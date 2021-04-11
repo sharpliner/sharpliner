@@ -2,10 +2,12 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>9.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="YamlDotNet" Version="11.1.1" />
+    <ProjectReference Include="..\Sharpliner.Model\Sharpliner.Model.csproj" />
   </ItemGroup>
 
 </Project>
