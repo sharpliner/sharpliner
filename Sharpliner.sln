@@ -1,0 +1,43 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpliner.CLI", "Sharpliner.CLI\Sharpliner.CLI.csproj", "{33A64DF3-F013-4AFF-878F-F387A0D67451}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpliner.Model", "Sharpliner.Model\Sharpliner.Model.csproj", "{6757FBD5-E5F9-451D-8C97-3A6A921FAF01}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharpliner.Fluent", "Sharpliner.Fluent\Sharpliner.Fluent.csproj", "{A93EB84A-C308-45F3-9348-EC77C5295EDE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharpliner.Serialization", "Sharpliner.Serialization\Sharpliner.Serialization.csproj", "{4A23F84F-B452-4514-821C-014B7F797469}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{33A64DF3-F013-4AFF-878F-F387A0D67451}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33A64DF3-F013-4AFF-878F-F387A0D67451}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33A64DF3-F013-4AFF-878F-F387A0D67451}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33A64DF3-F013-4AFF-878F-F387A0D67451}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6757FBD5-E5F9-451D-8C97-3A6A921FAF01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6757FBD5-E5F9-451D-8C97-3A6A921FAF01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6757FBD5-E5F9-451D-8C97-3A6A921FAF01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6757FBD5-E5F9-451D-8C97-3A6A921FAF01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A93EB84A-C308-45F3-9348-EC77C5295EDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A93EB84A-C308-45F3-9348-EC77C5295EDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A93EB84A-C308-45F3-9348-EC77C5295EDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A93EB84A-C308-45F3-9348-EC77C5295EDE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A23F84F-B452-4514-821C-014B7F797469}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4A23F84F-B452-4514-821C-014B7F797469}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4A23F84F-B452-4514-821C-014B7F797469}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4A23F84F-B452-4514-821C-014B7F797469}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {BDFCD6C1-CAB3-4251-8F2E-7F0A7B2B9111}
+	EndGlobalSection
+EndGlobal
