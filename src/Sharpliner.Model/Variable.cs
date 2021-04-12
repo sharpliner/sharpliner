@@ -5,8 +5,32 @@
 
     public record VariableGroup(string Name) : VariableDefinition;
 
-    public record Variable(
-        string Name,
-        string Value, // TODO: More overloads
-        bool Readonly = true) : VariableDefinition;
+    public record Variable : VariableDefinition
+    {
+        private Variable(string name, object value, bool isReadonly = true)
+        {
+            Name = name ?? throw new System.ArgumentNullException(nameof(name));
+            Value = value ?? throw new System.ArgumentNullException(nameof(value));
+            Readonly = isReadonly;
+        }
+
+        public Variable(string name, string value, bool isReadonly = true)
+            : this(name, (object)value, isReadonly)
+        {
+        }
+
+        public Variable(string name, int value, bool isReadonly = true)
+            : this(name, (object)value, isReadonly)
+        {
+        }
+
+        public Variable(string name, bool value, bool isReadonly = true)
+            : this(name, (object)value, isReadonly)
+        {
+        }
+
+        public string Name { get; }
+        public object Value { get; }
+        public bool Readonly { get; }
+    }
 }
