@@ -7,7 +7,7 @@ namespace Sharpliner.Model
     {
         /// <summary>
         /// Specify the working directory in which you want to run the command.
-        /// If you leave it empty, the working directory is [$(Build.SourcesDirectory)](../../build/variables.md).
+        /// If you leave it empty, the working directory is $(Build.SourcesDirectory).
         /// </summary>
         public string? WorkingDirectory { get; }
 
