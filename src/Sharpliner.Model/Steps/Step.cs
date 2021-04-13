@@ -7,12 +7,22 @@ namespace Sharpliner.Model
     public abstract record Step
     {
         public string DisplayName { get; }
+
         public string Name { get; }
+
         public bool Enabled { get; }
+
         public bool ContinueOnError { get; }
+
         public string? Condition { get; }
-        public IReadOnlyDictionary<string, string>? EnvironmentVariables { get; }
+
         public int? TimeoutInMinutes { get; }
+
+        /// <summary>
+        /// A list of additional items to map into the process's environment.
+        /// For example, secret variables are not automatically mapped.
+        /// </summary>
+        public IReadOnlyDictionary<string, string>? Env { get; }
 
         public Step(
             string displayName,
@@ -29,7 +39,7 @@ namespace Sharpliner.Model
             ContinueOnError = continueOnError;
             TimeoutInMinutes = timeout.HasValue ? (int)timeout.Value.TotalMinutes : null;
             Condition = condition;
-            EnvironmentVariables = environmentVariables;
+            Env = environmentVariables;
         }
     }
 }
