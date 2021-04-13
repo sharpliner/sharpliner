@@ -1,0 +1,37 @@
+trigger:
+  batch: true
+  branches:
+    include:
+    - main
+
+pr:
+  branches:
+    include:
+    - main
+
+jobs:
+  - job: Build
+    displayName: Build and test
+    pool:
+      name: Azure Pipelines
+      vmImage: 'vs2017-win2016'
+
+    steps:
+    - task: UseDotNet@2
+      displayName: Use .NET 5
+      inputs:
+        packageType: 'sdk'
+        version: '5.0.102'
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet restore'
+      inputs:
+        command: 'restore'
+        includeNuGetOrg: true
+        projects: Sharpliner.sln
+
+    - task: DotNetCoreCLI@2
+      displayName: 'dotnet test'
+      inputs:
+        command: test
+        projects: Sharpliner.sln
