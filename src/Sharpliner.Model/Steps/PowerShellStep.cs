@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Sharpliner.Model
 {
@@ -9,20 +8,20 @@ namespace Sharpliner.Model
         /// Specify the working directory in which you want to run the command.
         /// If you leave it empty, the working directory is $(Build.SourcesDirectory).
         /// </summary>
-        public string? WorkingDirectory { get; }
+        public string? WorkingDirectory { get; init; }
 
         /// <summary>
         /// Prepends the line $ErrorActionPreference = 'VALUE' at the top of your script.
         /// Default value: `stop`.
         /// </summary>
-        public ErrorActionPreference ErrorActionPreference { get; } = ErrorActionPreference.Stop;
+        public ErrorActionPreference ErrorActionPreference { get; init; } = ErrorActionPreference.Stop;
 
         /// <summary>
         /// If this is true, this task will fail if any errors are written to the error pipeline, or if any data is written to the Standard Error stream.
         /// Otherwise the task will rely on the exit code to determine failure
         /// Default value: `false`.
         /// </summary>
-        public bool FailOnStderr { get; } = false;
+        public bool FailOnStderr { get; init; } = false;
 
         /// <summary>
         /// If this is false, the line if ((Test-Path -LiteralPath variable:\\LASTEXITCODE)) { exit $LASTEXITCODE } is appended to the end of your script.
@@ -30,34 +29,17 @@ namespace Sharpliner.Model
         /// Otherwise the line is not appended to the end of your script
         /// Default value: `false`.
         /// </summary>
-        public bool IgnoreLASTEXITCODE { get; } = false;
+        public bool IgnoreLASTEXITCODE { get; init; } = false;
 
         /// <summary>
         /// If this is true, then on Windows the task will use pwsh.exe from your PATH instead of powershell.exe.
         /// Default value: `false`.
         /// </summary>
-        public bool Pwsh { get; } = false;
+        public bool Pwsh { get; init; } = false;
 
-        public PowerShellStep(
-            string displayName,
-            string name,
-            string? workingDirectory = null,
-            ErrorActionPreference errorActionPreference = ErrorActionPreference.Continue,
-            bool failOnStderr = false,
-            bool ignoreLASTEXITCODE = false,
-            bool pwsh = false,
-            bool enabled = true,
-            bool continueOnError = false,
-            TimeSpan? timeout = null,
-            string? condition = null,
-            IReadOnlyDictionary<string, string>? environmentVariables = null)
-            : base(displayName, name, enabled, continueOnError, timeout, condition, environmentVariables)
+        public PowerShellStep(string displayName, string name)
+            : base(displayName, name)
         {
-            WorkingDirectory = workingDirectory;
-            ErrorActionPreference = errorActionPreference;
-            FailOnStderr = failOnStderr;
-            IgnoreLASTEXITCODE = ignoreLASTEXITCODE;
-            Pwsh = pwsh;
         }
     }
 
@@ -66,25 +48,12 @@ namespace Sharpliner.Model
         /// <summary>
         /// Required if Type is inline, contents of the script.
         /// </summary>
-        public string Contents { get; }
+        public string Contents { get; init; }
 
-        public InlinePowerShellStep(
-            string displayName,
-            string name,
-            string scriptContents,
-            string? workingDirectory = null,
-            ErrorActionPreference errorActionPreference = ErrorActionPreference.Continue,
-            bool failOnStderr = false,
-            bool ignoreLASTEXITCODE = false,
-            bool pwsh = false,
-            bool enabled = true,
-            bool continueOnError = false,
-            TimeSpan? timeout = null,
-            string? condition = null,
-            IReadOnlyDictionary<string, string>? environmentVariables = null)
-            : base(displayName, name, workingDirectory, errorActionPreference, failOnStderr, ignoreLASTEXITCODE, pwsh, enabled, continueOnError, timeout, condition, environmentVariables)
+        public InlinePowerShellStep(string displayName, string name, string contents)
+            : base(displayName, name)
         {
-            Contents = scriptContents;
+            Contents = contents ?? throw new ArgumentNullException(nameof(contents));
         }
     }
 
@@ -99,26 +68,12 @@ namespace Sharpliner.Model
         /// <summary>
         /// Arguments passed to the Bash script.
         /// </summary>
-        public string? Arguments { get; }
+        public string? Arguments { get; init; }
 
-        public PowerShellFileStep(
-            string displayName,
-            string name,
-            string filePath,
-            string? arguments = null,
-            string? workingDirectory = null,
-            ErrorActionPreference errorActionPreference = ErrorActionPreference.Continue,
-            bool failOnStderr = false,
-            bool ignoreLASTEXITCODE = false,
-            bool pwsh = false,
-            bool enabled = true,
-            bool continueOnError = false,
-            TimeSpan? timeout = null,
-            string? condition = null,
-            IReadOnlyDictionary<string, string>? environmentVariables = null) : base(displayName, name, workingDirectory, errorActionPreference, failOnStderr, ignoreLASTEXITCODE, pwsh, enabled, continueOnError, timeout, condition, environmentVariables)
+        public PowerShellFileStep(string displayName, string name, string filePath)
+            : base(displayName, name)
         {
             FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
-            Arguments = arguments;
         }
     }
 

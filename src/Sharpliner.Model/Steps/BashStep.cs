@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Sharpliner.Model
 {
@@ -9,43 +8,28 @@ namespace Sharpliner.Model
         /// Specify the working directory in which you want to run the command.
         /// If you leave it empty, the working directory is $(Build.SourcesDirectory).
         /// </summary>
-        public string? WorkingDirectory { get; }
+        public string? WorkingDirectory { get; init; }
 
         /// <summary>
         /// If this is true, this task will fail if any errors are written to stderr.
         /// Default value: `false`.
         /// </summary>
-        public bool FailOnStderr { get; } = false;
+        public bool FailOnStderr { get; init; } = false;
 
         /// <summary>
         /// Don't load the system-wide startup file **`/etc/profile`** or any of the personal initialization files.
         /// </summary>
-        public bool NoProfile { get; } = false;
+        public bool NoProfile { get; init; } = false;
 
         /// <summary>
         /// If this is true, the task will not process `.bashrc` from the user's home directory.
         /// Default value: `true`.
         /// </summary>
-        public bool NoRc { get; } = true;
+        public bool NoRc { get; init; } = true;
 
-        public BashStep(
-            string displayName,
-            string name,
-            string? workingDirectory = null,
-            bool failOnStderr = false,
-            bool noProfile = false,
-            bool noRc = false,
-            bool enabled = true,
-            bool continueOnError = false,
-            TimeSpan? timeout = null,
-            string? condition = null,
-            IReadOnlyDictionary<string, string>? environmentVariables = null)
-            : base(displayName, name, enabled, continueOnError, timeout, condition, environmentVariables)
+        public BashStep(string displayName, string name)
+            : base(displayName, name)
         {
-            WorkingDirectory = workingDirectory;
-            FailOnStderr = failOnStderr;
-            NoProfile = noProfile;
-            NoRc = noRc;
         }
     }
 
@@ -56,22 +40,10 @@ namespace Sharpliner.Model
         /// </summary>
         public string Contents { get; }
 
-        public InlineBashStep(
-            string displayName,
-            string name,
-            string scriptContents,
-            string? workingDirectory = null,
-            bool failOnStderr = false,
-            bool noProfile = false,
-            bool noRc = false,
-            bool enabled = true,
-            bool continueOnError = false,
-            TimeSpan? timeout = null,
-            string? condition = null,
-            IReadOnlyDictionary<string, string>? environmentVariables = null)
-            : base(displayName, name, workingDirectory, failOnStderr, noProfile, noRc, enabled, continueOnError, timeout, condition, environmentVariables)
+        public InlineBashStep(string displayName, string name, string contents)
+            : base(displayName, name)
         {
-            Contents = scriptContents;
+            Contents = contents ?? throw new ArgumentNullException(nameof(contents));
         }
     }
 
@@ -86,25 +58,12 @@ namespace Sharpliner.Model
         /// <summary>
         /// Arguments passed to the Bash script.
         /// </summary>
-        public string? Arguments { get; }
+        public string? Arguments { get; init; }
 
-        public BashFileStep(
-            string displayName,
-            string name,
-            string filePath,
-            string? arguments = null,
-            string? workingDirectory = null,
-            bool failOnStderr = false,
-            bool noProfile = false,
-            bool noRc = false,
-            bool enabled = true,
-            bool continueOnError = false,
-            TimeSpan? timeout = null,
-            string? condition = null,
-            IReadOnlyDictionary<string, string>? environmentVariables = null) : base(displayName, name, workingDirectory, failOnStderr, noProfile, noRc, enabled, continueOnError, timeout, condition, environmentVariables)
+        public BashFileStep(string displayName, string name, string filePath)
+            : base(displayName, name)
         {
             FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
-            Arguments = arguments;
         }
     }
 }

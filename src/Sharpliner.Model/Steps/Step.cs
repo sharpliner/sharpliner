@@ -10,36 +10,24 @@ namespace Sharpliner.Model
 
         public string Name { get; }
 
-        public bool Enabled { get; }
+        public bool Enabled { get; init; }
 
-        public bool ContinueOnError { get; }
+        public bool ContinueOnError { get; init; }
 
-        public string? Condition { get; }
+        public string? Condition { get; init; }
 
-        public int? TimeoutInMinutes { get; }
+        public int? TimeoutInMinutes { get; protected set; }
 
         /// <summary>
         /// A list of additional items to map into the process's environment.
         /// For example, secret variables are not automatically mapped.
         /// </summary>
-        public IReadOnlyDictionary<string, string>? Env { get; }
+        public IReadOnlyDictionary<string, string>? Env { get; init; }
 
-        public Step(
-            string displayName,
-            string name,
-            bool enabled = true,
-            bool continueOnError = false,
-            TimeSpan? timeout = null,
-            string? condition = null,
-            IReadOnlyDictionary<string, string>? environmentVariables = null)
+        protected Step(string displayName, string name)
         {
             DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName));
             Name = name ?? throw new ArgumentNullException(nameof(name));
-            Enabled = enabled;
-            ContinueOnError = continueOnError;
-            TimeoutInMinutes = timeout.HasValue ? (int)timeout.Value.TotalMinutes : null;
-            Condition = condition;
-            Env = environmentVariables;
         }
     }
 }
