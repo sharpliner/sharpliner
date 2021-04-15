@@ -2,7 +2,7 @@
 
 namespace Sharpliner.Model
 {
-    public abstract record BashStep : Step
+    public abstract record BashTask : Step
     {
         /// <summary>
         /// Specify the working directory in which you want to run the command.
@@ -27,27 +27,27 @@ namespace Sharpliner.Model
         /// </summary>
         public bool NoRc { get; init; } = true;
 
-        public BashStep(string displayName, string name)
+        public BashTask(string displayName, string name)
             : base(displayName, name)
         {
         }
     }
 
-    public record InlineBashStep : BashStep
+    public record InlineBashTask : BashTask
     {
         /// <summary>
         /// Required if Type is inline, contents of the script.
         /// </summary>
         public string Contents { get; }
 
-        public InlineBashStep(string displayName, string name, string contents)
+        public InlineBashTask(string displayName, string name, string contents)
             : base(displayName, name)
         {
             Contents = contents ?? throw new ArgumentNullException(nameof(contents));
         }
     }
 
-    public record BashFileStep : BashStep
+    public record BashFileTask : BashTask
     {
         /// <summary>
         /// Path of the script to execute.
@@ -60,7 +60,7 @@ namespace Sharpliner.Model
         /// </summary>
         public string? Arguments { get; init; }
 
-        public BashFileStep(string displayName, string name, string filePath)
+        public BashFileTask(string displayName, string name, string filePath)
             : base(displayName, name)
         {
             FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));

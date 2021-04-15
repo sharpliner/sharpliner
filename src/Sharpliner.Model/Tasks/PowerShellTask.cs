@@ -2,7 +2,7 @@
 
 namespace Sharpliner.Model
 {
-    public abstract record PowerShellStep : Step
+    public abstract record PowerShellTask : Step
     {
         /// <summary>
         /// Specify the working directory in which you want to run the command.
@@ -37,27 +37,27 @@ namespace Sharpliner.Model
         /// </summary>
         public bool Pwsh { get; init; } = false;
 
-        public PowerShellStep(string displayName, string name)
+        public PowerShellTask(string displayName, string name)
             : base(displayName, name)
         {
         }
     }
 
-    public record InlinePowerShellStep : PowerShellStep
+    public record InlinePowerShellTask : PowerShellTask
     {
         /// <summary>
         /// Required if Type is inline, contents of the script.
         /// </summary>
         public string Contents { get; init; }
 
-        public InlinePowerShellStep(string displayName, string name, string contents)
+        public InlinePowerShellTask(string displayName, string name, string contents)
             : base(displayName, name)
         {
             Contents = contents ?? throw new ArgumentNullException(nameof(contents));
         }
     }
 
-    public record PowerShellFileStep : PowerShellStep
+    public record PowerShellFileTask : PowerShellTask
     {
         /// <summary>
         /// Path of the script to execute.
@@ -70,7 +70,7 @@ namespace Sharpliner.Model
         /// </summary>
         public string? Arguments { get; init; }
 
-        public PowerShellFileStep(string displayName, string name, string filePath)
+        public PowerShellFileTask(string displayName, string name, string filePath)
             : base(displayName, name)
         {
             FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
