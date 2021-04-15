@@ -7,6 +7,12 @@
 
     public record Variable : VariableDefinition
     {
+        public string Name { get; }
+
+        public object Value { get; }
+
+        public bool Readonly { get; }
+
         private Variable(string name, object value, bool isReadonly = true)
         {
             Name = name ?? throw new System.ArgumentNullException(nameof(name));
@@ -28,9 +34,5 @@
             : this(name, (object)value, isReadonly)
         {
         }
-
-        public string Name { get; }
-        public object Value { get; }
-        public bool Readonly { get; }
     }
 }

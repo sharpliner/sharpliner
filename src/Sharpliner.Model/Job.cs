@@ -9,7 +9,7 @@ namespace Sharpliner.Model
         IEnumerable<string> DependsOn,
         string Condition,
         JobStrategy Strategy,
-        JobPool Pool,
+        Pool Pool,
         ContainerReference Container,
         TimeSpan Timeout,
         TimeSpan CancelTimeout,
