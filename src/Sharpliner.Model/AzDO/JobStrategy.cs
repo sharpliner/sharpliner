@@ -1,4 +1,4 @@
-﻿namespace Sharpliner.Model
+﻿namespace Sharpliner.Model.AzDO
 {
     public record JobStrategy(/* TODO */);
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sharpliner.Model
+namespace Sharpliner.Model.AzDO
 {
     public abstract record JobPool();
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Sharpliner.Model
+namespace Sharpliner.Model.AzDO
 {
     public record Job(
         string Name,

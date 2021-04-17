@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sharpliner.Model
+namespace Sharpliner.Model.AzDO
 {
     public record Pipeline(
         string Name,
