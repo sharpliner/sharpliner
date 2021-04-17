@@ -22,7 +22,7 @@ namespace Sharpliner.Model.Tests.GitHub
                                     Description = "Person to greet",
                                     Default = "Mona the Octocat",
                                     IsRequired = true,
-                                }
+                               }
                             }
                         }
                     }
