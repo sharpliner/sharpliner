@@ -8,10 +8,10 @@ namespace Sharpliner.Model
 
         public Resources? Resources { get; init; }
 
-        public IEnumerable<Variable>? Variables { get; init; }
+        public List<Variable> Variables { get; init; } = new();
 
-        public IEnumerable<Trigger>? Triggers { get; init; }
+        public List<Trigger> Triggers { get; init; } = new();
 
-        public IEnumerable<Stage>? Stages { get; init; }
+        public List<Stage> Stages { get; init; } = new();
     }
 }

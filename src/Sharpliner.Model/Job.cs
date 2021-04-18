@@ -11,7 +11,7 @@ namespace Sharpliner.Model
 
         public string DisplayName { get; }
 
-        public IEnumerable<string>? DependsOn { get; init; }
+        public List<string> DependsOn { get; init; } = new();
 
         public string? Condition { get; init; }
 
@@ -25,9 +25,9 @@ namespace Sharpliner.Model
 
         public TimeSpan? CancelTimeout { get; init; }
 
-        public IEnumerable<Variable>? Variables { get; init; }
+        public List<Variable> Variables { get; init; } = new();
 
-        public IEnumerable<Step>? Steps { get; init; }
+        public List<Step> Steps { get; init; } = new();
 
         public JobWorkspace Workspace { get; init; } = JobWorkspace.Outputs;
 

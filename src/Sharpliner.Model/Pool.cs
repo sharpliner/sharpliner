@@ -15,9 +15,8 @@ namespace Sharpliner.Model
         }
     }
 
-    public record HostedPool(
-        string Name,
-        string VmImage,
-        IEnumerable<string>? Demands = null)
-        : Pool;
+    public record HostedPool(string Name, string VmImage) : Pool
+    {
+        public List<string> Demands { get; init; } = new();
+    }
 }

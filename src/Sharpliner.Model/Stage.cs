@@ -8,13 +8,13 @@ namespace Sharpliner.Model
 
         public string DisplayName { get; }
 
-        public IEnumerable<string>? DependsOn { get; init; }
+        public List<string> DependsOn { get; init; } = new();
 
         public string? Condition { get; init; }
 
-        public IEnumerable<Variable>? Variables { get; init; }
+        public List<Variable> Variables { get; init; } = new();
 
-        public IEnumerable<Job>? Jobs { get; init; }
+        public List<Job> Jobs { get; init; } = new();
 
         public Stage(string name, string displayName)
         {
