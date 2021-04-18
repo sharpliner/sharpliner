@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sharpliner.Model.AzureDevOps
+namespace Sharpliner.Model.AzureDevOps.Tasks
 {
     public abstract record PowerShellTask : Step
     {
