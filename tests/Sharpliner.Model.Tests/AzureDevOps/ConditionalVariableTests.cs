@@ -1,35 +1,68 @@
-﻿using FluentAssertions;
+﻿using System.Linq;
+using FluentAssertions;
 using Sharpliner.Model.AzureDevOps;
+using Sharpliner.Model.Definition;
 using Xunit;
 
 namespace Sharpliner.Model.Tests.AzureDevOps
 {
     public class PipelineSerializationTests
     {
+        private class And_Condition_Test_Pipeline : PipelineDefinitionBase
+        {
+            public override string TargetFile => "azure-pipelines.yml";
+
+            public override Pipeline Pipeline => new()
+            {
+                Variables =
+                {
+                    If.And(Equal("variables['Build.SourceBranch']", "'refs/heads/production'"), NotEqual("variables['Configuration']", "'Debug'"))
+                        .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
+                }
+            };
+        }
+
         [Fact]
         public void And_Condition_Test()
         {
-            var builder = new VariableDefinitionConditionBuilder();
-            var condition = builder.And(
-                new EqualityVariableDefinitionCondition("variables['Build.SourceBranch']", "'refs/heads/production'", true),
-                new EqualityVariableDefinitionCondition("variables['Configuration']", "'Debug'", false));
+            var pipeline = new And_Condition_Test_Pipeline();
 
-            ConditionedVariableDefinition def = condition.Variable("foo", "bar");
-            def.Condition.Should().Be("and(eq(variables['Build.SourceBranch'], 'refs/heads/production'), ne(variables['Configuration'], 'Debug'))");
+            var variable = pipeline.Pipeline.Variables.First();
+            var conditionedVariable = variable as ConditionedVariableDefinition;
+            conditionedVariable.Should().NotBeNull();
+            conditionedVariable!.Condition.Should().Be(
+                "and(eq(variables['Build.SourceBranch'], 'refs/heads/production'), ne(variables['Configuration'], 'Debug'))");
+        }
+
+        private class Or_Condition_Test_Pipeline : PipelineDefinitionBase
+        {
+            public override string TargetFile => "azure-pipelines.yml";
+
+            public override Pipeline Pipeline => new()
+            {
+                Variables =
+                {
+                    If.Or(
+                        And(
+                            NotEqual("true", "true"),
+                            Equal("variables['Build.SourceBranch']", "'refs/heads/production'")),
+                        NotEqual("variables['Configuration']", "'Debug'"))
+                        .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
+                }
+            };
         }
 
         [Fact]
         public void Or_Condition_Test()
         {
-            var builder = new VariableDefinitionConditionBuilder();
-            var condition = builder.Or(
-                new AndVariableDefinitionCondition(
-                    new EqualityVariableDefinitionCondition("true", "true", false),
-                    new EqualityVariableDefinitionCondition("variables['Build.SourceBranch']", "'refs/heads/production'", true)),
-                new EqualityVariableDefinitionCondition("variables['Configuration']", "'Debug'", false));
+            var pipeline = new Or_Condition_Test_Pipeline();
 
-            ConditionedVariableDefinition def = condition.Variable("foo", "bar");
-            def.Condition.Should().Be("or(and(ne(true, true), eq(variables['Build.SourceBranch'], 'refs/heads/production')), ne(variables['Configuration'], 'Debug'))");
+            var variable = pipeline.Pipeline.Variables.First();
+            var conditionedVariable = variable as ConditionedVariableDefinition;
+            conditionedVariable.Should().NotBeNull();
+            conditionedVariable!.Condition.Should().Be(
+                "or(and(ne(true, true), eq(variables['Build.SourceBranch'], 'refs/heads/production')), " +
+                "ne(variables['Configuration'], 'Debug'))");
         }
     }
 }
