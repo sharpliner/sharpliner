@@ -1,4 +1,4 @@
-﻿namespace Sharpliner.Model.AzDO
+﻿namespace Sharpliner.Model.AzureDevOps
 {
     // https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#variables
     public abstract record VariableDefinition;
@@ -7,6 +7,12 @@
 
     public record Variable : VariableDefinition
     {
+        public string Name { get; }
+
+        public object Value { get; }
+
+        public bool Readonly { get; }
+
         private Variable(string name, object value, bool isReadonly = true)
         {
             Name = name ?? throw new System.ArgumentNullException(nameof(name));
@@ -28,9 +34,5 @@
             : this(name, (object)value, isReadonly)
         {
         }
-
-        public string Name { get; }
-        public object Value { get; }
-        public bool Readonly { get; }
     }
 }

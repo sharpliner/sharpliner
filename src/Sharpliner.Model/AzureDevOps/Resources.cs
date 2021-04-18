@@ -1,4 +1,4 @@
-﻿namespace Sharpliner.Model.AzDO
+﻿namespace Sharpliner.Model.AzureDevOps
 {
     public record Resources(
         object? Pipelines,     // TODO
