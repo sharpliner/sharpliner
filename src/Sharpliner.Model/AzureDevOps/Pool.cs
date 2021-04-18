@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Sharpliner.Model
+namespace Sharpliner.Model.AzureDevOps
 {
     public abstract record Pool();
 

@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace Sharpliner.Model
+namespace Sharpliner.Model.AzureDevOps
 {
     /// <summary>
     /// https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/publish-pipeline-artifact?view=azure-devops
