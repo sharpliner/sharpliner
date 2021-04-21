@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace Sharpliner.Model.AzureDevOps.Tasks
 {
@@ -27,8 +28,8 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// </summary>
         public bool NoRc { get; init; } = true;
 
-        public BashTask(string displayName, string name)
-            : base(displayName, name)
+        protected BashTask(string displayName)
+            : base(displayName)
         {
         }
     }
@@ -40,10 +41,15 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// </summary>
         public string Contents { get; }
 
-        public InlineBashTask(string displayName, string name, string contents)
-            : base(displayName, name)
+        public InlineBashTask(string displayName, params string[] scriptLines)
+            : base(displayName)
         {
-            Contents = contents ?? throw new ArgumentNullException(nameof(contents));
+            if (scriptLines is null)
+            {
+                throw new ArgumentNullException(nameof(scriptLines));
+            }
+
+            Contents = string.Join("\n", scriptLines);
         }
     }
 
@@ -60,8 +66,8 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// </summary>
         public string? Arguments { get; init; }
 
-        public BashFileTask(string displayName, string name, string filePath)
-            : base(displayName, name)
+        public BashFileTask(string displayName, string filePath)
+            : base(displayName)
         {
             FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
         }
