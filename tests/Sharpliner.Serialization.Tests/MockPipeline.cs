@@ -1,9 +1,8 @@
 ﻿using Sharpliner.Model.AzureDevOps;
-using Sharpliner.Model.Definition;
 
 namespace Sharpliner.Serialization.Tests
 {
-    internal class MockPipeline : PipelineDefinitionBase
+    internal class MockPipeline : AzureDevOpsPipelineDefinition
     {
         public override string TargetFile => "azure-pipelines.yml";
 

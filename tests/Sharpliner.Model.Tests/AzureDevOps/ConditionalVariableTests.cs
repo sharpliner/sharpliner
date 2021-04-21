@@ -1,14 +1,13 @@
 ﻿using System.Linq;
 using FluentAssertions;
 using Sharpliner.Model.AzureDevOps;
-using Sharpliner.Model.Definition;
 using Xunit;
 
 namespace Sharpliner.Model.Tests.AzureDevOps
 {
     public class PipelineSerializationTests
     {
-        private class And_Condition_Test_Pipeline : PipelineDefinitionBase
+        private class And_Condition_Test_Pipeline : AzureDevOpsPipelineDefinition
         {
             public override string TargetFile => "azure-pipelines.yml";
 
@@ -33,7 +32,7 @@ namespace Sharpliner.Model.Tests.AzureDevOps
                 "and(eq(variables['Build.SourceBranch'], 'refs/heads/production'), ne(variables['Configuration'], 'Debug'))");
         }
 
-        private class Or_Condition_Test_Pipeline : PipelineDefinitionBase
+        private class Or_Condition_Test_Pipeline : AzureDevOpsPipelineDefinition
         {
             public override string TargetFile => "azure-pipelines.yml";
 

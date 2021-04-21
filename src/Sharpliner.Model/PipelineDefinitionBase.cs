@@ -27,42 +27,26 @@ namespace Sharpliner.Model.Definition
         /// </summary>
         public abstract Pipeline Pipeline { get; }
 
-        protected static ConditionedDefinition<VariableBase> Variable(string name, string value) => new(null, new Variable(name, value));
-        protected static ConditionedDefinition<VariableBase> Variable(string name, int value) => new(null, new Variable(name, value));
-        protected static ConditionedDefinition<VariableBase> Variable(string name, bool value) => new(null, new Variable(name, value));
-        protected static ConditionedDefinition<VariableBase> Group(string name) => new(null, new VariableGroup(name));
-        protected static ConditionBuilder<VariableBase> If => new();
+        protected static ConditionedDefinition<Variable> Variable(string name, string value) => new(new SingleVariable(name, value), null);
+        protected static ConditionedDefinition<Variable> Variable(string name, int value) => new(new SingleVariable(name, value), null);
+        protected static ConditionedDefinition<Variable> Variable(string name, bool value) => new(new SingleVariable(name, value), null);
+        protected static ConditionedDefinition<Variable> Group(string name) => new(new VariableGroup(name), null);
+        protected static ConditionBuilder<Variable> If => new();
 
-        protected static Condition<T> And<T>(Condition condition1, Condition condition2)
-            => new AndCondition<T>(condition1, condition2);
+        protected static Condition<T> And<T>(Condition condition1, Condition condition2) => new AndCondition<T>(condition1, condition2);
 
-        protected static Condition And(Condition condition1, Condition condition2)
-            => new AndCondition(condition1, condition2);
+        protected static Condition And(Condition condition1, Condition condition2) => new AndCondition(condition1, condition2);
 
-        protected static Condition Or(Condition condition1, Condition condition2)
-            => new OrCondition(condition1, condition2);
+        protected static Condition Or(Condition condition1, Condition condition2) => new OrCondition(condition1, condition2);
 
-        protected static Condition Or<T>(Condition condition1, Condition condition2)
-            => new OrCondition<T>(condition1, condition2);
+        protected static Condition Or<T>(Condition condition1, Condition condition2) => new OrCondition<T>(condition1, condition2);
 
-        protected static Condition Equal(string expression1, string expression2)
-            => new EqualityDefinitionCondition(expression1, expression2, true);
+        protected static Condition Equal(string expression1, string expression2) => new EqualityDefinitionCondition(expression1, expression2, true);
 
-        protected static Condition<T> Equal<T>(string expression1, string expression2)
-            => new EqualityCondition<T>(expression1, expression2, true);
+        protected static Condition<T> Equal<T>(string expression1, string expression2) => new EqualityCondition<T>(expression1, expression2, true);
 
-        protected static Condition<T> NotEqual<T>(string expression1, string expression2)
-            => new EqualityCondition<T>(expression1, expression2, false);
+        protected static Condition<T> NotEqual<T>(string expression1, string expression2) => new EqualityCondition<T>(expression1, expression2, false);
 
-        protected static Condition NotEqual(string expression1, string expression2)
-            => new EqualityDefinitionCondition(expression1, expression2, false);
-    }
-
-    public abstract class AzureDevOpsPipelineDefinition : PipelineDefinitionBase
-    {
-    }
-
-    public abstract class GitHubActionsPipelineDefinition : PipelineDefinitionBase
-    {
+        protected static Condition NotEqual(string expression1, string expression2) => new EqualityDefinitionCondition(expression1, expression2, false);
     }
 }
