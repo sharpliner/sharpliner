@@ -16,8 +16,10 @@ namespace Sharpliner.Model.Tests.AzureDevOps
             {
                 Variables =
                 {
-                    If.And(Equal("variables['Build.SourceBranch']", "'refs/heads/production'"), NotEqual("variables['Configuration']", "'Debug'"))
-                        .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
+                    If.And(
+                        Equal("variables['Build.SourceBranch']", "'refs/heads/production'"),
+                        NotEqual("variables['Configuration']", "'Debug'"))
+                      .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
                 }
             };
         }
@@ -26,11 +28,8 @@ namespace Sharpliner.Model.Tests.AzureDevOps
         public void And_Condition_Test()
         {
             var pipeline = new And_Condition_Test_Pipeline();
-
             var variable = pipeline.Pipeline.Variables.First();
-            var conditionedVariable = variable as ConditionedVariableDefinition;
-            conditionedVariable.Should().NotBeNull();
-            conditionedVariable!.Condition.Should().Be(
+            variable.Condition.Should().Be(
                 "and(eq(variables['Build.SourceBranch'], 'refs/heads/production'), ne(variables['Configuration'], 'Debug'))");
         }
 
@@ -56,11 +55,8 @@ namespace Sharpliner.Model.Tests.AzureDevOps
         public void Or_Condition_Test()
         {
             var pipeline = new Or_Condition_Test_Pipeline();
-
             var variable = pipeline.Pipeline.Variables.First();
-            var conditionedVariable = variable as ConditionedVariableDefinition;
-            conditionedVariable.Should().NotBeNull();
-            conditionedVariable!.Condition.Should().Be(
+            variable.Condition.Should().Be(
                 "or(and(ne(true, true), eq(variables['Build.SourceBranch'], 'refs/heads/production')), " +
                 "ne(variables['Configuration'], 'Debug'))");
         }

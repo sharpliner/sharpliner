@@ -27,20 +27,35 @@ namespace Sharpliner.Model.Definition
         /// </summary>
         public abstract Pipeline Pipeline { get; }
 
-        protected static Variable Variable(string name, string value) => new(name, value);
-        protected static Variable Variable(string name, int value) => new(name, value);
-        protected static Variable Variable(string name, bool value) => new(name, value);
-        protected static VariableGroup Group(string name) => new(name);
-        protected static VariableDefinitionConditionBuilder If => new();
+        protected static ConditionedDefinition<VariableBase> Variable(string name, string value) => new(null, new Variable(name, value));
+        protected static ConditionedDefinition<VariableBase> Variable(string name, int value) => new(null, new Variable(name, value));
+        protected static ConditionedDefinition<VariableBase> Variable(string name, bool value) => new(null, new Variable(name, value));
+        protected static ConditionedDefinition<VariableBase> Group(string name) => new(null, new VariableGroup(name));
+        protected static DefinitionConditionBuilder<VariableBase> If => new();
 
-        protected static VariableDefinitionCondition And(VariableDefinitionCondition condition1, VariableDefinitionCondition condition2)
-            => new AndVariableDefinitionCondition(condition1, condition2);
-        protected static VariableDefinitionCondition Or(VariableDefinitionCondition condition1, VariableDefinitionCondition condition2)
-            => new OrVariableDefinitionCondition(condition1, condition2);
-        protected static VariableDefinitionCondition Equal(string expression1, string expression2)
-            => new EqualityVariableDefinitionCondition(expression1, expression2, true);
-        protected static VariableDefinitionCondition NotEqual(string expression1, string expression2)
-            => new EqualityVariableDefinitionCondition(expression1, expression2, false);
+        protected static DefinitionCondition<T> And<T>(DefinitionCondition condition1, DefinitionCondition condition2)
+            => new AndDefinitionCondition<T>(condition1, condition2);
+
+        protected static DefinitionCondition And(DefinitionCondition condition1, DefinitionCondition condition2)
+            => new AndDefinitionCondition(condition1, condition2);
+
+        protected static DefinitionCondition Or(DefinitionCondition condition1, DefinitionCondition condition2)
+            => new OrDefinitionCondition(condition1, condition2);
+
+        protected static DefinitionCondition Or<T>(DefinitionCondition condition1, DefinitionCondition condition2)
+            => new OrDefinitionCondition<T>(condition1, condition2);
+
+        protected static DefinitionCondition Equal(string expression1, string expression2)
+            => new EqualityDefinitionCondition(expression1, expression2, true);
+
+        protected static DefinitionCondition<T> Equal<T>(string expression1, string expression2)
+            => new EqualityDefinitionCondition<T>(expression1, expression2, true);
+
+        protected static DefinitionCondition<T> NotEqual<T>(string expression1, string expression2)
+            => new EqualityDefinitionCondition<T>(expression1, expression2, false);
+
+        protected static DefinitionCondition NotEqual(string expression1, string expression2)
+            => new EqualityDefinitionCondition(expression1, expression2, false);
     }
 
     public abstract class AzureDevOpsPipelineDefinition : PipelineDefinitionBase
