@@ -44,16 +44,16 @@ namespace Sharpliner.Model.AzureDevOps
 
     public static class VariableConditionDefinitions
     {
-        public static ConditionedDefinition<VariableBase> Variable(this DefinitionCondition condition, string name, string value)
+        public static ConditionedDefinition<VariableBase> Variable(this Condition condition, string name, string value)
             => new(condition.ToString(), new Variable(name, value));
 
-        public static ConditionedDefinition<VariableBase> Variable(this DefinitionCondition condition, string name, bool value)
+        public static ConditionedDefinition<VariableBase> Variable(this Condition condition, string name, bool value)
             => new(condition.ToString(), new Variable(name, value));
 
-        public static ConditionedDefinition<VariableBase> Variable(this DefinitionCondition condition, string name, int value)
+        public static ConditionedDefinition<VariableBase> Variable(this Condition condition, string name, int value)
             => new(condition.ToString(), new Variable(name, value));
 
-        public static ConditionedDefinition<VariableBase> Group(this DefinitionCondition condition, string name)
+        public static ConditionedDefinition<VariableBase> Group(this Condition condition, string name)
             => new(condition.ToString(), new VariableGroup(name));
 
         public static ConditionedDefinition<VariableBase> Variable(

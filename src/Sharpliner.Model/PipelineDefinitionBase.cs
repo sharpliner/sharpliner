@@ -31,30 +31,30 @@ namespace Sharpliner.Model.Definition
         protected static ConditionedDefinition<VariableBase> Variable(string name, int value) => new(null, new Variable(name, value));
         protected static ConditionedDefinition<VariableBase> Variable(string name, bool value) => new(null, new Variable(name, value));
         protected static ConditionedDefinition<VariableBase> Group(string name) => new(null, new VariableGroup(name));
-        protected static DefinitionConditionBuilder<VariableBase> If => new();
+        protected static ConditionBuilder<VariableBase> If => new();
 
-        protected static DefinitionCondition<T> And<T>(DefinitionCondition condition1, DefinitionCondition condition2)
-            => new AndDefinitionCondition<T>(condition1, condition2);
+        protected static Condition<T> And<T>(Condition condition1, Condition condition2)
+            => new AndCondition<T>(condition1, condition2);
 
-        protected static DefinitionCondition And(DefinitionCondition condition1, DefinitionCondition condition2)
-            => new AndDefinitionCondition(condition1, condition2);
+        protected static Condition And(Condition condition1, Condition condition2)
+            => new AndCondition(condition1, condition2);
 
-        protected static DefinitionCondition Or(DefinitionCondition condition1, DefinitionCondition condition2)
-            => new OrDefinitionCondition(condition1, condition2);
+        protected static Condition Or(Condition condition1, Condition condition2)
+            => new OrCondition(condition1, condition2);
 
-        protected static DefinitionCondition Or<T>(DefinitionCondition condition1, DefinitionCondition condition2)
-            => new OrDefinitionCondition<T>(condition1, condition2);
+        protected static Condition Or<T>(Condition condition1, Condition condition2)
+            => new OrCondition<T>(condition1, condition2);
 
-        protected static DefinitionCondition Equal(string expression1, string expression2)
+        protected static Condition Equal(string expression1, string expression2)
             => new EqualityDefinitionCondition(expression1, expression2, true);
 
-        protected static DefinitionCondition<T> Equal<T>(string expression1, string expression2)
-            => new EqualityDefinitionCondition<T>(expression1, expression2, true);
+        protected static Condition<T> Equal<T>(string expression1, string expression2)
+            => new EqualityCondition<T>(expression1, expression2, true);
 
-        protected static DefinitionCondition<T> NotEqual<T>(string expression1, string expression2)
-            => new EqualityDefinitionCondition<T>(expression1, expression2, false);
+        protected static Condition<T> NotEqual<T>(string expression1, string expression2)
+            => new EqualityCondition<T>(expression1, expression2, false);
 
-        protected static DefinitionCondition NotEqual(string expression1, string expression2)
+        protected static Condition NotEqual(string expression1, string expression2)
             => new EqualityDefinitionCondition(expression1, expression2, false);
     }
 
