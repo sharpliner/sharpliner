@@ -2,7 +2,7 @@
 
 namespace Sharpliner.Model.AzureDevOps
 {
-    public record Pipeline
+    public record AzureDevOpsPipeline
     {
         public string? Name { get; init; }
 
@@ -10,7 +10,11 @@ namespace Sharpliner.Model.AzureDevOps
 
         public List<ConditionedDefinition<VariableBase>> Variables { get; init; } = new();
 
-        public List<Trigger> Triggers { get; init; } = new();
+        public Trigger? Trigger { get; init; } = null;
+
+        public PrTrigger? Pr { get; init; } = null;
+
+        // TODO: Scheduled triggers
 
         public List<Stage> Stages { get; init; } = new();
     }

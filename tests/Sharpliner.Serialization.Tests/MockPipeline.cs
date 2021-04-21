@@ -8,9 +8,24 @@ namespace Sharpliner.Serialization.Tests
 
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
-        public override Pipeline Pipeline => new()
+        public override AzureDevOpsPipeline Pipeline => new()
         {
             Name = "$(Date:yyyMMdd).$(Rev:rr)",
+
+            Trigger = new DetailedTrigger
+            {
+                Batched = false,
+                Branches = new()
+                {
+                    Include =
+                    {
+                        "main",
+                        "release/*",
+                    }
+                }
+            },
+
+            Pr = new BranchPrTrigger("main", "release/*"),
 
             Variables =
             {
