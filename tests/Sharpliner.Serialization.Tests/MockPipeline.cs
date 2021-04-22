@@ -14,7 +14,8 @@ namespace Sharpliner.Serialization.Tests
 
             Variables =
             {
-                Variable("Configuration", "Release"),
+                new Variable("Configuration", "Release"), // We can create the objects and then resue them for definition too
+                Variable("Configuration", "Release"),     // Or we have this more YAML-like definition
                 Group("PR keyvault variables"),
 
                 If.Equal("variables['Build.Reason']", "PullRequest")

@@ -25,7 +25,7 @@ namespace Sharpliner.Model.AzureDevOps
 
         public TimeSpan? CancelTimeout { get; init; }
 
-        public List<SingleVariable> Variables { get; init; } = new();
+        public List<ConditionedDefinition<VariableBase>> Variables { get; init; } = new();
 
         public List<Step> Steps { get; init; } = new();
 

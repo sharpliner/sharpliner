@@ -8,7 +8,7 @@ namespace Sharpliner.Model.AzureDevOps
 
         public Resources? Resources { get; init; }
 
-        public List<ConditionedDefinition<Variable>> Variables { get; init; } = new();
+        public List<ConditionedDefinition<VariableBase>> Variables { get; init; } = new();
 
         public List<Trigger> Triggers { get; init; } = new();
 

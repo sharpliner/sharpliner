@@ -5,47 +5,47 @@
     /// </summary>
     public static class ConditionedVariableDefinitions
     {
-        public static ConditionedDefinition<Variable> Variable(this Condition condition, string name, string value)
-            => new(new SingleVariable(name, value), condition.ToString());
+        public static ConditionedDefinition<VariableBase> Variable(this Condition condition, string name, string value)
+            => new(new Variable(name, value), condition.ToString());
 
-        public static ConditionedDefinition<Variable> Variable(this Condition condition, string name, bool value)
-            => new(new SingleVariable(name, value), condition.ToString());
+        public static ConditionedDefinition<VariableBase> Variable(this Condition condition, string name, bool value)
+            => new(new Variable(name, value), condition.ToString());
 
-        public static ConditionedDefinition<Variable> Variable(this Condition condition, string name, int value)
-            => new(new SingleVariable(name, value), condition.ToString());
+        public static ConditionedDefinition<VariableBase> Variable(this Condition condition, string name, int value)
+            => new(new Variable(name, value), condition.ToString());
 
-        public static ConditionedDefinition<Variable> Group(this Condition condition, string name)
+        public static ConditionedDefinition<VariableBase> Group(this Condition condition, string name)
             => new(new VariableGroup(name), condition.ToString());
 
-        public static ConditionedDefinition<Variable> Variable(
-            this ConditionedDefinition<Variable> condition,
+        public static ConditionedDefinition<VariableBase> Variable(
+            this ConditionedDefinition<VariableBase> condition,
             string name,
             string value)
         {
-            condition.Definitions.Add(new SingleVariable(name, value));
+            condition.Definitions.Add(new Variable(name, value));
             return condition;
         }
 
-        public static ConditionedDefinition<Variable> Variable(
-            this ConditionedDefinition<Variable> condition,
+        public static ConditionedDefinition<VariableBase> Variable(
+            this ConditionedDefinition<VariableBase> condition,
             string name,
             bool value)
         {
-            condition.Definitions.Add(new SingleVariable(name, value));
+            condition.Definitions.Add(new Variable(name, value));
             return condition;
         }
 
-        public static ConditionedDefinition<Variable> Variable(
-            this ConditionedDefinition<Variable> condition,
+        public static ConditionedDefinition<VariableBase> Variable(
+            this ConditionedDefinition<VariableBase> condition,
             string name,
             int value)
         {
-            condition.Definitions.Add(new SingleVariable(name, value));
+            condition.Definitions.Add(new Variable(name, value));
             return condition;
         }
 
-        public static ConditionedDefinition<Variable> Group(
-            this ConditionedDefinition<Variable> condition,
+        public static ConditionedDefinition<VariableBase> Group(
+            this ConditionedDefinition<VariableBase> condition,
             string name)
         {
             condition.Definitions.Add(new VariableGroup(name));
