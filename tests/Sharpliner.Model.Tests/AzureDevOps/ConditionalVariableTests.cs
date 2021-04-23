@@ -16,8 +16,8 @@ namespace Sharpliner.Model.Tests.AzureDevOps
                 Variables =
                 {
                     If.And(
-                        Equal("variables['Build.SourceBranch']", "'refs/heads/production'"),
-                        NotEqual("variables['Configuration']", "'Debug'"))
+                        Equal(variables["Build.SourceBranch"], "'refs/heads/production'"),
+                        NotEqual(variables["Configuration"], "'Debug'"))
                       .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
                 }
             };
@@ -43,8 +43,8 @@ namespace Sharpliner.Model.Tests.AzureDevOps
                     If.Or(
                         And(
                             NotEqual("true", "true"),
-                            Equal("variables['Build.SourceBranch']", "'refs/heads/production'")),
-                        NotEqual("variables['Configuration']", "'Debug'"))
+                            Equal(variables["Build.SourceBranch"], "'refs/heads/production'")),
+                        NotEqual(variables["Configuration"], "'Debug'"))
                         .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
                 }
             };

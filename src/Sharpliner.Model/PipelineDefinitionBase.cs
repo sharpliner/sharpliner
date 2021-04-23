@@ -33,6 +33,8 @@ namespace Sharpliner.Model.Definition
         protected static ConditionedDefinition<VariableBase> Group(string name) => new(new VariableGroup(name), null);
         protected static ConditionBuilder<VariableBase> If => new();
 
+        protected readonly PipelineVariable variables = new();
+
         protected static Condition<T> And<T>(Condition condition1, Condition condition2) => new AndCondition<T>(condition1, condition2);
 
         protected static Condition And(Condition condition1, Condition condition2) => new AndCondition(condition1, condition2);
