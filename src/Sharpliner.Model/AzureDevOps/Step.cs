@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Sharpliner.Model.AzureDevOps
 {
@@ -7,6 +8,7 @@ namespace Sharpliner.Model.AzureDevOps
     public abstract record Step
     {
         private string? _name;
+        private static readonly Regex s_nameRegex = new("[a-zA-Z0-9_]+", RegexOptions.Compiled);
 
         /// <summary>
         /// Friendly name displayed in the UI.
@@ -19,7 +21,15 @@ namespace Sharpliner.Model.AzureDevOps
         public string? Name
         {
             get => _name;
-            init => _name = value; // TODO: Validate format
+            init
+            {
+                if (value != null && !s_nameRegex.IsMatch(value))
+                {
+                    throw new ArgumentException(nameof(Name));
+                }
+
+                _name = value;
+            }
         }
 
         /// <summary>
