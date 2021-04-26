@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Sharpliner.Model.AzureDevOps;
+﻿using Sharpliner.Model.AzureDevOps;
 
 namespace Sharpliner.Model.Definition
 {
@@ -24,9 +23,9 @@ namespace Sharpliner.Model.Definition
         public virtual TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
 
         /// <summary>
-        /// Publishes the pipeline's YAML into a target stream.
+        /// Serializes the pipeline into a YAML string.
         /// </summary>
-        public abstract void Publish(Stream destination);
+        public abstract string Publish();
 
         /// <summary>
         /// Allows the variables[""] notation for conditional definitions.

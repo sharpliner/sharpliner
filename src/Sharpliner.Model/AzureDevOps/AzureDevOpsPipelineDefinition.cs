@@ -18,13 +18,14 @@ namespace Sharpliner.Model.AzureDevOps
         protected static ConditionedDefinition<VariableBase> Group(string name) => new(new VariableGroup(name), null);
         protected static ConditionBuilder<VariableBase> If => new();
 
-        public sealed override void Publish(Stream destination)
+        public sealed override string Publish()
         {
             var serializer = new SerializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
                 .Build();
 
-            serializer.Serialize(new StreamWriter(destination), Pipeline);
+            return serializer.Serialize(Pipeline);
         }
     }
 }
