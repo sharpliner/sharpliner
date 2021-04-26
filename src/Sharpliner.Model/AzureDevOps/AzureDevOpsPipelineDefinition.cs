@@ -1,4 +1,7 @@
-﻿using Sharpliner.Model.Definition;
+﻿using System.IO;
+using Sharpliner.Model.Definition;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace Sharpliner.Model.AzureDevOps
 {
@@ -14,5 +17,14 @@ namespace Sharpliner.Model.AzureDevOps
         protected static ConditionedDefinition<VariableBase> Variable(string name, bool value) => new(new Variable(name, value), null);
         protected static ConditionedDefinition<VariableBase> Group(string name) => new(new VariableGroup(name), null);
         protected static ConditionBuilder<VariableBase> If => new();
+
+        public sealed override void Publish(Stream destination)
+        {
+            var serializer = new SerializerBuilder()
+                .WithNamingConvention(CamelCaseNamingConvention.Instance)
+                .Build();
+
+            serializer.Serialize(new StreamWriter(destination), Pipeline);
+        }
     }
 }
