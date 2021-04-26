@@ -50,8 +50,8 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// </summary>
         public string Contents { get; init; }
 
-        public InlinePowerShellTask(string displayName, string name, string contents)
-            : base(displayName, name)
+        public InlinePowerShellTask(string displayName, string contents)
+            : base(displayName)
         {
             Contents = contents ?? throw new ArgumentNullException(nameof(contents));
         }

@@ -22,6 +22,11 @@ namespace Sharpliner.Model.Definition
         /// </summary>
         public virtual TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
 
+        /// <summary>
+        /// Allows the variables[""] notation for conditional definitions.
+        /// </summary>
+        protected readonly PipelineVariable variables = new();
+
         protected static Condition<T> And<T>(Condition condition1, Condition condition2) => new AndCondition<T>(condition1, condition2);
 
         protected static Condition And(Condition condition1, Condition condition2) => new AndCondition(condition1, condition2);
