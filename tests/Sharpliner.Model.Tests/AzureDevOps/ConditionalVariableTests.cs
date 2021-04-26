@@ -59,5 +59,31 @@ namespace Sharpliner.Model.Tests.AzureDevOps
                 "or(and(ne(true, true), eq(variables['Build.SourceBranch'], 'refs/heads/production')), " +
                 "ne(variables['Configuration'], 'Debug'))");
         }
+
+        private class EndIf_Condition_Test_Pipeline : AzureDevOpsPipelineDefinition
+        {
+            public override string TargetFile => "azure-pipelines.yml";
+
+            public override AzureDevOpsPipeline Pipeline => new()
+            {
+                Variables =
+                {
+                    If.NotEqual("1", "2")
+                        .Variable("foo", "bar")
+                        .Variable("xyz", "gah")
+                    .EndIf()
+                    .If.Equal("3", "4")
+                        .Variable("Baam", "Boink")
+                        .Variable("Number", 4),
+                }
+            };
+        }
+
+        [Fact]
+        public void EndIf_Condition_Test()
+        {
+            var pipeline = new EndIf_Condition_Test_Pipeline();
+            // TODO
+        }
     }
 }

@@ -1,8 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Sharpliner.Model
 {
+    public abstract record ConditionedDefinition
+    {
+        internal ConditionedDefinition? Parent { get; set; }
+    }
+
     /// <summary>
     /// Represents an item that might or might have a condition.
     /// Example of regular definition:
@@ -11,11 +15,8 @@ namespace Sharpliner.Model
     ///     - ${{ if eq(variables._RunAsInternal, True) }}:
     ///       name: NetCoreInternal-Pool
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public record ConditionedDefinition<T>
+    public record ConditionedDefinition<T> : ConditionedDefinition
     {
-        internal ConditionedDefinition<T>? Parent { get; set; }
-
         internal List<T> Definitions { get; }
 
         internal string? Condition { get; }
@@ -30,8 +31,5 @@ namespace Sharpliner.Model
         }
 
         public ConditionBuilder<T> If => new(this);
-
-        public ConditionedDefinition<T> EndIf => Parent
-            ?? throw new InvalidOperationException("You have called EndIf on a top level statement. EndIf should be only used to return from a nested definition.");
     }
 }

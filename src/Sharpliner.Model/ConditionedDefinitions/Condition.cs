@@ -11,6 +11,8 @@
 
         protected Condition(string condition) => _condition = condition;
 
+        internal ConditionedDefinition? Parent { get; set; }
+
         public override string ToString() => _condition;
     }
 
@@ -22,7 +24,7 @@
     /// </summary>
     public abstract class Condition<T> : Condition
     {
-        internal ConditionedDefinition<T>? Parent { get; set; }
+        internal new ConditionedDefinition<T>? Parent { get; set; }
 
         protected Condition(string condition, ConditionedDefinition<T>? parent = null) : base(condition)
         {
