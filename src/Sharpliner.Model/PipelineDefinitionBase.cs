@@ -33,21 +33,24 @@ namespace Sharpliner.Model.Definition
         protected static ConditionedDefinition<VariableBase> Group(string name) => new(new VariableGroup(name), null);
         protected static ConditionBuilder<VariableBase> If => new();
 
+        /// <summary>
+        /// Allows the variables[""] notation for conditional definitions.
+        /// </summary>
         protected readonly PipelineVariable variables = new();
 
         protected static Condition<T> And<T>(Condition condition1, Condition condition2) => new AndCondition<T>(condition1, condition2);
+
+        protected static Condition Or<T>(Condition condition1, Condition condition2) => new OrCondition<T>(condition1, condition2);
+
+        protected static Condition<T> Equal<T>(string expression1, string expression2) => new EqualityCondition<T>(expression1, expression2, true);
+
+        protected static Condition<T> NotEqual<T>(string expression1, string expression2) => new EqualityCondition<T>(expression1, expression2, false);
 
         protected static Condition And(Condition condition1, Condition condition2) => new AndCondition(condition1, condition2);
 
         protected static Condition Or(Condition condition1, Condition condition2) => new OrCondition(condition1, condition2);
 
-        protected static Condition Or<T>(Condition condition1, Condition condition2) => new OrCondition<T>(condition1, condition2);
-
         protected static Condition Equal(string expression1, string expression2) => new EqualityDefinitionCondition(expression1, expression2, true);
-
-        protected static Condition<T> Equal<T>(string expression1, string expression2) => new EqualityCondition<T>(expression1, expression2, true);
-
-        protected static Condition<T> NotEqual<T>(string expression1, string expression2) => new EqualityCondition<T>(expression1, expression2, false);
 
         protected static Condition NotEqual(string expression1, string expression2) => new EqualityDefinitionCondition(expression1, expression2, false);
     }
