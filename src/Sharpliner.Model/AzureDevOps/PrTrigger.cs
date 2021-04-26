@@ -5,7 +5,7 @@
 
     public record NoPrTrigger : PrTrigger;
 
-    public record BranchPrTrigger(params string[] BranchNames) : PrTrigger;
+    public record BranchPrTrigger(params string[] Branches) : PrTrigger;
 
     public record DetailedPrTrigger : PrTrigger
     {

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.Model.AzureDevOps
 {
@@ -7,10 +8,19 @@ namespace Sharpliner.Model.AzureDevOps
     {
         private List<ConditionedDefinition<VariableBase>> _variables = new();
 
+        [YamlMember(Order = 100)]
         public string? Name { get; init; }
 
+        [YamlMember(Order = 200)]
+        public Trigger? Trigger { get; init; } = null;
+
+        [YamlMember(Order = 300)]
+        public PrTrigger? Pr { get; init; } = null;
+
+        [YamlMember(Order = 400)]
         public Resources? Resources { get; init; }
 
+        [YamlMember(Order = 500)]
         public List<ConditionedDefinition<VariableBase>> Variables
         {
             get => _variables;
@@ -31,12 +41,9 @@ namespace Sharpliner.Model.AzureDevOps
                 .ToList();
         }
 
-        public Trigger? Trigger { get; init; } = null;
-
-        public PrTrigger? Pr { get; init; } = null;
-
         // TODO: Scheduled triggers
 
+        [YamlMember(Order = 600)]
         public List<Stage> Stages { get; init; } = new();
     }
 }
