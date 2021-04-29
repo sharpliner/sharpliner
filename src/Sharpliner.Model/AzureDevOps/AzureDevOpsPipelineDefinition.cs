@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using Sharpliner.Model.Definition;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
