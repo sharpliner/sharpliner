@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sharpliner.Model.AzureDevOps
+namespace Sharpliner.Model.AzureDevOps.Tasks
 {
     /// <summary>
     /// https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/publish-pipeline-artifact?view=azure-devops
