@@ -15,8 +15,6 @@ namespace Sharpliner.Model
 
         internal ConditionedDefinition? Parent { get; set; }
 
-        internal List<ConditionedDefinition> Children { get; } = new();
-
         public override string ToString() => _condition;
     }
 

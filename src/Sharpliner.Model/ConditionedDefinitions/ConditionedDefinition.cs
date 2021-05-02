@@ -4,16 +4,16 @@ namespace Sharpliner.Model
 {
     public abstract record ConditionedDefinition
     {
+        internal string? Condition { get; }
+
         internal ConditionedDefinition? Parent { get; set; }
 
-        /// <summary>
-        /// Determines in which order elements from Definitions and Conditions are stored.
-        /// False = Definition
-        /// True = Condition
-        /// </summary>
-        internal List<bool> Order { get; } = new();
+        internal List<ConditionedDefinition> Definitions { get; } = new();
 
-        internal List<Condition> Conditions { get; } = new();
+        protected ConditionedDefinition(string? condition)
+        {
+            Condition = condition;
+        }
     }
 
     /// <summary>
@@ -26,18 +26,16 @@ namespace Sharpliner.Model
     /// </summary>
     public record ConditionedDefinition<T> : ConditionedDefinition
     {
-        internal List<T> Definitions { get; }
+        internal T? Definition { get; }
 
-        internal string? Condition { get; }
-
-        internal ConditionedDefinition(T definition, string? condition)
+        internal ConditionedDefinition(ConditionedDefinition<T> definition, string condition) : base(condition)
         {
-            Condition = condition;
+            Definitions.Add(definition);
+        }
 
-            Definitions = new List<T>
-            {
-                definition
-            };
+        internal ConditionedDefinition(T definition) : base((string?)null)
+        {
+            Definition = definition;
         }
 
         public ConditionBuilder<T> If => new(this);

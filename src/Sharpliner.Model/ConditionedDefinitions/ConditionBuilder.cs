@@ -41,8 +41,6 @@
         private Condition Link(Condition condition)
         {
             condition.Parent = Parent;
-            Parent?.Conditions.Add(condition);
-            Parent?.Order.Add(true);
             return condition;
         }
 
