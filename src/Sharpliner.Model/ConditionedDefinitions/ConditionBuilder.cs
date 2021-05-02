@@ -42,13 +42,13 @@
         {
             condition.Parent = Parent;
             Parent?.Conditions.Add(condition);
+            Parent?.Order.Add(true);
             return condition;
         }
 
         private Condition<T> Link(Condition<T> condition)
         {
-            condition.Parent = Parent;
-            Parent?.Conditions.Add(condition);
+            Link((Condition)condition);
             return condition;
         }
     }

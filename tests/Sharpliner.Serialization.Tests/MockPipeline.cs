@@ -11,7 +11,7 @@ namespace Sharpliner.Serialization.Tests
 
         public override AzureDevOpsPipeline Pipeline => new()
         {
-            Name = "$(Date:yyyMMdd).$(Rev:rr)",
+            /*Name = "$(Date:yyyMMdd).$(Rev:rr)",
 
             Trigger = new DetailedTrigger
             {
@@ -27,10 +27,9 @@ namespace Sharpliner.Serialization.Tests
             },
 
             Pr = new BranchPrTrigger("main", "release/*"),
-
+            */
             Variables =
             {
-                new Variable("Configuration", "Release"), // We can create the objects and then resue them for definition too
                 Variable("Configuration", "Release"),     // Or we have this more YAML-like definition
                 Group("PR keyvault variables"),
 
@@ -48,7 +47,7 @@ namespace Sharpliner.Serialization.Tests
                         .Variable("AzureSubscription", "Prod")
                         .Group("azure-prod"),
             },
-
+            /*
             Stages =
             {
                 new("Build", "Build the project")
@@ -84,7 +83,7 @@ namespace Sharpliner.Serialization.Tests
                                 },
 
                                 new InlineBashTask("Upload tests results",
-                                    "./upload.sh ./**/TestResult.xml")
+                                    "./upload.sh ./** /TestResult.xml")
                                 {
                                     Condition = "eq(variables['Build.Reason'], \"PullRequest\")",
                                 },
@@ -101,7 +100,7 @@ namespace Sharpliner.Serialization.Tests
                         // ...
                     }
                 }
-            }
+            }*/
         };
     }
 }

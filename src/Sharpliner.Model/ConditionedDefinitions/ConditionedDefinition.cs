@@ -5,6 +5,15 @@ namespace Sharpliner.Model
     public abstract record ConditionedDefinition
     {
         internal ConditionedDefinition? Parent { get; set; }
+
+        /// <summary>
+        /// Determines in which order elements from Definitions and Conditions are stored.
+        /// False = Definition
+        /// True = Condition
+        /// </summary>
+        internal List<bool> Order { get; } = new();
+
+        internal List<Condition> Conditions { get; } = new();
     }
 
     /// <summary>
@@ -19,15 +28,6 @@ namespace Sharpliner.Model
     {
         internal List<T> Definitions { get; }
 
-        internal List<Condition> Conditions { get; }
-
-        /// <summary>
-        /// Determines in which order elements from Definitions and Conditions are stored.
-        /// False = Definition
-        /// True = Condition
-        /// </summary>
-        internal List<bool> Order { get; }
-
         internal string? Condition { get; }
 
         internal ConditionedDefinition(T definition, string? condition)
@@ -38,10 +38,6 @@ namespace Sharpliner.Model
             {
                 definition
             };
-
-            Conditions = new List<Condition>();
-
-            Order = new List<bool>();
         }
 
         public ConditionBuilder<T> If => new(this);
