@@ -5,7 +5,6 @@
     /// and then forces us to add a condition. The condition then forces us to add
     /// an actual definition.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
     public class ConditionBuilder<T>
     {
         internal ConditionedDefinition<T>? Parent { get; }
@@ -16,45 +15,41 @@
         }
 
         public Condition<T> Equal(Condition<T> condition)
-            => condition;
+            => Link(condition);
 
         public Condition<T> NotEqual(Condition<T> condition)
-            => condition;
+            => Link(condition);
 
         public Condition<T> Equal(string expression1, string expression2)
-            => new EqualityCondition<T>(expression1, expression2, true)
-            {
-                Parent = Parent
-            };
+            => Link(new EqualityCondition<T>(expression1, expression2, true));
 
         public Condition<T> NotEqual(string expression1, string expression2)
-            => new EqualityCondition<T>(expression1, expression2, false)
-            {
-                Parent = Parent
-            };
+            => Link(new EqualityCondition<T>(expression1, expression2, false));
 
         public Condition<T> And(Condition<T> condition1, Condition<T> condition2)
-            => new AndCondition<T>(condition1, condition2)
-            {
-                Parent = Parent
-            };
+            => Link(new AndCondition<T>(condition1, condition2));
 
         public Condition<T> Or(Condition<T> condition1, Condition<T> condition2)
-            => new OrCondition<T>(condition1, condition2)
-            {
-                Parent = Parent
-            };
+            => Link(new OrCondition<T>(condition1, condition2));
 
         public Condition And(Condition condition1, Condition condition2)
-            => new AndCondition(condition1, condition2)
-            {
-                Parent = Parent
-            };
+            => Link(new AndCondition(condition1, condition2));
 
         public Condition Or(Condition condition1, Condition condition2)
-            => new OrCondition(condition1, condition2)
-            {
-                Parent = Parent
-            };
+            => Link(new OrCondition(condition1, condition2));
+
+        private Condition Link(Condition condition)
+        {
+            condition.Parent = Parent;
+            Parent?.Conditions.Add(condition);
+            return condition;
+        }
+
+        private Condition<T> Link(Condition<T> condition)
+        {
+            condition.Parent = Parent;
+            Parent?.Conditions.Add(condition);
+            return condition;
+        }
     }
 }

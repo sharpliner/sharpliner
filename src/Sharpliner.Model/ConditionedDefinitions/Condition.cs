@@ -1,4 +1,6 @@
-﻿namespace Sharpliner.Model
+﻿using System.Collections.Generic;
+
+namespace Sharpliner.Model
 {
     /// <summary>
     /// Represents an ${{ if ... }} statement in the YAML.
@@ -12,6 +14,8 @@
         protected Condition(string condition) => _condition = condition;
 
         internal ConditionedDefinition? Parent { get; set; }
+
+        internal List<ConditionedDefinition> Children { get; } = new();
 
         public override string ToString() => _condition;
     }

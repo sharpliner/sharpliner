@@ -19,15 +19,29 @@ namespace Sharpliner.Model
     {
         internal List<T> Definitions { get; }
 
+        internal List<Condition> Conditions { get; }
+
+        /// <summary>
+        /// Determines in which order elements from Definitions and Conditions are stored.
+        /// False = Definition
+        /// True = Condition
+        /// </summary>
+        internal List<bool> Order { get; }
+
         internal string? Condition { get; }
 
         internal ConditionedDefinition(T definition, string? condition)
         {
             Condition = condition;
+
             Definitions = new List<T>
             {
                 definition
             };
+
+            Conditions = new List<Condition>();
+
+            Order = new List<bool>();
         }
 
         public ConditionBuilder<T> If => new(this);
