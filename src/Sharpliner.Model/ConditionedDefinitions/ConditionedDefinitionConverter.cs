@@ -5,8 +5,10 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.Model.ConditionedDefinitions
 {
-    public abstract class ConditionedDefinitionConverter<T> : IYamlTypeConverter
+    public class ConditionedDefinitionConverter<T> : IYamlTypeConverter
     {
+        public IValueSerializer? ValueSerializer { get; set; }
+
         public bool Accepts(Type type) => typeof(ConditionedDefinition<T>).IsAssignableFrom(type);
 
         public object? ReadYaml(IParser parser, Type type) => throw new NotImplementedException();
@@ -31,15 +33,8 @@ namespace Sharpliner.Model.ConditionedDefinitions
             }
             else
             {
-                if (definition.Definition == null)
-                {
-                    throw new InvalidOperationException("Definition expected");
-                }
-
-                EmitValue(emitter, definition.Definition);
+                ValueSerializer?.SerializeValue(emitter, definition.Definition, definition.Definition?.GetType());
             }
         }
-
-        protected abstract void EmitValue(IEmitter emitter, T definition);
     }
 }

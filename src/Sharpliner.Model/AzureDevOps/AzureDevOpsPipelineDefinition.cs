@@ -1,4 +1,5 @@
 using Sharpliner.Model.AzureDevOps.Converters;
+using Sharpliner.Model.ConditionedDefinitions;
 using Sharpliner.Model.Definition;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -20,13 +21,17 @@ namespace Sharpliner.Model.AzureDevOps
 
         public sealed override string Publish()
         {
-            var serializer = new SerializerBuilder()
+            var variableConverter = new ConditionedDefinitionConverter<VariableBase>();
+            var serializerBuilder = new SerializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
                 .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull)
+                .WithTypeConverter(variableConverter)
                 .WithTypeConverter(new VariableConverter())
-                .Build();
+                .WithTypeConverter(new VariableGroupConverter());
 
-            return serializer.Serialize(Pipeline);
+            variableConverter.ValueSerializer = serializerBuilder.BuildValueSerializer();
+
+            return serializerBuilder.Build().Serialize(Pipeline);
         }
     }
 }
