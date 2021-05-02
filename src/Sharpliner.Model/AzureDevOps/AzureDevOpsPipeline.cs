@@ -1,12 +1,26 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.Model.AzureDevOps
 {
+    public class ConditionedDefinitionList<T> : List<T> where T : ConditionedDefinition
+    {
+        public new void Add(T item)
+        {
+            // When we define a tree of conditional definitions, the expression returns
+            // the leaf definition so we have to move up to the top-level definition
+            while (item.Parent != null)
+            {
+                item = (T)item.Parent;
+            }
+
+            base.Add(item);
+        }
+    }
+
     public record AzureDevOpsPipeline
     {
-        private List<ConditionedDefinition<VariableBase>> _variables = new();
+        private ConditionedDefinitionList<ConditionedDefinition<VariableBase>> _variables = new();
 
         [YamlMember(Order = 100)]
         public string? Name { get; init; }
@@ -21,25 +35,7 @@ namespace Sharpliner.Model.AzureDevOps
         public Resources? Resources { get; init; }
 
         [YamlMember(Order = 500)]
-        public List<ConditionedDefinition<VariableBase>> Variables
-        {
-            get => _variables;
-            init => _variables = value
-                .Select(v =>
-                {
-                    // Find the root definitions
-                    // This is because when we define a tree of conditional definitions,
-                    // the expression returns the leaf definition so we have to move back
-                    // up to the top-level definitions.
-                    while (v.Parent != null)
-                    {
-                        v = (ConditionedDefinition<VariableBase>)v.Parent;
-                    }
-
-                    return v;
-                })
-                .ToList();
-        }
+        public ConditionedDefinitionList<ConditionedDefinition<VariableBase>> Variables { get; } = new();
 
         // TODO: Scheduled triggers
 

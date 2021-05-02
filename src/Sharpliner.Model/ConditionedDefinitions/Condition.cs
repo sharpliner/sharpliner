@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Sharpliner.Model
+﻿namespace Sharpliner.Model
 {
     /// <summary>
     /// Represents an ${{ if ... }} statement in the YAML.
@@ -26,7 +24,7 @@ namespace Sharpliner.Model
     /// </summary>
     public abstract class Condition<T> : Condition
     {
-        internal new ConditionedDefinition<T>? Parent { get; set; }
+        // internal new ConditionedDefinition<T>? Parent { get; set; }
 
         protected Condition(string condition, ConditionedDefinition<T>? parent = null) : base(condition)
         {
