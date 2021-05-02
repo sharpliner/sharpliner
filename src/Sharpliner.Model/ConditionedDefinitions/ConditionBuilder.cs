@@ -47,7 +47,6 @@
         private Condition<T> Link(Condition<T> condition)
         {
             Link((Condition)condition);
-            condition.Parent = Parent;
             return condition;
         }
     }

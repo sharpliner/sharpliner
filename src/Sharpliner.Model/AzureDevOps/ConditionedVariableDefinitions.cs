@@ -22,7 +22,7 @@ namespace Sharpliner.Model.AzureDevOps
         private static ConditionedDefinition<VariableBase> Link(Condition condition, ConditionedDefinition<VariableBase> definition)
         {
             condition.Parent?.Definitions.Add(definition);
-            definition.Parent = condition.Parent ?? (condition as Condition<VariableBase>)?.Parent;
+            definition.Parent = condition.Parent;
             return definition;
         }
 
