@@ -21,19 +21,19 @@ namespace Sharpliner.Serialization.Tests
                     Group("PR keyvault variables"),
 
                     If.Equal(variables["Build.Reason"], "PullRequest")
-                    .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)")
-                    .Variable("IsPr", true),
+                        .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)")
+                        .Variable("IsPr", true),
 
                     If.And(Equal(variables["Build.SourceBranch"], "refs/heads/production"), NotEqual("Configuration", "Debug"))
-                    .Variable("PublishProfileFile", "Prod")
-                    .If.NotEqual(variables["Build.Reason"], "PullRequest")
-                        .Variable("AzureSubscription", "Int")
-                        .Group("azure-int")
-                    .EndIf()
-                    .If.Equal(variables["Build.Reason"], "PullRequest")
-                        .Variable("AzureSubscription", "Prod")
-                        .Group("azure-prod"),
-                },
+                        .Variable("PublishProfileFile", "Prod")
+                        .If.NotEqual(variables["Build.Reason"], "PullRequest")
+                            .Variable("AzureSubscription", "Int")
+                            .Group("azure-int")
+                        .EndIf()
+                        .If.Equal(variables["Build.Reason"], "PullRequest")
+                            .Variable("AzureSubscription", "Prod")
+                            .Group("azure-prod"),
+                }
             };
         }
 
