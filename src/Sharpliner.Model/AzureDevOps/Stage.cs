@@ -21,5 +21,7 @@ namespace Sharpliner.Model.AzureDevOps
             Name = name ?? throw new System.ArgumentNullException(nameof(name));
             DisplayName = displayName ?? throw new System.ArgumentNullException(nameof(displayName));
         }
+
+        public static implicit operator ConditionedDefinition<Stage>(Stage stage) => new(stage);
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Sharpliner.Model.ConditionedDefinitions;
+﻿using Sharpliner.Model.ConditionedDefinitions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.Model.AzureDevOps
@@ -22,7 +21,7 @@ namespace Sharpliner.Model.AzureDevOps
         public ConditionedDefinitionList<ConditionedDefinition<VariableBase>> Variables { get; } = new();
 
         [YamlMember(Order = 600)]
-        public List<Stage> Stages { get; init; } = new();
+        public ConditionedDefinitionList<ConditionedDefinition<Stage>> Stages { get; init; } = new();
 
         // TODO: Scheduled triggers
     }

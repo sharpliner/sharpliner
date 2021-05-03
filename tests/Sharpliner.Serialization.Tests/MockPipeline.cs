@@ -51,7 +51,7 @@ namespace Sharpliner.Serialization.Tests
 
             Stages =
             {
-                new("Build", "Build the project")
+                new Stage("Build", "Build the project")
                 {
                     Jobs =
                     {
@@ -59,10 +59,10 @@ namespace Sharpliner.Serialization.Tests
                         {
                             Variables =
                             {
-                                If.Equal("variables['IsPr']", "true")
+                                If.Equal(variables["IsPr"], "true")
                                     .Variable("DotnetVersion", "6.0-preview-4"),
 
-                                If.NotEqual("variables['IsPr']", "true")
+                                If.NotEqual(variables["IsPr"], "true")
                                     .Variable("DotnetVersion", "6.0"),
                             },
 
@@ -93,14 +93,15 @@ namespace Sharpliner.Serialization.Tests
                     }
                 },
 
-                new("Test", "Run E2E tests")
-                {
-                    DependsOn = { "Build" },
-                    Jobs =
+                If_<Stage>().Equal(variables["IsPr"], "true")
+                    .Stage(new("Test", "Run E2E tests")
                     {
-                        // ...
-                    }
-                }
+                        DependsOn = { "Build" },
+                        Jobs =
+                        {
+                            // ...
+                        }
+                    })
             }
         };
     }
