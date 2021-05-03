@@ -1,8 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.Model
 {
-    public abstract record ConditionedDefinition
+    public abstract record ConditionedDefinition : IYamlConvertible
     {
         /// <summary>
         /// Evaluated textual representation of the condition, e.g. "ne('foo', 'bar')".
@@ -23,6 +27,11 @@ namespace Sharpliner.Model
         {
             Condition = condition;
         }
+
+        public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+            => throw new NotImplementedException();
+
+        public abstract void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer);
     }
 
     /// <summary>
@@ -55,5 +64,27 @@ namespace Sharpliner.Model
         }
 
         public ConditionBuilder<T> If => new(this);
+
+        public override void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+        {
+            if (!string.IsNullOrEmpty(Condition))
+            {
+                emitter.Emit(new MappingStart(AnchorName.Empty, TagName.Empty, true, MappingStyle.Block));
+                emitter.Emit(new Scalar("${{ if " + Condition + " }}"));
+                emitter.Emit(new SequenceStart(AnchorName.Empty, TagName.Empty, true, SequenceStyle.Block));
+
+                foreach (var childDefinition in Definitions)
+                {
+                    nestedObjectSerializer(childDefinition, childDefinition.GetType());
+                }
+
+                emitter.Emit(new SequenceEnd());
+                emitter.Emit(new MappingEnd());
+            }
+            else
+            {
+                nestedObjectSerializer(Definition, Definition?.GetType());
+            }
+        }
     }
 }

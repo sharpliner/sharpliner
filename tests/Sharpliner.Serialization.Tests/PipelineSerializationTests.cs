@@ -53,7 +53,7 @@ namespace Sharpliner.Serialization.Tests
   - name: TargetBranch
     value: $(System.PullRequest.SourceBranch)
   - name: IsPr
-    value: True
+    value: true
 - ${{ if and(eq(variables['Build.SourceBranch'], refs/heads/production), ne(Configuration, Debug)) }}:
   - name: PublishProfileFile
     value: Prod

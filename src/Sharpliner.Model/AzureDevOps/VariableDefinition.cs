@@ -1,4 +1,5 @@
 ﻿using System;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.Model.AzureDevOps
 {
@@ -8,14 +9,26 @@ namespace Sharpliner.Model.AzureDevOps
         public static implicit operator ConditionedDefinition<VariableBase>(VariableBase definition) => new(definition);
     }
 
-    public record VariableGroup(string Name) : VariableBase;
+    public record VariableGroup : VariableBase
+    {
+        [YamlMember(Alias = "group")]
+        public string Name { get; }
+
+        public VariableGroup(string name)
+        {
+            Name = name ?? throw new ArgumentNullException(nameof(name));
+        }
+    }
 
     public record Variable : VariableBase
     {
+        [YamlMember(Alias = "name", Order = 1)]
         public string Name { get; }
 
+        [YamlMember(Alias = "value", Order = 2)]
         public object Value { get; }
 
+        [YamlMember(Alias = "readonly", Order = 3, DefaultValuesHandling = DefaultValuesHandling.OmitDefaults)]
         public bool Readonly { get; init; }
 
         private Variable(string name, object value)
