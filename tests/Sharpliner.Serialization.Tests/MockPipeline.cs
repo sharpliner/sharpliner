@@ -15,7 +15,7 @@ namespace Sharpliner.Serialization.Tests
 
             Trigger = new DetailedTrigger
             {
-                Batched = false,
+                Batch = false,
                 Branches = new()
                 {
                     Include =

@@ -11,7 +11,7 @@ namespace Sharpliner.Model.Definition
         {
             var serializerBuilder = new SerializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull);
+                .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitDefaults);
 
             return serializerBuilder.Build();
         }

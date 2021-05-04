@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text.RegularExpressions;
 using YamlDotNet.Serialization;
 
@@ -39,6 +40,7 @@ namespace Sharpliner.Model.AzureDevOps
         /// Whether to run this step; defaults to 'true'.
         /// </summary>
         [YamlMember(Order = 175)]
+        [DefaultValue(true)]
         public bool Enabled { get; init; } = true;
 
         /// <summary>
@@ -79,13 +81,22 @@ namespace Sharpliner.Model.AzureDevOps
         }
 
         /// <summary>
-        /// Make step only run when previous steps succeeded.
+        /// Make step only run when a condition is met.
         /// </summary>
-        /// <returns></returns>
-        public Step WhenSucceeded() => this with
+        public Step When(string condition) => this with
         {
-            Condition = "succeeded()"
+            Condition = condition
         };
+
+        /// <summary>
+        /// Make step only run when previous steps succeeded ('succeeded()').
+        /// </summary>
+        public Step WhenSucceeded() => When("succeeded()");
+
+        /// <summary>
+        /// Make step run even when previous steps failed ('succeededOrFailed()').
+        /// </summary>
+        public Step WhenSucceededOrFailed() => When("succeededOrFailed()");
 
         public static implicit operator ConditionedDefinition<Step>(Step step) => new(step);
     }

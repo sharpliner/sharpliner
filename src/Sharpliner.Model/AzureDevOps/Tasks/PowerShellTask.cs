@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.Model.AzureDevOps.Tasks
@@ -17,6 +18,7 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// Default value: `stop`.
         /// </summary>
         [YamlMember(Order = 114)]
+        [DefaultValue(ErrorActionPreference.Stop)]
         public ErrorActionPreference ErrorActionPreference { get; init; } = ErrorActionPreference.Stop;
 
         /// <summary>
@@ -77,6 +79,7 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         public string FilePath { get; }
 
         [YamlMember(Order = 2)]
+        [DefaultValue("inline")]
         public string TargetType => "inline";
 
         /// <summary>

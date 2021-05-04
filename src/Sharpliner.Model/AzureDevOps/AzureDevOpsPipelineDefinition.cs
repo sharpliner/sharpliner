@@ -10,8 +10,8 @@ namespace Sharpliner.Model.AzureDevOps
         public abstract AzureDevOpsPipeline Pipeline { get; }
 
         protected static ConditionedDefinition<VariableBase> Template(string path)
-            => new(new Variable("template", path));
-        protected static ConditionedDefinition<T> Template<T>(string path, TemplateParameters parameters)
+            => new Template<VariableBase>(path);
+        protected static ConditionedDefinition<T> Template<T>(string path, TemplateParameters? parameters = null)
             => new Template<T>(path, parameters);
 
         protected static ConditionedDefinition<VariableBase> Variable(string name, string value) => new(new Variable(name, value));

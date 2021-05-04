@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.Model.AzureDevOps.Tasks
@@ -33,6 +34,7 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// Default value: `true`.
         /// </summary>
         [YamlMember(Order = 200)]
+        [DefaultValue(true)]
         public bool NoRc { get; init; } = true;
 
         protected BashTask(string displayName)

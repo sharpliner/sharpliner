@@ -12,7 +12,7 @@
         /// <summary>
         /// Batch changes if true; start a new build for every push if false (default).
         /// </summary>
-        public bool Batched { get; init; } = false;
+        public bool Batch { get; init; } = false;
 
         public InclusionRule? Branches { get; init; } = null;
 

@@ -23,7 +23,7 @@ namespace Sharpliner.Serialization.Tests
 
             Trigger = new DetailedTrigger
             {
-                Batched = true,
+                Batch = true,
                 Branches = new()
                 {
                     Include = { "main", "xcode/*" }
@@ -63,8 +63,7 @@ namespace Sharpliner.Serialization.Tests
                                             Steps =
                                             {
                                                 If_<Step>().Equal(variables["_RunAsPublic"], "False")
-                                                    .Step(new InlinePowerShellTask(
-                                                        "Build",
+                                                    .Step(new CommandLineTask("Build",
                                                             "eng\\common\\CIBuild.cmd" +
                                                             " -configuration $(_BuildConfig)" +
                                                             " -prepareMachine" +
@@ -73,13 +72,32 @@ namespace Sharpliner.Serialization.Tests
                                                         .WhenSucceeded()),
 
                                                 If_<Step>().Equal(variables["_RunAsPublic"], "True")
-                                                    .Step(new InlinePowerShellTask(
-                                                        "Build and run tests",
+                                                    .Step(new CommandLineTask("Build and run tests",
                                                             "eng\\common\\CIBuild.cmd" +
                                                             " -configuration $(_BuildConfig)" +
                                                             " -prepareMachine" +
                                                             " $(_InternalBuildArgs)")
                                                         .WhenSucceeded())
+
+                                                    .Step(new AzureDevOpsTask("PublishTestResults@2", "Publish Unit Test Results")
+                                                    {
+                                                        Inputs =
+                                                        {
+                                                            { "testResultsFormat", "xUnit" },
+                                                            { "testResultsFiles", "$(Build.SourcesDirectory)/artifacts/TestResults/**/*.xml" },
+                                                            { "mergeTestResults", true },
+                                                            { "searchFolder", "$(system.defaultworkingdirectory)" },
+                                                            { "testRunTitle", "XHarness unit tests - $(Agent.JobName)" },
+                                                        }
+                                                    }.WhenSucceededOrFailed())
+
+                                                    .Step(new AzureDevOpsTask("ComponentGovernanceComponentDetection@0", "Component Governance scan")
+                                                    {
+                                                        Inputs =
+                                                        {
+                                                            { "ignoreDirectories", "$(Build.SourcesDirectory)/.packages,$(Build.SourcesDirectory)/artifacts/obj/Microsoft.DotNet.XHarness.CLI/$(_BuildConfig)/net6.0/android-tools-unzipped" },
+                                                        }
+                                                    }),
                                             }
                                         }
                                     }
@@ -90,6 +108,70 @@ namespace Sharpliner.Serialization.Tests
                 },
 
                 If_<Stage>().Equal(variables["_RunAsPublic"], "True")
+                    .Stage(new Stage("Build_OSX", "Build OSX")
+                    {
+                        Jobs = {
+                            new Template<Job>("/eng/common/templates/jobs/jobs.yml")
+                            {
+                                Parameters =
+                                {
+                                    { "enableTelemetry", true },
+                                    { "enablePublishBuildArtifacts", true },
+                                    { "enableMicrobuild", true },
+                                    { "enablePublishUsingPipelines", true },
+                                    { "enablePublishBuildAssets", true },
+                                    { "helixRepo", "dotnet/xharness" },
+                                    { "jobs", new[]
+                                        {
+                                            new Job("OSX", "Build OSX")
+                                            {
+                                                Pool = new Pool("Hosted macOS"),
+                                                /* Strategy = ... TODO ..., */
+                                                Steps =
+                                                {
+                                                    If_<Step>().Equal(variables["_RunAsPublic"], "False")
+                                                        .Step(new CommandLineTask("Build",
+                                                                "eng/common/cibuild.sh" +
+                                                                " --configuration $(_BuildConfig)" +
+                                                                " --prepareMachine" +
+                                                                " $(_InternalBuildArgs)" +
+                                                                " /p:Test=false")
+                                                            .WhenSucceeded()),
+
+                                                    If_<Step>().Equal(variables["_RunAsPublic"], "True")
+                                                        .Step(new CommandLineTask("Build and run tests",
+                                                                "eng/common/cibuild.sh" +
+                                                                " --configuration $(_BuildConfig)" +
+                                                                " --prepareMachine" +
+                                                                " $(_InternalBuildArgs)")
+                                                            .WhenSucceeded())
+
+                                                        .Step(new PublishPipelineArtifactTask(
+                                                                "Publish XHarness CLI for Helix Testing",
+                                                                "$(Build.SourcesDirectory)/artifacts/packages/$(_BuildConfig)/Shipping/Microsoft.DotNet.XHarness.CLI.1.0.0-ci.nupkg",
+                                                                "Microsoft.DotNet.XHarness.CLI.$(_BuildConfig)")
+                                                            .When("and(succeeded(), eq(variables['_BuildConfig'], 'Debug'))"))
+
+                                                        .Step(new AzureDevOpsTask("PublishTestResults@2", "Publish Unit Test Results")
+                                                        {
+                                                            Inputs =
+                                                            {
+                                                                { "testResultsFormat", "xUnit" },
+                                                                { "testResultsFiles", "$(Build.SourcesDirectory)/artifacts/TestResults/**/*.xml" },
+                                                                { "mergeTestResults", true },
+                                                                { "searchFolder", "$(system.defaultworkingdirectory)" },
+                                                                { "testRunTitle", "XHarness unit tests - $(Agent.JobName)" },
+                                                            }
+                                                        }.WhenSucceededOrFailed())
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    })
+
                     .Template("eng/e2e-test.yml", new TemplateParameters
                     {
                         { "name", "E2E_Android" },

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.Model.AzureDevOps.Tasks
@@ -19,13 +20,14 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// Your artifact name. You can specify any name you prefer. E.g.: drop
         /// </summary>
         [YamlMember(Order = 101)]
-        public string ArtifactName { get; init; } = "drop";
+        public string Artifact { get; init; }
 
         /// <summary>
         /// Artifacts publish location. Choose whether to store the artifact in Azure Pipelines,
         /// or to copy it to a file share that must be accessible from the pipeline agent.
         /// </summary>
         [YamlMember(Order = 102)]
+        [DefaultValue(ArtifactType.Pipeline)]
         public ArtifactType ArtifactType { get; init; } = ArtifactType.Pipeline;
 
         /// <summary>
@@ -47,12 +49,14 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// The value must be at least 1 and not greater than 128.
         /// </summary>
         [YamlMember(Order = 213)]
+        [DefaultValue(1)]
         public uint ParallelCount { get; init; } = 1;
 
-        public PublishPipelineArtifactTask(string displayName, string targetPath)
+        public PublishPipelineArtifactTask(string displayName, string targetPath, string artifactName = "drop")
             : base(displayName)
         {
             TargetPath = targetPath ?? throw new ArgumentNullException(nameof(targetPath));
+            Artifact = artifactName ?? throw new ArgumentNullException(nameof(artifactName));
         }
     }
 
