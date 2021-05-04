@@ -49,8 +49,8 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// The value must be at least 1 and not greater than 128.
         /// </summary>
         [YamlMember(Order = 213)]
-        [DefaultValue(1)]
-        public uint ParallelCount { get; init; } = 1;
+        [DefaultValue(1u)]
+        public uint ParallelCount { get; init; } = 1u;
 
         public PublishPipelineArtifactTask(string displayName, string targetPath, string artifactName = "drop")
             : base(displayName)
