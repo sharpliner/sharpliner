@@ -37,8 +37,8 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// </summary>
         public bool Pwsh { get; init; } = false;
 
-        public PowerShellTask(string displayName, string name)
-            : base(displayName, name)
+        public PowerShellTask(string displayName)
+            : base(displayName)
         {
         }
     }
@@ -50,8 +50,8 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// </summary>
         public string Contents { get; init; }
 
-        public InlinePowerShellTask(string displayName, string name, string contents)
-            : base(displayName, name)
+        public InlinePowerShellTask(string displayName, string contents)
+            : base(displayName)
         {
             Contents = contents ?? throw new ArgumentNullException(nameof(contents));
         }
@@ -70,8 +70,8 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// </summary>
         public string? Arguments { get; init; }
 
-        public PowerShellFileTask(string displayName, string name, string filePath)
-            : base(displayName, name)
+        public PowerShellFileTask(string displayName, string filePath)
+            : base(displayName)
         {
             FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
         }

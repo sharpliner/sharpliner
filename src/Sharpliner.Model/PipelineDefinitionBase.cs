@@ -23,15 +23,9 @@ namespace Sharpliner.Model.Definition
         public virtual TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
 
         /// <summary>
-        /// Define the pipeline by implementing this field.
+        /// Serializes the pipeline into a YAML string.
         /// </summary>
-        public abstract Pipeline Pipeline { get; }
-
-        protected static ConditionedDefinition<VariableBase> Variable(string name, string value) => new(new Variable(name, value), null);
-        protected static ConditionedDefinition<VariableBase> Variable(string name, int value) => new(new Variable(name, value), null);
-        protected static ConditionedDefinition<VariableBase> Variable(string name, bool value) => new(new Variable(name, value), null);
-        protected static ConditionedDefinition<VariableBase> Group(string name) => new(new VariableGroup(name), null);
-        protected static ConditionBuilder<VariableBase> If => new();
+        public abstract string Publish();
 
         /// <summary>
         /// Allows the variables[""] notation for conditional definitions.

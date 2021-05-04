@@ -8,28 +8,16 @@ namespace Sharpliner.Model.AzureDevOps
     public static class ConditionedVariableDefinitions
     {
         public static ConditionedDefinition<VariableBase> Variable(this Condition condition, string name, string value)
-            => new(new Variable(name, value), condition.ToString())
-            {
-                Parent = condition.Parent ?? (condition as Condition<VariableBase>)?.Parent
-            };
+            => ConditionedDefinition.Link<VariableBase>(condition, new Variable(name, value));
 
         public static ConditionedDefinition<VariableBase> Variable(this Condition condition, string name, bool value)
-            => new(new Variable(name, value), condition.ToString())
-            {
-                Parent = condition.Parent ?? (condition as Condition<VariableBase>)?.Parent
-            };
+            => ConditionedDefinition.Link<VariableBase>(condition, new Variable(name, value));
 
         public static ConditionedDefinition<VariableBase> Variable(this Condition condition, string name, int value)
-            => new(new Variable(name, value), condition.ToString())
-            {
-                Parent = condition.Parent ?? (condition as Condition<VariableBase>)?.Parent
-            };
+            => ConditionedDefinition.Link<VariableBase>(condition, new Variable(name, value));
 
         public static ConditionedDefinition<VariableBase> Group(this Condition condition, string name)
-            => new(new VariableGroup(name), condition.ToString())
-            {
-                Parent = condition.Parent ?? (condition as Condition<VariableBase>)?.Parent
-            };
+            => ConditionedDefinition.Link<VariableBase>(condition, new VariableGroup(name));
 
         public static ConditionedDefinition<VariableBase> Variable(
             this ConditionedDefinition<VariableBase> condition,

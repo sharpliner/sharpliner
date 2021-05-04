@@ -24,8 +24,6 @@
     /// </summary>
     public abstract class Condition<T> : Condition
     {
-        internal new ConditionedDefinition<T>? Parent { get; set; }
-
         protected Condition(string condition, ConditionedDefinition<T>? parent = null) : base(condition)
         {
             Parent = parent;

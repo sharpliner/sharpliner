@@ -42,8 +42,8 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// </summary>
         public uint ParallelCount { get; init; } = 1;
 
-        public PublishPipelineArtifactTask(string displayName, string name, string targetPath)
-            : base(displayName, name)
+        public PublishPipelineArtifactTask(string displayName, string targetPath)
+            : base(displayName)
         {
             TargetPath = targetPath ?? throw new ArgumentNullException(nameof(targetPath));
         }

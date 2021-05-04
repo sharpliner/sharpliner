@@ -1,4 +1,5 @@
 ﻿using Sharpliner.Model.AzureDevOps;
+using Sharpliner.Model.AzureDevOps.Tasks;
 
 namespace Sharpliner.Serialization.Tests
 {
@@ -8,9 +9,24 @@ namespace Sharpliner.Serialization.Tests
 
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
-        public override Pipeline Pipeline => new()
+        public override AzureDevOpsPipeline Pipeline => new()
         {
             Name = "$(Date:yyyMMdd).$(Rev:rr)",
+
+            Trigger = new DetailedTrigger
+            {
+                Batched = false,
+                Branches = new()
+                {
+                    Include =
+                    {
+                        "main",
+                        "release/*",
+                    }
+                }
+            },
+
+            Pr = new BranchPrTrigger("main", "release/*"),
 
             Variables =
             {
@@ -31,6 +47,61 @@ namespace Sharpliner.Serialization.Tests
                     .If.Equal(variables["Build.Reason"], "PullRequest")
                         .Variable("AzureSubscription", "Prod")
                         .Group("azure-prod"),
+            },
+
+            Stages =
+            {
+                new Stage("Build", "Build the project")
+                {
+                    Jobs =
+                    {
+                        new("Build_API", "Build API")
+                        {
+                            Variables =
+                            {
+                                If.Equal(variables["IsPr"], "true")
+                                    .Variable("DotnetVersion", "6.0-preview-4"),
+
+                                If.NotEqual(variables["IsPr"], "true")
+                                    .Variable("DotnetVersion", "6.0"),
+                            },
+
+                            Steps =
+                            {
+                                new InlineBashTask("Restore .NET",
+                                    "curl -L https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh",
+                                    "chmod +x dotnet-install.sh",
+                                    "./dotnet-install.sh --channel $(DotnetVersion) --install-dir ./.dotnet"),
+
+                                new InlineBashTask("Build .sln",
+                                    "./.dotnet/dotnet build src/MySolution.sln -c $(Configuration)"),
+
+                                new InlineBashTask("Run unit tests",
+                                    "./.dotnet/dotnet test src/MySolution.sln")
+                                {
+                                    ContinueOnError = true,
+                                    Condition = "eq(variables['Build.Reason'], \"PullRequest\")",
+                                },
+
+                                new InlineBashTask("Upload tests results",
+                                    "./upload.sh ./**/TestResult.xml")
+                                {
+                                    Condition = "eq(variables['Build.Reason'], \"PullRequest\")",
+                                },
+                            }
+                        }
+                    }
+                },
+
+                If_<Stage>().Equal(variables["IsPr"], "true")
+                    .Stage(new("Test", "Run E2E tests")
+                    {
+                        DependsOn = { "Build" },
+                        Jobs =
+                        {
+                            // ...
+                        }
+                    })
             }
         };
     }

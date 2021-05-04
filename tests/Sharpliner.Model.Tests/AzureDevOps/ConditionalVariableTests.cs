@@ -11,7 +11,7 @@ namespace Sharpliner.Model.Tests.AzureDevOps
         {
             public override string TargetFile => "azure-pipelines.yml";
 
-            public override Pipeline Pipeline => new()
+            public override AzureDevOpsPipeline Pipeline => new()
             {
                 Variables =
                 {
@@ -36,7 +36,7 @@ namespace Sharpliner.Model.Tests.AzureDevOps
         {
             public override string TargetFile => "azure-pipelines.yml";
 
-            public override Pipeline Pipeline => new()
+            public override AzureDevOpsPipeline Pipeline => new()
             {
                 Variables =
                 {
