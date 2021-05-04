@@ -31,7 +31,7 @@ namespace Sharpliner.Model
             }
         }
 
-        protected override void SerializeContent(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+        protected override void SerializeSelf(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
         {
             emitter.Emit(new MappingStart(AnchorName.Empty, TagName.Empty, true, MappingStyle.Block));
             emitter.Emit(new Scalar("template"));
@@ -50,6 +50,7 @@ namespace Sharpliner.Model
 
                 emitter.Emit(new MappingEnd());
             }
+
             emitter.Emit(new MappingEnd());
         }
     }

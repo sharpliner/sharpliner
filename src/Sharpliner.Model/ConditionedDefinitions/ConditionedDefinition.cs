@@ -106,7 +106,16 @@ namespace Sharpliner.Model
                 emitter.Emit(new SequenceStart(AnchorName.Empty, TagName.Empty, true, SequenceStyle.Block));
             }
 
-            SerializeContent(emitter, nestedObjectSerializer);
+            // We are first serializing us. We can be
+            //   - a condition-less definition (top level or leaf) => serialize value inside Definition
+            //   - a template => serialize the special shape of template + parameters
+            SerializeSelf(emitter, nestedObjectSerializer);
+
+            // Otherwise, we expect a list of Definitions
+            foreach (var childDefinition in Definitions)
+            {
+                nestedObjectSerializer(childDefinition);
+            }
 
             if (!string.IsNullOrEmpty(Condition))
             {
@@ -115,18 +124,11 @@ namespace Sharpliner.Model
             }
         }
 
-        protected virtual void SerializeContent(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+        protected virtual void SerializeSelf(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
         {
-            // When we define an actual definition (not a nested if), we expect the Definition property to be set
             if (Definition != null)
             {
                 nestedObjectSerializer(Definition);
-            }
-
-            // Otherwise, we expect a list of Definitions
-            foreach (var childDefinition in Definitions)
-            {
-                nestedObjectSerializer(childDefinition);
             }
         }
     }
