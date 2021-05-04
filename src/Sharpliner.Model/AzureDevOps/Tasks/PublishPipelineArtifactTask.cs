@@ -1,4 +1,5 @@
 ﻿using System;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.Model.AzureDevOps.Tasks
 {
@@ -11,35 +12,41 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// Path to the folder or file you want to publish.
         /// The path must be a fully qualified path or a valid path relative to the root directory of your repository.
         /// </summary>
+        [YamlMember(Alias = "publish", Order = 1)]
         public string TargetPath { get; }
 
         /// <summary>
         /// Your artifact name. You can specify any name you prefer. E.g.: drop
         /// </summary>
+        [YamlMember(Order = 101)]
         public string ArtifactName { get; init; } = "drop";
 
         /// <summary>
         /// Artifacts publish location. Choose whether to store the artifact in Azure Pipelines,
         /// or to copy it to a file share that must be accessible from the pipeline agent.
         /// </summary>
+        [YamlMember(Order = 102)]
         public ArtifactType ArtifactType { get; init; } = ArtifactType.Pipeline;
 
         /// <summary>
         /// The file share to which the artifact files will be copied.
         /// This can include variables. Required when ArtifactType = FilePath.
         /// </summary>
+        [YamlMember(Order = 211)]
         public string? FileSharePath { get; init; }
 
         /// <summary>
         /// Select whether to copy files in parallel using multiple threads for greater potential throughput.
         /// If this setting is not enabled, one thread will be used.
         /// </summary>
+        [YamlMember(Order = 212)]
         public bool Parallel { get; init; }
 
         /// <summary>
         /// Enter the degree of parallelism, or number of threads used, to perform the copy.
         /// The value must be at least 1 and not greater than 128.
         /// </summary>
+        [YamlMember(Order = 213)]
         public uint ParallelCount { get; init; } = 1;
 
         public PublishPipelineArtifactTask(string displayName, string targetPath)
