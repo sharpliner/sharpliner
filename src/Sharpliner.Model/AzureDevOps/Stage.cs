@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Sharpliner.Model.ConditionedDefinitions;
 
 namespace Sharpliner.Model.AzureDevOps
 {
@@ -12,9 +13,9 @@ namespace Sharpliner.Model.AzureDevOps
 
         public string? Condition { get; init; }
 
-        public List<ConditionedDefinition<VariableBase>> Variables { get; init; } = new();
+        public ConditionedDefinitionList<ConditionedDefinition<VariableBase>> Variables { get; init; } = new();
 
-        public List<Job> Jobs { get; init; } = new();
+        public ConditionedDefinitionList<ConditionedDefinition<Job>> Jobs { get; init; } = new();
 
         public Stage(string name, string displayName)
         {

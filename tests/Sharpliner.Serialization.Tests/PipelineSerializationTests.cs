@@ -68,5 +68,12 @@ namespace Sharpliner.Serialization.Tests
 stages: []
 ");
         }
+
+        [Fact]
+        public void Serialize_XHarness_Pipeline_Test()
+        {
+            XHarnessPipeline pipeline = new();
+            string yaml = pipeline.Publish();
+        }
     }
 }

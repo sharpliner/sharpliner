@@ -1,7 +1,4 @@
-using System.Collections.Generic;
 using Sharpliner.Model.Definition;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace Sharpliner.Model.AzureDevOps
 {
@@ -14,7 +11,7 @@ namespace Sharpliner.Model.AzureDevOps
 
         protected static ConditionedDefinition<VariableBase> Template(string path)
             => new(new Variable("template", path));
-        protected static ConditionedDefinition<T> Template<T>(string path, Dictionary<string, object> parameters)
+        protected static ConditionedDefinition<T> Template<T>(string path, TemplateParameters parameters)
             => new Template<T>(path, parameters);
 
         protected static ConditionedDefinition<VariableBase> Variable(string name, string value) => new(new Variable(name, value));
@@ -24,14 +21,6 @@ namespace Sharpliner.Model.AzureDevOps
         protected static ConditionBuilder<VariableBase> If => new();
         protected static ConditionBuilder<T> If_<T>() => new();
 
-        public sealed override string Publish()
-        {
-            // TODO: Build just once somewhere else
-            var serializerBuilder = new SerializerBuilder()
-                .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitNull);
-
-            return serializerBuilder.Build().Serialize(Pipeline);
-        }
+        public sealed override string Publish() => SharplinerSerializer.Serialize(Pipeline);
     }
 }

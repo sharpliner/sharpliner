@@ -86,7 +86,7 @@ namespace Sharpliner.Model
             Definition = definition;
         }
 
-        internal ConditionedDefinition(T definition) : base((string?)null)
+        public ConditionedDefinition(T definition) : base((string?)null)
         {
             Definition = definition;
         }
@@ -120,13 +120,13 @@ namespace Sharpliner.Model
             // When we define an actual definition (not a nested if), we expect the Definition property to be set
             if (Definition != null)
             {
-                nestedObjectSerializer(Definition, Definition.GetType());
+                nestedObjectSerializer(Definition);
             }
 
             // Otherwise, we expect a list of Definitions
             foreach (var childDefinition in Definitions)
             {
-                nestedObjectSerializer(childDefinition, childDefinition.GetType());
+                nestedObjectSerializer(childDefinition);
             }
         }
     }

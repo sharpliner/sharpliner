@@ -38,5 +38,7 @@ namespace Sharpliner.Model.AzureDevOps
             Name = name ?? throw new ArgumentNullException(nameof(name));
             DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName));
         }
+
+        public static implicit operator ConditionedDefinition<Job>(Job definition) => new(definition);
     }
 }

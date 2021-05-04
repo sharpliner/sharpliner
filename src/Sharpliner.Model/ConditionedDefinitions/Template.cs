@@ -33,14 +33,24 @@ namespace Sharpliner.Model
 
         protected override void SerializeContent(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
         {
+            emitter.Emit(new MappingStart(AnchorName.Empty, TagName.Empty, true, MappingStyle.Block));
             emitter.Emit(new Scalar("template"));
             emitter.Emit(new Scalar(_path));
 
             if (Parameters != null && Parameters.Any())
             {
                 emitter.Emit(new Scalar("parameters"));
-                nestedObjectSerializer(Parameters);
+                emitter.Emit(new MappingStart(AnchorName.Empty, TagName.Empty, true, MappingStyle.Block));
+
+                foreach (var parameter in Parameters)
+                {
+                    emitter.Emit(new Scalar(parameter.Key));
+                    nestedObjectSerializer(parameter.Value);
+                }
+
+                emitter.Emit(new MappingEnd());
             }
+            emitter.Emit(new MappingEnd());
         }
     }
 
