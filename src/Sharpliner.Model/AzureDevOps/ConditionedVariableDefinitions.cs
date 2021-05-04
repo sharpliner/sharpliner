@@ -20,38 +20,38 @@ namespace Sharpliner.Model.AzureDevOps
             => ConditionedDefinition.Link<VariableBase>(condition, new VariableGroup(name));
 
         public static ConditionedDefinition<VariableBase> Variable(
-            this ConditionedDefinition<VariableBase> condition,
+            this ConditionedDefinition<VariableBase> conditionedDefinition,
             string name,
             string value)
         {
-            condition.Definitions.Add(new Variable(name, value));
-            return condition;
+            conditionedDefinition.Definitions.Add(new Variable(name, value));
+            return conditionedDefinition;
         }
 
         public static ConditionedDefinition<VariableBase> Variable(
-            this ConditionedDefinition<VariableBase> condition,
+            this ConditionedDefinition<VariableBase> conditionedDefinition,
             string name,
             bool value)
         {
-            condition.Definitions.Add(new Variable(name, value));
-            return condition;
+            conditionedDefinition.Definitions.Add(new Variable(name, value));
+            return conditionedDefinition;
         }
 
         public static ConditionedDefinition<VariableBase> Variable(
-            this ConditionedDefinition<VariableBase> condition,
+            this ConditionedDefinition<VariableBase> conditionedDefinition,
             string name,
             int value)
         {
-            condition.Definitions.Add(new Variable(name, value));
-            return condition;
+            conditionedDefinition.Definitions.Add(new Variable(name, value));
+            return conditionedDefinition;
         }
 
         public static ConditionedDefinition<VariableBase> Group(
-            this ConditionedDefinition<VariableBase> condition,
+            this ConditionedDefinition<VariableBase> conditionedDefinition,
             string name)
         {
-            condition.Definitions.Add(new VariableGroup(name));
-            return condition;
+            conditionedDefinition.Definitions.Add(new VariableGroup(name));
+            return conditionedDefinition;
         }
 
         public static ConditionedDefinition<VariableBase> EndIf(this ConditionedDefinition<VariableBase> condition)

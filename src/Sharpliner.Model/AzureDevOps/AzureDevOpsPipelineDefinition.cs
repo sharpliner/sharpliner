@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Sharpliner.Model.Definition;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -10,6 +11,11 @@ namespace Sharpliner.Model.AzureDevOps
         /// Define the pipeline by implementing this field.
         /// </summary>
         public abstract AzureDevOpsPipeline Pipeline { get; }
+
+        protected static ConditionedDefinition<VariableBase> Template(string path)
+            => new(new Variable("template", path));
+        protected static ConditionedDefinition<T> Template<T>(string path, Dictionary<string, object> parameters)
+            => new Template<T>(path, parameters);
 
         protected static ConditionedDefinition<VariableBase> Variable(string name, string value) => new(new Variable(name, value));
         protected static ConditionedDefinition<VariableBase> Variable(string name, int value) => new(new Variable(name, value));

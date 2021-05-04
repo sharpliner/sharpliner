@@ -46,6 +46,19 @@ namespace Sharpliner.Model
             conditionedDefinition.Parent = condition.Parent;
             return conditionedDefinition;
         }
+
+        /// <summary>
+        /// This method is used for double-linking of the definition expression tree.
+        /// </summary>
+        /// <param name="condition">Parent condition</param>
+        /// <param name="definition">Definition that was added below the condition</param>
+        /// <returns>The conditioned definition coming out of the inputs</returns>
+        internal static ConditionedDefinition<T> Link<T>(Condition condition, Template<T> template)
+        {
+            condition.Parent?.Definitions.Add(template);
+            template.Parent = condition.Parent;
+            return template;
+        }
     }
 
     /// <summary>
@@ -78,6 +91,10 @@ namespace Sharpliner.Model
             Definition = definition;
         }
 
+        protected ConditionedDefinition(string? condition) : base(condition)
+        {
+        }
+
         public ConditionBuilder<T> If => new(this);
 
         public override void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
@@ -89,6 +106,17 @@ namespace Sharpliner.Model
                 emitter.Emit(new SequenceStart(AnchorName.Empty, TagName.Empty, true, SequenceStyle.Block));
             }
 
+            SerializeContent(emitter, nestedObjectSerializer);
+
+            if (!string.IsNullOrEmpty(Condition))
+            {
+                emitter.Emit(new SequenceEnd());
+                emitter.Emit(new MappingEnd());
+            }
+        }
+
+        protected virtual void SerializeContent(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+        {
             // When we define an actual definition (not a nested if), we expect the Definition property to be set
             if (Definition != null)
             {
@@ -99,12 +127,6 @@ namespace Sharpliner.Model
             foreach (var childDefinition in Definitions)
             {
                 nestedObjectSerializer(childDefinition, childDefinition.GetType());
-            }
-
-            if (!string.IsNullOrEmpty(Condition))
-            {
-                emitter.Emit(new SequenceEnd());
-                emitter.Emit(new MappingEnd());
             }
         }
     }
