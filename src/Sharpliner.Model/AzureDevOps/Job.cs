@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sharpliner.Model.ConditionedDefinitions;
 
 namespace Sharpliner.Model.AzureDevOps
 {
-
-    // TODO: missing properties Uses, Services
+    /// <summary>
+    /// https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#job
+    /// </summary>
     public record Job
     {
+        // TODO: missing properties Uses, Services
+
         public string Name { get; }
 
         public string DisplayName { get; }
@@ -17,7 +21,7 @@ namespace Sharpliner.Model.AzureDevOps
 
         public JobStrategy? Strategy { get; init; }
 
-        public Pool? Pool { get; init; }
+        public ConditionedDefinition<Pool>? Pool { get; init; }
 
         public ContainerReference? Container { get; init; }
 
@@ -25,9 +29,9 @@ namespace Sharpliner.Model.AzureDevOps
 
         public TimeSpan? CancelTimeout { get; init; }
 
-        public List<ConditionedDefinition<VariableBase>> Variables { get; init; } = new();
+        public ConditionedDefinitionList<ConditionedDefinition<VariableBase>> Variables { get; init; } = new();
 
-        public List<Step> Steps { get; init; } = new();
+        public ConditionedDefinitionList<ConditionedDefinition<Step>> Steps { get; init; } = new();
 
         public JobWorkspace Workspace { get; init; } = JobWorkspace.Outputs;
 

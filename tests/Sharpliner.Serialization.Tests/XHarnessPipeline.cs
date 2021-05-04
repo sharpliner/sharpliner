@@ -1,5 +1,6 @@
 ﻿using Sharpliner.Model;
 using Sharpliner.Model.AzureDevOps;
+using Sharpliner.Model.AzureDevOps.Tasks;
 
 namespace Sharpliner.Serialization.Tests
 {
@@ -29,7 +30,13 @@ namespace Sharpliner.Serialization.Tests
                 }
             },
 
-            Pr = new BranchPrTrigger("main", "xcode/*"),
+            Pr = new DetailedPrTrigger()
+            {
+                Branches = new()
+                {
+                    Include = { "main", "xcode/*" }
+                }
+            },
 
             Stages =
             {
@@ -47,6 +54,36 @@ namespace Sharpliner.Serialization.Tests
                                 { "enablePublishUsingPipelines", true },
                                 { "enablePublishBuildAssets", true },
                                 { "helixRepo", "dotnet/xharness" },
+                                { "jobs", new[]
+                                    {
+                                        new Job("Windows_NT", "Build Windows_NT")
+                                        {
+                                            Pool = new HostedPool("windows-2019"),
+                                            /* Strategy = ... TODO ..., */
+                                            Steps =
+                                            {
+                                                If_<Step>().Equal(variables["_RunAsPublic"], "False")
+                                                    .Step(new InlinePowerShellTask(
+                                                        "Build",
+                                                            "eng\\common\\CIBuild.cmd" +
+                                                            " -configuration $(_BuildConfig)" +
+                                                            " -prepareMachine" +
+                                                            " $(_InternalBuildArgs)" +
+                                                            " /p:Test=false")
+                                                        .WhenSucceeded()),
+
+                                                If_<Step>().Equal(variables["_RunAsPublic"], "True")
+                                                    .Step(new InlinePowerShellTask(
+                                                        "Build and run tests",
+                                                            "eng\\common\\CIBuild.cmd" +
+                                                            " -configuration $(_BuildConfig)" +
+                                                            " -prepareMachine" +
+                                                            " $(_InternalBuildArgs)")
+                                                        .WhenSucceeded())
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
@@ -58,6 +95,34 @@ namespace Sharpliner.Serialization.Tests
                         { "name", "E2E_Android" },
                         { "displayName", "Android - Simulators" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Android/Android.Helix.SDK.Tests.proj" },
+                    })
+
+                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    {
+                        { "name", "E2E_Android_Manual_Commands" },
+                        { "displayName", "Android - Manual Commands" },
+                        { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Android/Android.CLI.Commands.Tests.proj" },
+                    })
+
+                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    {
+                        { "name", "E2E_Apple_Simulators" },
+                        { "displayName", "Apple - Simulators" },
+                        { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Simulator.Tests.proj" },
+                    })
+
+                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    {
+                        { "name", "E2E_SimulatorInstaller" },
+                        { "displayName", "Apple - Simulator Commands" },
+                        { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/SimulatorInstaller.Tests.proj" },
+                    })
+
+                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    {
+                        { "name", "E2E_WASM" },
+                        { "displayName", "WASM" },
+                        { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/WASM/WASM.Helix.SDK.Tests.proj" },
                     }),
 
                 If_<Stage>().Equal(variables["_RunAsInternal"], "True")

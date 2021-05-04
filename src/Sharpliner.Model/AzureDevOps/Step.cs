@@ -77,5 +77,16 @@ namespace Sharpliner.Model.AzureDevOps
         {
             DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName));
         }
+
+        /// <summary>
+        /// Make step only run when previous steps succeeded.
+        /// </summary>
+        /// <returns></returns>
+        public Step WhenSucceeded() => this with
+        {
+            Condition = "succeeded()"
+        };
+
+        public static implicit operator ConditionedDefinition<Step>(Step step) => new(step);
     }
 }
