@@ -5,7 +5,7 @@
     /// </summary>
     public static class ConditionedStageDefinitions
     {
-        public static ConditionedDefinition<Stage> Stage(this Condition condition, Stage stage)
+        public static ConditionedDefinition<Stage> Stage(this Condition<Stage> condition, Stage stage)
             => ConditionedDefinition.Link(condition, stage);
 
         public static ConditionedDefinition<Stage> Stage(
