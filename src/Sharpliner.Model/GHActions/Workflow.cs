@@ -34,5 +34,10 @@ namespace Sharpliner.Model.GHActions
         /// </summary>
         public Trigger On { get; } = new ();
 
+        /// <summary>
+        /// Allows to set the permissions granted to the Github token that will be used with the workflow. This
+        /// setting will apply to all the jobs in a workflow. You can override this setting per job.
+        /// </summary>
+        public Permissions Permissions { get; init; } = new ();
     }
 }

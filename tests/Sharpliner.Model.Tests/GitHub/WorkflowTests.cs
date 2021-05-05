@@ -1,3 +1,4 @@
+using System;
 using Sharpliner.Model.GHActions;
 using Xunit;
 
@@ -149,6 +150,146 @@ namespace Sharpliner.Model.Tests.GitHub
             Assert.Null(w.On.Manuals.RepositoryDispatch);
             Assert.Empty(w.On.Schedules);
             Assert.Equal(2, w.On.Webhooks.Count);
+        }
+
+        [Fact]
+        public void Workflow_ReadAll_Permissions()
+        {
+            var w = new Workflow
+            {
+                On =
+                {
+                    Webhooks =
+                    {
+                        new PullRequest
+                        {
+                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                        }
+                    }
+                },
+                Permissions = new Permissions().All(GitHubPermission.Read)
+            };
+            foreach (var scope in Enum.GetValues<GitHubPermissionScope>())
+            {
+                Assert.Contains(scope, w.Permissions.Read);
+            }
+        }
+
+        [Fact]
+        public void Workflow_WriteAll_Permissions()
+        {
+
+            var w = new Workflow
+            {
+                On =
+                {
+                    Webhooks =
+                    {
+                        new PullRequest
+                        {
+                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                        }
+                    }
+                },
+                Permissions = new Permissions().All(GitHubPermission.Write)
+            };
+            foreach (var scope in Enum.GetValues<GitHubPermissionScope>())
+            {
+                Assert.Contains(scope, w.Permissions.Write);
+            }
+        }
+
+        [Fact]
+        public void Workflow_OneRead_WriteAll_Permissions()
+        {
+
+            var w = new Workflow
+            {
+                On =
+                {
+                    Webhooks =
+                    {
+                        new PullRequest
+                        {
+                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                        }
+                    }
+                },
+                Permissions = new Permissions
+                {
+                    Read =
+                    {
+                        GitHubPermissionScope.Actions,
+                    }
+                }.All(GitHubPermission.Write)
+            };
+            Assert.Contains(GitHubPermissionScope.Actions, w.Permissions.Read);
+            foreach (var scope in Enum.GetValues<GitHubPermissionScope>())
+            {
+                Assert.Contains(scope, w.Permissions.Write);
+            }
+        }
+
+        [Fact]
+        public void Workflow_OneWrite_ReadAll_Permissions()
+        {
+            var w = new Workflow
+            {
+                On =
+                {
+                    Webhooks =
+                    {
+                        new PullRequest
+                        {
+                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                        }
+                    }
+                },
+                Permissions = new Permissions
+                {
+                    Write =
+                    {
+                        GitHubPermissionScope.Actions,
+                    }
+                }.All(GitHubPermission.Read)
+            };
+            Assert.Contains(GitHubPermissionScope.Actions, w.Permissions.Write);
+            foreach (var scope in Enum.GetValues<GitHubPermissionScope>())
+            {
+                Assert.Contains(scope, w.Permissions.Read);
+            }
+        }
+
+        [Fact]
+        public void Workflow_Detailed_Permissions()
+        {
+            var w = new Workflow
+            {
+                On =
+                {
+                    Webhooks =
+                    {
+                        new PullRequest
+                        {
+                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                        }
+                    }
+                },
+                Permissions =
+                {
+                    Write =
+                    {
+                        GitHubPermissionScope.Actions,
+                    },
+                    Read = {
+                        GitHubPermissionScope.Actions,
+                        GitHubPermissionScope.Contents
+                    }
+                }
+            };
+            Assert.Contains(GitHubPermissionScope.Actions, w.Permissions.Write);
+            Assert.Contains(GitHubPermissionScope.Actions, w.Permissions.Read);
+            Assert.Contains(GitHubPermissionScope.Contents, w.Permissions.Read);
         }
     }
 }
