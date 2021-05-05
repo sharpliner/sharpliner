@@ -7,22 +7,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{3909241C-F29
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpliner.CLI", "src\Sharpliner.CLI\Sharpliner.CLI.csproj", "{33D124C1-C819-4989-9C13-66084ADFA9DE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpliner.Fluent", "src\Sharpliner.Fluent\Sharpliner.Fluent.csproj", "{A50DA547-A993-434B-8280-CCFAD9D2BB83}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpliner.Model", "src\Sharpliner.Model\Sharpliner.Model.csproj", "{4B94A59A-1035-4143-938F-E1C6206AC319}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpliner.Serialization", "src\Sharpliner.Serialization\Sharpliner.Serialization.csproj", "{68BEEEF7-5B69-4109-A42C-B86CE68CAEE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpliner", "src\Sharpliner\Sharpliner.csproj", "{4B94A59A-1035-4143-938F-E1C6206AC319}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{8FBB691D-7838-452D-AFF5-5CCEFFE7200E}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpliner.Serialization.Tests", "tests\Sharpliner.Serialization.Tests\Sharpliner.Serialization.Tests.csproj", "{1D248722-4A4A-4447-9051-4F34D5765B7A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4367760B-3BCA-4A9F-B8C9-9D106BCBE861}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharpliner.Model.Tests", "tests\Sharpliner.Model.Tests\Sharpliner.Model.Tests.csproj", "{4FD9DBA4-6998-4B15-A03A-C9DF36B61B1B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharpliner.Tests", "tests\Sharpliner.Tests\Sharpliner.Tests.csproj", "{4FD9DBA4-6998-4B15-A03A-C9DF36B61B1B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
