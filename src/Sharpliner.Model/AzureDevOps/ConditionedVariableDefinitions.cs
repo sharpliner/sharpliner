@@ -7,51 +7,51 @@ namespace Sharpliner.Model.AzureDevOps
     /// </summary>
     public static class ConditionedVariableDefinitions
     {
-        public static ConditionedDefinition<VariableBase> Variable(this Condition condition, string name, string value)
+        public static ConditionedDefinition<VariableBase> Variable(this Condition<VariableBase> condition, string name, string value)
             => ConditionedDefinition.Link<VariableBase>(condition, new Variable(name, value));
 
-        public static ConditionedDefinition<VariableBase> Variable(this Condition condition, string name, bool value)
+        public static ConditionedDefinition<VariableBase> Variable(this Condition<VariableBase> condition, string name, bool value)
             => ConditionedDefinition.Link<VariableBase>(condition, new Variable(name, value));
 
-        public static ConditionedDefinition<VariableBase> Variable(this Condition condition, string name, int value)
+        public static ConditionedDefinition<VariableBase> Variable(this Condition<VariableBase> condition, string name, int value)
             => ConditionedDefinition.Link<VariableBase>(condition, new Variable(name, value));
 
-        public static ConditionedDefinition<VariableBase> Group(this Condition condition, string name)
+        public static ConditionedDefinition<VariableBase> Group(this Condition<VariableBase> condition, string name)
             => ConditionedDefinition.Link<VariableBase>(condition, new VariableGroup(name));
 
         public static ConditionedDefinition<VariableBase> Variable(
-            this ConditionedDefinition<VariableBase> condition,
+            this ConditionedDefinition<VariableBase> conditionedDefinition,
             string name,
             string value)
         {
-            condition.Definitions.Add(new Variable(name, value));
-            return condition;
+            conditionedDefinition.Definitions.Add(new Variable(name, value));
+            return conditionedDefinition;
         }
 
         public static ConditionedDefinition<VariableBase> Variable(
-            this ConditionedDefinition<VariableBase> condition,
+            this ConditionedDefinition<VariableBase> conditionedDefinition,
             string name,
             bool value)
         {
-            condition.Definitions.Add(new Variable(name, value));
-            return condition;
+            conditionedDefinition.Definitions.Add(new Variable(name, value));
+            return conditionedDefinition;
         }
 
         public static ConditionedDefinition<VariableBase> Variable(
-            this ConditionedDefinition<VariableBase> condition,
+            this ConditionedDefinition<VariableBase> conditionedDefinition,
             string name,
             int value)
         {
-            condition.Definitions.Add(new Variable(name, value));
-            return condition;
+            conditionedDefinition.Definitions.Add(new Variable(name, value));
+            return conditionedDefinition;
         }
 
         public static ConditionedDefinition<VariableBase> Group(
-            this ConditionedDefinition<VariableBase> condition,
+            this ConditionedDefinition<VariableBase> conditionedDefinition,
             string name)
         {
-            condition.Definitions.Add(new VariableGroup(name));
-            return condition;
+            conditionedDefinition.Definitions.Add(new VariableGroup(name));
+            return conditionedDefinition;
         }
 
         public static ConditionedDefinition<VariableBase> EndIf(this ConditionedDefinition<VariableBase> condition)

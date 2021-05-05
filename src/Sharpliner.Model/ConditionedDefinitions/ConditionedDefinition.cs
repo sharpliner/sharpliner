@@ -46,6 +46,19 @@ namespace Sharpliner.Model
             conditionedDefinition.Parent = condition.Parent;
             return conditionedDefinition;
         }
+
+        /// <summary>
+        /// This method is used for double-linking of the definition expression tree.
+        /// </summary>
+        /// <param name="condition">Parent condition</param>
+        /// <param name="definition">Definition that was added below the condition</param>
+        /// <returns>The conditioned definition coming out of the inputs</returns>
+        internal static ConditionedDefinition<T> Link<T>(Condition condition, Template<T> template)
+        {
+            condition.Parent?.Definitions.Add(template);
+            template.Parent = condition.Parent;
+            return template;
+        }
     }
 
     /// <summary>
@@ -73,9 +86,13 @@ namespace Sharpliner.Model
             Definition = definition;
         }
 
-        internal ConditionedDefinition(T definition) : base((string?)null)
+        public ConditionedDefinition(T definition) : base((string?)null)
         {
             Definition = definition;
+        }
+
+        protected ConditionedDefinition(string? condition) : base(condition)
+        {
         }
 
         public ConditionBuilder<T> If => new(this);
@@ -89,22 +106,29 @@ namespace Sharpliner.Model
                 emitter.Emit(new SequenceStart(AnchorName.Empty, TagName.Empty, true, SequenceStyle.Block));
             }
 
-            // When we define an actual definition (not a nested if), we expect the Definition property to be set
-            if (Definition != null)
-            {
-                nestedObjectSerializer(Definition, Definition.GetType());
-            }
+            // We are first serializing us. We can be
+            //   - a condition-less definition (top level or leaf) => serialize value inside Definition
+            //   - a template => serialize the special shape of template + parameters
+            SerializeSelf(emitter, nestedObjectSerializer);
 
             // Otherwise, we expect a list of Definitions
             foreach (var childDefinition in Definitions)
             {
-                nestedObjectSerializer(childDefinition, childDefinition.GetType());
+                nestedObjectSerializer(childDefinition);
             }
 
             if (!string.IsNullOrEmpty(Condition))
             {
                 emitter.Emit(new SequenceEnd());
                 emitter.Emit(new MappingEnd());
+            }
+        }
+
+        protected virtual void SerializeSelf(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+        {
+            if (Definition != null)
+            {
+                nestedObjectSerializer(Definition);
             }
         }
     }

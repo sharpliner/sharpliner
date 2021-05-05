@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Sharpliner.Model.Tests.AzureDevOps
 {
-    public class PipelineSerializationTests
+    public class ConditionalVariableTests
     {
         private class And_Condition_Test_Pipeline : AzureDevOpsPipelineDefinition
         {

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.ComponentModel;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.Model.AzureDevOps.Tasks
 {
@@ -8,12 +10,15 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// Specify the working directory in which you want to run the command.
         /// If you leave it empty, the working directory is $(Build.SourcesDirectory).
         /// </summary>
+        [YamlMember(Order = 113)]
         public string? WorkingDirectory { get; init; }
 
         /// <summary>
         /// Prepends the line $ErrorActionPreference = 'VALUE' at the top of your script.
         /// Default value: `stop`.
         /// </summary>
+        [YamlMember(Order = 114)]
+        [DefaultValue(ErrorActionPreference.Stop)]
         public ErrorActionPreference ErrorActionPreference { get; init; } = ErrorActionPreference.Stop;
 
         /// <summary>
@@ -21,6 +26,7 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// Otherwise the task will rely on the exit code to determine failure
         /// Default value: `false`.
         /// </summary>
+        [YamlMember(Order = 115)]
         public bool FailOnStderr { get; init; } = false;
 
         /// <summary>
@@ -29,12 +35,14 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// Otherwise the line is not appended to the end of your script
         /// Default value: `false`.
         /// </summary>
+        [YamlMember(Order = 116)]
         public bool IgnoreLASTEXITCODE { get; init; } = false;
 
         /// <summary>
         /// If this is true, then on Windows the task will use pwsh.exe from your PATH instead of powershell.exe.
         /// Default value: `false`.
         /// </summary>
+        [YamlMember(Order = 117)]
         public bool Pwsh { get; init; } = false;
 
         public PowerShellTask(string displayName)
@@ -48,7 +56,11 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// <summary>
         /// Required if Type is inline, contents of the script.
         /// </summary>
+        [YamlMember(Alias = "powershell", Order = 1)]
         public string Contents { get; init; }
+
+        [YamlMember(Order = 2)]
+        public string TargetType => "filepath";
 
         public InlinePowerShellTask(string displayName, string contents)
             : base(displayName)
@@ -63,7 +75,12 @@ namespace Sharpliner.Model.AzureDevOps.Tasks
         /// Path of the script to execute.
         /// Must be a fully qualified path or relative to $(System.DefaultWorkingDirectory).
         /// </summary>
+        [YamlMember(Alias = "powershell", Order = 1)]
         public string FilePath { get; }
+
+        [YamlMember(Order = 2)]
+        [DefaultValue("inline")]
+        public string TargetType => "inline";
 
         /// <summary>
         /// Arguments passed to the Bash script.

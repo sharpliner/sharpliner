@@ -3,20 +3,24 @@ using System.Collections.Generic;
 
 namespace Sharpliner.Model.AzureDevOps
 {
-    public abstract record Pool();
-
-    public record PoolName : Pool
+    public record Pool(string? Name)
     {
-        public string Name { get; }
-
-        internal PoolName(string name) : base()
-        {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-        }
+        public static implicit operator ConditionedDefinition<Pool>(Pool pool) => new(pool);
     }
 
-    public record HostedPool(string Name, string VmImage) : Pool
+    public record HostedPool : Pool
     {
+        public string VmImage { get; }
+
         public List<string> Demands { get; init; } = new();
+
+        public HostedPool(string vmImage) : this(null!, vmImage)
+        {
+        }
+
+        public HostedPool(string name, string vmImage) : base(name)
+        {
+            VmImage = vmImage ?? throw new ArgumentNullException(nameof(vmImage));
+        }
     }
 }

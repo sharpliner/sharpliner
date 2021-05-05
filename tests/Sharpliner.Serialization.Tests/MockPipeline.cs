@@ -15,7 +15,7 @@ namespace Sharpliner.Serialization.Tests
 
             Trigger = new DetailedTrigger
             {
-                Batched = false,
+                Batch = false,
                 Branches = new()
                 {
                     Include =
@@ -55,7 +55,7 @@ namespace Sharpliner.Serialization.Tests
                 {
                     Jobs =
                     {
-                        new("Build_API", "Build API")
+                        new Job("Build_API", "Build API")
                         {
                             Variables =
                             {
