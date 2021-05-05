@@ -30,7 +30,7 @@ namespace Sharpliner.CI
                     {
                         new Job("Build", "Build and test")
                         {
-                            Pool = new HostedPool("Azure Pipelines", "vs2017-win2016"),
+                            Pool = new HostedPool("Azure Pipelines", "windows-latest"),
                             Steps =
                             {
                                 new AzureDevOpsTask("UseDotNet@2", "Use .NET 5")
