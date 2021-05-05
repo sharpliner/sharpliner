@@ -1,4 +1,4 @@
-namespace Sharpliner.GHActions
+namespace Sharpliner.GitHubActions
 {
     public record Strategy
     {

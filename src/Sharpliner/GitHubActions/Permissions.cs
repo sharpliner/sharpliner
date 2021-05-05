@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Sharpliner.GHActions
+namespace Sharpliner.GitHubActions
 {
     public enum GitHubPermissionScope
     {

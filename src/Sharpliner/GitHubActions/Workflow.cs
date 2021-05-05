@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 
-namespace Sharpliner.GHActions
+namespace Sharpliner.GitHubActions
 {
     /// <summary>
     /// A workflow represents and automatic process in GitHub that have one more more steps.

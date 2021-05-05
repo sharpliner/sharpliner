@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Sharpliner.GHActions
+namespace Sharpliner.GitHubActions
 {
     /// <summary>
     /// Representation of all the possible triggers that a GitHub workflow can react too.

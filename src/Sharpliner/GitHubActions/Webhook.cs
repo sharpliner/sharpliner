@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sharpliner.GHActions
+namespace Sharpliner.GitHubActions
 {
     /// <summary>
     /// Base abstract class for all webhook related triggers.

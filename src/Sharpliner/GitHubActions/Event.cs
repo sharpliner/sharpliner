@@ -1,4 +1,4 @@
-namespace Sharpliner.GHActions
+namespace Sharpliner.GitHubActions
 {
     /// <summary>
     /// Abstract class that represents all the possible events that will trigger a workflow.

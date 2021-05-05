@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Sharpliner.GHActions
+namespace Sharpliner.GitHubActions
 {
     /// <summary>
     /// Abstract class that represents all the triggers that are initiated manually by a user.

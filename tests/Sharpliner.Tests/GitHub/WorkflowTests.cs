@@ -1,5 +1,5 @@
 using System;
-using Sharpliner.GHActions;
+using Sharpliner.GitHubActions;
 using Xunit;
 
 namespace Sharpliner.Tests.GitHub
