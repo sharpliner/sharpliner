@@ -10,6 +10,7 @@
   
   <ItemGroup>
     <Content Include="build\Sharpliner.Tools.props" PackagePath="build\" />
+    <Content Include="build\Sharpliner.Tools.targets" PackagePath="build\" />
   </ItemGroup>
 
   <ItemGroup>

@@ -4,5 +4,5 @@
     <TaskAssembly>$(MSBuildThisFileDirectory)..\tasks\net5.0\Sharpliner.Tools.dll</TaskAssembly>
   </PropertyGroup>
 
-  <UsingTask TaskName="Sharpliner.Tools.SayHelloTask" AssemblyFile="$(TaskAssembly)" />
+  <UsingTask TaskName="Sharpliner.Tools.SayHello" AssemblyFile="$(TaskAssembly)" />
 </Project>
