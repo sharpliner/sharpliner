@@ -18,7 +18,19 @@
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.9.0" />
     <ProjectReference Include="..\Sharpliner\Sharpliner.csproj" />
     <!-- Marks all packages as 'local only' so they don't end up in the nuspec -->
+    <ProjectReference Update="@(ProjectReference)" PrivateAssets="All" />
     <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
   </ItemGroup>
+  
+  <!-- Make sure that referenced projects (Sharpliner.dll) are packaged inside tasks\ -->
+  <PropertyGroup>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
+  </PropertyGroup>
+  
+  <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
+    </ItemGroup>
+  </Target>
 
 </Project>
