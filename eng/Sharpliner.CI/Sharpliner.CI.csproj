@@ -5,11 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- These will appear in artifacts/packages after you call `dotnet pack` -->
+    <PackageReference Include="Sharpliner" Version="1.0.0" />
     <PackageReference Include="Sharpliner.Tools" Version="1.0.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Sharpliner\Sharpliner.csproj" />
   </ItemGroup>
 
 </Project>
