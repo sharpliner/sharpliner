@@ -16,8 +16,6 @@ namespace Sharpliner.Tools
 
         public override bool Execute()
         {
-            Log.LogMessage(MessageImportance.High, "Searching for all pipeline definitions inside " + Assembly);
-
             var definitions = FindPipelines<AzureDevOpsPipelineDefinition>();
 
             foreach (var definition in definitions)

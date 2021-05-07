@@ -1,5 +1,9 @@
 <Project>
-  <Target Name="SharplinerPipelinePublish" AfterTargets="Build">
-    <PublishPipelines Assembly="$(IntermediateOutputPath)\$(AssemblyName).dll" />
+  <Target Name="PublishSharplinerPipelines" AfterTargets="Build">
+    <PropertyGroup>
+      <_AssemblyToSearch>$(OutputPath)$(AssemblyName).dll</_AssemblyToSearch>
+    </PropertyGroup>
+    <Message Importance="high" Text="Publishing all pipeline definitions inside $(_AssemblyToSearch)" />
+    <PublishPipelines Assembly="$(_AssemblyToSearch)" />
   </Target>
 </Project>

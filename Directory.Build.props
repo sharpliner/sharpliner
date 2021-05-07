@@ -29,6 +29,6 @@
     <IntermediateOutputPath Condition="'$(PlatformName)' == 'AnyCPU'">$(BaseIntermediateOutputPath)$(Configuration)\</IntermediateOutputPath>
     <IntermediateOutputPath Condition="'$(PlatformName)' != 'AnyCPU'">$(BaseIntermediateOutputPath)$(PlatformName)\$(Configuration)\</IntermediateOutputPath>
     
-    <PackageOutputPath>$(ArtifactsPackagesDir)</PackageOutputPath>
+    <PackageOutputPath>$(ArtifactsPackagesDir)\</PackageOutputPath>
   </PropertyGroup>
 </Project>
