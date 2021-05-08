@@ -1,5 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
+  <!--
+    To correctly re-build this project so that it consumes the latest code changes, you have to:
+    1. rm -rf ~/.nuget/packages/sharpliner*
+    2. rm -rf artifacts/packages
+    3. dotnet pack src/Sharpliner/Sharpliner.csproj
+    4. dotnet pack src/Sharpliner.Tools/Sharpliner.Tools.csproj
+    5. dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj
+  -->
+
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
