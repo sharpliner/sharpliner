@@ -1,4 +1,8 @@
-﻿using Sharpliner.AzureDevOps;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Reflection;
+using Sharpliner.AzureDevOps;
 
 namespace Sharpliner.Definition
 {
@@ -22,10 +26,54 @@ namespace Sharpliner.Definition
         /// </summary>
         public virtual TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
 
+        public virtual void Publish()
+        {
+            string fileName;
+            switch (TargetPathType)
+            {
+                case TargetPathType.RelativeToGitRoot:
+                    var currentDir = new DirectoryInfo(Directory.GetCurrentDirectory());
+                    while (!Directory.Exists(Path.Combine(currentDir.FullName, ".git")))
+                    {
+                        currentDir = currentDir.Parent;
+
+                        if (currentDir == null)
+                        {
+                            throw new Exception($"Failed to find git repository in {Directory.GetParent(Assembly.GetExecutingAssembly().Location)?.FullName}");
+                        }
+                    }
+
+                    fileName = Path.Combine(currentDir.FullName, TargetFile);
+                    break;
+
+                case TargetPathType.RelativeToCurrentDir:
+                    fileName = TargetFile;
+                    break;
+
+                case TargetPathType.RelativeToAssembly:
+                    fileName = Path.Combine(Assembly.GetExecutingAssembly().Location, TargetFile);
+                    break;
+
+                case TargetPathType.Absolute:
+                    if (!Path.IsPathRooted(TargetFile))
+                    {
+                        throw new Exception($"Failed to publish pipeline to {TargetFile}, path is not absolute.");
+                    }
+
+                    fileName = TargetFile;
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(TargetPathType));
+            }
+
+            File.WriteAllText(fileName, Serialize());
+        }
+
         /// <summary>
         /// Serializes the pipeline into a YAML string.
         /// </summary>
-        public abstract string Publish();
+        protected abstract string Serialize();
 
         /// <summary>
         /// Allows the variables[""] notation for conditional definitions.
