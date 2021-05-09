@@ -1,14 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <!--
-    To correctly re-build this project so that it consumes the latest code changes, you have to:
-    1. rm -rf ~/.nuget/packages/sharpliner*
-    2. rm -rf artifacts/packages
-    3. dotnet pack src/Sharpliner/Sharpliner.csproj
-    4. dotnet pack src/Sharpliner.Tools/Sharpliner.Tools.csproj
-    5. dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj
-  -->
-
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
@@ -18,7 +9,16 @@
     <PackageReference Include="Sharpliner" Version="1.0.0" />
     <PackageReference Include="Sharpliner.Tools" Version="1.0.0" />
   </ItemGroup>
-  
+
+  <!--
+    This project mimics the external usage of Sharpliner libraries to publish this repo's pipeline.
+
+    To correctly re-build this project so that it consumes the latest code changes, we have to:
+    1. Clean NuGet caches
+    3. Create Sharpliner and Sharpliner.CI nupkgs
+    5. Restore this project from those
+  -->
+
   <Target Name="CleanDependencies" AfterTargets="Clean">
     <Exec Condition=" '$(OS)' != 'Windows_NT' " Command="$(MSBuildThisFileDirectory)clean-dependencies.sh" />
     <Exec Condition=" '$(OS)' == 'Windows_NT' " Command="powershell.exe -NonInteractive -ExecutionPolicy Unrestricted $(MSBuildThisFileDirectory)clean-dependencies.ps1" />
