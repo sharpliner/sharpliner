@@ -8,4 +8,7 @@ $repo_root = Join-Path $PSScriptRoot ".."
 $repo_root = Join-Path $repo_root ".."
 
 # Remove Sharpliner .nupkg packages
-Remove-Item -Recurse "$repo_root/artifacts/packages/*"
+
+if (Test-Path "$repo_root/artifacts/packages") {
+    Remove-Item -Recurse "$repo_root/artifacts/packages/*"
+}
