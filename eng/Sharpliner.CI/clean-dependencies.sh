@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Clean cache
-dotnet nuget locals all --list | cut -d " " -f2 | xargs -i rm -rfv '{}/sharpliner*'
+dotnet nuget locals all --list | cut -d " " -f2 | xargs -i sh -c 'rm -rfv "{}/sharpliner"*'
 
 # Get current path
 here="${BASH_SOURCE[0]}"
