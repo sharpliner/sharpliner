@@ -17,8 +17,9 @@ jobs:
       vmImage: windows-latest
 
     steps:
+    # dotnet build fails with .NET 5 SDK and the new() statements
     - task: UseDotNet@2
-      displayName: Use .NET 5
+      displayName: Install .NET 6 preview 3
       inputs:
         packageType: sdk
         version: 6.0.100-preview.3.21202.5
@@ -29,6 +30,13 @@ jobs:
         command: build
         includeNuGetOrg: true
         projects: Sharpliner.sln
+
+    # dotnet test somehow doesn't work with .NET 6 SDK
+    - task: UseDotNet@2
+      displayName: Install .NET 5
+      inputs:
+        packageType: sdk
+        version: 5.0.202
 
     - task: DotNetCoreCLI@2
       displayName: dotnet test
