@@ -54,7 +54,7 @@ namespace Sharpliner.CI
                                 },
                                 
                                 // dotnet test somehow doesn't work with .NET 6 SDK
-                                new AzureDevOpsTask("UseDotNet@2", "Use .NET 5")
+                                new AzureDevOpsTask("UseDotNet@2", "Install .NET 5")
                                 {
                                     Inputs = new TaskInputs
                                     {

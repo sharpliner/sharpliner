@@ -3,21 +3,30 @@ trigger:
   branches:
     include:
     - main
+    exclude: []
 
 pr:
   branches:
-    include:
-    - main
+  - main
 
-jobs:
+variables: []
+
+stages:
+- stage: Build
+  displayName: Build
+  dependsOn: []
+  variables: []
+  jobs:
   - job: Build
     displayName: Build and test
+    dependsOn: []
     pool:
-      name: Azure Pipelines
       vmImage: windows-latest
-
+      demands: []
+      name: Azure Pipelines
+    variables: []
     steps:
-    # dotnet build fails with .NET 5 SDK and the new() statements
+
     - task: UseDotNet@2
       displayName: Install .NET 6 preview 3
       inputs:
@@ -31,7 +40,6 @@ jobs:
         includeNuGetOrg: true
         projects: Sharpliner.sln
 
-    # dotnet test somehow doesn't work with .NET 6 SDK
     - task: UseDotNet@2
       displayName: Install .NET 5
       inputs:
@@ -42,4 +50,5 @@ jobs:
       displayName: dotnet test
       inputs:
         command: test
+        includeNuGetOrg: true
         projects: Sharpliner.sln
