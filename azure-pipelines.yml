@@ -14,24 +14,24 @@ jobs:
     displayName: Build and test
     pool:
       name: Azure Pipelines
-      vmImage: 'windows-latest'
+      vmImage: windows-latest
 
     steps:
     - task: UseDotNet@2
       displayName: Use .NET 5
       inputs:
-        packageType: 'sdk'
-        version: '5.0.102'
+        packageType: sdk
+        version: 6.0.100-preview.3.21202.5
 
     - task: DotNetCoreCLI@2
-      displayName: 'dotnet build'
+      displayName: dotnet build
       inputs:
-        command: 'build'
+        command: build
         includeNuGetOrg: true
         projects: Sharpliner.sln
 
     - task: DotNetCoreCLI@2
-      displayName: 'dotnet test'
+      displayName: dotnet test
       inputs:
         command: test
         projects: Sharpliner.sln
