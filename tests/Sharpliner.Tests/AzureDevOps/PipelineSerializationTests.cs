@@ -41,7 +41,7 @@ namespace Sharpliner.Tests.AzureDevOps
         public void Serialize_Pipeline_Test()
         {
             VariablesPipeline pipeline = new();
-            string yaml = pipeline.Publish();
+            string yaml = pipeline.Serialize();
             yaml.Should().Be(
 @"variables:
 - name: Configuration
@@ -73,7 +73,7 @@ stages: []
         public void Serialize_XHarness_Pipeline_Test()
         {
             XHarnessPipeline pipeline = new();
-            string yaml = pipeline.Publish();
+            string yaml = pipeline.Serialize();
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Sharpliner.Definition
         /// </summary>
         public virtual TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
 
-        public virtual void Publish()
+        public void Publish()
         {
             string fileName;
             switch (TargetPathType)
@@ -73,7 +73,7 @@ namespace Sharpliner.Definition
         /// <summary>
         /// Serializes the pipeline into a YAML string.
         /// </summary>
-        protected abstract string Serialize();
+        public abstract string Serialize();
 
         /// <summary>
         /// Allows the variables[""] notation for conditional definitions.
