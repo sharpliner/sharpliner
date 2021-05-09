@@ -17,11 +17,13 @@ repo_root="$here/../../"
 # Prepare local packages
 
 if [ ! -f "$repo_root/artifacts/packages/Sharpliner.1.0.0.nupkg" ]; then
+  mkdir -p "$repo_root/artifacts/packages"
   echo "Building Sharpliner nupkg for Sharpliner.CI..."
   dotnet pack --nologo "$repo_root/src/Sharpliner/Sharpliner.csproj"
 fi
 
 if [ ! -f "$repo_root/artifacts/packages/Sharpliner.Tools.1.0.0.nupkg" ]; then
+  mkdir -p "$repo_root/artifacts/packages"
   echo "Building Sharpliner.Tools nupkg for Sharpliner.CI..."
   dotnet pack --nologo "$repo_root/src/Sharpliner.Tools/Sharpliner.Tools.csproj"
 fi
