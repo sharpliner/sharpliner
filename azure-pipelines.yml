@@ -29,15 +29,17 @@ stages:
     variables: []
     steps:
     - script: >-
-        dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj
+        dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj"
 
-        if [[ `git status --porcelain | grep -i '.ya\?ml$'` ]]; then
-            echo 'Please rebuild eng/Sharpliner.CI/Sharpliner.CI.csproj and commit the YAML changes'
-            exit 1
-        else
-            echo 'No YAML changes needed'
+        $results = Invoke-Expression "git status --porcelain" | Select-String -Pattern "\.ya?ml$"
+
+        if ($null -eq $results) {
+            Write-Host 'No YAML changes needed'
             exit 0
-        fi
+        } else {
+            Write-Host 'Please rebuild eng/Sharpliner.CI/Sharpliner.CI.csproj locally and commit the YAML changes'
+            exit 1
+        }
       displayName: Validate YAML is published
 
     - task: UseDotNet@2

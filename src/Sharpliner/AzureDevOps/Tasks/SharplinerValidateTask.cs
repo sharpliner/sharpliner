@@ -34,27 +34,27 @@ namespace Sharpliner.AzureDevOps.Tasks
             "\n",
             isPosix
             ? new[]
-                {
-                    $"dotnet build {pipelineProject}",
-                    "$results = Invoke-Expression \"git status --porcelain\" | Select-String -Pattern \"\\.ya?ml$\"",
-                    "if ($null -eq $results) {",
-                    "    Write-Host 'No YAML changes needed'",
-                    "    exit 0",
-                    "} else {",
-                    $"    Write-Host 'Please rebuild {pipelineProject} and commit the YAML changes'",
-                    "    exit 1",
-                    "}",
-                }
-                : new[]
-                {
-                    $"dotnet build {pipelineProject}",
-                    "if [[ `git status --porcelain | grep -i '.ya\\?ml$'` ]]; then",
-                    $"    echo 'Please rebuild {pipelineProject} and commit the YAML changes'",
-                    "    exit 1",
-                    "else",
-                    "    echo 'No YAML changes needed'",
-                    "    exit 0",
-                    "fi",
-                });
+            {
+                $"dotnet build \"{pipelineProject}\"",
+                "if [[ `git status --porcelain | grep -i '.ya\\?ml$'` ]]; then",
+                $"    echo 'Please rebuild {pipelineProject} locally and commit the YAML changes'",
+                "    exit 1",
+                "else",
+                "    echo 'No YAML changes needed'",
+                "    exit 0",
+                "fi",
+            }
+            : new[]
+            {
+                $"dotnet build \"{pipelineProject}\"",
+                "$results = Invoke-Expression \"git status --porcelain\" | Select-String -Pattern \"\\.ya?ml$\"",
+                "if ($null -eq $results) {",
+                "    Write-Host 'No YAML changes needed'",
+                "    exit 0",
+                "} else {",
+                $"    Write-Host 'Please rebuild {pipelineProject} locally and commit the YAML changes'",
+                "    exit 1",
+                "}",
+            });
     }
 }
