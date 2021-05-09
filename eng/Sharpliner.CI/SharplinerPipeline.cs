@@ -42,11 +42,11 @@ namespace Sharpliner.CI
                                     }
                                 },
 
-                                new AzureDevOpsTask("DotNetCoreCLI@2", "dotnet restore")
+                                new AzureDevOpsTask("DotNetCoreCLI@2", "dotnet build")
                                 {
                                     Inputs = new TaskInputs
                                     {
-                                        { "command", "restore" },
+                                        { "command", "build" },
                                         { "includeNuGetOrg", true },
                                         { "projects", "Sharpliner.sln" },
                                     }

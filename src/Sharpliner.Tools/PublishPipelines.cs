@@ -20,18 +20,17 @@ namespace Sharpliner.Tools
         private bool PublishAllPipelines<T>() where T : PipelineDefinitionBase
         {
             var assembly = LoadAssembly(Assembly ?? throw new ArgumentNullException(nameof(Assembly), "Assembly parameter not set"));
-            var pipelineBaseType = typeof(T);
 
-            Log.LogMessage(MessageImportance.High, $"Searching for {typeof(T).FullName}");
-
-            // TODO: I am unable to cast this to PipelineDefinitionBase and just do t.IsSubClass or t.IsAssignableTo because
-            // the types don't seem to be the same even when they are..
-            // I tried to make sure there is only one Sharpliner.dll but still couldn't get it to work so we have to parse members dynamically
             var pipelineFound = false;
+            var pipelineBaseType = typeof(T);
             foreach (Type type in assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract))
             {
                 bool isPipelineDefinition = false;
                 var baseType = type.BaseType;
+
+                // TODO: I am unable to cast this to PipelineDefinitionBase and just do t.IsSubClass or t.IsAssignableTo because the types don't seem
+                // to be the same even when they are (they come from the same code, but maybe different .dll files)..
+                // I tried to make sure there is only one Sharpliner.dll but still couldn't get it to work so we have to parse invoke Publish via reflection
                 while (baseType is not null)
                 {
                     isPipelineDefinition |= baseType.FullName == typeof(T).FullName && baseType.GUID == typeof(T).GUID;
@@ -62,7 +61,7 @@ namespace Sharpliner.Tools
         private Assembly LoadAssembly(string assemblyPath)
         {
             // Preload dependencies needed for things to work
-            var assemblies = new[] { "YamlDotNet.dll" }
+            var assemblies = new[] { "YamlDotNet.dll", "Sharpliner.dll" }
                 .Select(assemblyName => Path.Combine(Path.GetDirectoryName(assemblyPath) ?? throw new Exception($"Failed to find directory of {assemblyPath}"), assemblyName))
                 .Select(path => System.Reflection.Assembly.LoadFile(path) ?? throw new Exception($"Failed to find a Sharpliner dependency at {path}. Make sure your bin/ contains this library."))
                 .Where(a => a is not null)
