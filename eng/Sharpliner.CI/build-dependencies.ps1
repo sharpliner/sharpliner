@@ -2,11 +2,11 @@ $repo_root = Join-Path $PSScriptRoot ".."
 $repo_root = Join-Path $repo_root ".."
 
 if (-not(Test-Path "$repo_root/artifacts")) {
-    New-Item -Path "$repo_root" -Name "artifacts" -ItemType "directory"
+    New-Item -Path "$repo_root" -Name "artifacts" -ItemType "directory" | out-null
 }
 
 if (-not(Test-Path "$repo_root/artifacts/packages")) {
-    New-Item -Path "$repo_root/artifacts" -Name "packages" -ItemType "directory"
+    New-Item -Path "$repo_root/artifacts" -Name "packages" -ItemType "directory" | out-null
 }
 
 if (-not(Test-Path "$repo_root/artifacts/packages/Sharpliner.1.0.0.nupkg")) {
