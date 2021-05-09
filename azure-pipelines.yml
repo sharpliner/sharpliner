@@ -28,6 +28,12 @@ stages:
       name: Azure Pipelines
     variables: []
     steps:
+
+    - task: UseDotNet@2
+      displayName: Install .NET 6 preview 3
+      inputs:
+        packageType: sdk
+        version: 6.0.100-preview.3.21202.5
     - script: >-
         dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj"
 
@@ -41,12 +47,6 @@ stages:
             exit 1
         }
       displayName: Validate YAML is published
-
-    - task: UseDotNet@2
-      displayName: Install .NET 6 preview 3
-      inputs:
-        packageType: sdk
-        version: 6.0.100-preview.3.21202.5
 
     - task: DotNetCoreCLI@2
       displayName: dotnet build
