@@ -24,9 +24,9 @@ jobs:
         version: '5.0.102'
 
     - task: DotNetCoreCLI@2
-      displayName: 'dotnet restore'
+      displayName: 'dotnet build'
       inputs:
-        command: 'restore'
+        command: 'build'
         includeNuGetOrg: true
         projects: Sharpliner.sln
 
