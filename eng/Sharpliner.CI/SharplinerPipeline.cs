@@ -11,16 +11,12 @@ namespace Sharpliner.CI
 
         public override AzureDevOpsPipeline Pipeline => new()
         {
-            Trigger = new DetailedTrigger
+            Trigger = new Trigger("main")
             {
                 Batch = true,
-                Branches = new()
-                {
-                    Include = { "main" }
-                }
             },
 
-            Pr = new BranchPrTrigger("main"),
+            Pr = new PrTrigger("main"),
 
             Stages =
             {

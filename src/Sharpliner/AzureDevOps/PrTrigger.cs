@@ -1,15 +1,10 @@
 ﻿using System.ComponentModel;
+using System.Linq;
 
 namespace Sharpliner.AzureDevOps
 {
     // https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#pr-trigger
-    public abstract record PrTrigger;
-
-    public record NoPrTrigger : PrTrigger;
-
-    public record BranchPrTrigger(params string[] Branches) : PrTrigger;
-
-    public record DetailedPrTrigger : PrTrigger
+    public record PrTrigger
     {
         /// <summary>
         /// Indicates whether additional pushes to a PR should cancel in-progress runs for the same PR.
@@ -28,5 +23,17 @@ namespace Sharpliner.AzureDevOps
         public InclusionRule? Branches { get; init; } = null;
 
         public InclusionRule? Paths { get; init; } = null;
+
+        public PrTrigger()
+        {
+        }
+
+        public PrTrigger(params string[] branches)
+        {
+            Branches = new InclusionRule
+            {
+                Include = branches.ToList()
+            };
+        }
     }
 }
