@@ -33,12 +33,13 @@ namespace Sharpliner.CI
                             Pool = new HostedPool("Azure Pipelines", "windows-latest"),
                             Steps =
                             {
-                                new AzureDevOpsTask("UseDotNet@2", "Use .NET 5")
+                                // dotnet build fails with .NET 5 SDK and the new() statements
+                                new AzureDevOpsTask("UseDotNet@2", "Install .NET 6 preview 3")
                                 {
                                     Inputs = new TaskInputs
                                     {
                                         { "packageType", "sdk" },
-                                        { "version", "5.0.102" },
+                                        { "version", "6.0.100-preview.3.21202.5" },
                                     }
                                 },
 
@@ -49,6 +50,16 @@ namespace Sharpliner.CI
                                         { "command", "build" },
                                         { "includeNuGetOrg", true },
                                         { "projects", "Sharpliner.sln" },
+                                    }
+                                },
+                                
+                                // dotnet test somehow doesn't work with .NET 6 SDK
+                                new AzureDevOpsTask("UseDotNet@2", "Use .NET 5")
+                                {
+                                    Inputs = new TaskInputs
+                                    {
+                                        { "packageType", "sdk" },
+                                        { "version", "5.0.202" },
                                     }
                                 },
 
