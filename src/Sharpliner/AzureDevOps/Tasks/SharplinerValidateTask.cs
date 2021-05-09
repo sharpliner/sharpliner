@@ -36,7 +36,7 @@ namespace Sharpliner.AzureDevOps.Tasks
             ? new[]
                 {
                     $"dotnet build {pipelineProject}",
-                    "$results = git status --porcelain | Select-String -Pattern \"\\.ya?ml$\"",
+                    "$results = Invoke-Expression \"git status --porcelain\" | Select-String -Pattern \"\\.ya?ml$\"",
                     "if ($null -eq $results) {",
                     "    Write-Host 'No YAML changes needed'",
                     "    exit 0",
