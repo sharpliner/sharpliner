@@ -26,6 +26,17 @@ stages:
       name: Azure Pipelines
     variables: []
     steps:
+    - bash: >-
+        dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj
+
+        if [[ `git status --porcelain | grep -i '.ya\?ml$'` ]]; then
+            echo 'Please rebuild eng/Sharpliner.CI/Sharpliner.CI.csproj and commit the YAML changes'
+            exit 1
+        else
+            echo 'No YAML changes needed'
+            exit 0
+        fi
+      displayName: Validate YAML is published
 
     - task: UseDotNet@2
       displayName: Install .NET 6 preview 3

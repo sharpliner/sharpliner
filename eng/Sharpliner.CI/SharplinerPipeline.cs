@@ -33,6 +33,9 @@ namespace Sharpliner.CI
                             Pool = new HostedPool("Azure Pipelines", "windows-latest"),
                             Steps =
                             {
+                                // Validate we published the YAML
+                                new SharplinerValidateTask("eng/Sharpliner.CI/Sharpliner.CI.csproj", false),
+
                                 // dotnet build fails with .NET 5 SDK and the new() statements
                                 new AzureDevOpsTask("UseDotNet@2", "Install .NET 6 preview 3")
                                 {
