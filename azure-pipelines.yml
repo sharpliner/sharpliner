@@ -26,7 +26,7 @@ stages:
       name: Azure Pipelines
     variables: []
     steps:
-    - bash: >-
+    - script: >-
         dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj
 
         if [[ `git status --porcelain | grep -i '.ya\?ml$'` ]]; then

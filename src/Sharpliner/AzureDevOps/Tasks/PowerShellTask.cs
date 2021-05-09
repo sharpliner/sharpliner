@@ -62,10 +62,10 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlMember(Order = 2)]
         public string TargetType => "filepath";
 
-        public InlinePowerShellTask(string displayName, string contents)
+        public InlinePowerShellTask(string displayName, params string[] scriptLines)
             : base(displayName)
         {
-            Contents = contents ?? throw new ArgumentNullException(nameof(contents));
+            Contents = string.Join("\n", scriptLines);
         }
     }
 
