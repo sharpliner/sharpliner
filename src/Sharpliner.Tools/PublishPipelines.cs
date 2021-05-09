@@ -1,7 +1,8 @@
 ﻿using System;
-using Microsoft.Build.Framework;
+using System.IO;
 using System.Linq;
-using Sharpliner.AzureDevOps;
+using System.Reflection;
+using Microsoft.Build.Framework;
 using Sharpliner.Definition;
 
 namespace Sharpliner.Tools
@@ -14,17 +15,11 @@ namespace Sharpliner.Tools
         [Required]
         public string? Assembly { get; set; }
 
-        public override bool Execute()
-        {
-            // TODO: We can just search for PipelineDefinitionBase instead and publish all pipeline types
-            PublishAllPipelines<AzureDevOpsPipelineDefinition>(Assembly ?? throw new Exception("Failed to read current assembly name"));
-            return true;
-        }
+        public override bool Execute() => PublishAllPipelines<PipelineDefinitionBase>();
 
-        private bool PublishAllPipelines<T>(string assemblyPath) where T : PipelineDefinitionBase
+        private bool PublishAllPipelines<T>() where T : PipelineDefinitionBase
         {
-            var pipelineFound = false;
-            var assembly = System.Reflection.Assembly.LoadFile(assemblyPath);
+            var assembly = LoadAssembly(Assembly ?? throw new ArgumentNullException(nameof(Assembly), "Assembly parameter not set"));
             var pipelineBaseType = typeof(T);
 
             Log.LogMessage(MessageImportance.High, $"Searching for {typeof(T).FullName}");
@@ -32,6 +27,7 @@ namespace Sharpliner.Tools
             // TODO: I am unable to cast this to PipelineDefinitionBase and just do t.IsSubClass or t.IsAssignableTo because
             // the types don't seem to be the same even when they are..
             // I tried to make sure there is only one Sharpliner.dll but still couldn't get it to work so we have to parse members dynamically
+            var pipelineFound = false;
             foreach (Type type in assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract))
             {
                 bool isPipelineDefinition = false;
@@ -58,6 +54,35 @@ namespace Sharpliner.Tools
             }
 
             return pipelineFound;
+        }
+
+        /// <summary>
+        /// Loads the assembly and all of its dependencies (such as YamlDotNet).
+        /// </summary>
+        private Assembly LoadAssembly(string assemblyPath)
+        {
+            // Preload dependencies needed for things to work
+            var assemblies = new[] { "YamlDotNet.dll" }
+                .Select(assemblyName => Path.Combine(Path.GetDirectoryName(assemblyPath) ?? throw new Exception($"Failed to find directory of {assemblyPath}"), assemblyName))
+                .Select(path => System.Reflection.Assembly.LoadFile(path) ?? throw new Exception($"Failed to find a Sharpliner dependency at {path}. Make sure your bin/ contains this library."))
+                .Where(a => a is not null)
+                .ToDictionary(a => a.FullName!);
+
+            Assembly ResolveAssembly(object? sender, ResolveEventArgs e)
+            {
+                if (!assemblies.TryGetValue(e.Name, out var res))
+                {
+                    throw new Exception("Failed to find Sharpliner dependency " + e.Name);
+                }
+
+                return res;
+            }
+
+            AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += ResolveAssembly;
+            AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly;
+
+            // Load the final assembly where pipeline is defined
+            return System.Reflection.Assembly.LoadFile(assemblyPath);
         }
 
         private void PublishPipeline(object pipelineDefinition)
