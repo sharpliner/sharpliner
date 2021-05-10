@@ -37,10 +37,10 @@ namespace Sharpliner.AzureDevOps.Tasks
             {
                 $"dotnet build \"{_pipelineProject}\"",
                 "if [[ `git status --porcelain | grep -i '.ya\\?ml$'` ]]; then",
-                $"    echo 'Please rebuild {_pipelineProject} locally and commit the YAML changes'",
+                $"    echo 'Please rebuild {_pipelineProject} locally and commit the YAML changes' 1>&2",
                 "    exit 1",
                 "else",
-                "    echo 'No YAML changes needed'",
+                "    echo 'Check succeeded - no YAML changes needed'",
                 "    exit 0",
                 "fi",
             }
@@ -49,10 +49,10 @@ namespace Sharpliner.AzureDevOps.Tasks
                 $"dotnet build \"{_pipelineProject}\"",
                 "$results = Invoke-Expression \"git status --porcelain\" | Select-String -Pattern \"\\.ya?ml$\"",
                 "if (!$results) {",
-                "    Write-Host 'No YAML changes needed'",
+                "    Write-Host 'Check succeeded - no YAML changes needed'",
                 "    exit 0",
                 "} else {",
-                $"    Write-Host 'Please rebuild {_pipelineProject} locally and commit the YAML changes'",
+                $"    Write-Error 'Please rebuild {_pipelineProject} locally and commit the YAML changes'",
                 "    exit 1",
                 "}",
             });

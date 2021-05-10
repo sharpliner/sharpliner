@@ -43,7 +43,7 @@ stages:
             Write-Host 'No YAML changes needed'
             exit 0
         } else {
-            Write-Host 'Please rebuild eng/Sharpliner.CI/Sharpliner.CI.csproj locally and commit the YAML changes'
+            Write-Error 'Please rebuild eng/Sharpliner.CI/Sharpliner.CI.csproj locally and commit the YAML changes'
             exit 1
         }
       displayName: Validate YAML is published
