@@ -20,7 +20,7 @@ stages:
   variables: []
   jobs:
   - job: Build
-    displayName: Build and test
+    displayName: Build and test2
     dependsOn: []
     pool:
       vmImage: windows-latest
