@@ -35,16 +35,14 @@ stages:
         packageType: sdk
         version: 6.0.100-preview.3.21202.5
     - script: >-
-        dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj"
-
-        $results = Invoke-Expression "git status --porcelain" | Select-String -Pattern "\.ya?ml$"
-
+        dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj";
+        $results = Invoke-Expression "git status --porcelain" | Select-String -Pattern "\.ya?ml$";
         if (!$results) {
-            Write-Host 'No YAML changes needed'
-            exit 0
+            Write-Host 'No YAML changes needed';
+            exit 0;
         } else {
-            Write-Host 'Please rebuild eng/Sharpliner.CI/Sharpliner.CI.csproj locally and commit the YAML changes'
-            exit 1
+            Write-Host 'Please rebuild eng/Sharpliner.CI/Sharpliner.CI.csproj locally and commit the YAML changes';
+            exit 1;
         }
       displayName: Validate YAML is published
 
