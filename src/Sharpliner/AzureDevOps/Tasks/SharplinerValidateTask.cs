@@ -1,4 +1,6 @@
 ﻿using System;
+using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks
@@ -6,13 +8,10 @@ namespace Sharpliner.AzureDevOps.Tasks
     /// <summary>
     /// This task verifies that you didn't forget to check in your YAML pipeline changes.
     /// </summary>
-    public record SharplinerValidateTask : Step
+    public record SharplinerValidateTask : Step, IYamlConvertible
     {
-        /// <summary>
-        /// Required if Type is inline, contents of the script.
-        /// </summary>
-        [YamlMember(Order = 1)]
-        public string Script { get; }
+        private readonly string _pipelineProject;
+        private readonly bool _isPosix;
 
         /// <summary>
         /// This task verifies that you didn't forget to check in your YAML pipeline changes.
@@ -27,17 +26,18 @@ namespace Sharpliner.AzureDevOps.Tasks
                 throw new ArgumentException($"'{nameof(pipelineProject)}' cannot be null or empty.", nameof(pipelineProject));
             }
 
-            Script = ValidationScript(pipelineProject, isPosix);
+            _pipelineProject = pipelineProject;
+            _isPosix = isPosix;
         }
 
-        private static string ValidationScript(string pipelineProject, bool isPosix) => string.Join(
+        private string GetValidationScript() => string.Join(
             "\n",
-            isPosix
+            _isPosix
             ? new[]
             {
-                $"dotnet build \"{pipelineProject}\"",
+                $"dotnet build \"{_pipelineProject}\"",
                 "if [[ `git status --porcelain | grep -i '.ya\\?ml$'` ]]; then",
-                $"    echo 'Please rebuild {pipelineProject} locally and commit the YAML changes'",
+                $"    echo 'Please rebuild {_pipelineProject} locally and commit the YAML changes'",
                 "    exit 1",
                 "else",
                 "    echo 'No YAML changes needed'",
@@ -46,15 +46,27 @@ namespace Sharpliner.AzureDevOps.Tasks
             }
             : new[]
             {
-                $"dotnet build \"{pipelineProject}\"",
+                $"dotnet build \"{_pipelineProject}\"",
                 "$results = Invoke-Expression \"git status --porcelain\" | Select-String -Pattern \"\\.ya?ml$\"",
                 "if (!$results) {",
                 "    Write-Host 'No YAML changes needed'",
                 "    exit 0",
                 "} else {",
-                $"    Write-Host 'Please rebuild {pipelineProject} locally and commit the YAML changes'",
+                $"    Write-Host 'Please rebuild {_pipelineProject} locally and commit the YAML changes'",
                 "    exit 1",
                 "}",
             });
+
+        public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
+
+        public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+        {
+            emitter.Emit(new MappingStart());
+            emitter.Emit(new Scalar(_isPosix ? "bash" : "powershell"));
+            emitter.Emit(new Scalar(GetValidationScript()));
+            emitter.Emit(new Scalar("displayName"));
+            emitter.Emit(new Scalar(DisplayName));
+            emitter.Emit(new MappingEnd());
+        }
     }
 }
