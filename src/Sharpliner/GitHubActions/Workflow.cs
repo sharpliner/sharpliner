@@ -43,7 +43,7 @@ namespace Sharpliner.GitHubActions
 
         /// <summary>
         /// A map of environment variables that ara available to the steps of all jobs. When more than one variable
-        /// with the same name is used, the most specific one will be used.
+        /// with the same name is used, the latter one will be used.
         /// </summary>
         public Dictionary<string, string> Enviroment { get; init; } = new();
     }
