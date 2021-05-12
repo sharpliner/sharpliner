@@ -39,5 +39,10 @@ namespace Sharpliner.GitHubActions
         /// setting will apply to all the jobs in a workflow. You can override this setting per job.
         /// </summary>
         public Permissions Permissions { get; init; } = new ();
+
+        /// <summary>
+        /// Provide the default settings to be used by all jobs in the workflow.
+        /// </summary>
+        public Defaults Defaults { get; init; } = new();
     }
 }

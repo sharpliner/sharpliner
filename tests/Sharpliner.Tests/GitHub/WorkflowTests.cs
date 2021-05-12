@@ -291,5 +291,112 @@ namespace Sharpliner.Tests.GitHub
             Assert.Contains(GitHubPermissionScope.Actions, w.Permissions.Read);
             Assert.Contains(GitHubPermissionScope.Contents, w.Permissions.Read);
         }
+
+        [Fact]
+        public void Workflow_Defaults_Defaults()
+        {
+            var w = new Workflow
+            {
+                On =
+                {
+                    Webhooks =
+                    {
+                        new PullRequest
+                        {
+                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                        }
+                    }
+                },
+            };
+            Assert.Equal(Shell.Default, w.Defaults.Run.Shell);
+            Assert.Null(w.Defaults.Run.WorkingDirectory);
+            Assert.Null(w.Defaults.Run.CustomShell);
+        }
+
+        [Fact]
+        public void Workflow_Defaults_Shell()
+        {
+            var w = new Workflow
+            {
+                On =
+                {
+                    Webhooks =
+                    {
+                        new PullRequest
+                        {
+                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                        }
+                    }
+                },
+                Defaults =
+                {
+                    Run =
+                    {
+                        Shell = Shell.Pwsh
+                    }
+                }
+            };
+            Assert.Equal(Shell.Pwsh, w.Defaults.Run.Shell);
+            Assert.Null(w.Defaults.Run.WorkingDirectory);
+            Assert.Null(w.Defaults.Run.CustomShell);
+        }
+
+        [Fact]
+        public void Workflow_Defaults_WorkingDir()
+        {
+            var w = new Workflow
+            {
+                On =
+                {
+                    Webhooks =
+                    {
+                        new PullRequest
+                        {
+                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                        }
+                    }
+                },
+                Defaults =
+                {
+                    Run =
+                    {
+                        WorkingDirectory = "scripts"
+                    }
+                }
+            };
+            Assert.Equal(Shell.Default, w.Defaults.Run.Shell);
+            Assert.NotNull(w.Defaults.Run.WorkingDirectory);
+            Assert.Null(w.Defaults.Run.CustomShell);
+        }
+
+        [Fact]
+        public void Workflow_Defaults_CustomShell()
+        {
+            var w = new Workflow
+            {
+                On =
+                {
+                    Webhooks =
+                    {
+                        new PullRequest
+                        {
+                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                        }
+                    }
+                },
+                Defaults =
+                {
+                    Run =
+                    {
+                        CustomShell=  "perl {0}"
+                    }
+                }
+            };
+
+            Assert.Equal(Shell.Default, w.Defaults.Run.Shell);
+            Assert.Null(w.Defaults.Run.WorkingDirectory);
+            Assert.NotNull(w.Defaults.Run.CustomShell);
+            Assert.Equal("perl {0}", w.Defaults.Run.CustomShell);
+        }
     }
 }
