@@ -20,7 +20,7 @@ stages:
   variables: []
   jobs:
   - job: Build
-    displayName: Build and test2
+    displayName: Build and test
     dependsOn: []
     pool:
       vmImage: windows-latest
@@ -40,7 +40,7 @@ stages:
         $results = Invoke-Expression "git status --porcelain" | Select-String -Pattern "\.ya?ml$"
 
         if (!$results) {
-            Write-Host 'No YAML changes needed'
+            Write-Host 'Check succeeded - no YAML changes needed'
             exit 0
         } else {
             Write-Error 'Please rebuild eng/Sharpliner.CI/Sharpliner.CI.csproj locally and commit the YAML changes'
