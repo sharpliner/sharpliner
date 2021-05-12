@@ -6,7 +6,7 @@ namespace Sharpliner.GitHubActions
     {
         /// <summary>
         /// Represents a concurrency group that will be used to coordinate the execution of the workflow. This will
-        /// ensure that only one workflow is executed at a specific time. If
+        /// ensure that only one workflow is executed at a specific time.
         /// </summary>
         /// <param name="name">Name or expression of the concurrency context.</param>
         /// <param name="cancelInProgress">True if already in process workflows should be canceled.</param>
