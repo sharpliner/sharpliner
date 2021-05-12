@@ -42,7 +42,7 @@ namespace Sharpliner.GitHubActions
         public Permissions Permissions { get; init; } = new ();
 
         /// <summary>
-        /// A map of environment variables that ara available to the steps of all jobs. When more than one variable
+        /// A map of environment variables that are available to the steps of all jobs. When more than one variable
         /// with the same name is used, the latter one will be used.
         /// </summary>
         public Dictionary<string, string> Enviroment { get; init; } = new();
