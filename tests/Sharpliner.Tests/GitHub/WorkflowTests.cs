@@ -335,7 +335,7 @@ namespace Sharpliner.Tests.GitHub
             Assert.NotEmpty(w.Enviroment.Keys);
         }
 
-       [Fact]
+        [Fact]
         public void Workflow_With_Concurrency()
         {
             var w = new Workflow
