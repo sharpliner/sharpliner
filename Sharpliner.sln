@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4367760B-3BCA-4A9F-B8C9-9D106BCBE861}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		NuGet.config = NuGet.config
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpliner", "src\Sharpliner\Sharpliner.csproj", "{14F6E156-9E87-4B14-9B7A-C7A83101A795}"
@@ -17,6 +18,12 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpliner.CLI", "src\Sharpliner.CLI\Sharpliner.CLI.csproj", "{2FC2653B-40BC-4A46-A5C2-A476E51D4438}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpliner.Tests", "tests\Sharpliner.Tests\Sharpliner.Tests.csproj", "{70F30F92-B6D5-42C7-89B9-98AB72AFF192}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "eng", "eng", "{4F21BBD4-0FBF-43FA-94E8-3119F47DD493}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpliner.CI", "eng\Sharpliner.CI\Sharpliner.CI.csproj", "{DABB7F89-37B9-4AC8-9FEA-DCDE0B1E8DE0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharpliner.Tools", "src\Sharpliner.Tools\Sharpliner.Tools.csproj", "{BE5FF17A-40FB-4CDA-8F95-65FE1354F6FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +43,14 @@ Global
 		{70F30F92-B6D5-42C7-89B9-98AB72AFF192}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70F30F92-B6D5-42C7-89B9-98AB72AFF192}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70F30F92-B6D5-42C7-89B9-98AB72AFF192}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DABB7F89-37B9-4AC8-9FEA-DCDE0B1E8DE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DABB7F89-37B9-4AC8-9FEA-DCDE0B1E8DE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DABB7F89-37B9-4AC8-9FEA-DCDE0B1E8DE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DABB7F89-37B9-4AC8-9FEA-DCDE0B1E8DE0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE5FF17A-40FB-4CDA-8F95-65FE1354F6FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE5FF17A-40FB-4CDA-8F95-65FE1354F6FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE5FF17A-40FB-4CDA-8F95-65FE1354F6FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE5FF17A-40FB-4CDA-8F95-65FE1354F6FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -44,6 +59,8 @@ Global
 		{14F6E156-9E87-4B14-9B7A-C7A83101A795} = {3909241C-F29B-4D22-BC56-504F7EA792D7}
 		{2FC2653B-40BC-4A46-A5C2-A476E51D4438} = {3909241C-F29B-4D22-BC56-504F7EA792D7}
 		{70F30F92-B6D5-42C7-89B9-98AB72AFF192} = {8FBB691D-7838-452D-AFF5-5CCEFFE7200E}
+		{DABB7F89-37B9-4AC8-9FEA-DCDE0B1E8DE0} = {4F21BBD4-0FBF-43FA-94E8-3119F47DD493}
+		{BE5FF17A-40FB-4CDA-8F95-65FE1354F6FA} = {3909241C-F29B-4D22-BC56-504F7EA792D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BDFCD6C1-CAB3-4251-8F2E-7F0A7B2B9111}
