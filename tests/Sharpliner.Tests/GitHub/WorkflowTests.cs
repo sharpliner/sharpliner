@@ -334,5 +334,25 @@ namespace Sharpliner.Tests.GitHub
             };
             Assert.NotEmpty(w.Enviroment.Keys);
         }
+
+       [Fact]
+        public void Workflow_With_Concurrency()
+        {
+            var w = new Workflow
+            {
+                On =
+                {
+                    Webhooks =
+                    {
+                        new PullRequest
+                        {
+                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                        }
+                    }
+                },
+                Concurrency = new ("build", true)
+            };
+            Assert.NotNull(w.Concurrency);
+        }
     }
 }

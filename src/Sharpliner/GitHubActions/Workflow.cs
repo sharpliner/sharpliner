@@ -46,5 +46,10 @@ namespace Sharpliner.GitHubActions
         /// with the same name is used, the latter one will be used.
         /// </summary>
         public Dictionary<string, string> Enviroment { get; init; } = new();
+
+        /// <summary>
+        /// Provide a concurrency context to ensure that just one workflow is executed at a given time.
+        /// </summary>
+        public Concurrency? Concurrency { get; set; }
     }
 }
