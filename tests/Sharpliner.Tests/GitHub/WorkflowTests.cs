@@ -291,5 +291,25 @@ namespace Sharpliner.Tests.GitHub
             Assert.Contains(GitHubPermissionScope.Actions, w.Permissions.Read);
             Assert.Contains(GitHubPermissionScope.Contents, w.Permissions.Read);
         }
+
+        [Fact]
+        public void Workflow_With_Concurrency()
+        {
+            var w = new Workflow
+            {
+                On =
+                {
+                    Webhooks =
+                    {
+                        new PullRequest
+                        {
+                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                        }
+                    }
+                },
+                Concurrency = new ("build", true)
+            };
+            Assert.NotNull(w.Concurrency);
+        }
     }
 }

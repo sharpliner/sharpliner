@@ -39,5 +39,10 @@ namespace Sharpliner.GitHubActions
         /// setting will apply to all the jobs in a workflow. You can override this setting per job.
         /// </summary>
         public Permissions Permissions { get; init; } = new ();
+
+        /// <summary>
+        /// Provide a concurrency context to ensure that just one workflow is executed at a given time.
+        /// </summary>
+        public Concurrency? Concurrency { get; set; }
     }
 }
