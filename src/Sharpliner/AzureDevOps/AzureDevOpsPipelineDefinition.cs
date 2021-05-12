@@ -21,6 +21,6 @@ namespace Sharpliner.AzureDevOps
         protected static ConditionBuilder<VariableBase> If => new();
         protected static ConditionBuilder<T> If_<T>() => new();
 
-        public sealed override string Publish() => SharplinerSerializer.Serialize(Pipeline);
+        public override string Serialize() => SharplinerSerializer.Serialize(Pipeline);
     }
 }
