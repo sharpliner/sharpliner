@@ -293,6 +293,69 @@ namespace Sharpliner.Tests.GitHub
         }
 
         [Fact]
+        public void Workflow_No_Environment_Variables()
+        {
+            var w = new Workflow
+            {
+                On =
+                {
+                    Webhooks =
+                    {
+                        new PullRequest
+                        {
+                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                        }
+                    }
+                },
+            };
+            Assert.Empty(w.Enviroment.Keys);
+        }
+
+        [Fact]
+        public void Workflow_Environment_Variables()
+        {
+            var w = new Workflow
+            {
+                On =
+                {
+                    Webhooks =
+                    {
+                        new PullRequest
+                        {
+                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                        }
+                    }
+                },
+                Enviroment =
+                {
+                    ["Database"] = "production",
+                    ["Bot"] = "builder"
+                }
+            };
+            Assert.NotEmpty(w.Enviroment.Keys);
+        }
+
+       [Fact]
+        public void Workflow_With_Concurrency()
+        {
+            var w = new Workflow
+            {
+                On =
+                {
+                    Webhooks =
+                    {
+                        new PullRequest
+                        {
+                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                        }
+                    }
+                },
+                Concurrency = new ("build", true)
+            };
+            Assert.NotNull(w.Concurrency);
+        }
+
+        [Fact]
         public void Workflow_Defaults_Defaults()
         {
             var w = new Workflow
