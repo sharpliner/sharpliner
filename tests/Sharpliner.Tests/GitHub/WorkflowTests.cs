@@ -291,5 +291,48 @@ namespace Sharpliner.Tests.GitHub
             Assert.Contains(GitHubPermissionScope.Actions, w.Permissions.Read);
             Assert.Contains(GitHubPermissionScope.Contents, w.Permissions.Read);
         }
+
+        [Fact]
+        public void Workflow_No_Environment_Variables()
+        {
+            var w = new Workflow
+            {
+                On =
+                {
+                    Webhooks =
+                    {
+                        new PullRequest
+                        {
+                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                        }
+                    }
+                },
+            };
+            Assert.Empty(w.Enviroment.Keys);
+        }
+
+        [Fact]
+        public void Workflow_Environment_Variables()
+        {
+            var w = new Workflow
+            {
+                On =
+                {
+                    Webhooks =
+                    {
+                        new PullRequest
+                        {
+                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                        }
+                    }
+                },
+                Enviroment =
+                {
+                    ["Database"] = "production",
+                    ["Bot"] = "builder"
+                }
+            };
+            Assert.NotEmpty(w.Enviroment.Keys);
+        }
     }
 }
