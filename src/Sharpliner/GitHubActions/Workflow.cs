@@ -51,5 +51,10 @@ namespace Sharpliner.GitHubActions
         /// Provide a concurrency context to ensure that just one workflow is executed at a given time.
         /// </summary>
         public Concurrency? Concurrency { get; set; }
+
+        /// <summary>
+        /// Provide the default settings to be used by all jobs in the workflow.
+        /// </summary>
+        public Defaults Defaults { get; init; } = new();
     }
 }
