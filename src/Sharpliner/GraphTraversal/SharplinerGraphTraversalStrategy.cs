@@ -6,8 +6,7 @@ using YamlDotNet.Serialization.ObjectGraphTraversalStrategies;
 namespace Sharpliner.GraphTraversal
 {
     /// <summary>
-    /// This code was taken from YamlDotNet directly.
-    /// It is a workaround that skips empty collections and doesn't render them as [].
+    /// This is a workaround that skips empty collections and doesn't serialize them at all.
     /// The proper way to do this is in a PR here: https://github.com/aaubry/YamlDotNet/pull/608
     /// Before that is fixed, this is how we're going to do things (╯°□°）╯︵ ┻━┻
     /// </summary>
