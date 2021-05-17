@@ -3,30 +3,21 @@ trigger:
   branches:
     include:
     - main
-    exclude: []
 
 pr:
   branches:
     include:
     - main
-    exclude: []
-
-variables: []
 
 stages:
 - stage: Build
   displayName: Build
-  dependsOn: []
-  variables: []
   jobs:
   - job: Build
     displayName: Build and test
-    dependsOn: []
     pool:
       vmImage: windows-latest
-      demands: []
       name: Azure Pipelines
-    variables: []
     steps:
 
     - task: UseDotNet@2
