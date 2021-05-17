@@ -20,7 +20,7 @@ namespace Sharpliner.Tests.AzureDevOps
                 Variable("Build.Repository.Clean", true),
             },
 
-            Trigger = new DetailedTrigger
+            Trigger = new Trigger
             {
                 Batch = true,
                 Branches = new()
@@ -29,7 +29,7 @@ namespace Sharpliner.Tests.AzureDevOps
                 }
             },
 
-            Pr = new DetailedPrTrigger()
+            Pr = new PrTrigger()
             {
                 Branches = new()
                 {

@@ -13,7 +13,7 @@ namespace Sharpliner.Tests.AzureDevOps
         {
             Name = "$(Date:yyyMMdd).$(Rev:rr)",
 
-            Trigger = new DetailedTrigger
+            Trigger = new Trigger
             {
                 Batch = false,
                 Branches = new()
@@ -26,7 +26,7 @@ namespace Sharpliner.Tests.AzureDevOps
                 }
             },
 
-            Pr = new BranchPrTrigger("main", "release/*"),
+            Pr = new PrTrigger("main", "release/*"),
 
             Variables =
             {

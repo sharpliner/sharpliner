@@ -1,3 +1,5 @@
+using System;
+using System.Text.RegularExpressions;
 using Sharpliner.Definition;
 
 namespace Sharpliner.AzureDevOps
@@ -21,6 +23,16 @@ namespace Sharpliner.AzureDevOps
         protected static ConditionBuilder<VariableBase> If => new();
         protected static ConditionBuilder<T> If_<T>() => new();
 
-        public override string Serialize() => SharplinerSerializer.Serialize(Pipeline);
+        public override string Serialize()
+        {
+            var yaml = SharplinerSerializer.Serialize(Pipeline);
+
+            // Add empty new lines to make text more readable
+            yaml = Regex.Replace(yaml, "((\r?\n)[a-zA-Z]+:)", Environment.NewLine + "$1");
+            yaml = Regex.Replace(yaml, "((\r?\n)    - task: )", Environment.NewLine + "$1");
+            yaml = Regex.Replace(yaml, "((\r?\n) {0,8}- \\${{ if [^\n](\r?\n)    - task: )", Environment.NewLine + "$1");
+
+            return yaml;
+        }
     }
 }

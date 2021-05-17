@@ -9,20 +9,35 @@ pr:
     include:
     - main
 
-jobs:
+stages:
+- stage: Build
+  displayName: Build
+  jobs:
   - job: Build
     displayName: Build and test
     pool:
-      name: Azure Pipelines
       vmImage: windows-latest
-
+      name: Azure Pipelines
     steps:
-    # dotnet build fails with .NET 5 SDK and the new() statements
+
     - task: UseDotNet@2
       displayName: Install .NET 6 preview 3
       inputs:
         packageType: sdk
         version: 6.0.100-preview.3.21202.5
+    - powershell: >-
+        dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj"
+
+        $results = Invoke-Expression "git status --porcelain" | Select-String -Pattern "\.ya?ml$"
+
+        if (!$results) {
+            Write-Host 'Check succeeded - no YAML changes needed'
+            exit 0
+        } else {
+            Write-Error 'Please rebuild eng/Sharpliner.CI/Sharpliner.CI.csproj locally and commit the YAML changes'
+            exit 1
+        }
+      displayName: Validate YAML is published
 
     - task: DotNetCoreCLI@2
       displayName: dotnet build
@@ -31,7 +46,6 @@ jobs:
         includeNuGetOrg: true
         projects: Sharpliner.sln
 
-    # dotnet test somehow doesn't work with .NET 6 SDK
     - task: UseDotNet@2
       displayName: Install .NET 5
       inputs:
@@ -42,4 +56,5 @@ jobs:
       displayName: dotnet test
       inputs:
         command: test
+        includeNuGetOrg: true
         projects: Sharpliner.sln
