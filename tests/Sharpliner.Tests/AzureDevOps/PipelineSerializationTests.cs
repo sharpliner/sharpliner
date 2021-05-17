@@ -65,8 +65,6 @@ namespace Sharpliner.Tests.AzureDevOps
     - name: AzureSubscription
       value: Prod
     - group: azure-prod
-
-stages: []
 ");
         }
 
