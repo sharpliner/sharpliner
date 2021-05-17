@@ -19,7 +19,6 @@ stages:
       vmImage: windows-latest
       name: Azure Pipelines
     steps:
-
     - task: UseDotNet@2
       displayName: Install .NET 6 preview 3
       inputs:
