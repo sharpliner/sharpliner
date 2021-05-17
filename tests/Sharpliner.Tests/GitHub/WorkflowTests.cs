@@ -308,7 +308,7 @@ namespace Sharpliner.Tests.GitHub
                     }
                 },
             };
-            Assert.Empty(w.Enviroment.Keys);
+            Assert.Empty(w.Env.Keys);
         }
 
         [Fact]
@@ -326,13 +326,13 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 },
-                Enviroment =
+                Env =
                 {
                     ["Database"] = "production",
                     ["Bot"] = "builder"
                 }
             };
-            Assert.NotEmpty(w.Enviroment.Keys);
+            Assert.NotEmpty(w.Env.Keys);
         }
 
         [Fact]
@@ -460,6 +460,48 @@ namespace Sharpliner.Tests.GitHub
             Assert.Null(w.Defaults.Run.WorkingDirectory);
             Assert.NotNull(w.Defaults.Run.CustomShell);
             Assert.Equal("perl {0}", w.Defaults.Run.CustomShell);
+        }
+
+        [Fact]
+        public void Workflow_With_Job()
+        {
+            var w = new Workflow
+            {
+                On =
+                {
+                    Webhooks =
+                    {
+                        new PullRequest
+                        {
+                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                        }
+                    }
+                },
+                Jobs =
+                {
+                    new Job("configuration")
+                    {
+                        Name = "Configure Build",
+                        Env =
+                        {
+                            ["Database"] = "production",
+                            ["Bot"] = "builder"
+                        }
+                    },
+                    new Job("tests")
+                    {
+                        Name = "Run Tests",
+                        Env =
+                        {
+                            ["Database"] = "production",
+                            ["Bot"] = "builder"
+                        }
+                    }
+                }
+            };
+            Assert.Equal(2, w.Jobs.Count);
+            Assert.Equal("configuration", w.Jobs[0].Id);
+            Assert.Equal("tests", w.Jobs[1].Id);
         }
     }
 }

@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 
 namespace Sharpliner.GitHubActions
 {
@@ -45,7 +43,7 @@ namespace Sharpliner.GitHubActions
         /// A map of environment variables that are available to the steps of all jobs. When more than one variable
         /// with the same name is used, the latter one will be used.
         /// </summary>
-        public Dictionary<string, string> Enviroment { get; init; } = new();
+        public Dictionary<string, string> Env { get; } = new();
 
         /// <summary>
         /// Provide a concurrency context to ensure that just one workflow is executed at a given time.
@@ -55,6 +53,11 @@ namespace Sharpliner.GitHubActions
         /// <summary>
         /// Provide the default settings to be used by all jobs in the workflow.
         /// </summary>
-        public Defaults Defaults { get; init; } = new();
+        public Defaults Defaults { get; } = new();
+
+        /// <summary>
+        /// List of jobs to be executed by the workflow.
+        /// </summary>
+        public List<Job> Jobs { get; } = new();
     }
 }
