@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using Microsoft.Build.Framework;
 using Sharpliner.Definition;
 
@@ -87,16 +88,56 @@ namespace Sharpliner.Tools
         private void PublishPipeline(object pipelineDefinition)
         {
             Type type = pipelineDefinition.GetType();
-            var method = type.GetMethod(nameof(PipelineDefinitionBase.Publish));
+            var getPath = type.GetMethod(nameof(PipelineDefinitionBase.GetTargetPath));
+            var publish = type.GetMethod(nameof(PipelineDefinitionBase.Publish));
 
-            if (method is null)
+            if (publish is null || getPath is null)
             {
                 Log.LogError($"Failed to get pipeline definition metadata for {type.FullName}");
                 return;
             }
 
-            Log.LogMessage(MessageImportance.High, $"Publishing pipeline {type.Name}");
-            method.Invoke(pipelineDefinition, null);
+            if (getPath.Invoke(pipelineDefinition, null) is not string path)
+            {
+                Log.LogError($"Failed to get target path for {type.Name} ");
+                return;
+            }
+
+            Log.LogMessage(MessageImportance.High, $"Publishing pipeline {type.Name} to {path}");
+
+            string? hash = GetFileHash(path);
+
+            // Publish pipeline
+            publish.Invoke(pipelineDefinition, null);
+
+            if (hash == null)
+            {
+                Log.LogMessage(MessageImportance.High, $"YAML for {type.Name} created at {path}");
+            }
+            else
+            {
+                var newHash = GetFileHash(path);
+                if (hash == newHash)
+                {
+                    Log.LogMessage(MessageImportance.High, $"No new changes to publish for {type.Name}");
+                }
+                else
+                {
+                    Log.LogMessage(MessageImportance.High, $"Published new changes for {type.Name}");
+                }
+            }
+        }
+
+        private static string? GetFileHash(string path)
+        {
+            if (!File.Exists(path))
+            {
+                return null;
+            }
+
+            using var md5 = MD5.Create();
+            using var stream = File.OpenRead(path);
+            return System.Text.Encoding.UTF8.GetString(md5.ComputeHash(stream));
         }
     }
 }

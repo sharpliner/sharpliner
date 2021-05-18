@@ -31,6 +31,7 @@ namespace Sharpliner.AzureDevOps
             yaml = Regex.Replace(yaml, "((\r?\n)[a-zA-Z]+:)", Environment.NewLine + "$1");
             yaml = Regex.Replace(yaml, "((\r?\n)    - task: )", Environment.NewLine + "$1");
             yaml = Regex.Replace(yaml, "((\r?\n) {0,8}- \\${{ if [^\n](\r?\n)    - task: )", Environment.NewLine + "$1");
+            yaml = Regex.Replace(yaml, "(:\r?\n\r?\n)", ":" + Environment.NewLine);
 
             return yaml;
         }

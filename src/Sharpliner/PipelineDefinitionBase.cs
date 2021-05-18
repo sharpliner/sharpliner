@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using Sharpliner.AzureDevOps;
@@ -68,6 +67,41 @@ namespace Sharpliner.Definition
             }
 
             File.WriteAllText(fileName, Serialize());
+        }
+
+        /// <summary>
+        /// Gets the path where YAML of this definition should be published to.
+        /// </summary>
+        public string GetTargetPath()
+        {
+            switch (TargetPathType)
+            {
+                case TargetPathType.RelativeToGitRoot:
+                    var currentDir = new DirectoryInfo(Directory.GetCurrentDirectory());
+                    while (!Directory.Exists(Path.Combine(currentDir.FullName, ".git")))
+                    {
+                        currentDir = currentDir.Parent;
+
+                        if (currentDir == null)
+                        {
+                            throw new Exception($"Failed to find git repository in {Directory.GetParent(Assembly.GetExecutingAssembly().Location)?.FullName}");
+                        }
+                    }
+
+                    return Path.Combine(currentDir.FullName, TargetFile);
+
+                case TargetPathType.RelativeToCurrentDir:
+                    return TargetFile;
+
+                case TargetPathType.RelativeToAssembly:
+                    return Path.Combine(Assembly.GetExecutingAssembly().Location, TargetFile);
+
+                case TargetPathType.Absolute:
+                    return TargetFile;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(TargetPathType));
+            }
         }
 
         /// <summary>
