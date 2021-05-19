@@ -9,51 +9,45 @@ pr:
     include:
     - main
 
-stages:
-- stage: Build
-  displayName: Build
-  jobs:
-  - job: Build
-    displayName: Build and test
-    pool:
-      vmImage: windows-latest
-      name: Azure Pipelines
-    steps:
-    - task: UseDotNet@2
-      displayName: Install .NET 6 preview 3
-      inputs:
-        packageType: sdk
-        version: 6.0.100-preview.3.21202.5
-    - powershell: >-
-        dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj"
+jobs:
+- job: Build
+  displayName: Build and test
+  pool:
+    vmImage: windows-latest
+    name: Azure Pipelines
+  steps:
+  - task: UseDotNet@2
+    displayName: Install .NET 6 preview 3
+    inputs:
+      packageType: sdk
+      version: 6.0.100-preview.3.21202.5
+  - powershell: >-
+      dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj"
 
-        $results = Invoke-Expression "git status --porcelain" | Select-String -Pattern "\.ya?ml$"
+      $results = Invoke-Expression "git status --porcelain" | Select-String -Pattern "\.ya?ml$"
 
-        if (!$results) {
-            Write-Host 'Check succeeded - no YAML changes needed'
-            exit 0
-        } else {
-            Write-Error 'Please rebuild eng/Sharpliner.CI/Sharpliner.CI.csproj locally and commit the YAML changes'
-            exit 1
-        }
-      displayName: Validate YAML is published
-
-    - task: DotNetCoreCLI@2
-      displayName: dotnet build
-      inputs:
-        command: build
-        includeNuGetOrg: true
-        projects: Sharpliner.sln
-
-    - task: UseDotNet@2
-      displayName: Install .NET 5
-      inputs:
-        packageType: sdk
-        version: 5.0.202
-
-    - task: DotNetCoreCLI@2
-      displayName: dotnet test
-      inputs:
-        command: test
-        includeNuGetOrg: true
-        projects: Sharpliner.sln
+      if (!$results) {
+          Write-Host 'Check succeeded - no YAML changes needed'
+          exit 0
+      } else {
+          Write-Error 'Please rebuild eng/Sharpliner.CI/Sharpliner.CI.csproj locally and commit the YAML changes'
+          exit 1
+      }
+    displayName: Validate YAML is published
+  - task: DotNetCoreCLI@2
+    displayName: dotnet build
+    inputs:
+      command: build
+      includeNuGetOrg: true
+      projects: Sharpliner.sln
+  - task: UseDotNet@2
+    displayName: Install .NET 5
+    inputs:
+      packageType: sdk
+      version: 5.0.202
+  - task: DotNetCoreCLI@2
+    displayName: dotnet test
+    inputs:
+      command: test
+      includeNuGetOrg: true
+      projects: Sharpliner.sln

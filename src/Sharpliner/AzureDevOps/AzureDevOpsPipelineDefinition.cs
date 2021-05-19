@@ -4,29 +4,30 @@ using Sharpliner.Definition;
 
 namespace Sharpliner.AzureDevOps
 {
-    public abstract class AzureDevOpsPipelineDefinition : PipelineDefinitionBase
+    public abstract class AzureDevOpsPipelineDefinitionBase<TPipeline> : PipelineDefinitionBase where TPipeline : class
     {
         /// <summary>
         /// Define the pipeline by implementing this field.
         /// </summary>
-        public abstract AzureDevOpsPipeline Pipeline { get; }
+        public abstract TPipeline Pipeline { get; }
 
         protected static ConditionedDefinition<VariableBase> Template(string path)
             => new Template<VariableBase>(path);
         protected static ConditionedDefinition<T> Template<T>(string path, TemplateParameters? parameters = null)
             => new Template<T>(path, parameters);
 
+        protected static ConditionBuilder<VariableBase> If => new();
+        protected static ConditionBuilder<T> If_<T>() => new();
+
         protected static ConditionedDefinition<VariableBase> Variable(string name, string value) => new(new Variable(name, value));
         protected static ConditionedDefinition<VariableBase> Variable(string name, int value) => new(new Variable(name, value));
         protected static ConditionedDefinition<VariableBase> Variable(string name, bool value) => new(new Variable(name, value));
         protected static ConditionedDefinition<VariableBase> Group(string name) => new(new VariableGroup(name));
-        protected static ConditionBuilder<VariableBase> If => new();
-        protected static ConditionBuilder<T> If_<T>() => new();
 
-        public override string Serialize()
+        public override string Serialize() => Prettify(SharplinerSerializer.Serialize(Pipeline));
+
+        protected static string Prettify(string yaml)
         {
-            var yaml = SharplinerSerializer.Serialize(Pipeline);
-
             // Add empty new lines to make text more readable
             yaml = Regex.Replace(yaml, "((\r?\n)[a-zA-Z]+:)", Environment.NewLine + "$1");
             yaml = Regex.Replace(yaml, "((\r?\n)    - task: )", Environment.NewLine + "$1");
@@ -35,5 +36,13 @@ namespace Sharpliner.AzureDevOps
 
             return yaml;
         }
+    }
+
+    public abstract class AzureDevOpsPipelineDefinition : AzureDevOpsPipelineDefinitionBase<AzureDevOpsPipeline>
+    {
+    }
+
+    public abstract class SingleStageAzureDevOpsPipelineDefinition : AzureDevOpsPipelineDefinitionBase<SingleStageAzureDevOpsPipeline>
+    {
     }
 }
