@@ -1,5 +1,6 @@
 using System;
 using System.Text.RegularExpressions;
+using Sharpliner.AzureDevOps.Tasks;
 using Sharpliner.Definition;
 
 namespace Sharpliner.AzureDevOps
@@ -23,6 +24,8 @@ namespace Sharpliner.AzureDevOps
         protected static ConditionedDefinition<VariableBase> Variable(string name, int value) => new(new Variable(name, value));
         protected static ConditionedDefinition<VariableBase> Variable(string name, bool value) => new(new Variable(name, value));
         protected static ConditionedDefinition<VariableBase> Group(string name) => new(new VariableGroup(name));
+        protected static BashTaskBuilder Bash { get; } = new();
+        protected static PowerShellTaskBuilder PowerShell { get; } = new();
 
         public override string Serialize() => Prettify(SharplinerSerializer.Serialize(Pipeline));
 
