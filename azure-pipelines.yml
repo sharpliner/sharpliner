@@ -21,6 +21,7 @@ jobs:
     inputs:
       packageType: sdk
       version: 6.0.100-preview.3.21202.5
+
   - powershell: >-
       dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj"
 
@@ -34,17 +35,20 @@ jobs:
           exit 1
       }
     displayName: Validate YAML is published
+
   - task: DotNetCoreCLI@2
     displayName: dotnet build
     inputs:
       command: build
       includeNuGetOrg: true
       projects: Sharpliner.sln
+
   - task: UseDotNet@2
     displayName: Install .NET 5
     inputs:
       packageType: sdk
       version: 5.0.202
+
   - task: DotNetCoreCLI@2
     displayName: dotnet test
     inputs:
