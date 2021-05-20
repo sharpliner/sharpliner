@@ -26,6 +26,7 @@ namespace Sharpliner.AzureDevOps
         protected static ConditionedDefinition<VariableBase> Group(string name) => new(new VariableGroup(name));
         protected static BashTaskBuilder Bash { get; } = new();
         protected static PowershellTaskBuilder Powershell { get; } = new();
+        protected static PublishTask Publish(string displayName, string filePath, string artifactName = "drop") => new(displayName, filePath, artifactName);
 
         public override string Serialize() => Prettify(SharplinerSerializer.Serialize(Pipeline));
 

@@ -1,6 +1,6 @@
-﻿using System.Drawing;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Sharpliner.AzureDevOps;
+using Sharpliner.AzureDevOps.Tasks;
 using Xunit;
 
 namespace Sharpliner.Tests.AzureDevOps
@@ -125,6 +125,47 @@ namespace Sharpliner.Tests.AzureDevOps
       Set-ErrorActionPreference Stop
       Write-Host ""Lorem ipsum dolor sit amet""
     displayName: Path
+");
+        }
+
+        private class PublishTaskPipeline : SingleStageAzureDevOpsPipelineDefinition
+        {
+            public override string TargetFile => "azure-pipelines.yml";
+
+            public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
+
+            public override SingleStageAzureDevOpsPipeline Pipeline => new()
+            {
+                Jobs =
+                {
+                    new Job("test", "Test job")
+                    {
+                        Steps =
+                        {
+                            Publish("Publish artifact", "bin/Debug/net5.0/") with
+                            {
+                                ContinueOnError = false,
+                                ArtifactType = ArtifactType.Pipeline,
+                            },
+                        }
+                    }
+                }
+            };
+        }
+
+        [Fact]
+        public void Serialize_Publish_Builder_Test()
+        {
+            PublishTaskPipeline pipeline = new();
+            string yaml = pipeline.Serialize();
+            yaml.Should().Be(
+@"jobs:
+- job: test
+  displayName: Test job
+  steps:
+  - publish: bin/Debug/net5.0/
+    displayName: Publish artifact
+    artifact: drop
 ");
         }
     }
