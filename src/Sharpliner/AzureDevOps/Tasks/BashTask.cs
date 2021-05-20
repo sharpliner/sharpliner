@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks
@@ -48,7 +49,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// <summary>
         /// Required if Type is inline, contents of the script.
         /// </summary>
-        [YamlMember(Alias = "bash", Order = 1)]
+        [YamlMember(Alias = "bash", Order = 1, ScalarStyle = ScalarStyle.Literal)]
         public string Contents { get; }
 
         public InlineBashTask(string displayName, params string[] scriptLines)

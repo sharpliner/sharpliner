@@ -63,7 +63,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         {
             emitter.Emit(new MappingStart());
             emitter.Emit(new Scalar(_isPosix ? "bash" : "powershell"));
-            emitter.Emit(new Scalar(GetValidationScript()));
+            emitter.Emit(new Scalar(AnchorName.Empty, TagName.Empty, GetValidationScript(), ScalarStyle.Literal, true, false));
             emitter.Emit(new Scalar("displayName"));
             emitter.Emit(new Scalar(DisplayName));
             emitter.Emit(new MappingEnd());

@@ -22,11 +22,9 @@ jobs:
       packageType: sdk
       version: 6.0.100-preview.3.21202.5
 
-  - powershell: >-
+  - powershell: |-
       dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj"
-
       $results = Invoke-Expression "git status --porcelain" | Select-String -Pattern "\.ya?ml$"
-
       if (!$results) {
           Write-Host 'Check succeeded - no YAML changes needed'
           exit 0

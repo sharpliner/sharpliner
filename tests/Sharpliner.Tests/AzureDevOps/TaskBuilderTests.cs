@@ -41,17 +41,17 @@ namespace Sharpliner.Tests.AzureDevOps
 - job: test
   displayName: Test job
   steps:
-  - bash: >-
-      echo ""foo"";
-      git clone $bar;
+  - bash: |
+      echo ""foo""
+      git clone $bar
     displayName: Resource full name
 
-  - bash: >-
-      echo ""foo"";
-      git clone $bar;
+  - bash: |
+      echo ""foo""
+      git clone $bar
     displayName: Resource
 
-  - bash: >-
+  - bash: |-
       cat /etc/passwd
       rm -rf tests.xml
     displayName: Inline
@@ -59,9 +59,9 @@ namespace Sharpliner.Tests.AzureDevOps
   - bash: foo.sh
     displayName: File
 
-  - bash: >-
-      echo ""foo"";
-      git clone $bar;
+  - bash: |
+      echo ""foo""
+      git clone $bar
     displayName: Path
 ");
         }

@@ -1,2 +1,2 @@
-echo "foo";
-git clone $bar;
+echo "foo"
+git clone $bar
