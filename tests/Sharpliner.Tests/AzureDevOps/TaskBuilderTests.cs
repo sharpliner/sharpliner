@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Drawing;
+using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Xunit;
 
@@ -62,6 +63,67 @@ namespace Sharpliner.Tests.AzureDevOps
   - bash: |
       echo ""foo""
       git clone $bar
+    displayName: Path
+");
+        }
+
+        private class PowershellTaskPipeline : SingleStageAzureDevOpsPipelineDefinition
+        {
+            public override string TargetFile => "azure-pipelines.yml";
+
+            public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
+
+            public override SingleStageAzureDevOpsPipeline Pipeline => new()
+            {
+                Jobs =
+                {
+                    new Job("test", "Test job")
+                    {
+                        Steps =
+                        {
+                            Powershell.FromResourceFile<PowershellTaskPipeline>("Resource full name", "Sharpliner.Tests.AzureDevOps.Resources.Test-Script.ps1"),
+                            Powershell.FromResourceFile<PowershellTaskPipeline>("Resource", "Test-Script.ps1"),
+                            Powershell.Inline("Inline", "Connect-AzContext", "Set-AzSubscription --id foo-bar-xyz"),
+                            Powershell.File("File", "foo.ps1"),
+                            Powershell.FromFile("Path", "AzureDevops/Resources/Test-Script.ps1"),
+                        }
+                    }
+                }
+            };
+        }
+
+        [Fact]
+        public void Serialize_Powershell_Builders_Test()
+        {
+            PowershellTaskPipeline pipeline = new();
+            string yaml = pipeline.Serialize();
+            yaml.Should().Be(
+@"jobs:
+- job: test
+  displayName: Test job
+  steps:
+  - powershell: |
+      Set-ErrorActionPreference Stop
+      Write-Host ""Lorem ipsum dolor sit amet""
+    displayName: Resource full name
+
+  - powershell: |
+      Set-ErrorActionPreference Stop
+      Write-Host ""Lorem ipsum dolor sit amet""
+    displayName: Resource
+
+  - powershell: |-
+      Connect-AzContext
+      Set-AzSubscription --id foo-bar-xyz
+    displayName: Inline
+
+  - powershell: foo.ps1
+    targetType: filepath
+    displayName: File
+
+  - powershell: |
+      Set-ErrorActionPreference Stop
+      Write-Host ""Lorem ipsum dolor sit amet""
     displayName: Path
 ");
         }

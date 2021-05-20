@@ -17,7 +17,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// This task verifies that you didn't forget to check in your YAML pipeline changes.
         /// </summary>
         /// <param name="pipelineProject">Path to the .csproj where pipelines are defined</param>
-        /// <param name="isPosix">True for bash, false for PowerShell (based on OS)</param>
+        /// <param name="isPosix">True for bash, false for Powershell (based on OS)</param>
         public SharplinerValidateTask(string pipelineProject, bool isPosix, string displayName = "Validate YAML is published")
             : base(displayName)
         {

@@ -145,7 +145,7 @@ namespace Sharpliner.Tests.AzureDevOps
                                                                 " $(_InternalBuildArgs)")
                                                             .WhenSucceeded())
 
-                                                        .Step(new PublishPipelineArtifactTask(
+                                                        .Step(new PublishTask(
                                                                 "Publish XHarness CLI for Helix Testing",
                                                                 "$(Build.SourcesDirectory)/artifacts/packages/$(_BuildConfig)/Shipping/Microsoft.DotNet.XHarness.CLI.1.0.0-ci.nupkg",
                                                                 "Microsoft.DotNet.XHarness.CLI.$(_BuildConfig)")

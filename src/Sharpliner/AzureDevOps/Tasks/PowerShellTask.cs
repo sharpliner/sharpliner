@@ -5,7 +5,7 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks
 {
-    public abstract record PowerShellTask : Step
+    public abstract record PowershellTask : Step
     {
         /// <summary>
         /// Specify the working directory in which you want to run the command.
@@ -46,13 +46,13 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlMember(Order = 117)]
         public bool Pwsh { get; init; } = false;
 
-        public PowerShellTask(string displayName)
+        public PowershellTask(string displayName)
             : base(displayName)
         {
         }
     }
 
-    public record InlinePowerShellTask : PowerShellTask
+    public record InlinePowershellTask : PowershellTask
     {
         /// <summary>
         /// Required if Type is inline, contents of the script.
@@ -61,16 +61,17 @@ namespace Sharpliner.AzureDevOps.Tasks
         public string Contents { get; init; }
 
         [YamlMember(Order = 2)]
-        public string TargetType => "filepath";
+        [DefaultValue("inline")]
+        public string TargetType => "inline";
 
-        public InlinePowerShellTask(string displayName, params string[] scriptLines)
+        public InlinePowershellTask(string displayName, params string[] scriptLines)
             : base(displayName)
         {
             Contents = string.Join(Environment.NewLine, scriptLines);
         }
     }
 
-    public record PowerShellFileTask : PowerShellTask
+    public record PowershellFileTask : PowershellTask
     {
         /// <summary>
         /// Path of the script to execute.
@@ -80,15 +81,14 @@ namespace Sharpliner.AzureDevOps.Tasks
         public string FilePath { get; }
 
         [YamlMember(Order = 2)]
-        [DefaultValue("inline")]
-        public string TargetType => "inline";
+        public string TargetType => "filepath";
 
         /// <summary>
         /// Arguments passed to the Bash script.
         /// </summary>
         public string? Arguments { get; init; }
 
-        public PowerShellFileTask(string displayName, string filePath)
+        public PowershellFileTask(string displayName, string filePath)
             : base(displayName)
         {
             FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
