@@ -46,33 +46,35 @@ namespace Sharpliner.Tests.AzureDevOps
 @"variables:
 - name: Configuration
   value: Release
+
 - name: Configuration
   value: Release
+
 - group: PR keyvault variables
+
 - ${{ if eq(variables['Build.Reason'], PullRequest) }}:
   - name: TargetBranch
     value: $(System.PullRequest.SourceBranch)
+
   - name: IsPr
     value: true
+
 - ${{ if and(eq(variables['Build.SourceBranch'], refs/heads/production), ne(Configuration, Debug)) }}:
   - name: PublishProfileFile
     value: Prod
+
   - ${{ if ne(variables['Build.Reason'], PullRequest) }}:
     - name: AzureSubscription
       value: Int
+
     - group: azure-int
+
   - ${{ if eq(variables['Build.Reason'], PullRequest) }}:
     - name: AzureSubscription
       value: Prod
+
     - group: azure-prod
 ");
-        }
-
-        [Fact]
-        public void Serialize_XHarness_Pipeline_Test()
-        {
-            XHarnessPipeline pipeline = new();
-            string yaml = pipeline.Serialize();
         }
     }
 }
