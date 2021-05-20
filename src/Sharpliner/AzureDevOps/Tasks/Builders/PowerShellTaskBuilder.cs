@@ -1,4 +1,6 @@
-﻿namespace Sharpliner.AzureDevOps.Tasks
+﻿using System.Reflection;
+
+namespace Sharpliner.AzureDevOps.Tasks
 {
     public class PowershellTaskBuilder : ScriptTaskBuilder
     {
@@ -8,8 +10,8 @@
         /// <typeparam name="TAssembly">A type located in the assembly where the resource is located</typeparam>
         /// <param name="displayName">Name of the build step</param>
         /// <param name="resourceFileName">Name of the resource file</param>
-        public InlinePowershellTask FromResourceFile<TAssembly>(string displayName, string resourceFileName)
-            => new(displayName, GetResourceFile<TAssembly>(resourceFileName));
+        public InlinePowershellTask FromResourceFile(string displayName, string resourceFileName)
+            => new(displayName, GetResourceFile(Assembly.GetCallingAssembly()!, resourceFileName));
 
         /// <summary>
         /// Creates a Powershell task where the contents come from a file.

@@ -6,10 +6,8 @@ namespace Sharpliner.AzureDevOps.Tasks
 {
     public abstract class ScriptTaskBuilder
     {
-        protected static string GetResourceFile<TAssembly>(string resourceFileName)
+        protected static string GetResourceFile(Assembly assembly, string resourceFileName)
         {
-            // TODO: Try GetExecutingAssembly and drop the generics
-            Assembly assembly = typeof(TAssembly).Assembly;
             Stream? stream = assembly.GetManifestResourceStream($"{assembly.GetName().Name}.{resourceFileName}");
 
             if (stream == null)

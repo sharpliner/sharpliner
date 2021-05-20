@@ -21,8 +21,8 @@ namespace Sharpliner.Tests.AzureDevOps
                     {
                         Steps =
                         {
-                            Bash.FromResourceFile<BashTaskPipeline>("Resource full name", "Sharpliner.Tests.AzureDevOps.Resources.test-script.sh"),
-                            Bash.FromResourceFile<BashTaskPipeline>("Resource", "test-script.sh"),
+                            Bash.FromResourceFile("Resource full name", "Sharpliner.Tests.AzureDevOps.Resources.test-script.sh"),
+                            Bash.FromResourceFile("Resource", "test-script.sh"),
                             Bash.Inline("Inline", "cat /etc/passwd", "rm -rf tests.xml"),
                             Bash.File("File", "foo.sh"),
                             Bash.FromFile("Path", "AzureDevops/Resources/test-script.sh"),
@@ -81,8 +81,8 @@ namespace Sharpliner.Tests.AzureDevOps
                     {
                         Steps =
                         {
-                            Powershell.FromResourceFile<PowershellTaskPipeline>("Resource full name", "Sharpliner.Tests.AzureDevOps.Resources.Test-Script.ps1"),
-                            Powershell.FromResourceFile<PowershellTaskPipeline>("Resource", "Test-Script.ps1"),
+                            Powershell.FromResourceFile("Resource full name", "Sharpliner.Tests.AzureDevOps.Resources.Test-Script.ps1"),
+                            Powershell.FromResourceFile("Resource", "Test-Script.ps1"),
                             Powershell.Inline("Inline", "Connect-AzContext", "Set-AzSubscription --id foo-bar-xyz"),
                             Powershell.File("File", "foo.ps1"),
                             Powershell.FromFile("Path", "AzureDevops/Resources/Test-Script.ps1"),
