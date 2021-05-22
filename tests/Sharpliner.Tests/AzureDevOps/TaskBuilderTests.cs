@@ -264,5 +264,72 @@ namespace Sharpliner.Tests.AzureDevOps
     submodules: recursive
 ");
         }
+
+        private class DownloadTaskPipeline : TestPipeline
+        {
+            public override SingleStageAzureDevOpsPipeline Pipeline => new()
+            {
+                Jobs =
+                {
+                    new Job("test", "Test job")
+                    {
+                        Steps =
+                        {
+                            Download.None,
+                            Download.Current with
+                            {
+                                Tags = new()
+                                {
+                                    "release",
+                                    "nightly",
+                                },
+                                AllowFailedBuilds = true,
+                                Artifact = "Frontend",
+                                Patterns = new()
+                                {
+                                    "frontend/**/*",
+                                    "frontend.config",
+                                }
+                            },
+                            Download.SpecificBuild("dotnet-xharness") with
+                            {
+                                RunVersion = RunVersion.Latest,
+                                Project = "2a73171e-15d1-41f9-b283-49aa0633d1a2",
+                                BranchName = "main",
+                                Path = "$(Pipeline.Workspace)/xharness"
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        [Fact]
+        public void Serialize_Download_Builder_Test()
+        {
+            DownloadTaskPipeline pipeline = new();
+            string yaml = pipeline.Serialize();
+            yaml.Should().Be(
+@"jobs:
+- job: test
+  displayName: Test job
+  steps:
+  - download: none
+
+  - download: current
+    artifact: Frontend
+    patterns: |-
+      frontend/**/*
+      frontend.config
+    tags: release,nightly
+    allowFailedBuilds: true
+
+  - download: dotnet-xharness
+    path: $(Pipeline.Workspace)/xharness
+    project: 2a73171e-15d1-41f9-b283-49aa0633d1a2
+    runVersion: latest
+    runBranch: main
+");
+        }
     }
 }
