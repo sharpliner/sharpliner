@@ -6,7 +6,12 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps
 {
-    // https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#steps
+    /// <summary>
+    /// A step is a linear sequence of operations that make up a job.
+    /// Each step runs in its own process on an agent and has access to the pipeline workspace on a local hard drive.
+    /// This behavior means environment variables aren't preserved between steps but file system changes are.
+    /// https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#steps
+    /// </summary>
     public abstract record Step
     {
         private string? _name;
@@ -16,7 +21,7 @@ namespace Sharpliner.AzureDevOps
         /// Friendly name displayed in the UI.
         /// </summary>
         [YamlMember(Order = 100)]
-        public string? DisplayName { get; }
+        public string? DisplayName { get; init; }
 
         /// <summary>
         /// Identifier for this step (A-Z, a-z, 0-9, and underscore).
@@ -74,11 +79,6 @@ namespace Sharpliner.AzureDevOps
         /// </summary>
         [YamlMember(Order = 220)]
         public IReadOnlyDictionary<string, string>? Env { get; init; }
-
-        protected Step(string? displayName)
-        {
-            DisplayName = displayName;
-        }
 
         /// <summary>
         /// Make step only run when a condition is met.

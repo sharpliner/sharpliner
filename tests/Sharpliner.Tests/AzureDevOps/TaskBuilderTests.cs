@@ -21,15 +21,15 @@ namespace Sharpliner.Tests.AzureDevOps
             {
                 Jobs =
                 {
-                    new Job("test", "Test job")
+                    new Job("test")
                     {
                         Steps =
                         {
                             Bash.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.test-script.sh"),
-                            Bash.FromResourceFile("Resource", "test-script.sh"),
-                            Bash.Inline("Inline", "cat /etc/passwd", "rm -rf tests.xml"),
+                            Bash.FromResourceFile("test-script.sh"),
+                            Bash.Inline("cat /etc/passwd", "rm -rf tests.xml"),
                             Bash.File("foo.sh"),
-                            Bash.FromFile("Path", "AzureDevops/Resources/test-script.sh"),
+                            Bash.FromFile( "AzureDevops/Resources/test-script.sh"),
                         }
                     }
                 }
@@ -44,7 +44,6 @@ namespace Sharpliner.Tests.AzureDevOps
             yaml.Should().Be(
 @"jobs:
 - job: test
-  displayName: Test job
   steps:
   - bash: |
       echo ""foo""
@@ -53,19 +52,16 @@ namespace Sharpliner.Tests.AzureDevOps
   - bash: |
       echo ""foo""
       git clone $bar
-    displayName: Resource
 
   - bash: |-
       cat /etc/passwd
       rm -rf tests.xml
-    displayName: Inline
 
   - bash: foo.sh
 
   - bash: |
       echo ""foo""
       git clone $bar
-    displayName: Path
 ");
         }
 
@@ -75,14 +71,14 @@ namespace Sharpliner.Tests.AzureDevOps
             {
                 Jobs =
                 {
-                    new Job("test", "Test job")
+                    new Job("test")
                     {
                         Steps =
                         {
                             Powershell.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.Test-Script.ps1"),
-                            Powershell.FromResourceFile("Resource", "Test-Script.ps1"),
-                            Powershell.Inline("Inline", "Connect-AzContext", "Set-AzSubscription --id foo-bar-xyz"),
-                            Powershell.File("File", "foo.ps1"),
+                            Powershell.FromResourceFile("Test-Script.ps1"),
+                            Powershell.Inline("Connect-AzContext", "Set-AzSubscription --id foo-bar-xyz"),
+                            Powershell.File("foo.ps1"),
                             Powershell.FromFile("AzureDevops/Resources/Test-Script.ps1"),
                         }
                     }
@@ -98,7 +94,6 @@ namespace Sharpliner.Tests.AzureDevOps
             yaml.Should().Be(
 @"jobs:
 - job: test
-  displayName: Test job
   steps:
   - powershell: |
       Set-ErrorActionPreference Stop
@@ -107,16 +102,13 @@ namespace Sharpliner.Tests.AzureDevOps
   - powershell: |
       Set-ErrorActionPreference Stop
       Write-Host ""Lorem ipsum dolor sit amet""
-    displayName: Resource
 
   - powershell: |-
       Connect-AzContext
       Set-AzSubscription --id foo-bar-xyz
-    displayName: Inline
 
   - powershell: foo.ps1
     targetType: filepath
-    displayName: File
 
   - powershell: |
       Set-ErrorActionPreference Stop
@@ -130,14 +122,14 @@ namespace Sharpliner.Tests.AzureDevOps
             {
                 Jobs =
                 {
-                    new Job("test", "Test job")
+                    new Job("test")
                     {
                         Steps =
                         {
                             Pwsh.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.Test-Script.ps1"),
-                            Pwsh.FromResourceFile("Resource", "Test-Script.ps1"),
-                            Pwsh.Inline("Inline", "Connect-AzContext", "Set-AzSubscription --id foo-bar-xyz"),
-                            Pwsh.File("File", "foo.ps1"),
+                            Pwsh.FromResourceFile("Test-Script.ps1"),
+                            Pwsh.Inline("Connect-AzContext", "Set-AzSubscription --id foo-bar-xyz"),
+                            Pwsh.File("foo.ps1"),
                             Pwsh.FromFile("AzureDevops/Resources/Test-Script.ps1"),
                         }
                     }
@@ -153,7 +145,6 @@ namespace Sharpliner.Tests.AzureDevOps
             yaml.Should().Be(
 @"jobs:
 - job: test
-  displayName: Test job
   steps:
   - powershell: |
       Set-ErrorActionPreference Stop
@@ -163,18 +154,15 @@ namespace Sharpliner.Tests.AzureDevOps
   - powershell: |
       Set-ErrorActionPreference Stop
       Write-Host ""Lorem ipsum dolor sit amet""
-    displayName: Resource
     pwsh: true
 
   - powershell: |-
       Connect-AzContext
       Set-AzSubscription --id foo-bar-xyz
-    displayName: Inline
     pwsh: true
 
   - powershell: foo.ps1
     targetType: filepath
-    displayName: File
     pwsh: true
 
   - powershell: |
@@ -190,11 +178,11 @@ namespace Sharpliner.Tests.AzureDevOps
             {
                 Jobs =
                 {
-                    new Job("test", "Test job")
+                    new Job("test")
                     {
                         Steps =
                         {
-                            Publish("Publish artifact", "bin/Debug/net5.0/") with
+                            Publish("bin/Debug/net5.0/", "Publish artifact") with
                             {
                                 ContinueOnError = false,
                                 ArtifactType = ArtifactType.Pipeline,
@@ -213,7 +201,6 @@ namespace Sharpliner.Tests.AzureDevOps
             yaml.Should().Be(
 @"jobs:
 - job: test
-  displayName: Test job
   steps:
   - publish: bin/Debug/net5.0/
     displayName: Publish artifact
@@ -227,7 +214,7 @@ namespace Sharpliner.Tests.AzureDevOps
             {
                 Jobs =
                 {
-                    new Job("test", "Test job")
+                    new Job("test")
                     {
                         Steps =
                         {
@@ -253,7 +240,6 @@ namespace Sharpliner.Tests.AzureDevOps
             yaml.Should().Be(
 @"jobs:
 - job: test
-  displayName: Test job
   steps:
   - checkout: none
 
@@ -272,7 +258,7 @@ namespace Sharpliner.Tests.AzureDevOps
             {
                 Jobs =
                 {
-                    new Job("test", "Test job")
+                    new Job("test")
                     {
                         Steps =
                         {
@@ -313,7 +299,6 @@ namespace Sharpliner.Tests.AzureDevOps
             yaml.Should().Be(
 @"jobs:
 - job: test
-  displayName: Test job
   steps:
   - download: none
 
@@ -339,11 +324,11 @@ namespace Sharpliner.Tests.AzureDevOps
             {
                 Jobs =
                 {
-                    new Job("test", "Test job")
+                    new Job("test")
                     {
                         Steps =
                         {
-                            Task("Build", "VSBuild@1") with
+                            Task("VSBuild@1", "Build") with
                             {
                                 Timeout = TimeSpan.FromHours(2),
                                 Inputs = new()
@@ -365,7 +350,6 @@ namespace Sharpliner.Tests.AzureDevOps
             yaml.Should().Be(
 @"jobs:
 - job: test
-  displayName: Test job
   steps:
   - task: VSBuild@1
     displayName: Build

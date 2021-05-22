@@ -72,29 +72,17 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlMember(Order = 106)]
         [DefaultValue(false)]
         public bool AllowFailedBuilds { get; init; } = false;
-
-        public DownloadTask(string? displayName = null) : base(displayName)
-        {
-        }
     }
 
     public record CurrentDownloadTask : DownloadTask
     {
         public override string Download => "current";
-
-        public CurrentDownloadTask(string? displayName = null) : base(displayName)
-        {
-        }
     }
 
     public record NoneDownloadTask : Step
     {
         [YamlMember(Order = 1)]
         public string Download => "none";
-
-        public NoneDownloadTask(string? displayName = null) : base(displayName)
-        {
-        }
     }
 
     public record SpecificDownloadTask : DownloadTask
@@ -138,7 +126,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlMember(Alias = "runId", Order = 67)]
         public int PipelineId { get; init; }
 
-        public SpecificDownloadTask(string pipelineResourceIdentifier) : base((string?)null)
+        public SpecificDownloadTask(string pipelineResourceIdentifier)
         {
             _pipelineResourceIdentifier = pipelineResourceIdentifier;
         }

@@ -45,11 +45,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// </summary>
         [YamlMember(Order = 117)]
         public bool Pwsh { get; init; } = false;
-
-        public PowershellTask(string? displayName)
-            : base(displayName)
-        {
-        }
     }
 
     public record InlinePowershellTask : PowershellTask
@@ -64,8 +59,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [DefaultValue("inline")]
         public string TargetType => "inline";
 
-        public InlinePowershellTask(string? displayName, params string[] scriptLines)
-            : base(displayName)
+        public InlinePowershellTask(params string[] scriptLines)
         {
             Contents = string.Join(Environment.NewLine, scriptLines);
         }
@@ -88,8 +82,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// </summary>
         public string? Arguments { get; init; }
 
-        public PowershellFileTask(string? displayName, string filePath)
-            : base(displayName)
+        public PowershellFileTask(string filePath)
         {
             FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
         }

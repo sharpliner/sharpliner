@@ -1,5 +1,4 @@
 ﻿using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.Tests.AzureDevOps
 {
@@ -68,24 +67,29 @@ namespace Sharpliner.Tests.AzureDevOps
 
                             Steps =
                             {
-                                new InlineBashTask("Restore .NET",
+                                Bash.Inline(
                                     "curl -L https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh",
                                     "chmod +x dotnet-install.sh",
-                                    "./dotnet-install.sh --channel $(DotnetVersion) --install-dir ./.dotnet"),
-
-                                new InlineBashTask("Build .sln",
-                                    "./.dotnet/dotnet build src/MySolution.sln -c $(Configuration)"),
-
-                                new InlineBashTask("Run unit tests",
-                                    "./.dotnet/dotnet test src/MySolution.sln")
+                                    "./dotnet-install.sh --channel $(DotnetVersion) --install-dir ./.dotnet") with
                                 {
+                                    DisplayName = "Restore .NET"
+                                },
+
+                                Bash.Inline("./.dotnet/dotnet build src/MySolution.sln -c $(Configuration)") with
+                                {
+                                    DisplayName = "Build .sln"
+                                },
+
+                                Bash.Inline("./.dotnet/dotnet test src/MySolution.sln") with
+                                {
+                                    DisplayName = "Run unit tests",
                                     ContinueOnError = true,
                                     Condition = "eq(variables['Build.Reason'], \"PullRequest\")",
                                 },
 
-                                new InlineBashTask("Upload tests results",
-                                    "./upload.sh ./**/TestResult.xml")
+                                Bash.Inline("./upload.sh ./**/TestResult.xml") with
                                 {
+                                    DisplayName = "Upload tests results",
                                     Condition = "eq(variables['Build.Reason'], \"PullRequest\")",
                                 },
                             }

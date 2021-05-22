@@ -27,11 +27,11 @@ namespace Sharpliner.AzureDevOps
         protected static BashTaskBuilder Bash { get; } = new();
         protected static PowershellTaskBuilder Powershell { get; } = new(false);
         protected static PowershellTaskBuilder Pwsh { get; } = new(true);
-        protected static PublishTask Publish(string displayName, string filePath) => new(displayName, filePath);
-        protected static PublishTask Publish(string filePath) => new(null, filePath);
+        protected static PublishTask Publish(string filePath, string? displayName = null) => new PublishTask(filePath) with { DisplayName = displayName };
         protected static CheckoutTaskBuilder Checkout { get; } = new();
         protected static DownloadTaskBuilder Download { get; } = new();
-        protected static AzureDevOpsTask Task(string displayName, string taskName) => new(displayName, taskName);
+        protected static AzureDevOpsTask Task(string taskName, string? displayName = null) => new AzureDevOpsTask(taskName) with { DisplayName = displayName };
+        protected static Job Job(string jobName, string? displayName = null) => new Job(jobName) with { DisplayName = displayName };
 
         public override string Serialize() => Prettify(SharplinerSerializer.Serialize(Pipeline));
 

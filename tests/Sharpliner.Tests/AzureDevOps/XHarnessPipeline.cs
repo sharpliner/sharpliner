@@ -62,24 +62,31 @@ namespace Sharpliner.Tests.AzureDevOps
                                             Steps =
                                             {
                                                 If_<Step>().Equal(variables["_RunAsPublic"], "False")
-                                                    .Step(new CommandLineTask("Build",
+                                                    .Step(new CommandLineTask(
                                                             "eng\\common\\CIBuild.cmd" +
                                                             " -configuration $(_BuildConfig)" +
                                                             " -prepareMachine" +
                                                             " $(_InternalBuildArgs)" +
                                                             " /p:Test=false")
+                                                        {
+                                                            DisplayName = "Build"
+                                                        }
                                                         .WhenSucceeded()),
 
                                                 If_<Step>().Equal(variables["_RunAsPublic"], "True")
-                                                    .Step(new CommandLineTask("Build and run tests",
+                                                    .Step(new CommandLineTask(
                                                             "eng\\common\\CIBuild.cmd" +
                                                             " -configuration $(_BuildConfig)" +
                                                             " -prepareMachine" +
                                                             " $(_InternalBuildArgs)")
+                                                        {
+                                                            DisplayName = "Build and run tests"
+                                                        }
                                                         .WhenSucceeded())
 
-                                                    .Step(new AzureDevOpsTask("Publish Unit Test Results", "PublishTestResults@2")
+                                                    .Step(new AzureDevOpsTask("PublishTestResults@2")
                                                     {
+                                                        DisplayName = "Publish Unit Test Results",
                                                         Inputs =
                                                         {
                                                             { "testResultsFormat", "xUnit" },
@@ -90,8 +97,9 @@ namespace Sharpliner.Tests.AzureDevOps
                                                         }
                                                     }.WhenSucceededOrFailed())
 
-                                                    .Step(new AzureDevOpsTask("Component Governance scan", "ComponentGovernanceComponentDetection@0")
+                                                    .Step(new AzureDevOpsTask("ComponentGovernanceComponentDetection@0")
                                                     {
+                                                        DisplayName = "Component Governance scan",
                                                         Inputs =
                                                         {
                                                             { "ignoreDirectories", "$(Build.SourcesDirectory)/.packages,$(Build.SourcesDirectory)/artifacts/obj/Microsoft.DotNet.XHarness.CLI/$(_BuildConfig)/net6.0/android-tools-unzipped" },
@@ -122,37 +130,46 @@ namespace Sharpliner.Tests.AzureDevOps
                                     { "helixRepo", "dotnet/xharness" },
                                     { "jobs", new[]
                                         {
-                                            new Job("OSX", "Build OSX")
+                                            new Job("OSX")
                                             {
+                                                DisplayName = "Build OSX",
                                                 Pool = new Pool("Hosted macOS"),
                                                 /* Strategy = ... TODO ..., */
                                                 Steps =
                                                 {
                                                     If_<Step>().Equal(variables["_RunAsPublic"], "False")
-                                                        .Step(new CommandLineTask("Build",
+                                                        .Step(new CommandLineTask(
                                                                 "eng/common/cibuild.sh" +
                                                                 " --configuration $(_BuildConfig)" +
                                                                 " --prepareMachine" +
                                                                 " $(_InternalBuildArgs)" +
                                                                 " /p:Test=false")
-                                                            .WhenSucceeded()),
+                                                            .WhenSucceeded() with
+                                                            {
+                                                                DisplayName = "Build"
+                                                            }),
 
                                                     If_<Step>().Equal(variables["_RunAsPublic"], "True")
-                                                        .Step(new CommandLineTask("Build and run tests",
+                                                        .Step(new CommandLineTask(
                                                                 "eng/common/cibuild.sh" +
                                                                 " --configuration $(_BuildConfig)" +
                                                                 " --prepareMachine" +
                                                                 " $(_InternalBuildArgs)")
-                                                            .WhenSucceeded())
+                                                            .WhenSucceeded() with {
+                                                                DisplayName = "Build and run tests"
+                                                            })
 
                                                         .Step(new PublishTask(
-                                                                "Publish XHarness CLI for Helix Testing",
                                                                 "$(Build.SourcesDirectory)/artifacts/packages/$(_BuildConfig)/Shipping/Microsoft.DotNet.XHarness.CLI.1.0.0-ci.nupkg",
                                                                 "Microsoft.DotNet.XHarness.CLI.$(_BuildConfig)")
-                                                            .When("and(succeeded(), eq(variables['_BuildConfig'], 'Debug'))"))
+                                                            .When("and(succeeded(), eq(variables['_BuildConfig'], 'Debug'))") with
+                                                            {
+                                                                DisplayName = "Publish XHarness CLI for Helix Testing"
+                                                            })
 
-                                                        .Step(new AzureDevOpsTask("Publish Unit Test Results", "PublishTestResults@2")
+                                                        .Step(new AzureDevOpsTask("PublishTestResults@2")
                                                         {
+                                                            DisplayName = "Publish Unit Test Results",
                                                             Inputs =
                                                             {
                                                                 { "testResultsFormat", "xUnit" },

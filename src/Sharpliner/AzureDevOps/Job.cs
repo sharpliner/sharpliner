@@ -17,7 +17,7 @@ namespace Sharpliner.AzureDevOps
         public string Name { get; }
 
         [YamlMember(Order = 100)]
-        public string DisplayName { get; }
+        public string? DisplayName { get; init; }
 
         [YamlMember(Order = 200)]
         public List<string> DependsOn { get; init; } = new();
@@ -53,10 +53,10 @@ namespace Sharpliner.AzureDevOps
         [YamlMember(Order = 1200)]
         public bool ContinueOnError { get; init; } = false;
 
-        public Job(string name, string displayName)
+        public Job(string name, string? displayName = null)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
-            DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName));
+            DisplayName = displayName;
         }
 
         public static implicit operator ConditionedDefinition<Job>(Job definition) => new(definition);

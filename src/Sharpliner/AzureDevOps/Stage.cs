@@ -10,7 +10,7 @@ namespace Sharpliner.AzureDevOps
         public string Name { get; }
 
         [YamlMember(Order = 2)]
-        public string DisplayName { get; }
+        public string? DisplayName { get; init; }
 
         [YamlMember(Order = 100)]
         public List<string> DependsOn { get; init; } = new();
@@ -24,10 +24,10 @@ namespace Sharpliner.AzureDevOps
         [YamlMember(Order = 400)]
         public string? Condition { get; init; }
 
-        public Stage(string name, string displayName)
+        public Stage(string name, string? displayName = null)
         {
             Name = name ?? throw new System.ArgumentNullException(nameof(name));
-            DisplayName = displayName ?? throw new System.ArgumentNullException(nameof(displayName));
+            DisplayName = displayName;
         }
 
         public static implicit operator ConditionedDefinition<Stage>(Stage stage) => new(stage);

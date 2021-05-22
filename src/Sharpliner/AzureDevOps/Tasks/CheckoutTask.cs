@@ -67,29 +67,17 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlMember(Order = 105)]
         [DefaultValue(false)]
         public bool PersistCredentials { get; init; } = false;
-
-        public CheckoutTask(string? displayName = null) : base(displayName)
-        {
-        }
     }
 
     public record SelfCheckoutTask : CheckoutTask
     {
         public override string Checkout => "self";
-
-        public SelfCheckoutTask(string? displayName = null) : base(displayName)
-        {
-        }
     }
 
     public record NoneCheckoutTask : Step
     {
         [YamlMember(Order = 1)]
         public string Checkout => "none";
-
-        public NoneCheckoutTask(string? displayName) : base(displayName)
-        {
-        }
     }
 
     public record RepositoryCheckoutTask : CheckoutTask
@@ -98,7 +86,7 @@ namespace Sharpliner.AzureDevOps.Tasks
 
         public override string Checkout => _repository;
 
-        public RepositoryCheckoutTask(string? displayName, string repository) : base(displayName)
+        public RepositoryCheckoutTask(string repository)
         {
             _repository = repository;
         }

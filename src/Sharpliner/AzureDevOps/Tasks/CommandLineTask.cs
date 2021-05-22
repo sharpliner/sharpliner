@@ -29,8 +29,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlMember(Order = 200)]
         public bool FailOnStdErr { get; init; } = false;
 
-        public CommandLineTask(string displayName, params string[] scriptLines)
-            : base(displayName)
+        public CommandLineTask(params string[] scriptLines)
         {
             if (scriptLines is null)
             {

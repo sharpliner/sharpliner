@@ -19,7 +19,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlMember(Order = 101)]
         public TaskInputs Inputs { get; init; } = new();
 
-        public AzureDevOpsTask(string displayName, string task) : base(displayName)
+        public AzureDevOpsTask(string task) : base()
         {
             if (string.IsNullOrEmpty(task))
             {

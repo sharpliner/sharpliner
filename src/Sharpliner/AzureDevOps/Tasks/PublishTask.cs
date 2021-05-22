@@ -52,8 +52,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [DefaultValue(1u)]
         public uint ParallelCount { get; init; } = 1u;
 
-        public PublishTask(string? displayName, string targetPath, string artifactName = "drop")
-            : base(displayName)
+        public PublishTask(string targetPath, string artifactName = "drop")
         {
             TargetPath = targetPath ?? throw new ArgumentNullException(nameof(targetPath));
             Artifact = artifactName ?? throw new ArgumentNullException(nameof(artifactName));
