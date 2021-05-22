@@ -34,5 +34,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// <param name="displayName">Name of the build step</param>
         /// <param name="scriptLines">Contents of the script</param>
         public InlinePowershellTask Inline(string displayName, params string[] scriptLines) => new(displayName, scriptLines);
+
+        internal PowershellTaskBuilder()
+        {
+        }
     }
 }

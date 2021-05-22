@@ -7,12 +7,15 @@ namespace Sharpliner.Tests.AzureDevOps
 {
     public class TaskBuilderTests
     {
-        private class BashTaskPipeline : SingleStageAzureDevOpsPipelineDefinition
+        private abstract class TestPipeline : SingleStageAzureDevOpsPipelineDefinition
         {
             public override string TargetFile => "azure-pipelines.yml";
 
             public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
+        }
 
+        private class BashTaskPipeline : TestPipeline
+        {
             public override SingleStageAzureDevOpsPipeline Pipeline => new()
             {
                 Jobs =
@@ -67,12 +70,8 @@ namespace Sharpliner.Tests.AzureDevOps
 ");
         }
 
-        private class PowershellTaskPipeline : SingleStageAzureDevOpsPipelineDefinition
+        private class PowershellTaskPipeline : TestPipeline
         {
-            public override string TargetFile => "azure-pipelines.yml";
-
-            public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
-
             public override SingleStageAzureDevOpsPipeline Pipeline => new()
             {
                 Jobs =
@@ -128,12 +127,8 @@ namespace Sharpliner.Tests.AzureDevOps
 ");
         }
 
-        private class PublishTaskPipeline : SingleStageAzureDevOpsPipelineDefinition
+        private class PublishTaskPipeline : TestPipeline
         {
-            public override string TargetFile => "azure-pipelines.yml";
-
-            public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
-
             public override SingleStageAzureDevOpsPipeline Pipeline => new()
             {
                 Jobs =
@@ -166,6 +161,51 @@ namespace Sharpliner.Tests.AzureDevOps
   - publish: bin/Debug/net5.0/
     displayName: Publish artifact
     artifact: drop
+");
+        }
+
+        private class CheckoutTaskPipeline : TestPipeline
+        {
+            public override SingleStageAzureDevOpsPipeline Pipeline => new()
+            {
+                Jobs =
+                {
+                    new Job("test", "Test job")
+                    {
+                        Steps =
+                        {
+                            Checkout.None,
+                            Checkout.Self,
+                            Checkout.Repository("https://github.com/sharpliner/sharpliner.git") with
+                            {
+                                Submodules = SubmoduleCheckout.Recursive,
+                                Clean = true,
+                                FetchDepth = 1,
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        [Fact]
+        public void Serialize_Checkout_Builder_Test()
+        {
+            CheckoutTaskPipeline pipeline = new();
+            string yaml = pipeline.Serialize();
+            yaml.Should().Be(
+@"jobs:
+- job: test
+  displayName: Test job
+  steps:
+  - checkout: none
+
+  - checkout: self
+
+  - checkout: https://github.com/sharpliner/sharpliner.git
+    clean: true
+    fetchDepth: 1
+    submodules: recursive
 ");
         }
     }

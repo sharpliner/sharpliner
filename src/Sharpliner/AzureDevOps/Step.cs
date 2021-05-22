@@ -16,7 +16,7 @@ namespace Sharpliner.AzureDevOps
         /// Friendly name displayed in the UI.
         /// </summary>
         [YamlMember(Order = 100)]
-        public string DisplayName { get; }
+        public string? DisplayName { get; }
 
         /// <summary>
         /// Identifier for this step (A-Z, a-z, 0-9, and underscore).
@@ -75,9 +75,9 @@ namespace Sharpliner.AzureDevOps
         [YamlMember(Order = 220)]
         public IReadOnlyDictionary<string, string>? Env { get; init; }
 
-        protected Step(string displayName)
+        protected Step(string? displayName)
         {
-            DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName));
+            DisplayName = displayName;
         }
 
         /// <summary>
