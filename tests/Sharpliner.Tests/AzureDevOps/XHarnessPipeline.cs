@@ -20,22 +20,12 @@ namespace Sharpliner.Tests.AzureDevOps
                 Variable("Build.Repository.Clean", true),
             },
 
-            Trigger = new Trigger
+            Trigger = new Trigger("main", "xcode/*")
             {
-                Batch = true,
-                Branches = new()
-                {
-                    Include = { "main", "xcode/*" }
-                }
+                Batch = true
             },
 
-            Pr = new PrTrigger()
-            {
-                Branches = new()
-                {
-                    Include = { "main", "xcode/*" }
-                }
-            },
+            Pr = new PrTrigger("main", "xcode/*"),
 
             Stages =
             {
@@ -55,10 +45,18 @@ namespace Sharpliner.Tests.AzureDevOps
                                 { "helixRepo", "dotnet/xharness" },
                                 { "jobs", new[]
                                     {
-                                        new Job("Windows_NT", "Build Windows_NT")
+                                        new Job("Windows_NT")
                                         {
                                             Pool = new HostedPool("windows-2019"),
-                                            /* Strategy = ... TODO ..., */
+                                            Strategy = new MatrixStrategy
+                                            {
+                                                Matrix = new()
+                                                {
+                                                    { "Release", new[] { ("_BuildConfig", "Release") } },
+                                                    { "Debug", new[] { ("_BuildConfig", "Debug") } },
+                                                }
+                                            },
+
                                             Steps =
                                             {
                                                 If_<Step>().Equal(variables["_RunAsPublic"], "False")
@@ -115,7 +113,7 @@ namespace Sharpliner.Tests.AzureDevOps
                 },
 
                 If_<Stage>().Equal(variables["_RunAsPublic"], "True")
-                    .Stage(new Stage("Build_OSX", "Build OSX")
+                    .Stage(new Stage("Build_OSX")
                     {
                         Jobs = {
                             new Template<Job>("/eng/common/templates/jobs/jobs.yml")
@@ -134,7 +132,15 @@ namespace Sharpliner.Tests.AzureDevOps
                                             {
                                                 DisplayName = "Build OSX",
                                                 Pool = new Pool("Hosted macOS"),
-                                                /* Strategy = ... TODO ..., */
+                                                Strategy = new MatrixStrategy
+                                                {
+                                                    Matrix = new()
+                                                    {
+                                                        { "Release", new[] { ("_BuildConfig", "Release") } },
+                                                        { "Debug", new[] { ("_BuildConfig", "Debug") } },
+                                                    }
+                                                },
+
                                                 Steps =
                                                 {
                                                     If_<Step>().Equal(variables["_RunAsPublic"], "False")
@@ -188,6 +194,8 @@ namespace Sharpliner.Tests.AzureDevOps
                         }
                     })
 
+                // E2E tests
+
                     .Template("eng/e2e-test.yml", new TemplateParameters
                     {
                         { "name", "E2E_Android" },
@@ -223,14 +231,19 @@ namespace Sharpliner.Tests.AzureDevOps
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/WASM/WASM.Helix.SDK.Tests.proj" },
                     }),
 
+                // NuGet publishing
                 If_<Stage>().Equal(variables["_RunAsInternal"], "True")
                     .Template("eng/common/templates/post-build/post-build.yml", new TemplateParameters()
                     {
                         { "publishingInfraVersion", 3 },
                         { "enableSymbolValidation", true },
+
+                        // Reenable once this issue is resolved: https://github.com/dotnet/arcade/issues/2912
                         { "enableSourceLinkValidation", false },
                         { "validateDependsOn", new[] { "Build_Windows_NT" } },
                         { "publishDependsOn", new[] { "Validate" } },
+
+                        // This is to enable SDL runs part of Post-Build Validation Stage
                         { "SDLValidationParameters", new TemplateParameters
                             {
                                 { "enable", false },

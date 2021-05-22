@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Sharpliner.Tests.AzureDevOps
 {
-    public class PipelineSerializationTests
+    public class VariableSerializationTests
     {
         private class VariablesPipeline : AzureDevOpsPipelineDefinition
         {

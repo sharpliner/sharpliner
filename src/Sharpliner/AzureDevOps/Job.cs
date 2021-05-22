@@ -13,7 +13,7 @@ namespace Sharpliner.AzureDevOps
     {
         // TODO: missing properties Uses, Services
 
-        [YamlMember(Alias = "job", Order = 1)]
+        [YamlMember(Alias = "job", Order = 1, DefaultValuesHandling = DefaultValuesHandling.Preserve)]
         public string Name { get; }
 
         [YamlMember(Order = 100)]
@@ -26,7 +26,7 @@ namespace Sharpliner.AzureDevOps
         public ConditionedDefinition<Pool>? Pool { get; init; }
 
         [YamlMember(Order = 400)]
-        public JobStrategy? Strategy { get; init; }
+        public Strategy? Strategy { get; init; }
 
         [YamlMember(Order = 500)]
         public ContainerReference? Container { get; init; }
