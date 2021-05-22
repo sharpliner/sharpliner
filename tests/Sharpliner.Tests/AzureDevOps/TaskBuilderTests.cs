@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System;
+using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.Tasks;
 using Xunit;
@@ -329,6 +330,48 @@ namespace Sharpliner.Tests.AzureDevOps
     project: 2a73171e-15d1-41f9-b283-49aa0633d1a2
     runVersion: latest
     runBranch: main
+");
+        }
+
+        private class TaskPipeline : TestPipeline
+        {
+            public override SingleStageAzureDevOpsPipeline Pipeline => new()
+            {
+                Jobs =
+                {
+                    new Job("test", "Test job")
+                    {
+                        Steps =
+                        {
+                            Task("Build", "VSBuild@1") with
+                            {
+                                Timeout = TimeSpan.FromHours(2),
+                                Inputs = new()
+                                {
+                                    { "solution", "**/*.sln" }
+                                }
+                            }
+                        }
+                    }
+                }
+            };
+        }
+
+        [Fact]
+        public void Serialize_Task_Builder_Test()
+        {
+            TaskPipeline pipeline = new();
+            string yaml = pipeline.Serialize();
+            yaml.Should().Be(
+@"jobs:
+- job: test
+  displayName: Test job
+  steps:
+  - task: VSBuild@1
+    displayName: Build
+    inputs:
+      solution: '**/*.sln'
+    timeoutInMinutes: 120
 ");
         }
     }

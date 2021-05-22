@@ -78,7 +78,7 @@ namespace Sharpliner.Tests.AzureDevOps
                                                             " $(_InternalBuildArgs)")
                                                         .WhenSucceeded())
 
-                                                    .Step(new AzureDevOpsTask("PublishTestResults@2", "Publish Unit Test Results")
+                                                    .Step(new AzureDevOpsTask("Publish Unit Test Results", "PublishTestResults@2")
                                                     {
                                                         Inputs =
                                                         {
@@ -90,7 +90,7 @@ namespace Sharpliner.Tests.AzureDevOps
                                                         }
                                                     }.WhenSucceededOrFailed())
 
-                                                    .Step(new AzureDevOpsTask("ComponentGovernanceComponentDetection@0", "Component Governance scan")
+                                                    .Step(new AzureDevOpsTask("Component Governance scan", "ComponentGovernanceComponentDetection@0")
                                                     {
                                                         Inputs =
                                                         {
@@ -151,7 +151,7 @@ namespace Sharpliner.Tests.AzureDevOps
                                                                 "Microsoft.DotNet.XHarness.CLI.$(_BuildConfig)")
                                                             .When("and(succeeded(), eq(variables['_BuildConfig'], 'Debug'))"))
 
-                                                        .Step(new AzureDevOpsTask("PublishTestResults@2", "Publish Unit Test Results")
+                                                        .Step(new AzureDevOpsTask("Publish Unit Test Results", "PublishTestResults@2")
                                                         {
                                                             Inputs =
                                                             {

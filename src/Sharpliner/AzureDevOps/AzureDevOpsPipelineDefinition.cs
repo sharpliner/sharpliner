@@ -31,6 +31,7 @@ namespace Sharpliner.AzureDevOps
         protected static PublishTask Publish(string filePath) => new(null, filePath);
         protected static CheckoutTaskBuilder Checkout { get; } = new();
         protected static DownloadTaskBuilder Download { get; } = new();
+        protected static AzureDevOpsTask Task(string displayName, string taskName) => new(displayName, taskName);
 
         public override string Serialize() => Prettify(SharplinerSerializer.Serialize(Pipeline));
 
