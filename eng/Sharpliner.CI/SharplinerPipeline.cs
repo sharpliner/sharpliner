@@ -26,9 +26,9 @@ namespace Sharpliner.CI
                     Steps =
                     {
                         // dotnet build fails with .NET 5 SDK and the new() statements
-                        new AzureDevOpsTask("UseDotNet@2", "Install .NET 6 preview 3")
+                        Task("UseDotNet@2", "Install .NET 6 preview 3") with
                         {
-                            Inputs = new TaskInputs
+                            Inputs = new()
                             {
                                 { "packageType", "sdk" },
                                 { "version", "6.0.100-preview.3.21202.5" },
@@ -38,9 +38,9 @@ namespace Sharpliner.CI
                         // Validate we published the YAML
                         new SharplinerValidateTask("eng/Sharpliner.CI/Sharpliner.CI.csproj", false),
 
-                        new AzureDevOpsTask("DotNetCoreCLI@2", "dotnet build")
+                        Task("DotNetCoreCLI@2", "dotnet build") with
                         {
-                            Inputs = new TaskInputs
+                            Inputs = new()
                             {
                                 { "command", "build" },
                                 { "includeNuGetOrg", true },
@@ -49,18 +49,18 @@ namespace Sharpliner.CI
                         },
                                 
                         // dotnet test somehow doesn't work with .NET 6 SDK
-                        new AzureDevOpsTask("UseDotNet@2", "Install .NET 5")
+                        Task("UseDotNet@2", "Install .NET 5") with
                         {
-                            Inputs = new TaskInputs
+                            Inputs = new()
                             {
                                 { "packageType", "sdk" },
                                 { "version", "5.0.202" },
                             }
                         },
 
-                        new AzureDevOpsTask("DotNetCoreCLI@2", "dotnet test")
+                        Task("DotNetCoreCLI@2", "dotnet test") with
                         {
-                            Inputs = new TaskInputs
+                            Inputs = new()
                             {
                                 { "command", "test" },
                                 { "includeNuGetOrg", true },
