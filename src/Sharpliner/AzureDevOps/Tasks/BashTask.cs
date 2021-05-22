@@ -38,7 +38,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [DefaultValue(true)]
         public bool NoRc { get; init; } = true;
 
-        protected BashTask(string displayName)
+        protected BashTask(string? displayName)
             : base(displayName)
         {
         }
@@ -52,7 +52,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlMember(Alias = "bash", Order = 1, ScalarStyle = ScalarStyle.Literal)]
         public string Contents { get; }
 
-        public InlineBashTask(string displayName, params string[] scriptLines)
+        public InlineBashTask(string? displayName, params string[] scriptLines)
             : base(displayName)
         {
             if (scriptLines is null)
@@ -78,7 +78,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// </summary>
         public string? Arguments { get; init; }
 
-        public BashFileTask(string displayName, string filePath)
+        public BashFileTask(string? displayName, string filePath)
             : base(displayName)
         {
             FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));

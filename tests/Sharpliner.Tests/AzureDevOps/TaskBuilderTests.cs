@@ -24,10 +24,10 @@ namespace Sharpliner.Tests.AzureDevOps
                     {
                         Steps =
                         {
-                            Bash.FromResourceFile("Resource full name", "Sharpliner.Tests.AzureDevOps.Resources.test-script.sh"),
+                            Bash.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.test-script.sh"),
                             Bash.FromResourceFile("Resource", "test-script.sh"),
                             Bash.Inline("Inline", "cat /etc/passwd", "rm -rf tests.xml"),
-                            Bash.File("File", "foo.sh"),
+                            Bash.File("foo.sh"),
                             Bash.FromFile("Path", "AzureDevops/Resources/test-script.sh"),
                         }
                     }
@@ -48,7 +48,6 @@ namespace Sharpliner.Tests.AzureDevOps
   - bash: |
       echo ""foo""
       git clone $bar
-    displayName: Resource full name
 
   - bash: |
       echo ""foo""
@@ -61,7 +60,6 @@ namespace Sharpliner.Tests.AzureDevOps
     displayName: Inline
 
   - bash: foo.sh
-    displayName: File
 
   - bash: |
       echo ""foo""
@@ -80,11 +78,11 @@ namespace Sharpliner.Tests.AzureDevOps
                     {
                         Steps =
                         {
-                            Powershell.FromResourceFile("Resource full name", "Sharpliner.Tests.AzureDevOps.Resources.Test-Script.ps1"),
+                            Powershell.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.Test-Script.ps1"),
                             Powershell.FromResourceFile("Resource", "Test-Script.ps1"),
                             Powershell.Inline("Inline", "Connect-AzContext", "Set-AzSubscription --id foo-bar-xyz"),
                             Powershell.File("File", "foo.ps1"),
-                            Powershell.FromFile("Path", "AzureDevops/Resources/Test-Script.ps1"),
+                            Powershell.FromFile("AzureDevops/Resources/Test-Script.ps1"),
                         }
                     }
                 }
@@ -104,7 +102,6 @@ namespace Sharpliner.Tests.AzureDevOps
   - powershell: |
       Set-ErrorActionPreference Stop
       Write-Host ""Lorem ipsum dolor sit amet""
-    displayName: Resource full name
 
   - powershell: |
       Set-ErrorActionPreference Stop
@@ -123,7 +120,6 @@ namespace Sharpliner.Tests.AzureDevOps
   - powershell: |
       Set-ErrorActionPreference Stop
       Write-Host ""Lorem ipsum dolor sit amet""
-    displayName: Path
 ");
         }
 

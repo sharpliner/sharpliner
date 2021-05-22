@@ -64,7 +64,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [DefaultValue("inline")]
         public string TargetType => "inline";
 
-        public InlinePowershellTask(string displayName, params string[] scriptLines)
+        public InlinePowershellTask(string? displayName, params string[] scriptLines)
             : base(displayName)
         {
             Contents = string.Join(Environment.NewLine, scriptLines);
@@ -88,7 +88,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// </summary>
         public string? Arguments { get; init; }
 
-        public PowershellFileTask(string displayName, string filePath)
+        public PowershellFileTask(string? displayName, string filePath)
             : base(displayName)
         {
             FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));

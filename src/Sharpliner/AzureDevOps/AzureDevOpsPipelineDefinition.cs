@@ -27,6 +27,7 @@ namespace Sharpliner.AzureDevOps
         protected static BashTaskBuilder Bash { get; } = new();
         protected static PowershellTaskBuilder Powershell { get; } = new();
         protected static PublishTask Publish(string displayName, string filePath, string artifactName = "drop") => new(displayName, filePath, artifactName);
+        protected static PublishTask Publish(string filePath, string artifactName = "drop") => new(null, filePath, artifactName);
         protected static CheckoutTaskBuilder Checkout { get; } = new();
 
         public override string Serialize() => Prettify(SharplinerSerializer.Serialize(Pipeline));
