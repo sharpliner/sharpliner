@@ -123,6 +123,66 @@ namespace Sharpliner.Tests.AzureDevOps
 ");
         }
 
+        private class PwshTaskPipeline : TestPipeline
+        {
+            public override SingleStageAzureDevOpsPipeline Pipeline => new()
+            {
+                Jobs =
+                {
+                    new Job("test", "Test job")
+                    {
+                        Steps =
+                        {
+                            Pwsh.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.Test-Script.ps1"),
+                            Pwsh.FromResourceFile("Resource", "Test-Script.ps1"),
+                            Pwsh.Inline("Inline", "Connect-AzContext", "Set-AzSubscription --id foo-bar-xyz"),
+                            Pwsh.File("File", "foo.ps1"),
+                            Pwsh.FromFile("AzureDevops/Resources/Test-Script.ps1"),
+                        }
+                    }
+                }
+            };
+        }
+
+        [Fact]
+        public void Serialize_Pwsh_Builders_Test()
+        {
+            PwshTaskPipeline pipeline = new();
+            string yaml = pipeline.Serialize();
+            yaml.Should().Be(
+@"jobs:
+- job: test
+  displayName: Test job
+  steps:
+  - powershell: |
+      Set-ErrorActionPreference Stop
+      Write-Host ""Lorem ipsum dolor sit amet""
+    pwsh: true
+
+  - powershell: |
+      Set-ErrorActionPreference Stop
+      Write-Host ""Lorem ipsum dolor sit amet""
+    displayName: Resource
+    pwsh: true
+
+  - powershell: |-
+      Connect-AzContext
+      Set-AzSubscription --id foo-bar-xyz
+    displayName: Inline
+    pwsh: true
+
+  - powershell: foo.ps1
+    targetType: filepath
+    displayName: File
+    pwsh: true
+
+  - powershell: |
+      Set-ErrorActionPreference Stop
+      Write-Host ""Lorem ipsum dolor sit amet""
+    pwsh: true
+");
+        }
+
         private class PublishTaskPipeline : TestPipeline
         {
             public override SingleStageAzureDevOpsPipeline Pipeline => new()

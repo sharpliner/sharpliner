@@ -46,7 +46,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlMember(Order = 117)]
         public bool Pwsh { get; init; } = false;
 
-        public PowershellTask(string displayName)
+        public PowershellTask(string? displayName)
             : base(displayName)
         {
         }
