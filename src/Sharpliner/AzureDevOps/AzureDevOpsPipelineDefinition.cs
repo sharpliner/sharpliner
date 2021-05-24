@@ -26,7 +26,7 @@ namespace Sharpliner.AzureDevOps
 
         public override string Serialize() => Prettify(SharplinerSerializer.Serialize(Pipeline));
 
-        protected static string Prettify(string yaml)
+        private static string Prettify(string yaml)
         {
             // Add empty new lines to make text more readable
             yaml = Regex.Replace(yaml, "((\r?\n)[a-zA-Z]+:)", Environment.NewLine + "$1");
