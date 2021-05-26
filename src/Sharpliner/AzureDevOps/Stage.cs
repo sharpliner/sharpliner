@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using Sharpliner.ConditionedDefinitions;
 using YamlDotNet.Serialization;
 
@@ -10,6 +11,7 @@ namespace Sharpliner.AzureDevOps
         public string Name { get; }
 
         [YamlMember(Order = 2)]
+        [DisallowNull]
         public string? DisplayName { get; init; }
 
         [YamlMember(Order = 100)]
@@ -22,12 +24,17 @@ namespace Sharpliner.AzureDevOps
         public ConditionedDefinitionList<ConditionedDefinition<Job>> Jobs { get; init; } = new();
 
         [YamlMember(Order = 400)]
+        [DisallowNull]
         public string? Condition { get; init; }
 
         public Stage(string name, string? displayName = null)
         {
             Name = name ?? throw new System.ArgumentNullException(nameof(name));
-            DisplayName = displayName;
+
+            if (displayName != null)
+            {
+                DisplayName = displayName;
+            }
         }
 
         public static implicit operator ConditionedDefinition<Stage>(Stage stage) => new(stage);

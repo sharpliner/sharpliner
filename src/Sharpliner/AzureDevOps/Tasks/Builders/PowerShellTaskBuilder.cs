@@ -14,7 +14,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         public InlinePowershellTask FromResourceFile(string resourceFileName, string? displayName = null)
             => new InlinePowershellTask(GetResourceFile(Assembly.GetCallingAssembly()!, resourceFileName)) with
             {
-                DisplayName = displayName,
+                DisplayName = displayName!,
                 Pwsh = _pwsh
             };
 
@@ -26,7 +26,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         public InlinePowershellTask FromFile(string path, string? displayName = null)
             => new InlinePowershellTask(System.IO.File.ReadAllText(path)) with
             {
-                DisplayName = displayName,
+                DisplayName = displayName!,
                 Pwsh = _pwsh
             };
 
@@ -37,7 +37,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         public PowershellFileTask File(string filePath, string? displayName = null)
             => new PowershellFileTask(filePath) with
             {
-                DisplayName = displayName,
+                DisplayName = displayName!,
                 Pwsh = _pwsh
             };
 

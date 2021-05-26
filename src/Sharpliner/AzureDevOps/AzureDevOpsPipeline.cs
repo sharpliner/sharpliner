@@ -1,4 +1,5 @@
-﻿using Sharpliner.ConditionedDefinitions;
+﻿using System.Diagnostics.CodeAnalysis;
+using Sharpliner.ConditionedDefinitions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps
@@ -6,15 +7,19 @@ namespace Sharpliner.AzureDevOps
     public abstract record AzureDevOpsPipelineBase
     {
         [YamlMember(Order = 100)]
+        [DisallowNull]
         public string? Name { get; init; }
 
         [YamlMember(Order = 200)]
-        public Trigger? Trigger { get; init; } = null;
+        [DisallowNull]
+        public Trigger? Trigger { get; init; }
 
         [YamlMember(Order = 300)]
-        public PrTrigger? Pr { get; init; } = null;
+        [DisallowNull]
+        public PrTrigger? Pr { get; init; }
 
         [YamlMember(Order = 400)]
+        [DisallowNull]
         public Resources? Resources { get; init; }
 
         [YamlMember(Order = 500)]

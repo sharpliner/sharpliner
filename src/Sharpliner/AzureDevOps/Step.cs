@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 using YamlDotNet.Serialization;
 
@@ -21,12 +22,14 @@ namespace Sharpliner.AzureDevOps
         /// Friendly name displayed in the UI.
         /// </summary>
         [YamlMember(Order = 100)]
+        [DisallowNull]
         public string? DisplayName { get; init; }
 
         /// <summary>
         /// Identifier for this step (A-Z, a-z, 0-9, and underscore).
         /// </summary>
         [YamlMember(Order = 150)]
+        [DisallowNull]
         public string? Name
         {
             get => _name;
@@ -52,6 +55,7 @@ namespace Sharpliner.AzureDevOps
         /// Condition that must be met to run this step.
         /// </summary>
         [YamlMember(Order = 190)]
+        [DisallowNull]
         public string? Condition { get; init; }
 
         /// <summary>
@@ -65,6 +69,7 @@ namespace Sharpliner.AzureDevOps
         /// Timeout after which the step will be stopped.
         /// </summary>
         [YamlIgnore]
+        [DisallowNull]
         public TimeSpan? Timeout { get; init; }
 
         /// <summary>
@@ -78,6 +83,7 @@ namespace Sharpliner.AzureDevOps
         /// For example, secret variables are not automatically mapped.
         /// </summary>
         [YamlMember(Order = 220)]
+        [DisallowNull]
         public IReadOnlyDictionary<string, string>? Env { get; init; }
 
         /// <summary>
