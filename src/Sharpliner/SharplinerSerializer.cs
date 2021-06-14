@@ -1,6 +1,5 @@
 ﻿using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization;
-using Sharpliner.GraphTraversal;
 
 namespace Sharpliner.Definition
 {
@@ -14,8 +13,7 @@ namespace Sharpliner.Definition
         {
             var serializerBuilder = new SerializerBuilder()
                 .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                .WithObjectGraphTraversalStrategyFactory((typeInspector, typeResolver, typeConverters, maximumRecursion) => new SharplinerGraphTraversalStrategy(typeInspector, typeResolver, maximumRecursion, CamelCaseNamingConvention.Instance))
-                .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitDefaults);
+                .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitDefaults | DefaultValuesHandling.OmitEmptyCollections);
 
             return serializerBuilder.Build();
         }
