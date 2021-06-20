@@ -59,7 +59,7 @@ To define the pipeline, just start setting properties of the `Pipeline` member a
 There are several helper methods you will get from the parent class that will help you write cleaner definitions.
 Other than that, everything is usually named exactly like you would expect it to in the [AzDO pipelines YAML schema](https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema).
 
-Check out the [full reference with tips](TODO) so that you can write clean definitions using some of the syntax we provide.
+Check out the [full reference with tips](./DefinitionReference.md) so that you can write clean definitions using some of the syntax we provide.
 
 An example of a pipeline that builds and tests your PR can look like this:
 
