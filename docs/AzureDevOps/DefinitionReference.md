@@ -86,7 +86,7 @@ Similarly to Build steps, there's a shorthand style of definition of variables t
     }
 ```
 
-## Conditions
+## Conditioned expressions
 
 The Azure DevOps pipeline YAML allows you to specify conditioned expressions which are evaulated when pipeline is started.
 Sharpliner allows to defined conditioned blocks as well in almost any part of the definition.
@@ -145,3 +145,20 @@ For conditional blocks that define non-variable parts of the pipeline such as st
     }
 ...
 ```
+
+### Conditions
+
+The conditions themselves are defined similarly to what Azure DevOps requires, so this example YAML condition:
+```yaml
+${{ if or(and(ne(true, true), eq(variables['Build.SourceBranch'], 'refs/heads/production')), ne(variables['Configuration'], 'Debug')) }}
+```
+
+would have this C# definition:
+```csharp
+If.Or(
+    And(NotEqual("true", "true"), Equal(variables["Build.SourceBranch"], "'refs/heads/production'")),
+    NotEqual(variables["Configuration"], "'Debug'"))
+```
+
+The logic operators such as `Equal` or `Or` expect either a string or a nested condition.
+Additionally, you can also use `variables["name"]` instead of `"variables[\"name\"]"` as shorthand notation but it has the same effect.
