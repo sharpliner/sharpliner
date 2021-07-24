@@ -6,8 +6,8 @@
 
   <ItemGroup>
     <!-- These will appear in artifacts/packages after you call `dotnet pack` -->
-    <PackageReference Include="Sharpliner" Version="1.0.0" />
-    <PackageReference Include="Sharpliner.Tools" Version="1.0.0" />
+    <PackageReference Include="Sharpliner" Version="42.42.42" />
+    <PackageReference Include="Sharpliner.Tools" Version="42.42.42" />
   </ItemGroup>
 
   <ItemGroup>
