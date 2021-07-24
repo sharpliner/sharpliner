@@ -1,4 +1,5 @@
 ﻿using System;
+using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks
@@ -11,7 +12,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// <summary>
         /// Required if Type is inline, contents of the script.
         /// </summary>
-        [YamlMember(Alias = "script", Order = 1)]
+        [YamlMember(Alias = "script", Order = 1, ScalarStyle = ScalarStyle.Literal)]
         public string Contents { get; }
 
         /// <summary>
@@ -28,15 +29,14 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlMember(Order = 200)]
         public bool FailOnStdErr { get; init; } = false;
 
-        public CommandLineTask(string displayName, params string[] scriptLines)
-            : base(displayName)
+        public CommandLineTask(params string[] scriptLines)
         {
             if (scriptLines is null)
             {
                 throw new ArgumentNullException(nameof(scriptLines));
             }
 
-            Contents = string.Join("\n", scriptLines);
+            Contents = string.Join("\r\n", scriptLines);
         }
     }
 }

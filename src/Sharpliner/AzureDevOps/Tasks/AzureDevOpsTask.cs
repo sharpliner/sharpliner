@@ -5,6 +5,7 @@ namespace Sharpliner.AzureDevOps.Tasks
 {
     /// <summary>
     /// Represents generic definition of any arbitrary AzDO task.
+    /// https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=example%2Cparameter-schema#task
     /// </summary>
     public record AzureDevOpsTask : Step
     {
@@ -18,7 +19,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlMember(Order = 101)]
         public TaskInputs Inputs { get; init; } = new();
 
-        public AzureDevOpsTask(string task, string displayName) : base(displayName)
+        public AzureDevOpsTask(string task) : base()
         {
             if (string.IsNullOrEmpty(task))
             {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks
@@ -36,11 +37,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlMember(Order = 200)]
         [DefaultValue(true)]
         public bool NoRc { get; init; } = true;
-
-        protected BashTask(string displayName)
-            : base(displayName)
-        {
-        }
     }
 
     public record InlineBashTask : BashTask
@@ -48,11 +44,10 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// <summary>
         /// Required if Type is inline, contents of the script.
         /// </summary>
-        [YamlMember(Alias = "bash", Order = 1)]
+        [YamlMember(Alias = "bash", Order = 1, ScalarStyle = ScalarStyle.Literal)]
         public string Contents { get; }
 
-        public InlineBashTask(string displayName, params string[] scriptLines)
-            : base(displayName)
+        public InlineBashTask(params string[] scriptLines)
         {
             if (scriptLines is null)
             {
@@ -77,8 +72,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// </summary>
         public string? Arguments { get; init; }
 
-        public BashFileTask(string displayName, string filePath)
-            : base(displayName)
+        public BashFileTask(string filePath)
         {
             FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
         }

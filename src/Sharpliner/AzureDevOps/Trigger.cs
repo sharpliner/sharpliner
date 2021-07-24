@@ -1,8 +1,11 @@
-﻿using System.Linq;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Sharpliner.AzureDevOps
 {
-    // https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#triggers
+    /// <summary>
+    /// https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#triggers
+    /// </summary>
     public record Trigger
     {
         /// <summary>
@@ -10,11 +13,14 @@ namespace Sharpliner.AzureDevOps
         /// </summary>
         public bool Batch { get; init; } = false;
 
-        public InclusionRule? Branches { get; init; } = null;
+        [DisallowNull]
+        public InclusionRule? Branches { get; init; }
 
-        public InclusionRule? Tags { get; init; } = null;
+        [DisallowNull]
+        public InclusionRule? Tags { get; init; }
 
-        public InclusionRule? Paths { get; init; } = null;
+        [DisallowNull]
+        public InclusionRule? Paths { get; init; }
 
         public Trigger()
         {

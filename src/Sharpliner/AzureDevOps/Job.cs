@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using Sharpliner.ConditionedDefinitions;
 using YamlDotNet.Serialization;
 
@@ -13,11 +14,12 @@ namespace Sharpliner.AzureDevOps
     {
         // TODO: missing properties Uses, Services
 
-        [YamlMember(Alias = "job", Order = 1)]
+        [YamlMember(Alias = "job", Order = 1, DefaultValuesHandling = DefaultValuesHandling.Preserve)]
         public string Name { get; }
 
         [YamlMember(Order = 100)]
-        public string DisplayName { get; }
+        [DisallowNull]
+        public string? DisplayName { get; init; }
 
         [YamlMember(Order = 200)]
         public List<string> DependsOn { get; init; } = new();
@@ -26,9 +28,11 @@ namespace Sharpliner.AzureDevOps
         public ConditionedDefinition<Pool>? Pool { get; init; }
 
         [YamlMember(Order = 400)]
-        public JobStrategy? Strategy { get; init; }
+        [DisallowNull]
+        public Strategy? Strategy { get; init; }
 
         [YamlMember(Order = 500)]
+        [DisallowNull]
         public ContainerReference? Container { get; init; }
 
         [YamlMember(Order = 600)]
@@ -38,9 +42,11 @@ namespace Sharpliner.AzureDevOps
         public ConditionedDefinitionList<ConditionedDefinition<Step>> Steps { get; init; } = new();
 
         [YamlMember(Order = 800)]
+        [DisallowNull]
         public TimeSpan? Timeout { get; init; }
 
         [YamlMember(Order = 900)]
+        [DisallowNull]
         public TimeSpan? CancelTimeout { get; init; }
 
         [YamlMember(Order = 1000)]
@@ -48,15 +54,20 @@ namespace Sharpliner.AzureDevOps
         public JobWorkspace Workspace { get; init; } = JobWorkspace.Outputs;
 
         [YamlMember(Order = 1100)]
+        [DisallowNull]
         public string? Condition { get; init; }
 
         [YamlMember(Order = 1200)]
         public bool ContinueOnError { get; init; } = false;
 
-        public Job(string name, string displayName)
+        public Job(string name, string? displayName = null)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
-            DisplayName = displayName ?? throw new ArgumentNullException(nameof(displayName));
+
+            if (displayName != null)
+            {
+                DisplayName = displayName;
+            }
         }
 
         public static implicit operator ConditionedDefinition<Job>(Job definition) => new(definition);

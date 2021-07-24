@@ -20,22 +20,12 @@ namespace Sharpliner.Tests.AzureDevOps
                 Variable("Build.Repository.Clean", true),
             },
 
-            Trigger = new Trigger
+            Trigger = new Trigger("main", "xcode/*")
             {
-                Batch = true,
-                Branches = new()
-                {
-                    Include = { "main", "xcode/*" }
-                }
+                Batch = true
             },
 
-            Pr = new PrTrigger()
-            {
-                Branches = new()
-                {
-                    Include = { "main", "xcode/*" }
-                }
-            },
+            Pr = new PrTrigger("main", "xcode/*"),
 
             Stages =
             {
@@ -55,31 +45,46 @@ namespace Sharpliner.Tests.AzureDevOps
                                 { "helixRepo", "dotnet/xharness" },
                                 { "jobs", new[]
                                     {
-                                        new Job("Windows_NT", "Build Windows_NT")
+                                        new Job("Windows_NT")
                                         {
                                             Pool = new HostedPool("windows-2019"),
-                                            /* Strategy = ... TODO ..., */
+                                            Strategy = new MatrixStrategy
+                                            {
+                                                Matrix = new()
+                                                {
+                                                    { "Release", new[] { ("_BuildConfig", "Release") } },
+                                                    { "Debug", new[] { ("_BuildConfig", "Debug") } },
+                                                }
+                                            },
+
                                             Steps =
                                             {
                                                 If_<Step>().Equal(variables["_RunAsPublic"], "False")
-                                                    .Step(new CommandLineTask("Build",
+                                                    .Step(new CommandLineTask(
                                                             "eng\\common\\CIBuild.cmd" +
                                                             " -configuration $(_BuildConfig)" +
                                                             " -prepareMachine" +
                                                             " $(_InternalBuildArgs)" +
                                                             " /p:Test=false")
+                                                        {
+                                                            DisplayName = "Build"
+                                                        }
                                                         .WhenSucceeded()),
 
                                                 If_<Step>().Equal(variables["_RunAsPublic"], "True")
-                                                    .Step(new CommandLineTask("Build and run tests",
+                                                    .Step(new CommandLineTask(
                                                             "eng\\common\\CIBuild.cmd" +
                                                             " -configuration $(_BuildConfig)" +
                                                             " -prepareMachine" +
                                                             " $(_InternalBuildArgs)")
+                                                        {
+                                                            DisplayName = "Build and run tests"
+                                                        }
                                                         .WhenSucceeded())
 
-                                                    .Step(new AzureDevOpsTask("PublishTestResults@2", "Publish Unit Test Results")
+                                                    .Step(new AzureDevOpsTask("PublishTestResults@2")
                                                     {
+                                                        DisplayName = "Publish Unit Test Results",
                                                         Inputs =
                                                         {
                                                             { "testResultsFormat", "xUnit" },
@@ -90,8 +95,9 @@ namespace Sharpliner.Tests.AzureDevOps
                                                         }
                                                     }.WhenSucceededOrFailed())
 
-                                                    .Step(new AzureDevOpsTask("ComponentGovernanceComponentDetection@0", "Component Governance scan")
+                                                    .Step(new AzureDevOpsTask("ComponentGovernanceComponentDetection@0")
                                                     {
+                                                        DisplayName = "Component Governance scan",
                                                         Inputs =
                                                         {
                                                             { "ignoreDirectories", "$(Build.SourcesDirectory)/.packages,$(Build.SourcesDirectory)/artifacts/obj/Microsoft.DotNet.XHarness.CLI/$(_BuildConfig)/net6.0/android-tools-unzipped" },
@@ -107,7 +113,7 @@ namespace Sharpliner.Tests.AzureDevOps
                 },
 
                 If_<Stage>().Equal(variables["_RunAsPublic"], "True")
-                    .Stage(new Stage("Build_OSX", "Build OSX")
+                    .Stage(new Stage("Build_OSX")
                     {
                         Jobs = {
                             new Template<Job>("/eng/common/templates/jobs/jobs.yml")
@@ -122,37 +128,54 @@ namespace Sharpliner.Tests.AzureDevOps
                                     { "helixRepo", "dotnet/xharness" },
                                     { "jobs", new[]
                                         {
-                                            new Job("OSX", "Build OSX")
+                                            new Job("OSX")
                                             {
+                                                DisplayName = "Build OSX",
                                                 Pool = new Pool("Hosted macOS"),
-                                                /* Strategy = ... TODO ..., */
+                                                Strategy = new MatrixStrategy
+                                                {
+                                                    Matrix = new()
+                                                    {
+                                                        { "Release", new[] { ("_BuildConfig", "Release") } },
+                                                        { "Debug", new[] { ("_BuildConfig", "Debug") } },
+                                                    }
+                                                },
+
                                                 Steps =
                                                 {
                                                     If_<Step>().Equal(variables["_RunAsPublic"], "False")
-                                                        .Step(new CommandLineTask("Build",
+                                                        .Step(new CommandLineTask(
                                                                 "eng/common/cibuild.sh" +
                                                                 " --configuration $(_BuildConfig)" +
                                                                 " --prepareMachine" +
                                                                 " $(_InternalBuildArgs)" +
                                                                 " /p:Test=false")
-                                                            .WhenSucceeded()),
+                                                            .WhenSucceeded() with
+                                                            {
+                                                                DisplayName = "Build"
+                                                            }),
 
                                                     If_<Step>().Equal(variables["_RunAsPublic"], "True")
-                                                        .Step(new CommandLineTask("Build and run tests",
+                                                        .Step(new CommandLineTask(
                                                                 "eng/common/cibuild.sh" +
                                                                 " --configuration $(_BuildConfig)" +
                                                                 " --prepareMachine" +
                                                                 " $(_InternalBuildArgs)")
-                                                            .WhenSucceeded())
+                                                            .WhenSucceeded() with {
+                                                                DisplayName = "Build and run tests"
+                                                            })
 
-                                                        .Step(new PublishPipelineArtifactTask(
-                                                                "Publish XHarness CLI for Helix Testing",
+                                                        .Step(new PublishTask(
                                                                 "$(Build.SourcesDirectory)/artifacts/packages/$(_BuildConfig)/Shipping/Microsoft.DotNet.XHarness.CLI.1.0.0-ci.nupkg",
                                                                 "Microsoft.DotNet.XHarness.CLI.$(_BuildConfig)")
-                                                            .When("and(succeeded(), eq(variables['_BuildConfig'], 'Debug'))"))
+                                                            .When("and(succeeded(), eq(variables['_BuildConfig'], 'Debug'))") with
+                                                            {
+                                                                DisplayName = "Publish XHarness CLI for Helix Testing"
+                                                            })
 
-                                                        .Step(new AzureDevOpsTask("PublishTestResults@2", "Publish Unit Test Results")
+                                                        .Step(new AzureDevOpsTask("PublishTestResults@2")
                                                         {
+                                                            DisplayName = "Publish Unit Test Results",
                                                             Inputs =
                                                             {
                                                                 { "testResultsFormat", "xUnit" },
@@ -170,6 +193,8 @@ namespace Sharpliner.Tests.AzureDevOps
                             }
                         }
                     })
+
+                // E2E tests
 
                     .Template("eng/e2e-test.yml", new TemplateParameters
                     {
@@ -206,14 +231,19 @@ namespace Sharpliner.Tests.AzureDevOps
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/WASM/WASM.Helix.SDK.Tests.proj" },
                     }),
 
+                // NuGet publishing
                 If_<Stage>().Equal(variables["_RunAsInternal"], "True")
                     .Template("eng/common/templates/post-build/post-build.yml", new TemplateParameters()
                     {
                         { "publishingInfraVersion", 3 },
                         { "enableSymbolValidation", true },
+
+                        // Reenable once this issue is resolved: https://github.com/dotnet/arcade/issues/2912
                         { "enableSourceLinkValidation", false },
                         { "validateDependsOn", new[] { "Build_Windows_NT" } },
                         { "publishDependsOn", new[] { "Validate" } },
+
+                        // This is to enable SDL runs part of Post-Build Validation Stage
                         { "SDLValidationParameters", new TemplateParameters
                             {
                                 { "enable", false },
