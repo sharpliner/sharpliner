@@ -1,11 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!-- Suppresses the warnings about the package not having assemblies in lib/*/.dll.-->
-    <NoPackageAnalysis>true</NoPackageAnalysis>
-    <!-- Change the default location where NuGet will put the build output -->
-    <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
-
     <!-- NuGet details -->
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/sharpliner/sharpliner</RepositoryUrl>
@@ -37,10 +32,13 @@
     <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
   </ItemGroup>
   
-  <!-- Make sure that referenced projects (Sharpliner.dll) are packaged inside tasks\ -->
   <PropertyGroup>
+    <!-- Make sure that referenced projects (Sharpliner.dll) are packaged inside tasks\ -->
     <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
-    <Version>0.1.0</Version>
+    <!-- Suppresses the warnings about the package not having assemblies in lib/*/.dll.-->
+    <NoPackageAnalysis>true</NoPackageAnalysis>
+    <!-- Change the default location where NuGet will put the build output -->
+    <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
   </PropertyGroup>
   
   <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
