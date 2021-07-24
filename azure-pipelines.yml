@@ -1,3 +1,10 @@
+### 
+### DO NOT MODIFY THIS FILE!
+### 
+### This YAML was auto-generated from SharplinerPipeline.cs
+### To make changes, change the C# definition and rebuild its project
+### 
+
 trigger:
   batch: true
   branches:
