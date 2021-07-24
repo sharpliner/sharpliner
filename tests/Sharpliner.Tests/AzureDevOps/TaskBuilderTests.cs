@@ -358,22 +358,5 @@ namespace Sharpliner.Tests.AzureDevOps
     timeoutInMinutes: 120
 ");
         }
-
-        [Fact]
-        public void Serialize_XHarness_Pipeline_Test()
-        {
-            XHarnessPipeline pipeline = new();
-            string yaml = pipeline.Serialize();
-            yaml.Should().Be(
-@"jobs:
-- job: test
-  steps:
-  - task: VSBuild@1
-    displayName: Build
-    inputs:
-      solution: '**/*.sln'
-    timeoutInMinutes: 120
-");
-        }
     }
 }
