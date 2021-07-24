@@ -10,6 +10,10 @@
     <PackageReference Include="Sharpliner.Tools" Version="1.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Update="YamlDotNet" Version="11.2.0" />
+  </ItemGroup>
+
   <!--
     This project mimics the external usage of Sharpliner libraries to publish this repo's pipeline.
 
