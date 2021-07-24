@@ -66,7 +66,16 @@ namespace Sharpliner.Definition
                     throw new ArgumentOutOfRangeException(nameof(TargetPathType));
             }
 
-            File.WriteAllText(fileName, Serialize());
+            string fileContents = Serialize();
+
+            string[]? header = Header;
+            if (header?.Length > 0)
+            {
+                const string hash = "### ";
+                fileContents = hash + string.Join(Environment.NewLine + hash, header) + Environment.NewLine + Environment.NewLine + fileContents;
+            }
+
+            File.WriteAllText(fileName, fileContents);
         }
 
         /// <summary>
@@ -113,6 +122,20 @@ namespace Sharpliner.Definition
         /// Allows the variables[""] notation for conditional definitions.
         /// </summary>
         protected readonly PipelineVariable variables = new();
+
+        /// <summary>
+        /// Header that will be shown at the top of the generated YAML file.
+        /// Leave null or empty to omit file header.
+        /// </summary>
+        protected virtual string[]? Header => new[]
+        {
+            string.Empty,
+            "DO NOT MODIFY THIS FILE!",
+            string.Empty,
+            $"This YAML was auto-generated from { GetType().Name }.cs",
+            $"To make changes, change the C# definition and rebuild its project",
+            string.Empty,
+        };
 
         protected static Condition<T> And<T>(Condition condition1, Condition condition2) => new AndCondition<T>(condition1, condition2);
 
