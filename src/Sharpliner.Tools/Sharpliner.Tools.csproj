@@ -1,35 +1,49 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <!-- NuGet details -->
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/sharpliner/sharpliner</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/sharpliner/sharpliner</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Summary>Define Azure DevOps and GitHub actions pipelines using C#</Summary>
+    <Description>This package lets you define pipelines and automatically produces the YAML when the project is built</Description>
+    <PackageTags>yaml;azure devops;devops;ado;azdo;pipeline;pipelines;github;actions;csharp;definition;define</PackageTags>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageId>Sharpliner.Tools</PackageId>
+    <Authors>PremekVysoky</Authors>
+    <NeutralLanguage>en</NeutralLanguage>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <Content Include="..\..\LICENSE" PackagePath="\" />
+    <Content Include="..\..\README.md" PackagePath="\" />
+    <Content Include="build\Sharpliner.Tools.props" PackagePath="build\" />
+    <Content Include="build\Sharpliner.Tools.targets" PackagePath="build\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Sharpliner\Sharpliner.csproj" />
+
+    <PackageReference Include="Microsoft.Build.Framework" Version="16.9.0" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.9.0" />
+    <!-- Marks all packages as 'local only' so they don't end up in the nuspec -->
+    <ProjectReference Update="@(ProjectReference)" PrivateAssets="All" />
+    <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
+  </ItemGroup>
+  
+  <PropertyGroup>
+    <!-- Make sure that referenced projects (Sharpliner.dll) are packaged inside tasks\ -->
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
     <!-- Suppresses the warnings about the package not having assemblies in lib/*/.dll.-->
     <NoPackageAnalysis>true</NoPackageAnalysis>
     <!-- Change the default location where NuGet will put the build output -->
     <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
   </PropertyGroup>
   
-  <ItemGroup>
-    <Content Include="build\Sharpliner.Tools.props" PackagePath="build\" />
-    <Content Include="build\Sharpliner.Tools.targets" PackagePath="build\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="Microsoft.Build.Framework" Version="16.9.0" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.9.0" />
-    <ProjectReference Include="..\Sharpliner\Sharpliner.csproj" />
-    <!-- Marks all packages as 'local only' so they don't end up in the nuspec -->
-    <ProjectReference Update="@(ProjectReference)" PrivateAssets="All" />
-    <PackageReference Update="@(PackageReference)" PrivateAssets="All" />
-  </ItemGroup>
-  
-  <!-- Make sure that referenced projects (Sharpliner.dll) are packaged inside tasks\ -->
-  <PropertyGroup>
-    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
-  </PropertyGroup>
-  
   <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
     <ItemGroup>
-      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths->WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
     </ItemGroup>
   </Target>
 

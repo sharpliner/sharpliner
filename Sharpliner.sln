@@ -10,6 +10,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4367760B-3BCA-4A9F-B8C9-9D106BCBE861}"
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
+		LICENSE = LICENSE
 		NuGet.config = NuGet.config
 	EndProjectSection
 EndProject
@@ -23,7 +24,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "eng", "eng", "{4F21BBD4-0FB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpliner.CI", "eng\Sharpliner.CI\Sharpliner.CI.csproj", "{DABB7F89-37B9-4AC8-9FEA-DCDE0B1E8DE0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Sharpliner.Tools", "src\Sharpliner.Tools\Sharpliner.Tools.csproj", "{BE5FF17A-40FB-4CDA-8F95-65FE1354F6FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpliner.Tools", "src\Sharpliner.Tools\Sharpliner.Tools.csproj", "{BE5FF17A-40FB-4CDA-8F95-65FE1354F6FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
