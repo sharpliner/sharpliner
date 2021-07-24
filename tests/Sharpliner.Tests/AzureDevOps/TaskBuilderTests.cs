@@ -95,11 +95,11 @@ namespace Sharpliner.Tests.AzureDevOps
 @"jobs:
 - job: test
   steps:
-  - powershell: |
+  - powershell: |+
       Set-ErrorActionPreference Stop
       Write-Host ""Lorem ipsum dolor sit amet""
 
-  - powershell: |
+  - powershell: |+
       Set-ErrorActionPreference Stop
       Write-Host ""Lorem ipsum dolor sit amet""
 
@@ -110,7 +110,7 @@ namespace Sharpliner.Tests.AzureDevOps
   - powershell: foo.ps1
     targetType: filepath
 
-  - powershell: |
+  - powershell: |+
       Set-ErrorActionPreference Stop
       Write-Host ""Lorem ipsum dolor sit amet""
 ");
@@ -146,12 +146,12 @@ namespace Sharpliner.Tests.AzureDevOps
 @"jobs:
 - job: test
   steps:
-  - powershell: |
+  - powershell: |+
       Set-ErrorActionPreference Stop
       Write-Host ""Lorem ipsum dolor sit amet""
     pwsh: true
 
-  - powershell: |
+  - powershell: |+
       Set-ErrorActionPreference Stop
       Write-Host ""Lorem ipsum dolor sit amet""
     pwsh: true
@@ -165,7 +165,7 @@ namespace Sharpliner.Tests.AzureDevOps
     targetType: filepath
     pwsh: true
 
-  - powershell: |
+  - powershell: |+
       Set-ErrorActionPreference Stop
       Write-Host ""Lorem ipsum dolor sit amet""
     pwsh: true
@@ -346,6 +346,23 @@ namespace Sharpliner.Tests.AzureDevOps
         public void Serialize_Task_Builder_Test()
         {
             TaskPipeline pipeline = new();
+            string yaml = pipeline.Serialize();
+            yaml.Should().Be(
+@"jobs:
+- job: test
+  steps:
+  - task: VSBuild@1
+    displayName: Build
+    inputs:
+      solution: '**/*.sln'
+    timeoutInMinutes: 120
+");
+        }
+
+        [Fact]
+        public void Serialize_XHarness_Pipeline_Test()
+        {
+            XHarnessPipeline pipeline = new();
             string yaml = pipeline.Serialize();
             yaml.Should().Be(
 @"jobs:
