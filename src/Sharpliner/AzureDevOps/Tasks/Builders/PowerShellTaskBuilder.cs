@@ -2,7 +2,7 @@
 
 namespace Sharpliner.AzureDevOps.Tasks
 {
-    public class PowershellTaskBuilder : ScriptTaskBuilder
+    public class PowershellTaskBuilder : TaskBuilderBase
     {
         private readonly bool _pwsh;
 

@@ -2,7 +2,7 @@
 
 namespace Sharpliner.AzureDevOps.Tasks
 {
-    public class BashTaskBuilder : ScriptTaskBuilder
+    public class BashTaskBuilder : TaskBuilderBase
     {
         /// <summary>
         /// Creates a bash task where the contents come from an embedded resource.
