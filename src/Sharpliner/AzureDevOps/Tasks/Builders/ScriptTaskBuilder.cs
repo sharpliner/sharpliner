@@ -1,29 +1,39 @@
-﻿using System.IO;
-using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 
 namespace Sharpliner.AzureDevOps.Tasks
 {
-    public abstract class ScriptTaskBuilder
+    public class ScriptTaskBuilder : TaskBuilderBase
     {
-        protected static string GetResourceFile(Assembly assembly, string resourceFileName)
+        /// <summary>
+        /// Creates a script task where the contents come from an embedded resource.
+        /// </summary>
+        /// <typeparam name="TAssembly">A type located in the assembly where the resource is located</typeparam>
+        /// <param name="resourceFileName">Name of the resource file</param>
+        public ScriptTask FromResourceFile(string resourceFileName, string? displayName = null)
+            => new ScriptTask(GetResourceFile(Assembly.GetCallingAssembly()!, resourceFileName)) with
+            {
+                DisplayName = displayName!,
+            };
+
+        /// <summary>
+        /// Creates a script task where the contents come from a file.
+        /// The contents are inlined in the YAML as contrary to File method where the file name is just referenced.
+        /// </summary>
+        /// <param name="path">Path to the file</param>
+        public ScriptTask FromFile(string path, string? displayName = null)
+            => new ScriptTask(System.IO.File.ReadAllText(path)) with
+            {
+                DisplayName = displayName!,
+            };
+
+        /// <summary>
+        /// Creates a script task with given contents.
+        /// </summary>
+        /// <param name="scriptLines">Contents of the script</param>
+        public ScriptTask Inline(params string[] scriptLines) => new(scriptLines);
+
+        internal ScriptTaskBuilder()
         {
-            Stream? stream = assembly.GetManifestResourceStream($"{assembly.GetName().Name}.{resourceFileName}");
-
-            if (stream == null)
-            {
-                string? resource = assembly.GetManifestResourceNames().FirstOrDefault(res => res.EndsWith(resourceFileName));
-                if (resource != null)
-                {
-                    stream = assembly.GetManifestResourceStream(resource);
-                }
-            }
-
-            using (stream)
-            using (var sr = new StreamReader(stream ?? throw new FileNotFoundException($"Couldn't locate resource file '{resourceFileName}'")))
-            {
-                return sr.ReadToEnd();
-            }
         }
     }
 }

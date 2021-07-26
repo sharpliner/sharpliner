@@ -7,7 +7,7 @@ namespace Sharpliner.AzureDevOps.Tasks
     /// <summary>
     /// https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/command-line?view=azure-devops&tabs=yaml
     /// </summary>
-    public record CommandLineTask : Step
+    public record ScriptTask : Step
     {
         /// <summary>
         /// Required if Type is inline, contents of the script.
@@ -29,7 +29,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlMember(Order = 200)]
         public bool FailOnStdErr { get; init; } = false;
 
-        public CommandLineTask(params string[] scriptLines)
+        public ScriptTask(params string[] scriptLines)
         {
             if (scriptLines is null)
             {

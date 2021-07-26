@@ -25,6 +25,7 @@ namespace Sharpliner.AzureDevOps
         protected static ConditionedDefinition<VariableBase> Variable(string name, bool value) => new(new Variable(name, value));
         protected static ConditionedDefinition<VariableBase> Group(string name) => new(new VariableGroup(name));
         protected static BashTaskBuilder Bash { get; } = new();
+        protected static ScriptTaskBuilder Script { get; } = new();
         protected static PowershellTaskBuilder Powershell { get; } = new(false);
         protected static PowershellTaskBuilder Pwsh { get; } = new(true);
         protected static PublishTask Publish(string filePath, string? displayName = null) => new PublishTask(filePath) with { DisplayName = displayName! };

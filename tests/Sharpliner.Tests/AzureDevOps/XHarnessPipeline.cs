@@ -60,27 +60,27 @@ namespace Sharpliner.Tests.AzureDevOps
                                             Steps =
                                             {
                                                 If_<Step>().Equal(variables["_RunAsPublic"], "False")
-                                                    .Step(new CommandLineTask(
+                                                    .Step(Script.Inline(
                                                             "eng\\common\\CIBuild.cmd" +
                                                             " -configuration $(_BuildConfig)" +
                                                             " -prepareMachine" +
                                                             " $(_InternalBuildArgs)" +
                                                             " /p:Test=false")
+                                                        .WhenSucceeded() with
                                                         {
                                                             DisplayName = "Build"
-                                                        }
-                                                        .WhenSucceeded()),
+                                                        }),
 
                                                 If_<Step>().Equal(variables["_RunAsPublic"], "True")
-                                                    .Step(new CommandLineTask(
+                                                    .Step(Script.Inline(
                                                             "eng\\common\\CIBuild.cmd" +
                                                             " -configuration $(_BuildConfig)" +
                                                             " -prepareMachine" +
                                                             " $(_InternalBuildArgs)")
+                                                        .WhenSucceeded() with
                                                         {
                                                             DisplayName = "Build and run tests"
-                                                        }
-                                                        .WhenSucceeded())
+                                                        })
 
                                                     .Step(new AzureDevOpsTask("PublishTestResults@2")
                                                     {
@@ -144,7 +144,7 @@ namespace Sharpliner.Tests.AzureDevOps
                                                 Steps =
                                                 {
                                                     If_<Step>().Equal(variables["_RunAsPublic"], "False")
-                                                        .Step(new CommandLineTask(
+                                                        .Step(Script.Inline(
                                                                 "eng/common/cibuild.sh" +
                                                                 " --configuration $(_BuildConfig)" +
                                                                 " --prepareMachine" +
@@ -156,7 +156,7 @@ namespace Sharpliner.Tests.AzureDevOps
                                                             }),
 
                                                     If_<Step>().Equal(variables["_RunAsPublic"], "True")
-                                                        .Step(new CommandLineTask(
+                                                        .Step(Script.Inline(
                                                                 "eng/common/cibuild.sh" +
                                                                 " --configuration $(_BuildConfig)" +
                                                                 " --prepareMachine" +
