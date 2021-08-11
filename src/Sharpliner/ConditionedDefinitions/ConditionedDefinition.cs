@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sharpliner.AzureDevOps;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
@@ -42,6 +43,19 @@ namespace Sharpliner
         internal static ConditionedDefinition<T> Link<T>(Condition condition, T definition)
         {
             var conditionedDefinition = new ConditionedDefinition<T>(definition, condition.ToString());
+            condition.Parent?.Definitions.Add(conditionedDefinition);
+            conditionedDefinition.Parent = condition.Parent;
+            return conditionedDefinition;
+        }
+
+        /// <summary>
+        /// This method is used for double-linking of the definition expression tree.
+        /// </summary>
+        /// <param name="condition">Parent condition</param>
+        /// <param name="definition">Definition that was added below the condition</param>
+        /// <returns>The conditioned definition coming out of the inputs</returns>
+        internal static ConditionedDefinition<T> Link<T>(Condition condition, ConditionedDefinition<T> conditionedDefinition)
+        {
             condition.Parent?.Definitions.Add(conditionedDefinition);
             conditionedDefinition.Parent = condition.Parent;
             return conditionedDefinition;
