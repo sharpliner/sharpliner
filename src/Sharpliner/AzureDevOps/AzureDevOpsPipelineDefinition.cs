@@ -28,7 +28,7 @@ namespace Sharpliner.AzureDevOps
         protected static ScriptTaskBuilder Script { get; } = new();
         protected static PowershellTaskBuilder Powershell { get; } = new(false);
         protected static PowershellTaskBuilder Pwsh { get; } = new(true);
-        protected static PublishTask Publish(string filePath, string? artifactName = null, string? displayName = null)
+        protected static PublishTask Publish(string artifactName, string filePath, string? displayName = null)
             => new PublishTask(filePath) with
             {
                 DisplayName = displayName!,
