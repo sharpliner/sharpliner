@@ -2,12 +2,8 @@
 
 namespace Sharpliner.Tests.AzureDevOps
 {
-    internal class MockPipeline : AzureDevOpsPipelineDefinition
+    internal class MockPipeline : TestPipeline
     {
-        public override string TargetFile => "azure-pipelines.yml";
-
-        public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
-
         public override AzureDevOpsPipeline Pipeline => new()
         {
             Name = "$(Date:yyyMMdd).$(Rev:rr)",

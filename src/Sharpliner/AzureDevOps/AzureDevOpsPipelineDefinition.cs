@@ -5,7 +5,7 @@ using Sharpliner.Definition;
 
 namespace Sharpliner.AzureDevOps
 {
-    public abstract class AzureDevOpsPipelineDefinitionBase<TPipeline> : PipelineDefinitionBase where TPipeline : class
+    public abstract class AzureDevOpsPipelineDefinitionBase<TPipeline> : PipelineDefinitionBase where TPipeline : AzureDevOpsPipelineBase
     {
         /// <summary>
         /// Define the pipeline by implementing this field.
@@ -33,6 +33,8 @@ namespace Sharpliner.AzureDevOps
         protected static DownloadTaskBuilder Download { get; } = new();
         protected static AzureDevOpsTask Task(string taskName, string? displayName = null) => new AzureDevOpsTask(taskName) with { DisplayName = displayName! };
         protected static Job Job(string jobName, string? displayName = null) => new Job(jobName) with { DisplayName = displayName! };
+
+        public override void Validate() => Pipeline.Validate();
 
         public override string Serialize() => Prettify(SharplinerSerializer.Serialize(Pipeline));
 
