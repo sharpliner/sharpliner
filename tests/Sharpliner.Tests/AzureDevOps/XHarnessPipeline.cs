@@ -66,10 +66,8 @@ namespace Sharpliner.Tests.AzureDevOps
                                                             " -prepareMachine" +
                                                             " $(_InternalBuildArgs)" +
                                                             " /p:Test=false")
-                                                        .WhenSucceeded() with
-                                                        {
-                                                            DisplayName = "Build"
-                                                        }),
+                                                        .DisplayAs("Build")
+                                                        .WhenSucceeded()),
 
                                                 If_<Step>().Equal(variables["_RunAsPublic"], "True")
                                                     .Step(Script.Inline(
@@ -77,10 +75,8 @@ namespace Sharpliner.Tests.AzureDevOps
                                                             " -configuration $(_BuildConfig)" +
                                                             " -prepareMachine" +
                                                             " $(_InternalBuildArgs)")
-                                                        .WhenSucceeded() with
-                                                        {
-                                                            DisplayName = "Build and run tests"
-                                                        })
+                                                        .DisplayAs("Build and run tests")
+                                                        .WhenSucceeded())
 
                                                     .Step(new AzureDevOpsTask("PublishTestResults@2")
                                                     {
@@ -150,10 +146,8 @@ namespace Sharpliner.Tests.AzureDevOps
                                                                 " --prepareMachine" +
                                                                 " $(_InternalBuildArgs)" +
                                                                 " /p:Test=false")
-                                                            .WhenSucceeded() with
-                                                            {
-                                                                DisplayName = "Build"
-                                                            }),
+                                                            .DisplayAs("Build")
+                                                            .WhenSucceeded()),
 
                                                     If_<Step>().Equal(variables["_RunAsPublic"], "True")
                                                         .Step(Script.Inline(
@@ -161,17 +155,14 @@ namespace Sharpliner.Tests.AzureDevOps
                                                                 " --configuration $(_BuildConfig)" +
                                                                 " --prepareMachine" +
                                                                 " $(_InternalBuildArgs)")
-                                                            .WhenSucceeded() with {
-                                                                DisplayName = "Build and run tests"
-                                                            })
+                                                            .DisplayAs("Build and run tests")
+                                                            .WhenSucceeded())
 
                                                         .Step(new PublishTask(
                                                                 "$(Build.SourcesDirectory)/artifacts/packages/$(_BuildConfig)/Shipping/Microsoft.DotNet.XHarness.CLI.1.0.0-ci.nupkg",
                                                                 "Microsoft.DotNet.XHarness.CLI.$(_BuildConfig)")
-                                                            .When("and(succeeded(), eq(variables['_BuildConfig'], 'Debug'))") with
-                                                            {
-                                                                DisplayName = "Publish XHarness CLI for Helix Testing"
-                                                            })
+                                                            .DisplayAs("Publish XHarness CLI for Helix Testing")
+                                                            .When("and(succeeded(), eq(variables['_BuildConfig'], 'Debug'))"))
 
                                                         .Step(new AzureDevOpsTask("PublishTestResults@2")
                                                         {

@@ -182,7 +182,7 @@ namespace Sharpliner.Tests.AzureDevOps
                     {
                         Steps =
                         {
-                            Publish("bin/Debug/net5.0/", "Publish artifact") with
+                            Publish("Binary", "bin/Debug/net5.0/", "Publish artifact") with
                             {
                                 ContinueOnError = false,
                                 ArtifactType = ArtifactType.Pipeline,
@@ -204,7 +204,7 @@ namespace Sharpliner.Tests.AzureDevOps
   steps:
   - publish: bin/Debug/net5.0/
     displayName: Publish artifact
-    artifact: drop
+    artifact: Binary
 ");
         }
 
