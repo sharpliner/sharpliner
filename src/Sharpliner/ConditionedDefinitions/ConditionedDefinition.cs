@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Sharpliner.AzureDevOps;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
@@ -130,6 +132,23 @@ namespace Sharpliner
             {
                 nestedObjectSerializer(Definition);
             }
+        }
+
+        internal IEnumerable<T> FlattenDefinitions()
+        {
+            var definitions = new List<T>();
+
+            if (Definition is not null)
+            {
+                definitions.Add(Definition);
+            }
+
+            definitions.AddRange(
+                Definitions
+                    .SelectMany(s => (s as ConditionedDefinition<T>)?.FlattenDefinitions()!)
+                    .Where(s => s is not null));
+
+            return definitions;
         }
     }
 }

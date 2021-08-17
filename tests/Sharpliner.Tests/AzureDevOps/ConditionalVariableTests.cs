@@ -7,10 +7,8 @@ namespace Sharpliner.Tests.AzureDevOps
 {
     public class ConditionalVariableTests
     {
-        private class And_Condition_Test_Pipeline : AzureDevOpsPipelineDefinition
+        private class And_Condition_Test_Pipeline : TestPipeline
         {
-            public override string TargetFile => "azure-pipelines.yml";
-
             public override AzureDevOpsPipeline Pipeline => new()
             {
                 Variables =
@@ -32,10 +30,8 @@ namespace Sharpliner.Tests.AzureDevOps
                 "and(eq(variables['Build.SourceBranch'], 'refs/heads/production'), ne(variables['Configuration'], 'Debug'))");
         }
 
-        private class Or_Condition_Test_Pipeline : AzureDevOpsPipelineDefinition
+        private class Or_Condition_Test_Pipeline : TestPipeline
         {
-            public override string TargetFile => "azure-pipelines.yml";
-
             public override AzureDevOpsPipeline Pipeline => new()
             {
                 Variables =

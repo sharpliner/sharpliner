@@ -89,9 +89,10 @@ namespace Sharpliner.Tools
         {
             Type type = pipelineDefinition.GetType();
             var getPath = type.GetMethod(nameof(PipelineDefinitionBase.GetTargetPath));
+            var validate = type.GetMethod(nameof(PipelineDefinitionBase.Validate));
             var publish = type.GetMethod(nameof(PipelineDefinitionBase.Publish));
 
-            if (publish is null || getPath is null)
+            if (publish is null || validate is null || getPath is null)
             {
                 Log.LogError($"Failed to get pipeline definition metadata for {type.FullName}");
                 return;
@@ -103,7 +104,19 @@ namespace Sharpliner.Tools
                 return;
             }
 
-            Log.LogMessage(MessageImportance.High, $"Publishing pipeline {type.Name} to {path}");
+            Log.LogMessage(MessageImportance.High, $"Validating pipeline {type.Name}..");
+
+            try
+            {
+                validate.Invoke(pipelineDefinition, null);
+            }
+            catch (Exception e)
+            {
+                Log.LogMessage(MessageImportance.High, $"Validation of pipeline {type.Name} failed: {e.Message}");
+                return;
+            }
+
+            Log.LogMessage(MessageImportance.High, $"Publishing pipeline {type.Name} to {path}..");
 
             string? hash = GetFileHash(path);
 

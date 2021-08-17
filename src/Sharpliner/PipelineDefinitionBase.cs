@@ -114,6 +114,11 @@ namespace Sharpliner.Definition
         }
 
         /// <summary>
+        /// Validates the pipeline for runtime errors (e.g. wrong dependsOn, artifact name typos..).
+        /// </summary>
+        public abstract void Validate();
+
+        /// <summary>
         /// Serializes the pipeline into a YAML string.
         /// </summary>
         public abstract string Serialize();
