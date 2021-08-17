@@ -35,6 +35,7 @@ namespace Sharpliner.Tests.AzureDevOps
             e.WithMessage("*stage_3*");
             e.WithMessage("*foo*");
         }
+
         private class JobDependsOnErrorPipeline : TestPipeline
         {
             public override AzureDevOpsPipeline Pipeline => new()
@@ -79,6 +80,34 @@ namespace Sharpliner.Tests.AzureDevOps
             var e = action.Should().Throw<Exception>();
             e.WithMessage("*job_5*");
             e.WithMessage("*job_3*");
+        }
+
+        private class DuplicateNamePipeline : TestPipeline
+        {
+            public override AzureDevOpsPipeline Pipeline => new()
+            {
+                Stages =
+                {
+                    new Stage("stage_1"),
+                    new Stage("stage_1")
+                    {
+                        DependsOn = { "stage_1" }
+                    },
+                    new Stage("stage_3")
+                    {
+                        DependsOn = { "stage_1" }
+                    },
+                }
+            };
+        }
+
+        [Fact]
+        public void DuplicateName_Validation_Test()
+        {
+            var pipeline = new StageDependsOnErrorPipeline();
+            Action action = () => pipeline.Validate();
+            var e = action.Should().Throw<Exception>();
+            e.WithMessage("*stage_1*");
         }
     }
 }

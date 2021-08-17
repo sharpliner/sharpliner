@@ -33,19 +33,32 @@ namespace Sharpliner.AzureDevOps
 
         protected static void ValidateDependsOn<T>(ConditionedDefinitionList<ConditionedDefinition<T>> definitions) where T : IDependsOn
         {
-            // TODO: Validate circular dependencies?
             var allDefs = definitions.SelectMany(s => s.FlattenDefinitions());
+
+            var duplicateNames = allDefs.Where(d => allDefs.Count(o => o.Name == d.Name) > 1);
+            var duplicate = duplicateNames.FirstOrDefault();
+            if (duplicate is not null)
+            {
+                throw new Exception($"Found duplicate {typeof(T).Name.ToLower()} name '{duplicate.Name}'");
+            }
 
             foreach (var definition in allDefs)
             {
                 foreach (var dependsOn in definition.DependsOn)
                 {
-                    if (!allDefs.Any(s => s.Name == dependsOn))
+                    if (dependsOn == definition.Name)
+                    {
+                        throw new Exception($"Stage `{definition.Name}` depends on itself");
+                    }
+
+                    if (!allDefs.Any(d => d.Name == dependsOn))
                     {
                         throw new Exception($"Stage `{definition.Name}` depends on stage `{dependsOn}` which was not found");
                     }
                 }
             }
+
+            // TODO: Validate circular dependencies?
         }
     }
 
