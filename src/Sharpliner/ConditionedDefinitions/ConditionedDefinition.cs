@@ -55,6 +55,19 @@ namespace Sharpliner
         /// <param name="condition">Parent condition</param>
         /// <param name="definition">Definition that was added below the condition</param>
         /// <returns>The conditioned definition coming out of the inputs</returns>
+        internal static ConditionedDefinition<T> Link<T>(Condition condition, ConditionedDefinition<T> conditionedDefinition)
+        {
+            condition.Parent?.Definitions.Add(conditionedDefinition);
+            conditionedDefinition.Parent = condition.Parent;
+            return conditionedDefinition;
+        }
+
+        /// <summary>
+        /// This method is used for double-linking of the definition expression tree.
+        /// </summary>
+        /// <param name="condition">Parent condition</param>
+        /// <param name="definition">Definition that was added below the condition</param>
+        /// <returns>The conditioned definition coming out of the inputs</returns>
         internal static ConditionedDefinition<T> Link<T>(Condition condition, Template<T> template)
         {
             condition.Parent?.Definitions.Add(template);
