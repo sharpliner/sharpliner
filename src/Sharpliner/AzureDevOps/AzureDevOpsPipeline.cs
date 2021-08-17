@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Sharpliner.ConditionedDefinitions;
 using YamlDotNet.Serialization;
 
@@ -8,6 +9,8 @@ namespace Sharpliner.AzureDevOps
 {
     public abstract record AzureDevOpsPipelineBase
     {
+        private static Regex s_nameRegex = new("^[A-Za-z0-9_]+$", RegexOptions.Compiled);
+
         [YamlMember(Order = 100)]
         [DisallowNull]
         public string? Name { get; init; }
@@ -35,11 +38,16 @@ namespace Sharpliner.AzureDevOps
         {
             var allDefs = definitions.SelectMany(s => s.FlattenDefinitions());
 
-            var duplicateNames = allDefs.Where(d => allDefs.Count(o => o.Name == d.Name) > 1);
-            var duplicate = duplicateNames.FirstOrDefault();
+            var duplicate = allDefs.FirstOrDefault(d => allDefs.Count(o => o.Name == d.Name) > 1);
             if (duplicate is not null)
             {
                 throw new Exception($"Found duplicate {typeof(T).Name.ToLower()} name '{duplicate.Name}'");
+            }
+
+            var invalidName = allDefs.FirstOrDefault(d => !s_nameRegex.IsMatch(d.Name));
+            if (invalidName is not null)
+            {
+                throw new Exception($"Invalid character found in {typeof(T).Name.ToLower()} name '{invalidName.Name}', only A-Z, a-z, 0-9, and underscore are allowed");
             }
 
             foreach (var definition in allDefs)
@@ -48,12 +56,12 @@ namespace Sharpliner.AzureDevOps
                 {
                     if (dependsOn == definition.Name)
                     {
-                        throw new Exception($"Stage `{definition.Name}` depends on itself");
+                        throw new Exception($"{typeof(T).Name} `{definition.Name}` depends on itself");
                     }
 
                     if (!allDefs.Any(d => d.Name == dependsOn))
                     {
-                        throw new Exception($"Stage `{definition.Name}` depends on stage `{dependsOn}` which was not found");
+                        throw new Exception($"{typeof(T).Name} `{definition.Name}` depends on stage `{dependsOn}` which was not found");
                     }
                 }
             }

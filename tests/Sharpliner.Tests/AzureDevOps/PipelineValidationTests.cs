@@ -89,14 +89,8 @@ namespace Sharpliner.Tests.AzureDevOps
                 Stages =
                 {
                     new Stage("stage_1"),
-                    new Stage("stage_1")
-                    {
-                        DependsOn = { "stage_1" }
-                    },
-                    new Stage("stage_3")
-                    {
-                        DependsOn = { "stage_1" }
-                    },
+                    new Stage("stage_1"),
+                    new Stage("stage_3"),
                 }
             };
         }
@@ -104,10 +98,31 @@ namespace Sharpliner.Tests.AzureDevOps
         [Fact]
         public void DuplicateName_Validation_Test()
         {
-            var pipeline = new StageDependsOnErrorPipeline();
+            var pipeline = new DuplicateNamePipeline();
             Action action = () => pipeline.Validate();
             var e = action.Should().Throw<Exception>();
             e.WithMessage("*stage_1*");
+        }
+
+        private class InvalidNamePipeline : TestPipeline
+        {
+            public override AzureDevOpsPipeline Pipeline => new()
+            {
+                Stages =
+                {
+                    new Stage("stage_1"),
+                    new Stage("stage_2_*&^"),
+                }
+            };
+        }
+
+        [Fact]
+        public void InvalidName_Validation_Test()
+        {
+            var pipeline = new InvalidNamePipeline();
+            Action action = () => pipeline.Validate();
+            var e = action.Should().Throw<Exception>();
+            e.WithMessage("*stage_2*");
         }
     }
 }
