@@ -10,7 +10,7 @@ namespace Sharpliner.AzureDevOps
     /// <summary>
     /// https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#job
     /// </summary>
-    public record Job
+    public record Job : IDependsOn
     {
         // TODO: missing properties Uses, Services
 

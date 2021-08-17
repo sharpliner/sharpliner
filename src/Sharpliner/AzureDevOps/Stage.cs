@@ -5,7 +5,7 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps
 {
-    public record Stage
+    public record Stage : IDependsOn
     {
         [YamlMember(Alias = "stage", Order = 1)]
         public string Name { get; }

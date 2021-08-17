@@ -6,12 +6,8 @@ namespace Sharpliner.Tests.AzureDevOps
 {
     public class VariableSerializationTests
     {
-        private class VariablesPipeline : AzureDevOpsPipelineDefinition
+        private class VariablesPipeline : TestPipeline
         {
-            public override string TargetFile => "azure-pipelines.yml";
-
-            public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
-
             public override AzureDevOpsPipeline Pipeline => new()
             {
                 Variables =
