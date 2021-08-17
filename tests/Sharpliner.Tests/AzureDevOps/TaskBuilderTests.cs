@@ -204,7 +204,7 @@ namespace Sharpliner.Tests.AzureDevOps
   steps:
   - publish: bin/Debug/net5.0/
     displayName: Publish artifact
-    artifact: drop
+    artifact: Binary
 ");
         }
 
