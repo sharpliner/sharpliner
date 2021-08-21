@@ -58,7 +58,7 @@ jobs:
       minorVersion: $(minorVersion)
       patchVersion: $(patchVersion)
 
-  - ${{ if and(ne(variables['Build.Reason'], "PullRequest"), eq(variables['Build.SourceBranch'], "refs/heads/main")) }}:
+  - ${{ if and(ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main')) }}:
     - task: NuGetAuthenticate@0
       displayName: Authenticate NuGet
 
