@@ -110,9 +110,9 @@ namespace Sharpliner
             {
                 validate.Invoke(pipelineDefinition, null);
             }
-            catch (Exception e)
+            catch (TargetInvocationException e)
             {
-                Log.LogMessage(MessageImportance.High, $"Validation of pipeline {type.Name} failed: {e.Message}");
+                Log.LogError("Validation of pipeline {0} failed: {1}", type.Name, e.InnerException?.Message ?? e.Message);
                 return;
             }
 

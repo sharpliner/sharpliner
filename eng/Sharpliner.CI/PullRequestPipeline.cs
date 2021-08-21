@@ -3,7 +3,7 @@ using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.CI
 {
-    internal class SharplinerPipeline : SingleStageAzureDevOpsPipelineDefinition
+    internal class PullRequestPipeline : SingleStageAzureDevOpsPipelineDefinition
     {
         public override string TargetFile => "azure-pipelines.yml";
 

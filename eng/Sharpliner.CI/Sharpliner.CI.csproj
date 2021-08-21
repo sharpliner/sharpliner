@@ -5,6 +5,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Get-Version.ps1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Get-Version.ps1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <!-- These will appear in artifacts/packages after you call `dotnet pack` -->
     <PackageReference Include="Sharpliner" Version="42.42.42" />
   </ItemGroup>
