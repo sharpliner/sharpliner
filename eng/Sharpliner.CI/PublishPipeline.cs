@@ -1,5 +1,4 @@
 ﻿using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.CI
 {
@@ -13,12 +12,12 @@ namespace Sharpliner.CI
         {
             Jobs =
             {
-                new Job("Publish", "Publish Sharpline to nuget.org")
+                new Job("Publish", "Publish to nuget.org")
                 {
                     Pool = new HostedPool("Azure Pipelines", "windows-latest"),
                     Steps =
                     {
-                        Powershell.FromResourceFile("Get-Version.ps1").DisplayAs("Parse version"),
+                        Powershell.FromResourceFile("Get-Version.ps1").DisplayAs("Detect package version"),
 
                         Task("UseDotNet@2", "Install .NET 6 preview 3") with
                         {
@@ -29,20 +28,18 @@ namespace Sharpliner.CI
                             }
                         },
 
-                        new SharplinerValidateTask("eng/Sharpliner.CI/Sharpliner.CI.csproj", false),
-
-                        Task("DotNetCoreCLI@2", "dotnet build") with
+                        Task("DotNetCoreCLI@2", "Build Sharpliner.csproj") with
                         {
                             Inputs = new()
                             {
                                 { "command", "build" },
                                 { "includeNuGetOrg", true },
-                                { "projects", "Sharpliner.sln" },
+                                { "projects", "src/Sharpliner/Sharpliner.csproj" },
                                 { "arguments", "-c Release" },
                             }
                         },
 
-                        Task("NuGetCommand@2", "Pack Sharpliner.csproj") with
+                        Task("NuGetCommand@2", "Pack the .nupkg") with
                         {
                             Inputs = new()
                             {
@@ -59,7 +56,7 @@ namespace Sharpliner.CI
 
                         If.And(IsNotPullRequest, IsBranch("refs/heads/main"))
                             .Step(Task("NuGetAuthenticate@0", "Authenticate NuGet"))
-                            .Step(Task("NuGetCommand@2", "Publish Sharpliner.csproj") with
+                            .Step(Task("NuGetCommand@2", "Publish to nuget.org") with
                             {
                                 Inputs = new()
                                 {
