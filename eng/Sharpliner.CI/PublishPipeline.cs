@@ -17,7 +17,7 @@ namespace Sharpliner.CI
                     Pool = new HostedPool("Azure Pipelines", "windows-latest"),
                     Steps =
                     {
-                        Powershell.FromResourceFile("Get-Version.ps1").DisplayAs("Parse version"),
+                        Powershell.FromResourceFile("Get-Version.ps1").DisplayAs("Detect package version"),
 
                         Task("UseDotNet@2", "Install .NET 6 preview 3") with
                         {
@@ -28,7 +28,7 @@ namespace Sharpliner.CI
                             }
                         },
 
-                        Task("DotNetCoreCLI@2", "dotnet build") with
+                        Task("DotNetCoreCLI@2", "Build Sharpliner.csproj") with
                         {
                             Inputs = new()
                             {

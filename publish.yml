@@ -28,7 +28,7 @@ jobs:
       Write-Host "##vso[task.setvariable variable=majorVersion]$major"
       Write-Host "##vso[task.setvariable variable=minorVersion]$minor"
       Write-Host "##vso[task.setvariable variable=patchVersion]$patch"
-    displayName: Parse version
+    displayName: Detect package version
 
   - task: UseDotNet@2
     displayName: Install .NET 6 preview 3
@@ -37,7 +37,7 @@ jobs:
       version: 6.0.100-preview.3.21202.5
 
   - task: DotNetCoreCLI@2
-    displayName: dotnet build
+    displayName: Build Sharpliner.csproj
     inputs:
       command: build
       includeNuGetOrg: true
