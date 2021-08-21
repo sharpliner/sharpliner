@@ -32,10 +32,10 @@
         public Condition Or(Condition condition1, Condition condition2)
             => Link(new OrCondition(condition1, condition2));
 
-        public Condition BranchIs(string branchName)
+        public Condition IsBranch(string branchName)
             => Link(new BranchCondition(branchName, true));
 
-        public Condition BranchIsNot(string branchName)
+        public Condition IsNotBranch(string branchName)
             => Link(new BranchCondition(branchName, false));
 
         public Condition IsPullRequest
@@ -84,10 +84,10 @@
         public Condition<T> Or(Condition condition1, Condition condition2)
             => Link(new OrCondition<T>(condition1, condition2));
 
-        public Condition<T> BranchIs(string branchName)
+        public Condition<T> IsBranch(string branchName)
             => Link(new BranchCondition<T>(branchName, true));
 
-        public Condition<T> BranchIsNot(string branchName)
+        public Condition<T> IsNotBranch(string branchName)
             => Link(new BranchCondition<T>(branchName, false));
 
         public Condition<T> IsPullRequest

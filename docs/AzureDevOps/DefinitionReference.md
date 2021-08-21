@@ -93,45 +93,46 @@ Sharpliner allows to defined conditioned blocks as well in almost any part of th
 This feature was a little bit problematic to mimic in C# but we've found a nice way to express these:
 
 ```csharp
-    Variables =
-    {
-        // You can create one if statement and chain multiple definitions beneath it
-        If.Equal("$(Environment.Target)", "Cloud")
-            .Variable("target", "Azure")
-            .Variable("isCloud", true)
-            // You can nest another if statement beneath
-            .If.NotEqual(variables["Build.Reason"], "PullRequest")
-                .Group("azure-int")
-            .EndIf // You can jump out of the nested section too
-            .If.Equal(variables['Build.SourceBranch'], "refs/heads/main")
-                .Group("azure-prod"),
-    },
+Variables =
+{
+    // You can create one if statement and chain multiple definitions beneath it
+    If.Equal("$(Environment.Target)", "Cloud")
+        .Variable("target", "Azure")
+        .Variable("isCloud", true)
+
+        // You can nest another if statement beneath
+        .If.NotEqual(variables["Build.Reason"], "PullRequest")
+            .Group("azure-int")
+        .EndIf // You can jump out of the nested section too
+
+        // You can use many macros such as IsBranch or IsPullRequest
+        .If.IsBranch("main")
+            .Group("azure-prod")
+
+        // You can also swap the previous condition with an "else"
+        .Else
+            .Group("azure-int"),
+},
 ```
 
 The resulting YAML will look like this:
 
 ```yaml
-variables:
-- ${{ if eq(variables['Environment.Target'], Cloud) }}:
+- ${{ if eq($(Environment.Target), Cloud) }}:
   - name: target
     value: Azure
+
   - name: isCloud
     value: true
 
   - ${{ if ne(variables['Build.Reason'], PullRequest) }}:
     - group: azure-int
 
-  - ${{ if eq(variables['Build.SourceBranch'], refs/heads/main) }}:
-    - group: azure-prod
-```
+    - ${{ if eq(variables['Build.SourceBranch'], refs/heads/main) }}:
+      - group: azure-prod
 
-We have many useful extensions so the above conditions can also be shortened like this:
-
-```csharp
-    .If.IsPullRequest
-        .Group("azure-int"),
-    .If.BranchIs("main")
-        .Group("azure-prod"),
+    - ${{ if ne(variables['Build.SourceBranch'], refs/heads/main) }}:
+      - group: azure-int
 ```
 
 ### Conditions

@@ -55,9 +55,5 @@ namespace Sharpliner
         }
     }
 
-    public static class TemplateDefinitionExtensions
-    {
-    }
-
     public class TemplateParameters : Dictionary<string, object> { }
 }

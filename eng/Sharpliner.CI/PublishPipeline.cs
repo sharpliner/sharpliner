@@ -49,7 +49,7 @@ namespace Sharpliner.CI
                             }
                         },
 
-                        If_<Step>().And(IsNotPullRequest, BranchIs("refs/heads/main"))
+                        If.And(IsNotPullRequest, IsBranch("refs/heads/main"))
                             .Step(Task("NuGetAuthenticate@0", "Authenticate NuGet"))
                             .Step(Task("NuGetCommand@2", "Publish Sharpliner.csproj") with
                             {

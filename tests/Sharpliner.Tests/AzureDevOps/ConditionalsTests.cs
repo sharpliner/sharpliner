@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Sharpliner.Tests.AzureDevOps
 {
-    public class ConditionalVariableTests
+    public class ConditionalsTests
     {
         private class And_Condition_Test_Pipeline : TestPipeline
         {
@@ -62,10 +62,10 @@ namespace Sharpliner.Tests.AzureDevOps
             {
                 Variables =
                 {
-                    If.BranchIs("refs/head/main")
+                    If.IsBranch("refs/head/main")
                       .Variable("feature", "on"),
 
-                    If.And(IsPullRequest, BranchIsNot("main"))
+                    If.And(IsPullRequest, IsNotBranch("main"))
                       .Group("pr-group"),
                 }
             };
@@ -81,6 +81,75 @@ namespace Sharpliner.Tests.AzureDevOps
 
             variable1.Condition.Should().Be("eq(variables['Build.SourceBranch'], refs/head/main)");
             variable2.Condition.Should().Be("and(eq(variables['Build.Reason'], PullRequest), ne(variables['Build.SourceBranch'], main))");
+        }
+
+        private class Else_Test_Pipeline : TestPipeline
+        {
+            public override AzureDevOpsPipeline Pipeline => new()
+            {
+                Variables =
+                {
+                    If.Equal("a", "b")
+                        .Variable("feature", "on")
+                        .Variable("feature2", "on")
+                    .Else
+                        .Variable("feature", "off")
+                        .Variable("feature2", "off"),
+
+                    If.NotEqual("c", "d")
+                      .Variable("feature", "on")
+                      .Variable("feature2", "on")
+                      .If.And(Equal("e", "f"), NotEqual("g", "h"))
+                          .Variable("feature", "on")
+                          .Variable("feature2", "on")
+                      .Else
+                          .Variable("feature", "off")
+                          .Variable("feature2", "off"),
+                }
+            };
+        }
+
+        [Fact]
+        public void Else_Test()
+        {
+            var pipeline = new Else_Test_Pipeline();
+            pipeline.Serialize().Should().Be(
+@"variables:
+- ${{ if eq(a, b) }}:
+  - name: feature
+    value: on
+
+  - name: feature2
+    value: on
+
+- ${{ if ne(a, b) }}:
+  - name: feature
+    value: off
+
+  - name: feature2
+    value: off
+
+- ${{ if ne(c, d) }}:
+  - name: feature
+    value: on
+
+  - name: feature2
+    value: on
+
+  - ${{ if and(eq(e, f), ne(g, h)) }}:
+    - name: feature
+      value: on
+
+    - name: feature2
+      value: on
+
+  - ${{ if not(and(eq(e, f), ne(g, h))) }}:
+    - name: feature
+      value: off
+
+    - name: feature2
+      value: off
+");
         }
     }
 }

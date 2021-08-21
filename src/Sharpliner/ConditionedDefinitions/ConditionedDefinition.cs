@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sharpliner.AzureDevOps;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
@@ -113,7 +112,27 @@ namespace Sharpliner
         public ConditionBuilder<T> If => new(this);
 
         public ConditionedDefinition<T> EndIf => Parent as ConditionedDefinition<T>
-            ?? throw new InvalidOperationException("You have called EndIf on a top level statement. EndIf should be only used to return from a nested definition.");
+            ?? throw new InvalidOperationException("You have called EndIf on a top-level statement, EndIf can only be used to return from a nested definition");
+
+        public Condition<T> Else
+        {
+            get
+            {
+                // If we're top-level, we create a fake new top with empty definition to collect all the definitions
+                if (Parent == null)
+                {
+                    Parent = new ConditionedDefinition<T>((string?)null);
+                    Parent.Definitions.Add(this);
+                }
+
+                var notCondition = new NotCondition<T>(Condition ?? throw new InvalidOperationException("No condition to match Else against"))
+                {
+                    Parent = Parent
+                };
+
+                return notCondition;
+            }
+        }
 
         public override void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
         {
