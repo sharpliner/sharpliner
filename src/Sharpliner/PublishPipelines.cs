@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using Microsoft.Build.Framework;
 using Sharpliner.Definition;
 
-namespace Sharpliner.Tools
+namespace Sharpliner
 {
     public class PublishPipelines : Microsoft.Build.Utilities.Task
     {

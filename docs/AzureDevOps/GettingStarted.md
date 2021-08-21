@@ -8,7 +8,7 @@ You can have as many pipeline definitions in one project as you want.
 
 ## 1. Create a new project
 
-In this example, we create a `MyProject.Pipelines.csproj` and add the **Sharpliner** and **Sharpliner.Tools** NuGet package references (grab the newest from `nuget.org`).
+In this example, we create a `MyProject.Pipelines.csproj` and add the **Sharpliner** NuGet package reference (grab the newest from `nuget.org`).
 The .csproj file should look something like this:
 
 ```xml
@@ -19,7 +19,6 @@ The .csproj file should look something like this:
 
   <ItemGroup>
     <PackageReference Include="Sharpliner" Version="x.y.z" />
-    <PackageReference Include="Sharpliner.Tools" Version="x.y.z" />
   </ItemGroup>
 </Project>
 ```

@@ -1,13 +1,12 @@
 Sharpliner is a .NET library containing tooling that lets you define YAML pipelines in C#.
-You can use Sharpliner to define Azure DevOps pipelines and GitHub actions in a type-safe comfortable environment of the C# language with the help of intellisense, avoiding syntax errors and bugs.
+You can use Sharpliner to define Azure DevOps pipelines in a type-safe comfortable environment of the C# language with the help of intellisense, avoiding syntax errors and bugs.
 
 ## Getting started
 
 All you have to do is reference our NuGet package in your project, override a class and build the project! Dead simple!
 
 For more detailed steps, check our documentation:
-- [Azure DevOps pipelines]([docs/AzureDevOps/GettingStarted.md](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/GettingStarted.md))
-- [GitHub actions]([docs/GitHubActions/GettingStarted.md](https://github.com/sharpliner/sharpliner/blob/main/docs/GitHubActions/GettingStarted.md))
+- [Azure DevOps pipelines](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/GettingStarted.md)
 
 You can also read about some of our [features and reasons to use Sharpliner](#sharpliner-features) for your project.
 

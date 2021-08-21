@@ -1,0 +1,9 @@
+<Project TreatAsLocalProperty="TaskFolder;TaskAssembly">
+
+  <PropertyGroup>
+    <TaskAssembly>$(MSBuildThisFileDirectory)..\lib\net5.0\Sharpliner.dll</TaskAssembly>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+
+  <UsingTask TaskName="Sharpliner.PublishPipelines" AssemblyFile="$(TaskAssembly)" />
+</Project>
