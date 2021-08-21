@@ -30,9 +30,9 @@
         }
     }
 
-    public class EqualityDefinitionCondition : Condition
+    public class EqualityCondition : Condition
     {
-        internal EqualityDefinitionCondition(string expression1, string expression2, bool equal)
+        internal EqualityCondition(string expression1, string expression2, bool equal)
             : base((equal ? "eq" : "ne") + $"({expression1}, {expression2})")
         {
         }
@@ -74,6 +74,37 @@
     {
         internal OrCondition(Condition expression1, Condition expression2)
             : base($"or({expression1}, {expression2})")
+        {
+        }
+    }
+    public class BranchCondition : EqualityCondition
+    {
+        internal BranchCondition(string branchName, bool equal)
+            : base("variables['Build.SourceBranch']", branchName, equal)
+        {
+        }
+    }
+
+    public class BranchCondition<T> : EqualityCondition<T>
+    {
+        internal BranchCondition(string branchName, bool equal)
+            : base("variables['Build.SourceBranch']", branchName, equal)
+        {
+        }
+    }
+
+    public class BuildReasonCondition : EqualityCondition
+    {
+        internal BuildReasonCondition(string reason, bool equal)
+            : base("variables['Build.Reason']", reason, equal)
+        {
+        }
+    }
+
+    public class BuildReasonCondition<T> : EqualityCondition<T>
+    {
+        internal BuildReasonCondition(string reason, bool equal)
+            : base("variables['Build.Reason']", reason, equal)
         {
         }
     }

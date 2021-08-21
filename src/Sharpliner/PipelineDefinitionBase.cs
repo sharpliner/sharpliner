@@ -154,8 +154,16 @@ namespace Sharpliner.Definition
 
         protected static Condition Or(Condition condition1, Condition condition2) => new OrCondition(condition1, condition2);
 
-        protected static Condition Equal(string expression1, string expression2) => new EqualityDefinitionCondition(expression1, expression2, true);
+        protected static Condition Equal(string expression1, string expression2) => new EqualityCondition(expression1, expression2, true);
 
-        protected static Condition NotEqual(string expression1, string expression2) => new EqualityDefinitionCondition(expression1, expression2, false);
+        protected static Condition NotEqual(string expression1, string expression2) => new EqualityCondition(expression1, expression2, false);
+
+        protected static Condition BranchIs(string branchName) => new BranchCondition(branchName, true);
+
+        protected static Condition BranchIsNot(string branchName) => new BranchCondition(branchName, false);
+
+        protected static Condition IsPullRequest => new BuildReasonCondition("PullRequest", true);
+
+        protected static Condition IsNotPullRequest => new BuildReasonCondition("PullRequest", false);
     }
 }

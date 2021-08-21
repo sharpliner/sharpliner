@@ -38,6 +38,18 @@
         public Condition<T> Or(Condition condition1, Condition condition2)
             => Link(new OrCondition<T>(condition1, condition2));
 
+        public Condition<T> BranchIs(string branchName)
+            => Link(new BranchCondition<T>(branchName, true));
+
+        public Condition<T> BranchIsNot(string branchName)
+            => Link(new BranchCondition<T>(branchName, false));
+
+        public Condition<T> IsPullRequest
+            => Link(new BuildReasonCondition<T>("PullRequest", true));
+
+        public Condition<T> IsNotPullRequest
+            => Link(new BuildReasonCondition<T>("PullRequest", false));
+
         private Condition<T> Link(Condition<T> condition)
         {
             condition.Parent = Parent;
