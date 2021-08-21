@@ -1,18 +1,14 @@
-Sharpliner is a .NET library containing tooling that lets you define YAML pipelines in C#.
-You can use Sharpliner to define Azure DevOps pipelines in a type-safe comfortable environment of the C# language with the help of intellisense, avoiding syntax errors and bugs.
+Sharpliner is a .NET library that lets you use C# for Azure DevOps pipeline definition.
+Exchange YAML indentation problems for the type-safe environment of C# and let the intellisense speed up your work!
 
 ## Getting started
 
 All you have to do is reference our NuGet package in your project, override a class and build the project! Dead simple!
 
-For more detailed steps, check our documentation:
-- [Azure DevOps pipelines](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/GettingStarted.md)
-
-You can also read about some of our [features and reasons to use Sharpliner](#sharpliner-features) for your project.
+For more detailed steps, check our [documentation](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/GettingStarted.md).
 
 ## Example
 
-`PullRequestPipeline.cs`
 ```csharp
 class PullRequestPipeline : AzureDevopsPipelineDefinition
 {
@@ -27,9 +23,9 @@ class PullRequestPipeline : AzureDevopsPipelineDefinition
         Variables =
         {
             If.IsBranch("net-6.0")
-                .Variable("DotnetVersion", "6.0.100"),
-
-            If.IsNotBranch("net-6.0")
+                .Variable("DotnetVersion", "6.0.100")
+                .Group("net6-kv")
+            .Else
                 .Variable("DotnetVersion", "5.0.202"),
         },
 
@@ -57,10 +53,12 @@ class PullRequestPipeline : AzureDevopsPipelineDefinition
                             { "projects", "src/MyProject.sln" },
                         }
                     },
+
+                    PowerShell.FromResourceFile("New-Report.ps1", "Create build report"),
                 }
             }
         },
-    }
+    };
 }
 ```
 
@@ -87,4 +85,4 @@ Steps =
 
 ## Something missing?
 
-This project is still under development and we probably don't cover 100% of the cases. If you find a missing feature / API / property, file an issue in project's repository, or even better, file a PR and we will work with you to get you going.
+This project is still under development and we probably don't cover 100% of the cases. If you find a missing feature / API / property, file an issue in project's repository, or even better - file a PR and we will work with you to get you going.
