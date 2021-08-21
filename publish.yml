@@ -1,0 +1,71 @@
+### 
+### DO NOT MODIFY THIS FILE!
+### 
+### This YAML was auto-generated from PublishPipeline.cs
+### To make changes, change the C# definition and rebuild its project
+### 
+
+trigger:
+  batch: true
+  branches:
+    include:
+    - main
+
+pr:
+  branches:
+    include:
+    - main
+
+jobs:
+- job: Build
+  displayName: Build and test
+  pool:
+    vmImage: windows-latest
+    name: Azure Pipelines
+  steps:
+  - powershell: |+
+      $tag = git tag --points-at HEAD
+      if ("" -eq "$tag") {
+        Write-Host '##vso[task.complete result=Failed;]No git tag with version found'
+        exit 1
+      }
+
+      $versions = $tag.Split('.')
+
+      $major = $versions[0]
+      $minor = $versions[1]
+      $patch = $versions[2]
+
+      Write-Host "##vso[task.setvariable variable=majorVersion]$major"
+      Write-Host "##vso[task.setvariable variable=minorVersion]$minor"
+      Write-Host "##vso[task.setvariable variable=patchVersion]$patch"
+    displayName: Parse version
+
+  - task: UseDotNet@2
+    displayName: Install .NET 6 preview 3
+    inputs:
+      packageType: sdk
+      version: 6.0.100-preview.3.21202.5
+
+  - task: NuGetCommand@2
+    displayName: Pack Sharpliner.csproj
+    inputs:
+      command: pack
+      includeNuGetOrg: true
+      packagesToPack: src/Sharpliner/Sharpliner.csproj
+      versioningScheme: byPrereleaseNumber
+      majorVersion: $(majorVersion)
+      minorVersion: $(minorVersion)
+      patchVersion: $(patchVersion)
+
+  - ${{ if and(ne(variables['Build.Reason'], PullRequest), eq(variables['Build.SourceBranch'], refs/heads/main)) }}:
+    - task: NuGetAuthenticate@0
+      displayName: Authenticate NuGet
+
+    - task: NuGetCommand@2
+      displayName: Publish Sharpliner.csproj
+      inputs:
+        command: push
+        packagesToPush: artifacts/packages/Sharpliner*.nupkg
+        nuGetFeedType: external
+        publishFeedCredentials: Sharpliner / nuget.org
