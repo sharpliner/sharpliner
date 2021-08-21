@@ -6,8 +6,8 @@
 ### 
 
 jobs:
-- job: Build
-  displayName: Build and test
+- job: Publish
+  displayName: Publish Sharpline to nuget.org
   pool:
     vmImage: windows-latest
     name: Azure Pipelines
@@ -36,6 +36,26 @@ jobs:
       packageType: sdk
       version: 6.0.100-preview.3.21202.5
 
+  - powershell: |-
+      dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj"
+      $results = Invoke-Expression "git status --porcelain" | Select-String -Pattern "\.ya?ml$"
+      if (!$results) {
+          Write-Host 'Check succeeded - no YAML changes needed'
+          exit 0
+      } else {
+          Write-Error 'Please rebuild eng/Sharpliner.CI/Sharpliner.CI.csproj locally and commit the YAML changes'
+          exit 1
+      }
+    displayName: Validate YAML is published
+
+  - task: DotNetCoreCLI@2
+    displayName: dotnet build
+    inputs:
+      command: build
+      includeNuGetOrg: true
+      projects: Sharpliner.sln
+      arguments: -c Release
+
   - task: NuGetCommand@2
     displayName: Pack Sharpliner.csproj
     inputs:
@@ -46,6 +66,7 @@ jobs:
       majorVersion: $(majorVersion)
       minorVersion: $(minorVersion)
       patchVersion: $(patchVersion)
+      configuration: Release
 
   - ${{ if and(ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main')) }}:
     - task: NuGetAuthenticate@0

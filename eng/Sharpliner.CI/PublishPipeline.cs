@@ -1,4 +1,5 @@
 ﻿using Sharpliner.AzureDevOps;
+using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.CI
 {
@@ -12,7 +13,7 @@ namespace Sharpliner.CI
         {
             Jobs =
             {
-                new Job("Build", "Build and test")
+                new Job("Publish", "Publish Sharpline to nuget.org")
                 {
                     Pool = new HostedPool("Azure Pipelines", "windows-latest"),
                     Steps =
@@ -28,6 +29,19 @@ namespace Sharpliner.CI
                             }
                         },
 
+                        new SharplinerValidateTask("eng/Sharpliner.CI/Sharpliner.CI.csproj", false),
+
+                        Task("DotNetCoreCLI@2", "dotnet build") with
+                        {
+                            Inputs = new()
+                            {
+                                { "command", "build" },
+                                { "includeNuGetOrg", true },
+                                { "projects", "Sharpliner.sln" },
+                                { "arguments", "-c Release" },
+                            }
+                        },
+
                         Task("NuGetCommand@2", "Pack Sharpliner.csproj") with
                         {
                             Inputs = new()
@@ -39,6 +53,7 @@ namespace Sharpliner.CI
                                 { "majorVersion", "$(majorVersion)" },
                                 { "minorVersion", "$(minorVersion)" },
                                 { "patchVersion", "$(patchVersion)" },
+                                { "configuration", "Release" },
                             }
                         },
 
