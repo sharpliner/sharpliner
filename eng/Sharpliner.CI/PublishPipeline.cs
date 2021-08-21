@@ -10,13 +10,6 @@ namespace Sharpliner.CI
 
         public override SingleStageAzureDevOpsPipeline Pipeline => new()
         {
-            Trigger = new Trigger("main")
-            {
-                Batch = true,
-            },
-
-            Pr = new PrTrigger("main"),
-
             Jobs =
             {
                 new Job("Build", "Build and test")
