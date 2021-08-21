@@ -59,7 +59,7 @@ namespace Sharpliner.Tests.AzureDevOps
 
                                             Steps =
                                             {
-                                                If_<Step>().Equal(variables["_RunAsPublic"], "False")
+                                                If.Equal(variables["_RunAsPublic"], "False")
                                                     .Step(Script.Inline(
                                                             "eng\\common\\CIBuild.cmd" +
                                                             " -configuration $(_BuildConfig)" +
@@ -69,7 +69,7 @@ namespace Sharpliner.Tests.AzureDevOps
                                                         .DisplayAs("Build")
                                                         .WhenSucceeded()),
 
-                                                If_<Step>().Equal(variables["_RunAsPublic"], "True")
+                                                If.Equal(variables["_RunAsPublic"], "True")
                                                     .Step(Script.Inline(
                                                             "eng\\common\\CIBuild.cmd" +
                                                             " -configuration $(_BuildConfig)" +
@@ -108,7 +108,7 @@ namespace Sharpliner.Tests.AzureDevOps
                     }
                 },
 
-                If_<Stage>().Equal(variables["_RunAsPublic"], "True")
+                If.Equal(variables["_RunAsPublic"], "True")
                     .Stage(new Stage("Build_OSX")
                     {
                         Jobs = {
@@ -139,7 +139,7 @@ namespace Sharpliner.Tests.AzureDevOps
 
                                                 Steps =
                                                 {
-                                                    If_<Step>().Equal(variables["_RunAsPublic"], "False")
+                                                    If.Equal(variables["_RunAsPublic"], "False")
                                                         .Step(Script.Inline(
                                                                 "eng/common/cibuild.sh" +
                                                                 " --configuration $(_BuildConfig)" +
@@ -149,7 +149,7 @@ namespace Sharpliner.Tests.AzureDevOps
                                                             .DisplayAs("Build")
                                                             .WhenSucceeded()),
 
-                                                    If_<Step>().Equal(variables["_RunAsPublic"], "True")
+                                                    If.Equal(variables["_RunAsPublic"], "True")
                                                         .Step(Script.Inline(
                                                                 "eng/common/cibuild.sh" +
                                                                 " --configuration $(_BuildConfig)" +
@@ -223,8 +223,8 @@ namespace Sharpliner.Tests.AzureDevOps
                     }),
 
                 // NuGet publishing
-                If_<Stage>().Equal(variables["_RunAsInternal"], "True")
-                    .Template("eng/common/templates/post-build/post-build.yml", new TemplateParameters()
+                If.Equal(variables["_RunAsInternal"], "True")
+                    .Template<Stage>("eng/common/templates/post-build/post-build.yml", new TemplateParameters()
                     {
                         { "publishingInfraVersion", 3 },
                         { "enableSymbolValidation", true },

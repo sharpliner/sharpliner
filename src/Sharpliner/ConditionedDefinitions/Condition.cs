@@ -1,4 +1,6 @@
-﻿namespace Sharpliner
+﻿using System;
+
+namespace Sharpliner
 {
     /// <summary>
     /// Represents an ${{ if ... }} statement in the YAML.
@@ -30,6 +32,19 @@
         }
     }
 
+    public class NotCondition : Condition
+    {
+        internal NotCondition(Condition condition)
+            : base(NotConditionHelper.NegateCondition(condition.ToString()))
+        {
+        }
+
+        internal NotCondition(string condition)
+            : base(NotConditionHelper.NegateCondition(condition))
+        {
+        }
+    }
+
     public class EqualityCondition : Condition
     {
         internal EqualityCondition(string expression1, string expression2, bool equal)
@@ -50,6 +65,19 @@
     {
         internal OrCondition(Condition expression1, Condition expression2)
             : base($"or({expression1}, {expression2})")
+        {
+        }
+    }
+
+    public class NotCondition<T> : Condition<T>
+    {
+        internal NotCondition(Condition condition)
+            : base(NotConditionHelper.NegateCondition(condition.ToString()))
+        {
+        }
+
+        internal NotCondition(string condition)
+            : base(NotConditionHelper.NegateCondition(condition))
         {
         }
     }
@@ -88,7 +116,7 @@
     public class BranchCondition<T> : EqualityCondition<T>
     {
         internal BranchCondition(string branchName, bool equal)
-            : base("variables['Build.SourceBranch']", branchName, equal)
+            : base("variables['Build.SourceBranch']", branchName.StartsWith("refs/heads/") ? branchName : "refs /heads/" + branchName, equal)
         {
         }
     }
@@ -106,6 +134,24 @@
         internal BuildReasonCondition(string reason, bool equal)
             : base("variables['Build.Reason']", reason, equal)
         {
+        }
+    }
+
+    internal static class NotConditionHelper
+    {
+        public static string NegateCondition(string condition)
+        {
+            if (condition.StartsWith("eq("))
+            {
+                return string.Concat("ne", condition.AsSpan(2));
+            }
+
+            if (condition.StartsWith("ne("))
+            {
+                return string.Concat("eq", condition.AsSpan(2));
+            }
+
+            return $"not({condition})";
         }
     }
 }

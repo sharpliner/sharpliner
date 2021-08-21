@@ -158,9 +158,9 @@ namespace Sharpliner.Definition
 
         protected static Condition NotEqual(string expression1, string expression2) => new EqualityCondition(expression1, expression2, false);
 
-        protected static Condition BranchIs(string branchName) => new BranchCondition(branchName, true);
+        protected static Condition IsBranch(string branchName) => new BranchCondition(branchName, true);
 
-        protected static Condition BranchIsNot(string branchName) => new BranchCondition(branchName, false);
+        protected static Condition IsNotBranch(string branchName) => new BranchCondition(branchName, false);
 
         protected static Condition IsPullRequest => new BuildReasonCondition("PullRequest", true);
 

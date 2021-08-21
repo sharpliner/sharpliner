@@ -25,7 +25,7 @@ namespace Sharpliner.Tests.AzureDevOps
                         .If.NotEqual(variables["Build.Reason"], "PullRequest")
                             .Variable("AzureSubscription", "Int")
                             .Group("azure-int")
-                        .EndIf()
+                        .EndIf
                         .If.Equal(variables["Build.Reason"], "PullRequest")
                             .Variable("AzureSubscription", "Prod")
                             .Group("azure-prod"),

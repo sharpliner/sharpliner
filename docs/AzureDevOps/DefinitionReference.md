@@ -90,60 +90,49 @@ Similarly to Build steps, there's a shorthand style of definition of variables t
 
 The Azure DevOps pipeline YAML allows you to specify conditioned expressions which are evaulated when pipeline is started.
 Sharpliner allows to defined conditioned blocks as well in almost any part of the definition.
-This feature was a little bit problematic to mimic in C# but we've found a nice way to express these.
+This feature was a little bit problematic to mimic in C# but we've found a nice way to express these:
 
-For variable definitions, we have a really comfortable way of defining conditioned definitions:
 ```csharp
-    Variables =
-    {
-        // You can create one if statement and chain multiple definitions beneath it
-        If.Equal("$(Environment.Target)", "Cloud")
-            .Variable("target", "Azure")
-            .Variable("isCloud", true)
-            // You can nest another if statement beneath
-            .If.NotEqual(variables["Build.Reason"], "PullRequest")
-                .Group("azure-int")
-            .EndIf() // You can jump out of the nested section too
-            .If.Equal(variables["Build.Reason"], "PullRequest")
-                .Group("azure-prod"),
-    },
+Variables =
+{
+    // You can create one if statement and chain multiple definitions beneath it
+    If.Equal("$(Environment.Target)", "Cloud")
+        .Variable("target", "Azure")
+        .Variable("isCloud", true)
+
+        // You can nest another if statement beneath
+        .If.NotEqual(variables["Build.Reason"], "PullRequest")
+            .Group("azure-int")
+        .EndIf // You can jump out of the nested section too
+
+        // You can use many macros such as IsBranch or IsPullRequest
+        .If.IsBranch("main")
+            .Group("azure-prod")
+
+        // You can also swap the previous condition with an "else"
+        .Else
+            .Group("azure-int"),
+},
 ```
 
 The resulting YAML will look like this:
+
 ```yaml
-variables:
-- ${{ if eq(variables['Environment.Target'], Cloud) }}:
+- ${{ if eq($(Environment.Target), Cloud) }}:
   - name: target
     value: Azure
+
   - name: isCloud
     value: true
 
   - ${{ if ne(variables['Build.Reason'], PullRequest) }}:
     - group: azure-int
 
-  - ${{ if eq(variables['Build.Reason'], PullRequest) }}:
-    - group: azure-prod
-```
+    - ${{ if eq(variables['Build.SourceBranch'], refs/heads/main) }}:
+      - group: azure-prod
 
-For conditional blocks that define non-variable parts of the pipeline such as steps, you need to unfortunately use the `If_<T>()` notation where `T` is the type you want to enclose in the condition:
-```csharp
-...
-    Steps =
-    {
-        // You can always check the type of Steps to get the type for `If_`
-        If_<Step>().Equal(variables["_RunAsPublic"], "False")
-            .Step(new CommandLineTask(
-                    "eng\\common\\CIBuild.cmd" +
-                    " -configuration $(_BuildConfig)" +
-                    " -prepareMachine" +
-                    " $(_InternalBuildArgs)" +
-                    " /p:Test=false")
-                {
-                    DisplayName = "Build"
-                }
-                .WhenSucceeded()),
-    }
-...
+    - ${{ if ne(variables['Build.SourceBranch'], refs/heads/main) }}:
+      - group: azure-int
 ```
 
 ### Conditions

@@ -26,10 +26,10 @@ class PullRequestPipeline : AzureDevopsPipelineDefinition
 
         Variables =
         {
-            If.Equal(variables["Build.SourceBranch"], "refs/heads/net-6.0")
+            If.IsBranch("net-6.0")
                 .Variable("DotnetVersion", "6.0.100"),
 
-            If.NotEqual(variables["Build.SourceBranch"], "refs/heads/net-6.0")
+            If.IsNotBranch("net-6.0")
                 .Variable("DotnetVersion", "5.0.202"),
         },
 

@@ -63,7 +63,7 @@ namespace Sharpliner.Tests.AzureDevOps
                                 DependsOn = { "job_1", "job_2" }
                             },
 
-                            If_<Job>().BranchIs("main").Job(
+                            If.IsBranch("main").Job(
                                 new Job("job_5")
                                 {
                                     DependsOn = { "job_2", "job_3" }
