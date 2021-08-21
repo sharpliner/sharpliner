@@ -1,7 +1,7 @@
 <Project TreatAsLocalProperty="TaskFolder;TaskAssembly">
 
   <PropertyGroup>
-    <TaskAssembly>$(MSBuildThisFileDirectory)..\tasks\net5.0\Sharpliner.Tools.dll</TaskAssembly>
+    <TaskAssembly>$(MSBuildThisFileDirectory)..\lib\net5.0\Sharpliner.dll</TaskAssembly>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
@@ -9,5 +9,5 @@
     <PackageReference Include="YamlDotNet" Version="11.2.0" />
   </ItemGroup>
 
-  <UsingTask TaskName="Sharpliner.Tools.PublishPipelines" AssemblyFile="$(TaskAssembly)" />
+  <UsingTask TaskName="Sharpliner.PublishPipelines" AssemblyFile="$(TaskAssembly)" />
 </Project>
