@@ -13,15 +13,15 @@
     <PackageId>Sharpliner</PackageId>
     <Authors>PremekVysoky</Authors>
     <NeutralLanguage>en</NeutralLanguage>
+
+    <!-- Copy dependencies (YamlDotNet.dll) to bin/ so that we can include it in the NuGet later -->
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="YamlDotNet" Version="11.2.0" />
+    <PackageReference Include="YamlDotNet" Version="11.2.1" />
     <PackageReference Include="Microsoft.Build.Framework" Version="16.9.0" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.9.0" />
-
-    <!-- Marks all packages as 'local only' so they don't end up in the nuspec -->
-    <!-- <PackageReference Update="@(PackageReference)" PrivateAssets="All" /> -->
   </ItemGroup>
 
   <ItemGroup>
@@ -30,22 +30,23 @@
     <Content Include="build\Sharpliner.props" PackagePath="build\" />
     <Content Include="build\Sharpliner.targets" PackagePath="build\" />
   </ItemGroup>
-  
-  <PropertyGroup>
-    <!-- Make sure that referenced projects (Sharpliner.dll) are packaged inside tasks\ -->
-    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage</TargetsForTfmSpecificBuildOutput>
-  </PropertyGroup>
-  
-  <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
+
+  <!--
+    This Target makes sure we include YamlDotNet.dll in the NuGet as it will be needed by the task
+    https://natemcmaster.com/blog/2017/11/11/msbuild-task-with-dependencies/#third-party-dependencies-and-nuget
+  -->
+  <Target Name="PackTaskDependencies" BeforeTargets="GenerateNuspec">
+    <!--
+      The include needs to happen after output has been copied to build output folder
+      but before NuGet generates a nuspec. See https://github.com/NuGet/Home/issues/4704.
+    -->
     <ItemGroup>
-      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths-&gt;WithMetadataValue('ReferenceSourceTarget', 'ProjectReference'))" />
+      <_PackageFiles Include="$(BaseOutputPath)\*\YamlDotNet.dll">
+        <PackagePath>lib</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
     </ItemGroup>
-  </Target>
-  
-  <Target Name="PrePackage" BeforeTargets="BuildPackage">
-    <PropertyGroup>
-      <BuildCommand>$(BuildCommand) -IncludeReferencedProjects</BuildCommand>
-    </PropertyGroup>
   </Target>
 
 </Project>
