@@ -162,8 +162,8 @@ namespace Sharpliner.Definition
 
         protected static Condition IsNotBranch(string branchName) => new BranchCondition(branchName, false);
 
-        protected static Condition IsPullRequest => new BuildReasonCondition("PullRequest", true);
+        protected static Condition IsPullRequest => new BuildReasonCondition("\"PullRequest\"", true);
 
-        protected static Condition IsNotPullRequest => new BuildReasonCondition("PullRequest", false);
+        protected static Condition IsNotPullRequest => new BuildReasonCondition("\"PullRequest\"", false);
     }
 }

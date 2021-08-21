@@ -62,7 +62,7 @@ namespace Sharpliner.Tests.AzureDevOps
             {
                 Variables =
                 {
-                    If.IsBranch("refs/head/main")
+                    If.IsBranch("main")
                       .Variable("feature", "on"),
 
                     If.And(IsPullRequest, IsNotBranch("main"))
@@ -79,8 +79,8 @@ namespace Sharpliner.Tests.AzureDevOps
             var variable1 = pipeline.Pipeline.Variables.ElementAt(0);
             var variable2 = pipeline.Pipeline.Variables.ElementAt(1);
 
-            variable1.Condition.Should().Be("eq(variables['Build.SourceBranch'], refs/head/main)");
-            variable2.Condition.Should().Be("and(eq(variables['Build.Reason'], PullRequest), ne(variables['Build.SourceBranch'], main))");
+            variable1.Condition.Should().Be("eq(variables['Build.SourceBranch'], \"refs/heads/main\")");
+            variable2.Condition.Should().Be("and(eq(variables['Build.Reason'], \"PullRequest\"), ne(variables['Build.SourceBranch'], \"refs/heads/main\"))");
         }
 
         private class Else_Test_Pipeline : TestPipeline
