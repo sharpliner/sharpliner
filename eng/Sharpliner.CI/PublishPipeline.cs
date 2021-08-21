@@ -1,4 +1,5 @@
-﻿using Sharpliner.AzureDevOps;
+﻿using System.IO;
+using Sharpliner.AzureDevOps;
 
 namespace Sharpliner.CI
 {
@@ -27,6 +28,8 @@ namespace Sharpliner.CI
                                 { "version", "6.0.100-preview.3.21202.5" },
                             }
                         },
+
+                        Powershell.Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'"),
 
                         Task("DotNetCoreCLI@2", "Build Sharpliner.csproj") with
                         {
