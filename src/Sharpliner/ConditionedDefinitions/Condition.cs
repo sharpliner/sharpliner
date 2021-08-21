@@ -108,7 +108,7 @@ namespace Sharpliner
     public class BranchCondition : EqualityCondition
     {
         internal BranchCondition(string branchName, bool equal)
-            : base("variables['Build.SourceBranch']", branchName, equal)
+            : base("variables['Build.SourceBranch']", '"' + (branchName.StartsWith("refs/heads/") ? branchName : "refs/heads/" + branchName) + '"', equal)
         {
         }
     }
@@ -116,7 +116,7 @@ namespace Sharpliner
     public class BranchCondition<T> : EqualityCondition<T>
     {
         internal BranchCondition(string branchName, bool equal)
-            : base("variables['Build.SourceBranch']", branchName.StartsWith("refs/heads/") ? branchName : "refs /heads/" + branchName, equal)
+            : base("variables['Build.SourceBranch']", '"' + (branchName.StartsWith("refs/heads/") ? branchName : "refs/heads/" + branchName) + '"', equal)
         {
         }
     }
