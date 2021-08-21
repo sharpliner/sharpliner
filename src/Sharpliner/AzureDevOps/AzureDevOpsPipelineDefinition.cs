@@ -17,8 +17,7 @@ namespace Sharpliner.AzureDevOps
         protected static ConditionedDefinition<T> Template<T>(string path, TemplateParameters? parameters = null)
             => new Template<T>(path, parameters);
 
-        protected static ConditionBuilder<VariableBase> If => new();
-        protected static ConditionBuilder<T> If_<T>() => new();
+        protected static ConditionBuilder If => new();
 
         protected static ConditionedDefinition<VariableBase> Variable(string name, string value) => new(new Variable(name, value));
         protected static ConditionedDefinition<VariableBase> Variable(string name, int value) => new(new Variable(name, value));

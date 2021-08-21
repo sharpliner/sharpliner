@@ -57,15 +57,6 @@ namespace Sharpliner
 
     public static class TemplateDefinitionExtensions
     {
-        public static ConditionedDefinition<T> Template<T>(this Condition<T> condition, string path, TemplateParameters parameters)
-            => ConditionedDefinition.Link(condition, new Template<T>(condition: condition.ToString(), path: path, parameters));
-
-        public static ConditionedDefinition<T> Template<T>(this ConditionedDefinition<T> conditionedDefinition, string path, TemplateParameters parameters)
-        {
-            var template = new Template<T>(path: path, parameters);
-            conditionedDefinition.Definitions.Add(template);
-            return conditionedDefinition;
-        }
     }
 
     public class TemplateParameters : Dictionary<string, object> { }

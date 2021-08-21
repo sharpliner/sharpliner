@@ -112,6 +112,9 @@ namespace Sharpliner
 
         public ConditionBuilder<T> If => new(this);
 
+        public ConditionedDefinition<T> EndIf => Parent as ConditionedDefinition<T>
+            ?? throw new InvalidOperationException("You have called EndIf on a top level statement. EndIf should be only used to return from a nested definition.");
+
         public override void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
         {
             if (!string.IsNullOrEmpty(Condition))

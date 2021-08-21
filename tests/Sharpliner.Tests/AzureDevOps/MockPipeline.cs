@@ -38,7 +38,7 @@ namespace Sharpliner.Tests.AzureDevOps
                     .If.NotEqual(variables["Build.Reason"], "PullRequest")
                         .Variable("AzureSubscription", "Int")
                         .Group("azure-int")
-                    .EndIf()
+                    .EndIf
                     .If.Equal(variables["Build.Reason"], "PullRequest")
                         .Variable("AzureSubscription", "Prod")
                         .Group("azure-prod"),
@@ -93,7 +93,7 @@ namespace Sharpliner.Tests.AzureDevOps
                     }
                 },
 
-                If_<Stage>().Equal(variables["IsPr"], "true")
+                If.Equal(variables["IsPr"], "true")
                     .Stage(new("Test", "Run E2E tests")
                     {
                         DependsOn = { "Build" },

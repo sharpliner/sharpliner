@@ -88,7 +88,7 @@
     public class BranchCondition<T> : EqualityCondition<T>
     {
         internal BranchCondition(string branchName, bool equal)
-            : base("variables['Build.SourceBranch']", branchName, equal)
+            : base("variables['Build.SourceBranch']", branchName.StartsWith("refs/heads/") ? branchName : "refs /heads/" + branchName, equal)
         {
         }
     }
