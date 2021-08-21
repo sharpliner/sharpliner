@@ -28,5 +28,17 @@
             condition.Definitions.Add(step);
             return condition;
         }
+
+        public static ConditionedDefinition<Job> Job(this Condition<Job> condition, Job job)
+            => ConditionedDefinition.Link(condition, job);
+
+        public static ConditionedDefinition<Job> Job(this Condition<Job> condition, ConditionedDefinition<Job> job)
+            => ConditionedDefinition.Link(condition, job);
+
+        public static ConditionedDefinition<Job> Job(this ConditionedDefinition<Job> condition, Job job)
+        {
+            condition.Definitions.Add(job);
+            return condition;
+        }
     }
 }
