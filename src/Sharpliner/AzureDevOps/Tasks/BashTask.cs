@@ -6,7 +6,7 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps.Tasks
 {
     /// <summary>
-    /// https://github.com/MicrosoftDocs/azure-devops-docs/blob/master/docs/pipelines/tasks/utility/bash.md
+    /// More details can be found in <see href="https://github.com/MicrosoftDocs/azure-devops-docs/blob/master/docs/pipelines/tasks/utility/bash.md">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public abstract record BashTask : Step
     {

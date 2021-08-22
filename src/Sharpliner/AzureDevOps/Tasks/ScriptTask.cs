@@ -5,7 +5,7 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps.Tasks
 {
     /// <summary>
-    /// https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/command-line?view=azure-devops&tabs=yaml
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/command-line?view=azure-devops&amp;tabs=yaml">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public record ScriptTask : Step
     {

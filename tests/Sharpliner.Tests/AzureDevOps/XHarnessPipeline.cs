@@ -4,7 +4,7 @@ using Sharpliner.AzureDevOps.Tasks;
 namespace Sharpliner.Tests.AzureDevOps
 {
     /// <summary>
-    /// https://github.com/dotnet/xharness/blob/main/azure-pipelines.yml
+    /// More details can be found in <see href="https://github.com/dotnet/xharness/blob/main/azure-pipelines.yml">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     internal class XHarnessPipeline : PipelineDefinition
     {

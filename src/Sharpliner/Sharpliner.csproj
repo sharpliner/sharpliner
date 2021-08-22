@@ -16,6 +16,14 @@
 
     <!-- Copy dependencies (YamlDotNet.dll) to bin/ so that we can include it in the NuGet later -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+    <!-- Warnings about missing XML docs for public members -->
+    <NoWarn>$(NoWarn);CS1591;CA1822</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <DocumentationFile>$(BaseOutputPath)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>

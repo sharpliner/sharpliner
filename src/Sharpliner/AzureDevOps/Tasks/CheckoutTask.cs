@@ -4,7 +4,7 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps.Tasks
 {
     /// <summary>
-    /// https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#checkout
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#checkout">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public abstract record CheckoutTask : Step
     {
@@ -12,7 +12,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         public abstract string Checkout { get; }
 
         /// <summary>
-        /// When true, run `execute git clean -ffdx && git reset --hard HEAD` before fetching.
+        /// When true, run `execute git clean -ffdx &amp;&amp; git reset --hard HEAD` before fetching.
         /// Defaults to false.
         /// </summary>
         [YamlMember(Order = 100)]

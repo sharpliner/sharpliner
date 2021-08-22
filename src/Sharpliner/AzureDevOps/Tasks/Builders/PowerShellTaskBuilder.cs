@@ -9,8 +9,8 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// <summary>
         /// Creates a Powershell task where the contents come from an embedded resource.
         /// </summary>
-        /// <typeparam name="TAssembly">A type located in the assembly where the resource is located</typeparam>
         /// <param name="resourceFileName">Name of the resource file</param>
+        /// <param name="displayName">Display name of the build step</param>
         public InlinePowershellTask FromResourceFile(string resourceFileName, string? displayName = null)
             => new InlinePowershellTask(GetResourceFile(Assembly.GetCallingAssembly()!, resourceFileName)) with
             {
@@ -23,6 +23,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// The contents are inlined in the YAML as contrary to File method where the file name is just referenced.
         /// </summary>
         /// <param name="path">Path to the file</param>
+        /// <param name="displayName">Display name of the build step</param>
         public InlinePowershellTask FromFile(string path, string? displayName = null)
             => new InlinePowershellTask(System.IO.File.ReadAllText(path)) with
             {
@@ -34,6 +35,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Creates a Powershell task referencing a Powershell file (contents are not inlined in the YAML).
         /// </summary>
         /// <param name="filePath">Path to the file</param>
+        /// <param name="displayName">Display name of the build step</param>
         public PowershellFileTask File(string filePath, string? displayName = null)
             => new PowershellFileTask(filePath) with
             {

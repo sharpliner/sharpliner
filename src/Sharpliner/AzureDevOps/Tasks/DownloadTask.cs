@@ -6,7 +6,7 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps.Tasks
 {
     /// <summary>
-    /// https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/download-pipeline-artifact?view=azure-devops
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/utility/download-pipeline-artifact?view=azure-devops">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public abstract record DownloadTask : Step
     {
@@ -14,7 +14,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         public abstract string Download { get; }
 
         /// <summary>
-        /// The name of the artifact to download. If left empty, all artifacts associated to the pipeline run will be downloaded. 
+        /// The name of the artifact to download. If left empty, all artifacts associated to the pipeline run will be downloaded.
         /// </summary>
         [YamlMember(Order = 60)]
         public string? Artifact { get; init; } = null;
@@ -22,7 +22,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// <summary>
         /// One or more file matching patterns (new line delimited) that limit which files get downloaded.
         /// Default value: **
-        /// https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/file-matching-patterns?view=azure-devops
+        /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/file-matching-patterns?view=azure-devops">official Azure DevOps pipelines documentation</see>.
         /// </summary>
         [YamlIgnore]
         public List<string> Patterns { get; init; } = new();
@@ -34,7 +34,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Directory to download the artifact files. Can be relative to the pipeline workspace directory or absolute.
         /// If multi-download option is applied (by leaving an empty artifact name), a sub-directory will be created for each.
         /// Default value: $(Pipeline.Workspace)
-        /// https://docs.microsoft.com/en-us/azure/devops/pipelines/artifacts/pipeline-artifacts?view=azure-devops
+        /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/artifacts/pipeline-artifacts?view=azure-devops">official Azure DevOps pipelines documentation</see>.
         /// </summary>
         [YamlMember(Order = 62)]
         [DefaultValue("$(Pipeline.Workspace)")]

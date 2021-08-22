@@ -8,7 +8,7 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps
 {
     /// <summary>
-    /// https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#job
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#job">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public record Job : IDependsOn
     {
