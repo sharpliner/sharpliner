@@ -43,16 +43,20 @@ jobs:
     displayName: Build
     inputs:
       command: build
-      includeNuGetOrg: true
       projects: src/Sharpliner/Sharpliner.csproj
       arguments: -c Release
+      includeNuGetOrg: true
 
   - task: DotNetCoreCLI@2
     displayName: Pack the .nupkg
     inputs:
       command: pack
       projects: src/Sharpliner/Sharpliner.csproj
-      arguments: -c Release /p:VersionPrefix=$(majorVersion).$(minorVersion).$(patchVersion)
+      arguments: -c Release --output artifacts/packages /p:PackageVersion=$(majorVersion).$(minorVersion).$(patchVersion)
+
+  - publish: artifacts/packages/Sharpliner.$(majorVersion).$(minorVersion).$(patchVersion).nupkg
+    displayName: Publish build artifacts
+    artifact: Sharpliner
 
   - ${{ if and(ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main')) }}:
     - task: NuGetAuthenticate@0

@@ -42,11 +42,11 @@ jobs:
     displayName: Validate YAML is published
 
   - task: DotNetCoreCLI@2
-    displayName: dotnet build
+    displayName: Build
     inputs:
       command: build
-      includeNuGetOrg: true
       projects: Sharpliner.sln
+      includeNuGetOrg: true
 
   - task: UseDotNet@2
     displayName: Install .NET 5
@@ -55,8 +55,7 @@ jobs:
       version: 5.0.202
 
   - task: DotNetCoreCLI@2
-    displayName: dotnet test
+    displayName: Build
     inputs:
       command: test
-      includeNuGetOrg: true
       projects: Sharpliner.sln

@@ -1,4 +1,5 @@
 ﻿using Sharpliner.AzureDevOps;
+using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.CI
 {
@@ -19,37 +20,19 @@ namespace Sharpliner.CI
                     {
                         Powershell.FromResourceFile("Get-Version.ps1").DisplayAs("Detect package version"),
 
-                        Task("UseDotNet@2", "Install .NET 6 preview 3") with
-                        {
-                            Inputs = new()
-                            {
-                                { "packageType", "sdk" },
-                                { "version", "6.0.100-preview.3.21202.5" },
-                            }
-                        },
+                        DotNet.Install(DotNetPackageType.Sdk, "6.0.100-preview.3.21202.5").DisplayAs("Install .NET 6 preview 3"),
 
                         Powershell.Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'"),
 
-                        Task("DotNetCoreCLI@2", "Build") with
-                        {
-                            Inputs = new()
-                            {
-                                { "command", "build" },
-                                { "includeNuGetOrg", true },
-                                { "projects", "src/Sharpliner/Sharpliner.csproj" },
-                                { "arguments", "-c Release" },
-                            }
-                        },
+                        DotNet.Build("src/Sharpliner/Sharpliner.csproj", arguments: "-c Release", includeNuGetOrg: true).DisplayAs("Build"),
 
-                        Task("DotNetCoreCLI@2", "Pack the .nupkg") with
-                        {
-                            Inputs = new()
-                            {
-                                { "command", "pack" },
-                                { "projects", "src/Sharpliner/Sharpliner.csproj" },
-                                { "arguments", "-c Release /p:VersionPrefix=$(majorVersion).$(minorVersion).$(patchVersion)" },
-                            }
-                        },
+                        DotNet
+                            .Command(DotNetCommand.Pack,
+                                projects: "src/Sharpliner/Sharpliner.csproj",
+                                arguments: "-c Release --output artifacts/packages /p:PackageVersion=$(majorVersion).$(minorVersion).$(patchVersion)")
+                            .DisplayAs("Pack the .nupkg"),
+
+                        Publish("Sharpliner", "artifacts/packages/Sharpliner.$(majorVersion).$(minorVersion).$(patchVersion).nupkg", "Publish build artifacts"),
 
                         If.And(IsNotPullRequest, IsBranch("refs/heads/main"))
                             .Step(Task("NuGetAuthenticate@0", "Authenticate NuGet"))

@@ -10,7 +10,7 @@ For more detailed steps, check our [documentation](https://github.com/sharpliner
 ## Example
 
 ```csharp
-class PullRequestPipeline : AzureDevopsPipelineDefinition
+class PullRequestPipeline : SingleStageAzureDevOpsPipelineDefinition
 {
     public override string TargetFile => "azure-pipelines.yml";
 
@@ -36,15 +36,10 @@ class PullRequestPipeline : AzureDevopsPipelineDefinition
                 Pool = new HostedPool("Azure Pipelines", "windows-latest"),
                 Steps =
                 {
-                    Task("UseDotNet@2", "Install .NET SDK") with
-                    {
-                        Inputs = new()
-                        {
-                            { "packageType", "sdk" },
-                            { "version", "$(DotnetVersion)" },
-                        }
-                    },
+                    // Many tasks have helper methods for shorter notation
+                    DotNet.Install(DotNetPackageType.Sdk, "$(DotnetVersion)").DisplayAs("Install .NET SDK"),
 
+                    // You can also specify any pipeline task in full
                     Task("DotNetCoreCLI@2", "Build and test") with
                     {
                         Inputs = new()
@@ -54,7 +49,10 @@ class PullRequestPipeline : AzureDevopsPipelineDefinition
                         }
                     },
 
-                    PowerShell.FromResourceFile("New-Report.ps1", "Create build report"),
+                    // If statements supported everywhere
+                    If.IsNotPullRequest
+                        // Loads the contents from a file and inlines the script into the YAML
+                        .Step(PowerShell.FromResourceFile("New-Report.ps1", "Create build report")),
                 }
             }
         },
