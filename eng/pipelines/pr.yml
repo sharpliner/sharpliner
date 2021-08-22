@@ -23,7 +23,7 @@ jobs:
     vmImage: windows-latest
     name: Azure Pipelines
   steps:
-  - template: eng/pipelines/templates/install-dotnet.yml
+  - template: templates/install-dotnet.yml
 
   - powershell: |-
       dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj"

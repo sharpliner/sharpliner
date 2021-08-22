@@ -4,7 +4,7 @@ namespace Sharpliner.CI
 {
     internal class PublishPipeline : SingleStagePipelineDefinition
     {
-        public override string TargetFile => "eng/pipelines/publish.yml";
+        public override string TargetFile => Pipelines.Location + "publish.yml";
 
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
