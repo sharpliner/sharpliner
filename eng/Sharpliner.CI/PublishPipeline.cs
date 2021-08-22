@@ -28,6 +28,8 @@ namespace Sharpliner.CI
                             }
                         },
 
+                        Powershell.Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'"),
+
                         Task("DotNetCoreCLI@2", "Build") with
                         {
                             Inputs = new()
