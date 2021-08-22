@@ -17,13 +17,19 @@ namespace Sharpliner.CI
                     Pool = new HostedPool("Azure Pipelines", "windows-latest"),
                     Steps =
                     {
-                        Powershell.FromResourceFile("Get-Version.ps1").DisplayAs("Detect package version"),
+                        Powershell
+                            .FromResourceFile("Get-Version.ps1")
+                            .DisplayAs("Detect package version"),
 
                         Template<Step>(InstallDotNetTemplate.Path),
 
-                        Powershell.Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'"),
+                        Powershell
+                            .Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'")
+                            .DisplayAs("Create artifacts/packages"),
 
-                        DotNet.Build("src/Sharpliner/Sharpliner.csproj", arguments: "-c Release", includeNuGetOrg: true).DisplayAs("Build"),
+                        DotNet
+                            .Build("src/Sharpliner/Sharpliner.csproj", arguments: "-c Release", includeNuGetOrg: true)
+                            .DisplayAs("Build"),
 
                         DotNet
                             .Custom("pack", arguments:
@@ -32,7 +38,9 @@ namespace Sharpliner.CI
                                 "-p:PackageVersion=$(majorVersion).$(minorVersion).$(patchVersion)")
                             .DisplayAs("Pack the .nupkg"),
 
-                        Publish("Sharpliner", "artifacts/packages/Sharpliner.$(majorVersion).$(minorVersion).$(patchVersion).nupkg", "Publish build artifacts"),
+                        Publish("Sharpliner",
+                            filePath: "artifacts/packages/Sharpliner.$(majorVersion).$(minorVersion).$(patchVersion).nupkg",
+                            displayName: "Publish build artifacts"),
 
                         If.And(IsNotPullRequest, IsBranch("refs/heads/main"))
                             .Step(Task("NuGetAuthenticate@0", "Authenticate NuGet"))

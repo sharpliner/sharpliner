@@ -6,9 +6,9 @@
     <RepositoryUrl>https://github.com/sharpliner/sharpliner</RepositoryUrl>
     <PackageProjectUrl>https://github.com/sharpliner/sharpliner</PackageProjectUrl>
     <PackageReadmeFile>README.md</PackageReadmeFile>
-    <Summary>Define Azure DevOps and GitHub actions pipelines using C#</Summary>
-    <Description>Sharpliner is a library that lets you define Azure DevOps pipelines and GitHub actions using C# and generates the YAML for you</Description>
-    <PackageTags>yaml;azure devops;devops;ado;azdo;pipeline;pipelines;github;actions;csharp;definition;define</PackageTags>
+    <Summary>Define Azure DevOps pipelines using C# instead of YAML</Summary>
+    <Description>Sharpliner is a .NET library that lets you use C# for Azure DevOps pipeline definition. Exchange YAML indentation problems for the type-safe environment of C# and let the intellisense speed up your work!</Description>
+    <PackageTags>yaml;azure devops;devops;ado;azdo;pipeline;pipelines;github;actions;csharp;definition;define;csharp;productivity;continous integration;ci</PackageTags>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <PackageId>Sharpliner</PackageId>
     <Authors>PremekVysoky</Authors>
