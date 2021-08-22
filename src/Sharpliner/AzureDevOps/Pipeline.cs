@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Sharpliner.ConditionedDefinitions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps

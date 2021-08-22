@@ -1,6 +1,5 @@
 ﻿using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.Tasks;
-using Sharpliner.ConditionedDefinitions;
 
 namespace Sharpliner.CI
 {

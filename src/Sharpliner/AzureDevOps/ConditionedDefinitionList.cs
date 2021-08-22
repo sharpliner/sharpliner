@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sharpliner.ConditionedDefinitions
+namespace Sharpliner.AzureDevOps
 {
     /// <summary>
     /// This class is here only to override the Add() which is used for definition.
