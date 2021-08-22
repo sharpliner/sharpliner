@@ -43,20 +43,16 @@ Either you new them the regular way though this requires a longer syntax
 ...
 ```
 
-or you can use the shorthand style. For each of the basic commands, a method is defined on the parent class with the same name as the original task
+or you can use the shorthand style. For each of the basic commands, a method/property is defined on the parent class with the same name as the original task:
 ```csharp
 ...
     Steps =
     {
+        Checkout.Self,
+
         // Tasks are represented as C# records so you can use the `with` keyword to override the properties
-        Task("DotNetCoreCLI@2", "Build solution") with
+        DotNet.Build("src/MyProject.sln", includeNuGetOrg: true) with
         {
-            Inputs = new()
-            {
-                { "command", "build" },
-                { "includeNuGetOrg", true },
-                { "projects", "src/MyProject.sln" },
-            },
             Timeout = TimeSpan.FromMinutes(20)
         },
 
@@ -68,10 +64,11 @@ or you can use the shorthand style. For each of the basic commands, a method is 
             ContinueOnError = true,
             Condition = "eq(variables['Build.Reason'], \"PullRequest\")",
         },
+
+        Publish("ArtifactName", "bin/**/*.dll", "Publish build artifacts"),
     }
 ...
 ```
-.
 
 
 ## Pipeline variables
@@ -80,9 +77,9 @@ Similarly to Build steps, there's a shorthand style of definition of variables t
 ```csharp
     Variables =
     {
-        new Variable("Configuration", "Release"), // We can create the objects and then resue them for definition too
-        Variable("Configuration", "Release"),     // Or we have shorthand style like we do for build steps
-        Group("PR keyvault variables"),           // Also shorthand style for variable groups
+        Variable("Configuration", "Release"),     // We have shorthand style like we do for build steps
+        Group("PR keyvault variables"),
+        new Variable("Configuration", "Release"), // We can also create the objects and resue them too
     }
 ```
 
@@ -111,7 +108,7 @@ Variables =
 
         // You can also swap the previous condition with an "else"
         .Else
-            .Group("azure-int"),
+            .Group("azure-pr"),
 },
 ```
 
@@ -132,7 +129,7 @@ The resulting YAML will look like this:
       - group: azure-prod
 
     - ${{ if ne(variables['Build.SourceBranch'], refs/heads/main) }}:
-      - group: azure-int
+      - group: azure-pr
 ```
 
 ### Conditions
@@ -151,3 +148,19 @@ If.Or(
 
 The logic operators such as `Equal` or `Or` expect either a string or a nested condition.
 Additionally, you can also use `variables["name"]` instead of `"variables[\"name\"]"` as shorthand notation but it has the same effect.
+
+Additionally, many of the commonly used conditions have macros prepared for a shorter syntax.
+These are:
+```csharp
+// eq(variables['Build.SourceBranch'], 'refs/heads/production')
+If.IsBranch("production")
+If.IsNotBranch("production")
+
+// eq(variables['Build.Reason'], 'PullRequest')
+If.IsPullRequest
+If.IsNotPullRequest
+
+// You can mix these too
+If.And(IsNotPullRequest, IsBranch("production"))
+```
+

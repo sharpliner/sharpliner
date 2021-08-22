@@ -9,7 +9,7 @@ You can have as many pipeline definitions in one project as you want.
 ## 1. Create a new project
 
 In this example, we create a `MyProject.Pipelines.csproj` and add the **Sharpliner** NuGet package reference (grab the newest from `nuget.org`).
-The .csproj file should look something like this:
+Your file should look something like this:
 
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
@@ -65,16 +65,16 @@ An example of a pipeline that builds and tests your PR can look like this:
 ```csharp
 ...
 
-public override AzureDevOpsPipeline Pipeline => new()
+public override SingleStageAzureDevOpsPipelineDefinition Pipeline => new()
 {
     Pr = new PrTrigger("main"),
 
     Variables =
     {
-        If.Equal(variables["Build.SourceBranch"], "refs/heads/net-6.0")
-            .Variable("DotnetVersion", "6.0.100"),
-
-        If.NotEqual(variables["Build.SourceBranch"], "refs/heads/net-6.0")
+        If.IsBranch("net-6.0")
+            .Variable("DotnetVersion", "6.0.100")
+            .Group("net6-kv")
+        .Else
             .Variable("DotnetVersion", "5.0.202"),
     },
 
@@ -85,33 +85,14 @@ public override AzureDevOpsPipeline Pipeline => new()
             Pool = new HostedPool("Azure Pipelines", "windows-latest"),
             Steps =
             {
-                Task("UseDotNet@2", "Install .NET SDK") with
-                {
-                    Inputs = new()
-                    {
-                        { "packageType", "sdk" },
-                        { "version", "$(DotnetVersion)" },
-                    }
-                },
+                If.IsPullRequest
+                    .Step(Powershell.Inline("Write-Host 'Hello-World'").DisplayAs("Hello world")),
 
-                Task("DotNetCoreCLI@2", "Build solution") with
-                {
-                    Inputs = new()
-                    {
-                        { "command", "build" },
-                        { "includeNuGetOrg", true },
-                        { "projects", "src/MyProject.sln" },
-                    }
-                },
+                DotNet.Install(DotNetPackageType.Sdk, "$(DotnetVersion)").DisplayAs("Install .NET SDK"),
 
-                Task("DotNetCoreCLI@2", "Run unit tests") with
-                {
-                    Inputs = new()
-                    {
-                        { "command", "test" },
-                        { "projects", "src/MyProject.sln" },
-                    }
-                },
+                DotNet.Build("src/MyProject.sln", includeNuGetOrg: true).DisplayAs("Build"),
+
+                DotNet.Command(DotNetCommand.Test, projects: "src/MyProject.sln").DisplayAs("Test"),
             }
         }
     },
@@ -137,7 +118,8 @@ Copyright (C) Microsoft Corporation. All rights reserved.
   Restored MyProject.Pipelines.csproj (in 135 ms).
   MyProject.Pipelines -> bin/MyProject.Pipelines/net5.0/MyProject.Pipelines.dll
   Publishing all pipeline definitions inside bin/MyProject.Pipelines/net5.0/MyProject.Pipelines.dll
-  Publishing pipeline PullRequestPipeline to azure-pipelines.yml
+  Validating pipeline PullRequestPipeline..
+  Publishing pipeline PullRequestPipeline to azure-pipelines.yml..
   Published new changes for PullRequestPipeline
 
 Build succeeded.
@@ -156,11 +138,13 @@ pr:
     - main
 
 variables:
-- ${{ if eq(variables['Build.SourceBranch'], refs/heads/net-6.0) }}:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/net-6.0') }}:
   - name: DotnetVersion
     value: 6.0.100
 
-- ${{ if ne(variables['Build.SourceBranch'], refs/heads/net-6.0) }}:
+  - group: net6-kv
+
+- ${{ if ne(variables['Build.SourceBranch'], 'refs/heads/net-6.0') }}:
   - name: DotnetVersion
     value: 5.0.202
 
@@ -171,6 +155,11 @@ jobs:
     vmImage: windows-latest
     name: Azure Pipelines
   steps:
+  - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+    - powershell: |-
+        Write-Host 'Hello-World'
+      displayName: Hello world
+
   - task: UseDotNet@2
     displayName: Install .NET SDK
     inputs:
@@ -178,14 +167,14 @@ jobs:
       version: $(DotnetVersion)
 
   - task: DotNetCoreCLI@2
-    displayName: Build solution
+    displayName: Build
     inputs:
       command: build
-      includeNuGetOrg: true
       projects: src/MyProject.sln
+      includeNuGetOrg: true
 
   - task: DotNetCoreCLI@2
-    displayName: Run unit tests
+    displayName: Test
     inputs:
       command: test
       projects: src/MyProject.sln
@@ -196,31 +185,10 @@ jobs:
 It can happen that you change your C# definition and you forget to publish or commit the exported YAML file with it.
 To safeguard against these cases, we have created an AzureDevOps task called `SharplinerValidateTask` which will compare what is in your definition and what is in the YAML and fail the build in case they don't match.
 
-You can add this step to your pipeline if you want:
+You can add this step to your pipeline:
 
 ```csharp
 ...
-
-    Task("UseDotNet@2", "Install .NET SDK") with
-    {
-        Inputs = new()
-        {
-            { "packageType", "sdk" },
-            { "version", "$(DotnetVersion)" },
-        }
-    },
-
     new SharplinerValidateTask("src/MyProject.Pipelines.csproj"),
-
-    Task("DotNetCoreCLI@2", "Build solution") with
-    {
-        Inputs = new()
-        {
-            { "command", "build" },
-            { "includeNuGetOrg", true },
-            { "projects", "src/MyProject.sln" },
-        }
-    },
-
 ...
 ```
