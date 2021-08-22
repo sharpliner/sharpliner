@@ -36,11 +36,10 @@ class PullRequestPipeline : SingleStageAzureDevOpsPipelineDefinition
                 Pool = new HostedPool("Azure Pipelines", "windows-latest"),
                 Steps =
                 {
-                    // You can also specify the full UseDotNet@0 task
+                    // Many tasks have helper methods for shorter notation
                     DotNet.Install(DotNetPackageType.Sdk, "$(DotnetVersion)").DisplayAs("Install .NET SDK"),
 
-                    // Can also be shortened using macros:
-                    //   Dotnet.Command("test", projects: "src/MyProject.sln").DisplayAs("Build and test")
+                    // You can also specify any pipeline task in full
                     Task("DotNetCoreCLI@2", "Build and test") with
                     {
                         Inputs = new()
@@ -51,7 +50,7 @@ class PullRequestPipeline : SingleStageAzureDevOpsPipelineDefinition
                     },
 
                     // If statements supported everywhere
-                    If.IsBranch("main")
+                    If.IsNotPullRequest
                         // Loads the contents from a file and inlines the script into the YAML
                         .Step(PowerShell.FromResourceFile("New-Report.ps1", "Create build report")),
                 }
