@@ -27,9 +27,10 @@ namespace Sharpliner.CI
                         DotNet.Build("src/Sharpliner/Sharpliner.csproj", arguments: "-c Release", includeNuGetOrg: true).DisplayAs("Build"),
 
                         DotNet
-                            .Command(DotNetCommand.Pack,
-                                projects: "src/Sharpliner/Sharpliner.csproj",
-                                arguments: "-c Release --output artifacts/packages /p:PackageVersion=$(majorVersion).$(minorVersion).$(patchVersion)")
+                            .Custom("pack", arguments:
+                                "src/Sharpliner/Sharpliner.csproj " +
+                                "-c Release --output artifacts/packages " +
+                                "-p:PackageVersion=$(majorVersion).$(minorVersion).$(patchVersion)")
                             .DisplayAs("Pack the .nupkg"),
 
                         Publish("Sharpliner", "artifacts/packages/Sharpliner.$(majorVersion).$(minorVersion).$(patchVersion).nupkg", "Publish build artifacts"),
