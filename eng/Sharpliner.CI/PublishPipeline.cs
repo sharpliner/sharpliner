@@ -30,7 +30,7 @@ namespace Sharpliner.CI
                             .Custom("pack", arguments:
                                 "src/Sharpliner/Sharpliner.csproj " +
                                 "-c Release --output artifacts/packages " +
-                                "/p:PackageVersion=$(majorVersion).$(minorVersion).$(patchVersion)")
+                                "-p:PackageVersion=$(majorVersion).$(minorVersion).$(patchVersion)")
                             .DisplayAs("Pack the .nupkg"),
 
                         Publish("Sharpliner", "artifacts/packages/Sharpliner.$(majorVersion).$(minorVersion).$(patchVersion).nupkg", "Publish build artifacts"),
