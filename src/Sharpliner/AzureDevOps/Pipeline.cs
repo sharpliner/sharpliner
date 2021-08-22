@@ -9,7 +9,7 @@ namespace Sharpliner.AzureDevOps
 {
     public abstract record PipelineBase
     {
-        private static Regex s_nameRegex = new("^[A-Za-z0-9_]+$", RegexOptions.Compiled);
+        private static readonly Regex s_nameRegex = new("^[A-Za-z0-9_]+$", RegexOptions.Compiled);
 
         [YamlMember(Order = 100)]
         [DisallowNull]

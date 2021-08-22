@@ -11,7 +11,7 @@ namespace Sharpliner.AzureDevOps
     /// A step is a linear sequence of operations that make up a job.
     /// Each step runs in its own process on an agent and has access to the pipeline workspace on a local hard drive.
     /// This behavior means environment variables aren't preserved between steps but file system changes are.
-    /// https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#steps
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#steps">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public abstract record Step
     {

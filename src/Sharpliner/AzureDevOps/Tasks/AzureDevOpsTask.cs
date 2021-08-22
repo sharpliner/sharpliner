@@ -5,7 +5,7 @@ namespace Sharpliner.AzureDevOps.Tasks
 {
     /// <summary>
     /// Represents generic definition of any arbitrary AzDO task.
-    /// https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=example%2Cparameter-schema#task
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=example%2Cparameter-schema#task">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public record AzureDevOpsTask : Step
     {

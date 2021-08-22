@@ -18,7 +18,7 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
     <!-- Warnings about missing XML docs for public members -->
-    <NoWarn>$(NoWarn);1591</NoWarn>
+    <NoWarn>$(NoWarn);CS1591;CA1822</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup>

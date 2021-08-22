@@ -5,7 +5,7 @@ Here you can find detailed reference on how to define various parts of the pipel
 ## Build steps
 
 Build steps are basic building blocks of the build.
-Azure DevOps pipelines [define several basic tasks](https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#steps) that can be used as the pipeline's build steps:
+Azure DevOps pipelines [define several basic tasks](https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#steps) that can be used as the pipeline's build steps:
 - `script`
 - `bash`
 - `pwsh`

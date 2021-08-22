@@ -3,7 +3,7 @@
 namespace Sharpliner.AzureDevOps.Tasks
 {
     /// <summary>
-    /// https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/tool/dotnet-core-tool-installer?view=azure-devops
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/tool/dotnet-core-tool-installer?view=azure-devops">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public record UseDotNetTask : AzureDevOpsTask
     {
