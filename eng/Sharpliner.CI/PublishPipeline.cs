@@ -1,11 +1,10 @@
 ﻿using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.CI
 {
     internal class PublishPipeline : SingleStagePipelineDefinition
     {
-        public override string TargetFile => "publish.yml";
+        public override string TargetFile => "eng/pipelines/publish.yml";
 
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
@@ -20,7 +19,7 @@ namespace Sharpliner.CI
                     {
                         Powershell.FromResourceFile("Get-Version.ps1").DisplayAs("Detect package version"),
 
-                        DotNet.Install(DotNetPackageType.Sdk, "6.0.100-preview.3.21202.5").DisplayAs("Install .NET 6 preview 3"),
+                        Template<Step>(InstallDotNetTemplate.Path),
 
                         Powershell.Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'"),
 

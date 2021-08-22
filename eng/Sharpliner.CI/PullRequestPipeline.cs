@@ -5,7 +5,7 @@ namespace Sharpliner.CI
 {
     internal class PullRequestPipeline : SingleStagePipelineDefinition
     {
-        public override string TargetFile => "azure-pipelines.yml";
+        public override string TargetFile => "eng/pipelines/pr.yml";
 
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
@@ -25,10 +25,7 @@ namespace Sharpliner.CI
                     Pool = new HostedPool("Azure Pipelines", "windows-latest"),
                     Steps =
                     {
-                        // dotnet build fails with .NET 5 SDK and the new() statements
-                        DotNet
-                            .Install(DotNetPackageType.Sdk, "6.0.100-preview.3.21202.5")
-                            .DisplayAs("Install .NET 6 preview 3"),
+                        Template<Step>(InstallDotNetTemplate.Path),
                                 
                         // Validate we published the YAML
                         new SharplinerValidateTask("eng/Sharpliner.CI/Sharpliner.CI.csproj", false),
