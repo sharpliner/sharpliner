@@ -1,5 +1,4 @@
-﻿using System.IO;
-using Sharpliner.AzureDevOps;
+﻿using Sharpliner.AzureDevOps;
 
 namespace Sharpliner.CI
 {
@@ -29,9 +28,7 @@ namespace Sharpliner.CI
                             }
                         },
 
-                        Powershell.Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'"),
-
-                        Task("DotNetCoreCLI@2", "Build Sharpliner.csproj") with
+                        Task("DotNetCoreCLI@2", "Build") with
                         {
                             Inputs = new()
                             {
@@ -42,18 +39,13 @@ namespace Sharpliner.CI
                             }
                         },
 
-                        Task("NuGetCommand@2", "Pack the .nupkg") with
+                        Task("DotNetCoreCLI@2", "Pack the .nupkg") with
                         {
                             Inputs = new()
                             {
                                 { "command", "pack" },
-                                { "includeNuGetOrg", true },
-                                { "packagesToPack", "src/Sharpliner/Sharpliner.csproj" },
-                                { "versioningScheme", "byPrereleaseNumber" },
-                                { "majorVersion", "$(majorVersion)" },
-                                { "minorVersion", "$(minorVersion)" },
-                                { "patchVersion", "$(patchVersion)" },
-                                { "configuration", "Release" },
+                                { "projects", "src/Sharpliner/Sharpliner.csproj" },
+                                { "arguments", "-c Release /p:VersionPrefix=$(majorVersion).$(minorVersion).$(patchVersion)" },
                             }
                         },
 
@@ -64,7 +56,7 @@ namespace Sharpliner.CI
                                 Inputs = new()
                                 {
                                     { "command", "push" },
-                                    { "packagesToPush", "artifacts/packages/Sharpliner*.nupkg" },
+                                    { "packagesToPush", "artifacts/packages/Sharpliner.$(majorVersion).$(minorVersion).$(patchVersion).nupkg" },
                                     { "nuGetFeedType", "external" },
                                     { "publishFeedCredentials", "Sharpliner / nuget.org" },
                                 }

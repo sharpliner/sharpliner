@@ -36,28 +36,20 @@ jobs:
       packageType: sdk
       version: 6.0.100-preview.3.21202.5
 
-  - powershell: |-
-      New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'
-
   - task: DotNetCoreCLI@2
-    displayName: Build Sharpliner.csproj
+    displayName: Build
     inputs:
       command: build
       includeNuGetOrg: true
       projects: src/Sharpliner/Sharpliner.csproj
       arguments: -c Release
 
-  - task: NuGetCommand@2
+  - task: DotNetCoreCLI@2
     displayName: Pack the .nupkg
     inputs:
       command: pack
-      includeNuGetOrg: true
-      packagesToPack: src/Sharpliner/Sharpliner.csproj
-      versioningScheme: byPrereleaseNumber
-      majorVersion: $(majorVersion)
-      minorVersion: $(minorVersion)
-      patchVersion: $(patchVersion)
-      configuration: Release
+      projects: src/Sharpliner/Sharpliner.csproj
+      arguments: -c Release /p:VersionPrefix=$(majorVersion).$(minorVersion).$(patchVersion)
 
   - ${{ if and(ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main')) }}:
     - task: NuGetAuthenticate@0
@@ -67,6 +59,6 @@ jobs:
       displayName: Publish to nuget.org
       inputs:
         command: push
-        packagesToPush: artifacts/packages/Sharpliner*.nupkg
+        packagesToPush: artifacts/packages/Sharpliner.$(majorVersion).$(minorVersion).$(patchVersion).nupkg
         nuGetFeedType: external
         publishFeedCredentials: Sharpliner / nuget.org
