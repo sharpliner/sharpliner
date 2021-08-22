@@ -10,10 +10,7 @@
         public Step Install(DotNetPackageType packageType, string version) => new UseDotNetTask(packageType, version);
 
         // We return Step and not something more specific so that user cannot override Inputs
-        public Step Build(
-            string projects,
-            bool includeNuGetOrg = false,
-            string arguments = null!)
+        public Step Build(string projects, bool includeNuGetOrg = false, string arguments = null!)
         {
             var inputs = new TaskInputs();
 
@@ -56,6 +53,34 @@
                 Inputs = orderedInputs
             };
         }
+
+        // We return Step and not something more specific so that user cannot override Inputs
+        public Step Custom(string command, string arguments = null!, TaskInputs inputs = null!)
+        {
+            var orderedInputs = new TaskInputs()
+            {
+                { "command", "custom" },
+                { "custom", command },
+            };
+
+            if (arguments != null)
+            {
+                orderedInputs.Add("arguments", arguments);
+            }
+
+            if (inputs != null)
+            {
+                foreach (var pair in inputs)
+                {
+                    orderedInputs[pair.Key] = pair.Value;
+                }
+            }
+
+            return new DotNetCoreCliTask()
+            {
+                Inputs = orderedInputs
+            };
+        }
     }
 
     public enum DotNetCommand
@@ -67,6 +92,5 @@
         Restore,
         Run,
         Test,
-        Custom,
     }
 }
