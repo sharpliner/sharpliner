@@ -15,7 +15,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlMember(Order = 1)]
         public string Task { get; }
 
-
         [YamlMember(Order = 101)]
         public TaskInputs Inputs { get; init; } = new();
 

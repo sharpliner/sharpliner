@@ -33,11 +33,11 @@ namespace Sharpliner.AzureDevOps
                 DisplayName = displayName!,
                 Artifact = artifactName!,
             };
-
         protected static CheckoutTaskBuilder Checkout { get; } = new();
         protected static DownloadTaskBuilder Download { get; } = new();
         protected static AzureDevOpsTask Task(string taskName, string? displayName = null) => new AzureDevOpsTask(taskName) with { DisplayName = displayName! };
         protected static Job Job(string jobName, string? displayName = null) => new Job(jobName) with { DisplayName = displayName! };
+        protected static DotNetTaskBuilder DotNet { get; } = new();
 
         public override void Validate() => Pipeline.Validate();
 

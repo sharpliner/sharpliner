@@ -26,47 +26,17 @@ namespace Sharpliner.CI
                     Steps =
                     {
                         // dotnet build fails with .NET 5 SDK and the new() statements
-                        Task("UseDotNet@2", "Install .NET 6 preview 3") with
-                        {
-                            Inputs = new()
-                            {
-                                { "packageType", "sdk" },
-                                { "version", "6.0.100-preview.3.21202.5" },
-                            }
-                        },
+                        DotNet.Install(DotNetPackageType.Sdk, "6.0.100-preview.3.21202.5").DisplayAs("Install .NET 6 preview 3"),
                                 
                         // Validate we published the YAML
                         new SharplinerValidateTask("eng/Sharpliner.CI/Sharpliner.CI.csproj", false),
 
-                        Task("DotNetCoreCLI@2", "dotnet build") with
-                        {
-                            Inputs = new()
-                            {
-                                { "command", "build" },
-                                { "includeNuGetOrg", true },
-                                { "projects", "Sharpliner.sln" },
-                            }
-                        },
+                        DotNet.Build("Sharpliner.sln", includeNuGetOrg: true).DisplayAs("Build"),
                                 
                         // dotnet test somehow doesn't work with .NET 6 SDK
-                        Task("UseDotNet@2", "Install .NET 5") with
-                        {
-                            Inputs = new()
-                            {
-                                { "packageType", "sdk" },
-                                { "version", "5.0.202" },
-                            }
-                        },
+                        DotNet.Install(DotNetPackageType.Sdk, "5.0.202").DisplayAs("Install .NET 5"),
 
-                        Task("DotNetCoreCLI@2", "dotnet test") with
-                        {
-                            Inputs = new()
-                            {
-                                { "command", "test" },
-                                { "includeNuGetOrg", true },
-                                { "projects", "Sharpliner.sln" },
-                            }
-                        },
+                        DotNet.Command(DotNetCommand.Test, projects: "Sharpliner.sln").DisplayAs("Build"),
                     }
                 }
             },
