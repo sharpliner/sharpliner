@@ -5,7 +5,7 @@ namespace Sharpliner.CI
 {
     internal class PullRequestPipeline : SingleStagePipelineDefinition
     {
-        public override string TargetFile => "eng/pipelines/pr.yml";
+        public override string TargetFile => Pipelines.Location + "pr.yml";
 
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 

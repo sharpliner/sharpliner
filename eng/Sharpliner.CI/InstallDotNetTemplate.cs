@@ -6,9 +6,9 @@ namespace Sharpliner.CI
 {
     internal class InstallDotNetTemplate : StepTemplateDefinition
     {
-        public const string Path = "eng/pipelines/templates/install-dotnet.yml";
+        public const string Path = Pipelines.TemplateLocation + "install-dotnet.yml";
 
-        public override string TargetFile => Path;
+        public override string TargetFile => Pipelines.Location + Path;
 
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 

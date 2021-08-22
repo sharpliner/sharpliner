@@ -30,7 +30,7 @@ jobs:
       Write-Host "##vso[task.setvariable variable=patchVersion]$patch"
     displayName: Detect package version
 
-  - template: eng/pipelines/templates/install-dotnet.yml
+  - template: templates/install-dotnet.yml
 
   - powershell: |-
       New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'
