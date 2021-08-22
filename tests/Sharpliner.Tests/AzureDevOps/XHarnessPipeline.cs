@@ -6,13 +6,13 @@ namespace Sharpliner.Tests.AzureDevOps
     /// <summary>
     /// https://github.com/dotnet/xharness/blob/main/azure-pipelines.yml
     /// </summary>
-    internal class XHarnessPipeline : AzureDevOpsPipelineDefinition
+    internal class XHarnessPipeline : PipelineDefinition
     {
         public override string TargetFile => "azure-pipelines.yml";
 
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
-        public override AzureDevOpsPipeline Pipeline => new()
+        public override Pipeline Pipeline => new()
         {
             Variables =
             {

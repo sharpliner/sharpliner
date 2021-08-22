@@ -8,7 +8,7 @@ namespace Sharpliner.Tests.AzureDevOps
 {
     public class TaskBuilderTests
     {
-        private abstract class TestPipeline : SingleStageAzureDevOpsPipelineDefinition
+        private abstract class TestPipeline : SingleStagePipelineDefinition
         {
             public override string TargetFile => "azure-pipelines.yml";
 
@@ -17,7 +17,7 @@ namespace Sharpliner.Tests.AzureDevOps
 
         private class BashTaskPipeline : TestPipeline
         {
-            public override SingleStageAzureDevOpsPipeline Pipeline => new()
+            public override SingleStagePipeline Pipeline => new()
             {
                 Jobs =
                 {
@@ -67,7 +67,7 @@ namespace Sharpliner.Tests.AzureDevOps
 
         private class PowershellTaskPipeline : TestPipeline
         {
-            public override SingleStageAzureDevOpsPipeline Pipeline => new()
+            public override SingleStagePipeline Pipeline => new()
             {
                 Jobs =
                 {
@@ -118,7 +118,7 @@ namespace Sharpliner.Tests.AzureDevOps
 
         private class PwshTaskPipeline : TestPipeline
         {
-            public override SingleStageAzureDevOpsPipeline Pipeline => new()
+            public override SingleStagePipeline Pipeline => new()
             {
                 Jobs =
                 {
@@ -174,7 +174,7 @@ namespace Sharpliner.Tests.AzureDevOps
 
         private class PublishTaskPipeline : TestPipeline
         {
-            public override SingleStageAzureDevOpsPipeline Pipeline => new()
+            public override SingleStagePipeline Pipeline => new()
             {
                 Jobs =
                 {
@@ -210,7 +210,7 @@ namespace Sharpliner.Tests.AzureDevOps
 
         private class CheckoutTaskPipeline : TestPipeline
         {
-            public override SingleStageAzureDevOpsPipeline Pipeline => new()
+            public override SingleStagePipeline Pipeline => new()
             {
                 Jobs =
                 {
@@ -254,7 +254,7 @@ namespace Sharpliner.Tests.AzureDevOps
 
         private class DownloadTaskPipeline : TestPipeline
         {
-            public override SingleStageAzureDevOpsPipeline Pipeline => new()
+            public override SingleStagePipeline Pipeline => new()
             {
                 Jobs =
                 {
@@ -320,7 +320,7 @@ namespace Sharpliner.Tests.AzureDevOps
 
         private class TaskPipeline : TestPipeline
         {
-            public override SingleStageAzureDevOpsPipeline Pipeline => new()
+            public override SingleStagePipeline Pipeline => new()
             {
                 Jobs =
                 {

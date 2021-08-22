@@ -7,7 +7,7 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps
 {
-    public abstract record AzureDevOpsPipelineBase
+    public abstract record PipelineBase
     {
         private static Regex s_nameRegex = new("^[A-Za-z0-9_]+$", RegexOptions.Compiled);
 
@@ -70,7 +70,7 @@ namespace Sharpliner.AzureDevOps
         }
     }
 
-    public record AzureDevOpsPipeline : AzureDevOpsPipelineBase
+    public record Pipeline : PipelineBase
     {
         [YamlMember(Order = 600)]
         public ConditionedDefinitionList<ConditionedDefinition<Stage>> Stages { get; init; } = new();
@@ -86,7 +86,7 @@ namespace Sharpliner.AzureDevOps
         }
     }
 
-    public record SingleStageAzureDevOpsPipeline : AzureDevOpsPipelineBase
+    public record SingleStagePipeline : PipelineBase
     {
         [YamlMember(Order = 600)]
         public ConditionedDefinitionList<ConditionedDefinition<Job>> Jobs { get; init; } = new();

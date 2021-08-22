@@ -9,7 +9,7 @@ namespace Sharpliner.Tests.AzureDevOps
     {
         private class And_Condition_Test_Pipeline : TestPipeline
         {
-            public override AzureDevOpsPipeline Pipeline => new()
+            public override Pipeline Pipeline => new()
             {
                 Variables =
                 {
@@ -32,7 +32,7 @@ namespace Sharpliner.Tests.AzureDevOps
 
         private class Or_Condition_Test_Pipeline : TestPipeline
         {
-            public override AzureDevOpsPipeline Pipeline => new()
+            public override Pipeline Pipeline => new()
             {
                 Variables =
                 {
@@ -58,7 +58,7 @@ namespace Sharpliner.Tests.AzureDevOps
 
         private class Branch_Condition_Test_Pipeline : TestPipeline
         {
-            public override AzureDevOpsPipeline Pipeline => new()
+            public override Pipeline Pipeline => new()
             {
                 Variables =
                 {
@@ -85,7 +85,7 @@ namespace Sharpliner.Tests.AzureDevOps
 
         private class Else_Test_Pipeline : TestPipeline
         {
-            public override AzureDevOpsPipeline Pipeline => new()
+            public override Pipeline Pipeline => new()
             {
                 Variables =
                 {

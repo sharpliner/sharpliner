@@ -2,7 +2,7 @@
 
 namespace Sharpliner.Tests.AzureDevOps
 {
-    internal abstract class TestPipeline : AzureDevOpsPipelineDefinition
+    internal abstract class TestPipeline : PipelineDefinition
     {
         public override string TargetFile => "azure-pipelines.yml";
 

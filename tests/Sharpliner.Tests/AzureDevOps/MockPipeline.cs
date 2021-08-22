@@ -4,7 +4,7 @@ namespace Sharpliner.Tests.AzureDevOps
 {
     internal class MockPipeline : TestPipeline
     {
-        public override AzureDevOpsPipeline Pipeline => new()
+        public override Pipeline Pipeline => new()
         {
             Name = "$(Date:yyyMMdd).$(Rev:rr)",
 

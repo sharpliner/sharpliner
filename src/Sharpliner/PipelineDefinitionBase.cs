@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Sharpliner.AzureDevOps;
 
 namespace Sharpliner.Definition
@@ -124,11 +125,6 @@ namespace Sharpliner.Definition
         public abstract string Serialize();
 
         /// <summary>
-        /// Allows the variables[""] notation for conditional definitions.
-        /// </summary>
-        protected readonly PipelineVariable variables = new();
-
-        /// <summary>
         /// Header that will be shown at the top of the generated YAML file.
         /// Leave null or empty to omit file header.
         /// </summary>
@@ -142,28 +138,15 @@ namespace Sharpliner.Definition
             string.Empty,
         };
 
-        protected static Condition<T> And<T>(Condition condition1, Condition condition2) => new AndCondition<T>(condition1, condition2);
+        protected static string PrettifyYaml(string yaml)
+        {
+            // Add empty new lines to make text more readable
+            yaml = Regex.Replace(yaml, "((\r?\n)[a-zA-Z]+:)", Environment.NewLine + "$1");
+            yaml = Regex.Replace(yaml, "((\r?\n) {0,8}- ?[a-zA-Z]+@?[a-zA-Z\\.0-9]*:)", Environment.NewLine + "$1");
+            yaml = Regex.Replace(yaml, "((\r?\n) {0,8}- ?\\${{ ?if[^\n]+\n)", Environment.NewLine + "$1");
+            yaml = Regex.Replace(yaml, "(:\r?\n\r?\n)", ":" + Environment.NewLine);
 
-        protected static Condition Or<T>(Condition condition1, Condition condition2) => new OrCondition<T>(condition1, condition2);
-
-        protected static Condition<T> Equal<T>(string expression1, string expression2) => new EqualityCondition<T>(expression1, expression2, true);
-
-        protected static Condition<T> NotEqual<T>(string expression1, string expression2) => new EqualityCondition<T>(expression1, expression2, false);
-
-        protected static Condition And(Condition condition1, Condition condition2) => new AndCondition(condition1, condition2);
-
-        protected static Condition Or(Condition condition1, Condition condition2) => new OrCondition(condition1, condition2);
-
-        protected static Condition Equal(string expression1, string expression2) => new EqualityCondition(expression1, expression2, true);
-
-        protected static Condition NotEqual(string expression1, string expression2) => new EqualityCondition(expression1, expression2, false);
-
-        protected static Condition IsBranch(string branchName) => new BranchCondition(branchName, true);
-
-        protected static Condition IsNotBranch(string branchName) => new BranchCondition(branchName, false);
-
-        protected static Condition IsPullRequest => new BuildReasonCondition("'PullRequest'", true);
-
-        protected static Condition IsNotPullRequest => new BuildReasonCondition("'PullRequest'", false);
+            return yaml;
+        }
     }
 }

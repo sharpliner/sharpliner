@@ -9,7 +9,7 @@ namespace Sharpliner.Tests.AzureDevOps
     {
         private class StageDependsOnErrorPipeline : TestPipeline
         {
-            public override AzureDevOpsPipeline Pipeline => new()
+            public override Pipeline Pipeline => new()
             {
                 Stages =
                 {
@@ -38,7 +38,7 @@ namespace Sharpliner.Tests.AzureDevOps
 
         private class JobDependsOnErrorPipeline : TestPipeline
         {
-            public override AzureDevOpsPipeline Pipeline => new()
+            public override Pipeline Pipeline => new()
             {
                 Stages =
                 {
@@ -86,7 +86,7 @@ namespace Sharpliner.Tests.AzureDevOps
 
         private class DuplicateNamePipeline : TestPipeline
         {
-            public override AzureDevOpsPipeline Pipeline => new()
+            public override Pipeline Pipeline => new()
             {
                 Stages =
                 {
@@ -108,7 +108,7 @@ namespace Sharpliner.Tests.AzureDevOps
 
         private class InvalidNamePipeline : TestPipeline
         {
-            public override AzureDevOpsPipeline Pipeline => new()
+            public override Pipeline Pipeline => new()
             {
                 Stages =
                 {

@@ -3,13 +3,13 @@ using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.CI
 {
-    internal class PullRequestPipeline : SingleStageAzureDevOpsPipelineDefinition
+    internal class PullRequestPipeline : SingleStagePipelineDefinition
     {
-        public override string TargetFile => "azure-pipelines.yml";
+        public override string TargetFile => "eng/pipelines/pr.yml";
 
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
-        public override SingleStageAzureDevOpsPipeline Pipeline => new()
+        public override SingleStagePipeline Pipeline => new()
         {
             Trigger = new Trigger("main")
             {
@@ -25,18 +25,23 @@ namespace Sharpliner.CI
                     Pool = new HostedPool("Azure Pipelines", "windows-latest"),
                     Steps =
                     {
-                        // dotnet build fails with .NET 5 SDK and the new() statements
-                        DotNet.Install(DotNetPackageType.Sdk, "6.0.100-preview.3.21202.5").DisplayAs("Install .NET 6 preview 3"),
+                        Template<Step>(InstallDotNetTemplate.Path),
                                 
                         // Validate we published the YAML
                         new SharplinerValidateTask("eng/Sharpliner.CI/Sharpliner.CI.csproj", false),
 
-                        DotNet.Build("Sharpliner.sln", includeNuGetOrg: true).DisplayAs("Build"),
+                        DotNet
+                            .Build("Sharpliner.sln", includeNuGetOrg: true)
+                            .DisplayAs("Build"),
                                 
-                        // dotnet test somehow doesn't work with .NET 6 SDK
-                        DotNet.Install(DotNetPackageType.Sdk, "5.0.202").DisplayAs("Install .NET 5"),
+                        // dotnet test needs .NET 5
+                        DotNet
+                            .Install(DotNetPackageType.Sdk, "5.0.202")
+                            .DisplayAs("Install .NET 5"),
 
-                        DotNet.Command(DotNetCommand.Test, projects: "Sharpliner.sln").DisplayAs("Build"),
+                        DotNet
+                            .Command(DotNetCommand.Test, projects: "Sharpliner.sln")
+                            .DisplayAs("Build"),
                     }
                 }
             },
