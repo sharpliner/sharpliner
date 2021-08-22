@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Sharpliner.ConditionedDefinitions;
 using Sharpliner.Definition;
 
 namespace Sharpliner.AzureDevOps

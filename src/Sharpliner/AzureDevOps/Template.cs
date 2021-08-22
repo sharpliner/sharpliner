@@ -5,7 +5,7 @@ using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-namespace Sharpliner
+namespace Sharpliner.AzureDevOps
 {
     public record Template<T> : ConditionedDefinition<T>
     {

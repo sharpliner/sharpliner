@@ -1,4 +1,4 @@
-﻿namespace Sharpliner
+﻿namespace Sharpliner.AzureDevOps
 {
     /// <summary>
     /// The builder is what let's us start the definition with the "If."

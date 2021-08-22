@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using Sharpliner.ConditionedDefinitions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps
