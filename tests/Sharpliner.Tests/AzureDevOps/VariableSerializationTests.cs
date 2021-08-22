@@ -8,7 +8,7 @@ namespace Sharpliner.Tests.AzureDevOps
     {
         private class VariablesPipeline : TestPipeline
         {
-            public override AzureDevOpsPipeline Pipeline => new()
+            public override Pipeline Pipeline => new()
             {
                 Variables =
                 {

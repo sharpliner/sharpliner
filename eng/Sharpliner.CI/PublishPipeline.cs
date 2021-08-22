@@ -3,13 +3,13 @@ using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.CI
 {
-    internal class PublishPipeline : SingleStageAzureDevOpsPipelineDefinition
+    internal class PublishPipeline : SingleStagePipelineDefinition
     {
         public override string TargetFile => "publish.yml";
 
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
-        public override SingleStageAzureDevOpsPipeline Pipeline => new()
+        public override SingleStagePipeline Pipeline => new()
         {
             Jobs =
             {

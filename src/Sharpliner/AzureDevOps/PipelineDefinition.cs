@@ -3,7 +3,7 @@ using Sharpliner.Definition;
 
 namespace Sharpliner.AzureDevOps
 {
-    public abstract class AzureDevOpsPipelineDefinitionBase<TPipeline> : PipelineDefinitionBase where TPipeline : AzureDevOpsPipelineBase
+    public abstract class PipelineDefinitionBase<TPipeline> : PipelineDefinitionBase where TPipeline : PipelineBase
     {
         /// <summary>
         /// Define the pipeline by implementing this field.
@@ -75,11 +75,11 @@ namespace Sharpliner.AzureDevOps
         #endregion
     }
 
-    public abstract class AzureDevOpsPipelineDefinition : AzureDevOpsPipelineDefinitionBase<AzureDevOpsPipeline>
+    public abstract class PipelineDefinition : PipelineDefinitionBase<Pipeline>
     {
     }
 
-    public abstract class SingleStageAzureDevOpsPipelineDefinition : AzureDevOpsPipelineDefinitionBase<SingleStageAzureDevOpsPipeline>
+    public abstract class SingleStagePipelineDefinition : PipelineDefinitionBase<SingleStagePipeline>
     {
     }
 }
