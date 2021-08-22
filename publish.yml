@@ -36,6 +36,9 @@ jobs:
       packageType: sdk
       version: 6.0.100-preview.3.21202.5
 
+  - powershell: |-
+      New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'
+
   - task: DotNetCoreCLI@2
     displayName: Build
     inputs:
