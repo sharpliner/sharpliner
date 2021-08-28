@@ -17,7 +17,7 @@ namespace Sharpliner.CI
         {
             // dotnet build fails with .NET 5 SDK and the new() statements
             DotNet
-                .Install(DotNetPackageType.Sdk, "6.0.100-preview.3.21202.5")
+                .Install.Sdk("6.0.100-preview.3.21202.5")
                 .DisplayAs("Install .NET 6 preview 3")
         };
     }
