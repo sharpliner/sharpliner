@@ -88,7 +88,7 @@ public override SingleStageAzureDevOpsPipelineDefinition Pipeline => new()
                 If.IsPullRequest
                     .Step(Powershell.Inline("Write-Host 'Hello-World'").DisplayAs("Hello world")),
 
-                DotNet.Install(DotNetPackageType.Sdk, "$(DotnetVersion)").DisplayAs("Install .NET SDK"),
+                DotNet.Install.Sdk("$(DotnetVersion)").DisplayAs("Install .NET SDK"),
 
                 DotNet.Build("src/MyProject.sln", includeNuGetOrg: true).DisplayAs("Build"),
 

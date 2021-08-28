@@ -36,7 +36,7 @@ namespace Sharpliner.CI
                                 
                         // dotnet test needs .NET 5
                         DotNet
-                            .Install(DotNetPackageType.Sdk, "5.0.202")
+                            .Install.Sdk("5.0.202")
                             .DisplayAs("Install .NET 5"),
 
                         DotNet

@@ -37,7 +37,7 @@ class PullRequestPipeline : SingleStageAzureDevOpsPipelineDefinition
                 Steps =
                 {
                     // Many tasks have helper methods for shorter notation
-                    DotNet.Install(DotNetPackageType.Sdk, "$(DotnetVersion)").DisplayAs("Install .NET SDK"),
+                    DotNet.Install.Sdk("$(DotnetVersion)").DisplayAs("Install .NET SDK"),
 
                     // You can also specify any pipeline task in full
                     Task("DotNetCoreCLI@2", "Build and test") with
