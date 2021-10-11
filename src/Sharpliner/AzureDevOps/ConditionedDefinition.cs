@@ -24,6 +24,11 @@ namespace Sharpliner.AzureDevOps
         /// </summary>
         internal List<ConditionedDefinition> Definitions { get; } = new();
 
+        /// <summary>
+        /// When serializing, we need to distinguish whether serializing a list of items under a condition or just a value.
+        /// </summary>
+        internal bool IsList { get; set; } = false;
+
         protected ConditionedDefinition(string? condition)
         {
             Condition = condition;
@@ -135,6 +140,73 @@ namespace Sharpliner.AzureDevOps
         }
 
         public override void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+        {
+            if (IsList)
+            {
+                WriteList(emitter, nestedObjectSerializer);
+            }
+            else
+            {
+                WriteValue(emitter, nestedObjectSerializer);
+            }
+        }
+
+        /// <summary>
+        /// This method's responsibility is to serialize a single item which might or might not have conditions underneath.
+        /// Example #1 (no condition)
+        ///   name: value1
+        ///
+        /// Example #2 (conditions)
+        ///   name:
+        ///     ${{ if eq(...) }}
+        ///       name2: value1
+        ///     ${{ if ne(...) }}
+        ///       name2: value2
+        /// </summary>
+        private void WriteValue(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+        {
+            if (string.IsNullOrEmpty(Condition))
+            {
+                if (Definitions.Count > 1)
+                {
+                    emitter.Emit(new MappingStart(AnchorName.Empty, TagName.Empty, true, MappingStyle.Block));
+                }
+            }
+            else
+            {
+                emitter.Emit(new MappingStart(AnchorName.Empty, TagName.Empty, true, MappingStyle.Block));
+                emitter.Emit(new Scalar("${{ if " + Condition + " }}"));
+                emitter.Emit(new MappingStart(AnchorName.Empty, TagName.Empty, true, MappingStyle.Block));
+            }
+
+            // We are first serializing us. We can be
+            //   - a condition-less definition (top level or leaf) => serialize value inside Definition
+            //   - a template => serialize the special shape of template + parameters
+            SerializeSelf(emitter, nestedObjectSerializer);
+
+            // Otherwise, we expect a list of Definitions
+            foreach (var childDefinition in Definitions)
+            {
+                nestedObjectSerializer(childDefinition);
+            }
+
+            if (string.IsNullOrEmpty(Condition))
+            {
+                if (Definitions.Count > 1)
+                {
+                    emitter.Emit(new MappingEnd());
+                }
+            }
+            else
+            {
+                emitter.Emit(new MappingEnd());
+            }
+        }
+
+        /// <summary>
+        /// This method's responsibility is to serialize a list of items which can share a common condition.
+        /// </summary>
+        private void WriteList(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
         {
             if (!string.IsNullOrEmpty(Condition))
             {

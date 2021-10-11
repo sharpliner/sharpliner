@@ -34,5 +34,11 @@
 
         public static ConditionedDefinition<T> Template<T>(this Condition condition, string path, TemplateParameters parameters)
             => ConditionedDefinition.Link(condition, new Template<T>(condition: condition.ToString(), path: path, parameters));
+
+        public static ConditionedDefinition<Pool> Pool(this Condition condition, Pool pool)
+            => ConditionedDefinition.Link(condition, pool);
+
+        public static ConditionedDefinition<Strategy> Strategy(this Condition condition, Strategy strategy)
+            => ConditionedDefinition.Link(condition, strategy);
     }
 }

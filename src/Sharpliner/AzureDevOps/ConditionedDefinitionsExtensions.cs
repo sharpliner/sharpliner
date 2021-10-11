@@ -67,5 +67,16 @@
             conditionedDefinition.Definitions.Add(template);
             return conditionedDefinition;
         }
+
+        internal static ConditionedDefinition<T>? GetRoot<T>(this ConditionedDefinition<T> conditionedDefinition)
+        {
+            var parent = conditionedDefinition;
+            while (parent?.Parent != null)
+            {
+                parent = parent.Parent as ConditionedDefinition<T>;
+            }
+
+            return parent;
+        }
     }
 }

@@ -9,11 +9,14 @@ namespace Sharpliner.AzureDevOps
     {
         public new void Add(ConditionedDefinition<T> item)
         {
+            item.IsList = true;
+
             // When we define a tree of conditional definitions, the expression returns
             // the leaf definition so we have to move up to the top-level definition
             while (item.Parent != null)
             {
-                item = (ConditionedDefinition<T>)item.Parent;
+                item = (T)item.Parent;
+                item.IsList = true;
             }
 
             base.Add(item);

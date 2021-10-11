@@ -104,7 +104,8 @@ namespace Sharpliner
                 return;
             }
 
-            Log.LogMessage(MessageImportance.High, $"Validating pipeline {type.Name}..");
+            Log.LogMessage(MessageImportance.High, $"{type.Name}:");
+            Log.LogMessage(MessageImportance.High, $"  Validating pipeline..");
 
             try
             {
@@ -112,11 +113,9 @@ namespace Sharpliner
             }
             catch (TargetInvocationException e)
             {
-                Log.LogError("Validation of pipeline {0} failed: {1}", type.Name, e.InnerException?.Message ?? e.Message);
+                Log.LogError("  Validation of pipeline {0} failed: {1}", type.Name, e.InnerException?.Message ?? e.Message);
                 return;
             }
-
-            Log.LogMessage(MessageImportance.High, $"Publishing pipeline {type.Name} to {path}..");
 
             string? hash = GetFileHash(path);
 
@@ -125,18 +124,18 @@ namespace Sharpliner
 
             if (hash == null)
             {
-                Log.LogMessage(MessageImportance.High, $"YAML for {type.Name} created at {path}");
+                Log.LogMessage(MessageImportance.High, $"  {type.Name} created at {path}");
             }
             else
             {
                 var newHash = GetFileHash(path);
                 if (hash == newHash)
                 {
-                    Log.LogMessage(MessageImportance.High, $"No new changes to publish for {type.Name}");
+                    Log.LogMessage(MessageImportance.High, $"  No new changes to publish");
                 }
                 else
                 {
-                    Log.LogMessage(MessageImportance.High, $"Published new changes for {type.Name}");
+                    Log.LogMessage(MessageImportance.High, $"  Published new changes to {path}");
                 }
             }
         }
