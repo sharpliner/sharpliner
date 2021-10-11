@@ -1,5 +1,4 @@
 ﻿using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.CI
 {
@@ -13,7 +12,7 @@ namespace Sharpliner.CI
 
         public override TemplateParameters Parameters => NoParameters;
 
-        public override ConditionedDefinitionList<ConditionedDefinition<Step>> Definition => new()
+        public override ConditionedDefinitionList<Step> Definition => new()
         {
             // dotnet build fails with .NET 5 SDK and the new() statements
             DotNet
