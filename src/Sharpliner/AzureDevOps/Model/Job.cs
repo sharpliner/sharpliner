@@ -35,10 +35,10 @@ namespace Sharpliner.AzureDevOps
         public ContainerReference? Container { get; init; }
 
         [YamlMember(Order = 600)]
-        public ConditionedDefinitionList<ConditionedDefinition<VariableBase>> Variables { get; init; } = new();
+        public ConditionedDefinitionList<VariableBase> Variables { get; init; } = new();
 
         [YamlMember(Order = 700)]
-        public ConditionedDefinitionList<ConditionedDefinition<Step>> Steps { get; init; } = new();
+        public ConditionedDefinitionList<Step> Steps { get; init; } = new();
 
         [YamlMember(Order = 800)]
         [DisallowNull]

@@ -17,10 +17,10 @@ namespace Sharpliner.AzureDevOps
         public List<string> DependsOn { get; init; } = new();
 
         [YamlMember(Order = 200)]
-        public ConditionedDefinitionList<ConditionedDefinition<VariableBase>> Variables { get; init; } = new();
+        public ConditionedDefinitionList<VariableBase> Variables { get; init; } = new();
 
         [YamlMember(Order = 300)]
-        public ConditionedDefinitionList<ConditionedDefinition<Job>> Jobs { get; init; } = new();
+        public ConditionedDefinitionList<Job> Jobs { get; init; } = new();
 
         [YamlMember(Order = 400)]
         [DisallowNull]

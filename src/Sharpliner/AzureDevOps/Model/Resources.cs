@@ -5,7 +5,7 @@
     /// </summary>
     public record Resources
     {
-        public ConditionedDefinitionList<ConditionedDefinition<PipelineResource>> Pipelines { get; init; } = new();
+        public ConditionedDefinitionList<PipelineResource> Pipelines { get; init; } = new();
 
         /* TODO
         public ConditionedDefinitionList<ConditionedDefinition<BuildResource>> Builds { get; init; } = new();
@@ -13,8 +13,8 @@
         public ConditionedDefinitionList<ConditionedDefinition<RepositoryResource>> Repositories { get; init; } = new();
         */
 
-        public ConditionedDefinitionList<ConditionedDefinition<ContainerResource>> Containers { get; init; } = new();
+        public ConditionedDefinitionList<ContainerResource> Containers { get; init; } = new();
 
-        public ConditionedDefinitionList<ConditionedDefinition<PackageResource>> Packages { get; init; } = new();
+        public ConditionedDefinitionList<PackageResource> Packages { get; init; } = new();
     }
 }
