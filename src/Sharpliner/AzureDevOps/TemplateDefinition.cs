@@ -11,7 +11,7 @@ namespace Sharpliner.AzureDevOps
         public abstract TemplateParameters Parameters { get; }
 
         [DisallowNull]
-        public abstract ConditionedDefinitionList<ConditionedDefinition<T>> Definition { get; }
+        public abstract ConditionedDefinitionList<T> Definition { get; }
 
         protected abstract string YamlProperty { get; }
 
