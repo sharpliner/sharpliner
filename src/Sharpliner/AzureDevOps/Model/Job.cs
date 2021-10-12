@@ -23,7 +23,7 @@ namespace Sharpliner.AzureDevOps
         public string? DisplayName { get; init; }
 
         [YamlMember(Order = 200)]
-        public ConditionedList<string> DependsOn { get; init; } = new();
+        public List<string> DependsOn { get; init; } = new();
 
         [YamlMember(Order = 300)]
         public Conditioned<Pool>? Pool { get => _pool; init => _pool = value?.GetRoot(); }

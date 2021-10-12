@@ -14,7 +14,7 @@ namespace Sharpliner.AzureDevOps
         public string? DisplayName { get; init; }
 
         [YamlMember(Order = 100)]
-        public ConditionedList<string> DependsOn { get; init; } = new();
+        public List<string> DependsOn { get; init; } = new();
 
         [YamlMember(Order = 200)]
         public ConditionedList<VariableBase> Variables { get; init; } = new();
