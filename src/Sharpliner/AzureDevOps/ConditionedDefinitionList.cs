@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace Sharpliner.AzureDevOps
 {
@@ -7,6 +8,18 @@ namespace Sharpliner.AzureDevOps
     /// </summary>
     public class ConditionedDefinitionList<T> : List<ConditionedDefinition<T>>
     {
+        // Make sure we can for example assign a string into ConditionedDefinition<string>
+        public static implicit operator ConditionedDefinitionList<T>(List<T> list) => new(list);
+
+        public ConditionedDefinitionList()
+        {
+        }
+
+        protected ConditionedDefinitionList(IEnumerable<T> values)
+            : base(values.Select(v => new ConditionedDefinition<T>(v)))
+        {
+        }
+
         public new void Add(ConditionedDefinition<T> item)
         {
             // When we define a tree of conditional definitions, the expression returns
