@@ -151,5 +151,80 @@ namespace Sharpliner.Tests.AzureDevOps
       value: off
 ");
         }
+
+        private class ConditionedValueWithElse_Pipeline : SimpleTestPipeline
+        {
+            public override SingleStagePipeline Pipeline => new()
+            {
+                Jobs =
+                {
+                    new Job("Job")
+                    {
+                        Pool = If.Equal("A", "B")
+                                    .Pool(new HostedPool("pool-A")
+                                    {
+                                        Demands = { "SomeProperty -equals SomeValue" }
+                                    })
+                                .Else
+                                    .Pool(new HostedPool("pool-B")),
+                    }
+                }
+            };
+        }
+
+        [Fact]
+        public void ConditionedValueWithElse_Test()
+        {
+            var pipeline = new ConditionedValueWithElse_Pipeline();
+            pipeline.Serialize().Should().Be(
+@"jobs:
+- job: Job
+  pool:
+    ${{ if eq(A, B) }}:
+      demands:
+      - SomeProperty -equals SomeValue
+      name: pool-A
+    ${{ if ne(A, B) }}:
+      name: pool-B
+");
+        }
+
+        private class ConditionedValueWithElseIf_Pipeline : SimpleTestPipeline
+        {
+            public override SingleStagePipeline Pipeline => new()
+            {
+                Jobs =
+                {
+                    new Job("Job")
+                    {
+                        Pool = If.Equal("A", "B")
+                                    .Pool(new HostedPool("pool-A")
+                                    {
+                                        Demands = { "SomeProperty -equals SomeValue" }
+                                    })
+                                .EndIf
+                                .If.Equal("C", "D")
+                                    .Pool(new HostedPool("pool-B")),
+                    }
+                }
+            };
+        }
+
+        [Fact]
+        public void ConditionedValueWithElseIf_Test()
+        {
+            var pipeline = new ConditionedValueWithElseIf_Pipeline();
+            pipeline.Serialize().Should().Be(
+@"jobs:
+- job: Job
+  pool:
+    ${{ if eq(A, B) }}:
+      demands:
+      - SomeProperty -equals SomeValue
+      name: pool-A
+    ${{ if eq(C, D) }}:
+      name: pool-B
+");
+        }
     }
 }

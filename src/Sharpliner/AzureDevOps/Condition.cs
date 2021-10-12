@@ -13,7 +13,7 @@ namespace Sharpliner.AzureDevOps
 
         protected Condition(string condition) => _condition = condition;
 
-        internal ConditionedDefinition? Parent { get; set; }
+        internal Conditioned? Parent { get; set; }
 
         public override string ToString() => _condition;
     }
@@ -26,7 +26,7 @@ namespace Sharpliner.AzureDevOps
     /// </summary>
     public abstract class Condition<T> : Condition
     {
-        protected Condition(string condition, ConditionedDefinition<T>? parent = null) : base(condition)
+        protected Condition(string condition, Conditioned<T>? parent = null) : base(condition)
         {
             Parent = parent;
         }

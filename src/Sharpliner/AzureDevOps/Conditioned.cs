@@ -7,7 +7,7 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps
 {
-    public abstract record ConditionedDefinition : IYamlConvertible
+    public abstract record Conditioned : IYamlConvertible
     {
         /// <summary>
         /// Evaluated textual representation of the condition, e.g. "ne('foo', 'bar')".
@@ -17,14 +17,19 @@ namespace Sharpliner.AzureDevOps
         /// <summary>
         /// Pointer in case of nested conditional blocks.
         /// </summary>
-        internal ConditionedDefinition? Parent { get; set; }
+        internal Conditioned? Parent { get; set; }
 
         /// <summary>
         /// In case we define multiple items inside one ${{ if }}, they are stored here.
         /// </summary>
-        internal List<ConditionedDefinition> Definitions { get; } = new();
+        internal List<Conditioned> Definitions { get; } = new();
 
-        protected ConditionedDefinition(string? condition)
+        /// <summary>
+        /// When serializing, we need to distinguish whether serializing a list of items under a condition or just a value.
+        /// </summary>
+        internal bool IsList { get; set; } = false;
+
+        protected Conditioned(string? condition)
         {
             Condition = condition;
         }
@@ -40,9 +45,9 @@ namespace Sharpliner.AzureDevOps
         /// <param name="condition">Parent condition</param>
         /// <param name="definition">Definition that was added below the condition</param>
         /// <returns>The conditioned definition coming out of the inputs</returns>
-        internal static ConditionedDefinition<T> Link<T>(Condition condition, T definition)
+        internal static Conditioned<T> Link<T>(Condition condition, T definition)
         {
-            var conditionedDefinition = new ConditionedDefinition<T>(definition, condition.ToString());
+            var conditionedDefinition = new Conditioned<T>(definition, condition.ToString());
             condition.Parent?.Definitions.Add(conditionedDefinition);
             conditionedDefinition.Parent = condition.Parent;
             return conditionedDefinition;
@@ -54,7 +59,7 @@ namespace Sharpliner.AzureDevOps
         /// <param name="condition">Parent condition</param>
         /// <param name="conditionedDefinition">Definition that was added below the condition</param>
         /// <returns>The conditioned definition coming out of the inputs</returns>
-        internal static ConditionedDefinition<T> Link<T>(Condition condition, ConditionedDefinition<T> conditionedDefinition)
+        internal static Conditioned<T> Link<T>(Condition condition, Conditioned<T> conditionedDefinition)
         {
             condition.Parent?.Definitions.Add(conditionedDefinition);
             conditionedDefinition.Parent = condition.Parent;
@@ -67,7 +72,7 @@ namespace Sharpliner.AzureDevOps
         /// <param name="condition">Parent condition</param>
         /// <param name="template">Definition that was added below the condition</param>
         /// <returns>The conditioned definition coming out of the inputs</returns>
-        internal static ConditionedDefinition<T> Link<T>(Condition condition, Template<T> template)
+        internal static Conditioned<T> Link<T>(Condition condition, Template<T> template)
         {
             condition.Parent?.Definitions.Add(template);
             template.Parent = condition.Parent;
@@ -83,36 +88,51 @@ namespace Sharpliner.AzureDevOps
     ///     - ${{ if eq(variables._RunAsInternal, True) }}:
     ///       name: NetCoreInternal-Pool
     /// </summary>
-    public record ConditionedDefinition<T> : ConditionedDefinition
+    public record Conditioned<T> : Conditioned
     {
+        // Make sure we can for example assign a string into ConditionedDefinition<string>
+        public static implicit operator Conditioned<T>(T value) => new(definition: value);
+
         /// <summary>
         /// The actual definition (value).
         /// </summary>
         internal T? Definition { get; }
 
-        internal ConditionedDefinition(ConditionedDefinition<T> definition, string condition) : base(condition)
-        {
-            Definitions.Add(definition);
-        }
-
-        internal ConditionedDefinition(T definition, string condition) : base(condition)
+        internal Conditioned(T definition, string condition) : base(condition)
         {
             Definition = definition;
         }
 
-        public ConditionedDefinition(T definition) : base((string?)null)
+        public Conditioned(T definition) : this()
         {
             Definition = definition;
         }
 
-        protected ConditionedDefinition(string? condition) : base(condition)
+        protected Conditioned(string? condition) : base(condition)
+        {
+        }
+
+        protected Conditioned() : base((string?)null)
         {
         }
 
         public ConditionBuilder<T> If => new(this);
 
-        public ConditionedDefinition<T> EndIf => Parent as ConditionedDefinition<T>
-            ?? throw new InvalidOperationException("You have called EndIf on a top-level statement, EndIf can only be used to return from a nested definition");
+        public Conditioned<T> EndIf
+        {
+            get
+            {
+                // If we're top-level, we create a fake new top with empty definition to collect all the definitions
+                if (Parent == null)
+                {
+                    Parent = new Conditioned<T>();
+                    Parent.Definitions.Add(this);
+                }
+
+                return Parent as Conditioned<T>
+                    ?? throw new InvalidOperationException("You have called EndIf on a top-level statement, EndIf can only be used to return from a nested definition");
+            }
+        }
 
         public Condition<T> Else
         {
@@ -121,7 +141,7 @@ namespace Sharpliner.AzureDevOps
                 // If we're top-level, we create a fake new top with empty definition to collect all the definitions
                 if (Parent == null)
                 {
-                    Parent = new ConditionedDefinition<T>((string?)null);
+                    Parent = new Conditioned<T>();
                     Parent.Definitions.Add(this);
                 }
 
@@ -136,9 +156,67 @@ namespace Sharpliner.AzureDevOps
 
         public override void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
         {
+            if (IsList)
+            {
+                WriteList(emitter, nestedObjectSerializer);
+            }
+            else
+            {
+                WriteValue(emitter, nestedObjectSerializer);
+            }
+        }
+
+        /// <summary>
+        /// This method's responsibility is to serialize a single item which might or might not have conditions underneath.
+        /// Example #1 (no condition)
+        ///   name: value1
+        ///
+        /// Example #2 (conditions)
+        ///   name:
+        ///     ${{ if eq(...) }}
+        ///       name2: value1
+        ///     ${{ if ne(...) }}
+        ///       name2: value2
+        /// </summary>
+        private void WriteValue(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+        {
             if (!string.IsNullOrEmpty(Condition))
             {
-                emitter.Emit(new MappingStart(AnchorName.Empty, TagName.Empty, true, MappingStyle.Block));
+                emitter.Emit(new Scalar("${{ if " + Condition + " }}"));
+            }
+            else if (Definitions.Count > 0)
+            {
+                emitter.Emit(new MappingStart());
+            }
+
+            // We are first serializing us. We can be
+            //   - a condition-less definition (top level or leaf) => serialize value inside Definition
+            //   - a template => serialize the special shape of template + parameters
+            SerializeSelf(emitter, nestedObjectSerializer);
+
+            // Otherwise, we expect a list of Definitions
+            foreach (var childDefinition in Definitions)
+            {
+                nestedObjectSerializer(childDefinition);
+            }
+
+            if (!string.IsNullOrEmpty(Condition))
+            {
+            }
+            else if (Definitions.Count > 0)
+            {
+                emitter.Emit(new MappingEnd());
+            }
+        }
+
+        /// <summary>
+        /// This method's responsibility is to serialize a list of items which can share a common condition.
+        /// </summary>
+        private void WriteList(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+        {
+            if (!string.IsNullOrEmpty(Condition))
+            {
+                emitter.Emit(new MappingStart());
                 emitter.Emit(new Scalar("${{ if " + Condition + " }}"));
                 emitter.Emit(new SequenceStart(AnchorName.Empty, TagName.Empty, true, SequenceStyle.Block));
             }
@@ -180,7 +258,7 @@ namespace Sharpliner.AzureDevOps
 
             definitions.AddRange(
                 Definitions
-                    .SelectMany(s => (s as ConditionedDefinition<T>)?.FlattenDefinitions()!)
+                    .SelectMany(s => (s as Conditioned<T>)?.FlattenDefinitions()!)
                     .Where(s => s is not null));
 
             return definitions;

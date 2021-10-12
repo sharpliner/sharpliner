@@ -12,7 +12,7 @@ namespace Sharpliner.AzureDevOps
 
         [YamlMember(Order = 100)]
         [DisallowNull]
-        public string? Name { get; init; }
+        public Conditioned<string>? Name { get; init; }
 
         [YamlMember(Order = 200)]
         [DisallowNull]
@@ -27,13 +27,13 @@ namespace Sharpliner.AzureDevOps
         public Resources? Resources { get; init; }
 
         [YamlMember(Order = 500)]
-        public ConditionedDefinitionList<VariableBase> Variables { get; } = new();
+        public ConditionedList<VariableBase> Variables { get; } = new();
 
         public abstract void Validate();
 
         // TODO: Scheduled triggers
 
-        protected static void ValidateDependsOn<T>(ConditionedDefinitionList<T> definitions) where T : IDependsOn
+        protected static void ValidateDependsOn<T>(ConditionedList<T> definitions) where T : IDependsOn
         {
             var allDefs = definitions.SelectMany(s => s.FlattenDefinitions());
 
@@ -72,7 +72,7 @@ namespace Sharpliner.AzureDevOps
     public record Pipeline : PipelineBase
     {
         [YamlMember(Order = 600)]
-        public ConditionedDefinitionList<Stage> Stages { get; init; } = new();
+        public ConditionedList<Stage> Stages { get; init; } = new();
 
         public override void Validate()
         {
@@ -88,7 +88,7 @@ namespace Sharpliner.AzureDevOps
     public record SingleStagePipeline : PipelineBase
     {
         [YamlMember(Order = 600)]
-        public ConditionedDefinitionList<Job> Jobs { get; init; } = new();
+        public ConditionedList<Job> Jobs { get; init; } = new();
 
         public override void Validate()
         {

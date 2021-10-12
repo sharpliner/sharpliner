@@ -17,7 +17,7 @@ namespace Sharpliner.AzureDevOps
         /// Reference a YAML template.
         /// </summary>
         /// <param name="path">Relative path to the YAML file with the template</param>
-        protected static ConditionedDefinition<VariableBase> Template(string path)
+        protected static Conditioned<VariableBase> Template(string path)
             => new Template<VariableBase>(path);
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace Sharpliner.AzureDevOps
         /// </summary>
         /// <param name="path">Relative path to the YAML file with the template</param>
         /// <param name="parameters">Values for template parameters</param>
-        protected static ConditionedDefinition<T> Template<T>(string path, TemplateParameters? parameters = null)
+        protected static Conditioned<T> Template<T>(string path, TemplateParameters? parameters = null)
             => new Template<T>(path, parameters);
 
         /// <summary>
@@ -38,27 +38,27 @@ namespace Sharpliner.AzureDevOps
         /// </summary>
         /// <param name="name">Variable name</param>
         /// <param name="value">Variable value</param>
-        protected static ConditionedDefinition<VariableBase> Variable(string name, string value) => new(new Variable(name, value));
+        protected static Conditioned<VariableBase> Variable(string name, string value) => new(new Variable(name, value));
 
         /// <summary>
         /// Defines a variable.
         /// </summary>
         /// <param name="name">Variable name</param>
         /// <param name="value">Variable value</param>
-        protected static ConditionedDefinition<VariableBase> Variable(string name, int value) => new(new Variable(name, value));
+        protected static Conditioned<VariableBase> Variable(string name, int value) => new(new Variable(name, value));
 
         /// <summary>
         /// Defines a variable.
         /// </summary>
         /// <param name="name">Variable name</param>
         /// <param name="value">Variable value</param>
-        protected static ConditionedDefinition<VariableBase> Variable(string name, bool value) => new(new Variable(name, value));
+        protected static Conditioned<VariableBase> Variable(string name, bool value) => new(new Variable(name, value));
 
         /// <summary>
         /// References a variable group.
         /// </summary>
         /// <param name="name">Group name</param>
-        protected static ConditionedDefinition<VariableBase> Group(string name) => new(new VariableGroup(name));
+        protected static Conditioned<VariableBase> Group(string name) => new(new VariableGroup(name));
 
         /// <summary>
         /// Creates a bash task.

@@ -11,6 +11,8 @@ namespace Sharpliner.AzureDevOps
     /// </summary>
     public record Job : IDependsOn
     {
+        private Conditioned<Pool>? _pool;
+
         // TODO: missing properties Uses, Services
 
         [YamlMember(Alias = "job", Order = 1, DefaultValuesHandling = DefaultValuesHandling.Preserve)]
@@ -24,21 +26,21 @@ namespace Sharpliner.AzureDevOps
         public List<string> DependsOn { get; init; } = new();
 
         [YamlMember(Order = 300)]
-        public ConditionedDefinition<Pool>? Pool { get; init; }
+        public Conditioned<Pool>? Pool { get => _pool; init => _pool = value?.GetRoot(); }
 
         [YamlMember(Order = 400)]
         [DisallowNull]
-        public Strategy? Strategy { get; init; }
+        public Conditioned<Strategy>? Strategy { get; init; }
 
         [YamlMember(Order = 500)]
         [DisallowNull]
-        public ContainerReference? Container { get; init; }
+        public Conditioned<ContainerReference>? Container { get; init; }
 
         [YamlMember(Order = 600)]
-        public ConditionedDefinitionList<VariableBase> Variables { get; init; } = new();
+        public ConditionedList<VariableBase> Variables { get; init; } = new();
 
         [YamlMember(Order = 700)]
-        public ConditionedDefinitionList<Step> Steps { get; init; } = new();
+        public ConditionedList<Step> Steps { get; init; } = new();
 
         [YamlMember(Order = 800)]
         [DisallowNull]
@@ -68,7 +70,5 @@ namespace Sharpliner.AzureDevOps
                 DisplayName = displayName;
             }
         }
-
-        public static implicit operator ConditionedDefinition<Job>(Job definition) => new(definition);
     }
 }
