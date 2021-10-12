@@ -8,7 +8,7 @@ namespace Sharpliner.Tests.AzureDevOps
     /// </summary>
     internal class XHarnessPipeline : PipelineDefinition
     {
-        public override string TargetFile => "azure-pipelines.yml";
+        public override string TargetFile => "xharness.yml";
 
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
@@ -47,15 +47,34 @@ namespace Sharpliner.Tests.AzureDevOps
                                     {
                                         new Job("Windows_NT")
                                         {
-                                            Pool = new HostedPool("windows-2019"),
-                                            Strategy = new MatrixStrategy
-                                            {
-                                                Matrix = new()
-                                                {
-                                                    { "Release", new[] { ("_BuildConfig", "Release") } },
-                                                    { "Debug", new[] { ("_BuildConfig", "Debug") } },
-                                                }
-                                            },
+                                            Pool =
+                                                If.Equal(variables["_RunAsInternal"], "True")
+                                                    .Pool(new HostedPool("NetCore1ESPool-Internal")
+                                                    {
+                                                        Demands = { "ImageOverride -equals Build.Server.Amd64.VS2019" }
+                                                    })
+                                                .EndIf
+                                                .If.Equal(variables["_RunAsPublic"], "True")
+                                                    .Pool(new HostedPool("windows-2019")),
+
+                                            Strategy =
+                                                If.Equal(variables["_RunAsPublic"], "True")
+                                                    .Strategy(new MatrixStrategy
+                                                    {
+                                                        Matrix = new()
+                                                        {
+                                                            { "Release", new[] { ("_BuildConfig", "Release") } },
+                                                            { "Debug", new[] { ("_BuildConfig", "Debug") } },
+                                                        }
+                                                    })
+                                                .Else
+                                                    .Strategy(new MatrixStrategy
+                                                    {
+                                                        Matrix = new()
+                                                        {
+                                                            { "Release", new[] { ("_BuildConfig", "Release") } },
+                                                        }
+                                                    }),
 
                                             Steps =
                                             {
@@ -170,7 +189,7 @@ namespace Sharpliner.Tests.AzureDevOps
                                                             Inputs =
                                                             {
                                                                 { "testResultsFormat", "xUnit" },
-                                                                { "testResultsFiles", "$(Build.SourcesDirectory)/artifacts/TestResults/**/*.xml" },
+                                                                { "testResultsFiles", "$(Build.SourcesDirectory)/artifacts/TestResults/** /*.xml" },
                                                                 { "mergeTestResults", true },
                                                                 { "searchFolder", "$(system.defaultworkingdirectory)" },
                                                                 { "testRunTitle", "XHarness unit tests - $(Agent.JobName)" },
@@ -252,7 +271,7 @@ namespace Sharpliner.Tests.AzureDevOps
                             }
                         }
                     }),
-            }
+                }
         };
     }
 }

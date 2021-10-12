@@ -12,6 +12,8 @@ namespace Sharpliner.AzureDevOps
     public record Job : IDependsOn
     {
         private Conditioned<Pool>? _pool;
+        private Conditioned<Strategy>? _strategy;
+        private Conditioned<ContainerReference>? _container;
 
         // TODO: missing properties Uses, Services
 
@@ -30,11 +32,11 @@ namespace Sharpliner.AzureDevOps
 
         [YamlMember(Order = 400)]
         [DisallowNull]
-        public Conditioned<Strategy>? Strategy { get; init; }
+        public Conditioned<Strategy>? Strategy { get => _strategy; init => _strategy = value?.GetRoot(); }
 
         [YamlMember(Order = 500)]
         [DisallowNull]
-        public Conditioned<ContainerReference>? Container { get; init; }
+        public Conditioned<ContainerReference>? Container { get => _container; init => _container = value?.GetRoot(); }
 
         [YamlMember(Order = 600)]
         public ConditionedList<VariableBase> Variables { get; init; } = new();
