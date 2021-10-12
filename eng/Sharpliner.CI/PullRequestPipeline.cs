@@ -41,7 +41,7 @@ namespace Sharpliner.CI
 
                         DotNet
                             .Command(DotNetCommand.Test, projects: "Sharpliner.sln")
-                            .DisplayAs("Build"),
+                            .DisplayAs("Test"),
                     }
                 }
             },

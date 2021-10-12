@@ -51,7 +51,7 @@ jobs:
       version: 5.0.202
 
   - task: DotNetCoreCLI@2
-    displayName: Build
+    displayName: Test
     inputs:
       command: test
       projects: Sharpliner.sln
