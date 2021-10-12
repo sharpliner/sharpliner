@@ -80,17 +80,6 @@ namespace Sharpliner.AzureDevOps
         }
     }
 
-    /*public record ConditionedString : ConditionedDefinition<string>
-    {
-        public static implicit operator ConditionedString(string s) => new(s);
-
-        public static implicit operator ConditionedString(ConditionedDefinition<string> s) => new(s);
-
-        internal ConditionedString(string value) : base(definition: value)
-        {
-        }
-    }*/
-
     /// <summary>
     /// Represents an item that might or might have a condition.
     /// Example of regular definition:
@@ -101,6 +90,7 @@ namespace Sharpliner.AzureDevOps
     /// </summary>
     public record ConditionedDefinition<T> : ConditionedDefinition
     {
+        // Make sure we can for example assign a string into ConditionedDefinition<string>
         public static implicit operator ConditionedDefinition<T>(T value) => new(definition: value);
 
         /// <summary>

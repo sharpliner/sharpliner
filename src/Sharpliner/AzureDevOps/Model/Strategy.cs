@@ -16,8 +16,6 @@ namespace Sharpliner.AzureDevOps
         /// If unspecified or set to 0, no limit is applied.
         /// </summary>
         public int MaxParallel { get; init; } = 0;
-
-        public static implicit operator ConditionedDefinition<Strategy>(Strategy strategy) => new(strategy);
     }
 
     /// <summary>

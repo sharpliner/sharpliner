@@ -108,7 +108,5 @@ namespace Sharpliner.AzureDevOps
         /// Sets the displayName property.
         /// </summary>
         public Step DisplayAs(string displayName) => this with { DisplayName = displayName };
-
-        public static implicit operator ConditionedDefinition<Step>(Step step) => new(step);
     }
 }

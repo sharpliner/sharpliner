@@ -70,7 +70,5 @@ namespace Sharpliner.AzureDevOps
                 DisplayName = displayName;
             }
         }
-
-        public static implicit operator ConditionedDefinition<Job>(Job definition) => new(definition);
     }
 }

@@ -2,10 +2,7 @@
 
 namespace Sharpliner.AzureDevOps
 {
-    public record Pool(string? Name = null)
-    {
-        public static implicit operator ConditionedDefinition<Pool>(Pool pool) => new(pool);
-    }
+    public record Pool(string? Name = null);
 
     public record HostedPool(string? Name = null, string? VmImage = null) : Pool(Name)
     {

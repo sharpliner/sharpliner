@@ -35,7 +35,5 @@ namespace Sharpliner.AzureDevOps
                 DisplayName = displayName;
             }
         }
-
-        public static implicit operator ConditionedDefinition<Stage>(Stage stage) => new(stage);
     }
 }
