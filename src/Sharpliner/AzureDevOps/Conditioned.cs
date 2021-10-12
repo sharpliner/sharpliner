@@ -200,10 +200,7 @@ namespace Sharpliner.AzureDevOps
                 nestedObjectSerializer(childDefinition);
             }
 
-            if (!string.IsNullOrEmpty(Condition))
-            {
-            }
-            else if (Definitions.Count > 0)
+            if (string.IsNullOrEmpty(Condition) && Definitions.Count > 0)
             {
                 emitter.Emit(new MappingEnd());
             }

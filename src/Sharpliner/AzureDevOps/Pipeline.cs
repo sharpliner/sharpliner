@@ -9,22 +9,25 @@ namespace Sharpliner.AzureDevOps
     public abstract record PipelineBase
     {
         private static readonly Regex s_nameRegex = new("^[A-Za-z0-9_]+$", RegexOptions.Compiled);
+        private Conditioned<Trigger>? _trigger;
+        private Conditioned<PrTrigger>? _pr;
+        private Conditioned<Resources>? _resources;
 
         [YamlMember(Order = 100)]
         [DisallowNull]
-        public Conditioned<string>? Name { get; init; }
+        public string? Name { get; init; }
 
         [YamlMember(Order = 200)]
         [DisallowNull]
-        public Trigger? Trigger { get; init; }
+        public Conditioned<Trigger>? Trigger { get => _trigger; init => _trigger = value?.GetRoot(); }
 
         [YamlMember(Order = 300)]
         [DisallowNull]
-        public PrTrigger? Pr { get; init; }
+        public Conditioned<PrTrigger>? Pr { get => _pr; init => _pr = value?.GetRoot(); }
 
         [YamlMember(Order = 400)]
         [DisallowNull]
-        public Resources? Resources { get; init; }
+        public Conditioned<Resources>? Resources { get => _resources; init => _resources = value?.GetRoot(); }
 
         [YamlMember(Order = 500)]
         public ConditionedList<VariableBase> Variables { get; } = new();

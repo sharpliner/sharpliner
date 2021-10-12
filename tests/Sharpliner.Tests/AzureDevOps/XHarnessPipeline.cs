@@ -8,7 +8,7 @@ namespace Sharpliner.Tests.AzureDevOps
     /// </summary>
     internal class XHarnessPipeline : PipelineDefinition
     {
-        public override string TargetFile => "azure-pipelines.yml";
+        public override string TargetFile => "xharness.yml";
 
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
@@ -47,15 +47,34 @@ namespace Sharpliner.Tests.AzureDevOps
                                     {
                                         new Job("Windows_NT")
                                         {
-                                            Pool = new HostedPool("windows-2019"),
-                                            Strategy = new MatrixStrategy
-                                            {
-                                                Matrix = new()
-                                                {
-                                                    { "Release", new[] { ("_BuildConfig", "Release") } },
-                                                    { "Debug", new[] { ("_BuildConfig", "Debug") } },
-                                                }
-                                            },
+                                            Pool =
+                                                If.Equal(variables["_RunAsInternal"], "True")
+                                                    .Pool(new HostedPool("NetCore1ESPool-Internal")
+                                                    {
+                                                        Demands = { "ImageOverride -equals Build.Server.Amd64.VS2019" }
+                                                    })
+                                                .EndIf
+                                                .If.Equal(variables["_RunAsPublic"], "True")
+                                                    .Pool(new HostedPool("windows-2019")),
+
+                                            Strategy =
+                                                If.Equal(variables["_RunAsPublic"], "True")
+                                                    .Strategy(new MatrixStrategy
+                                                    {
+                                                        Matrix = new()
+                                                        {
+                                                            { "Release", new[] { ("_BuildConfig", "Release") } },
+                                                            { "Debug", new[] { ("_BuildConfig", "Debug") } },
+                                                        }
+                                                    })
+                                                .Else
+                                                    .Strategy(new MatrixStrategy
+                                                    {
+                                                        Matrix = new()
+                                                        {
+                                                            { "Release", new[] { ("_BuildConfig", "Release") } },
+                                                        }
+                                                    }),
 
                                             Steps =
                                             {
@@ -186,19 +205,25 @@ namespace Sharpliner.Tests.AzureDevOps
                     })
 
                 // E2E tests
+                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    {
+                        { "name", "E2E_Android_Simulators" },
+                        { "displayName", "Android - Simulators" },
+                        { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Android/Simulator.Tests.proj" },
+                    })
 
                     .Template("eng/e2e-test.yml", new TemplateParameters
                     {
-                        { "name", "E2E_Android" },
-                        { "displayName", "Android - Simulators" },
-                        { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Android/Android.Helix.SDK.Tests.proj" },
+                        { "name", "E2E_Android_Devices" },
+                        { "displayName", "Android - Devices" },
+                        { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Android/Device.Tests.proj" },
                     })
 
                     .Template("eng/e2e-test.yml", new TemplateParameters
                     {
                         { "name", "E2E_Android_Manual_Commands" },
                         { "displayName", "Android - Manual Commands" },
-                        { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Android/Android.CLI.Commands.Tests.proj" },
+                        { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Android/Commands.Tests.proj" },
                     })
 
                     .Template("eng/e2e-test.yml", new TemplateParameters
@@ -210,8 +235,36 @@ namespace Sharpliner.Tests.AzureDevOps
 
                     .Template("eng/e2e-test.yml", new TemplateParameters
                     {
-                        { "name", "E2E_SimulatorInstaller" },
+                        { "name", "E2E_iOS_Devices" },
+                        { "displayName", "Apple - iOS devices" },
+                        { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Device.iOS.Tests.proj" },
+                    })
+
+                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    {
+                        { "name", "E2E_tvOS_Devices" },
+                        { "displayName", "Apple - tvOS devices" },
+                        { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Device.tvOS.Tests.proj" },
+                    })
+
+                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    {
+                        { "name", "E2E_Apple_Simulator_Commands" },
                         { "displayName", "Apple - Simulator Commands" },
+                        { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Simulator.Commands.Tests.proj" },
+                    })
+
+                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    {
+                        { "name", "E2E_Apple_Device_Commands" },
+                        { "displayName", "Apple - Device Commands" },
+                        { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Device.Commands.Tests.proj" },
+                    })
+
+                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    {
+                        { "name", "E2E_Apple_Simulator_Mgmt" },
+                        { "displayName", "Apple - Simulator management" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/SimulatorInstaller.Tests.proj" },
                     })
 
@@ -228,9 +281,7 @@ namespace Sharpliner.Tests.AzureDevOps
                     {
                         { "publishingInfraVersion", 3 },
                         { "enableSymbolValidation", true },
-
-                        // Reenable once this issue is resolved: https://github.com/dotnet/arcade/issues/2912
-                        { "enableSourceLinkValidation", false },
+                        { "enableSourceLinkValidation", true },
                         { "validateDependsOn", new[] { "Build_Windows_NT" } },
                         { "publishDependsOn", new[] { "Validate" } },
 
@@ -239,7 +290,7 @@ namespace Sharpliner.Tests.AzureDevOps
                             {
                                 { "enable", false },
                                 { "continueOnError", false },
-                                { "params", "-SourceToolsList @(\"policheck\",\"credscan\") " +
+                                { "params", " -SourceToolsList @(\"policheck\",\"credscan\") " +
                                             "-TsaInstanceURL $(_TsaInstanceURL) " +
                                             "-TsaProjectName $(_TsaProjectName) " +
                                             "-TsaNotificationEmail $(_TsaNotificationEmail) " +
@@ -252,7 +303,7 @@ namespace Sharpliner.Tests.AzureDevOps
                             }
                         }
                     }),
-            }
+                }
         };
     }
 }
