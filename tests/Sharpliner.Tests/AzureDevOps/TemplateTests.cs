@@ -10,24 +10,17 @@ namespace Sharpliner.Tests.AzureDevOps
         {
             public override SingleStagePipeline Pipeline => new()
             {
-                Name = 
-                    If.Equal("foo", "bar")
-                        .Template<string>("template1.yml", new TemplateParameters
-                        {
-                            { "enableTelemetry", true },
-                            { "sources", "src/*" },
-                            { "nestedParameters", new TemplateParameters
-                                {
-                                    { "enable", false },
-                                    { "continueOnError", false },
-                                }
-                            }
-                        })
-                    .Else
-                        .Template<string>("template2.yml", new TemplateParameters
-                        {
-                            { "enableTelemetry", false },
-                        })
+                Jobs =
+                {
+                    new Job("job")
+                    {
+                        Pool =
+                            If.Equal("foo", "bar")
+                                .Template<Pool>("pool1.yml")
+                            .Else
+                                .Template<Pool>("pool2.yml")
+                    }
+                }
             };
         }
 
@@ -37,14 +30,13 @@ namespace Sharpliner.Tests.AzureDevOps
             var yaml = new Template_Pipeline().Serialize();
 
             yaml.Should().Be(
-@"${{ if eq(foo, bar) }}:
-  template: template.yml
-  parameters:
-    enableTelemetry: true
-    sources: src/*
-    nestedParameters:
-      enable: false
-      continueOnError: false
+@"jobs:
+- job: job
+  pool:
+    ${{ if eq(foo, bar) }}:
+      template: pool1.yml
+    ${{ if ne(foo, bar) }}:
+      template: pool2.yml
 ");
         }
 

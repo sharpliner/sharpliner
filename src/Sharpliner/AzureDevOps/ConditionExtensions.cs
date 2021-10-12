@@ -32,8 +32,8 @@
         public static ConditionedDefinition<Step> Step(this Condition condition, ConditionedDefinition<Step> step)
             => ConditionedDefinition.Link(condition, step);
 
-        public static ConditionedDefinition<T> Template<T>(this Condition condition, string path, TemplateParameters parameters)
-            => ConditionedDefinition.Link(condition, new Template<T>(condition: condition.ToString(), path: path, parameters));
+        public static ConditionedDefinition<T> Template<T>(this Condition condition, string path, TemplateParameters? parameters = null)
+            => ConditionedDefinition.Link(condition, new Template<T>(condition: condition.ToString(), path: path, parameters ?? new TemplateParameters()));
 
         public static ConditionedDefinition<Pool> Pool(this Condition condition, Pool pool)
             => ConditionedDefinition.Link(condition, pool);
