@@ -78,8 +78,6 @@ namespace Sharpliner.AzureDevOps
             template.Parent = condition.Parent;
             return template;
         }
-
-        internal abstract bool IsNotEmpty();
     }
 
     /// <summary>
@@ -197,7 +195,7 @@ namespace Sharpliner.AzureDevOps
             SerializeSelf(emitter, nestedObjectSerializer);
 
             // Otherwise, we expect a list of Definitions
-            foreach (var childDefinition in Definitions.Where(d => d.IsNotEmpty()))
+            foreach (var childDefinition in Definitions)
             {
                 nestedObjectSerializer(childDefinition);
             }
@@ -229,7 +227,7 @@ namespace Sharpliner.AzureDevOps
             SerializeSelf(emitter, nestedObjectSerializer);
 
             // Otherwise, we expect a list of Definitions
-            foreach (var childDefinition in Definitions.Where(d => d.IsNotEmpty()))
+            foreach (var childDefinition in Definitions)
             {
                 nestedObjectSerializer(childDefinition);
             }
@@ -265,7 +263,5 @@ namespace Sharpliner.AzureDevOps
 
             return definitions;
         }
-
-        internal override bool IsNotEmpty() => Definitions.Any() || !string.IsNullOrEmpty(Condition) || Definition != null;
     }
 }
