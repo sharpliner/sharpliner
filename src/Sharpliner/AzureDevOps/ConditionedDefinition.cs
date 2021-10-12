@@ -80,6 +80,17 @@ namespace Sharpliner.AzureDevOps
         }
     }
 
+    /*public record ConditionedString : ConditionedDefinition<string>
+    {
+        public static implicit operator ConditionedString(string s) => new(s);
+
+        public static implicit operator ConditionedString(ConditionedDefinition<string> s) => new(s);
+
+        internal ConditionedString(string value) : base(definition: value)
+        {
+        }
+    }*/
+
     /// <summary>
     /// Represents an item that might or might have a condition.
     /// Example of regular definition:
@@ -90,22 +101,19 @@ namespace Sharpliner.AzureDevOps
     /// </summary>
     public record ConditionedDefinition<T> : ConditionedDefinition
     {
+        public static implicit operator ConditionedDefinition<T>(T value) => new(definition: value);
+
         /// <summary>
         /// The actual definition (value).
         /// </summary>
         internal T? Definition { get; }
-
-        internal ConditionedDefinition(ConditionedDefinition<T> definition, string condition) : base(condition)
-        {
-            Definitions.Add(definition);
-        }
 
         internal ConditionedDefinition(T definition, string condition) : base(condition)
         {
             Definition = definition;
         }
 
-        public ConditionedDefinition(T definition) : base((string?)null)
+        public ConditionedDefinition(T definition) : this()
         {
             Definition = definition;
         }
@@ -114,10 +122,27 @@ namespace Sharpliner.AzureDevOps
         {
         }
 
+        protected ConditionedDefinition() : base((string?)null)
+        {
+        }
+
         public ConditionBuilder<T> If => new(this);
 
-        public ConditionedDefinition<T> EndIf => Parent as ConditionedDefinition<T>
-            ?? throw new InvalidOperationException("You have called EndIf on a top-level statement, EndIf can only be used to return from a nested definition");
+        public ConditionedDefinition<T> EndIf
+        {
+            get
+            {
+                // If we're top-level, we create a fake new top with empty definition to collect all the definitions
+                if (Parent == null)
+                {
+                    Parent = new ConditionedDefinition<T>();
+                    Parent.Definitions.Add(this);
+                }
+
+                return Parent as ConditionedDefinition<T>
+                    ?? throw new InvalidOperationException("You have called EndIf on a top-level statement, EndIf can only be used to return from a nested definition");
+            }
+        }
 
         public Condition<T> Else
         {
@@ -126,7 +151,7 @@ namespace Sharpliner.AzureDevOps
                 // If we're top-level, we create a fake new top with empty definition to collect all the definitions
                 if (Parent == null)
                 {
-                    Parent = new ConditionedDefinition<T>((string?)null);
+                    Parent = new ConditionedDefinition<T>();
                     Parent.Definitions.Add(this);
                 }
 
@@ -165,18 +190,13 @@ namespace Sharpliner.AzureDevOps
         /// </summary>
         private void WriteValue(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
         {
-            if (string.IsNullOrEmpty(Condition))
+            if (!string.IsNullOrEmpty(Condition))
             {
-                if (Definitions.Count > 1)
-                {
-                    emitter.Emit(new MappingStart(AnchorName.Empty, TagName.Empty, true, MappingStyle.Block));
-                }
-            }
-            else
-            {
-                emitter.Emit(new MappingStart(AnchorName.Empty, TagName.Empty, true, MappingStyle.Block));
                 emitter.Emit(new Scalar("${{ if " + Condition + " }}"));
-                emitter.Emit(new MappingStart(AnchorName.Empty, TagName.Empty, true, MappingStyle.Block));
+            }
+            else if (Definitions.Count > 0)
+            {
+                emitter.Emit(new MappingStart());
             }
 
             // We are first serializing us. We can be
@@ -190,14 +210,10 @@ namespace Sharpliner.AzureDevOps
                 nestedObjectSerializer(childDefinition);
             }
 
-            if (string.IsNullOrEmpty(Condition))
+            if (!string.IsNullOrEmpty(Condition))
             {
-                if (Definitions.Count > 1)
-                {
-                    emitter.Emit(new MappingEnd());
-                }
             }
-            else
+            else if (Definitions.Count > 0)
             {
                 emitter.Emit(new MappingEnd());
             }
@@ -210,7 +226,7 @@ namespace Sharpliner.AzureDevOps
         {
             if (!string.IsNullOrEmpty(Condition))
             {
-                emitter.Emit(new MappingStart(AnchorName.Empty, TagName.Empty, true, MappingStyle.Block));
+                emitter.Emit(new MappingStart());
                 emitter.Emit(new Scalar("${{ if " + Condition + " }}"));
                 emitter.Emit(new SequenceStart(AnchorName.Empty, TagName.Empty, true, SequenceStyle.Block));
             }

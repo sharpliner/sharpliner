@@ -6,7 +6,7 @@ namespace Sharpliner.AzureDevOps
     // https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#variables
     public abstract record VariableBase
     {
-        public static implicit operator ConditionedDefinition<VariableBase>(VariableBase definition) => new(definition);
+        // public static implicit operator ConditionedDefinition<VariableBase>(VariableBase definition) => new(definition);
     }
 
     public record VariableGroup : VariableBase

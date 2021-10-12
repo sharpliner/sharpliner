@@ -154,8 +154,6 @@ namespace Sharpliner.Tests.AzureDevOps
 
         private class ConditionedValueWithElse_Pipeline : SimpleTestPipeline
         {
-            public override string TargetFile => "ConditionedValue";
-
             public override SingleStagePipeline Pipeline => new()
             {
                 Jobs =
@@ -193,8 +191,6 @@ namespace Sharpliner.Tests.AzureDevOps
 
         private class ConditionedValueWithElseIf_Pipeline : SimpleTestPipeline
         {
-            public override string TargetFile => "ConditionedValue";
-
             public override SingleStagePipeline Pipeline => new()
             {
                 Jobs =
@@ -206,7 +202,8 @@ namespace Sharpliner.Tests.AzureDevOps
                                     {
                                         Demands = { "SomeProperty -equals SomeValue" }
                                     })
-                                .EndIf.If.Equal("C", "D")
+                                .EndIf
+                                .If.Equal("C", "D")
                                     .Pool(new HostedPool("pool-B")),
                     }
                 }

@@ -12,7 +12,7 @@ namespace Sharpliner.AzureDevOps
 
         [YamlMember(Order = 100)]
         [DisallowNull]
-        public string? Name { get; init; }
+        public ConditionedDefinition<string>? Name { get; init; }
 
         [YamlMember(Order = 200)]
         [DisallowNull]
