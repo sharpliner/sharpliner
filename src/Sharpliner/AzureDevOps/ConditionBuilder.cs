@@ -7,9 +7,9 @@
     /// </summary>
     public class ConditionBuilder
     {
-        internal ConditionedDefinition? Parent { get; }
+        internal Conditioned? Parent { get; }
 
-        internal ConditionBuilder(ConditionedDefinition? parent = null)
+        internal ConditionBuilder(Conditioned? parent = null)
         {
             Parent = parent;
         }
@@ -53,9 +53,9 @@
 
     public class ConditionBuilder<T>
     {
-        internal ConditionedDefinition<T>? Parent { get; }
+        internal Conditioned<T>? Parent { get; }
 
-        internal ConditionBuilder(ConditionedDefinition<T>? parent = null)
+        internal ConditionBuilder(Conditioned<T>? parent = null)
         {
             Parent = parent;
         }

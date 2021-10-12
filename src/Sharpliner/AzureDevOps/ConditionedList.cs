@@ -6,25 +6,25 @@ namespace Sharpliner.AzureDevOps
     /// <summary>
     /// This class is here only to override the Add() which is used for definition.
     /// </summary>
-    public class ConditionedDefinitionList<T> : List<ConditionedDefinition<T>>
+    public class ConditionedList<T> : List<Conditioned<T>>
     {
         // Make sure we can for example assign a string into ConditionedDefinition<string>
-        public static implicit operator ConditionedDefinitionList<T>(List<T> list) => new(list);
+        public static implicit operator ConditionedList<T>(List<T> list) => new(list);
 
-        public ConditionedDefinitionList()
+        public ConditionedList()
         {
         }
 
-        protected ConditionedDefinitionList(IEnumerable<T> values)
-            : base(values.Select(v => new ConditionedDefinition<T>(v)))
+        protected ConditionedList(IEnumerable<T> values)
+            : base(values.Select(v => new Conditioned<T>(v)))
         {
         }
 
-        public new void Add(ConditionedDefinition<T> item)
+        public new void Add(Conditioned<T> item)
         {
             // When we define a tree of conditional definitions, the expression returns
             // the leaf definition so we have to move up to the top-level definition
-            while (item.Parent is ConditionedDefinition<T> parent)
+            while (item.Parent is Conditioned<T> parent)
             {
                 item = parent;
             }
@@ -33,7 +33,7 @@ namespace Sharpliner.AzureDevOps
             base.Add(item);
         }
 
-        private static void SetIsListForAll(ConditionedDefinition? item)
+        private static void SetIsListForAll(Conditioned? item)
         {
             if (item == null)
             {
@@ -42,7 +42,7 @@ namespace Sharpliner.AzureDevOps
 
             item.IsList = true;
 
-            if (item is ConditionedDefinition<T> temp && temp.Definition is ConditionedDefinition temp2)
+            if (item is Conditioned<T> temp && temp.Definition is Conditioned temp2)
             {
                 SetIsListForAll(temp2);
             }

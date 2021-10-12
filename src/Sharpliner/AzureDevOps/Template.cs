@@ -7,7 +7,7 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps
 {
-    public record Template<T> : ConditionedDefinition<T>
+    public record Template<T> : Conditioned<T>
     {
         private readonly string _path;
         public TemplateParameters Parameters { get; init; } = new();

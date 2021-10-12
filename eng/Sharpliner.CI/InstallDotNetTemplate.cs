@@ -12,7 +12,7 @@ namespace Sharpliner.CI
 
         public override TemplateParameters Parameters => NoParameters;
 
-        public override ConditionedDefinitionList<Step> Definition => new()
+        public override ConditionedList<Step> Definition => new()
         {
             // dotnet build fails with .NET 5 SDK and the new() statements
             DotNet

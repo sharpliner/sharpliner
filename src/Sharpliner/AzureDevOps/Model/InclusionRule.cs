@@ -7,8 +7,8 @@ namespace Sharpliner.AzureDevOps
         /// <summary>
         /// Branch names which will trigger a build
         /// </summary>
-        public ConditionedDefinitionList<string> Include { get; init; } = new();
+        public ConditionedList<string> Include { get; init; } = new();
 
-        public ConditionedDefinitionList<string> Exclude { get; init; } = new();
+        public ConditionedList<string> Exclude { get; init; } = new();
     }
 }

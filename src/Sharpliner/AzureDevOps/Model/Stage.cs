@@ -14,13 +14,13 @@ namespace Sharpliner.AzureDevOps
         public string? DisplayName { get; init; }
 
         [YamlMember(Order = 100)]
-        public List<string> DependsOn { get; init; } = new();
+        public ConditionedList<string> DependsOn { get; init; } = new();
 
         [YamlMember(Order = 200)]
-        public ConditionedDefinitionList<VariableBase> Variables { get; init; } = new();
+        public ConditionedList<VariableBase> Variables { get; init; } = new();
 
         [YamlMember(Order = 300)]
-        public ConditionedDefinitionList<Job> Jobs { get; init; } = new();
+        public ConditionedList<Job> Jobs { get; init; } = new();
 
         [YamlMember(Order = 400)]
         [DisallowNull]
