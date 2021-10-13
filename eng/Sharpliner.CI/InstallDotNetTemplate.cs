@@ -1,4 +1,5 @@
-﻿using Sharpliner.AzureDevOps;
+﻿using System.Collections.Generic;
+using Sharpliner.AzureDevOps;
 
 namespace Sharpliner.CI
 {
@@ -10,12 +11,17 @@ namespace Sharpliner.CI
 
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
+        public override List<TemplateParameter> Parameters => new()
+        {
+            StringParameter("version", defaultValue: "6.0.100-rc.1.21430.12"),
+        };
+
         public override ConditionedList<Step> Definition => new()
         {
             // dotnet build fails with .NET 5 SDK and the new() statements
             DotNet
-                .Install.Sdk("6.0.100-preview.3.21202.5")
-                .DisplayAs("Install .NET 6 preview 3")
+                .Install.Sdk(parameters["version"])
+                .DisplayAs("Install .NET " + parameters["version"])
         };
     }
 }
