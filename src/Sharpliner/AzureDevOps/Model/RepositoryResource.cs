@@ -10,7 +10,6 @@ namespace Sharpliner.AzureDevOps
     /// </summary>
     public record RepositoryResource
     {
-        // TODO: Add validation
         /// <summary>
         /// Identifier for the resource used in pipeline resource variables (A-Z, a-z, 0-9, and underscore)
         /// </summary>
@@ -62,7 +61,8 @@ namespace Sharpliner.AzureDevOps
 
         public RepositoryResource(string identifier)
         {
-            Identifier = identifier ?? throw new System.ArgumentNullException(nameof(identifier));
+            Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
+            Pipeline.ValidateName(Identifier);
         }
     }
 

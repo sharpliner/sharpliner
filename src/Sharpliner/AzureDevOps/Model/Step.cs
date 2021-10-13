@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
-using System.Text.RegularExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps
@@ -16,7 +15,6 @@ namespace Sharpliner.AzureDevOps
     public abstract record Step
     {
         private string? _name;
-        private static readonly Regex s_nameRegex = new("[a-zA-Z0-9_]+", RegexOptions.Compiled);
 
         /// <summary>
         /// Friendly name displayed in the UI.
@@ -25,7 +23,6 @@ namespace Sharpliner.AzureDevOps
         [DisallowNull]
         public string? DisplayName { get; init; }
 
-        // TODO: Add validation
         /// <summary>
         /// Identifier for this step (A-Z, a-z, 0-9, and underscore).
         /// </summary>
@@ -36,11 +33,7 @@ namespace Sharpliner.AzureDevOps
             get => _name;
             init
             {
-                if (value != null && !s_nameRegex.IsMatch(value))
-                {
-                    throw new ArgumentException(nameof(Name));
-                }
-
+                Pipeline.ValidateName(value);
                 _name = value;
             }
         }
@@ -85,7 +78,7 @@ namespace Sharpliner.AzureDevOps
         /// </summary>
         [YamlMember(Order = 220)]
         [DisallowNull]
-        public IReadOnlyDictionary<string, string>? Env { get; init; }
+        public Dictionary<string, string> Env { get; init; } = new();
 
         /// <summary>
         /// Make step only run when a condition is met.
