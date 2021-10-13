@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace Sharpliner.AzureDevOps
+﻿namespace Sharpliner.AzureDevOps
 {
     public record InclusionRule
     {
