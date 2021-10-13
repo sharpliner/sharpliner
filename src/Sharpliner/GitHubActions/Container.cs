@@ -66,12 +66,12 @@ namespace Sharpliner.GitHubActions
         /// <summary>
         /// Get/Set the list of available ports in the image.
         /// </summary>
-        public int[] Ports { get; set; }
+        public List<int> Ports { get; set; } = new();
 
         /// <summary>
         /// Get/Set the array of volumes to be used in the image.
         /// </summary>
-        public string [] Volumes { get; set; }
+        public List<string> Volumes { get; set; } = new();
 
         /// <summary>
         /// Get/Set additional create options for the docker image.

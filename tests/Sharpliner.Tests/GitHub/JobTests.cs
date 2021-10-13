@@ -132,8 +132,8 @@ namespace Sharpliner.Tests.GitHub
                         ["Database"] = "production",
                         ["Bot"] = "builder"
                     },
-                    Ports = new [] {495, 500, 43},
-                    Volumes = new [] {"my_docker_volume:/volume_mount", "/data/my_data"}
+                    Ports = {495, 500, 43},
+                    Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
                 }
             };
 
@@ -155,8 +155,8 @@ namespace Sharpliner.Tests.GitHub
                         ["Database"] = "production",
                         ["Bot"] = "builder"
                     },
-                    Ports = new [] {495, 500, 43},
-                    Volumes = new [] {"my_docker_volume:/volume_mount", "/data/my_data"}
+                    Ports = {495, 500, 43},
+                    Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
                 }
             };
             Assert.Equal("node:14.16", j.RunsOn.Image);
@@ -184,8 +184,8 @@ namespace Sharpliner.Tests.GitHub
                         ["Database"] = "production",
                         ["Bot"] = "builder"
                     },
-                    Ports = new [] {495, 500, 43},
-                    Volumes = new [] {"my_docker_volume:/volume_mount", "/data/my_data"}
+                    Ports = {495, 500, 43},
+                    Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
                 }
             };
 
