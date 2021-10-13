@@ -32,12 +32,12 @@ namespace Sharpliner.GitHubActions
         public Dictionary<string, List<object>> Configuration { get; set; }
 
         /// <summary>
-        ///
+        /// List of extra configurations that will be included.
         /// </summary>
         public List<StrategyConfiguration> Include { get; set; } = new();
 
         /// <summary>
-        ///
+        /// List of configurations to be excluded.
         /// </summary>
         public List<StrategyConfiguration> Exclude { get; set; } = new();
 
