@@ -13,28 +13,48 @@ namespace Sharpliner.AzureDevOps
         private Conditioned<PrTrigger>? _pr;
         private Conditioned<Resources>? _resources;
 
+        /// <summary>
+        /// Name of the pipline in the build numbering format
+        /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/run-number?view=azure-devops&tabs=yaml">official Azure DevOps pipelines documentation</see>.
+        /// </summary>
         [YamlMember(Order = 100)]
         [DisallowNull]
         public string? Name { get; init; }
 
+        /// <summary>
+        /// Specifies when the pipeline is supposed to run
+        /// </summary>
         [YamlMember(Order = 200)]
         [DisallowNull]
         public Conditioned<Trigger>? Trigger { get => _trigger; init => _trigger = value?.GetRoot(); }
 
+        /// <summary>
+        /// A pull request trigger specifies which branches cause a pull request build to run.
+        /// If you specify no pull request trigger, pull requests to any branch trigger a build.
+
+        /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/build/triggers?tabs=yaml&view=azure-devops#pr-triggers">official Azure DevOps pipelines documentation</see>.
+        /// </summary>
         [YamlMember(Order = 300)]
         [DisallowNull]
         public Conditioned<PrTrigger>? Pr { get => _pr; init => _pr = value?.GetRoot(); }
 
+        /// <summary>
+        /// A resource is any external service that is consumed as part of your pipeline
+
+        /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/resources?view=azure-devops&tabs=schema">official Azure DevOps pipelines documentation</see>.
+        /// </summary>
         [YamlMember(Order = 400)]
         [DisallowNull]
         public Conditioned<Resources>? Resources { get => _resources; init => _resources = value?.GetRoot(); }
 
+        /// <summary>
+        /// Specifies variables at the pipeline level
+        /// You can add hard-coded values directly, reference variable groups, or insert via variable templates.
+        /// </summary>
         [YamlMember(Order = 500)]
         public ConditionedList<VariableBase> Variables { get; } = new();
 
         public abstract void Validate();
-
-        // TODO: Scheduled triggers
 
         protected static void ValidateDependsOn<T>(ConditionedList<T> definitions) where T : IDependsOn
         {
