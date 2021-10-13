@@ -21,7 +21,7 @@ namespace Sharpliner.CI
                             .FromResourceFile("Get-Version.ps1")
                             .DisplayAs("Detect package version"),
 
-                        Template<Step>(InstallDotNetTemplate.Path),
+                        StepTemplate(InstallDotNetTemplate.Path),
 
                         Powershell
                             .Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'")

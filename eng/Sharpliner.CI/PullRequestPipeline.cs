@@ -25,7 +25,7 @@ namespace Sharpliner.CI
                     Pool = new HostedPool("Azure Pipelines", "windows-latest"),
                     Steps =
                     {
-                        Template<Step>(InstallDotNetTemplate.Path),
+                        StepTemplate(InstallDotNetTemplate.Path),
                                 
                         // Validate we published the YAML
                         new SharplinerValidateTask("eng/Sharpliner.CI/Sharpliner.CI.csproj", false),

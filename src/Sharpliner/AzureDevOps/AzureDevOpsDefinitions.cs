@@ -17,16 +17,33 @@ namespace Sharpliner.AzureDevOps
         /// Reference a YAML template.
         /// </summary>
         /// <param name="path">Relative path to the YAML file with the template</param>
-        protected static Conditioned<VariableBase> Template(string path)
-            => new Template<VariableBase>(path);
+        /// <param name="parameters">Values for template parameters</param>
+        protected static Template<VariableBase> VariableTemplate(string path, TemplateParameters? parameters = null)
+            => new(path, parameters);
 
         /// <summary>
         /// Reference a YAML template.
         /// </summary>
         /// <param name="path">Relative path to the YAML file with the template</param>
         /// <param name="parameters">Values for template parameters</param>
-        protected static Conditioned<T> Template<T>(string path, TemplateParameters? parameters = null)
-            => new Template<T>(path, parameters);
+        protected static Template<Stage> StageTemplate(string path, TemplateParameters? parameters = null)
+            => new(path, parameters);
+
+        /// <summary>
+        /// Reference a YAML template.
+        /// </summary>
+        /// <param name="path">Relative path to the YAML file with the template</param>
+        /// <param name="parameters">Values for template parameters</param>
+        protected static Template<Job> JobTemplate(string path, TemplateParameters? parameters = null)
+            => new(path, parameters);
+
+        /// <summary>
+        /// Reference a YAML template.
+        /// </summary>
+        /// <param name="path">Relative path to the YAML file with the template</param>
+        /// <param name="parameters">Values for template parameters</param>
+        protected static Template<Step> StepTemplate(string path, TemplateParameters? parameters = null)
+            => new(path, parameters);
 
         /// <summary>
         /// Allows the variables[""] notation for conditional definitions.
