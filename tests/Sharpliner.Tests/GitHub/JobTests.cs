@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Sharpliner.GitHubActions;
 using Xunit;
 
@@ -120,5 +121,133 @@ namespace Sharpliner.Tests.GitHub
             Assert.Null(j.Defaults.Run.CustomShell);
         }
 
+        [Fact]
+        public void Job_Default_Matrix()
+        {
+            var j = new Job("matrix")
+            {
+                Strategy = new ()
+                {
+                    Configuration = new ()
+                    {
+                        {"Foo", new () {1,2,3}},
+                        {"Bar", new (){"ubuntu", "windows"}},
+                    }
+                }
+            };
+
+            // validate that we do have the values and can access them
+            Assert.NotNull(j.Strategy);
+            Assert.True(j.Strategy.Configuration.Keys.Contains("Foo"));
+            Assert.True(j.Strategy.Configuration.Keys.Contains("Bar"));
+            Assert.True(j.Strategy.FailFast);
+            Assert.Equal(int.MaxValue, j.Strategy.MaxParallel);
+        }
+
+        [Fact]
+        public void Job_Matrix_Fast_Fail ()
+        {
+            var j = new Job("matrix")
+            {
+                Strategy = new()
+                {
+                    Configuration = new ()
+                    {
+                        {"Foo", new(){1,2,3}},
+                        {"Bar", new(){"ubuntu", "windows" }},
+                    },
+                    FailFast = false,
+                }
+            };
+            Assert.False(j.Strategy.FailFast);
+        }
+
+        [Fact]
+        public void Job_Matrix_Max_Parallel()
+        {
+            var j = new Job("matrix")
+            {
+                Strategy = new ()
+                {
+                    Configuration = new ()
+                    {
+                        {"Foo", new (){1,2,3}},
+                        {"Bar", new (){"ubuntu", "windows" }},
+                    },
+                    MaxParallel = 2,
+                },
+            };
+            Assert.Equal(2, j.Strategy.MaxParallel);
+        }
+
+        [Fact]
+        public void Job_Matrix_Include_Vars()
+        {
+            var j = new Job("matrix")
+            {
+                Strategy = new ()
+                {
+                    Configuration = new ()
+                    {
+                        {"Fo" , new () {1,2,3}},
+                        {"Br" , new () {"ubuntu", "windows" }},
+                    },
+                    Include =
+                    {
+                        new ()
+                        {
+                            Configuration = new ()
+                            {
+                                {"Foo", 4},
+                                {"Bar", "macOS"},
+                            },
+                            Variables = new ()
+                            {
+                                {"ENV",  "DEBUG"}
+                            }
+                        }
+                    }
+                },
+            };
+
+            Assert.True(j.Strategy.Include[0].Configuration.ContainsKey("Foo"));
+            Assert.True(j.Strategy.Include[0].Configuration.ContainsKey("Bar"));
+            Assert.True(j.Strategy.Include[0].Variables.ContainsKey("ENV"));
+        }
+
+        [Fact]
+        public void Job_Matrix_Exclude_Vars()
+        {
+            var j = new Job("matrix")
+            {
+                Strategy = new ()
+                {
+                    Configuration = new()
+                    {
+                        {"Foo", new (){1,2,3}},
+                        {"Bar", new (){"ubuntu", "windows" }},
+                    },
+                    Exclude =
+                    {
+                        new ()
+                        {
+                            Configuration = new()
+                            {
+                                {"Foo", 4},
+                                {"Bar", "macOS"},
+                            },
+                            Variables = new()
+                            {
+                                {"ENV", "DEBUG"}
+                            }
+                        }
+                    }
+                },
+            };
+
+            Assert.True(j.Strategy.Exclude[0].Configuration.Keys.Contains("Foo"));
+            Assert.True(j.Strategy.Exclude[0].Configuration.Keys.Contains("Bar"));
+            Assert.True(j.Strategy.Exclude[0].Variables.Keys.Contains("ENV"));
+        }
     }
 }
