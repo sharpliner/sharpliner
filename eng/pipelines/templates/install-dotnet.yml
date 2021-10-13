@@ -8,7 +8,6 @@
 parameters:
 - name: version
   type: string
-  default: 6.0.100-rc.2.21505.57
 
 steps:
 - task: UseDotNet@2

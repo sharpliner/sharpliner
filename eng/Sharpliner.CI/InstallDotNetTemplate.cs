@@ -13,7 +13,7 @@ namespace Sharpliner.CI
 
         public override List<TemplateParameter> Parameters => new()
         {
-            StringParameter("version", defaultValue: "6.0.100-rc.2.21505.57"),
+            StringParameter("version"),
         };
 
         public override ConditionedList<Step> Definition => new()

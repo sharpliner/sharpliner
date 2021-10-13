@@ -132,6 +132,13 @@ namespace Sharpliner.AzureDevOps
         /// </summary>
         protected static DotNetTaskBuilder DotNet { get; } = new();
 
+        /// <summary>
+        /// This task verifies that you didn't forget to check in your YAML pipeline changes.
+        /// </summary>
+        /// <param name="pipelineProject">Path to the .csproj where pipelines are defined</param>
+        /// <param name="isPosix">True for bash, false for Powershell (based on OS)</param>
+        protected static SharplinerValidateTask ValidateYamlsArePublished(string pipelineProject, bool isPosix) => new(pipelineProject, isPosix);
+
         protected static Condition<T> And<T>(Condition condition1, Condition condition2) => new AndCondition<T>(condition1, condition2);
 
         protected static Condition Or<T>(Condition condition1, Condition condition2) => new OrCondition<T>(condition1, condition2);

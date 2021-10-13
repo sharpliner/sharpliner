@@ -25,19 +25,22 @@ namespace Sharpliner.CI
                     Pool = new HostedPool("Azure Pipelines", "windows-latest"),
                     Steps =
                     {
-                        StepTemplate(InstallDotNetTemplate.Path),
-                                
-                        // Validate we published the YAML
-                        new SharplinerValidateTask("eng/Sharpliner.CI/Sharpliner.CI.csproj", false),
+                        StepTemplate(InstallDotNetTemplate.Path, new()
+                        {
+                            { "version", "6.0.100-rc.2.21505.57" }
+                        }),
+
+                        ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj", false),
 
                         DotNet
                             .Build("Sharpliner.sln", includeNuGetOrg: true)
                             .DisplayAs("Build"),
                                 
                         // dotnet test needs .NET 5
-                        DotNet
-                            .Install.Sdk("5.0.202")
-                            .DisplayAs("Install .NET 5"),
+                        StepTemplate(InstallDotNetTemplate.Path, new()
+                        {
+                            { "version", "5.0.402" }
+                        }),
 
                         DotNet
                             .Command(DotNetCommand.Test, projects: "Sharpliner.sln")
