@@ -181,9 +181,9 @@ namespace Sharpliner.Tests.AzureDevOps
 - job: Job
   pool:
     ${{ if eq(A, B) }}:
+      name: pool-A
       demands:
       - SomeProperty -equals SomeValue
-      name: pool-A
     ${{ if ne(A, B) }}:
       name: pool-B
 ");
@@ -219,9 +219,9 @@ namespace Sharpliner.Tests.AzureDevOps
 - job: Job
   pool:
     ${{ if eq(A, B) }}:
+      name: pool-A
       demands:
       - SomeProperty -equals SomeValue
-      name: pool-A
     ${{ if eq(C, D) }}:
       name: pool-B
 ");
