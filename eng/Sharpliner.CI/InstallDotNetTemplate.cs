@@ -10,8 +10,6 @@ namespace Sharpliner.CI
 
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
-        public override TemplateParameters Parameters => NoParameters;
-
         public override ConditionedList<Step> Definition => new()
         {
             // dotnet build fails with .NET 5 SDK and the new() statements
