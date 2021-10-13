@@ -20,6 +20,8 @@ namespace Sharpliner.GitHubActions
         // TODO
         public Container? RunsOn { get; set; }
 
+        public Strategy? Strategy { get; set; }
+
         /// <summary>
         /// Allows to set the permissions granted to the Github token that will be used with the job. This
         /// setting will override that from the workflow.
