@@ -3,6 +3,9 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps
 {
+    /// <summary>
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#pool">official Azure DevOps pipelines documentation</see>.
+    /// </summary>
     public record Pool
     {
         /// <summary>
