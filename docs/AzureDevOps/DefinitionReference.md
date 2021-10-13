@@ -164,3 +164,67 @@ If.IsNotPullRequest
 If.And(IsNotPullRequest, IsBranch("production"))
 ```
 
+## Templates
+
+Azure pipelines allow you to [define a parametrized template](https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#template-references) for a **stage**, **job**, **step** or **variables** and then insert those template in your pipeline. Sharpliner also supports definition and refercing of templates, however with C# it's easier to define these entities directly in code. Anyway, the functionality is useful when for example migrating from YAML to do it step by step.
+
+To define a template, you do it similarly as when you define the pipeline - you inherit from one of these classes:
+- `StageTemplateDefinition`
+- `JobTemplateDefinition`
+- `StepTemplateDefinition`
+- `VariableTemplateDefinition`
+
+Example definition:
+
+``` csharp
+class InstallDotNetTemplate : StepTemplateDefinition
+{
+    // Where to publish the YAML to
+    public override string TargetFile => "pipelines/install-dotnet.yml";
+    public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
+
+    // Define parameters, if any
+    public override List<TemplateParameter> Parameters => new()
+    {
+        StringParameter("version", allowedValues: new[] { "6.0.100-preview.3.21202.5", "6.0.100-rc.1.21430.12" })
+    };
+
+    // Implement the template
+    public override ConditionedList<Step> Definition => new()
+    {
+        DotNet
+            .Install.Sdk(parameters["version"])
+            .DisplayAs("Install .NET " + parameters["version"])
+    };
+}
+```
+
+This produces following YAML template:
+
+```yaml
+parameters:
+- type: string
+  name: version
+  values:
+  - 6.0.100-preview.3.21202.5
+  - 6.0.100-rc.1.21430.12
+
+steps:
+- task: UseDotNet@2
+  displayName: Install .NET ${{ parameters.version }}
+  inputs:
+    packageType: sdk
+    version: ${{ parameters.version }}
+```
+
+To use the template, reference in the following way:
+
+```csharp
+Steps =
+{
+    StepTemplate("pipelines/install-dotnet.yml", new()
+    {
+        { "version", "6.0.100-rc.1.21430.12" }
+    })
+}
+```
