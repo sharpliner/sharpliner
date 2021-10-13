@@ -122,6 +122,82 @@ namespace Sharpliner.Tests.GitHub
         }
 
         [Fact]
+        public void Job_Container_No_Creds()
+        {
+            var j = new Job("container")
+            {
+                RunsOn = new ("node:14.16")
+                {
+                    Env =
+                    {
+                        ["Database"] = "production",
+                        ["Bot"] = "builder"
+                    },
+                    Ports = {495, 500, 43},
+                    Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
+                }
+            };
+
+            Assert.Equal("node:14.16", j.RunsOn.Image);
+            Assert.Null(j.RunsOn.Credentials);
+            Assert.Contains(43, j.RunsOn.Ports);
+            Assert.Contains("/data/my_data", j.RunsOn.Volumes);
+        }
+
+        [Fact]
+        public void Job_Container_With_Creds_Construtor()
+        {
+            var j = new Job("container")
+            {
+                RunsOn = new ("node:14.16", "mandel", "1234")
+                {
+                    Env =
+                    {
+                        ["Database"] = "production",
+                        ["Bot"] = "builder"
+                    },
+                    Ports = {495, 500, 43},
+                    Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
+                }
+            };
+            Assert.Equal("node:14.16", j.RunsOn.Image);
+            Assert.Equal("mandel", j.RunsOn.Credentials.Username);
+            Assert.Equal("1234", j.RunsOn.Credentials.Password);
+            Assert.Contains(43, j.RunsOn.Ports);
+            Assert.Contains("/data/my_data", j.RunsOn.Volumes);
+        }
+
+
+        [Fact]
+        public void Job_Container_Wit_Creds()
+        {
+            var j = new Job("container")
+            {
+                RunsOn = new ("node:14.16")
+                {
+                    Credentials = new ()
+                    {
+                        Username = "mandel",
+                        Password = "1234"
+                    },
+                    Env =
+                    {
+                        ["Database"] = "production",
+                        ["Bot"] = "builder"
+                    },
+                    Ports = {495, 500, 43},
+                    Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
+                }
+            };
+
+            Assert.Equal("node:14.16", j.RunsOn.Image);
+            Assert.Equal("mandel", j.RunsOn.Credentials.Username);
+            Assert.Equal("1234", j.RunsOn.Credentials.Password);
+            Assert.Contains(43, j.RunsOn.Ports);
+            Assert.Contains("/data/my_data", j.RunsOn.Volumes);
+        }
+
+        [Fact]
         public void Job_Default_Matrix()
         {
             var j = new Job("matrix")
