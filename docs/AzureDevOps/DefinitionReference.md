@@ -180,21 +180,26 @@ Example definition:
 class InstallDotNetTemplate : StepTemplateDefinition
 {
     // Where to publish the YAML to
-    public override string TargetFile => "pipelines/install-dotnet.yml";
-    public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
+    public override string TargetFile => "templates/build-csproj.yml";
 
-    // Define parameters, if any
     public override List<TemplateParameter> Parameters => new()
     {
-        StringParameter("version", allowedValues: new[] { "6.0.100-preview.3.21202.5", "6.0.100-rc.1.21430.12" })
+        StringParameter("project"),
+        StringParameter("version", allowedValues: new[] { "5.0.100", "5.0.102" }),
+        BooleanParameter("restore", defaultValue: true),
+        StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)")),
     };
 
-    // Implement the template
     public override ConditionedList<Step> Definition => new()
     {
-        DotNet
-            .Install.Sdk(parameters["version"])
-            .DisplayAs("Install .NET " + parameters["version"])
+        DotNet.Install.Sdk(parameters["version"]),
+
+        If.Equal(parameters["restore"], "true")
+            .Step(DotNet.Command(Sharpliner.AzureDevOps.Tasks.DotNetCommand.Restore, parameters["project"])),
+
+        DotNet.Build(parameters["project"]),
+
+        StepParameterReference("afterBuild"),
     };
 }
 ```
@@ -203,18 +208,43 @@ This produces following YAML template:
 
 ```yaml
 parameters:
-- type: string
-  name: version
+- name: project
+  type: string
+
+- name: version
+  type: string
   values:
-  - 6.0.100-preview.3.21202.5
-  - 6.0.100-rc.1.21430.12
+  - 5.0.100
+  - 5.0.102
+
+- name: restore
+  type: boolean
+  default: true
+
+- name: afterBuild
+  type: step
+  default:
+    bash: |-
+      cp -R logs $(Build.ArtifactStagingDirectory)
 
 steps:
 - task: UseDotNet@2
-  displayName: Install .NET ${{ parameters.version }}
   inputs:
     packageType: sdk
     version: ${{ parameters.version }}
+
+- ${{ if eq(${{ parameters.restore }}, true) }}:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: restore
+      projects: ${{ parameters.project }}
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: build
+    projects: ${{ parameters.project }}
+
+- ${{ parameters.afterBuild }}
 ```
 
 To use the template, reference in the following way:
@@ -224,7 +254,8 @@ Steps =
 {
     StepTemplate("pipelines/install-dotnet.yml", new()
     {
-        { "version", "6.0.100-rc.1.21430.12" }
+        { "project", "src/MyProject.csproj" },
+        { "version", "5.0.100" },
     })
 }
 ```

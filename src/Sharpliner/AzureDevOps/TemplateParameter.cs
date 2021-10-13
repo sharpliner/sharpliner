@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps
@@ -83,9 +86,8 @@ namespace Sharpliner.AzureDevOps
         /// </summary>
         /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
         /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-        /// <param name="allowedValues">Allowed list of values (for some data types)</param>
-        public BooleanTemplateParameter(string name, bool defaultValue = false, IEnumerable<bool>? allowedValues = null)
-            : base(name, defaultValue, allowedValues)
+        public BooleanTemplateParameter(string name, bool defaultValue = false)
+            : base(name, defaultValue)
         {
         }
 
@@ -229,4 +231,53 @@ namespace Sharpliner.AzureDevOps
         public override string Type => "stageList";
     }
 
+    internal sealed record StageParameterReference : Stage, IYamlConvertible
+    {
+        private readonly string _parameterName;
+
+        public StageParameterReference(string parameterName) : base(parameterName)
+        {
+            _parameterName = parameterName;
+        }
+
+        public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+            => throw new NotImplementedException();
+
+        public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+            => emitter.Emit(new Scalar("${{ parameters." + _parameterName + " }}"));
+    }
+
+    internal sealed record JobParameterReference : Job, IYamlConvertible
+    {
+        private readonly string _parameterName;
+
+        public JobParameterReference(string parameterName) : base(parameterName)
+        {
+            _parameterName = parameterName;
+        }
+
+        public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+            => throw new NotImplementedException();
+
+        public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+            => emitter.Emit(new Scalar("${{ parameters." + _parameterName + " }}"));
+    }
+
+    internal sealed record StepParameterReference : Step, IYamlConvertible
+    {
+        private readonly string _parameterName;
+
+        public StepParameterReference(string parameterName)
+        {
+            _parameterName = parameterName;
+        }
+
+        public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+            => throw new NotImplementedException();
+
+        public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+            => emitter.Emit(new Scalar("${{ parameters." + _parameterName + " }}"));
+    }
+
+    // TODO: Deployment / deploymentList
 }

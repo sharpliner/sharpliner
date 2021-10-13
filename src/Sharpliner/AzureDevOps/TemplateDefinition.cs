@@ -62,8 +62,8 @@ namespace Sharpliner.AzureDevOps
         /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
         /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
         /// <param name="allowedValues">Allowed list of values (for some data types)</param>
-        protected TemplateParameter BooleanParameter(string name, bool defaultValue = false, IEnumerable<bool>? allowedValues = null)
-            => new BooleanTemplateParameter(name, defaultValue, allowedValues);
+        protected TemplateParameter BooleanParameter(string name, bool defaultValue = false)
+            => new BooleanTemplateParameter(name, defaultValue);
 
         /// <summary>
         /// Defines a object template parameter
@@ -142,7 +142,22 @@ namespace Sharpliner.AzureDevOps
         /// <summary>
         /// Allows the ${{ parameters.name }} notation for parameter reference.
         /// </summary>
-        protected readonly TemplateVariableReference parameters = new();
+        protected readonly TemplateParameterReference parameters = new();
+
+        /// <summary>
+        /// Allows the ${{ parameters.name }} notation for a stage defined in parameters.
+        /// </summary>
+        protected Stage StageParameterReference(string parameterName) => new StageParameterReference(parameterName);
+
+        /// <summary>
+        /// Allows the ${{ parameters.name }} notation for a job defined in parameters.
+        /// </summary>
+        protected Job JobParameterReference(string parameterName) => new JobParameterReference(parameterName);
+
+        /// <summary>
+        /// Allows the ${{ parameters.name }} notation for a step defined in parameters.
+        /// </summary>
+        protected Step StepParameterReference(string parameterName) => new StepParameterReference(parameterName);
     }
 
     /// <summary>
@@ -181,7 +196,7 @@ namespace Sharpliner.AzureDevOps
         internal sealed override string YamlProperty => "variables";
     }
 
-    public sealed class TemplateVariableReference
+    public sealed class TemplateParameterReference
     {
         public string this[string parameterName] => "${{ parameters." + parameterName + " }}";
     }
