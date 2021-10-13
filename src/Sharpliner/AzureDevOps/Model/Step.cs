@@ -25,6 +25,7 @@ namespace Sharpliner.AzureDevOps
         [DisallowNull]
         public string? DisplayName { get; init; }
 
+        // TODO: Add validation
         /// <summary>
         /// Identifier for this step (A-Z, a-z, 0-9, and underscore).
         /// </summary>

@@ -10,6 +10,7 @@ namespace Sharpliner.AzureDevOps
     /// </summary>
     public record ContainerResource
     {
+        // TODO: Add validation
         /// <summary>
         /// Identifier (A-Z, a-z, 0-9, and underscore)
         /// </summary>
