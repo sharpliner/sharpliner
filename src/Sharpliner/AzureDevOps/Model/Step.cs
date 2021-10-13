@@ -108,5 +108,10 @@ namespace Sharpliner.AzureDevOps
         /// Sets the displayName property.
         /// </summary>
         public Step DisplayAs(string displayName) => this with { DisplayName = displayName };
+
+        /// <summary>
+        /// Sets the name property.
+        /// </summary>
+        public Step WithName(string name) => this with { Name = name };
     }
 }

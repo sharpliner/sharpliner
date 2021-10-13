@@ -20,8 +20,8 @@ jobs:
 - job: Build
   displayName: Build and test
   pool:
-    vmImage: windows-latest
     name: Azure Pipelines
+    vmImage: windows-latest
   steps:
   - template: templates/install-dotnet.yml
 

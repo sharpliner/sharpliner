@@ -55,7 +55,7 @@ namespace Sharpliner.Tests.AzureDevOps
                                                     })
                                                 .EndIf
                                                 .If.Equal(variables["_RunAsPublic"], "True")
-                                                    .Pool(new HostedPool("windows-2019")),
+                                                    .Pool(new HostedPool(vmImage: "windows-2019")),
 
                                             Strategy =
                                                 If.Equal(variables["_RunAsPublic"], "True")
@@ -128,7 +128,7 @@ namespace Sharpliner.Tests.AzureDevOps
                 },
 
                 If.Equal(variables["_RunAsPublic"], "True")
-                    .Stage(new Stage("Build_OSX")
+                    .Stage(new Stage("Build_OSX", "Build OSX")
                     {
                         Jobs = {
                             new Template<Job>("/eng/common/templates/jobs/jobs.yml")
@@ -147,14 +147,24 @@ namespace Sharpliner.Tests.AzureDevOps
                                             {
                                                 DisplayName = "Build OSX",
                                                 Pool = new Pool("Hosted macOS"),
-                                                Strategy = new MatrixStrategy
-                                                {
-                                                    Matrix = new()
-                                                    {
-                                                        { "Release", new[] { ("_BuildConfig", "Release") } },
-                                                        { "Debug", new[] { ("_BuildConfig", "Debug") } },
-                                                    }
-                                                },
+                                                Strategy =
+                                                    If.Equal(variables["_RunAsPublic"], "True")
+                                                        .Strategy(new MatrixStrategy
+                                                        {
+                                                            Matrix = new()
+                                                            {
+                                                                { "Release", new[] { ("_BuildConfig", "Release") } },
+                                                                { "Debug", new[] { ("_BuildConfig", "Debug") } },
+                                                            }
+                                                        })
+                                                    .Else
+                                                        .Strategy(new MatrixStrategy
+                                                        {
+                                                            Matrix = new()
+                                                            {
+                                                                { "Release", new[] { ("_BuildConfig", "Release") } },
+                                                            }
+                                                        }),
 
                                                 Steps =
                                                 {
