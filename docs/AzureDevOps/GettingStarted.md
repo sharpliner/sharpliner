@@ -189,6 +189,6 @@ You can add this step to your pipeline:
 
 ```csharp
 ...
-    new SharplinerValidateTask("src/MyProject.Pipelines.csproj"),
+    ValidateYamlsArePublished("src/MyProject.Pipelines.csproj"),
 ...
 ```
