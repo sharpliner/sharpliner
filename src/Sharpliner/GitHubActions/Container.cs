@@ -8,9 +8,9 @@ namespace Sharpliner.GitHubActions
 
     public record ContainerCredentials
     {
-        public string Username { get; set; }
+        public string? Username { get; set; }
 
-        public string Password { get; set; }
+        public string? Password { get; set; }
     }
 
     /// <summary>
@@ -36,7 +36,7 @@ namespace Sharpliner.GitHubActions
         /// <param name="image"></param>
         /// <param name="username"></param>
         /// <param name="password"></param>
-        public Container(string image, string username, string password) : this(image)
+        public Container(string image, string? username, string? password) : this(image)
         {
             Credentials = new() { Username = username, Password = password };
         }
