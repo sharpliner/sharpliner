@@ -40,7 +40,7 @@ jobs:
 
   - script: |-
       dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj" -p:FailIfChanged=true
-    displayName: Validate YAML has been published2
+    displayName: Validate YAML has been published
 
   - template: templates/install-dotnet.yml
     parameters:
