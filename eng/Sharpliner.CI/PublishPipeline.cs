@@ -5,8 +5,6 @@ namespace Sharpliner.CI
 {
     internal class PublishPipeline : SingleStagePipelineDefinition
     {
-        private static readonly string _packageDestPath = $"artifacts/packages/Sharpliner.$(packageVersion).nupkg";
-
         public override string TargetFile => Pipelines.Location + "publish.yml";
 
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
@@ -29,20 +27,21 @@ namespace Sharpliner.CI
                             { "version", "6.0.100-rc.2.21505.57" }
                         }),
 
-                        Powershell
-                            .Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'")
-                            .DisplayAs("Create artifacts/packages"),
-
                         DotNet
                             .Build("src/Sharpliner/Sharpliner.csproj", includeNuGetOrg: true)
                             .DisplayAs("Build"),
 
                         DotNet
-                            .Command(DotNetCommand.Pack, "src/Sharpliner/Sharpliner.csproj -c Release --output artifacts/packages -p:PackageVersion=$(packageVersion)")
+                            .Command(DotNetCommand.Pack, "-c Release", inputs: new()
+                            {
+                                { "packagesToPack", "src/Sharpliner/Sharpliner.csproj" },
+                                { "versioningScheme", "byEnvVar" },
+                                { "versionEnvVar", "$(packageVersion)" },
+                            })
                             .DisplayAs("Pack the .nupkg"),
 
                         Publish("Sharpliner",
-                            filePath: _packageDestPath,
+                            filePath: "$(Build.ArtifactStagingDirectory)/Sharpliner.$(packageVersion).nupkg",
                             displayName: "Publish build artifacts"),
 
                         /*If.And(IsNotPullRequest, IsBranch("main"))
@@ -52,7 +51,7 @@ namespace Sharpliner.CI
                                 Inputs = new()
                                 {
                                     { "command", "push" },
-                                    { "packagesToPush", _packageDestPath },
+                                    { "packagesToPush", "$(Build.ArtifactStagingDirectory)" },
                                     { "nuGetFeedType", "external" },
                                     { "publishFeedCredentials", "Sharpliner / nuget.org" },
                                 }
