@@ -29,7 +29,7 @@ namespace Sharpliner.GitHubActions
         /// <summary>
         /// Defines the default configurations to be included in the matrix.
         /// </summary>
-        public Dictionary<string, List<object>> Configuration { get; set; }
+        public Dictionary<string, List<object>> Configuration { get; set; } = new();
 
         /// <summary>
         /// List of extra configurations that will be included.

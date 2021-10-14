@@ -31,7 +31,7 @@ namespace Sharpliner.Tests.GitHub
         [Fact]
         public void Job_Enviroment()
         {
-            var j = new Job("configure") {Environment = new("Name")};
+            var j = new Job("configure") { Environment = new("Name") };
             Assert.Equal("Name", j.Environment.Name);
             Assert.Null(j.Environment.Url);
         }
@@ -41,7 +41,7 @@ namespace Sharpliner.Tests.GitHub
         {
             var j = new Job("concurrency")
             {
-                Concurrency = new ("build", true)
+                Concurrency = new("build", true)
             };
 
             Assert.NotNull(j.Concurrency);
@@ -126,15 +126,15 @@ namespace Sharpliner.Tests.GitHub
         {
             var j = new Job("container")
             {
-                RunsOn = new ("node:14.16")
+                RunsOn = new("node:14.16")
                 {
                     Env =
                     {
                         ["Database"] = "production",
                         ["Bot"] = "builder"
                     },
-                    Ports = {495, 500, 43},
-                    Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
+                    Ports = { 495, 500, 43 },
+                    Volumes = { "my_docker_volume:/volume_mount", "/data/my_data" }
                 }
             };
 
@@ -149,33 +149,32 @@ namespace Sharpliner.Tests.GitHub
         {
             var j = new Job("container")
             {
-                RunsOn = new ("node:14.16", "mandel", "1234")
+                RunsOn = new("node:14.16", "mandel", "1234")
                 {
                     Env =
                     {
                         ["Database"] = "production",
                         ["Bot"] = "builder"
                     },
-                    Ports = {495, 500, 43},
-                    Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
+                    Ports = { 495, 500, 43 },
+                    Volumes = { "my_docker_volume:/volume_mount", "/data/my_data" }
                 }
             };
             Assert.Equal("node:14.16", j.RunsOn.Image);
-            Assert.Equal("mandel", j.RunsOn.Credentials.Username);
-            Assert.Equal("1234", j.RunsOn.Credentials.Password);
-            Assert.Contains(43, j.RunsOn.Ports);
-            Assert.Contains("/data/my_data", j.RunsOn.Volumes);
+            Assert.Equal("mandel", j.RunsOn?.Credentials?.Username);
+            Assert.Equal("1234", j.RunsOn?.Credentials?.Password);
+            Assert.Contains(43, j.RunsOn?.Ports);
+            Assert.Contains("/data/my_data", j.RunsOn?.Volumes);
         }
-
 
         [Fact]
         public void Job_Container_Wit_Creds()
         {
             var j = new Job("container")
             {
-                RunsOn = new ("node:14.16")
+                RunsOn = new("node:14.16")
                 {
-                    Credentials = new ()
+                    Credentials = new()
                     {
                         Username = "mandel",
                         Password = "1234"
@@ -185,8 +184,8 @@ namespace Sharpliner.Tests.GitHub
                         ["Database"] = "production",
                         ["Bot"] = "builder"
                     },
-                    Ports = {495, 500, 43},
-                    Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
+                    Ports = { 495, 500, 43 },
+                    Volumes = { "my_docker_volume:/volume_mount", "/data/my_data" }
                 }
             };
 
@@ -202,35 +201,35 @@ namespace Sharpliner.Tests.GitHub
         {
             var j = new Job("matrix")
             {
-                Strategy = new ()
+                Strategy = new()
                 {
-                    Configuration = new ()
+                    Configuration = new()
                     {
-                        {"Foo", new () {1,2,3}},
-                        {"Bar", new (){"ubuntu", "windows"}},
+                        { "Foo", new() { 1, 2, 3 } },
+                        { "Bar", new() { "ubuntu", "windows" } },
                     }
                 }
             };
 
             // validate that we do have the values and can access them
             Assert.NotNull(j.Strategy);
-            Assert.True(j.Strategy.Configuration.Keys.Contains("Foo"));
-            Assert.True(j.Strategy.Configuration.Keys.Contains("Bar"));
+            Assert.True(j.Strategy.Configuration?.Keys.Contains("Foo"));
+            Assert.True(j.Strategy.Configuration?.Keys.Contains("Bar"));
             Assert.True(j.Strategy.FailFast);
             Assert.Equal(int.MaxValue, j.Strategy.MaxParallel);
         }
 
         [Fact]
-        public void Job_Matrix_Fast_Fail ()
+        public void Job_Matrix_Fast_Fail()
         {
             var j = new Job("matrix")
             {
                 Strategy = new()
                 {
-                    Configuration = new ()
+                    Configuration = new()
                     {
-                        {"Foo", new(){1,2,3}},
-                        {"Bar", new(){"ubuntu", "windows" }},
+                        { "Foo", new() { 1, 2, 3 } },
+                        { "Bar", new() { "ubuntu", "windows" } },
                     },
                     FailFast = false,
                 }
@@ -243,12 +242,12 @@ namespace Sharpliner.Tests.GitHub
         {
             var j = new Job("matrix")
             {
-                Strategy = new ()
+                Strategy = new()
                 {
-                    Configuration = new ()
+                    Configuration = new()
                     {
-                        {"Foo", new (){1,2,3}},
-                        {"Bar", new (){"ubuntu", "windows" }},
+                        { "Foo", new() { 1, 2, 3 } },
+                        { "Bar", new() { "ubuntu", "windows" } },
                     },
                     MaxParallel = 2,
                 },
@@ -261,12 +260,12 @@ namespace Sharpliner.Tests.GitHub
         {
             var j = new Job("matrix")
             {
-                Strategy = new ()
+                Strategy = new()
                 {
-                    Configuration = new ()
+                    Configuration = new()
                     {
-                        {"Fo" , new () {1,2,3}},
-                        {"Br" , new () {"ubuntu", "windows" }},
+                        { "Fo", new() { 1, 2, 3 } },
+                        { "Br", new() { "ubuntu", "windows" } },
                     },
                     Include =
                     {
@@ -274,21 +273,21 @@ namespace Sharpliner.Tests.GitHub
                         {
                             Configuration = new ()
                             {
-                                {"Foo", 4},
-                                {"Bar", "macOS"},
+                                { "Foo", 4 },
+                                { "Bar", "macOS" },
                             },
                             Variables = new ()
                             {
-                                {"ENV",  "DEBUG"}
+                                { "ENV",  "DEBUG" }
                             }
                         }
                     }
                 },
             };
 
-            Assert.True(j.Strategy.Include[0].Configuration.ContainsKey("Foo"));
-            Assert.True(j.Strategy.Include[0].Configuration.ContainsKey("Bar"));
-            Assert.True(j.Strategy.Include[0].Variables.ContainsKey("ENV"));
+            Assert.True(j.Strategy.Include[0].Configuration?.ContainsKey("Foo"));
+            Assert.True(j.Strategy.Include[0].Configuration?.ContainsKey("Bar"));
+            Assert.True(j.Strategy.Include[0].Variables?.ContainsKey("ENV"));
         }
 
         [Fact]
@@ -296,12 +295,12 @@ namespace Sharpliner.Tests.GitHub
         {
             var j = new Job("matrix")
             {
-                Strategy = new ()
+                Strategy = new()
                 {
                     Configuration = new()
                     {
-                        {"Foo", new (){1,2,3}},
-                        {"Bar", new (){"ubuntu", "windows" }},
+                        { "Foo", new() { 1, 2, 3 } },
+                        { "Bar", new() { "ubuntu", "windows" } },
                     },
                     Exclude =
                     {
@@ -309,21 +308,21 @@ namespace Sharpliner.Tests.GitHub
                         {
                             Configuration = new()
                             {
-                                {"Foo", 4},
-                                {"Bar", "macOS"},
+                                { "Foo", 4 },
+                                { "Bar", "macOS" },
                             },
                             Variables = new()
                             {
-                                {"ENV", "DEBUG"}
+                                { "ENV", "DEBUG" }
                             }
                         }
                     }
                 },
             };
 
-            Assert.True(j.Strategy.Exclude[0].Configuration.Keys.Contains("Foo"));
-            Assert.True(j.Strategy.Exclude[0].Configuration.Keys.Contains("Bar"));
-            Assert.True(j.Strategy.Exclude[0].Variables.Keys.Contains("ENV"));
+            Assert.True(j.Strategy.Exclude[0].Configuration?.Keys.Contains("Foo"));
+            Assert.True(j.Strategy.Exclude[0].Configuration?.Keys.Contains("Bar"));
+            Assert.True(j.Strategy.Exclude[0].Variables?.Keys.Contains("ENV"));
         }
     }
 }
