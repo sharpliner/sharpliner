@@ -73,6 +73,11 @@ namespace Sharpliner.AzureDevOps
 
             foreach (var definition in allDefs)
             {
+                if (definition.DependsOn is EmptyDependsOn)
+                {
+                    continue;
+                }
+
                 foreach (var dependsOn in definition.DependsOn)
                 {
                     if (dependsOn == definition.Name)
