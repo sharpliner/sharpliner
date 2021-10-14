@@ -64,5 +64,11 @@ namespace Sharpliner.GitHubActions
         /// The list of steps to be executed by the job.
         /// </summary>
         public List<Step> Steps { get; init; } = new();
+
+        /// <summary>
+        /// The list of services to be used for the job.
+        /// </summary>
+        public List<Service> Services { get; init; } = new();
+
     }
 }

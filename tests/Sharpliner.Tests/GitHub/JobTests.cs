@@ -168,7 +168,7 @@ namespace Sharpliner.Tests.GitHub
         }
 
         [Fact]
-        public void Job_Container_Wit_Creds()
+        public void Job_Container_With_Creds()
         {
             var j = new Job("container")
             {
@@ -194,6 +194,50 @@ namespace Sharpliner.Tests.GitHub
             Assert.Equal("1234", j.RunsOn.Credentials.Password);
             Assert.Contains(43, j.RunsOn.Ports);
             Assert.Contains("/data/my_data", j.RunsOn.Volumes);
+        }
+
+        [Fact]
+        public void Job_Services_With_Containers()
+        {
+            var j = new Job("services")
+            {
+                Services =
+                {
+                    new ("service_with_container_image")
+                    {
+                        Container = new ("nginx")
+                    },
+                    new ("service_with_container_ports_and_volumes")
+                    {
+                        Container = new ("redis")
+                        {
+                            Ports = {495, 500, 43},
+                            Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
+                        }
+                    },
+                    new ("service_with_container_creds")
+                    {
+                        Container = new ("node:14.16")
+                        {
+                            Credentials = new ()
+                            {
+                                Username = "hope",
+                                Password = "1234"
+                            },
+                            Ports = {495, 500, 43},
+                            Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
+                        }
+                    }
+                }
+            };
+
+            Assert.Equal("nginx", j.Services[0].Container.Image);
+
+            Assert.Contains(495, j.Services[1].Container.Ports);
+            Assert.Contains("my_docker_volume:/volume_mount", j.Services[1].Container.Volumes);
+
+            Assert.Equal("hope", j.Services[2].Container.Credentials.Username);
+            Assert.Equal("1234", j.Services[2].Container.Credentials.Password);
         }
 
         [Fact]
