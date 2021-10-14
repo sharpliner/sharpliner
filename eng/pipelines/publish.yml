@@ -15,19 +15,13 @@ jobs:
   - powershell: |+
       $tag = git tag --points-at HEAD
       if ("" -eq "$tag") {
-        Write-Host '##vso[task.complete result=Failed;]No git tag with version found'
-        exit 1
+      # TODO do not check it
+      #    Write-Host '##vso[task.complete result=Failed;]No git tag with version found'
+      #  exit 1
+          $tag = "1.2.3"
       }
 
-      $versions = $tag.Split('.')
-
-      $major = $versions[0]
-      $minor = $versions[1]
-      $patch = $versions[2]
-
-      Write-Host "##vso[task.setvariable variable=majorVersion]$major"
-      Write-Host "##vso[task.setvariable variable=minorVersion]$minor"
-      Write-Host "##vso[task.setvariable variable=patchVersion]$patch"
+      Write-Host "##vso[task.setvariable variable=packageVersion]$tag"
     displayName: Detect package version
 
   - template: templates/install-dotnet.yml
@@ -43,27 +37,14 @@ jobs:
     inputs:
       command: build
       projects: src/Sharpliner/Sharpliner.csproj
-      arguments: -c Release
       includeNuGetOrg: true
 
   - task: DotNetCoreCLI@2
     displayName: Pack the .nupkg
     inputs:
       command: pack
-      arguments: src/Sharpliner/Sharpliner.csproj -c Release --output artifacts/packages -p:PackageVersion=$(majorVersion).$(minorVersion).$(patchVersion)
+      projects: src/Sharpliner/Sharpliner.csproj -c Release --output artifacts/packages -p:PackageVersion=$(packageVersion)
 
-  - publish: artifacts/packages/Sharpliner.$(majorVersion).$(minorVersion).$(patchVersion).nupkg
+  - publish: artifacts/packages/Sharpliner.$(packageVersion).nupkg
     displayName: Publish build artifacts
     artifact: Sharpliner
-
-  - ${{ if and(ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main')) }}:
-    - task: NuGetAuthenticate@0
-      displayName: Authenticate NuGet
-
-    - task: NuGetCommand@2
-      displayName: Publish to nuget.org
-      inputs:
-        command: push
-        packagesToPush: artifacts/packages/Sharpliner.$(majorVersion).$(minorVersion).$(patchVersion).nupkg
-        nuGetFeedType: external
-        publishFeedCredentials: Sharpliner / nuget.org
