@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Sharpliner.Common.Model.Tasks;
 
 namespace Sharpliner.AzureDevOps.Tasks
 {

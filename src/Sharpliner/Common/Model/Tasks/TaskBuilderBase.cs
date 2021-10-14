@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Reflection;
 
-namespace Sharpliner.AzureDevOps.Tasks
+namespace Sharpliner.Common.Model.Tasks
 {
     public abstract class TaskBuilderBase
     {
