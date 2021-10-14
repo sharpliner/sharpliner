@@ -29,7 +29,7 @@ namespace Sharpliner
                 bool isPipelineDefinition = false;
                 var baseType = type.BaseType;
 
-                // TODO: I am unable to cast this to PipelineDefinitionBase and just do t.IsSubClass or t.IsAssignableTo because the types don't seem
+                // I am unable to cast this to PipelineDefinitionBase and just do t.IsSubClass or t.IsAssignableTo because the types don't seem
                 // to be the same even when they are (they come from the same code, but maybe different .dll files)..
                 // I tried to make sure there is only one Sharpliner.dll but still couldn't get it to work so we have to parse invoke Publish via reflection
                 while (baseType is not null)

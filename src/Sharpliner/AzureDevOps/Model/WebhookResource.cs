@@ -10,7 +10,6 @@ namespace Sharpliner.AzureDevOps
     /// </summary>
     public record WebhookResource
     {
-        // TODO: Add validation
         /// <summary>
         /// Identifier for the resource used in build resource variables
         /// </summary>
@@ -32,6 +31,7 @@ namespace Sharpliner.AzureDevOps
         public WebhookResource(string identifier)
         {
             Identifier = identifier ?? throw new System.ArgumentNullException(nameof(identifier));
+            Pipeline.ValidateName(Identifier);
         }
     }
 

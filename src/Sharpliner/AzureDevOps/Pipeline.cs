@@ -8,7 +8,8 @@ namespace Sharpliner.AzureDevOps
 {
     public abstract record PipelineBase
     {
-        private static readonly Regex s_nameRegex = new("^[A-Za-z0-9_]+$", RegexOptions.Compiled);
+        protected static readonly Regex s_nameRegex = new("^[A-Za-z0-9_]+$", RegexOptions.Compiled);
+
         private Conditioned<Trigger>? _trigger;
         private Conditioned<PrTrigger>? _pr;
         private Conditioned<Resources>? _resources;
@@ -104,6 +105,14 @@ namespace Sharpliner.AzureDevOps
             foreach (var stage in Stages.SelectMany(s => s.FlattenDefinitions()))
             {
                 ValidateDependsOn(stage.Jobs);
+            }
+        }
+
+        internal static void ValidateName(string name)
+        {
+            if (!s_nameRegex.IsMatch(name))
+            {
+                throw new FormatException($"Invalid identifier '{name}'! Only A-Z, a-z, 0-9, and underscore are allowed.");
             }
         }
     }
