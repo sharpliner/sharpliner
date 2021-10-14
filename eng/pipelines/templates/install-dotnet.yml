@@ -5,9 +5,13 @@
 ### To make changes, change the C# definition and rebuild its project
 ### 
 
+parameters:
+- name: version
+  type: string
+
 steps:
 - task: UseDotNet@2
-  displayName: Install .NET 6 preview 3
+  displayName: Install .NET ${{ parameters.version }}
   inputs:
     packageType: sdk
-    version: 6.0.100-preview.3.21202.5
+    version: ${{ parameters.version }}

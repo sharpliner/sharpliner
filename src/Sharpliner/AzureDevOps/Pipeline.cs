@@ -8,14 +8,15 @@ namespace Sharpliner.AzureDevOps
 {
     public abstract record PipelineBase
     {
-        private static readonly Regex s_nameRegex = new("^[A-Za-z0-9_]+$", RegexOptions.Compiled);
+        protected static readonly Regex s_nameRegex = new("^[A-Za-z0-9_]+$", RegexOptions.Compiled);
+
         private Conditioned<Trigger>? _trigger;
         private Conditioned<PrTrigger>? _pr;
         private Conditioned<Resources>? _resources;
 
         /// <summary>
         /// Name of the pipline in the build numbering format
-        /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/run-number?view=azure-devops&tabs=yaml">official Azure DevOps pipelines documentation</see>.
+        /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/run-number?view=azure-devops&amp;tabs=yaml">official Azure DevOps pipelines documentation</see>.
         /// </summary>
         [YamlMember(Order = 100)]
         [DisallowNull]
@@ -31,8 +32,7 @@ namespace Sharpliner.AzureDevOps
         /// <summary>
         /// A pull request trigger specifies which branches cause a pull request build to run.
         /// If you specify no pull request trigger, pull requests to any branch trigger a build.
-
-        /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/build/triggers?tabs=yaml&view=azure-devops#pr-triggers">official Azure DevOps pipelines documentation</see>.
+        /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/build/triggers?tabs=yaml&amp;view=azure-devops#pr-triggers">official Azure DevOps pipelines documentation</see>.
         /// </summary>
         [YamlMember(Order = 300)]
         [DisallowNull]
@@ -40,8 +40,7 @@ namespace Sharpliner.AzureDevOps
 
         /// <summary>
         /// A resource is any external service that is consumed as part of your pipeline
-
-        /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/resources?view=azure-devops&tabs=schema">official Azure DevOps pipelines documentation</see>.
+        /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/resources?view=azure-devops&amp;tabs=schema">official Azure DevOps pipelines documentation</see>.
         /// </summary>
         [YamlMember(Order = 400)]
         [DisallowNull]
@@ -74,6 +73,11 @@ namespace Sharpliner.AzureDevOps
 
             foreach (var definition in allDefs)
             {
+                if (definition.DependsOn is EmptyDependsOn)
+                {
+                    continue;
+                }
+
                 foreach (var dependsOn in definition.DependsOn)
                 {
                     if (dependsOn == definition.Name)
@@ -104,6 +108,14 @@ namespace Sharpliner.AzureDevOps
             foreach (var stage in Stages.SelectMany(s => s.FlattenDefinitions()))
             {
                 ValidateDependsOn(stage.Jobs);
+            }
+        }
+
+        internal static void ValidateName(string name)
+        {
+            if (!s_nameRegex.IsMatch(name))
+            {
+                throw new FormatException($"Invalid identifier '{name}'! Only A-Z, a-z, 0-9, and underscore are allowed.");
             }
         }
     }

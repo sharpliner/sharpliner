@@ -14,23 +14,18 @@ jobs:
   steps:
   - powershell: |+
       $tag = git tag --points-at HEAD
+
       if ("" -eq "$tag") {
-        Write-Host '##vso[task.complete result=Failed;]No git tag with version found'
-        exit 1
+          Write-Host '##vso[task.complete result=Failed;]No git tag with version found'
+          exit 1
       }
 
-      $versions = $tag.Split('.')
-
-      $major = $versions[0]
-      $minor = $versions[1]
-      $patch = $versions[2]
-
-      Write-Host "##vso[task.setvariable variable=majorVersion]$major"
-      Write-Host "##vso[task.setvariable variable=minorVersion]$minor"
-      Write-Host "##vso[task.setvariable variable=patchVersion]$patch"
+      Write-Host "##vso[task.setvariable variable=packageVersion]$tag"
     displayName: Detect package version
 
   - template: templates/install-dotnet.yml
+    parameters:
+      version: 6.0.100-rc.2.21505.57
 
   - powershell: |-
       New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'
@@ -41,7 +36,6 @@ jobs:
     inputs:
       command: build
       projects: src/Sharpliner/Sharpliner.csproj
-      arguments: -c Release
       includeNuGetOrg: true
 
   - task: DotNetCoreCLI@2
@@ -49,9 +43,9 @@ jobs:
     inputs:
       command: custom
       custom: pack
-      arguments: src/Sharpliner/Sharpliner.csproj -c Release --output artifacts/packages -p:PackageVersion=$(majorVersion).$(minorVersion).$(patchVersion)
+      arguments: -c Release -p:PackageVersion=$(packageVersion) --output artifacts/packages
 
-  - publish: artifacts/packages/Sharpliner.$(majorVersion).$(minorVersion).$(patchVersion).nupkg
+  - publish: artifacts/packages/Sharpliner.$(packageVersion).nupkg
     displayName: Publish build artifacts
     artifact: Sharpliner
 
@@ -63,6 +57,6 @@ jobs:
       displayName: Publish to nuget.org
       inputs:
         command: push
-        packagesToPush: artifacts/packages/Sharpliner.$(majorVersion).$(minorVersion).$(patchVersion).nupkg
+        packagesToPush: artifacts/packages/Sharpliner.$(packageVersion).nupkg
         nuGetFeedType: external
         publishFeedCredentials: Sharpliner / nuget.org

@@ -1,7 +1,7 @@
 ﻿namespace Sharpliner.AzureDevOps
 {
     /// <summary>
-    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/resources?view=azure-devops&tabs=schema">official Azure DevOps pipelines documentation</see>.
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/resources?view=azure-devops&amp;tabs=schema">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public record Resources
     {

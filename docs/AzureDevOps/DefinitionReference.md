@@ -164,3 +164,98 @@ If.IsNotPullRequest
 If.And(IsNotPullRequest, IsBranch("production"))
 ```
 
+## Templates
+
+Azure pipelines allow you to [define a parametrized template](https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#template-references) for a **stage**, **job**, **step** or **variables** and then insert those template in your pipeline. Sharpliner also supports definition and refercing of templates, however with C# it's easier to define these entities directly in code. Anyway, the functionality is useful when for example migrating from YAML to do it step by step.
+
+To define a template, you do it similarly as when you define the pipeline - you inherit from one of these classes:
+- `StageTemplateDefinition`
+- `JobTemplateDefinition`
+- `StepTemplateDefinition`
+- `VariableTemplateDefinition`
+
+Example definition:
+
+``` csharp
+class InstallDotNetTemplate : StepTemplateDefinition
+{
+    // Where to publish the YAML to
+    public override string TargetFile => "templates/build-csproj.yml";
+
+    public override List<TemplateParameter> Parameters => new()
+    {
+        StringParameter("project"),
+        StringParameter("version", allowedValues: new[] { "5.0.100", "5.0.102" }),
+        BooleanParameter("restore", defaultValue: true),
+        StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)")),
+    };
+
+    public override ConditionedList<Step> Definition => new()
+    {
+        DotNet.Install.Sdk(parameters["version"]),
+
+        If.Equal(parameters["restore"], "true")
+            .Step(DotNet.Command(Sharpliner.AzureDevOps.Tasks.DotNetCommand.Restore, parameters["project"])),
+
+        DotNet.Build(parameters["project"]),
+
+        StepParameterReference("afterBuild"),
+    };
+}
+```
+
+This produces following YAML template:
+
+```yaml
+parameters:
+- name: project
+  type: string
+
+- name: version
+  type: string
+  values:
+  - 5.0.100
+  - 5.0.102
+
+- name: restore
+  type: boolean
+  default: true
+
+- name: afterBuild
+  type: step
+  default:
+    bash: |-
+      cp -R logs $(Build.ArtifactStagingDirectory)
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: sdk
+    version: ${{ parameters.version }}
+
+- ${{ if eq(${{ parameters.restore }}, true) }}:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: restore
+      projects: ${{ parameters.project }}
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: build
+    projects: ${{ parameters.project }}
+
+- ${{ parameters.afterBuild }}
+```
+
+To use the template, reference in the following way:
+
+```csharp
+Steps =
+{
+    StepTemplate("pipelines/install-dotnet.yml", new()
+    {
+        { "project", "src/MyProject.csproj" },
+        { "version", "5.0.100" },
+    })
+}
+```

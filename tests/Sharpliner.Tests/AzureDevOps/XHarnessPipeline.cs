@@ -16,7 +16,7 @@ namespace Sharpliner.Tests.AzureDevOps
         {
             Variables =
             {
-                Template("eng/common-variables.yml"),
+                VariableTemplate("eng/common-variables.yml"),
                 Variable("Build.Repository.Clean", true),
             },
 
@@ -130,6 +130,7 @@ namespace Sharpliner.Tests.AzureDevOps
                 If.Equal(variables["_RunAsPublic"], "True")
                     .Stage(new Stage("Build_OSX", "Build OSX")
                     {
+                        DependsOn = NoDependsOn,
                         Jobs = {
                             new Template<Job>("/eng/common/templates/jobs/jobs.yml")
                             {
@@ -215,70 +216,70 @@ namespace Sharpliner.Tests.AzureDevOps
                     })
 
                 // E2E tests
-                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    .Template("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_Android_Simulators" },
                         { "displayName", "Android - Simulators" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Android/Simulator.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    .Template("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_Android_Devices" },
                         { "displayName", "Android - Devices" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Android/Device.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    .Template("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_Android_Manual_Commands" },
                         { "displayName", "Android - Manual Commands" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Android/Commands.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    .Template("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_Apple_Simulators" },
                         { "displayName", "Apple - Simulators" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Simulator.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    .Template("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_iOS_Devices" },
                         { "displayName", "Apple - iOS devices" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Device.iOS.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    .Template("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_tvOS_Devices" },
                         { "displayName", "Apple - tvOS devices" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Device.tvOS.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    .Template("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_Apple_Simulator_Commands" },
                         { "displayName", "Apple - Simulator Commands" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Simulator.Commands.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    .Template("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_Apple_Device_Commands" },
                         { "displayName", "Apple - Device Commands" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Device.Commands.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    .Template("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_Apple_Simulator_Mgmt" },
                         { "displayName", "Apple - Simulator management" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/SimulatorInstaller.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new TemplateParameters
+                    .Template("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_WASM" },
                         { "displayName", "WASM" },
@@ -287,7 +288,7 @@ namespace Sharpliner.Tests.AzureDevOps
 
                 // NuGet publishing
                 If.Equal(variables["_RunAsInternal"], "True")
-                    .Template<Stage>("eng/common/templates/post-build/post-build.yml", new TemplateParameters()
+                    .Template<Stage>("eng/common/templates/post-build/post-build.yml", new()
                     {
                         { "publishingInfraVersion", 3 },
                         { "enableSymbolValidation", true },
@@ -296,7 +297,7 @@ namespace Sharpliner.Tests.AzureDevOps
                         { "publishDependsOn", new[] { "Validate" } },
 
                         // This is to enable SDL runs part of Post-Build Validation Stage
-                        { "SDLValidationParameters", new TemplateParameters
+                        { "SDLValidationParameters", new TemplateParameters()
                             {
                                 { "enable", false },
                                 { "continueOnError", false },

@@ -6,11 +6,10 @@ namespace Sharpliner.AzureDevOps
 {
     /// <summary>
     /// If your pipeline has templates in another repository, or if you want to use multi-repo checkout with a repository that requires a service connection, you must let the system know about that repository.
-    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/resources?view=azure-devops&tabs=schema#define-a-repositories-resource">official Azure DevOps pipelines documentation</see>.
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/resources?view=azure-devops&amp;tabs=schema#define-a-repositories-resource">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public record RepositoryResource
     {
-        // TODO: Add validation
         /// <summary>
         /// Identifier for the resource used in pipeline resource variables (A-Z, a-z, 0-9, and underscore)
         /// </summary>
@@ -62,7 +61,8 @@ namespace Sharpliner.AzureDevOps
 
         public RepositoryResource(string identifier)
         {
-            Identifier = identifier ?? throw new System.ArgumentNullException(nameof(identifier));
+            Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
+            Pipeline.ValidateName(Identifier);
         }
     }
 

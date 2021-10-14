@@ -16,6 +16,8 @@ namespace Sharpliner
         [Required]
         public string? Assembly { get; set; }
 
+        public bool FailIfChanged { get; set; }
+
         public override bool Execute() => PublishAllPipelines<PipelineDefinitionBase>();
 
         private bool PublishAllPipelines<T>() where T : PipelineDefinitionBase
@@ -29,7 +31,7 @@ namespace Sharpliner
                 bool isPipelineDefinition = false;
                 var baseType = type.BaseType;
 
-                // TODO: I am unable to cast this to PipelineDefinitionBase and just do t.IsSubClass or t.IsAssignableTo because the types don't seem
+                // I am unable to cast this to PipelineDefinitionBase and just do t.IsSubClass or t.IsAssignableTo because the types don't seem
                 // to be the same even when they are (they come from the same code, but maybe different .dll files)..
                 // I tried to make sure there is only one Sharpliner.dll but still couldn't get it to work so we have to parse invoke Publish via reflection
                 while (baseType is not null)
@@ -64,7 +66,8 @@ namespace Sharpliner
             // Preload dependencies needed for things to work
             var assemblies = new[] { "YamlDotNet.dll", "Sharpliner.dll" }
                 .Select(assemblyName => Path.Combine(Path.GetDirectoryName(assemblyPath) ?? throw new Exception($"Failed to find directory of {assemblyPath}"), assemblyName))
-                .Select(path => System.Reflection.Assembly.LoadFile(path) ?? throw new Exception($"Failed to find a Sharpliner dependency at {path}. Make sure your bin/ contains this library."))
+                .Select(Path.GetFullPath)
+                .Select(path => System.Reflection.Assembly.LoadFile(path) ?? throw new Exception($"Failed to find a Sharpliner dependency at {path}. Make sure the bin/ directory of your project contains this library."))
                 .Where(a => a is not null)
                 .ToDictionary(a => a.FullName!);
 
@@ -82,7 +85,7 @@ namespace Sharpliner
             AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly;
 
             // Load the final assembly where pipeline is defined
-            return System.Reflection.Assembly.LoadFile(assemblyPath);
+            return System.Reflection.Assembly.LoadFile(Path.GetFullPath(assemblyPath));
         }
 
         private void PublishPipeline(object pipelineDefinition)
@@ -124,7 +127,14 @@ namespace Sharpliner
 
             if (hash == null)
             {
-                Log.LogMessage(MessageImportance.High, $"  {type.Name} created at {path}");
+                if (FailIfChanged)
+                {
+                    Log.LogError($"  This pipeline hasn't been published yet!");
+                }
+                else
+                {
+                    Log.LogMessage(MessageImportance.High, $"  {type.Name} created at {path}");
+                }
             }
             else
             {
@@ -135,7 +145,14 @@ namespace Sharpliner
                 }
                 else
                 {
-                    Log.LogMessage(MessageImportance.High, $"  Published new changes to {path}");
+                    if (FailIfChanged)
+                    {
+                        Log.LogError($"  Changes detected between {type.Name} and {path}!");
+                    }
+                    else
+                    {
+                        Log.LogMessage(MessageImportance.High, $"  Published new changes to {path}");
+                    }
                 }
             }
         }

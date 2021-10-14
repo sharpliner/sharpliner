@@ -16,8 +16,8 @@ repo_root="$here/../../"
 
 # Prepare local packages
 
-if [ ! -f "$repo_root/artifacts/packages/Sharpliner.42.42.42.nupkg" ]; then
+if [ ! -f "$repo_root/artifacts/packages/Sharpliner.43.43.43.nupkg" ]; then
   mkdir -p "$repo_root/artifacts/packages"
   echo "Building Sharpliner nupkg for Sharpliner.CI..."
-  dotnet pack --nologo "$repo_root/src/Sharpliner/Sharpliner.csproj" -p:PackageVersion=42.42.42
+  dotnet pack --nologo "$repo_root/src/Sharpliner/Sharpliner.csproj" -p:PackageVersion=43.43.43 -c:Release
 fi

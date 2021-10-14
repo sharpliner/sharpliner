@@ -43,7 +43,7 @@ namespace Sharpliner.Tests.GitHub
         {
             var j = new Job("concurrency")
             {
-                Concurrency = new ("build", true)
+                Concurrency = new("build", true)
             };
 
             NotNull(j.Concurrency);
@@ -128,15 +128,15 @@ namespace Sharpliner.Tests.GitHub
         {
             var j = new Job("container")
             {
-                RunsOn = new ("node:14.16")
+                RunsOn = new("node:14.16")
                 {
                     Env =
                     {
                         ["Database"] = "production",
                         ["Bot"] = "builder"
                     },
-                    Ports = {495, 500, 43},
-                    Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
+                    Ports = { 495, 500, 43 },
+                    Volumes = { "my_docker_volume:/volume_mount", "/data/my_data" }
                 }
             };
 
@@ -151,33 +151,32 @@ namespace Sharpliner.Tests.GitHub
         {
             var j = new Job("container")
             {
-                RunsOn = new ("node:14.16", "mandel", "1234")
+                RunsOn = new("node:14.16", "mandel", "1234")
                 {
                     Env =
                     {
                         ["Database"] = "production",
                         ["Bot"] = "builder"
                     },
-                    Ports = {495, 500, 43},
-                    Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
+                    Ports = { 495, 500, 43 },
+                    Volumes = { "my_docker_volume:/volume_mount", "/data/my_data" }
                 }
             };
             Equal("node:14.16", j.RunsOn.Image);
-            Equal("mandel", j.RunsOn.Credentials.Username);
-            Equal("1234", j.RunsOn.Credentials.Password);
+            Equal("mandel", j.RunsOn.Credentials?.Username);
+            Equal("1234", j.RunsOn.Credentials?.Password);
             Contains(43, j.RunsOn.Ports);
             Contains("/data/my_data", j.RunsOn.Volumes);
         }
 
-
         [Fact]
-        public void Job_Container_Wit_Creds()
+        public void Job_Container_With_Creds()
         {
             var j = new Job("container")
             {
-                RunsOn = new ("node:14.16")
+                RunsOn = new("node:14.16")
                 {
-                    Credentials = new ()
+                    Credentials = new()
                     {
                         Username = "mandel",
                         Password = "1234"
@@ -187,8 +186,8 @@ namespace Sharpliner.Tests.GitHub
                         ["Database"] = "production",
                         ["Bot"] = "builder"
                     },
-                    Ports = {495, 500, 43},
-                    Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
+                    Ports = { 495, 500, 43 },
+                    Volumes = { "my_docker_volume:/volume_mount", "/data/my_data" }
                 }
             };
 
@@ -200,16 +199,60 @@ namespace Sharpliner.Tests.GitHub
         }
 
         [Fact]
+        public void Job_Services_With_Containers()
+        {
+            var j = new Job("services")
+            {
+                Services =
+                {
+                    new ("service_with_container_image")
+                    {
+                        Container = new ("nginx")
+                    },
+                    new ("service_with_container_ports_and_volumes")
+                    {
+                        Container = new ("redis")
+                        {
+                            Ports = {495, 500, 43},
+                            Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
+                        }
+                    },
+                    new ("service_with_container_creds")
+                    {
+                        Container = new ("node:14.16")
+                        {
+                            Credentials = new ()
+                            {
+                                Username = "hope",
+                                Password = "1234"
+                            },
+                            Ports = {495, 500, 43},
+                            Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
+                        }
+                    }
+                }
+            };
+
+            Assert.Equal("nginx", j.Services[0].Container.Image);
+
+            Assert.Contains(495, j.Services[1].Container.Ports);
+            Assert.Contains("my_docker_volume:/volume_mount", j.Services[1].Container.Volumes);
+
+            Assert.Equal("hope", j.Services[2].Container.Credentials?.Username);
+            Assert.Equal("1234", j.Services[2].Container.Credentials?.Password);
+        }
+
+        [Fact]
         public void Job_Default_Matrix()
         {
             var j = new Job("matrix")
             {
-                Strategy = new ()
+                Strategy = new()
                 {
-                    Configuration = new ()
+                    Configuration = new()
                     {
-                        {"Foo", new () {1,2,3}},
-                        {"Bar", new (){"ubuntu", "windows"}},
+                        { "Foo", new() { 1, 2, 3 } },
+                        { "Bar", new() { "ubuntu", "windows" } },
                     }
                 }
             };
@@ -223,16 +266,16 @@ namespace Sharpliner.Tests.GitHub
         }
 
         [Fact]
-        public void Job_Matrix_Fast_Fail ()
+        public void Job_Matrix_Fast_Fail()
         {
             var j = new Job("matrix")
             {
                 Strategy = new()
                 {
-                    Configuration = new ()
+                    Configuration = new()
                     {
-                        {"Foo", new(){1,2,3}},
-                        {"Bar", new(){"ubuntu", "windows" }},
+                        { "Foo", new() { 1, 2, 3 } },
+                        { "Bar", new() { "ubuntu", "windows" } },
                     },
                     FailFast = false,
                 }
@@ -245,12 +288,12 @@ namespace Sharpliner.Tests.GitHub
         {
             var j = new Job("matrix")
             {
-                Strategy = new ()
+                Strategy = new()
                 {
-                    Configuration = new ()
+                    Configuration = new()
                     {
-                        {"Foo", new (){1,2,3}},
-                        {"Bar", new (){"ubuntu", "windows" }},
+                        { "Foo", new() { 1, 2, 3 } },
+                        { "Bar", new() { "ubuntu", "windows" } },
                     },
                     MaxParallel = 2,
                 },
@@ -263,12 +306,12 @@ namespace Sharpliner.Tests.GitHub
         {
             var j = new Job("matrix")
             {
-                Strategy = new ()
+                Strategy = new()
                 {
-                    Configuration = new ()
+                    Configuration = new()
                     {
-                        {"Fo" , new () {1,2,3}},
-                        {"Br" , new () {"ubuntu", "windows" }},
+                        { "Fo", new() { 1, 2, 3 } },
+                        { "Br", new() { "ubuntu", "windows" } },
                     },
                     Include =
                     {
@@ -276,21 +319,21 @@ namespace Sharpliner.Tests.GitHub
                         {
                             Configuration = new ()
                             {
-                                {"Foo", 4},
-                                {"Bar", "macOS"},
+                                { "Foo", 4 },
+                                { "Bar", "macOS" },
                             },
                             Variables = new ()
                             {
-                                {"ENV",  "DEBUG"}
+                                { "ENV",  "DEBUG" }
                             }
                         }
                     }
                 },
             };
 
-            True(j.Strategy.Include[0].Configuration.ContainsKey("Foo"));
-            True(j.Strategy.Include[0].Configuration.ContainsKey("Bar"));
-            True(j.Strategy.Include[0].Variables.ContainsKey("ENV"));
+            True(j.Strategy.Include[0].Configuration?.ContainsKey("Foo"));
+            True(j.Strategy.Include[0].Configuration?.ContainsKey("Bar"));
+            True(j.Strategy.Include[0].Variables?.ContainsKey("ENV"));
         }
 
         [Fact]
@@ -298,12 +341,12 @@ namespace Sharpliner.Tests.GitHub
         {
             var j = new Job("matrix")
             {
-                Strategy = new ()
+                Strategy = new()
                 {
                     Configuration = new()
                     {
-                        {"Foo", new (){1,2,3}},
-                        {"Bar", new (){"ubuntu", "windows" }},
+                        { "Foo", new() { 1, 2, 3 } },
+                        { "Bar", new() { "ubuntu", "windows" } },
                     },
                     Exclude =
                     {
@@ -311,21 +354,21 @@ namespace Sharpliner.Tests.GitHub
                         {
                             Configuration = new()
                             {
-                                {"Foo", 4},
-                                {"Bar", "macOS"},
+                                { "Foo", 4 },
+                                { "Bar", "macOS" },
                             },
                             Variables = new()
                             {
-                                {"ENV", "DEBUG"}
+                                { "ENV", "DEBUG" }
                             }
                         }
                     }
                 },
             };
 
-            Contains("Foo", j.Strategy.Exclude[0].Configuration.Keys);
-            Contains("Bar", j.Strategy.Exclude[0].Configuration.Keys);
-            Contains("ENV", j.Strategy.Exclude[0].Variables.Keys);
+            Contains("Foo", j.Strategy?.Exclude[0].Configuration?.Keys);
+            Contains("Bar", j.Strategy?.Exclude[0].Configuration?.Keys);
+            Contains("ENV", j.Strategy?.Exclude[0].Variables?.Keys);
         }
 
         [Fact]

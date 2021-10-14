@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using YamlDotNet.Serialization;
@@ -10,7 +11,6 @@ namespace Sharpliner.AzureDevOps
     /// </summary>
     public record ContainerResource
     {
-        // TODO: Add validation
         /// <summary>
         /// Identifier (A-Z, a-z, 0-9, and underscore)
         /// </summary>
@@ -66,7 +66,8 @@ namespace Sharpliner.AzureDevOps
 
         public ContainerResource(string identifier)
         {
-            Identifier = identifier ?? throw new System.ArgumentNullException(nameof(identifier));
+            Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
+            Pipeline.ValidateName(identifier);
         }
     }
 

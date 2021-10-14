@@ -6,7 +6,7 @@ namespace Sharpliner.AzureDevOps
     /// <summary>
     /// If you have an external CI build system that produces artifacts, you can consume artifacts with a builds resource.
     /// A builds resource can be any external CI systems like Jenkins, TeamCity, CircleCI, and so on.
-    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/resources?view=azure-devops&tabs=schema#define-a-builds-resource">official Azure DevOps pipelines documentation</see>.
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/resources?view=azure-devops&amp;tabs=schema#define-a-builds-resource">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public record BuildResource
     {
