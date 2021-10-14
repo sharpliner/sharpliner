@@ -30,11 +30,15 @@ namespace Sharpliner.CI
                             { "version", "6.0.100-rc.2.21505.57" }
                         }),
 
-                        ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj", false),
+                        Powershell
+                            .Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'")
+                            .DisplayAs("Create artifacts/packages"),
 
                         DotNet
-                            .Build("Sharpliner.sln", includeNuGetOrg: true)
+                            .Build("src/**/*.csproj", includeNuGetOrg: true)
                             .DisplayAs("Build"),
+
+                        ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj", false),
                                 
                         // dotnet test needs .NET 5
                         StepTemplate(InstallDotNetTemplate.Path, new()
@@ -43,7 +47,7 @@ namespace Sharpliner.CI
                         }),
 
                         DotNet
-                            .Command(DotNetCommand.Test, projects: "Sharpliner.sln")
+                            .Command(DotNetCommand.Test, "tests/**/*.csproj")
                             .DisplayAs("Test"),
                     }
                 }

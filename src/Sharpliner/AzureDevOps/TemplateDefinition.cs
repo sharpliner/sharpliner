@@ -61,7 +61,6 @@ namespace Sharpliner.AzureDevOps
         /// </summary>
         /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
         /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-        /// <param name="allowedValues">Allowed list of values (for some data types)</param>
         protected TemplateParameter BooleanParameter(string name, bool defaultValue = false)
             => new BooleanTemplateParameter(name, defaultValue);
 
@@ -162,7 +161,7 @@ namespace Sharpliner.AzureDevOps
 
     /// <summary>
     /// Inherit from this class to define a stage template.
-    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public abstract class StageTemplateDefinition : TemplateDefinition<Stage>
     {
@@ -171,7 +170,7 @@ namespace Sharpliner.AzureDevOps
 
     /// <summary>
     /// Inherit from this class to define a job template.
-    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public abstract class JobTemplateDefinition : TemplateDefinition<Job>
     {
@@ -180,7 +179,7 @@ namespace Sharpliner.AzureDevOps
 
     /// <summary>
     /// Inherit from this class to define a step template.
-    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public abstract class StepTemplateDefinition : TemplateDefinition<Step>
     {
@@ -189,7 +188,7 @@ namespace Sharpliner.AzureDevOps
 
     /// <summary>
     /// Inherit from this class to define a variable template.
-    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBase>
     {

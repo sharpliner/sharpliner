@@ -28,6 +28,17 @@ jobs:
       version: 6.0.100-rc.2.21505.57
 
   - powershell: |-
+      New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'
+    displayName: Create artifacts/packages
+
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      command: build
+      projects: src/**/*.csproj
+      includeNuGetOrg: true
+
+  - powershell: |-
       dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj"
       $results = Invoke-Expression "git status --porcelain" | Select-String -Pattern "\.ya?ml$"
       if (!$results) {
@@ -39,13 +50,6 @@ jobs:
       }
     displayName: Validate YAML is published
 
-  - task: DotNetCoreCLI@2
-    displayName: Build
-    inputs:
-      command: build
-      projects: Sharpliner.sln
-      includeNuGetOrg: true
-
   - template: templates/install-dotnet.yml
     parameters:
       version: 5.0.402
@@ -54,4 +58,4 @@ jobs:
     displayName: Test
     inputs:
       command: test
-      projects: Sharpliner.sln
+      projects: tests/**/*.csproj

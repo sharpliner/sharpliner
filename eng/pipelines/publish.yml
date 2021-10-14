@@ -31,6 +31,8 @@ jobs:
     displayName: Detect package version
 
   - template: templates/install-dotnet.yml
+    parameters:
+      version: 6.0.100-rc.2.21505.57
 
   - powershell: |-
       New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'
@@ -47,8 +49,7 @@ jobs:
   - task: DotNetCoreCLI@2
     displayName: Pack the .nupkg
     inputs:
-      command: custom
-      custom: pack
+      command: pack
       arguments: src/Sharpliner/Sharpliner.csproj -c Release --output artifacts/packages -p:PackageVersion=$(majorVersion).$(minorVersion).$(patchVersion)
 
   - publish: artifacts/packages/Sharpliner.$(majorVersion).$(minorVersion).$(patchVersion).nupkg
