@@ -27,6 +27,13 @@ jobs:
     parameters:
       version: 6.0.100-rc.2.21505.57
 
+  - task: DotNetCoreCLI@2
+    displayName: Build
+    inputs:
+      command: build
+      projects: Sharpliner.sln
+      includeNuGetOrg: true
+
   - powershell: |-
       dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj"
       $results = Invoke-Expression "git status --porcelain" | Select-String -Pattern "\.ya?ml$"
@@ -38,13 +45,6 @@ jobs:
           exit 1
       }
     displayName: Validate YAML is published
-
-  - task: DotNetCoreCLI@2
-    displayName: Build
-    inputs:
-      command: build
-      projects: Sharpliner.sln
-      includeNuGetOrg: true
 
   - template: templates/install-dotnet.yml
     parameters:
