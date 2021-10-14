@@ -1,16 +1,5 @@
 namespace Sharpliner.GitHubActions
 {
-    public enum Shell
-    {
-        Default,
-        Bash,
-        Cmd,
-        Python,
-        Pwsh,
-        Powershell,
-        Sh,
-    }
-
     /// <summary>
     /// Provide the default for the run step.
     /// </summary>

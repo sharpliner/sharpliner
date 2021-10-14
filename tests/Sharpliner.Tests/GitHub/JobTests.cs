@@ -3,6 +3,8 @@ using System.Linq;
 using Sharpliner.GitHubActions;
 using Xunit;
 
+using static Xunit.Assert;
+
 namespace Sharpliner.Tests.GitHub
 {
     public class JobTests
@@ -12,28 +14,28 @@ namespace Sharpliner.Tests.GitHub
         public void Job_Null_Id()
         {
             // test in case users do not have nullable enabled
-            Assert.Throws<ArgumentNullException>(() => new Job(null!));
+            Throws<ArgumentNullException>(() => new Job(null!));
         }
 
         [Fact]
         public void Job_Empty_Id()
         {
-            Assert.Throws<ArgumentNullException>(() => new Job(string.Empty));
+            Throws<ArgumentNullException>(() => new Job(string.Empty));
         }
 
         [Fact]
         public void Job_Valid_Id()
         {
             var j = new Job("configure");
-            Assert.Equal("configure", j.Id);
+            Equal("configure", j.Id);
         }
 
         [Fact]
         public void Job_Enviroment()
         {
             var j = new Job("configure") {Environment = new("Name")};
-            Assert.Equal("Name", j.Environment.Name);
-            Assert.Null(j.Environment.Url);
+            Equal("Name", j.Environment.Name);
+            Null(j.Environment.Url);
         }
 
         [Fact]
@@ -44,7 +46,7 @@ namespace Sharpliner.Tests.GitHub
                 Concurrency = new ("build", true)
             };
 
-            Assert.NotNull(j.Concurrency);
+            NotNull(j.Concurrency);
         }
 
         [Fact]
@@ -58,7 +60,7 @@ namespace Sharpliner.Tests.GitHub
                     ["second"] = "expression"
                 }
             };
-            Assert.NotEmpty(j.Outputs.Keys);
+            NotEmpty(j.Outputs.Keys);
         }
 
         [Fact]
@@ -67,7 +69,7 @@ namespace Sharpliner.Tests.GitHub
 
             var j = new Job("concurrency");
 
-            Assert.Empty(j.Outputs.Keys);
+            Empty(j.Outputs.Keys);
         }
 
         [Fact]
@@ -75,7 +77,7 @@ namespace Sharpliner.Tests.GitHub
         {
             var j = new Job("concurrency");
 
-            Assert.Empty(j.Env.Keys);
+            Empty(j.Env.Keys);
         }
 
         [Fact]
@@ -90,7 +92,7 @@ namespace Sharpliner.Tests.GitHub
                 }
             };
 
-            Assert.NotEmpty(j.Env.Keys);
+            NotEmpty(j.Env.Keys);
         }
 
         [Fact]
@@ -108,17 +110,17 @@ namespace Sharpliner.Tests.GitHub
                 }
             };
 
-            Assert.Equal(Shell.Pwsh, j.Defaults.Run.Shell);
-            Assert.Null(j.Defaults.Run.WorkingDirectory);
-            Assert.Null(j.Defaults.Run.CustomShell);
+            Equal(Shell.Pwsh, j.Defaults.Run.Shell);
+            Null(j.Defaults.Run.WorkingDirectory);
+            Null(j.Defaults.Run.CustomShell);
         }
 
         [Fact]
         public void Job_Defaults_Empty()
         {
             var j = new Job("concurrency");
-            Assert.Null(j.Defaults.Run.WorkingDirectory);
-            Assert.Null(j.Defaults.Run.CustomShell);
+            Null(j.Defaults.Run.WorkingDirectory);
+            Null(j.Defaults.Run.CustomShell);
         }
 
         [Fact]
@@ -138,10 +140,10 @@ namespace Sharpliner.Tests.GitHub
                 }
             };
 
-            Assert.Equal("node:14.16", j.RunsOn.Image);
-            Assert.Null(j.RunsOn.Credentials);
-            Assert.Contains(43, j.RunsOn.Ports);
-            Assert.Contains("/data/my_data", j.RunsOn.Volumes);
+            Equal("node:14.16", j.RunsOn.Image);
+            Null(j.RunsOn.Credentials);
+            Contains(43, j.RunsOn.Ports);
+            Contains("/data/my_data", j.RunsOn.Volumes);
         }
 
         [Fact]
@@ -160,11 +162,11 @@ namespace Sharpliner.Tests.GitHub
                     Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
                 }
             };
-            Assert.Equal("node:14.16", j.RunsOn.Image);
-            Assert.Equal("mandel", j.RunsOn.Credentials.Username);
-            Assert.Equal("1234", j.RunsOn.Credentials.Password);
-            Assert.Contains(43, j.RunsOn.Ports);
-            Assert.Contains("/data/my_data", j.RunsOn.Volumes);
+            Equal("node:14.16", j.RunsOn.Image);
+            Equal("mandel", j.RunsOn.Credentials.Username);
+            Equal("1234", j.RunsOn.Credentials.Password);
+            Contains(43, j.RunsOn.Ports);
+            Contains("/data/my_data", j.RunsOn.Volumes);
         }
 
 
@@ -190,11 +192,11 @@ namespace Sharpliner.Tests.GitHub
                 }
             };
 
-            Assert.Equal("node:14.16", j.RunsOn.Image);
-            Assert.Equal("mandel", j.RunsOn.Credentials.Username);
-            Assert.Equal("1234", j.RunsOn.Credentials.Password);
-            Assert.Contains(43, j.RunsOn.Ports);
-            Assert.Contains("/data/my_data", j.RunsOn.Volumes);
+            Equal("node:14.16", j.RunsOn.Image);
+            Equal("mandel", j.RunsOn.Credentials.Username);
+            Equal("1234", j.RunsOn.Credentials.Password);
+            Contains(43, j.RunsOn.Ports);
+            Contains("/data/my_data", j.RunsOn.Volumes);
         }
 
         [Fact]
@@ -213,11 +215,11 @@ namespace Sharpliner.Tests.GitHub
             };
 
             // validate that we do have the values and can access them
-            Assert.NotNull(j.Strategy);
-            Assert.True(j.Strategy.Configuration.Keys.Contains("Foo"));
-            Assert.True(j.Strategy.Configuration.Keys.Contains("Bar"));
-            Assert.True(j.Strategy.FailFast);
-            Assert.Equal(int.MaxValue, j.Strategy.MaxParallel);
+            NotNull(j.Strategy);
+            Contains("Foo", j.Strategy.Configuration.Keys);
+            Contains("Bar", j.Strategy.Configuration.Keys);
+            True(j.Strategy.FailFast);
+            Equal(int.MaxValue, j.Strategy.MaxParallel);
         }
 
         [Fact]
@@ -235,7 +237,7 @@ namespace Sharpliner.Tests.GitHub
                     FailFast = false,
                 }
             };
-            Assert.False(j.Strategy.FailFast);
+            False(j.Strategy.FailFast);
         }
 
         [Fact]
@@ -253,7 +255,7 @@ namespace Sharpliner.Tests.GitHub
                     MaxParallel = 2,
                 },
             };
-            Assert.Equal(2, j.Strategy.MaxParallel);
+            Equal(2, j.Strategy.MaxParallel);
         }
 
         [Fact]
@@ -286,9 +288,9 @@ namespace Sharpliner.Tests.GitHub
                 },
             };
 
-            Assert.True(j.Strategy.Include[0].Configuration.ContainsKey("Foo"));
-            Assert.True(j.Strategy.Include[0].Configuration.ContainsKey("Bar"));
-            Assert.True(j.Strategy.Include[0].Variables.ContainsKey("ENV"));
+            True(j.Strategy.Include[0].Configuration.ContainsKey("Foo"));
+            True(j.Strategy.Include[0].Configuration.ContainsKey("Bar"));
+            True(j.Strategy.Include[0].Variables.ContainsKey("ENV"));
         }
 
         [Fact]
@@ -321,9 +323,98 @@ namespace Sharpliner.Tests.GitHub
                 },
             };
 
-            Assert.True(j.Strategy.Exclude[0].Configuration.Keys.Contains("Foo"));
-            Assert.True(j.Strategy.Exclude[0].Configuration.Keys.Contains("Bar"));
-            Assert.True(j.Strategy.Exclude[0].Variables.Keys.Contains("ENV"));
+            Contains("Foo", j.Strategy.Exclude[0].Configuration.Keys);
+            Contains("Bar", j.Strategy.Exclude[0].Configuration.Keys);
+            Contains("ENV", j.Strategy.Exclude[0].Variables.Keys);
+        }
+
+        [Fact]
+        public void Job_With_Simple_Step()
+        {
+            var j = new Job("Steps")
+            {
+                Steps =
+                {
+                    new InlineStep ("bash")
+                    {
+                       Name= "Bash example",
+                       Contents = {
+                           "rm *.js",
+                           "npm ci",
+                           "npm run build",
+                           "echo $TEST"
+                       },
+                       WorkingDirectory = "~/test",
+                       Shell = Shell.Bash,
+                       ContinueOnError = true,
+                       TimeoutMinutes = null,
+                       Variables = new () {
+                           {"TEST", "Manuel"},
+                       },
+                    },
+                    new InlineStep("pwsh") {
+                        Name = "Pwsh example",
+                        Contents = {"echo ${env:PATH}"},
+                        WorkingDirectory = "~/pwsh",
+                        Shell = Shell.Pwsh,
+                        ContinueOnError = false,
+                        TimeoutMinutes = 800,
+                    },
+                    new InlineStep("python")
+                    {
+                        Name ="Python example",
+                        Contents =
+                        {
+                            "import os",
+                            "print(os.environ['PATH'])",
+                        },
+                        WorkingDirectory = "~/python",
+                        Shell = Shell.Python,
+                        CustomShell = null,
+                        ContinueOnError = false,
+                        TimeoutMinutes = 100,
+                        Variables = null
+                    }
+                }
+            };
+            Equal(3, j.Steps.Count);
+            Equal("bash", j.Steps[0].Id);
+            Equal(Shell.Bash, j.Steps[0].Shell);
+            Equal("pwsh", j.Steps[1].Id);
+            Equal(Shell.Pwsh, j.Steps[1].Shell);
+            Equal("python", j.Steps[2].Id);
+            Equal(Shell.Python, j.Steps[2].Shell);
+        }
+
+        [Fact]
+        public void Job_Wit_Custom_Shell()
+        {
+            var j = new Job("Steps")
+            {
+                Steps =
+                {
+                    new InlineStep ("perl")
+                    {
+                       Name= "Perl example",
+                       Contents = {
+                           "print %ENV"
+                       },
+                       WorkingDirectory = "~/test",
+                       Shell = Shell.Custom,
+                       CustomShell = "perl {0}",
+                       ContinueOnError = true,
+                       TimeoutMinutes = null,
+                       Variables = new () {
+                           {"TEST", "Manuel"},
+                       },
+                    },
+                }
+            };
+
+            Single(j.Steps);
+            Equal("perl", j.Steps[0].Id);
+            Equal(Shell.Custom, j.Steps[0].Shell);
+            Equal("perln  {0}", j.Steps[0].CustomShell);
         }
     }
 }
