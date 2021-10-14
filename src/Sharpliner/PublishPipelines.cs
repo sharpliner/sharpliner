@@ -85,7 +85,7 @@ namespace Sharpliner
             AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly;
 
             // Load the final assembly where pipeline is defined
-            return System.Reflection.Assembly.LoadFile(assemblyPath);
+            return System.Reflection.Assembly.LoadFile(Path.GetFullPath(assemblyPath));
         }
 
         private void PublishPipeline(object pipelineDefinition)
