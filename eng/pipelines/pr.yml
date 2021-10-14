@@ -31,7 +31,7 @@ jobs:
     displayName: Build
     inputs:
       command: build
-      projects: Sharpliner.sln
+      projects: src/**/*.csproj
       includeNuGetOrg: true
 
   - powershell: |-
@@ -54,4 +54,4 @@ jobs:
     displayName: Test
     inputs:
       command: test
-      projects: Sharpliner.sln
+      projects: test/**/*.csproj

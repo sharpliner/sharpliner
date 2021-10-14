@@ -31,7 +31,7 @@ namespace Sharpliner.CI
                         }),
 
                         DotNet
-                            .Build("Sharpliner.sln", includeNuGetOrg: true)
+                            .Build("src/**/*.csproj", includeNuGetOrg: true)
                             .DisplayAs("Build"),
 
                         ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj", false),
@@ -43,7 +43,7 @@ namespace Sharpliner.CI
                         }),
 
                         DotNet
-                            .Command(DotNetCommand.Test, projects: "Sharpliner.sln")
+                            .Command(DotNetCommand.Test, "test/**/*.csproj")
                             .DisplayAs("Test"),
                     }
                 }
