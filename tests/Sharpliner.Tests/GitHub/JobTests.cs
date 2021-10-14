@@ -161,10 +161,10 @@ namespace Sharpliner.Tests.GitHub
                 }
             };
             Assert.Equal("node:14.16", j.RunsOn.Image);
-            Assert.Equal("mandel", j.RunsOn.Credentials.Username);
-            Assert.Equal("1234", j.RunsOn.Credentials.Password);
-            Assert.Contains(43, j.RunsOn.Ports);
-            Assert.Contains("/data/my_data", j.RunsOn.Volumes);
+            Assert.Equal("mandel", j.RunsOn?.Credentials?.Username);
+            Assert.Equal("1234", j.RunsOn?.Credentials?.Password);
+            Assert.Contains(43, j.RunsOn?.Ports);
+            Assert.Contains("/data/my_data", j.RunsOn?.Volumes);
         }
 
 
@@ -214,8 +214,8 @@ namespace Sharpliner.Tests.GitHub
 
             // validate that we do have the values and can access them
             Assert.NotNull(j.Strategy);
-            Assert.True(j.Strategy.Configuration.Keys.Contains("Foo"));
-            Assert.True(j.Strategy.Configuration.Keys.Contains("Bar"));
+            Assert.True(j.Strategy.Configuration?.Keys.Contains("Foo"));
+            Assert.True(j.Strategy.Configuration?.Keys.Contains("Bar"));
             Assert.True(j.Strategy.FailFast);
             Assert.Equal(int.MaxValue, j.Strategy.MaxParallel);
         }
@@ -286,9 +286,9 @@ namespace Sharpliner.Tests.GitHub
                 },
             };
 
-            Assert.True(j.Strategy.Include[0].Configuration.ContainsKey("Foo"));
-            Assert.True(j.Strategy.Include[0].Configuration.ContainsKey("Bar"));
-            Assert.True(j.Strategy.Include[0].Variables.ContainsKey("ENV"));
+            Assert.True(j.Strategy.Include[0].Configuration?.ContainsKey("Foo"));
+            Assert.True(j.Strategy.Include[0].Configuration?.ContainsKey("Bar"));
+            Assert.True(j.Strategy.Include[0].Variables?.ContainsKey("ENV"));
         }
 
         [Fact]
@@ -321,9 +321,9 @@ namespace Sharpliner.Tests.GitHub
                 },
             };
 
-            Assert.True(j.Strategy.Exclude[0].Configuration.Keys.Contains("Foo"));
-            Assert.True(j.Strategy.Exclude[0].Configuration.Keys.Contains("Bar"));
-            Assert.True(j.Strategy.Exclude[0].Variables.Keys.Contains("ENV"));
+            Assert.True(j.Strategy.Exclude[0].Configuration?.Keys.Contains("Foo"));
+            Assert.True(j.Strategy.Exclude[0].Configuration?.Keys.Contains("Bar"));
+            Assert.True(j.Strategy.Exclude[0].Variables?.Keys.Contains("ENV"));
         }
     }
 }
