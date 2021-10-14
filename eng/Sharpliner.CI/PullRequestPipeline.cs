@@ -38,7 +38,7 @@ namespace Sharpliner.CI
                             .Build("src/**/*.csproj", includeNuGetOrg: true)
                             .DisplayAs("Build"),
 
-                        ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj", false),
+                        ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj"),
                                 
                         // dotnet test needs .NET 5
                         StepTemplate(InstallDotNetTemplate.Path, new()
