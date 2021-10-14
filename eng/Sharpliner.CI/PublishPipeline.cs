@@ -1,10 +1,11 @@
 ﻿using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.CI
 {
     internal class PublishPipeline : SingleStagePipelineDefinition
     {
+        private const string DestPath = "artifacts/packages";
+
         public override string TargetFile => Pipelines.Location + "publish.yml";
 
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
@@ -29,21 +30,18 @@ namespace Sharpliner.CI
 
                         Powershell
                             .Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'")
-                            .DisplayAs("Create artifacts/packages"),
+                            .DisplayAs($"Create {DestPath}"),
 
                         DotNet
-                            .Build("src/Sharpliner/Sharpliner.csproj", arguments: "-c Release", includeNuGetOrg: true)
+                            .Build("src/Sharpliner/Sharpliner.csproj", includeNuGetOrg: true)
                             .DisplayAs("Build"),
 
                         DotNet
-                            .Command(DotNetCommand.Pack, arguments:
-                                "src/Sharpliner/Sharpliner.csproj " +
-                                "-c Release --output artifacts/packages " +
-                                "-p:PackageVersion=$(majorVersion).$(minorVersion).$(patchVersion)")
+                            .Custom("pack", $"-c Release -p:PackageVersion=$(packageVersion) --output {DestPath}")
                             .DisplayAs("Pack the .nupkg"),
 
                         Publish("Sharpliner",
-                            filePath: "artifacts/packages/Sharpliner.$(majorVersion).$(minorVersion).$(patchVersion).nupkg",
+                            filePath: DestPath + "/Sharpliner.$(packageVersion).nupkg",
                             displayName: "Publish build artifacts"),
 
                         If.And(IsNotPullRequest, IsBranch("main"))
@@ -53,7 +51,7 @@ namespace Sharpliner.CI
                                 Inputs = new()
                                 {
                                     { "command", "push" },
-                                    { "packagesToPush", "artifacts/packages/Sharpliner.$(majorVersion).$(minorVersion).$(patchVersion).nupkg" },
+                                    { "packagesToPush", DestPath + "/Sharpliner.$(packageVersion).nupkg" },
                                     { "nuGetFeedType", "external" },
                                     { "publishFeedCredentials", "Sharpliner / nuget.org" },
                                 }
