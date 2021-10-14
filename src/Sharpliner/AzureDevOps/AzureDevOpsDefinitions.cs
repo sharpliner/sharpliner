@@ -1,4 +1,5 @@
-﻿using Sharpliner.AzureDevOps.Tasks;
+﻿using System.Collections.Generic;
+using Sharpliner.AzureDevOps.Tasks;
 using Sharpliner.Definition;
 
 namespace Sharpliner.AzureDevOps
@@ -140,6 +141,12 @@ namespace Sharpliner.AzureDevOps
             => Script
                 .Inline($"dotnet build \"{pipelineProject}\" -p:{nameof(PublishPipelines.FailIfChanged)}=true")
                 .DisplayAs("Validate YAML has been published");
+
+        /// <summary>
+        /// AzDO allows an empty dependsOn which then forces the stage/job to kick off in parallel.
+        /// If dependsOn is omitted, stages/jobs run in the order they are defined.
+        /// </summary>
+        protected static List<string> NoDependsOn => new EmptyDependsOn();
 
         protected static Condition<T> And<T>(Condition condition1, Condition condition2) => new AndCondition<T>(condition1, condition2);
 
