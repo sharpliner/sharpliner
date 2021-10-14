@@ -16,6 +16,8 @@ namespace Sharpliner
         [Required]
         public string? Assembly { get; set; }
 
+        public bool FailIfChanged { get; set; }
+
         public override bool Execute() => PublishAllPipelines<PipelineDefinitionBase>();
 
         private bool PublishAllPipelines<T>() where T : PipelineDefinitionBase
@@ -124,7 +126,14 @@ namespace Sharpliner
 
             if (hash == null)
             {
-                Log.LogMessage(MessageImportance.High, $"  {type.Name} created at {path}");
+                if (FailIfChanged)
+                {
+                    Log.LogError($"  This pipeline hasn't been published yet!");
+                }
+                else
+                {
+                    Log.LogMessage(MessageImportance.High, $"  {type.Name} created at {path}");
+                }
             }
             else
             {
@@ -135,7 +144,14 @@ namespace Sharpliner
                 }
                 else
                 {
-                    Log.LogMessage(MessageImportance.High, $"  Published new changes to {path}");
+                    if (FailIfChanged)
+                    {
+                        Log.LogError($"  Changes detected between {type.Name} and {path}!");
+                    }
+                    else
+                    {
+                        Log.LogMessage(MessageImportance.High, $"  Published new changes to {path}");
+                    }
                 }
             }
         }
