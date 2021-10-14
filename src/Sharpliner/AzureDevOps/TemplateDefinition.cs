@@ -105,7 +105,7 @@ namespace Sharpliner.AzureDevOps
         protected TemplateParameter JobListParameter(string name, ConditionedList<Job>? defaultValue = null)
             => new JobListTemplateParameter(name, defaultValue);
 
-        /* TODO: When we have Deployment
+        /* TODO: When we have Deployment https://github.com/sharpliner/sharpliner/issues/72
         /// <summary>
         /// Defines a deployment template parameter
         /// </summary>

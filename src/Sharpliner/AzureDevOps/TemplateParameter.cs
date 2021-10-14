@@ -169,7 +169,7 @@ namespace Sharpliner.AzureDevOps
         public override string Type => "jobList";
     }
 
-    /* TODO: When we have Deployment
+    /* TODO: When we have Deployment https://github.com/sharpliner/sharpliner/issues/72
      * 
      * public sealed record DeploymentTemplateParameter : TemplateParameter<>
     {
@@ -279,5 +279,5 @@ namespace Sharpliner.AzureDevOps
             => emitter.Emit(new Scalar("${{ parameters." + _parameterName + " }}"));
     }
 
-    // TODO: Deployment / deploymentList
+    // TODO: Deployment / deploymentList https://github.com/sharpliner/sharpliner/issues/72
 }
