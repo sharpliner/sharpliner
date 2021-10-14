@@ -16,7 +16,7 @@ namespace Sharpliner.Tests.AzureDevOps
         {
             Variables =
             {
-                Template("eng/common-variables.yml"),
+                VariableTemplate("eng/common-variables.yml"),
                 Variable("Build.Repository.Clean", true),
             },
 
