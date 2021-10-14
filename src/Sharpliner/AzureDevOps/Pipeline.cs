@@ -16,7 +16,7 @@ namespace Sharpliner.AzureDevOps
 
         /// <summary>
         /// Name of the pipline in the build numbering format
-        /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/run-number?view=azure-devops&tabs=yaml">official Azure DevOps pipelines documentation</see>.
+        /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/run-number?view=azure-devops&amp;tabs=yaml">official Azure DevOps pipelines documentation</see>.
         /// </summary>
         [YamlMember(Order = 100)]
         [DisallowNull]
@@ -32,8 +32,7 @@ namespace Sharpliner.AzureDevOps
         /// <summary>
         /// A pull request trigger specifies which branches cause a pull request build to run.
         /// If you specify no pull request trigger, pull requests to any branch trigger a build.
-
-        /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/build/triggers?tabs=yaml&view=azure-devops#pr-triggers">official Azure DevOps pipelines documentation</see>.
+        /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/build/triggers?tabs=yaml&amp;view=azure-devops#pr-triggers">official Azure DevOps pipelines documentation</see>.
         /// </summary>
         [YamlMember(Order = 300)]
         [DisallowNull]
@@ -41,8 +40,7 @@ namespace Sharpliner.AzureDevOps
 
         /// <summary>
         /// A resource is any external service that is consumed as part of your pipeline
-
-        /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/resources?view=azure-devops&tabs=schema">official Azure DevOps pipelines documentation</see>.
+        /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/resources?view=azure-devops&amp;tabs=schema">official Azure DevOps pipelines documentation</see>.
         /// </summary>
         [YamlMember(Order = 400)]
         [DisallowNull]

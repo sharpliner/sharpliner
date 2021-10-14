@@ -8,7 +8,7 @@ namespace Sharpliner.AzureDevOps
     /// If you have a pipeline that produces artifacts, you can consume the artifacts by defining a pipelines resource. pipelines is a dedicated resource only for Azure Pipelines.
     /// You can also set triggers on a pipeline resource for your CD workflows.
     /// In your resource definition, pipeline is a unique value that you can use to reference the pipeline resource later on.source is the name of the pipeline that produces an artifact.
-    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/resources?view=azure-devops&tabs=schema#define-a-pipelines-resource">official Azure DevOps pipelines documentation</see>.
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/resources?view=azure-devops&amp;tabs=schema#define-a-pipelines-resource">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public record PipelineResource
     {
