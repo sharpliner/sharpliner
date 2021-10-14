@@ -66,7 +66,8 @@ namespace Sharpliner
             // Preload dependencies needed for things to work
             var assemblies = new[] { "YamlDotNet.dll", "Sharpliner.dll" }
                 .Select(assemblyName => Path.Combine(Path.GetDirectoryName(assemblyPath) ?? throw new Exception($"Failed to find directory of {assemblyPath}"), assemblyName))
-                .Select(path => System.Reflection.Assembly.LoadFile(path) ?? throw new Exception($"Failed to find a Sharpliner dependency at {path}. Make sure your bin/ contains this library."))
+                .Select(Path.GetFullPath)
+                .Select(path => System.Reflection.Assembly.LoadFile(path) ?? throw new Exception($"Failed to find a Sharpliner dependency at {path}. Make sure the bin/ directory of your project contains this library."))
                 .Where(a => a is not null)
                 .ToDictionary(a => a.FullName!);
 
