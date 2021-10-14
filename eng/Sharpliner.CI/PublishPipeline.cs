@@ -1,4 +1,5 @@
 ﻿using Sharpliner.AzureDevOps;
+using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.CI
 {
@@ -21,7 +22,10 @@ namespace Sharpliner.CI
                             .FromResourceFile("Get-Version.ps1")
                             .DisplayAs("Detect package version"),
 
-                        StepTemplate(InstallDotNetTemplate.Path),
+                        StepTemplate(InstallDotNetTemplate.Path, new()
+                        {
+                            { "version", "6.0.100-rc.2.21505.57" }
+                        }),
 
                         Powershell
                             .Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'")
@@ -32,7 +36,7 @@ namespace Sharpliner.CI
                             .DisplayAs("Build"),
 
                         DotNet
-                            .Custom("pack", arguments:
+                            .Command(DotNetCommand.Pack, arguments:
                                 "src/Sharpliner/Sharpliner.csproj " +
                                 "-c Release --output artifacts/packages " +
                                 "-p:PackageVersion=$(majorVersion).$(minorVersion).$(patchVersion)")
@@ -42,7 +46,7 @@ namespace Sharpliner.CI
                             filePath: "artifacts/packages/Sharpliner.$(majorVersion).$(minorVersion).$(patchVersion).nupkg",
                             displayName: "Publish build artifacts"),
 
-                        If.And(IsNotPullRequest, IsBranch("refs/heads/main"))
+                        If.And(IsNotPullRequest, IsBranch("main"))
                             .Step(Task("NuGetAuthenticate@0", "Authenticate NuGet"))
                             .Step(Task("NuGetCommand@2", "Publish to nuget.org") with
                             {
