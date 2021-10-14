@@ -28,6 +28,10 @@ jobs:
     parameters:
       version: 6.0.100-rc.2.21505.57
 
+  - powershell: |-
+      New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'
+    displayName: Create artifacts/packages
+
   - task: DotNetCoreCLI@2
     displayName: Build
     inputs:

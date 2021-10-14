@@ -27,6 +27,10 @@ namespace Sharpliner.CI
                             { "version", "6.0.100-rc.2.21505.57" }
                         }),
 
+                        Powershell
+                            .Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'")
+                            .DisplayAs("Create artifacts/packages"),
+
                         DotNet
                             .Build("src/Sharpliner/Sharpliner.csproj", includeNuGetOrg: true)
                             .DisplayAs("Build"),
