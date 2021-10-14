@@ -30,11 +30,11 @@ namespace Sharpliner.CI
                             { "version", "6.0.100-rc.2.21505.57" }
                         }),
 
-                        ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj", false),
-
                         DotNet
                             .Build("Sharpliner.sln", includeNuGetOrg: true)
                             .DisplayAs("Build"),
+
+                        ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj", false),
                                 
                         // dotnet test needs .NET 5
                         StepTemplate(InstallDotNetTemplate.Path, new()
