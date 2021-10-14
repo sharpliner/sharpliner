@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <!-- These will appear in artifacts/packages after you call `dotnet pack` -->
-    <PackageReference Include="Sharpliner" Version="42.42.42" />
+    <PackageReference Include="Sharpliner" Version="43.43.43" />
   </ItemGroup>
 
   <!--
@@ -30,7 +30,7 @@
     <Exec Condition=" '$(OS)' != 'Windows_NT' " Command="$(MSBuildThisFileDirectory)clean-dependencies.sh" />
     <Exec Condition=" '$(OS)' == 'Windows_NT' " Command="powershell.exe -NonInteractive -ExecutionPolicy Unrestricted $(MSBuildThisFileDirectory)clean-dependencies.ps1" />
   </Target>
-  
+
   <Target Name="BuildDependencies" BeforeTargets="_GenerateRestoreProjectSpec">
     <Exec Condition=" '$(OS)' != 'Windows_NT' " Command="$(MSBuildThisFileDirectory)build-dependencies.sh" />
     <Exec Condition=" '$(OS)' == 'Windows_NT' " Command="powershell.exe -NonInteractive -ExecutionPolicy Unrestricted $(MSBuildThisFileDirectory)build-dependencies.ps1" />
