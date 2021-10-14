@@ -58,4 +58,4 @@ jobs:
     displayName: Test
     inputs:
       command: test
-      projects: test/**/*.csproj
+      projects: tests/**/*.csproj

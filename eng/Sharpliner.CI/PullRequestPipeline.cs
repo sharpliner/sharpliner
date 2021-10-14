@@ -47,7 +47,7 @@ namespace Sharpliner.CI
                         }),
 
                         DotNet
-                            .Command(DotNetCommand.Test, "test/**/*.csproj")
+                            .Command(DotNetCommand.Test, "tests/**/*.csproj")
                             .DisplayAs("Test"),
                     }
                 }
