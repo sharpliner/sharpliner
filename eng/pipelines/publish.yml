@@ -14,11 +14,10 @@ jobs:
   steps:
   - powershell: |+
       $tag = git tag --points-at HEAD
+
       if ("" -eq "$tag") {
-      # TODO do not check it
-      #    Write-Host '##vso[task.complete result=Failed;]No git tag with version found'
-      #  exit 1
-          $tag = "1.2.3"
+          Write-Host '##vso[task.complete result=Failed;]No git tag with version found'
+          exit 1
       }
 
       Write-Host "##vso[task.setvariable variable=packageVersion]$tag"
@@ -49,3 +48,15 @@ jobs:
   - publish: artifacts/packages/Sharpliner.$(packageVersion).nupkg
     displayName: Publish build artifacts
     artifact: Sharpliner
+
+  - ${{ if and(ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main')) }}:
+    - task: NuGetAuthenticate@0
+      displayName: Authenticate NuGet
+
+    - task: NuGetCommand@2
+      displayName: Publish to nuget.org
+      inputs:
+        command: push
+        packagesToPush: artifacts/packages/Sharpliner.$(packageVersion).nupkg
+        nuGetFeedType: external
+        publishFeedCredentials: Sharpliner / nuget.org
