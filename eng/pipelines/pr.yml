@@ -38,17 +38,9 @@ jobs:
       projects: src/**/*.csproj
       includeNuGetOrg: true
 
-  - powershell: |-
-      dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj"
-      $results = Invoke-Expression "git status --porcelain" | Select-String -Pattern "\.ya?ml$"
-      if (!$results) {
-          Write-Host 'Check succeeded - no YAML changes needed'
-          exit 0
-      } else {
-          Write-Error 'Please rebuild eng/Sharpliner.CI/Sharpliner.CI.csproj locally and commit the YAML changes'
-          exit 1
-      }
-    displayName: Validate YAML is published
+  - script: |-
+      dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj" -p:FailIfChanged=true
+    displayName: Validate YAML has been published
 
   - template: templates/install-dotnet.yml
     parameters:
