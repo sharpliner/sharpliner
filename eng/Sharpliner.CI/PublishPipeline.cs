@@ -36,16 +36,11 @@ namespace Sharpliner.CI
                             .DisplayAs("Build"),
 
                         DotNet
-                            .Command(DotNetCommand.Pack, "-c Release", inputs: new()
-                            {
-                                { "packagesToPack", "src/Sharpliner/Sharpliner.csproj" },
-                                { "versioningScheme", "byEnvVar" },
-                                { "versionEnvVar", "$(packageVersion)" },
-                            })
+                            .Custom("pack", "-c Release -p:PackageVersion=$(packageVersion) --output artifacts/packages")
                             .DisplayAs("Pack the .nupkg"),
 
                         Publish("Sharpliner",
-                            filePath: "$(Build.ArtifactStagingDirectory)/Sharpliner.$(packageVersion).nupkg",
+                            filePath: "artifacts/packages/Sharpliner.$(packageVersion).nupkg",
                             displayName: "Publish build artifacts"),
 
                         /*If.And(IsNotPullRequest, IsBranch("main"))
@@ -55,7 +50,7 @@ namespace Sharpliner.CI
                                 Inputs = new()
                                 {
                                     { "command", "push" },
-                                    { "packagesToPush", "$(Build.ArtifactStagingDirectory)" },
+                                    { "packagesToPush", "artifacts/packages/Sharpliner.$(packageVersion).nupkg" },
                                     { "nuGetFeedType", "external" },
                                     { "publishFeedCredentials", "Sharpliner / nuget.org" },
                                 }
