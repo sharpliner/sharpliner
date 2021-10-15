@@ -50,7 +50,7 @@ namespace MyProject.Pipelines
 }
 ```
 
-You can also decide to override `SingleStageAzureDevOpsPipelineDefinition` in case you have a simpler pipeline with only a signle stage.
+You can also decide to override `SingleStageAzureDevOpsPipelineDefinition` in case you have a simpler pipeline with only a single stage.
 
 ## 3. Define the pipeline
 
