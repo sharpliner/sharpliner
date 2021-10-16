@@ -9,6 +9,8 @@ namespace Sharpliner.AzureDevOps.Tasks
     /// </summary>
     public record AzureDevOpsTask : Step
     {
+        private readonly TaskInputs _inputs = new();
+
         /// <summary>
         /// Task name in the form 'PublishTestResults@2'.
         /// </summary>
@@ -16,7 +18,28 @@ namespace Sharpliner.AzureDevOps.Tasks
         public string Task { get; }
 
         [YamlMember(Order = 101)]
-        public TaskInputs Inputs { get; init; } = new();
+        public TaskInputs Inputs
+        {
+            get => _inputs;
+            init
+            {
+                // Add inputs to the existing ones
+                foreach (var item in value)
+                {
+if (value == null)
+{
+                        if (_inputs.ContainsKey(item.Key))
+{
+                            _inputs.Remove(item.Key);
+                        }
+                    }
+                    else
+                    {
+                        _inputs[item.Key] = item.Value;
+                    }
+                }
+            }
+        }
 
         public AzureDevOpsTask(string task) : base()
         {
@@ -26,6 +49,27 @@ namespace Sharpliner.AzureDevOps.Tasks
             }
 
             Task = task;
+        }
+
+        protected string? GetString(string name, string? defaultValue = null)
+            => Inputs.TryGetValue(name, out var value) ? value.ToString() : defaultValue;
+
+        protected bool GetBool(string name, bool defaultValue)
+            => Inputs.TryGetValue(name, out var value) ? value.ToString() == "true" : defaultValue;
+
+        protected void SetProperty(string name, string? value)
+        {
+            if (value == null)
+            {
+                if (Inputs.ContainsKey(name))
+                {
+                    Inputs.Remove(name);
+                }
+            }
+            else
+            {
+                Inputs[name] = value;
+            }
         }
     }
 
