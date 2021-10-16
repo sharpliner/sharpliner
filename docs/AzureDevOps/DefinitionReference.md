@@ -17,7 +17,7 @@ Azure DevOps pipelines [define several basic tasks](https://docs.microsoft.com/e
 
 For each of these, there are two ways how you can define these.
 
-Either you new them the regular way though this requires a longer syntax
+Either you "new" them the regular way though this requires a longer syntax
 ```csharp
 ...
     Steps =

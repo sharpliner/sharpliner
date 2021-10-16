@@ -1,3 +1,8 @@
+> **Please read!**  
+> This project got traction online before we were able to complete a proper release. Many things are already working, some are not. No contribution is too small, we welcome all!  
+>   
+> Please check [[Project status]](#project-status) below for more details on what is possible.
+
 Sharpliner is a .NET library that lets you use C# for Azure DevOps pipeline definition.
 Exchange YAML indentation problems for the type-safe environment of C# and let the intellisense speed up your work!
 
@@ -82,42 +87,42 @@ However, this task's specification is quite long since the task does many things
 # https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops
 - task: DotNetCoreCLI@2
   inputs:
-    #command: 'build' # Options: build, push, pack, publish, restore, run, test, custom
-    #publishWebProjects: true # Required when command == Publish
-    #projects: # Optional
-    #custom: # Required when command == Custom
-    #arguments: # Optional
-    #publishTestResults: true # Optional
-    #testRunTitle: # Optional
-    #zipAfterPublish: true # Optional
-    #modifyOutputPath: true # Optional
-    #feedsToUse: 'select' # Options: select, config
-    #vstsFeed: # Required when feedsToUse == Select
-    #feedRestore: # Required when command == restore. projectName/feedName for project-scoped feed. FeedName only for organization-scoped feed.
-    #includeNuGetOrg: true # Required when feedsToUse == Select
-    #nugetConfigPath: # Required when feedsToUse == Config
-    #externalFeedCredentials: # Optional
-    #noCache: false
+    command: 'build' # Options: build, push, pack, publish, restore, run, test, custom
+    publishWebProjects: true # Required when command == Publish
+    projects: # Optional
+    custom: # Required when command == Custom
+    arguments: # Optional
+    publishTestResults: true # Optional
+    testRunTitle: # Optional
+    zipAfterPublish: true # Optional
+    modifyOutputPath: true # Optional
+    feedsToUse: 'select' # Options: select, config
+    vstsFeed: # Required when feedsToUse == Select
+    feedRestore: # Required when command == restore. projectName/feedName for project-scoped feed. FeedName only for organization-scoped feed.
+    includeNuGetOrg: true # Required when feedsToUse == Select
+    nugetConfigPath: # Required when feedsToUse == Config
+    externalFeedCredentials: # Optional
+    noCache: false
     restoreDirectory:
-    #restoreArguments: # Optional
-    #verbosityRestore: 'Detailed' # Options: -, quiet, minimal, normal, detailed, diagnostic
-    #packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg' # Required when command == Push
-    #nuGetFeedType: 'internal' # Required when command == Push# Options: internal, external
-    #publishVstsFeed: # Required when command == Push && NuGetFeedType == Internal
-    #publishPackageMetadata: true # Optional
-    #publishFeedCredentials: # Required when command == Push && NuGetFeedType == External
-    #packagesToPack: '**/*.csproj' # Required when command == Pack
-    #packDirectory: '$(Build.ArtifactStagingDirectory)' # Optional
-    #nobuild: false # Optional
-    #includesymbols: false # Optional
-    #includesource: false # Optional
-    #versioningScheme: 'off' # Options: off, byPrereleaseNumber, byEnvVar, byBuildNumber
-    #versionEnvVar: # Required when versioningScheme == byEnvVar
-    #majorVersion: '1' # Required when versioningScheme == ByPrereleaseNumber
-    #minorVersion: '0' # Required when versioningScheme == ByPrereleaseNumber
-    #patchVersion: '0' # Required when versioningScheme == ByPrereleaseNumber
-    #buildProperties: # Optional
-    #verbosityPack: 'Detailed' # Options: -, quiet, minimal, normal, detailed, diagnostic
+    restoreArguments: # Optional
+    verbosityRestore: 'Detailed' # Options: -, quiet, minimal, normal, detailed, diagnostic
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/*.nupkg' # Required when command == Push
+    nuGetFeedType: 'internal' # Required when command == Push# Options: internal, external
+    publishVstsFeed: # Required when command == Push && NuGetFeedType == Internal
+    publishPackageMetadata: true # Optional
+    publishFeedCredentials: # Required when command == Push && NuGetFeedType == External
+    packagesToPack: '**/*.csproj' # Required when command == Pack
+    packDirectory: '$(Build.ArtifactStagingDirectory)' # Optional
+    nobuild: false # Optional
+    includesymbols: false # Optional
+    includesource: false # Optional
+    versioningScheme: 'off' # Options: off, byPrereleaseNumber, byEnvVar, byBuildNumber
+    versionEnvVar: # Required when versioningScheme == byEnvVar
+    majorVersion: '1' # Required when versioningScheme == ByPrereleaseNumber
+    minorVersion: '0' # Required when versioningScheme == ByPrereleaseNumber
+    patchVersion: '0' # Required when versioningScheme == ByPrereleaseNumber
+    buildProperties: # Optional
+    verbosityPack: 'Detailed' # Options: -, quiet, minimal, normal, detailed, diagnostic
     workingDirectory:
 ```
 
@@ -125,14 +130,19 @@ Notice how some of the properties are only valid in a specific combination with 
 With Sharpliner, we remove some of this complexity using nice fluent APIs:
 
 ```csharp
-DotNet.Install.Sdk(parameters["version"])
-    .DisplayAs("Install .NET " + parameters["version"]),
+DotNet.Install.Sdk(parameters["version"]),
+
+DotNet.Restore.FromFeed("dotnet-7-preview-feed", includeNuGetOrg: false) with
+{
+    ExternalFeedCredentials = "feeds/dotnet-7",
+    NoCache = true,
+    RestoreDirectory = ".packages",
+},
 
 DotNet.Build("src/MyProject.csproj") with
 {
-    IncludeNuGetOrg = false,
     Timeout = TimeSpan.FromMinutes(20)
-}
+},
 ```
 
 ### Useful macros
@@ -181,12 +191,37 @@ This gives you a faster dev loop and greater productivity.
 
 ## Something missing?
 
-This project is still under development and we probably don't cover 100% of the cases, properties and tasks. If you find a missing feature / API / property / use case, file an issue in project's repository - or even better - file a PR and we will work with you to get you going!
+This project is still under development and we probably don't cover 100% of the cases, properties and tasks.
+If you find a missing feature / API / property / use case, file an issue in project's repository.
+We try to be very responsive and for small asks can deliver you a new version very fast.
 
 If you want to start contributing, either you already know about something missing or you can choose from some of the open issues.
-We are very responsive and will help you review your first change so that you can continue with something advanced!
+We will help you review your first change so that you can continue with something advanced!
 
-Another way to start is to use Sharpliner to define your own, already existing pipeline.
+Another way to start is to try out Sharpliner to define your own, already existing pipeline.
 This way you can uncover missing features or you can introduce shortcuts for definitions of build tasks or similar that you use frequently.
 Contributions like these are also very welcome!
 In these cases, it is worth starting with describing your intent in an issue first.
+
+## Project status
+
+### Azure DevOps
+
+Azure DevOps pipelines can be already defined and have been tested on several pipelines in the wild already.
+
+Status:
+- About 80-90% of the features and properties are implemented. We miss some of the models around deployment jobs, scheduled triggers...  
+  To track progress on the model - check [this issue](https://github.com/sharpliner/sharpliner/issues/2).
+- The `${{ if }}` statements are working and they can be put (and nested) almost everywhere.  
+  There are places where if statemets didn't make sense but in case you need to "if" some property or value, let us know by opening an issue, it should be easy to add.
+- Defining and using [templates](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionReference.md#Templates) works!
+- It can happen that we have some of the default values or property names wrong - please let us know!
+
+### GitHub Actions
+
+Currently under development, but very behind compared to Azure DevOps:
+- Model is not complete
+- Actions cannot be currently defined as a whole
+- Documentation is missing
+
+We welcome all contributors, no contribution is small enough!
