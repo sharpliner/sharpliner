@@ -208,6 +208,8 @@ In these cases, it is worth starting with describing your intent in an issue fir
 ### Azure DevOps
 
 Azure DevOps pipelines can be already defined and have been tested on several pipelines in the wild already.
+The Sharpliner project itself is self-hosted and is [using Sharpliner](https://github.com/sharpliner/sharpliner/tree/main/eng/Sharpliner.CI) for its PR and publish pipelines.
+This is at least some guarantee that the project works.
 
 Status:
 - About 80-90% of the features and properties are implemented. We miss some of the models around deployment jobs, scheduled triggers...  
