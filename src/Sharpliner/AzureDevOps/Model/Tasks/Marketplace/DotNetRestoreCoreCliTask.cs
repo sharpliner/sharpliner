@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using YamlDotNet.Serialization;
+﻿using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks
 {
@@ -8,13 +7,16 @@ namespace Sharpliner.AzureDevOps.Tasks
     /// </summary>
     public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     {
+        public DotNetRestoreCoreCliTask() : base("restore")
+        {
+        }
+
         /// <summary>
         /// Specifies the folder in which packages are installed. If no folder is specified, packages are restored into the default NuGet package cache
         ///
         /// Argument aliases: packagesDirectory
         /// </summary>
         [YamlIgnore]
-        [DisallowNull]
         public string? RestoreDirectory
         {
             get => GetString("restoreDirectory");
@@ -25,7 +27,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Write the additional arguments to be passed to the restore command.
         /// </summary>
         [YamlIgnore]
-        [DisallowNull]
         public string? RestoreArguments
         {
             get => GetString("restoreArguments");
@@ -70,38 +71,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         }
 
         /// <summary>
-        /// Restore from a given feed
-        /// </summary>
-        /// <param name="feed">
-        /// projectName/feedName for project-scoped feed. FeedName only for organization-scoped feed.
-        /// 
-        /// Include the selected feed in the generated NuGet.config.
-        /// You must have Package Management installed and licensed to select a feed here.
-        /// projectName/feedName for project-scoped feed.
-        /// FeedName only for organization-scoped feed. Note that this is not supported for the test command.
-        /// </param>
-        /// <param name="includeNuGetOrg">Include NuGet.org in the generated NuGet.config</param>
-        public DotNetRestoreCoreCliTask FromFeed(string feed, bool includeNuGetOrg)
-        {
-            SetProperty("feedsToUse", "select");
-            SetProperty("feedRestore", feed);
-            SetProperty("includeNuGetOrg", includeNuGetOrg ? "true" : "value");
-            return this;
-        }
-
-        /// <summary>
-        /// Restore using a NuGet.config file
-        /// </summary>
-        /// <param name="nugetConfigPath">The NuGet.config in your repository that specifies the feeds from which to restore packages.</param>
-        /// <param name="includeNuGetOrg">Include NuGet.org in the generated NuGet.config</param>
-        public DotNetRestoreCoreCliTask FromNuGetConfig(string nugetConfigPath)
-        {
-            SetProperty("feedsToUse", "config");
-            SetProperty("nugetConfigPath", nugetConfigPath);
-            return this;
-        }
-
-        /// <summary>
         /// Include NuGet.org in the generated NuGet.config000 0. 
         /// </summary>
         [YamlIgnore]
@@ -115,7 +84,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// The NuGet.config in your repository that specifies the feeds from which to restore packages.
         /// </summary>
         [YamlIgnore]
-        [DisallowNull]
         public string? NuGetConfigPath
         {
             get => GetString("nugetConfigPath");
@@ -129,7 +97,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Argument aliases: externalEndpoints
         /// </summary>
         [YamlIgnore]
-        [DisallowNull]
         public string? ExternalFeedCredentials
         {
             get => GetString("externalFeedCredentials");

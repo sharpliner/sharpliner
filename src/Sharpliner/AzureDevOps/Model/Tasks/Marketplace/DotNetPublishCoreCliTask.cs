@@ -7,6 +7,10 @@ namespace Sharpliner.AzureDevOps.Tasks
     /// </summary>
     public record DotNetPublishCoreCliTask : DotNetCoreCliTask
     {
+        public DotNetPublishCoreCliTask() : base("public")
+        {
+        }
+
         /// <summary>
         /// If true, the projects property value will be skipped and the task will try to find the web projects in the repository and
         /// run the publish command on them. Web projects are identified by presence of either a web.config file or wwwroot folder in the directory.

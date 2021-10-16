@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using YamlDotNet.Serialization;
+﻿using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks
 {
@@ -8,11 +7,14 @@ namespace Sharpliner.AzureDevOps.Tasks
     /// </summary>
     public record DotNetTestCoreCliTask : DotNetCoreCliTask
     {
+        public DotNetTestCoreCliTask() : base("test")
+        {
+        }
+
         /// <summary>
         /// Provides a name for the test run
         /// </summary>
         [YamlIgnore]
-        [DisallowNull]
         public string? TestRunTitle
         {
             get => GetString("restoreArguments");

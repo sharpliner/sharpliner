@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using YamlDotNet.Serialization;
+﻿using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks
 {
@@ -8,6 +7,10 @@ namespace Sharpliner.AzureDevOps.Tasks
     /// </summary>
     public record DotNetPushCoreCliTask : DotNetCoreCliTask
     {
+        public DotNetPushCoreCliTask() : base("push")
+        {
+        }
+
         /// <summary>
         /// The pattern to match or path to nupkg files to be uploaded
         /// 
@@ -17,7 +20,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Argument aliases: searchPatternPush
         /// </summary>
         [YamlIgnore]
-        [DisallowNull]
         public string? PackagesToPush
         {
             get => GetString("packagesToPush");

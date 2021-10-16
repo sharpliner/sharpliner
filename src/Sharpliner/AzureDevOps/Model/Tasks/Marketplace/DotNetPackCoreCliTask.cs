@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using YamlDotNet.Serialization;
+﻿using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks
 {
@@ -8,6 +7,10 @@ namespace Sharpliner.AzureDevOps.Tasks
     /// </summary>
     public record DotNetPackCoreCliTask : DotNetCoreCliTask
     {
+        public DotNetPackCoreCliTask() : base("pack")
+        {
+        }
+
         /// <summary>
         /// Pattern to search for csproj or nuspec files to pack. You can separate multiple patterns with a semicolon,
         /// and you can make a pattern negative by prefixing it with !.
@@ -16,7 +19,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Argument aliases: searchPatternPack
         /// </summary>
         [YamlIgnore]
-        [DisallowNull]
         public string? PackagesToPack
         {
             get => GetString("packagesToPack");
@@ -28,7 +30,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Argument aliases: configuration
         /// </summary>
         [YamlIgnore]
-        [DisallowNull]
         public string? ConfigurationToPack
         {
             get => GetString("configurationToPack");
@@ -41,7 +42,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Argument aliases: packDirectory
         /// </summary>
         [YamlIgnore]
-        [DisallowNull]
         public string? OutputDir
         {
             get => GetString("outputDir");
@@ -88,7 +88,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Values can be strings in quotation marks
         /// </summary>
         [YamlIgnore]
-        [DisallowNull]
         public string? BuildProperties
         {
             get => GetString("buildProperties");
