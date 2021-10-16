@@ -1,12 +1,13 @@
 # Getting started with Sharpliner for AzureDevOps
 
-This documentation shows how to define and publish YAML for [AzureDevOps pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/?view=azure-devops).
+This documentation shows how to define and publish YAML for [Azure DevOps pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/?view=azure-devops).
+For more detailed reference, see [Azure DevOps definition reference](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionReference.md).
+
+## 1. Create a new project
 
 For best experience, we recommend creating a dedicated project that will contain your pipeline definitions.
 It is possible to add Sharpliner into any other kind of project and have pipelines there but it is better to separate concerns this way.
 You can have as many pipeline definitions in one project as you want.
-
-## 1. Create a new project
 
 In this example, we create a `MyProject.Pipelines.csproj` and add the **Sharpliner** NuGet package reference (grab the newest from `nuget.org`).
 Your file should look something like this:
@@ -109,6 +110,8 @@ public override SingleStageAzureDevOpsPipelineDefinition Pipeline => new()
 
 Save the changes and build the project using `dotnet`.
 Based on the settings provided in the overriden members, Sharpliner will determine where you want your YAML file created.
+
+> **Note:** It is recommended to `dotnet build` the project rather than "F5" it in Visual Studio as we are hooking into the build process and this is not working as expected yet.
 
 The output should look something like this:
 
