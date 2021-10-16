@@ -37,8 +37,12 @@ namespace Sharpliner.CI
                             .DisplayAs("Build"),
 
                         DotNet
-                            .Custom("pack", $"-c Release -p:PackageVersion=$(packageVersion) --output {DestPath}")
-                            .DisplayAs("Pack the .nupkg"),
+                            .Pack("src/Sharpliner/Sharpliner.csproj", $"-p:PackageVersion=$(packageVersion)") with
+                            {
+                                DisplayName = "Pack the .nupkg",
+                                OutputDir = DestPath,
+                                ConfigurationToPack = "Release",
+                            },
 
                         Publish("Sharpliner",
                             filePath: DestPath + "/Sharpliner.$(packageVersion).nupkg",
