@@ -172,7 +172,7 @@
             /// FeedName only for organization-scoped feed. Note that this is not supported for the test command.
             /// </param>
             /// <param name="includeNuGetOrg">Include NuGet.org in the generated NuGet.config</param>
-            public DotNetRestoreCoreCliTask FromFeed(string feed, bool includeNuGetOrg) => new()
+            public DotNetRestoreCoreCliTask FromFeed(string feed, bool? includeNuGetOrg = null) => new()
             {
                 IncludeNuGetOrg = includeNuGetOrg,
                 Inputs =

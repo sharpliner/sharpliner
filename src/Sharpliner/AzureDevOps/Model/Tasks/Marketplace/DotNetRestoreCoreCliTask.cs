@@ -74,10 +74,10 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Include NuGet.org in the generated NuGet.config000 0. 
         /// </summary>
         [YamlIgnore]
-        public bool IncludeNuGetOrg
+        public bool? IncludeNuGetOrg
         {
             get => GetBool("includeNuGetOrg", false);
-            init => SetProperty("includeNuGetOrg", value ? "true" : "false");
+            init => SetProperty("includeNuGetOrg", value.HasValue ? (value.Value ? "true" : "false") : null);
         }
 
         /// <summary>
