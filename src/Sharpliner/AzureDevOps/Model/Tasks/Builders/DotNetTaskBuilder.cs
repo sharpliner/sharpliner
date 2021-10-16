@@ -194,10 +194,7 @@
             /// </param>
             public DotNetRestoreCoreCliTask Projects(string projects) => new()
             {
-                Inputs =
-                {
-                    { "projects", projects },
-                }
+                Projects = projects,
             };
 
             /// <summary>
@@ -235,16 +232,5 @@
                 }
             };
         }
-    }
-
-    public enum DotNetCommand
-    {
-        Build,
-        Push,
-        Pack,
-        Publish,
-        Restore,
-        Run,
-        Test,
     }
 }

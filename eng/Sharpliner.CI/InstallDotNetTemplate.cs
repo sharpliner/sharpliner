@@ -21,7 +21,7 @@ namespace Sharpliner.CI
             // dotnet build fails with .NET 5 SDK and the new() statements
             DotNet
                 .Install.Sdk(parameters["version"])
-                .DisplayAs("Install .NET " + parameters["version"])
+                .DisplayAs("Install .NET " + parameters["version"]),
         };
     }
 }

@@ -209,6 +209,31 @@ namespace Sharpliner.Tests.AzureDevOps
         [Fact]
         public void Restore_FromFeed_Command_Test()
         {
+            var task = _builder.Restore.FromFeed("dotnet-7-preview-feed", includeNuGetOrg: false) with
+            {
+                ExternalFeedCredentials = "feeds/dotnet-7",
+                NoCache = true,
+                RestoreDirectory = ".packages",
+            };
+
+            var yaml = GetYaml(task);
+            yaml.Should().Be(@"jobs:
+- job: job
+  steps:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: restore
+      includeNuGetOrg: false
+      feedsToUse: select
+      feedRestore: dotnet-7-preview-feed
+      externalFeedCredentials: feeds/dotnet-7
+      noCache: true
+      restoreDirectory: .packages");
+        }
+
+        [Fact]
+        public void Restore_FromConfig_Command_Test()
+        {
             var task = _builder.Restore.FromNuGetConfig("src/NuGet.config") with
             {
                 Arguments = "foo"
@@ -224,6 +249,25 @@ namespace Sharpliner.Tests.AzureDevOps
       feedsToUse: config
       nugetConfigPath: src/NuGet.config
       arguments: foo");
+        }
+
+        [Fact]
+        public void Custom_Command_Test()
+        {
+            var task = _builder.CustomCommand("--list-sdks") with
+            {
+                ContinueOnError = true,
+            };
+
+            var yaml = GetYaml(task);
+            yaml.Should().Be(@"jobs:
+- job: job
+  steps:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: custom
+      custom: --list-sdks
+    continueOnError: true");
         }
 
         private static string GetYaml(Step task) => new DotNet_Pipeline(task).Serialize().Trim();
