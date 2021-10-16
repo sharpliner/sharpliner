@@ -41,9 +41,11 @@ jobs:
   - task: DotNetCoreCLI@2
     displayName: Pack the .nupkg
     inputs:
-      command: custom
-      custom: pack
-      arguments: -c Release -p:PackageVersion=$(packageVersion) --output artifacts/packages
+      command: pack
+      packagesToPack: src/Sharpliner/Sharpliner.csproj
+      arguments: -p:PackageVersion=$(packageVersion)
+      outputDir: artifacts/packages
+      configurationToPack: Release
 
   - publish: artifacts/packages/Sharpliner.$(packageVersion).nupkg
     displayName: Publish build artifacts

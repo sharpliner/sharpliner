@@ -94,7 +94,7 @@ namespace Sharpliner.Tests.AzureDevOps
                 DotNet.Install.Sdk(parameters["version"]),
 
                 If.Equal(parameters["restore"], "true")
-                    .Step(DotNet.Command(Sharpliner.AzureDevOps.Tasks.DotNetCommand.Restore, parameters["project"])),
+                    .Step(DotNet.Restore.Projects(parameters["project"])),
 
                 DotNet.Build(parameters["project"]),
 
