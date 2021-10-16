@@ -12,11 +12,11 @@ namespace Sharpliner.Tests.AzureDevOps
 
         private class DotNet_Pipeline : SimpleTestPipeline
         {
-            private readonly DotNetCoreCliTask _task;
+            private readonly Step _step;
 
-            public DotNet_Pipeline(DotNetCoreCliTask task)
+            public DotNet_Pipeline(Step step)
             {
-                _task = task;
+                _step = step;
             }
 
             public override SingleStagePipeline Pipeline => new()
@@ -25,7 +25,7 @@ namespace Sharpliner.Tests.AzureDevOps
                 {
                     new Job("job")
                     {
-                        Steps = { _task }
+                        Steps = { _step }
                     }
                 }
             };
@@ -50,6 +50,66 @@ namespace Sharpliner.Tests.AzureDevOps
       arguments: -c Release
       includeNuGetOrg: true
       workingDirectory: /tmp");
+        }
+
+        [Fact]
+        public void Install_Sdk_Command_Test()
+        {
+            var task = _builder.Install.Sdk("6.0.100-rc.2.21505.57", true) with
+            {
+                WorkingDirectory = "/tmp",
+                InstallationPath = "/.dotnet",
+            };
+
+            var yaml = GetYaml(task);
+            yaml.Should().Be(@"jobs:
+- job: job
+  steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: sdk
+      version: 6.0.100-rc.2.21505.57
+      includePreviewVersions: true
+      workingDirectory: /tmp
+      installationPath: /.dotnet");
+        }
+
+        [Fact]
+        public void Install_Runtime_Command_Test()
+        {
+            var task = _builder.Install.Sdk("5.0.100") with
+            {
+                PerformMultiLevelLookup = true,
+            };
+
+            var yaml = GetYaml(task);
+            yaml.Should().Be(@"jobs:
+- job: job
+  steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: sdk
+      version: 5.0.100
+      performMultiLevelLookup: true");
+        }
+
+        [Fact]
+        public void Install_GlobalJson_Command_Test()
+        {
+            var task = _builder.Install.FromGlobalJson("/foo/global.json") with
+            {
+                WorkingDirectory = "/tmp",
+                InstallationPath = "/.dotnet",
+            };
+
+            var yaml = GetYaml(task);
+            yaml.Should().Be(@"jobs:
+- job: job
+  steps:
+  - task: UseDotNet@2
+    inputs:
+      workingDirectory: /tmp
+      installationPath: /.dotnet");
         }
 
         [Fact]
@@ -149,6 +209,31 @@ namespace Sharpliner.Tests.AzureDevOps
         [Fact]
         public void Restore_FromFeed_Command_Test()
         {
+            var task = _builder.Restore.FromFeed("dotnet-7-preview-feed", includeNuGetOrg: false) with
+            {
+                ExternalFeedCredentials = "feeds/dotnet-7",
+                NoCache = true,
+                RestoreDirectory = ".packages",
+            };
+
+            var yaml = GetYaml(task);
+            yaml.Should().Be(@"jobs:
+- job: job
+  steps:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: restore
+      includeNuGetOrg: false
+      feedsToUse: select
+      feedRestore: dotnet-7-preview-feed
+      externalFeedCredentials: feeds/dotnet-7
+      noCache: true
+      restoreDirectory: .packages");
+        }
+
+        [Fact]
+        public void Restore_FromConfig_Command_Test()
+        {
             var task = _builder.Restore.FromNuGetConfig("src/NuGet.config") with
             {
                 Arguments = "foo"
@@ -166,6 +251,25 @@ namespace Sharpliner.Tests.AzureDevOps
       arguments: foo");
         }
 
-        private static string GetYaml(DotNetCoreCliTask task) => new DotNet_Pipeline(task).Serialize().Trim();
+        [Fact]
+        public void Custom_Command_Test()
+        {
+            var task = _builder.CustomCommand("--list-sdks") with
+            {
+                ContinueOnError = true,
+            };
+
+            var yaml = GetYaml(task);
+            yaml.Should().Be(@"jobs:
+- job: job
+  steps:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: custom
+      custom: --list-sdks
+    continueOnError: true");
+        }
+
+        private static string GetYaml(Step task) => new DotNet_Pipeline(task).Serialize().Trim();
     }
 }

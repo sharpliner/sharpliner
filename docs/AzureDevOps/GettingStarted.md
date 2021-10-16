@@ -36,10 +36,8 @@ namespace MyProject.Pipelines
 {
     class PullRequestPipeline : AzureDevopsPipelineDefinition
     {
-        // Name of the YAML file this pipeline will be serialized into
+        // Name and where to serialize the YAML of this pipeline into
         public override string TargetFile => "azure-pipelines.yml";
-
-        // How to find this file
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
         public override AzureDevOpsPipeline Pipeline => new()
@@ -88,11 +86,17 @@ public override SingleStageAzureDevOpsPipelineDefinition Pipeline => new()
                 If.IsPullRequest
                     .Step(Powershell.Inline("Write-Host 'Hello-World'").DisplayAs("Hello world")),
 
-                DotNet.Install.Sdk("$(DotnetVersion)").DisplayAs("Install .NET SDK"),
+                DotNet.Install
+                    .Sdk("$(DotnetVersion)")
+                    .DisplayAs("Install .NET SDK"),
 
-                DotNet.Build("src/MyProject.sln", includeNuGetOrg: true).DisplayAs("Build"),
+                DotNet
+                    .Build("src/MyProject.sln", includeNuGetOrg: true)
+                    .DisplayAs("Build"),
 
-                DotNet.Command(DotNetCommand.Test, projects: "src/MyProject.sln").DisplayAs("Test"),
+                DotNet
+                    .Test("src/MyProject.sln")
+                    .DisplayAs("Test"),
             }
         }
     },

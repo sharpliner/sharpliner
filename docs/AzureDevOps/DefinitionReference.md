@@ -70,6 +70,42 @@ or you can use the shorthand style. For each of the basic commands, a method/pro
 ...
 ```
 
+## Azure Pipelines tasks
+
+Even though it is possible to use any of the non-default [Azure Pipelines tasks](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/?view=azure-devops) by specifying its name + inputs:
+
+```csharp
+Task("DotNetCoreCLI@2", "Run unit tests") with
+{
+    Inputs = new()
+    {
+        { "command", "test" },
+        { "projects", "src/MyProject.sln" },
+    }
+}
+```
+
+some of the tasks are quite hard to comprehend such as the [.NET Core CLI task](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops) whose specification is quite long since the task can do many different things.
+Notice how some of the properties are only valid in a specific combination with other.
+With Sharpliner, we remove some of this complexity by restricting which properties are available at a time and by using nice fluent APIs:
+
+```csharp
+DotNet.Install.Sdk(parameters["version"]),
+
+DotNet.Restore.FromFeed("dotnet-7-preview-feed", includeNuGetOrg: false) with
+{
+    ExternalFeedCredentials = "feeds/dotnet-7",
+    NoCache = true,
+    RestoreDirectory = ".packages",
+},
+
+DotNet.Build("src/MyProject.csproj") with
+{
+    Timeout = TimeSpan.FromMinutes(20)
+},
+```
+
+Note how we use the `with` keyword to extend the `record` object with new properties.
 
 ## Pipeline variables
 
@@ -195,7 +231,7 @@ class InstallDotNetTemplate : StepTemplateDefinition
         DotNet.Install.Sdk(parameters["version"]),
 
         If.Equal(parameters["restore"], "true")
-            .Step(DotNet.Command(Sharpliner.AzureDevOps.Tasks.DotNetCommand.Restore, parameters["project"])),
+            .Step(DotNet.Restore.Projects(parameters["project"])),
 
         DotNet.Build(parameters["project"]),
 
