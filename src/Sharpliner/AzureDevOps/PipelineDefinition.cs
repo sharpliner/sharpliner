@@ -1,24 +1,43 @@
-using Sharpliner.Definition;
-
 namespace Sharpliner.AzureDevOps
 {
-
-    public abstract class PipelineDefinitionBase<TPipeline> : AzureDevOpsDefinitions where TPipeline : PipelineBase
+    public abstract class PipelineDefinitionBase<TPipeline> : AzureDevOpsDefinition where TPipeline : PipelineBase
     {
         /// <summary>
         /// Define the pipeline by implementing this field.
         /// </summary>
         public abstract TPipeline Pipeline { get; }
 
+        /// <summary>
+        /// This method is run by the Sharpliner publish process to validate for
+        /// some problems we can catch early and fail the publishing.
+        /// </summary>
         public override void Validate() => Pipeline.Validate();
 
+        /// <summary>
+        /// Serializes this pipeline into YAML.
+        /// </summary>
         public override string Serialize() => PrettifyYaml(SharplinerSerializer.Serialize(Pipeline));
+
+        /// <summary>
+        /// Internal, cannot inherit from this.
+        /// Please override Sharpliner.AzureDevOps.PipelineDefinition or Sharpliner.AzureDevOps.SingleStagePipelineDefinition.
+        /// </summary>
+        internal PipelineDefinitionBase()
+        {
+        }
     }
 
+    /// <summary>
+    /// Inherit from this class to define a full Azure DevOps pipeline.
+    /// For a pipeline with only a single stage, consider using SingleStagePipelineDefinition.
+    /// </summary>
     public abstract class PipelineDefinition : PipelineDefinitionBase<Pipeline>
     {
     }
 
+    /// <summary>
+    /// Inherit from this class to define a pipeline with a single stage where you only define jobs.
+    /// </summary>
     public abstract class SingleStagePipelineDefinition : PipelineDefinitionBase<SingleStagePipeline>
     {
     }

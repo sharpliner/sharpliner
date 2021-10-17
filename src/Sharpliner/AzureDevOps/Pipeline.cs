@@ -2,10 +2,14 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps
 {
+    /// <summary>
+    /// Base model for Azure DevOps pipelines.
+    /// </summary>
     public abstract record PipelineBase
     {
         protected static readonly Regex s_nameRegex = new("^[A-Za-z0-9_]+$", RegexOptions.Compiled);
@@ -96,6 +100,10 @@ namespace Sharpliner.AzureDevOps
         }
     }
 
+    /// <summary>
+    /// Model for a full Azure DevOps pipeline.
+    /// This is a model only! To define a pipeline, inherit from one of the *PipelineDefinition classes.
+    /// </summary>
     public record Pipeline : PipelineBase
     {
         [YamlMember(Order = 600)]
@@ -120,6 +128,10 @@ namespace Sharpliner.AzureDevOps
         }
     }
 
+    /// <summary>
+    /// Model for a single-stage AzureDevOps pipeline.
+    /// This is a model only! To define a pipeline, inherit from one of the *PipelineDefinition classes.
+    /// </summary>
     public record SingleStagePipeline : PipelineBase
     {
         [YamlMember(Order = 600)]

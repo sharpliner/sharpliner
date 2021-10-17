@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Sharpliner.AzureDevOps
+namespace Sharpliner.AzureDevOps.ConditionedExpressions
 {
     /// <summary>
     /// This class is here only to override the Add() which is used for definition.

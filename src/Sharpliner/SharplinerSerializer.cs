@@ -1,7 +1,7 @@
 ﻿using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization;
 
-namespace Sharpliner.Definition
+namespace Sharpliner
 {
     public static class SharplinerSerializer
     {

@@ -1,4 +1,4 @@
-﻿namespace Sharpliner.AzureDevOps
+﻿namespace Sharpliner
 {
     public enum TargetPathType
     {

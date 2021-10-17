@@ -2,14 +2,12 @@ using System;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Sharpliner.AzureDevOps;
 
-namespace Sharpliner.Definition
+namespace Sharpliner
 {
     /// <summary>
-    /// To define a pipeline, inherit from this class and implement the missing fields.
-    /// The type will be located via reflection and the pipeline will be compiled into a YAML file.
-    /// Define one pipeline child class per resulting file.
+    /// Common ancestor for all serializable definitions.
+    /// Do not override this class, we have a Azure DevOps/GitHub specific child classes for that.
     /// </summary>
     public abstract class PipelineDefinitionBase
     {
@@ -25,6 +23,11 @@ namespace Sharpliner.Definition
         /// Default is RelativeToCurrentDir.
         /// </summary>
         public virtual TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
+
+        // No inheritance outside of this project to not confuse people.
+        internal PipelineDefinitionBase()
+        {
+        }
 
         public void Publish()
         {
@@ -67,9 +70,9 @@ namespace Sharpliner.Definition
                     throw new ArgumentOutOfRangeException(nameof(TargetPathType));
             }
 
-            string fileContents = Serialize();
+            var fileContents = Serialize();
 
-            string[]? header = Header;
+            var header = Header;
             if (header?.Length > 0)
             {
                 const string hash = "### ";

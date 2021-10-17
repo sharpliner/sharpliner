@@ -1,6 +1,4 @@
-﻿using Sharpliner.Definition;
-
-namespace Sharpliner.GitHubActions
+﻿namespace Sharpliner.GitHubActions
 {
     public abstract class GitHubActionsPipelineDefinition : PipelineDefinitionBase
     {

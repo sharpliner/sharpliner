@@ -1,4 +1,6 @@
-﻿namespace Sharpliner.AzureDevOps
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+
+namespace Sharpliner.AzureDevOps
 {
     /// <summary>
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/resources?view=azure-devops&amp;tabs=schema">official Azure DevOps pipelines documentation</see>.

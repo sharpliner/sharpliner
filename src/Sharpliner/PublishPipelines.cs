@@ -4,7 +4,6 @@ using System.Linq;
 using System.Reflection;
 using System.Security.Cryptography;
 using Microsoft.Build.Framework;
-using Sharpliner.Definition;
 
 namespace Sharpliner
 {

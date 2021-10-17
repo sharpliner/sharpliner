@@ -5,7 +5,7 @@ using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-namespace Sharpliner.AzureDevOps
+namespace Sharpliner.AzureDevOps.ConditionedExpressions
 {
     public abstract record Conditioned : IYamlConvertible
     {

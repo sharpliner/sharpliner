@@ -1,7 +1,7 @@
 # Getting started with Sharpliner for AzureDevOps
 
 This documentation shows how to define and publish YAML for [Azure DevOps pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/?view=azure-devops).
-For more detailed reference, see [Azure DevOps definition reference](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionReference.md).
+For more detailed reference of various parts of the pipeline, see [Azure DevOps definition reference](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionReference.md).
 
 ## 1. Create a new project
 
