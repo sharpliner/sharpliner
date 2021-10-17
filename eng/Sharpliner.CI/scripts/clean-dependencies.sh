@@ -15,7 +15,7 @@ while [[ -h "$here" ]]; do
 done
 
 here="$( cd -P "$( dirname "$here" )" && pwd )"
-repo_root="$here/../../"
+repo_root="$here/../../../"
 
 # Remove Sharpliner .nupkg packages
 rm -rf "$repo_root/artifacts/packages"

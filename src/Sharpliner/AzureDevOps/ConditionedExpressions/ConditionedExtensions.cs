@@ -1,4 +1,6 @@
-﻿namespace Sharpliner.AzureDevOps.ConditionedExpressions
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+
+namespace Sharpliner.AzureDevOps
 {
     /// <summary>
     /// Allows better syntax inside of the condition tree.
