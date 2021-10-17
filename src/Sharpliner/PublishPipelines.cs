@@ -7,6 +7,9 @@ using Microsoft.Build.Framework;
 
 namespace Sharpliner
 {
+    /// <summary>
+    /// This is an MSBuild task that is run in user projects to publish YAMLs after build.
+    /// </summary>
     public class PublishPipelines : Microsoft.Build.Utilities.Task
     {
         /// <summary>
@@ -15,10 +18,18 @@ namespace Sharpliner
         [Required]
         public string? Assembly { get; set; }
 
+        /// <summary>
+        /// You can make the task fail in case it finds a YAML whose definition changed.
+        /// This is for example used in the ValidateYamlsArePublished build step that checks that YAML changes were checked in.
+        /// </summary>
         public bool FailIfChanged { get; set; }
 
         public override bool Execute() => PublishAllPipelines<PipelineDefinitionBase>();
 
+        /// <summary>
+        /// This method finds all pipeline definitions via reflection and publishes them to YAML.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
         private bool PublishAllPipelines<T>() where T : PipelineDefinitionBase
         {
             var assembly = LoadAssembly(Assembly ?? throw new ArgumentNullException(nameof(Assembly), "Assembly parameter not set"));

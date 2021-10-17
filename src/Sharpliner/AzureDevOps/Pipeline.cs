@@ -9,6 +9,7 @@ namespace Sharpliner.AzureDevOps
 {
     /// <summary>
     /// Base model for Azure DevOps pipelines.
+    /// This is a model only! To define a pipeline, inherit from one of the *PipelineDefinition classes.
     /// </summary>
     public abstract record PipelineBase
     {

@@ -21,14 +21,14 @@ Exchange YAML indentation problems for the type-safe environment of C# and let t
 
 ## Getting started
 
-All you have to do is reference our NuGet package in your project, override a class with your definition and build the project! Dead simple!
+All you have to do is reference our [NuGet package](https://www.nuget.org/packages/Sharpliner/) in your project, override a class with your definition and `dotnet build` the project! Dead simple!
 
 For more detailed steps, check our [documentation](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/GettingStarted.md).
 
 ## Example
 
 ```csharp
-// Just override prepared abstract classes and build the project, nothing else is needed!
+// Just override prepared abstract classes and `dotnet build` the project, nothing else is needed!
 class PullRequestPipeline : SingleStageAzureDevOpsPipelineDefinition
 {
     // Say where to publish the YAML to
@@ -41,9 +41,8 @@ class PullRequestPipeline : SingleStageAzureDevOpsPipelineDefinition
 
         Variables =
         {
-            // YAML ${{ if }} conditions are available with handy macros
-            // that expand into the lengthy expressions such as comparing branch names.
-            // We even have "else" :)
+            // YAML ${{ if }} conditions are available with handy macros that expand into the lengthy
+            // expressions such as comparing branch names. We even have "else" :)
             If.IsBranch("net-6.0")
                 .Variable("DotnetVersion", "6.0.100")
                 .Group("net6-kv")

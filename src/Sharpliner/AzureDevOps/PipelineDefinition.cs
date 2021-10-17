@@ -1,5 +1,9 @@
 namespace Sharpliner.AzureDevOps
 {
+    /// <summary>
+    /// Common internal ancestor. Do not inherit from this class, use PipelineDefinition or SingleStagePipelineDefinition.
+    /// </summary>
+    /// <typeparam name="TPipeline"></typeparam>
     public abstract class PipelineDefinitionBase<TPipeline> : AzureDevOpsDefinition where TPipeline : PipelineBase
     {
         /// <summary>
