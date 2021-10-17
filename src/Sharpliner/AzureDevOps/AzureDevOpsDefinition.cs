@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Tasks;
-using Sharpliner.Definition;
 
 namespace Sharpliner.AzureDevOps
 {
     /// <summary>
     /// This is a common ancestor for AzDO related definitions (pipelines, templates..) containing useful macros.
     /// </summary>
-    public abstract class AzureDevOpsDefinitions : PipelineDefinitionBase
+    public abstract class AzureDevOpsDefinition : PipelineDefinitionBase
     {
         /// <summary>
         /// Start an ${{ if () }} section.
@@ -171,5 +171,10 @@ namespace Sharpliner.AzureDevOps
         protected static Condition IsPullRequest => new BuildReasonCondition("'PullRequest'", true);
 
         protected static Condition IsNotPullRequest => new BuildReasonCondition("'PullRequest'", false);
+
+        public sealed class PipelineVariable
+        {
+            public string this[string variableName] => $"variables['{variableName}']";
+        }
     }
 }

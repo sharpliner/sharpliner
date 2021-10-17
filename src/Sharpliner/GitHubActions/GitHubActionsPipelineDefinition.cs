@@ -1,8 +1,10 @@
-﻿using Sharpliner.Definition;
-
-namespace Sharpliner.GitHubActions
+﻿namespace Sharpliner.GitHubActions
 {
+    /// <summary>
+    /// Inherit from this class to define a GitHub action.
+    /// </summary>
     public abstract class GitHubActionsPipelineDefinition : PipelineDefinitionBase
     {
+        // TODO
     }
 }

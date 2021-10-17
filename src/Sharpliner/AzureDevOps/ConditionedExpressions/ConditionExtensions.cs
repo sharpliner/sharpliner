@@ -1,4 +1,6 @@
-﻿namespace Sharpliner.AzureDevOps
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+
+namespace Sharpliner.AzureDevOps
 {
     public static class ConditionExtensions
     {

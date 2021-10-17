@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Sharpliner.Definition;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 
 namespace Sharpliner.AzureDevOps
 {
-    public abstract class TemplateDefinition<T> : AzureDevOpsDefinitions
+    public abstract class TemplateDefinition<T> : AzureDevOpsDefinition
     {
         [DisallowNull]
         public virtual List<TemplateParameter> Parameters { get; } = new();

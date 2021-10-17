@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Sharpliner.AzureDevOps;
-using Sharpliner.Definition;
 using Xunit;
 
 namespace Sharpliner.Tests.AzureDevOps

@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Get-Version.ps1" />
+    <EmbeddedResource Include="scripts\Get-Version.ps1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -27,13 +27,13 @@
   -->
 
   <Target Name="CleanDependencies" AfterTargets="Clean">
-    <Exec Condition=" '$(OS)' != 'Windows_NT' " Command="$(MSBuildThisFileDirectory)clean-dependencies.sh" />
-    <Exec Condition=" '$(OS)' == 'Windows_NT' " Command="powershell.exe -NonInteractive -ExecutionPolicy Unrestricted $(MSBuildThisFileDirectory)clean-dependencies.ps1" />
+    <Exec Condition=" '$(OS)' != 'Windows_NT' " Command="$(MSBuildThisFileDirectory)scripts/clean-dependencies.sh" />
+    <Exec Condition=" '$(OS)' == 'Windows_NT' " Command="powershell.exe -NonInteractive -ExecutionPolicy Unrestricted $(MSBuildThisFileDirectory)scripts\clean-dependencies.ps1" />
   </Target>
 
   <Target Name="BuildDependencies" BeforeTargets="_GenerateRestoreProjectSpec">
-    <Exec Condition=" '$(OS)' != 'Windows_NT' " Command="$(MSBuildThisFileDirectory)build-dependencies.sh" />
-    <Exec Condition=" '$(OS)' == 'Windows_NT' " Command="powershell.exe -NonInteractive -ExecutionPolicy Unrestricted $(MSBuildThisFileDirectory)build-dependencies.ps1" />
+    <Exec Condition=" '$(OS)' != 'Windows_NT' " Command="$(MSBuildThisFileDirectory)scripts/build-dependencies.sh" />
+    <Exec Condition=" '$(OS)' == 'Windows_NT' " Command="powershell.exe -NonInteractive -ExecutionPolicy Unrestricted $(MSBuildThisFileDirectory)scripts\build-dependencies.ps1" />
   </Target>
 
 </Project>

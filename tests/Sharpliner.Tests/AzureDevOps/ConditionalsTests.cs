@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using FluentAssertions;
 using Sharpliner.AzureDevOps;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Xunit;
 
 namespace Sharpliner.Tests.AzureDevOps

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sharpliner.AzureDevOps
+namespace Sharpliner.AzureDevOps.ConditionedExpressions
 {
     /// <summary>
     /// Represents an ${{ if ... }} statement in the YAML.

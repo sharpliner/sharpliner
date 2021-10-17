@@ -1,21 +1,34 @@
+Sharpliner is a .NET library that lets you use C# for Azure DevOps pipeline definition.
+Exchange YAML indentation problems for the type-safe environment of C# and let the intellisense speed up your work!
+
 > **Please read!**  
 > This project got traction online before we were able to complete a proper release. Many things are already working, some are not. No contribution is too small, we welcome all!  
 >   
 > Please check [[Project status]](#project-status) below for more details on what is possible.
 
-Sharpliner is a .NET library that lets you use C# for Azure DevOps pipeline definition.
-Exchange YAML indentation problems for the type-safe environment of C# and let the intellisense speed up your work!
+## Table of contents
+- [Getting started](#getting-started)
+- [Example](#example)
+- [Sharpliner features](#sharpliner-features)
+  - [Intellisense](#intellisense)
+  - [Useful macros](#useful-macros)
+  - [Sourcing scripts from files](#sourcing-scripts-from-files)
+  - [Pipeline validation](#pipeline-validation)
+- [Something missing?](#something-missing)
+- [Project status](#project-status)
+  - [Azure DevOps](#azure-devops)
+  - [GitHub Actions](#github-actions)
 
 ## Getting started
 
-All you have to do is reference our NuGet package in your project, override a class with your definition and build the project! Dead simple!
+All you have to do is reference our [NuGet package](https://www.nuget.org/packages/Sharpliner/) in your project, override a class with your definition and `dotnet build` the project! Dead simple!
 
 For more detailed steps, check our [documentation](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/GettingStarted.md).
 
 ## Example
 
 ```csharp
-// Just override prepared abstract classes and build the project, nothing else is needed!
+// Just override prepared abstract classes and `dotnet build` the project, nothing else is needed!
 class PullRequestPipeline : SingleStageAzureDevOpsPipelineDefinition
 {
     // Say where to publish the YAML to
@@ -28,9 +41,8 @@ class PullRequestPipeline : SingleStageAzureDevOpsPipelineDefinition
 
         Variables =
         {
-            // YAML ${{ if }} conditions are available with handy macros
-            // that expand into the lengthy expressions such as comparing branch names.
-            // We even have "else" :)
+            // YAML ${{ if }} conditions are available with handy macros that expand into the lengthy
+            // expressions such as comparing branch names. We even have "else" :)
             If.IsBranch("net-6.0")
                 .Variable("DotnetVersion", "6.0.100")
                 .Group("net6-kv")

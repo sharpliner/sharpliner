@@ -1,4 +1,6 @@
-﻿namespace Sharpliner.AzureDevOps
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+
+namespace Sharpliner.AzureDevOps
 {
     /// <summary>
     /// Any resources (repos or pools) required by this job that are not already referenced.

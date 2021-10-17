@@ -1,4 +1,4 @@
-﻿namespace Sharpliner.AzureDevOps
+﻿namespace Sharpliner.AzureDevOps.ConditionedExpressions
 {
     /// <summary>
     /// The builder is what let's us start the definition with the "If."

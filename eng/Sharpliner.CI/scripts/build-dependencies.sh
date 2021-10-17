@@ -12,7 +12,7 @@ while [[ -h "$here" ]]; do
 done
 
 here="$( cd -P "$( dirname "$here" )" && pwd )"
-repo_root="$here/../../"
+repo_root="$here/../../../"
 
 # Prepare local packages
 

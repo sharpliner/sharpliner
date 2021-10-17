@@ -1,4 +1,4 @@
-﻿using YamlDotNet.Core.Tokens;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
 
 namespace Sharpliner.AzureDevOps
 {
@@ -37,7 +37,7 @@ namespace Sharpliner.AzureDevOps
         public static Conditioned<VariableBase> Group(
             this Conditioned<VariableBase> conditionedDefinition,
 string name)
-{
+        {
             conditionedDefinition.Definitions.Add(new Conditioned<VariableBase>(definition: new VariableGroup(name)));
             return conditionedDefinition;
         }
