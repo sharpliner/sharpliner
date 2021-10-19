@@ -1,5 +1,4 @@
 ﻿using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.Tests.AzureDevOps
@@ -34,7 +33,7 @@ namespace Sharpliner.Tests.AzureDevOps
                 {
                     Jobs =
                     {
-                        new Template<Job>("/eng/common/templates/jobs/jobs.yml")
+                        new Template<JobBase>("/eng/common/templates/jobs/jobs.yml")
                         {
                             Parameters =
                             {
@@ -133,7 +132,7 @@ namespace Sharpliner.Tests.AzureDevOps
                     {
                         DependsOn = NoDependsOn,
                         Jobs = {
-                            new Template<Job>("/eng/common/templates/jobs/jobs.yml")
+                            new Template<JobBase>("/eng/common/templates/jobs/jobs.yml")
                             {
                                 Parameters =
                                 {

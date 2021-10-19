@@ -140,14 +140,14 @@ namespace Sharpliner.AzureDevOps
         public override string Type => "stepList";
     }
 
-    public sealed record JobTemplateParameter : TemplateParameter<Job>
+    public sealed record JobTemplateParameter : TemplateParameter<JobBase>
     {
         /// <summary>
         /// Creates a parameter definition
         /// </summary>
         /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
         /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-        public JobTemplateParameter(string name, Job? defaultValue = null)
+        public JobTemplateParameter(string name, JobBase? defaultValue = null)
             : base(name, defaultValue, null)
         {
         }
@@ -155,14 +155,14 @@ namespace Sharpliner.AzureDevOps
         public override string Type => "job";
     }
 
-    public sealed record JobListTemplateParameter : TemplateParameter<ConditionedList<Job>>
+    public sealed record JobListTemplateParameter : TemplateParameter<ConditionedList<JobBase>>
     {
         /// <summary>
         /// Creates a parameter definition
         /// </summary>
         /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
         /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-        public JobListTemplateParameter(string name, ConditionedList<Job>? defaultValue = null)
+        public JobListTemplateParameter(string name, ConditionedList<JobBase>? defaultValue = null)
             : base(name, defaultValue, null)
         {
         }
@@ -248,7 +248,7 @@ namespace Sharpliner.AzureDevOps
             => emitter.Emit(new Scalar("${{ parameters." + _parameterName + " }}"));
     }
 
-    internal sealed record JobParameterReference : Job, IYamlConvertible
+    internal sealed record JobParameterReference : JobBase, IYamlConvertible
     {
         private readonly string _parameterName;
 

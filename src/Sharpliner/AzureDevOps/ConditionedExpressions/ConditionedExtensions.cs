@@ -7,6 +7,12 @@ namespace Sharpliner.AzureDevOps
     /// </summary>
     public static class ConditionedExtensions
     {
+        /// <summary>
+        /// Defines a variable.
+        /// </summary>
+        /// <param name="conditionedDefinition">Conditioned definition</param>
+        /// <param name="name">Variable name</param>
+        /// <param name="value">Variable value</param>
         public static Conditioned<VariableBase> Variable(
             this Conditioned<VariableBase> conditionedDefinition,
             string name,
@@ -16,6 +22,12 @@ namespace Sharpliner.AzureDevOps
             return conditionedDefinition;
         }
 
+        /// <summary>
+        /// Defines a variable.
+        /// </summary>
+        /// <param name="conditionedDefinition">Conditioned definition</param>
+        /// <param name="name">Variable name</param>
+        /// <param name="value">Variable value</param>
         public static Conditioned<VariableBase> Variable(
             this Conditioned<VariableBase> conditionedDefinition,
             string name,
@@ -25,6 +37,12 @@ namespace Sharpliner.AzureDevOps
             return conditionedDefinition;
         }
 
+        /// <summary>
+        /// Defines a variable.
+        /// </summary>
+        /// <param name="conditionedDefinition">Conditioned definition</param>
+        /// <param name="name">Variable name</param>
+        /// <param name="value">Variable value</param>
         public static Conditioned<VariableBase> Variable(
             this Conditioned<VariableBase> conditionedDefinition,
             string name,
@@ -34,6 +52,9 @@ namespace Sharpliner.AzureDevOps
             return conditionedDefinition;
         }
 
+        /// <summary>
+        /// References a variable group.
+        /// </summary>
         public static Conditioned<VariableBase> Group(
             this Conditioned<VariableBase> conditionedDefinition,
 string name)
@@ -42,24 +63,48 @@ string name)
             return conditionedDefinition;
         }
 
+        /// <summary>
+        /// Creates a new stage.
+        /// </summary>
         public static Conditioned<Stage> Stage(this Conditioned<Stage> condition, Stage stage)
         {
             condition.Definitions.Add(new Conditioned<Stage>(definition: stage));
             return condition;
         }
 
+        /// <summary>
+        /// Creates a new step.
+        /// </summary>
         public static Conditioned<Step> Step(this Conditioned<Step> condition, Step step)
         {
             condition.Definitions.Add(new Conditioned<Step>(definition: step));
             return condition;
         }
 
-        public static Conditioned<Job> Job(this Conditioned<Job> condition, Job job)
+        /// <summary>
+        /// Creates a new job.
+        /// </summary>
+        public static Conditioned<JobBase> Job(this Conditioned<JobBase> condition, JobBase job)
         {
-            condition.Definitions.Add(new Conditioned<Job>(definition: job));
+            condition.Definitions.Add(new Conditioned<JobBase>(definition: job));
             return condition;
         }
 
+        /// <summary>
+        /// Creates a new deployment job.
+        /// </summary>
+        public static Conditioned<JobBase> DeploymentJob(this Conditioned<JobBase> condition, JobBase job)
+        {
+            condition.Definitions.Add(new Conditioned<JobBase>(definition: job));
+            return condition;
+        }
+
+        /// <summary>
+        /// Reference a YAML template.
+        /// </summary>
+        /// <param name="conditionedDefinition">Conditioned definition</param>
+        /// <param name="path">Relative path to the YAML file with the template</param>
+        /// <param name="parameters">Values for template parameters</param>
         public static Conditioned<T> Template<T>(
             this Conditioned<T> conditionedDefinition,
             string path,

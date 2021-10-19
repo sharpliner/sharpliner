@@ -26,10 +26,10 @@ namespace Sharpliner.AzureDevOps.Tasks
                 // Add inputs to the existing ones
                 foreach (var item in value)
                 {
-if (value == null)
-{
+                    if (value == null)
+                    {
                         if (_inputs.ContainsKey(item.Key))
-{
+                        {
                             _inputs.Remove(item.Key);
                         }
                     }

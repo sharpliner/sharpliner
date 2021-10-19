@@ -1,7 +1,6 @@
 ﻿using System;
 using FluentAssertions;
 using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Xunit;
 
 namespace Sharpliner.Tests.AzureDevOps
@@ -58,7 +57,7 @@ namespace Sharpliner.Tests.AzureDevOps
                         Jobs =
                         {
                             new Job("job_1"),
-                            new Job("job_2"),
+                            new DeploymentJob("job_2"),
                             new Job("job_4")
                             {
                                 DependsOn = { "job_1", "job_2" }
