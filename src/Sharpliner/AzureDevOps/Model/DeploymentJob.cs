@@ -22,6 +22,13 @@ namespace Sharpliner.AzureDevOps
         public string JobName => Name;
 
         /// <summary>
+        /// Target environment name and optionally a resource name to record the deployment history; format: [environment-name].[resource-name]
+        /// </summary>
+        [YamlMember(Order = 1201)]
+        [DisallowNull]
+        public string? Environment { get; init; }
+
+        /// <summary>
         /// Specifies how many jobs with which parameters should run
         /// Can be for example useful for defining a test matrix.
         /// </summary>
