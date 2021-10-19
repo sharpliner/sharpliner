@@ -143,7 +143,7 @@ namespace Sharpliner.AzureDevOps
     public record RollingStrategy : DeploymentStrategy
     {
         /// <summary>
-        /// With maxParallel: <# or % of VMs>, you can control the number/percentage of virtual machine targets to deploy to in parallel.
+        /// With maxParallel: # or % of VMs - you can control the number/percentage of virtual machine targets to deploy to in parallel.
         /// This ensures that the app is running on these machines and is capable of handling requests while the deployment is taking place on the rest of the machines, which reduces overall downtime.
         /// </summary>
         [YamlMember(Order = 50, DefaultValuesHandling = DefaultValuesHandling.OmitDefaults)]

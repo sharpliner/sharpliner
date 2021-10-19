@@ -93,7 +93,7 @@ namespace Sharpliner.AzureDevOps
         /// </summary>
         /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
         /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-        protected TemplateParameter JobParameter(string name, Job? defaultValue = null)
+        protected TemplateParameter JobParameter(string name, JobBase? defaultValue = null)
             => new JobTemplateParameter(name, defaultValue);
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Sharpliner.AzureDevOps
         /// </summary>
         /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
         /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-        protected TemplateParameter JobListParameter(string name, ConditionedList<Job>? defaultValue = null)
+        protected TemplateParameter JobListParameter(string name, ConditionedList<JobBase>? defaultValue = null)
             => new JobListTemplateParameter(name, defaultValue);
 
         /* TODO: When we have Deployment https://github.com/sharpliner/sharpliner/issues/72
@@ -151,7 +151,7 @@ namespace Sharpliner.AzureDevOps
         /// <summary>
         /// Allows the ${{ parameters.name }} notation for a job defined in parameters.
         /// </summary>
-        protected Job JobParameterReference(string parameterName) => new JobParameterReference(parameterName);
+        protected JobBase JobParameterReference(string parameterName) => new JobParameterReference(parameterName);
 
         /// <summary>
         /// Allows the ${{ parameters.name }} notation for a step defined in parameters.
@@ -172,7 +172,7 @@ namespace Sharpliner.AzureDevOps
     /// Inherit from this class to define a job template.
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
     /// </summary>
-    public abstract class JobTemplateDefinition : TemplateDefinition<Job>
+    public abstract class JobTemplateDefinition : TemplateDefinition<JobBase>
     {
         internal sealed override string YamlProperty => "jobs";
     }

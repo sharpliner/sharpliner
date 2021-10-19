@@ -33,7 +33,7 @@ namespace Sharpliner.Tests.AzureDevOps
                 {
                     Jobs =
                     {
-                        new Template<Job>("/eng/common/templates/jobs/jobs.yml")
+                        new Template<JobBase>("/eng/common/templates/jobs/jobs.yml")
                         {
                             Parameters =
                             {
@@ -132,7 +132,7 @@ namespace Sharpliner.Tests.AzureDevOps
                     {
                         DependsOn = NoDependsOn,
                         Jobs = {
-                            new Template<Job>("/eng/common/templates/jobs/jobs.yml")
+                            new Template<JobBase>("/eng/common/templates/jobs/jobs.yml")
                             {
                                 Parameters =
                                 {

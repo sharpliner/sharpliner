@@ -39,7 +39,7 @@ namespace Sharpliner.AzureDevOps
         /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/phases?tabs=yaml&amp;view=azure-devops">official Azure DevOps pipelines documentation</see>.
         /// </summary>
         [YamlMember(Order = 300)]
-        public ConditionedList<Job> Jobs { get; init; } = new();
+        public ConditionedList<JobBase> Jobs { get; init; } = new();
 
         [YamlMember(Order = 400)]
         [DisallowNull]

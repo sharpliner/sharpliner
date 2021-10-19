@@ -35,7 +35,7 @@ namespace Sharpliner.AzureDevOps
         /// </summary>
         /// <param name="path">Relative path to the YAML file with the template</param>
         /// <param name="parameters">Values for template parameters</param>
-        protected static Template<Job> JobTemplate(string path, TemplateParameters? parameters = null)
+        protected static Template<JobBase> JobTemplate(string path, TemplateParameters? parameters = null)
             => new(path, parameters);
 
         /// <summary>
@@ -124,9 +124,19 @@ namespace Sharpliner.AzureDevOps
         protected static AzureDevOpsTask Task(string taskName, string? displayName = null) => new AzureDevOpsTask(taskName) with { DisplayName = displayName! };
 
         /// <summary>
+        /// Creates a new stage.
+        /// </summary>
+        protected static Stage Stage(string stageName, string? displayName = null) => new(stageName, displayName);
+
+        /// <summary>
         /// Creates a new job.
         /// </summary>
-        protected static Job Job(string jobName, string? displayName = null) => new Job(jobName) with { DisplayName = displayName! };
+        protected static Job Job(string jobName, string? displayName = null) => new(jobName, displayName);
+
+        /// <summary>
+        /// Creates a new deployment job.
+        /// </summary>
+        protected static DeploymentJob DeploymentJob(string jobName, string? displayName = null) => new(jobName, displayName);
 
         /// <summary>
         /// Creates an UseDotNet or DotNetCoreCLI task.

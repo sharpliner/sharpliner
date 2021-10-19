@@ -49,11 +49,11 @@ namespace Sharpliner.Tests.AzureDevOps
                 Jobs =
                 {
                     If.Equal("foo", "bar")
-                        .Template<Job>("template1.yml", new TemplateParameters
+                        .Template<JobBase>("template1.yml", new TemplateParameters
                         {
                             { "enableTelemetry", true },
                         })
-                        .Template<Job>("template2.yml", new TemplateParameters
+                        .Template<JobBase>("template2.yml", new TemplateParameters
                         {
                             { "enableTelemetry", false },
                         })

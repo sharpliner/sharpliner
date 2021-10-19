@@ -136,7 +136,7 @@ namespace Sharpliner.AzureDevOps
     public record SingleStagePipeline : PipelineBase
     {
         [YamlMember(Order = 600)]
-        public ConditionedList<Job> Jobs { get; init; } = new();
+        public ConditionedList<JobBase> Jobs { get; init; } = new();
 
         public override void Validate()
         {

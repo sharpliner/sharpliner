@@ -9,7 +9,7 @@ namespace Sharpliner.AzureDevOps
     /// It's a collection of steps to run sequentially against the environment.
     /// In YAML pipelines, we recommend that you put your deployment steps in a deployment job.
     ///
-    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#deployment-job">official Azure DevOps pipelines documentation</see>.
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/deployment-jobs?view=azure-devops">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public record DeploymentJob : JobBase
     {
