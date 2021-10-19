@@ -1,5 +1,5 @@
-﻿using YamlDotNet.Serialization.NamingConventions;
-using YamlDotNet.Serialization;
+﻿using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace Sharpliner
 {

@@ -1,5 +1,4 @@
 ﻿using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.Tests.AzureDevOps
