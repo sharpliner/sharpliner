@@ -21,7 +21,7 @@ namespace Sharpliner.AzureDevOps
         /// Used to run steps that initialize resources before application deployment starts.
         /// </summary>
         [YamlMember(Order = 100)]
-        public LifeCycleHook? PreDeploy { get; init; } = null;
+        public LifeCycleHook PreDeploy { get; init; } = new();
 
         /// <summary>
         /// Used to run steps that deploy your application.
@@ -30,31 +30,31 @@ namespace Sharpliner.AzureDevOps
         /// To stop downloading artifacts, use - download: none or choose specific artifacts to download by specifying the download task.
         /// </summary>
         [YamlMember(Order = 200)]
-        public LifeCycleHook? Deploy { get; init; } = null;
+        public LifeCycleHook Deploy { get; init; } = new();
 
         /// <summary>
         /// Used to run steps that serve the traffic to the updated version.
         /// </summary>
         [YamlMember(Order = 300)]
-        public LifeCycleHook? RouteTraffic { get; init; } = null;
+        public LifeCycleHook RouteTraffic { get; init; } = new();
 
         /// <summary>
         /// Used to run the steps after the traffic is routed. Typically, these tasks monitor the health of the updated version for defined interval.
         /// </summary>
         [YamlMember(Order = 400)]
-        public LifeCycleHook? PostRouteTraffic { get; init; } = null;
+        public LifeCycleHook PostRouteTraffic { get; init; } = new();
 
         /// <summary>
         /// Used to run steps for rollback actions or clean-up.
         /// </summary>
         [YamlMember(Order = 500)]
-        public LifeCycleHook? OnSuccess { get; init; } = null;
+        public LifeCycleHook OnSuccess { get; init; } = new();
 
         /// <summary>
         /// Used to run steps for rollback actions or clean-up.
         /// </summary>
         [YamlMember(Order = 600)]
-        public LifeCycleHook? OnFailure { get; init; } = null;
+        public LifeCycleHook OnFailure { get; init; } = new();
 
         protected DeploymentStrategy(string type)
         {
@@ -70,10 +70,10 @@ namespace Sharpliner.AzureDevOps
 
             WriteCustomFields(emitter, nestedObjectSerializer);
 
-            var properties = new (string, Func<DeploymentStrategy, LifeCycleHook?>)[]
+            var properties = new (string, Func<DeploymentStrategy, LifeCycleHook>)[]
             {
                 ("preDeploy", x => x.PreDeploy),
-                ("Deploy", x => x.Deploy),
+                ("deploy", x => x.Deploy),
                 ("routeTraffic", x => x.RouteTraffic),
                 ("postRouteTraffic", x => x.PostRouteTraffic),
             };
@@ -81,27 +81,27 @@ namespace Sharpliner.AzureDevOps
             foreach (var pair in properties)
             {
                 string name = pair.Item1;
-                LifeCycleHook? value = pair.Item2(this);
+                LifeCycleHook value = pair.Item2(this);
 
-                if (value != null)
+                if (value.Steps.Any())
                 {
                     emitter.Emit(new Scalar(name));
                     nestedObjectSerializer(value);
                 }
             }
 
-            if (OnFailure != null || OnSuccess != null)
+            if (OnFailure.Steps.Any() || OnSuccess.Steps.Any())
             {
                 emitter.Emit(new Scalar("on"));
                 emitter.Emit(new MappingStart());
 
-                if (OnSuccess != null)
+                if (OnSuccess.Steps.Any())
                 {
                     emitter.Emit(new Scalar("success"));
                     nestedObjectSerializer(OnSuccess);
                 }
 
-                if (OnFailure != null)
+                if (OnFailure.Steps.Any())
                 {
                     emitter.Emit(new Scalar("failure"));
                     nestedObjectSerializer(OnFailure);
