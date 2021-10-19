@@ -1,4 +1,5 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using System.Linq;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 
 namespace Sharpliner.AzureDevOps
 {
@@ -12,6 +13,27 @@ namespace Sharpliner.AzureDevOps
 
         public static Conditioned<VariableBase> Variable(this Condition condition, string name, int value)
             => Conditioned.Link<VariableBase>(condition, new Variable(name, value));
+
+        public static Conditioned<VariableBase> Variables(
+            this Condition condition,
+            params (string name, object value)[] variables)
+        {
+            var (name, value) = variables.First();
+            var conditionedDefinition = value switch
+            {
+                int number => Conditioned.Link<VariableBase>(condition, new Variable(name, number)),
+                bool boolean => Conditioned.Link<VariableBase>(condition, new Variable(name, boolean)),
+                string s => Conditioned.Link<VariableBase>(condition, new Variable(name, s)),
+                object any => Conditioned.Link<VariableBase>(condition, new Variable(name, any?.ToString() ?? string.Empty)),
+            };
+
+            if (variables.Length > 1)
+            {
+                conditionedDefinition = conditionedDefinition.Variables(variables.Skip(1).ToArray());
+            }
+
+            return conditionedDefinition;
+        }
 
         public static Conditioned<VariableBase> Group(this Condition condition, string name)
             => Conditioned.Link<VariableBase>(condition, new VariableGroup(name));

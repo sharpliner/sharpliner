@@ -21,7 +21,7 @@ namespace Sharpliner.Tests.AzureDevOps
                         .Variable("IsPr", true),
 
                     If.And(Equal(variables["Build.SourceBranch"], "refs/heads/production"), NotEqual("Configuration", "Debug"))
-                        .Variable("PublishProfileFile", "Prod")
+                        .Variables(("PublishProfileFile", "Prod"), ("foo", "bar"))
                         .If.NotEqual(variables["Build.Reason"], "PullRequest")
                             .Variable("AzureSubscription", "Int")
                             .Group("azure-int")
@@ -58,6 +58,9 @@ namespace Sharpliner.Tests.AzureDevOps
 - ${{ if and(eq(variables['Build.SourceBranch'], refs/heads/production), ne(Configuration, Debug)) }}:
   - name: PublishProfileFile
     value: Prod
+
+  - name: foo
+    value: bar
 
   - ${{ if ne(variables['Build.Reason'], PullRequest) }}:
     - name: AzureSubscription
