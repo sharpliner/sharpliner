@@ -51,13 +51,14 @@ jobs:
     displayName: Publish build artifacts
     artifact: Sharpliner
 
-  - task: NuGetAuthenticate@0
-    displayName: Authenticate NuGet
+  - ${{ if and(ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main')) }}:
+    - task: NuGetAuthenticate@0
+      displayName: Authenticate NuGet
 
-  - task: NuGetCommand@2
-    displayName: Publish to nuget.org
-    inputs:
-      command: push
-      packagesToPush: artifacts/packages/Sharpliner.$(packageVersion).nupkg
-      nuGetFeedType: external
-      publishFeedCredentials: Sharpliner / nuget.org
+    - task: NuGetCommand@2
+      displayName: Publish to nuget.org
+      inputs:
+        command: push
+        packagesToPush: artifacts/packages/Sharpliner.$(packageVersion).nupkg
+        nuGetFeedType: external
+        publishFeedCredentials: Sharpliner / nuget.org
