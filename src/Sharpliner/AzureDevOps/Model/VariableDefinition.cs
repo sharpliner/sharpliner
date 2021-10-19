@@ -22,7 +22,7 @@ namespace Sharpliner.AzureDevOps
         [YamlMember(Alias = "name", Order = 1)]
         public string Name { get; }
 
-        [YamlMember(Alias = "value", Order = 2)]
+        [YamlMember(Alias = "value", Order = 2, DefaultValuesHandling = DefaultValuesHandling.Preserve)]
         public object Value { get; }
 
         [YamlMember(Alias = "readonly", Order = 3, DefaultValuesHandling = DefaultValuesHandling.OmitDefaults)]

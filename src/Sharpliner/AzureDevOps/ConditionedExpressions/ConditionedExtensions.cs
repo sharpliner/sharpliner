@@ -1,4 +1,6 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using System;
+using System.Linq;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 
 namespace Sharpliner.AzureDevOps
 {
@@ -53,11 +55,36 @@ namespace Sharpliner.AzureDevOps
         }
 
         /// <summary>
+        /// Defines multiple variables at once.
+        /// </summary>
+        /// <param name="conditionedDefinition">Conditioned definition</param>
+        /// <param name="variables">List of (key, value) pairs</param>
+        public static Conditioned<VariableBase> Variables(
+            this Conditioned<VariableBase> conditionedDefinition,
+            params (string name, object value)[] variables)
+        {
+            foreach (var variable in variables)
+            {
+                Conditioned<VariableBase> definition = variable.value switch
+                {
+                    int number => new Conditioned<VariableBase>(definition: new Variable(variable.name, number)),
+                    bool boolean => new Conditioned<VariableBase>(definition: new Variable(variable.name, boolean)),
+                    string s => new Conditioned<VariableBase>(definition: new Variable(variable.name, s)),
+                    object any => new Conditioned<VariableBase>(definition: new Variable(variable.name, any?.ToString() ?? string.Empty)),
+                };
+
+                conditionedDefinition.Definitions.Add(definition);
+            }
+
+            return conditionedDefinition;
+        }
+
+        /// <summary>
         /// References a variable group.
         /// </summary>
         public static Conditioned<VariableBase> Group(
             this Conditioned<VariableBase> conditionedDefinition,
-string name)
+            string name)
         {
             conditionedDefinition.Definitions.Add(new Conditioned<VariableBase>(definition: new VariableGroup(name)));
             return conditionedDefinition;
