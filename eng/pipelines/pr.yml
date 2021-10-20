@@ -42,10 +42,6 @@ jobs:
       dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj" -p:FailIfChanged=true
     displayName: Validate YAML has been published
 
-  - template: templates/install-dotnet.yml
-    parameters:
-      version: 5.0.402
-
   - task: DotNetCoreCLI@2
     displayName: Test
     inputs:
