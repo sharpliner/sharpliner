@@ -1,5 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
+using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps
@@ -37,5 +40,19 @@ namespace Sharpliner.AzureDevOps
         [YamlMember(Order = 110)]
         [DisallowNull]
         public ConditionedList<string> Demands { get; init; } = new();
+    }
+
+    /// <summary>
+    /// The server pool specifies a server job.
+    /// Only server tasks like invoking an Azure function app can be run in a server job.
+    /// </summary>
+    public record ServerPool : Pool, IYamlConvertible
+    {
+        public ServerPool() : base((string?)null)
+        {
+        }
+
+        public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
+        public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer) => emitter.Emit(new Scalar("server"));
     }
 }
