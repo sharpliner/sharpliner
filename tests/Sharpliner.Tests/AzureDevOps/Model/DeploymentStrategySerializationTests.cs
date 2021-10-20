@@ -3,24 +3,24 @@ using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.Tasks;
 using Xunit;
 
-namespace Sharpliner.Tests.AzureDevOps
+namespace Sharpliner.Tests.AzureDevOps;
+
+public class DeploymentStrategySerializationTests
 {
-    public class DeploymentStrategySerializationTests
+    [Fact]
+    public void Rolling_Strategy_Test()
     {
-        [Fact]
-        public void Rolling_Strategy_Test()
+        var strategy = new RollingStrategy
         {
-            var strategy = new RollingStrategy
-            {
-                MaxParallel = 4,
-                PreDeploy =
+            MaxParallel = 4,
+            PreDeploy =
                 {
                     Steps =
                     {
                         new CurrentDownloadTask(),
                     }
                 },
-                Deploy =
+            Deploy =
                 {
                     Pool = new HostedPool("MacOS-latest"),
                     Steps =
@@ -28,10 +28,10 @@ namespace Sharpliner.Tests.AzureDevOps
                         new CurrentDownloadTask(),
                     }
                 },
-            };
+        };
 
-            string yaml = SharplinerSerializer.Serialize(strategy);
-            yaml.Should().Be(
+        string yaml = SharplinerSerializer.Serialize(strategy);
+        yaml.Should().Be(
 @"rolling:
   maxParallel: 4
   preDeploy:
@@ -43,22 +43,22 @@ namespace Sharpliner.Tests.AzureDevOps
     steps:
     - download: current
 ");
-        }
+    }
 
-        [Fact]
-        public void Canary_Strategy_Test()
+    [Fact]
+    public void Canary_Strategy_Test()
+    {
+        var strategy = new CanaryStrategy
         {
-            var strategy = new CanaryStrategy
-            {
-                Increments = { 10, 1000, 25000 },
-                RouteTraffic =
+            Increments = { 10, 1000, 25000 },
+            RouteTraffic =
                 {
                     Steps =
                     {
                         new CurrentDownloadTask(),
                     }
                 },
-                PostRouteTraffic =
+            PostRouteTraffic =
                 {
                     Pool = new HostedPool("MacOS-latest"),
                     Steps =
@@ -66,17 +66,17 @@ namespace Sharpliner.Tests.AzureDevOps
                         new CurrentDownloadTask(),
                     }
                 },
-                OnFailure =
+            OnFailure =
                 {
                     Steps =
                     {
                         new InlineBashTask("echo 'failure!' && exit 1")
                     }
                 }
-            };
+        };
 
-            string yaml = SharplinerSerializer.Serialize(strategy);
-            yaml.Should().Be(
+        string yaml = SharplinerSerializer.Serialize(strategy);
+        yaml.Should().Be(
 @"canary:
   increments:
   - 10
@@ -96,6 +96,5 @@ namespace Sharpliner.Tests.AzureDevOps
       - bash: |-
           echo 'failure!' && exit 1
 ");
-        }
     }
 }

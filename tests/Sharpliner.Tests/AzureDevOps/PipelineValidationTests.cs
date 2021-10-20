@@ -3,15 +3,15 @@ using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Xunit;
 
-namespace Sharpliner.Tests.AzureDevOps
+namespace Sharpliner.Tests.AzureDevOps;
+
+public class PipelineValidationTests
 {
-    public class PipelineValidationTests
+    private class StageDependsOnErrorPipeline : TestPipeline
     {
-        private class StageDependsOnErrorPipeline : TestPipeline
+        public override Pipeline Pipeline => new()
         {
-            public override Pipeline Pipeline => new()
-            {
-                Stages =
+            Stages =
                 {
                     new Stage("stage_1"),
                     new Stage("stage_2")
@@ -23,24 +23,24 @@ namespace Sharpliner.Tests.AzureDevOps
                         DependsOn = { "foo" }
                     },
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void StageDependsOn_Validation_Test()
-        {
-            var pipeline = new StageDependsOnErrorPipeline();
-            Action action = () => pipeline.Validate();
-            var e = action.Should().Throw<Exception>();
-            e.WithMessage("*stage_3*");
-            e.WithMessage("*foo*");
-        }
+    [Fact]
+    public void StageDependsOn_Validation_Test()
+    {
+        var pipeline = new StageDependsOnErrorPipeline();
+        Action action = () => pipeline.Validate();
+        var e = action.Should().Throw<Exception>();
+        e.WithMessage("*stage_3*");
+        e.WithMessage("*foo*");
+    }
 
-        private class JobDependsOnErrorPipeline : TestPipeline
+    private class JobDependsOnErrorPipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
         {
-            public override Pipeline Pipeline => new()
-            {
-                Stages =
+            Stages =
                 {
                     new Stage("stage_1")
                     {
@@ -71,60 +71,59 @@ namespace Sharpliner.Tests.AzureDevOps
                         }
                     },
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void JobDependsOn_Validation_Test()
-        {
-            var pipeline = new JobDependsOnErrorPipeline();
-            Action action = () => pipeline.Validate();
-            var e = action.Should().Throw<Exception>();
-            e.WithMessage("*job_5*");
-            e.WithMessage("*job_3*");
-        }
+    [Fact]
+    public void JobDependsOn_Validation_Test()
+    {
+        var pipeline = new JobDependsOnErrorPipeline();
+        Action action = () => pipeline.Validate();
+        var e = action.Should().Throw<Exception>();
+        e.WithMessage("*job_5*");
+        e.WithMessage("*job_3*");
+    }
 
-        private class DuplicateNamePipeline : TestPipeline
+    private class DuplicateNamePipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
         {
-            public override Pipeline Pipeline => new()
-            {
-                Stages =
+            Stages =
                 {
                     new Stage("stage_1"),
                     new Stage("stage_1"),
                     new Stage("stage_3"),
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void DuplicateName_Validation_Test()
-        {
-            var pipeline = new DuplicateNamePipeline();
-            Action action = () => pipeline.Validate();
-            var e = action.Should().Throw<Exception>();
-            e.WithMessage("*stage_1*");
-        }
+    [Fact]
+    public void DuplicateName_Validation_Test()
+    {
+        var pipeline = new DuplicateNamePipeline();
+        Action action = () => pipeline.Validate();
+        var e = action.Should().Throw<Exception>();
+        e.WithMessage("*stage_1*");
+    }
 
-        private class InvalidNamePipeline : TestPipeline
+    private class InvalidNamePipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
         {
-            public override Pipeline Pipeline => new()
-            {
-                Stages =
+            Stages =
                 {
                     new Stage("stage_1"),
                     new Stage("stage_2_*&^"),
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void InvalidName_Validation_Test()
-        {
-            var pipeline = new InvalidNamePipeline();
-            Action action = () => pipeline.Validate();
-            var e = action.Should().Throw<Exception>();
-            e.WithMessage("*stage_2*");
-        }
+    [Fact]
+    public void InvalidName_Validation_Test()
+    {
+        var pipeline = new InvalidNamePipeline();
+        Action action = () => pipeline.Validate();
+        var e = action.Should().Throw<Exception>();
+        e.WithMessage("*stage_2*");
     }
 }

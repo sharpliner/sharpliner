@@ -4,15 +4,15 @@ using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Xunit;
 
-namespace Sharpliner.Tests.AzureDevOps
+namespace Sharpliner.Tests.AzureDevOps;
+
+public class TemplateTests
 {
-    public class TemplateTests
+    private class Template_Pipeline : SimpleTestPipeline
     {
-        private class Template_Pipeline : SimpleTestPipeline
+        public override SingleStagePipeline Pipeline => new()
         {
-            public override SingleStagePipeline Pipeline => new()
-            {
-                Jobs =
+            Jobs =
                 {
                     new Job("job")
                     {
@@ -23,15 +23,15 @@ namespace Sharpliner.Tests.AzureDevOps
                                 .Template<Pool>("pool2.yml")
                     }
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void Template_Serialization_Test()
-        {
-            var yaml = new Template_Pipeline().Serialize();
+    [Fact]
+    public void Template_Serialization_Test()
+    {
+        var yaml = new Template_Pipeline().Serialize();
 
-            yaml.Should().Be(
+        yaml.Should().Be(
 @"jobs:
 - job: job
   pool:
@@ -40,13 +40,13 @@ namespace Sharpliner.Tests.AzureDevOps
     ${{ if ne(foo, bar) }}:
       template: pool2.yml
 ");
-        }
+    }
 
-        private class TemplateList_Pipeline : SimpleTestPipeline
+    private class TemplateList_Pipeline : SimpleTestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
         {
-            public override SingleStagePipeline Pipeline => new()
-            {
-                Jobs =
+            Jobs =
                 {
                     If.Equal("foo", "bar")
                         .Template<JobBase>("template1.yml", new TemplateParameters
@@ -58,15 +58,15 @@ namespace Sharpliner.Tests.AzureDevOps
                             { "enableTelemetry", false },
                         })
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void TemplateList_Serialization_Test()
-        {
-            var yaml = new TemplateList_Pipeline().Serialize();
+    [Fact]
+    public void TemplateList_Serialization_Test()
+    {
+        var yaml = new TemplateList_Pipeline().Serialize();
 
-            yaml.Should().Be(
+        yaml.Should().Be(
 @"jobs:
 - ${{ if eq(foo, bar) }}:
   - template: template1.yml
@@ -77,38 +77,38 @@ namespace Sharpliner.Tests.AzureDevOps
     parameters:
       enableTelemetry: false
 ");
-        }
-        private class Template_Definition : StepTemplateDefinition
+    }
+    private class Template_Definition : StepTemplateDefinition
+    {
+        public override string TargetFile => "template.yml";
+
+        public override List<TemplateParameter> Parameters => new()
         {
-            public override string TargetFile => "template.yml";
+            StringParameter("project"),
+            StringParameter("version", allowedValues: new[] { "5.0.100", "5.0.102" }),
+            BooleanParameter("restore", defaultValue: true),
+            StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)")),
+        };
 
-            public override List<TemplateParameter> Parameters => new()
-            {
-                StringParameter("project"),
-                StringParameter("version", allowedValues: new[] { "5.0.100", "5.0.102" }),
-                BooleanParameter("restore", defaultValue: true),
-                StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)")),
-            };
-
-            public override ConditionedList<Step> Definition => new()
-            {
-                DotNet.Install.Sdk(parameters["version"]),
-
-                If.Equal(parameters["restore"], "true")
-                    .Step(DotNet.Restore.Projects(parameters["project"])),
-
-                DotNet.Build(parameters["project"]),
-
-                StepParameterReference("afterBuild"),
-            };
-        }
-
-        [Fact]
-        public void Template_Definition_Serialization_Test()
+        public override ConditionedList<Step> Definition => new()
         {
-            var yaml = new Template_Definition().Serialize();
+            DotNet.Install.Sdk(parameters["version"]),
 
-            yaml.Should().Be(
+            If.Equal(parameters["restore"], "true")
+                .Step(DotNet.Restore.Projects(parameters["project"])),
+
+            DotNet.Build(parameters["project"]),
+
+            StepParameterReference("afterBuild"),
+        };
+    }
+
+    [Fact]
+    public void Template_Definition_Serialization_Test()
+    {
+        var yaml = new Template_Definition().Serialize();
+
+        yaml.Should().Be(
 @"parameters:
 - name: project
   type: string
@@ -147,6 +147,5 @@ steps:
     projects: ${{ parameters.project }}
 - ${{ parameters.afterBuild }}
 ");
-        }
     }
 }

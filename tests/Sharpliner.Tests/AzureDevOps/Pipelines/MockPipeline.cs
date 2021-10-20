@@ -1,29 +1,29 @@
 ﻿using Sharpliner.AzureDevOps;
 
-namespace Sharpliner.Tests.AzureDevOps
-{
-    internal class MockPipeline : TestPipeline
-    {
-        public override Pipeline Pipeline => new()
-        {
-            Name = "$(Date:yyyMMdd).$(Rev:rr)",
+namespace Sharpliner.Tests.AzureDevOps;
 
-            Trigger = new Trigger
+internal class MockPipeline : TestPipeline
+{
+    public override Pipeline Pipeline => new()
+    {
+        Name = "$(Date:yyyMMdd).$(Rev:rr)",
+
+        Trigger = new Trigger
+        {
+            Batch = false,
+            Branches = new()
             {
-                Batch = false,
-                Branches = new()
-                {
-                    Include =
+                Include =
                     {
                         "main",
                         "release/*",
                     }
-                }
-            },
+            }
+        },
 
-            Pr = new PrTrigger("main", "release/*"),
+        Pr = new PrTrigger("main", "release/*"),
 
-            Variables =
+        Variables =
             {
                 new Variable("Configuration", "Release"), // We can create the objects and then resue them for definition too
                 Variable("Configuration", "Release"),     // Or we have this more YAML-like definition
@@ -44,7 +44,7 @@ namespace Sharpliner.Tests.AzureDevOps
                         .Group("azure-prod"),
             },
 
-            Stages =
+        Stages =
             {
                 new Stage("Build", "Build the project")
                 {
@@ -103,6 +103,5 @@ namespace Sharpliner.Tests.AzureDevOps
                         }
                     })
             }
-        };
-    }
+    };
 }

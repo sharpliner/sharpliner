@@ -1,9 +1,8 @@
-﻿namespace Sharpliner.AzureDevOps
+﻿namespace Sharpliner.AzureDevOps;
+
+public enum JobWorkspace
 {
-    public enum JobWorkspace
-    {
-        Outputs,
-        Resources,
-        All,
-    }
+    Outputs,
+    Resources,
+    All,
 }
