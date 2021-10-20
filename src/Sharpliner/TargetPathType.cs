@@ -1,25 +1,24 @@
-﻿namespace Sharpliner
+﻿namespace Sharpliner;
+
+public enum TargetPathType
 {
-    public enum TargetPathType
-    {
-        /// <summary>
-        /// Relative to parent the parent directory that contains a .git directory
-        /// </summary>
-        RelativeToGitRoot,
+    /// <summary>
+    /// Relative to parent the parent directory that contains a .git directory
+    /// </summary>
+    RelativeToGitRoot,
 
-        /// <summary>
-        /// Relative to where you are invoking the compilation from
-        /// </summary>
-        RelativeToCurrentDir,
+    /// <summary>
+    /// Relative to where you are invoking the compilation from
+    /// </summary>
+    RelativeToCurrentDir,
 
-        /// <summary>
-        /// Relative to the assembly where the pipeline is defined
-        /// </summary>
-        RelativeToAssembly,
+    /// <summary>
+    /// Relative to the assembly where the pipeline is defined
+    /// </summary>
+    RelativeToAssembly,
 
-        /// <summary>
-        /// Absolute file system path
-        /// </summary>
-        Absolute,
-    }
+    /// <summary>
+    /// Absolute file system path
+    /// </summary>
+    Absolute,
 }

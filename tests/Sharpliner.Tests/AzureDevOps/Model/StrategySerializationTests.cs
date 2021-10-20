@@ -2,30 +2,31 @@
 using Sharpliner.AzureDevOps;
 using Xunit;
 
-namespace Sharpliner.Tests.AzureDevOps
+namespace Sharpliner.Tests.AzureDevOps;
+
+public class StrategySerializationTests
 {
-    public class StrategySerializationTests
+    [Fact]
+    public void Serialize_MatrixStrategy_Test()
     {
-        [Fact]
-        public void Serialize_MatrixStrategy_Test()
+        var strategy = new MatrixStrategy
         {
-            var strategy = new MatrixStrategy
+            Matrix = new()
             {
-                Matrix = new()
                 {
+                    "Release",
+                    new[]
                     {
-                        "Release", new[]
-                        {
                             ("_BuildConfig", "Release"),
                             ("_BuildConfig2", "Release2"),
                         }
-                    },
-                    { "Debug", new[] { ("_BuildConfig", "Debug") } },
                 },
-                MaxParallel = 2,
-            };
-            string yaml = SharplinerSerializer.Serialize(strategy);
-            yaml.Should().Be(
+                { "Debug", new[] { ("_BuildConfig", "Debug") } },
+            },
+            MaxParallel = 2,
+        };
+        string yaml = SharplinerSerializer.Serialize(strategy);
+        yaml.Should().Be(
 @"matrix:
   Release:
     _BuildConfig: Release
@@ -34,6 +35,5 @@ namespace Sharpliner.Tests.AzureDevOps
     _BuildConfig: Debug
 maxParallel: 2
 ");
-        }
     }
 }

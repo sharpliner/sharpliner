@@ -3,38 +3,38 @@ using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Xunit;
 
-namespace Sharpliner.Tests.AzureDevOps.ConditionedExpressions
+namespace Sharpliner.Tests.AzureDevOps.ConditionedExpressions;
+
+public class ConditionalsTests
 {
-    public class ConditionalsTests
+    private class And_Condition_Test_Pipeline : TestPipeline
     {
-        private class And_Condition_Test_Pipeline : TestPipeline
+        public override Pipeline Pipeline => new()
         {
-            public override Pipeline Pipeline => new()
-            {
-                Variables =
+            Variables =
                 {
                     If.And(
                         Equal(variables["Build.SourceBranch"], "'refs/heads/production'"),
                         NotEqual(variables["Configuration"], "'Debug'"))
                       .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void And_Condition_Test()
-        {
-            var pipeline = new And_Condition_Test_Pipeline();
-            var variable = pipeline.Pipeline.Variables.First();
-            variable.Condition.Should().Be(
-                "and(eq(variables['Build.SourceBranch'], 'refs/heads/production'), ne(variables['Configuration'], 'Debug'))");
-        }
+    [Fact]
+    public void And_Condition_Test()
+    {
+        var pipeline = new And_Condition_Test_Pipeline();
+        var variable = pipeline.Pipeline.Variables.First();
+        variable.Condition.Should().Be(
+            "and(eq(variables['Build.SourceBranch'], 'refs/heads/production'), ne(variables['Configuration'], 'Debug'))");
+    }
 
-        private class Or_Condition_Test_Pipeline : TestPipeline
+    private class Or_Condition_Test_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
         {
-            public override Pipeline Pipeline => new()
-            {
-                Variables =
+            Variables =
                 {
                     If.Or(
                         And(
@@ -43,24 +43,24 @@ namespace Sharpliner.Tests.AzureDevOps.ConditionedExpressions
                         NotEqual(variables["Configuration"], "'Debug'"))
                         .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void Or_Condition_Test()
-        {
-            var pipeline = new Or_Condition_Test_Pipeline();
-            var variable = pipeline.Pipeline.Variables.First();
-            variable.Condition.Should().Be(
-                "or(and(ne(true, true), eq(variables['Build.SourceBranch'], 'refs/heads/production')), " +
-                "ne(variables['Configuration'], 'Debug'))");
-        }
+    [Fact]
+    public void Or_Condition_Test()
+    {
+        var pipeline = new Or_Condition_Test_Pipeline();
+        var variable = pipeline.Pipeline.Variables.First();
+        variable.Condition.Should().Be(
+            "or(and(ne(true, true), eq(variables['Build.SourceBranch'], 'refs/heads/production')), " +
+            "ne(variables['Configuration'], 'Debug'))");
+    }
 
-        private class Branch_Condition_Test_Pipeline : TestPipeline
+    private class Branch_Condition_Test_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
         {
-            public override Pipeline Pipeline => new()
-            {
-                Variables =
+            Variables =
                 {
                     If.IsBranch("main")
                       .Variable("feature", "on"),
@@ -68,26 +68,26 @@ namespace Sharpliner.Tests.AzureDevOps.ConditionedExpressions
                     If.And(IsPullRequest, IsNotBranch("main"))
                       .Group("pr-group"),
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void Branch_Condition_Test()
+    [Fact]
+    public void Branch_Condition_Test()
+    {
+        var pipeline = new Branch_Condition_Test_Pipeline();
+
+        var variable1 = pipeline.Pipeline.Variables.ElementAt(0);
+        var variable2 = pipeline.Pipeline.Variables.ElementAt(1);
+
+        variable1.Condition.Should().Be("eq(variables['Build.SourceBranch'], 'refs/heads/main')");
+        variable2.Condition.Should().Be("and(eq(variables['Build.Reason'], 'PullRequest'), ne(variables['Build.SourceBranch'], 'refs/heads/main'))");
+    }
+
+    private class Else_Test_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
         {
-            var pipeline = new Branch_Condition_Test_Pipeline();
-
-            var variable1 = pipeline.Pipeline.Variables.ElementAt(0);
-            var variable2 = pipeline.Pipeline.Variables.ElementAt(1);
-
-            variable1.Condition.Should().Be("eq(variables['Build.SourceBranch'], 'refs/heads/main')");
-            variable2.Condition.Should().Be("and(eq(variables['Build.Reason'], 'PullRequest'), ne(variables['Build.SourceBranch'], 'refs/heads/main'))");
-        }
-
-        private class Else_Test_Pipeline : TestPipeline
-        {
-            public override Pipeline Pipeline => new()
-            {
-                Variables =
+            Variables =
                 {
                     If.Equal("a", "b")
                         .Variable("feature", "on")
@@ -106,14 +106,14 @@ namespace Sharpliner.Tests.AzureDevOps.ConditionedExpressions
                           .Variable("feature", "off")
                           .Variable("feature2", "off"),
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void Else_Test()
-        {
-            var pipeline = new Else_Test_Pipeline();
-            pipeline.Serialize().Should().Be(
+    [Fact]
+    public void Else_Test()
+    {
+        var pipeline = new Else_Test_Pipeline();
+        pipeline.Serialize().Should().Be(
 @"variables:
 - ${{ if eq(a, b) }}:
   - name: feature
@@ -150,13 +150,13 @@ namespace Sharpliner.Tests.AzureDevOps.ConditionedExpressions
     - name: feature2
       value: off
 ");
-        }
+    }
 
-        private class ConditionedValueWithElse_Pipeline : SimpleTestPipeline
+    private class ConditionedValueWithElse_Pipeline : SimpleTestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
         {
-            public override SingleStagePipeline Pipeline => new()
-            {
-                Jobs =
+            Jobs =
                 {
                     new Job("Job")
                     {
@@ -169,14 +169,14 @@ namespace Sharpliner.Tests.AzureDevOps.ConditionedExpressions
                                     .Pool(new HostedPool("pool-B")),
                     }
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void ConditionedValueWithElse_Test()
-        {
-            var pipeline = new ConditionedValueWithElse_Pipeline();
-            pipeline.Serialize().Should().Be(
+    [Fact]
+    public void ConditionedValueWithElse_Test()
+    {
+        var pipeline = new ConditionedValueWithElse_Pipeline();
+        pipeline.Serialize().Should().Be(
 @"jobs:
 - job: Job
   pool:
@@ -187,13 +187,13 @@ namespace Sharpliner.Tests.AzureDevOps.ConditionedExpressions
     ${{ if ne(A, B) }}:
       name: pool-B
 ");
-        }
+    }
 
-        private class ConditionedValueWithElseIf_Pipeline : SimpleTestPipeline
+    private class ConditionedValueWithElseIf_Pipeline : SimpleTestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
         {
-            public override SingleStagePipeline Pipeline => new()
-            {
-                Jobs =
+            Jobs =
                 {
                     new Job("Job")
                     {
@@ -207,14 +207,14 @@ namespace Sharpliner.Tests.AzureDevOps.ConditionedExpressions
                                     .Pool(new HostedPool("pool-B")),
                     }
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void ConditionedValueWithElseIf_Test()
-        {
-            var pipeline = new ConditionedValueWithElseIf_Pipeline();
-            pipeline.Serialize().Should().Be(
+    [Fact]
+    public void ConditionedValueWithElseIf_Test()
+    {
+        var pipeline = new ConditionedValueWithElseIf_Pipeline();
+        pipeline.Serialize().Should().Be(
 @"jobs:
 - job: Job
   pool:
@@ -225,6 +225,5 @@ namespace Sharpliner.Tests.AzureDevOps.ConditionedExpressions
     ${{ if eq(C, D) }}:
       name: pool-B
 ");
-        }
     }
 }

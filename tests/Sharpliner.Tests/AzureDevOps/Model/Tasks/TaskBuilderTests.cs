@@ -4,22 +4,22 @@ using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.Tasks;
 using Xunit;
 
-namespace Sharpliner.Tests.AzureDevOps
+namespace Sharpliner.Tests.AzureDevOps;
+
+public class TaskBuilderTests
 {
-    public class TaskBuilderTests
+    private abstract class TestPipeline : SingleStagePipelineDefinition
     {
-        private abstract class TestPipeline : SingleStagePipelineDefinition
-        {
-            public override string TargetFile => "azure-pipelines.yml";
+        public override string TargetFile => "azure-pipelines.yml";
 
-            public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
-        }
+        public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
+    }
 
-        private class BashTaskPipeline : TestPipeline
+    private class BashTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
         {
-            public override SingleStagePipeline Pipeline => new()
-            {
-                Jobs =
+            Jobs =
                 {
                     new Job("test")
                     {
@@ -33,15 +33,15 @@ namespace Sharpliner.Tests.AzureDevOps
                         }
                     }
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void Serialize_Bash_Builders_Test()
-        {
-            BashTaskPipeline pipeline = new();
-            string yaml = pipeline.Serialize();
-            yaml.Should().Be(
+    [Fact]
+    public void Serialize_Bash_Builders_Test()
+    {
+        BashTaskPipeline pipeline = new();
+        string yaml = pipeline.Serialize();
+        yaml.Should().Be(
 @"jobs:
 - job: test
   steps:
@@ -63,13 +63,13 @@ namespace Sharpliner.Tests.AzureDevOps
       echo ""foo""
       git clone $bar
 ");
-        }
+    }
 
-        private class PowershellTaskPipeline : TestPipeline
+    private class PowershellTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
         {
-            public override SingleStagePipeline Pipeline => new()
-            {
-                Jobs =
+            Jobs =
                 {
                     new Job("test")
                     {
@@ -83,15 +83,15 @@ namespace Sharpliner.Tests.AzureDevOps
                         }
                     }
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void Serialize_Powershell_Builders_Test()
-        {
-            PowershellTaskPipeline pipeline = new();
-            string yaml = pipeline.Serialize();
-            yaml.Should().Be(
+    [Fact]
+    public void Serialize_Powershell_Builders_Test()
+    {
+        PowershellTaskPipeline pipeline = new();
+        string yaml = pipeline.Serialize();
+        yaml.Should().Be(
 @"jobs:
 - job: test
   steps:
@@ -114,13 +114,13 @@ namespace Sharpliner.Tests.AzureDevOps
       Set-ErrorActionPreference Stop
       Write-Host ""Lorem ipsum dolor sit amet""
 ");
-        }
+    }
 
-        private class PwshTaskPipeline : TestPipeline
+    private class PwshTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
         {
-            public override SingleStagePipeline Pipeline => new()
-            {
-                Jobs =
+            Jobs =
                 {
                     new Job("test")
                     {
@@ -134,15 +134,15 @@ namespace Sharpliner.Tests.AzureDevOps
                         }
                     }
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void Serialize_Pwsh_Builders_Test()
-        {
-            PwshTaskPipeline pipeline = new();
-            string yaml = pipeline.Serialize();
-            yaml.Should().Be(
+    [Fact]
+    public void Serialize_Pwsh_Builders_Test()
+    {
+        PwshTaskPipeline pipeline = new();
+        string yaml = pipeline.Serialize();
+        yaml.Should().Be(
 @"jobs:
 - job: test
   steps:
@@ -170,13 +170,13 @@ namespace Sharpliner.Tests.AzureDevOps
       Write-Host ""Lorem ipsum dolor sit amet""
     pwsh: true
 ");
-        }
+    }
 
-        private class PublishTaskPipeline : TestPipeline
+    private class PublishTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
         {
-            public override SingleStagePipeline Pipeline => new()
-            {
-                Jobs =
+            Jobs =
                 {
                     new Job("test")
                     {
@@ -190,15 +190,15 @@ namespace Sharpliner.Tests.AzureDevOps
                         }
                     }
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void Serialize_Publish_Builder_Test()
-        {
-            PublishTaskPipeline pipeline = new();
-            string yaml = pipeline.Serialize();
-            yaml.Should().Be(
+    [Fact]
+    public void Serialize_Publish_Builder_Test()
+    {
+        PublishTaskPipeline pipeline = new();
+        string yaml = pipeline.Serialize();
+        yaml.Should().Be(
 @"jobs:
 - job: test
   steps:
@@ -206,13 +206,13 @@ namespace Sharpliner.Tests.AzureDevOps
     displayName: Publish artifact
     artifact: Binary
 ");
-        }
+    }
 
-        private class CheckoutTaskPipeline : TestPipeline
+    private class CheckoutTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
         {
-            public override SingleStagePipeline Pipeline => new()
-            {
-                Jobs =
+            Jobs =
                 {
                     new Job("test")
                     {
@@ -229,15 +229,15 @@ namespace Sharpliner.Tests.AzureDevOps
                         }
                     }
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void Serialize_Checkout_Builder_Test()
-        {
-            CheckoutTaskPipeline pipeline = new();
-            string yaml = pipeline.Serialize();
-            yaml.Should().Be(
+    [Fact]
+    public void Serialize_Checkout_Builder_Test()
+    {
+        CheckoutTaskPipeline pipeline = new();
+        string yaml = pipeline.Serialize();
+        yaml.Should().Be(
 @"jobs:
 - job: test
   steps:
@@ -250,13 +250,13 @@ namespace Sharpliner.Tests.AzureDevOps
     fetchDepth: 1
     submodules: recursive
 ");
-        }
+    }
 
-        private class DownloadTaskPipeline : TestPipeline
+    private class DownloadTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
         {
-            public override SingleStagePipeline Pipeline => new()
-            {
-                Jobs =
+            Jobs =
                 {
                     new Job("test")
                     {
@@ -288,15 +288,15 @@ namespace Sharpliner.Tests.AzureDevOps
                         }
                     }
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void Serialize_Download_Builder_Test()
-        {
-            DownloadTaskPipeline pipeline = new();
-            string yaml = pipeline.Serialize();
-            yaml.Should().Be(
+    [Fact]
+    public void Serialize_Download_Builder_Test()
+    {
+        DownloadTaskPipeline pipeline = new();
+        string yaml = pipeline.Serialize();
+        yaml.Should().Be(
 @"jobs:
 - job: test
   steps:
@@ -316,13 +316,13 @@ namespace Sharpliner.Tests.AzureDevOps
     runVersion: latest
     runBranch: main
 ");
-        }
+    }
 
-        private class TaskPipeline : TestPipeline
+    private class TaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
         {
-            public override SingleStagePipeline Pipeline => new()
-            {
-                Jobs =
+            Jobs =
                 {
                     new Job("test")
                     {
@@ -339,15 +339,15 @@ namespace Sharpliner.Tests.AzureDevOps
                         }
                     }
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void Serialize_Task_Builder_Test()
-        {
-            TaskPipeline pipeline = new();
-            string yaml = pipeline.Serialize();
-            yaml.Should().Be(
+    [Fact]
+    public void Serialize_Task_Builder_Test()
+    {
+        TaskPipeline pipeline = new();
+        string yaml = pipeline.Serialize();
+        yaml.Should().Be(
 @"jobs:
 - job: test
   steps:
@@ -357,6 +357,5 @@ namespace Sharpliner.Tests.AzureDevOps
       solution: '**/*.sln'
     timeoutInMinutes: 120
 ");
-        }
     }
 }

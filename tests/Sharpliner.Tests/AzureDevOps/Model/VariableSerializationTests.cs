@@ -2,15 +2,15 @@
 using Sharpliner.AzureDevOps;
 using Xunit;
 
-namespace Sharpliner.Tests.AzureDevOps
+namespace Sharpliner.Tests.AzureDevOps;
+
+public class VariableSerializationTests
 {
-    public class VariableSerializationTests
+    private class VariablesPipeline : TestPipeline
     {
-        private class VariablesPipeline : TestPipeline
+        public override Pipeline Pipeline => new()
         {
-            public override Pipeline Pipeline => new()
-            {
-                Variables =
+            Variables =
                 {
                     new Variable("Configuration", "Release"), // We can create the objects and then resue them for definition too
                     Variable("Configuration", "Release"),     // Or we have this more YAML-like definition
@@ -30,15 +30,15 @@ namespace Sharpliner.Tests.AzureDevOps
                             .Variable("AzureSubscription", "Prod")
                             .Group("azure-prod"),
                 }
-            };
-        }
+        };
+    }
 
-        [Fact]
-        public void Serialize_Pipeline_Test()
-        {
-            VariablesPipeline pipeline = new();
-            string yaml = pipeline.Serialize();
-            yaml.Should().Be(
+    [Fact]
+    public void Serialize_Pipeline_Test()
+    {
+        VariablesPipeline pipeline = new();
+        string yaml = pipeline.Serialize();
+        yaml.Should().Be(
 @"variables:
 - name: Configuration
   value: Release
@@ -74,6 +74,5 @@ namespace Sharpliner.Tests.AzureDevOps
 
     - group: azure-prod
 ");
-        }
     }
 }
