@@ -61,7 +61,7 @@ namespace Sharpliner.AzureDevOps.Tasks
 
         public InlinePowershellTask(params string[] scriptLines)
         {
-            Contents = string.Join(Environment.NewLine, scriptLines);
+            Contents = string.Join(System.Environment.NewLine, scriptLines);
         }
     }
 
