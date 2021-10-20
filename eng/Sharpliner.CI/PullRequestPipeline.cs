@@ -38,12 +38,6 @@ namespace Sharpliner.CI
                             .DisplayAs("Build"),
 
                         ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj"),
-                                
-                        // dotnet test needs .NET 5
-                        StepTemplate(InstallDotNetTemplate.Path, new()
-                        {
-                            { "version", "5.0.402" }
-                        }),
 
                         DotNet
                             .Test("tests/**/*.csproj")
