@@ -1,33 +1,33 @@
 ﻿using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.Tasks;
 
-namespace Sharpliner.Tests.AzureDevOps
+namespace Sharpliner.Tests.AzureDevOps;
+
+/// <summary>
+/// More details can be found in <see href="https://github.com/dotnet/xharness/blob/main/azure-pipelines.yml">official Azure DevOps pipelines documentation</see>.
+/// </summary>
+internal class XHarnessPipeline : PipelineDefinition
 {
-    /// <summary>
-    /// More details can be found in <see href="https://github.com/dotnet/xharness/blob/main/azure-pipelines.yml">official Azure DevOps pipelines documentation</see>.
-    /// </summary>
-    internal class XHarnessPipeline : PipelineDefinition
+    public override string TargetFile => "xharness.yml";
+
+    public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
+
+    public override Pipeline Pipeline => new()
     {
-        public override string TargetFile => "xharness.yml";
-
-        public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
-
-        public override Pipeline Pipeline => new()
-        {
-            Variables =
+        Variables =
             {
                 VariableTemplate("eng/common-variables.yml"),
                 Variable("Build.Repository.Clean", true),
             },
 
-            Trigger = new Trigger("main", "xcode/*")
-            {
-                Batch = true
-            },
+        Trigger = new Trigger("main", "xcode/*")
+        {
+            Batch = true
+        },
 
-            Pr = new PrTrigger("main", "xcode/*"),
+        Pr = new PrTrigger("main", "xcode/*"),
 
-            Stages =
+        Stages =
             {
                 new Stage("Build_Windows_NT", "Build Windows")
                 {
@@ -315,6 +315,5 @@ namespace Sharpliner.Tests.AzureDevOps
                         }
                     }),
                 }
-        };
-    }
+    };
 }
