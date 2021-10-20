@@ -26,7 +26,7 @@ namespace Sharpliner.AzureDevOps
         /// </summary>
         [YamlMember(Order = 1201)]
         [DisallowNull]
-        public string? Environment { get; init; }
+        public Environment? Environment { get; init; }
 
         /// <summary>
         /// Specifies how many jobs with which parameters should run
