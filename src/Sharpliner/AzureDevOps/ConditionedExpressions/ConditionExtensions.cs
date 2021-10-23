@@ -59,9 +59,6 @@ public static class ConditionExtensions
     public static Conditioned<Step> Step(this Condition condition, Step step)
         => Conditioned.Link(condition, step);
 
-    public static Conditioned<Step> Step(this Condition condition, Conditioned<Step> step)
-        => Conditioned.Link(condition, step);
-
     public static Conditioned<Pool> Pool(this Condition condition, Pool pool)
         => Conditioned.Link(condition, pool);
 
@@ -70,6 +67,18 @@ public static class ConditionExtensions
 
     public static Conditioned<T> Template<T>(this Condition condition, string path, TemplateParameters? parameters = null)
         => Conditioned.Link(condition, new Template<T>(condition: condition.ToString(), path: path, parameters ?? new TemplateParameters()));
+
+    public static Conditioned<JobBase> JobTemplate(this Condition condition, string path, TemplateParameters? parameters = null)
+        => Conditioned.Link(condition, new Template<JobBase>(condition: condition.ToString(), path: path, parameters ?? new TemplateParameters()));
+
+    public static Conditioned<Step> StepTemplate(this Condition condition, string path, TemplateParameters? parameters = null)
+        => Conditioned.Link(condition, new Template<Step>(condition: condition.ToString(), path: path, parameters ?? new TemplateParameters()));
+
+    public static Conditioned<Stage> StageTemplate(this Condition condition, string path, TemplateParameters? parameters = null)
+        => Conditioned.Link(condition, new Template<Stage>(condition: condition.ToString(), path: path, parameters ?? new TemplateParameters()));
+
+    public static Conditioned<VariableBase> VariableTemplate(this Condition condition, string path, TemplateParameters? parameters = null)
+        => Conditioned.Link(condition, new Template<VariableBase>(condition: condition.ToString(), path: path, parameters ?? new TemplateParameters()));
 
     public static Conditioned<Strategy> Strategy(this Condition condition, Strategy strategy)
         => Conditioned.Link(condition, strategy);

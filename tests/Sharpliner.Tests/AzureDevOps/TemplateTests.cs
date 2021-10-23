@@ -49,11 +49,11 @@ public class TemplateTests
             Jobs =
                 {
                     If.Equal("foo", "bar")
-                        .Template<JobBase>("template1.yml", new TemplateParameters
+                        .JobTemplate("template1.yml", new TemplateParameters
                         {
                             { "enableTelemetry", true },
                         })
-                        .Template<JobBase>("template2.yml", new TemplateParameters
+                        .JobTemplate("template2.yml", new TemplateParameters
                         {
                             { "enableTelemetry", false },
                         })
@@ -78,6 +78,7 @@ public class TemplateTests
       enableTelemetry: false
 ");
     }
+
     private class Template_Definition : StepTemplateDefinition
     {
         public override string TargetFile => "template.yml";
@@ -146,6 +147,40 @@ steps:
     command: build
     projects: ${{ parameters.project }}
 - ${{ parameters.afterBuild }}
+");
+    }
+
+    private class Conditioned_Template_Reference : SimpleStepTestPipeline
+    {
+        protected override ConditionedList<Step> Steps => new()
+        {
+            If.Equal("restore", "true")
+                .StepTemplate("template1.yaml"),
+
+            If.IsBranch("main")
+                .StepTemplate("template2.yaml")
+                .If.IsPullRequest
+                    .StepTemplate("template3.yaml"),
+        };
+    }
+
+    [Fact]
+    public void Conditioned_Template_Reference_Serialization_Test()
+    {
+        var yaml = new Conditioned_Template_Reference().Serialize();
+
+        yaml.Should().Be(
+@"jobs:
+- job: testJob
+  steps:
+  - ${{ if eq(restore, true) }}:
+    - template: template1.yaml
+
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    - template: template2.yaml
+
+    - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      - template: template3.yaml
 ");
     }
 }

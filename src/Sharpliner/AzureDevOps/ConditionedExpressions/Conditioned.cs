@@ -12,7 +12,7 @@ public abstract record Conditioned : IYamlConvertible
     /// <summary>
     /// Evaluated textual representation of the condition, e.g. "ne('foo', 'bar')".
     /// </summary>
-    internal string? Condition { get; }
+    internal string? Condition { get; set; }
 
     /// <summary>
     /// Pointer in case of nested conditional blocks.
@@ -74,8 +74,16 @@ public abstract record Conditioned : IYamlConvertible
     /// <returns>The conditioned definition coming out of the inputs</returns>
     internal static Conditioned<T> Link<T>(Condition condition, Template<T> template)
     {
-        condition.Parent?.Definitions.Add(template);
-        template.Parent = condition.Parent;
+        if (condition.Parent == null)
+        {
+            template.Condition = condition.ToString();
+        }
+        else
+        {
+            condition.Parent?.Definitions.Add(template);
+            template.Parent = condition.Parent;
+        }
+
         return template;
     }
 }
