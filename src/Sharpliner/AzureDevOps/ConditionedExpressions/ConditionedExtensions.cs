@@ -140,6 +140,70 @@ public static class ConditionedExtensions
         return conditionedDefinition;
     }
 
+    /// <summary>
+    /// Reference a YAML stage template.
+    /// </summary>
+    /// <param name="conditionedDefinition">Conditioned definition</param>
+    /// <param name="path">Relative path to the YAML file with the template</param>
+    /// <param name="parameters">Values for template parameters</param>
+    public static Conditioned<Stage> StageTemplate(
+        this Conditioned<Stage> conditionedDefinition,
+        string path,
+        TemplateParameters parameters)
+    {
+        var template = new Template<Stage>(path: path, parameters);
+        conditionedDefinition.Definitions.Add(template);
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Reference a YAML job template.
+    /// </summary>
+    /// <param name="conditionedDefinition">Conditioned definition</param>
+    /// <param name="path">Relative path to the YAML file with the template</param>
+    /// <param name="parameters">Values for template parameters</param>
+    public static Conditioned<JobBase> JobTemplate(
+        this Conditioned<JobBase> conditionedDefinition,
+        string path,
+        TemplateParameters parameters)
+    {
+        var template = new Template<JobBase>(path: path, parameters);
+        conditionedDefinition.Definitions.Add(template);
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Reference a YAML step template.
+    /// </summary>
+    /// <param name="conditionedDefinition">Conditioned definition</param>
+    /// <param name="path">Relative path to the YAML file with the template</param>
+    /// <param name="parameters">Values for template parameters</param>
+    public static Conditioned<Step> StepTemplate(
+        this Conditioned<Step> conditionedDefinition,
+        string path,
+        TemplateParameters parameters)
+    {
+        var template = new Template<Step>(path: path, parameters);
+        conditionedDefinition.Definitions.Add(template);
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Reference a YAML variable template.
+    /// </summary>
+    /// <param name="conditionedDefinition">Conditioned definition</param>
+    /// <param name="path">Relative path to the YAML file with the template</param>
+    /// <param name="parameters">Values for template parameters</param>
+    public static Conditioned<VariableBase> VariableTemplate(
+        this Conditioned<VariableBase> conditionedDefinition,
+        string path,
+        TemplateParameters parameters)
+    {
+        var template = new Template<VariableBase>(path: path, parameters);
+        conditionedDefinition.Definitions.Add(template);
+        return conditionedDefinition;
+    }
+
     internal static Conditioned<T>? GetRoot<T>(this Conditioned<T> conditionedDefinition)
     {
         var parent = conditionedDefinition;
