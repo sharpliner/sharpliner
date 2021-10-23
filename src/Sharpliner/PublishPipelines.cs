@@ -126,7 +126,7 @@ public class PublishPipelines : Microsoft.Build.Utilities.Task
         }
         catch (TargetInvocationException e)
         {
-            Log.LogError("  Validation of pipeline {0} failed: {1}", type.Name, e.InnerException?.Message ?? e.Message);
+            Log.LogError("  Validation of pipeline {0} failed: {1}", type.Name, e);
             return;
         }
 
