@@ -50,14 +50,6 @@ public abstract record JobBase : IDependsOn
     public ConditionedList<VariableBase> Variables { get; init; } = new();
 
     /// <summary>
-    /// A step is a linear sequence of operations that make up a job
-    /// Each step runs in its own process on an agent and has access to the pipeline workspace on a local hard drive.
-    /// This behavior means environment variables aren't preserved between steps but file system changes are.
-    /// </summary>
-    [YamlMember(Order = 700)]
-    public ConditionedList<Step> Steps { get; init; } = new();
-
-    /// <summary>
     /// How long to run the job before automatically cancelling
     /// </summary>
     [YamlIgnore]

@@ -80,6 +80,7 @@ public record PowershellFileTask : PowershellTask
     /// <summary>
     /// Arguments passed to the Bash script.
     /// </summary>
+    [YamlMember(Order = 3)]
     public string? Arguments { get; init; }
 
     public PowershellFileTask(string filePath)
