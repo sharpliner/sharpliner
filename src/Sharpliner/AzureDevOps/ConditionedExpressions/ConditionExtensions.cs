@@ -82,4 +82,7 @@ public static class ConditionExtensions
 
     public static Conditioned<Strategy> Strategy(this Condition condition, Strategy strategy)
         => Conditioned.Link(condition, strategy);
+
+    public static Conditioned<T> Value<T>(this Condition condition, T value)
+        => Conditioned.Link(condition, value);
 }

@@ -26,7 +26,7 @@ public abstract record JobBase : IDependsOn
     /// List of names of other jobs this job depends on
     /// </summary>
     [YamlMember(Order = 200)]
-    public List<string> DependsOn { get; init; } = new();
+    public ConditionedList<string> DependsOn { get; init; } = new();
 
     /// <summary>
     /// Specifies which pool to use for a job of the pipeline

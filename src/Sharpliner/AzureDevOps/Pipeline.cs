@@ -85,14 +85,14 @@ public abstract record PipelineBase
 
             foreach (var dependsOn in definition.DependsOn)
             {
-                if (dependsOn == definition.Name)
+                if (dependsOn.Definition == definition.Name)
                 {
                     throw new Exception($"{typeof(T).Name} `{definition.Name}` depends on itself");
                 }
 
                 if (!allDefs.Any(d => d.Name == dependsOn))
                 {
-                    throw new Exception($"{typeof(T).Name} `{definition.Name}` depends on stage `{dependsOn}` which was not found");
+                    throw new Exception($"{typeof(T).Name} `{definition.Name}` depends on stage `{dependsOn.Definition}` which was not found");
                 }
             }
         }
