@@ -90,10 +90,11 @@ public abstract record PipelineBase
                     throw new Exception($"{typeof(T).Name} `{definition.Name}` depends on itself");
                 }
 
-                if (!allDefs.Any(d => d.Name == dependsOn))
-                {
-                    throw new Exception($"{typeof(T).Name} `{definition.Name}` depends on stage `{dependsOn.Definition}` which was not found");
-                }
+                // TODO: This check can be disruptive since items can be defined inside templates and then we don't have the visiblity in there
+                //if (!allDefs.Any(d => d.Name == dependsOn))
+                //{
+                //    throw new Exception($"{typeof(T).Name} `{definition.Name}` depends on {typeof(T).Name.ToLower()} `{dependsOn.Definition}` which was not found");
+                //}
             }
         }
 
