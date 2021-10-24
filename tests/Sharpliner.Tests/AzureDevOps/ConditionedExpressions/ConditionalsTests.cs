@@ -14,7 +14,7 @@ public class ConditionalsTests
             Variables =
                 {
                     If.And(
-                        Equal(variables["Build.SourceBranch"], "'refs/heads/production'"),
+                        IsBranch("production"),
                         NotEqual(variables["Configuration"], "'Debug'"))
                       .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
                 }
