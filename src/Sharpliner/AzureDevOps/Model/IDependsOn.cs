@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
@@ -9,14 +9,14 @@ namespace Sharpliner.AzureDevOps;
 public interface IDependsOn
 {
     string Name { get; }
-    List<string> DependsOn { get; }
+    ConditionedList<string> DependsOn { get; }
 }
 
 /// <summary>
 /// AzDO allows an empty dependsOn which then forces the stage/job to kick off in parallel.
 /// If dependsOn is omitted, stages/jobs run in the order they are defined.
 /// </summary>
-internal class EmptyDependsOn : List<string>, IYamlConvertible
+internal class EmptyDependsOn : ConditionedList<string>, IYamlConvertible
 {
     public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
 

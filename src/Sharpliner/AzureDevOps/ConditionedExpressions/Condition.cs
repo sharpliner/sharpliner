@@ -16,6 +16,8 @@ public abstract class Condition
     internal Conditioned? Parent { get; set; }
 
     public override string ToString() => _condition;
+
+    public static implicit operator string(Condition value) => value.ToString();
 }
 
 /// <summary>

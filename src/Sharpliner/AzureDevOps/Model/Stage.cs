@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
@@ -24,7 +23,7 @@ public record Stage : IDependsOn
     /// List of names of other jobs this job depends on
     /// </summary>
     [YamlMember(Order = 100)]
-    public List<string> DependsOn { get; init; } = new();
+    public ConditionedList<string> DependsOn { get; init; } = new();
 
     /// <summary>
     /// Specifies variables at the job level

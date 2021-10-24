@@ -7,6 +7,53 @@ namespace Sharpliner.Tests.AzureDevOps;
 
 public class PipelineValidationTests
 {
+    private class ConditionedDependsOnPipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Stages =
+                {
+                    new Stage("stage_1"),
+                    new Stage("stage_2")
+                    {
+                        DependsOn = { "stage_1" }
+                    },
+                    new Stage("stage_3")
+                    {
+                        DependsOn =
+                        {
+                            If.IsBranch("main")
+                                .Value("stage_1")
+                            .Else
+                                .Value("stage_2")
+                        }
+                    },
+                }
+        };
+    }
+
+    [Fact]
+    public void ConditionedDependsOn_Validation_Test()
+    {
+        var pipeline = new ConditionedDependsOnPipeline();
+        var yaml = pipeline.Serialize();
+        yaml.Should().Be(@"stages:
+- stage: stage_1
+
+- stage: stage_2
+  dependsOn:
+  - stage_1
+
+- stage: stage_3
+  dependsOn:
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    - stage_1
+
+  - ${{ if ne(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    - stage_2
+");
+    }
+
     private class StageDependsOnErrorPipeline : TestPipeline
     {
         public override Pipeline Pipeline => new()

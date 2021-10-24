@@ -63,4 +63,5 @@ public enum ArtifactType
 {
     Pipeline,
     Filepath,
+    Container,
 }

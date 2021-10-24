@@ -85,7 +85,7 @@ public abstract record PipelineBase
 
             foreach (var dependsOn in definition.DependsOn)
             {
-                if (dependsOn == definition.Name)
+                if (dependsOn.Definition == definition.Name)
                 {
                     throw new Exception($"{typeof(T).Name} `{definition.Name}` depends on itself");
                 }
@@ -93,7 +93,7 @@ public abstract record PipelineBase
                 // TODO: This check can be disruptive since items can be defined inside templates and then we don't have the visiblity in there
                 //if (!allDefs.Any(d => d.Name == dependsOn))
                 //{
-                //    throw new Exception($"{typeof(T).Name} `{definition.Name}` depends on {typeof(T).Name.ToLower()} `{dependsOn}` which was not found");
+                //    throw new Exception($"{typeof(T).Name} `{definition.Name}` depends on {typeof(T).Name.ToLower()} `{dependsOn.Definition}` which was not found");
                 //}
             }
         }

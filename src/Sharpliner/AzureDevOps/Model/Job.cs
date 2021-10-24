@@ -29,6 +29,14 @@ public record Job : JobBase
     public Conditioned<Strategy>? Strategy { get => _strategy; init => _strategy = value?.GetRoot(); }
 
     /// <summary>
+    /// A step is a linear sequence of operations that make up a job
+    /// Each step runs in its own process on an agent and has access to the pipeline workspace on a local hard drive.
+    /// This behavior means environment variables aren't preserved between steps but file system changes are.
+    /// </summary>
+    [YamlMember(Order = 700)]
+    public ConditionedList<Step> Steps { get; init; } = new();
+
+    /// <summary>
     /// Any resources (repos or pools) required by this job that are not already referenced.
     /// </summary>
     [YamlMember(Order = 1200)]
