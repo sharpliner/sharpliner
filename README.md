@@ -1,11 +1,6 @@
 Sharpliner is a .NET library that lets you use C# for Azure DevOps pipeline definition.
 Exchange YAML indentation problems for the type-safe environment of C# and let the intellisense speed up your work!
 
-> **Please read!**  
-> This project got traction online before we were able to complete a proper release. Many things are already working, some are not. No contribution is too small, we welcome all!  
->   
-> Please check [[Project status]](#project-status) below for more details on what is possible.
-
 ## Table of contents
 - [Getting started](#getting-started)
 - [Example](#example)
@@ -224,12 +219,11 @@ The Sharpliner project itself is self-hosted and is [using Sharpliner](https://g
 This is at least some guarantee that the project works.
 
 Status:
-- About 80-90% of the features and properties are implemented. We miss some of the models around deployment jobs, scheduled triggers...  
-  To track progress on the model - check [this issue](https://github.com/sharpliner/sharpliner/issues/2).
+- About 95% of the features and properties are implemented. We miss some of the models. To track progress on the model - check [this issue](https://github.com/sharpliner/sharpliner/issues/2).
 - The `${{ if }}` statements are working and they can be put (and nested) almost everywhere.  
   There are places where if statemets didn't make sense but in case you need to "if" some property or value, let us know by opening an issue, it should be easy to add.
 - Defining and using [templates](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionReference.md#Templates) works!
-- It can happen that we have some of the default values or property names wrong - please let us know!
+- It can happen that we have some of the default values or property names wrong - please let us know (by creating an issue for example)!
 
 ### GitHub Actions
 
