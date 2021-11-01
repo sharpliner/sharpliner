@@ -80,6 +80,12 @@ public abstract class PipelineDefinitionBase
             fileContents = fileContents.Replace(" \r\n", "\r\n").Replace(" \n", "\n"); // Remove trailing spaces from the default template
         }
 
+        var targetDirectory = Path.GetDirectoryName(fileName)!;
+        if (!Directory.Exists(targetDirectory))
+        {
+            Directory.CreateDirectory(targetDirectory);
+        }
+
         File.WriteAllText(fileName, fileContents);
     }
 
