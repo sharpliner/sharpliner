@@ -58,6 +58,11 @@ public class EqualityCondition : Condition
 public class AndCondition : Condition
 {
     internal AndCondition(Condition expression1, Condition expression2)
+        : this(expression1.ToString(), expression2.ToString())
+    {
+    }
+
+    internal AndCondition(string expression1, string expression2)
         : base($"and({expression1}, {expression2})")
     {
     }
@@ -66,6 +71,11 @@ public class AndCondition : Condition
 public class OrCondition : Condition
 {
     internal OrCondition(Condition expression1, Condition expression2)
+        : this(expression1.ToString(), expression2.ToString())
+    {
+    }
+
+    internal OrCondition(string expression1, string expression2)
         : base($"or({expression1}, {expression2})")
     {
     }

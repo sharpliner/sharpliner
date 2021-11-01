@@ -231,13 +231,13 @@ namespace Sharpliner.Tests.GitHub
                 }
             };
 
-            Assert.Equal("nginx", j.Services[0].Container.Image);
+            Assert.Equal("nginx", j.Services[0]?.Container?.Image);
 
-            Assert.Contains(495, j.Services[1].Container.Ports);
-            Assert.Contains("my_docker_volume:/volume_mount", j.Services[1].Container.Volumes);
+            Assert.Contains(495, j.Services[1]?.Container?.Ports);
+            Assert.Contains("my_docker_volume:/volume_mount", j.Services[1]?.Container?.Volumes);
 
-            Assert.Equal("hope", j.Services[2].Container.Credentials.Username);
-            Assert.Equal("1234", j.Services[2].Container.Credentials.Password);
+            Assert.Equal("hope", j.Services[2]?.Container?.Credentials?.Username);
+            Assert.Equal("1234", j.Services[2]?.Container?.Credentials?.Password);
         }
 
         [Fact]
@@ -257,8 +257,8 @@ namespace Sharpliner.Tests.GitHub
 
             // validate that we do have the values and can access them
             Assert.NotNull(j.Strategy);
-            Assert.True(j.Strategy.Configuration?.Keys.Contains("Foo"));
-            Assert.True(j.Strategy.Configuration?.Keys.Contains("Bar"));
+            Assert.True(j.Strategy.Configuration?.ContainsKey("Foo"));
+            Assert.True(j.Strategy.Configuration?.ContainsKey("Bar"));
             Assert.True(j.Strategy.FailFast);
             Assert.Equal(int.MaxValue, j.Strategy.MaxParallel);
         }
@@ -364,9 +364,9 @@ namespace Sharpliner.Tests.GitHub
                 },
             };
 
-            Assert.True(j.Strategy.Exclude[0].Configuration?.Keys.Contains("Foo"));
-            Assert.True(j.Strategy.Exclude[0].Configuration?.Keys.Contains("Bar"));
-            Assert.True(j.Strategy.Exclude[0].Variables?.Keys.Contains("ENV"));
+            Assert.True(j.Strategy.Exclude[0].Configuration?.ContainsKey("Foo"));
+            Assert.True(j.Strategy.Exclude[0].Configuration?.ContainsKey("Bar"));
+            Assert.True(j.Strategy.Exclude[0].Variables?.ContainsKey("ENV"));
         }
     }
 }

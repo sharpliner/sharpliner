@@ -125,22 +125,6 @@ public static class ConditionedExtensions
     }
 
     /// <summary>
-    /// Reference a YAML template.
-    /// </summary>
-    /// <param name="conditionedDefinition">Conditioned definition</param>
-    /// <param name="path">Relative path to the YAML file with the template</param>
-    /// <param name="parameters">Values for template parameters</param>
-    public static Conditioned<T> Template<T>(
-        this Conditioned<T> conditionedDefinition,
-        string path,
-        TemplateParameters parameters)
-    {
-        var template = new Template<T>(path: path, parameters);
-        conditionedDefinition.Definitions.Add(template);
-        return conditionedDefinition;
-    }
-
-    /// <summary>
     /// Reference a YAML stage template.
     /// </summary>
     /// <param name="conditionedDefinition">Conditioned definition</param>

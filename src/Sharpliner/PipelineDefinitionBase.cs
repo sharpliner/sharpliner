@@ -77,6 +77,7 @@ public abstract class PipelineDefinitionBase
         {
             const string hash = "### ";
             fileContents = hash + string.Join(Environment.NewLine + hash, header) + Environment.NewLine + Environment.NewLine + fileContents;
+            fileContents = fileContents.Replace(" \r\n", "\r\n").Replace(" \n", "\n"); // Remove trailing spaces from the default template
         }
 
         File.WriteAllText(fileName, fileContents);

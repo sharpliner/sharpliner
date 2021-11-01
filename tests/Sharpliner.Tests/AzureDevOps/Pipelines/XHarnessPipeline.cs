@@ -216,70 +216,70 @@ internal class XHarnessPipeline : PipelineDefinition
                     })
 
                 // E2E tests
-                    .Template("eng/e2e-test.yml", new()
+                    .StageTemplate("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_Android_Simulators" },
                         { "displayName", "Android - Simulators" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Android/Simulator.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new()
+                    .StageTemplate("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_Android_Devices" },
                         { "displayName", "Android - Devices" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Android/Device.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new()
+                    .StageTemplate("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_Android_Manual_Commands" },
                         { "displayName", "Android - Manual Commands" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Android/Commands.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new()
+                    .StageTemplate("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_Apple_Simulators" },
                         { "displayName", "Apple - Simulators" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Simulator.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new()
+                    .StageTemplate("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_iOS_Devices" },
                         { "displayName", "Apple - iOS devices" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Device.iOS.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new()
+                    .StageTemplate("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_tvOS_Devices" },
                         { "displayName", "Apple - tvOS devices" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Device.tvOS.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new()
+                    .StageTemplate("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_Apple_Simulator_Commands" },
                         { "displayName", "Apple - Simulator Commands" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Simulator.Commands.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new()
+                    .StageTemplate("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_Apple_Device_Commands" },
                         { "displayName", "Apple - Device Commands" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Device.Commands.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new()
+                    .StageTemplate("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_Apple_Simulator_Mgmt" },
                         { "displayName", "Apple - Simulator management" },
                         { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/SimulatorInstaller.Tests.proj" },
                     })
 
-                    .Template("eng/e2e-test.yml", new()
+                    .StageTemplate("eng/e2e-test.yml", new()
                     {
                         { "name", "E2E_WASM" },
                         { "displayName", "WASM" },
@@ -288,7 +288,7 @@ internal class XHarnessPipeline : PipelineDefinition
 
                 // NuGet publishing
                 If.Equal(variables["_RunAsInternal"], "True")
-                    .Template<Stage>("eng/common/templates/post-build/post-build.yml", new()
+                    .StageTemplate("eng/common/templates/post-build/post-build.yml", new()
                     {
                         { "publishingInfraVersion", 3 },
                         { "enableSymbolValidation", true },
