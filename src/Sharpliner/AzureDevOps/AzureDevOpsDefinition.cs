@@ -166,6 +166,10 @@ public abstract class AzureDevOpsDefinition : PipelineDefinitionBase
 
     protected static Condition<T> NotEqual<T>(string expression1, string expression2) => new EqualityCondition<T>(expression1, expression2, false);
 
+    protected static Condition And(string condition1, string condition2) => new AndCondition(condition1, condition2);
+
+    protected static Condition Or(string condition1, string condition2) => new OrCondition(condition1, condition2);
+
     protected static Condition And(Condition condition1, Condition condition2) => new AndCondition(condition1, condition2);
 
     protected static Condition Or(Condition condition1, Condition condition2) => new OrCondition(condition1, condition2);

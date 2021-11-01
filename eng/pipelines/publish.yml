@@ -1,9 +1,9 @@
-### 
+###
 ### DO NOT MODIFY THIS FILE!
-### 
+###
 ### This YAML was auto-generated from PublishPipeline.cs
 ### To make changes, change the C# definition and rebuild its project
-### 
+###
 
 jobs:
 - job: Publish
