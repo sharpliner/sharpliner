@@ -81,7 +81,7 @@ public abstract class PipelineDefinitionBase
         }
 
         var targetDirectory = Path.GetDirectoryName(fileName)!;
-        if (!Directory.Exists(targetDirectory))
+        if (!string.IsNullOrEmpty(targetDirectory) && !Directory.Exists(targetDirectory))
         {
             Directory.CreateDirectory(targetDirectory);
         }
