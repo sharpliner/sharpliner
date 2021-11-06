@@ -104,23 +104,21 @@ public abstract class TemplateDefinition<T> : AzureDevOpsDefinition
     protected TemplateParameter JobListParameter(string name, ConditionedList<JobBase>? defaultValue = null)
         => new JobListTemplateParameter(name, defaultValue);
 
-    /* TODO: When we have Deployment https://github.com/sharpliner/sharpliner/issues/72
     /// <summary>
-    /// Defines a deployment template parameter
+    /// Defines a deployment job template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected TemplateParameter DeploymentParameter(string name, ? defaultValue = null)
-        => new DeploymentTemplateParameter(name, defaultValue, null);
+    protected TemplateParameter DeploymentParameter(string name, DeploymentJob? defaultValue = null)
+        => new DeploymentTemplateParameter(name, defaultValue);
 
     /// <summary>
     /// Defines a deploymentList template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected TemplateParameter DeploymentListParameter(string name, ConditionedList<>? defaultValue = null)
-        => new DeploymentListTemplateParameter(name, defaultValue, null);
-    */
+    protected TemplateParameter DeploymentListParameter(string name, ConditionedList<DeploymentJob>? defaultValue = null)
+        => new DeploymentListTemplateParameter(name, defaultValue);
 
     /// <summary>
     /// Defines a stage template parameter
