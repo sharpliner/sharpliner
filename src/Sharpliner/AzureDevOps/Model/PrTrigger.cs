@@ -5,6 +5,7 @@ using System.Linq;
 namespace Sharpliner.AzureDevOps;
 
 /// <summary>
+/// A pull request trigger specifies which branches cause a pull request build to run.
 /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#pr-trigger">official Azure DevOps pipelines documentation</see>.
 /// </summary>
 public record PrTrigger

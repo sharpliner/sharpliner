@@ -51,7 +51,7 @@ public abstract record TemplateParameter<T> : TemplateParameter
 public sealed record StringTemplateParameter : TemplateParameter<string>
 {
     /// <summary>
-    /// Creates a parameter definition
+    /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
@@ -67,7 +67,7 @@ public sealed record StringTemplateParameter : TemplateParameter<string>
 public sealed record NumberTemplateParameter : TemplateParameter<int>
 {
     /// <summary>
-    /// Creates a parameter definition
+    /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
@@ -83,7 +83,7 @@ public sealed record NumberTemplateParameter : TemplateParameter<int>
 public sealed record BooleanTemplateParameter : TemplateParameter<bool>
 {
     /// <summary>
-    /// Creates a parameter definition
+    /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
@@ -98,7 +98,7 @@ public sealed record BooleanTemplateParameter : TemplateParameter<bool>
 public sealed record ObjectTemplateParameter : TemplateParameter<Dictionary<string, object>>
 {
     /// <summary>
-    /// Creates a parameter definition
+    /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
@@ -113,7 +113,7 @@ public sealed record ObjectTemplateParameter : TemplateParameter<Dictionary<stri
 public sealed record StepTemplateParameter : TemplateParameter<Step>
 {
     /// <summary>
-    /// Creates a parameter definition
+    /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
@@ -128,7 +128,7 @@ public sealed record StepTemplateParameter : TemplateParameter<Step>
 public sealed record StepListTemplateParameter : TemplateParameter<ConditionedList<Step>>
 {
     /// <summary>
-    /// Creates a parameter definition
+    /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
@@ -143,7 +143,7 @@ public sealed record StepListTemplateParameter : TemplateParameter<ConditionedLi
 public sealed record JobTemplateParameter : TemplateParameter<JobBase>
 {
     /// <summary>
-    /// Creates a parameter definition
+    /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
@@ -158,7 +158,7 @@ public sealed record JobTemplateParameter : TemplateParameter<JobBase>
 public sealed record JobListTemplateParameter : TemplateParameter<ConditionedList<JobBase>>
 {
     /// <summary>
-    /// Creates a parameter definition
+    /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
@@ -170,16 +170,14 @@ public sealed record JobListTemplateParameter : TemplateParameter<ConditionedLis
     public override string Type => "jobList";
 }
 
-/* TODO: When we have Deployment https://github.com/sharpliner/sharpliner/issues/72
- * 
- * public sealed record DeploymentTemplateParameter : TemplateParameter<>
+public sealed record DeploymentTemplateParameter : TemplateParameter<DeploymentJob>
 {
     /// <summary>
-    /// Creates a parameter definition
+    /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public DeploymentTemplateParameter(string name, ? defaultValue = null)
+    public DeploymentTemplateParameter(string name, DeploymentJob? defaultValue = null)
         : base(name, defaultValue, null)
     {
     }
@@ -187,25 +185,25 @@ public sealed record JobListTemplateParameter : TemplateParameter<ConditionedLis
     public override string Type => "deployment";
 }
 
-public sealed record DeploymentListTemplateParameter : TemplateParameter<>
+public sealed record DeploymentListTemplateParameter : TemplateParameter<ConditionedList<DeploymentJob>>
 {
     /// <summary>
-    /// Creates a parameter definition
+    /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public DeploymentListTemplateParameter(string name, ConditionedList<>? defaultValue = null)
+    public DeploymentListTemplateParameter(string name, ConditionedList<DeploymentJob>? defaultValue = null)
         : base(name, defaultValue, null)
     {
     }
 
     public override string Type => "deploymentList";
-}*/
+}
 
 public sealed record StageTemplateParameter : TemplateParameter<Stage>
 {
     /// <summary>
-    /// Creates a parameter definition
+    /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
@@ -220,7 +218,7 @@ public sealed record StageTemplateParameter : TemplateParameter<Stage>
 public sealed record StageListTemplateParameter : TemplateParameter<ConditionedList<Stage>>
 {
     /// <summary>
-    /// Creates a parameter definition
+    /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>

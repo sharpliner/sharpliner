@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -15,8 +16,6 @@ public abstract record PipelineBase
 {
     protected static readonly Regex s_nameRegex = new("^[A-Za-z0-9_]+$", RegexOptions.Compiled);
 
-    private Conditioned<Trigger>? _trigger;
-    private Conditioned<PrTrigger>? _pr;
     private Conditioned<Resources>? _resources;
 
     /// <summary>
@@ -32,7 +31,7 @@ public abstract record PipelineBase
     /// </summary>
     [YamlMember(Order = 200)]
     [DisallowNull]
-    public Conditioned<Trigger>? Trigger { get => _trigger; init => _trigger = value?.GetRoot(); }
+    public Trigger? Trigger { get; init; }
 
     /// <summary>
     /// A pull request trigger specifies which branches cause a pull request build to run.
@@ -41,7 +40,15 @@ public abstract record PipelineBase
     /// </summary>
     [YamlMember(Order = 300)]
     [DisallowNull]
-    public Conditioned<PrTrigger>? Pr { get => _pr; init => _pr = value?.GetRoot(); }
+    public PrTrigger? Pr { get; init; }
+
+    /// <summary>
+    /// Scheduled triggers for the pipeline which specify which branches are built when periodically.
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/build/triggers?tabs=yaml&amp;view=azure-devops#scheduled-trigger">official Azure DevOps pipelines documentation</see>.
+    /// </summary>
+    [YamlMember(Order = 350)]
+    [DisallowNull]
+    public List<ScheduledTrigger> Schedule { get; } = new();
 
     /// <summary>
     /// A resource is any external service that is consumed as part of your pipeline
