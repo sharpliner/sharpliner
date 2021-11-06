@@ -36,7 +36,7 @@ class PullRequestPipeline : SingleStageAzureDevOpsPipelineDefinition
 
         Variables =
         {
-            // YAML ${{ if }} conditions are available with handy macros that expand into the lengthy
+            // YAML ${{ if }} conditions are available with handy macros that expand into the
             // expressions such as comparing branch names. We even have "else" :)
             If.IsBranch("net-6.0")
                 .Variable("DotnetVersion", "6.0.100")
@@ -65,10 +65,10 @@ class PullRequestPipeline : SingleStageAzureDevOpsPipelineDefinition
                         }
                     },
 
-                    // If statements supported almost everywhere
+                    // If statements supported (almost) everywhere
                     If.IsPullRequest
-                        // You can load the script contents from a .ps1 file and inline them into the YAML
-                        // This way you can keep writing scripts with syntax highlighting and IDE support
+                        // You can load script contents from a .ps1 file and inline them into YAML
+                        // This way you can write scripts with syntax highlighting separately
                         .Step(PowerShell.FromResourceFile("New-Report.ps1", "Create build report")),
                 }
             }
@@ -198,7 +198,6 @@ This gives you a faster dev loop and greater productivity.
 
 ## Something missing?
 
-This project is still under development and we probably don't cover 100% of the cases, properties and tasks.
 If you find a missing feature / API / property / use case, file an issue in project's repository.
 We try to be very responsive and for small asks can deliver you a new version very fast.
 
@@ -216,10 +215,9 @@ In these cases, it is worth starting with describing your intent in an issue fir
 
 Azure DevOps pipelines can be already defined and have been tested on several pipelines in the wild already.
 The Sharpliner project itself is self-hosted and is [using Sharpliner](https://github.com/sharpliner/sharpliner/tree/main/eng/Sharpliner.CI) for its PR and publish pipelines.
-This is at least some guarantee that the project works.
 
 Status:
-- About 95% of the features and properties are implemented. We miss some of the models. To track progress on the model - check [this issue](https://github.com/sharpliner/sharpliner/issues/2).
+- All of the known models from the official documentation have now appropriate C# counterparts.
 - The `${{ if }}` statements are working and they can be put (and nested) almost everywhere.  
   There are places where if statemets didn't make sense but in case you need to "if" some property or value, let us know by opening an issue, it should be easy to add.
 - Defining and using [templates](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionReference.md#Templates) works!
