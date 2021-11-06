@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.AzureDevOps;

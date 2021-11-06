@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -42,6 +43,14 @@ public abstract record PipelineBase
     [YamlMember(Order = 300)]
     [DisallowNull]
     public Conditioned<PrTrigger>? Pr { get => _pr; init => _pr = value?.GetRoot(); }
+
+    /// <summary>
+    /// Scheduled triggers for the pipeline which specify which branches are built when periodically.
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/build/triggers?tabs=yaml&amp;view=azure-devops#scheduled-trigger">official Azure DevOps pipelines documentation</see>.
+    /// </summary>
+    [YamlMember(Order = 350)]
+    [DisallowNull]
+    public List<ScheduledTrigger> Schedule { get; } = new();
 
     /// <summary>
     /// A resource is any external service that is consumed as part of your pipeline
