@@ -6,6 +6,9 @@
       <_FailIfChanged Condition="$(FailIfChanged) == 'true'">true</_FailIfChanged>
     </PropertyGroup>
     <Message Importance="high" Text="Publishing all pipeline definitions inside $(_AssemblyToSearch)" />
-    <PublishPipelines Assembly="$(_AssemblyToSearch)" FailIfChanged="$(_FailIfChanged)" />
+
+    <Error Text="To publish the YAML using Sharpliner please build the project using 'dotnet build' and not from Visual Studio (it needs the .NET Core MSBuild)" Condition=" '$(MSBuildRuntimeType)' != 'Core' " />
+
+    <PublishPipelines Assembly="$(_AssemblyToSearch)" FailIfChanged="$(_FailIfChanged)" Condition=" '$(MSBuildRuntimeType)' != 'Core' " />
   </Target>
 </Project>
