@@ -17,58 +17,56 @@ Azure DevOps pipelines [define several basic tasks](https://docs.microsoft.com/e
 
 For each of these, there are two ways how you can define these.
 
-Either you "new" them the regular way though this requires a longer syntax
-```csharp
-...
-    Steps =
-    {
-        new AzureDevOpsTask("DotNetCoreCLI@2", "Build solution")
-        {
-            Inputs = new()
-            {
-                { "command", "build" },
-                { "includeNuGetOrg", true },
-                { "projects", "src/MyProject.sln" },
-            },
-            Timeout = TimeSpan.FromMinutes(20)
-        },
+Either you "new" them the regular way though this requires a longer syntax similar to what you would do in YAML:
 
-        new InlineBashTask("./.dotnet/dotnet test src/MySolution.sln")
+```csharp
+Steps =
+{
+    new AzureDevOpsTask("DotNetCoreCLI@2", "Build solution")
+    {
+        Inputs = new()
         {
-            DisplayName = "Run unit tests",
-            ContinueOnError = true,
-            Condition = "eq(variables['Build.Reason'], \"PullRequest\")",
+            { "command", "build" },
+            { "includeNuGetOrg", true },
+            { "projects", "src/MyProject.sln" },
         },
-    }
-...
+        Timeout = TimeSpan.FromMinutes(20)
+    },
+
+    new InlineBashTask("./.dotnet/dotnet test src/MySolution.sln")
+    {
+        DisplayName = "Run unit tests",
+        ContinueOnError = true,
+    },
+}
 ```
 
 or you can use the shorthand style. For each of the basic commands, a method/property is defined on the parent class with the same name as the original task:
+
 ```csharp
-...
-    Steps =
+Steps =
+{
+    Checkout.Self,
+
+    // Tasks are represented as C# records so you can use the `with` keyword to override the properties
+    DotNet.Build("src/MyProject.sln", includeNuGetOrg: true) with
     {
-        Checkout.Self,
+        Timeout = TimeSpan.FromMinutes(20)
+    },
 
-        // Tasks are represented as C# records so you can use the `with` keyword to override the properties
-        DotNet.Build("src/MyProject.sln", includeNuGetOrg: true) with
-        {
-            Timeout = TimeSpan.FromMinutes(20)
-        },
+    // Some of the shorthand styles define more options and a cleaner way of defining them
+    // E.g. Bash gives you several ways where to get the script from such as Bash.FromResourceFile or Bash.FromFile
+    Bash.Inline("./.dotnet/dotnet test src/MySolution.sln") with
+    {
+        DisplayName = "Run unit tests",
+        ContinueOnError = true,
+    },
 
-        // Some of the shorthand styles define more options and a cleaner way of defining them
-        // E.g. Bash gives you several ways where to get the script from such as Bash.FromResourceFile or Bash.FromFile
-        Bash.Inline("./.dotnet/dotnet test src/MySolution.sln") with
-        {
-            DisplayName = "Run unit tests",
-            ContinueOnError = true,
-            Condition = "eq(variables['Build.Reason'], \"PullRequest\")",
-        },
-
-        Publish("ArtifactName", "bin/**/*.dll", "Publish build artifacts"),
-    }
-...
+    Publish("ArtifactName", "bin/**/*.dll", "Publish build artifacts"),
+}
 ```
+
+Please notice the `with` keyword which is a [new feature in C#](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/record#nondestructive-mutation) that allows modifying of records.
 
 ## Azure Pipelines tasks
 
@@ -107,22 +105,32 @@ DotNet.Build("src/MyProject.csproj") with
 
 Note how we use the `with` keyword to extend the `record` object with new properties.
 
+### Help needed
+
+Currently, we don't support many marketplace tasks in C# as the project is still growing.
+If you find one useful, hit us up with a request, or better, with a pull request and we can add it to our library.
+
 ## Pipeline variables
 
 Similarly to Build steps, there's a shorthand style of definition of variables too:
 ```csharp
-    Variables =
-    {
-        Variable("Configuration", "Release"),     // We have shorthand style like we do for build steps
-        Group("PR keyvault variables"),
-        new Variable("Configuration", "Release"), // We can also create the objects and resue them too
-    }
+Variables =
+{
+    Variable("Configuration", "Release"),     // We have shorthand style like we do for build steps
+    Group("PR keyvault variables"),
+    new Variable("Configuration", "Release"), // We can also create the objects and resue them too
+    Variables(                                // You can also save some keystrokes and define multiple variables at once
+        ("variable1", "value1"),
+        ("variable2", true))
+}
 ```
 
 ## Conditioned expressions
 
 The Azure DevOps pipeline YAML allows you to specify conditioned expressions which are evaulated when pipeline is started.
-Sharpliner allows to defined conditioned blocks as well in almost any part of the definition.
+Sharpliner allows to define conditioned blocks as well in almost any part of the definition.
+If you find a place where If cannot be used, raise an issue and we can add it easily.
+
 This feature was a little bit problematic to mimic in C# but we've found a nice way to express these:
 
 ```csharp
@@ -185,7 +193,7 @@ If.Or(
 The logic operators such as `Equal` or `Or` expect either a string or a nested condition.
 Additionally, you can also use `variables["name"]` instead of `"variables[\"name\"]"` as shorthand notation but it has the same effect.
 
-Additionally, many of the commonly used conditions have macros prepared for a shorter syntax.
+Finally, many of the commonly used conditions have macros prepared for a shorter syntax.
 These are:
 ```csharp
 // eq(variables['Build.SourceBranch'], 'refs/heads/production')
@@ -202,7 +210,10 @@ If.And(IsNotPullRequest, IsBranch("production"))
 
 ## Templates
 
-Azure pipelines allow you to [define a parametrized template](https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#template-references) for a **stage**, **job**, **step** or **variables** and then insert those template in your pipeline. Sharpliner also supports definition and refercing of templates, however with C# it's easier to define these entities directly in code. Anyway, the functionality is useful when for example migrating from YAML to do it step by step.
+Azure pipelines allow you to [define a parametrized template](https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#template-references) for a **stage**, **job**, **step** or **variables** and then insert those templates in your pipeline.
+Sharpliner also supports definition and refercing of templates, however with C# it's easier to define these entities directly in code.
+Anyway, the functionality is useful when for example migrating from large YAML code base step by step.
+We also found it useful to create both YAML templates + C# representations for calling them and bind their parameters this way.
 
 To define a template, you do it similarly as when you define the pipeline - you inherit from one of these classes:
 - `StageTemplateDefinition`
@@ -283,7 +294,7 @@ steps:
 - ${{ parameters.afterBuild }}
 ```
 
-To use the template, reference in the following way:
+To use the template, reference it in the following way:
 
 ```csharp
 Steps =
