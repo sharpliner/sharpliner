@@ -24,13 +24,13 @@ For more detailed steps, check our [documentation](https://github.com/sharpliner
 
 ```csharp
 // Just override prepared abstract classes and `dotnet build` the project, nothing else is needed!
-class PullRequestPipeline : SingleStageAzureDevOpsPipelineDefinition
+class PullRequestPipeline : SingleStagePipelineDefinition
 {
     // Say where to publish the YAML to
     public override string TargetFile => "azure-pipelines.yml";
     public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
-    public override AzureDevOpsPipeline Pipeline => new()
+    public override SingleStagePipeline Pipeline => new()
     {
         Pr = new PrTrigger("main"),
 
@@ -69,7 +69,7 @@ class PullRequestPipeline : SingleStageAzureDevOpsPipelineDefinition
                     If.IsPullRequest
                         // You can load script contents from a .ps1 file and inline them into YAML
                         // This way you can write scripts with syntax highlighting separately
-                        .Step(PowerShell.FromResourceFile("New-Report.ps1", "Create build report")),
+                        .Step(Powershell.FromResourceFile("New-Report.ps1", "Create build report")),
                 }
             }
         },

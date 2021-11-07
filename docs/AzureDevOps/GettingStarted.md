@@ -15,7 +15,10 @@ Your file should look something like this:
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <!-- .NET 5.0 and 6.0 are supported at the moment -->
+    <TargetFramework>net6.0</TargetFramework>
+    <!-- Use C# 10 for best experience with some of the definition syntax -->
+    <LangVersion>10.0</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,29 +30,28 @@ Your file should look something like this:
 ## 2. Create a pipeline definition
 
 Inside of the `MyProject.Pipelines` pipeline project, create a new class.
-Let's call it `PullRequestPipeline.cs` and make it inherit from `AzureDevopsPipelineDefinition`.
+Let's call it `PullRequestPipeline.cs` and make it inherit from `Sharpliner.AzureDevops.PipelineDefinition`.
 Once you do this, you will see that you need to implement some of the abstract members of the pipeline:
 
 ```csharp
 using Sharpliner.AzureDevOps;
 
-namespace MyProject.Pipelines
-{
-    class PullRequestPipeline : AzureDevopsPipelineDefinition
-    {
-        // Name and where to serialize the YAML of this pipeline into
-        public override string TargetFile => "azure-pipelines.yml";
-        public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
+namespace MyProject.Pipelines;
 
-        public override AzureDevOpsPipeline Pipeline => new()
-        {
-            // This is where your pipeline will go
-        }
+class PullRequestPipeline : PipelineDefinition
+{
+    // Name and where to serialize the YAML of this pipeline into
+    public override string TargetFile => "azure-pipelines.yml";
+    public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
+
+    public override Pipeline Pipeline => new()
+    {
+        // This is where your pipeline will go
     }
 }
 ```
 
-You can also decide to override `SingleStageAzureDevOpsPipelineDefinition` in case you have a simpler pipeline with only a single stage.
+You can also decide to override `SingleStagePipelineDefinition` in case you have a simpler pipeline with only a single stage.
 
 ## 3. Define the pipeline
 
@@ -64,7 +66,7 @@ An example of a pipeline that builds and tests your PR can look like this:
 ```csharp
 ...
 
-public override SingleStageAzureDevOpsPipelineDefinition Pipeline => new()
+public override SingleStagePipelineDefinition Pipeline => new()
 {
     Pr = new PrTrigger("main"),
 
@@ -111,7 +113,7 @@ public override SingleStageAzureDevOpsPipelineDefinition Pipeline => new()
 Save the changes and build the project using `dotnet`.
 Based on the settings provided in the overriden members, Sharpliner will determine where you want your YAML file created.
 
-> **Note:** It is recommended to `dotnet build` the project rather than "F5" it in Visual Studio as we are hooking into the build process and this is not working as expected yet.
+> **Note:** It is recommended to `dotnet build` the project rather than "F5" it in Visual Studio as we are hooking into the build process and this is not working as expected yet (https://github.com/sharpliner/sharpliner/issues/108).
 
 The output should look something like this:
 
@@ -125,15 +127,15 @@ Copyright (C) Microsoft Corporation. All rights reserved.
   Restored MyProject.Pipelines.csproj (in 135 ms).
   MyProject.Pipelines -> bin/MyProject.Pipelines/net5.0/MyProject.Pipelines.dll
   Publishing all pipeline definitions inside bin/MyProject.Pipelines/net5.0/MyProject.Pipelines.dll
-  Validating pipeline PullRequestPipeline..
-  Publishing pipeline PullRequestPipeline to azure-pipelines.yml..
-  Published new changes for PullRequestPipeline
+  PullRequestPipeline:
+    Validating pipeline..
+    Publishing changes to azure-pipelines.yml..
 
 Build succeeded.
     0 Warning(s)
     0 Error(s)
 
-Time Elapsed 00:00:04.23
+Time Elapsed 00:00:01.23
 ```
 
 Your `azure-pipelines.yml` should look something like this:
