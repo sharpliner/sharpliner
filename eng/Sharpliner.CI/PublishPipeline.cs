@@ -25,7 +25,7 @@ namespace Sharpliner.CI
 
                         StepTemplate(InstallDotNetTemplate.Path, new()
                         {
-                            { "version", "6.0.100-rc.2.21505.57" }
+                            { "version", "6.0.100" }
                         }),
 
                         Powershell
