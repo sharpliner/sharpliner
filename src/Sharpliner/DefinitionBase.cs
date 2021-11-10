@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -9,7 +10,7 @@ namespace Sharpliner;
 /// Common ancestor for all serializable definitions.
 /// Do not override this class, we have a Azure DevOps/GitHub specific child classes for that.
 /// </summary>
-public abstract class PipelineDefinitionBase
+public abstract class DefinitionBase
 {
     /// <summary>
     /// Path to the YAML file where this pipeline will be exported to.
@@ -25,7 +26,7 @@ public abstract class PipelineDefinitionBase
     public virtual TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
 
     // No inheritance outside of this project to not confuse people.
-    internal PipelineDefinitionBase()
+    internal DefinitionBase()
     {
     }
 
@@ -140,13 +141,13 @@ public abstract class PipelineDefinitionBase
     /// </summary>
     protected virtual string[]? Header => new[]
     {
-            string.Empty,
-            "DO NOT MODIFY THIS FILE!",
-            string.Empty,
-            $"This YAML was auto-generated from { GetType().Name }.cs",
-            $"To make changes, change the C# definition and rebuild its project",
-            string.Empty,
-        };
+        string.Empty,
+        "DO NOT MODIFY THIS FILE!",
+        string.Empty,
+        $"This YAML was auto-generated from { GetType().Name }.cs",
+        $"To make changes, change the C# definition and rebuild its project",
+        string.Empty,
+    };
 
     protected static string PrettifyYaml(string yaml)
     {
@@ -158,4 +159,37 @@ public abstract class PipelineDefinitionBase
 
         return yaml;
     }
+}
+
+/// <summary>
+/// Use this data class to create pipeline definitions dynamically inside of PipelineDefinitionCollection.
+/// </summary>
+/// <typeparam name="TDefinition">Type of the definition</typeparam>
+public class DefinitionBase<TDefinition> where TDefinition : DefinitionBase
+{
+    /// <summary>
+    /// If set, override's the target directory set for the parent collection
+    /// </summary>
+    public string? TargetDirectory { get; set; }
+
+    /// <summary>
+    /// If set, override's the target directory set for the parent collection
+    /// 
+    /// Override this to define where the resulting YAML should be stored (together with TargetFile).
+    /// Default is RelativeToCurrentDir.
+    /// </summary>
+    public TargetPathType? TargetPathType { get; set; }
+
+    /// <summary>
+    /// Header that will be shown at the top of the generated YAML file
+    /// 
+    /// Leave null or empty to omit file header.
+    /// </summary>
+    public string[]? Header { get; set; }
+
+    /// <summary>
+    /// The definition itself
+    /// </summary>
+    [DisallowNull]
+    public TDefinition? Definition { get; set; }
 }

@@ -6,7 +6,7 @@ namespace Sharpliner.AzureDevOps;
 /// <summary>
 /// This is a common ancestor for AzDO related definitions (pipelines, templates..) containing useful macros.
 /// </summary>
-public abstract class AzureDevOpsDefinition : PipelineDefinitionBase
+public abstract class AzureDevOpsDefinition : DefinitionBase
 {
     /// <summary>
     /// Start an ${{ if () }} section.
@@ -148,7 +148,7 @@ public abstract class AzureDevOpsDefinition : PipelineDefinitionBase
     /// <param name="pipelineProject">Path to the .csproj where pipelines are defined</param>
     protected static Step ValidateYamlsArePublished(string pipelineProject)
         => Script
-            .Inline($"dotnet build \"{pipelineProject}\" -p:{nameof(PublishPipelines.FailIfChanged)}=true")
+            .Inline($"dotnet build \"{pipelineProject}\" -p:{nameof(PublishDefinitions.FailIfChanged)}=true")
             .DisplayAs("Validate YAML has been published");
 
     /// <summary>
