@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -10,7 +11,7 @@ namespace Sharpliner;
 /// <summary>
 /// This is an MSBuild task that is run in user projects to publish YAMLs after build.
 /// </summary>
-public class PublishPipelines : Microsoft.Build.Utilities.Task
+public class PublishDefinitions : Microsoft.Build.Utilities.Task
 {
     /// <summary>
     /// Assembly that will be scaned for pipeline definitions.
@@ -24,48 +25,22 @@ public class PublishPipelines : Microsoft.Build.Utilities.Task
     /// </summary>
     public bool FailIfChanged { get; set; }
 
-    public override bool Execute() => PublishAllPipelines<PipelineDefinitionBase>();
+    public override bool Execute() => PublishAllDefinitions<DefinitionBase>();
 
     /// <summary>
     /// This method finds all pipeline definitions via reflection and publishes them to YAML.
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    private bool PublishAllPipelines<T>() where T : PipelineDefinitionBase
+    /// <typeparam name="T">Base type of the definitions we're looking for</typeparam>
+    private bool PublishAllDefinitions<T>() where T : DefinitionBase
     {
-        var assembly = LoadAssembly(Assembly ?? throw new ArgumentNullException(nameof(Assembly), "Assembly parameter not set"));
+        var pipelines = FindAllImplementations<T>();
 
-        var pipelineFound = false;
-        var pipelineBaseType = typeof(T);
-        foreach (Type type in assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract))
+        foreach (var pipeline in pipelines)
         {
-            bool isPipelineDefinition = false;
-            var baseType = type.BaseType;
-
-            // I am unable to cast this to PipelineDefinitionBase and just do t.IsSubClass or t.IsAssignableTo because the types don't seem
-            // to be the same even when they are (they come from the same code, but maybe different .dll files)..
-            // I tried to make sure there is only one Sharpliner.dll but still couldn't get it to work so we have to parse invoke Publish via reflection
-            while (baseType is not null)
-            {
-                isPipelineDefinition |= baseType.FullName == typeof(T).FullName && baseType.GUID == typeof(T).GUID;
-                baseType = baseType.BaseType;
-            }
-
-            if (!isPipelineDefinition)
-            {
-                continue;
-            }
-
-            object? pipelineDefinition = Activator.CreateInstance(type);
-            if (pipelineDefinition is null)
-            {
-                throw new Exception($"Failed to instantiate {type.GetType().FullName}");
-            }
-
-            pipelineFound = true;
-            PublishPipeline(pipelineDefinition);
+            PublishDefinition(pipeline);
         }
 
-        return pipelineFound;
+        return pipelines.Count > 0;
     }
 
     /// <summary>
@@ -98,12 +73,12 @@ public class PublishPipelines : Microsoft.Build.Utilities.Task
         return System.Reflection.Assembly.LoadFile(Path.GetFullPath(assemblyPath));
     }
 
-    private void PublishPipeline(object pipelineDefinition)
+    private void PublishDefinition(object definition)
     {
-        Type type = pipelineDefinition.GetType();
-        var getPath = type.GetMethod(nameof(PipelineDefinitionBase.GetTargetPath));
-        var validate = type.GetMethod(nameof(PipelineDefinitionBase.Validate));
-        var publish = type.GetMethod(nameof(PipelineDefinitionBase.Publish));
+        Type type = definition.GetType();
+        var getPath = type.GetMethod(nameof(DefinitionBase.GetTargetPath));
+        var validate = type.GetMethod(nameof(DefinitionBase.Validate));
+        var publish = type.GetMethod(nameof(DefinitionBase.Publish));
 
         if (publish is null || validate is null || getPath is null)
         {
@@ -111,7 +86,7 @@ public class PublishPipelines : Microsoft.Build.Utilities.Task
             return;
         }
 
-        if (getPath.Invoke(pipelineDefinition, null) is not string path)
+        if (getPath.Invoke(definition, null) is not string path)
         {
             Log.LogError($"Failed to get target path for {type.Name} ");
             return;
@@ -122,7 +97,7 @@ public class PublishPipelines : Microsoft.Build.Utilities.Task
 
         try
         {
-            validate.Invoke(pipelineDefinition, null);
+            validate.Invoke(definition, null);
         }
         catch (TargetInvocationException e)
         {
@@ -138,7 +113,7 @@ public class PublishPipelines : Microsoft.Build.Utilities.Task
         string? hash = GetFileHash(path);
 
         // Publish pipeline
-        publish.Invoke(pipelineDefinition, null);
+        publish.Invoke(definition, null);
 
         if (hash == null)
         {
@@ -170,6 +145,44 @@ public class PublishPipelines : Microsoft.Build.Utilities.Task
                 }
             }
         }
+    }
+
+    private List<object> FindAllImplementations<T>()
+    {
+        var assembly = LoadAssembly(Assembly ?? throw new ArgumentNullException(nameof(Assembly), "Assembly parameter not set"));
+
+        var pipelines = new List<object>();
+        var pipelineBaseType = typeof(T);
+
+        foreach (Type type in assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract))
+        {
+            bool isPipelineDefinition = false;
+            var baseType = type.BaseType;
+
+            // I am unable to cast this to PipelineDefinitionBase and just do t.IsSubClass or t.IsAssignableTo because the types don't seem
+            // to be the same even when they are (they come from the same code, but maybe different .dll files)..
+            // I tried to make sure there is only one Sharpliner.dll but still couldn't get it to work so we have to parse invoke Publish via reflection
+            while (baseType is not null)
+            {
+                isPipelineDefinition |= baseType.FullName == typeof(T).FullName && baseType.GUID == typeof(T).GUID;
+                baseType = baseType.BaseType;
+            }
+
+            if (!isPipelineDefinition)
+            {
+                continue;
+            }
+
+            object? pipelineDefinition = Activator.CreateInstance(type);
+            if (pipelineDefinition is null)
+            {
+                throw new Exception($"Failed to instantiate {type.GetType().FullName}");
+            }
+
+            pipelines.Add(pipelineDefinition);
+        }
+
+        return pipelines;
     }
 
     private static string? GetFileHash(string path)

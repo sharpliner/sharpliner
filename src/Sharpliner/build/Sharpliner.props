@@ -5,5 +5,5 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 
-  <UsingTask TaskName="Sharpliner.PublishPipelines" AssemblyFile="$(TaskAssembly)" />
+  <UsingTask TaskName="Sharpliner.PublishDefinitions" AssemblyFile="$(TaskAssembly)" />
 </Project>

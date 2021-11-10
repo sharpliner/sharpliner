@@ -3,7 +3,7 @@
     /// <summary>
     /// Inherit from this class to define a GitHub action.
     /// </summary>
-    public abstract class GitHubActionsPipelineDefinition : PipelineDefinitionBase
+    public abstract class GitHubActionsPipelineDefinition : DefinitionBase
     {
         // TODO
     }
