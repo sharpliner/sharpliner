@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 using System;
+using System.Text.RegularExpressions;
 
 namespace Sharpliner;
 
@@ -30,6 +31,7 @@ public interface IDefinition
     /// </summary>
     string GetTargetPath()
     {
+        Serialize();
         switch (TargetPathType)
         {
             case TargetPathType.RelativeToGitRoot:
@@ -66,7 +68,7 @@ public interface IDefinition
     void Publish()
     {
         string fileName = GetTargetPath();
-        var fileContents = Serialize();
+        var fileContents = PrettifyYaml(Serialize());
 
         var header = Header;
         if (header?.Length > 0)
@@ -94,4 +96,15 @@ public interface IDefinition
     /// Serializes the definition into a YAML string.
     /// </summary>
     string Serialize();
+
+    private string PrettifyYaml(string yaml)
+    {
+        // Add empty new lines to make text more readable
+        yaml = Regex.Replace(yaml, "((\r?\n)[a-zA-Z]+:)", Environment.NewLine + "$1");
+        yaml = Regex.Replace(yaml, "((\r?\n) {0,8}- ?[a-zA-Z]+@?[a-zA-Z\\.0-9]*:)", Environment.NewLine + "$1");
+        yaml = Regex.Replace(yaml, "((\r?\n) {0,8}- ?\\${{ ?if[^\n]+\n)", Environment.NewLine + "$1");
+        yaml = Regex.Replace(yaml, "(:\r?\n\r?\n)", ":" + Environment.NewLine);
+
+        return yaml;
+    }
 }

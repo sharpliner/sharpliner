@@ -40,18 +40,4 @@ public abstract class DefinitionBase : IDefinition
     public abstract void Validate();
 
     public abstract string Serialize();
-
-    protected virtual string PrettifyYaml(string yaml)
-    {
-        // Add empty new lines to make text more readable
-        yaml = Regex.Replace(yaml, "((\r?\n)[a-zA-Z]+:)", Environment.NewLine + "$1");
-        yaml = Regex.Replace(yaml, "((\r?\n) {0,8}- ?[a-zA-Z]+@?[a-zA-Z\\.0-9]*:)", Environment.NewLine + "$1");
-        yaml = Regex.Replace(yaml, "((\r?\n) {0,8}- ?\\${{ ?if[^\n]+\n)", Environment.NewLine + "$1");
-        yaml = Regex.Replace(yaml, "(:\r?\n\r?\n)", ":" + Environment.NewLine);
-
-        return yaml;
-    }
-
-    void IDefinition.Validate() => throw new NotImplementedException();
-    string IDefinition.Serialize() => throw new NotImplementedException();
 }

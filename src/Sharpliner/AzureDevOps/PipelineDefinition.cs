@@ -20,7 +20,7 @@ public abstract class PipelineDefinitionBase<TPipeline> : AzureDevOpsDefinition 
     /// <summary>
     /// Serializes this pipeline into YAML.
     /// </summary>
-    public override string Serialize() => PrettifyYaml(SharplinerSerializer.Serialize(Pipeline));
+    public override string Serialize() => SharplinerSerializer.Serialize(Pipeline);
 
     /// <summary>
     /// Internal, cannot inherit from this.

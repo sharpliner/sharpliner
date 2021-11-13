@@ -26,7 +26,7 @@ public abstract class TemplateDefinition<T> : AzureDevOpsDefinition
 
         template.Add(YamlProperty, Definition);
 
-        return PrettifyYaml(SharplinerSerializer.Serialize(template));
+        return SharplinerSerializer.Serialize(template);
     }
 
     public sealed override void Validate() { }

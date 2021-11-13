@@ -32,7 +32,7 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
     /// </summary>
     private bool PublishAllDefinitions()
     {
-        var pipelines = FindAllImplementations<IDefinition>();
+        var pipelines = FindAllImplementations<IDefinition>(isInterface: true);
 
         foreach (var pipeline in pipelines)
         {
@@ -78,11 +78,10 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
         Type type = definition.GetType();
         Type iface = type.GetInterfaces().First(i => i.GUID == typeof(IDefinition).GUID);
         var getPath = iface.GetMethod(nameof(IDefinition.GetTargetPath));
-        var serialize = type.GetMethod(nameof(IDefinition.Serialize));
-        var validate = type.GetMethod(nameof(IDefinition.Validate));
-        var header = type.GetProperty(nameof(IDefinition.Header));
+        var validate = iface.GetMethod(nameof(IDefinition.Validate));
+        var publish = iface.GetMethod(nameof(IDefinition.Publish));
 
-        if (serialize is null || validate is null || getPath is null || header is null)
+        if (publish is null || validate is null || getPath is null)
         {
             Log.LogError($"Failed to get pipeline definition metadata for {type.FullName}");
             return;
@@ -107,17 +106,15 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
                 type.Name,
                 e.InnerException?.Message ?? e.ToString(),
                 Environment.NewLine,
-                e);// TODO "To see exception details, build with more verbosity (dotnet build -v:n)");
+                "To see exception details, build with more verbosity (dotnet build -v:n)");
             Log.LogMessage(MessageImportance.Normal, "Validation of pipeline {0} failed: {1}", type.Name, e.InnerException);
             return;
         }
 
-        string? content = serialize.Invoke(definition, null) as string;
-        string? fileHeader = header.GetValue(definition, null) as string;
         string? hash = GetFileHash(path);
 
         // Publish pipeline
-        PublishDefinition(path, fileHeader!, content!);
+        publish.Invoke(definition, null);
 
         if (hash == null)
         {
@@ -151,25 +148,7 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
         }
     }
 
-    private void PublishDefinition(string targetPath, string fileHeader, string fileContents)
-    {
-        if (fileHeader?.Length > 0)
-        {
-            const string hash = "### ";
-            fileContents = hash + string.Join(Environment.NewLine + hash, fileHeader) + Environment.NewLine + Environment.NewLine + fileContents;
-            fileContents = fileContents.Replace(" \r\n", "\r\n").Replace(" \n", "\n"); // Remove trailing spaces from the default template
-        }
-
-        var targetDirectory = Path.GetDirectoryName(targetPath)!;
-        if (!string.IsNullOrEmpty(targetDirectory) && !Directory.Exists(targetDirectory))
-        {
-            Directory.CreateDirectory(targetDirectory);
-        }
-
-        File.WriteAllText(targetPath, fileContents);
-    }
-
-    private List<object> FindAllImplementations<T>()
+    private List<object> FindAllImplementations<T>(bool isInterface)
     {
         var assembly = LoadAssembly(Assembly ?? throw new ArgumentNullException(nameof(Assembly), "Assembly parameter not set"));
 
@@ -178,13 +157,35 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
 
         foreach (Type type in assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract))
         {
-            // I am unable to just do "is IDefinition) because the types from the assembly cannot be cast for some reasone
-            // (they come from the same code, but maybe different .dll files or something)..
-            // I tried to make sure there is only one Sharpliner.dll but still couldn't get it to work so we have to treat them as anonymous
-            var interfaces = type.GetInterfaces();
-            if (!interfaces.Any(iface => iface.FullName == typeof(T).FullName && iface.GUID == typeof(T).GUID))
+            if (isInterface)
             {
-                continue;
+                // I am unable to just do "is T" because the types from the assembly cannot be cast for some reasone
+                // (they come from the same code, but maybe different .dll files or something)..
+                // I tried to make sure there is only one Sharpliner.dll but still couldn't get it to work so we have to treat them as anonymous
+                var interfaces = type.GetInterfaces();
+                if (!interfaces.Any(iface => iface.FullName == typeof(T).FullName && iface.GUID == typeof(T).GUID))
+                {
+                    continue;
+                }
+            }
+            else
+            {
+                bool isChild = false;
+                var baseType = type.BaseType;
+
+                // I am unable to cast this to PipelineDefinitionBase and just do t.IsSubClass or t.IsAssignableTo because the types don't seem
+                // to be the same even when they are (they come from the same code, but maybe different .dll files)..
+                // I tried to make sure there is only one Sharpliner.dll but still couldn't get it to work so we have to parse invoke Publish via reflection
+                while (!isChild && baseType is not null)
+                {
+                    isChild |= baseType.FullName == typeof(T).FullName && baseType.GUID == typeof(T).GUID;
+                    baseType = baseType.BaseType;
+                }
+
+                if (!isChild)
+                {
+                    continue;
+                }
             }
 
             object? pipelineDefinition = Activator.CreateInstance(type);
