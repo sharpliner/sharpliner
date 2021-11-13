@@ -39,18 +39,3 @@ public abstract class PipelineDefinitionBase<TPipeline> : AzureDevOpsDefinition,
     {
     }
 }
-
-/// <summary>
-/// Inherit from this class to define a full Azure DevOps pipeline.
-/// For a pipeline with only a single stage, consider using SingleStagePipelineDefinition.
-/// </summary>
-public abstract class PipelineDefinition : PipelineDefinitionBase<Pipeline>
-{
-}
-
-/// <summary>
-/// Inherit from this class to define a pipeline with a single stage where you only define jobs.
-/// </summary>
-public abstract class SingleStagePipelineDefinition : PipelineDefinitionBase<SingleStagePipeline>
-{
-}

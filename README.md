@@ -24,6 +24,7 @@ For more detailed steps, check our [documentation](https://github.com/sharpliner
 
 ```csharp
 // Just override prepared abstract classes and `dotnet build` the project, nothing else is needed!
+// For full list of classes that you can override, see https://github.com/sharpliner/sharpliner/blob/main/src/Sharpliner/AzureDevOps/PublicDefinitions.cs
 class PullRequestPipeline : SingleStagePipelineDefinition
 {
     // Say where to publish the YAML to
