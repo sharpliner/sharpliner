@@ -33,6 +33,7 @@ public class StrategySerializationTests
     _BuildConfig2: Release2
   Debug:
     _BuildConfig: Debug
+
 maxParallel: 2
 ");
     }
