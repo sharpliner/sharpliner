@@ -5,6 +5,9 @@ using Sharpliner.AzureDevOps.ConditionedExpressions;
 
 namespace Sharpliner.AzureDevOps;
 
+/// <summary>
+/// This class is just a simple collection of handy macros that make template definition easier.
+/// </summary>
 public abstract class TemplateDefinition : AzureDevOpsDefinition
 {
     /// <summary>
@@ -126,6 +129,10 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
     protected Step StepParameterReference(string parameterName) => new StepParameterReference(parameterName);
 }
 
+/// <summary>
+/// This is the ancestor of all definitions that produce a Azure pipelines template.
+/// </summary>
+/// <typeparam name="T">Type of the part of the pipeline that this template is for (one of stages, steps, jobs or variables)</typeparam>
 public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDefinition
 {
     /// <summary>
