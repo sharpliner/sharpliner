@@ -23,7 +23,7 @@ namespace Sharpliner.CI
                             .FromResourceFile("Get-Version.ps1")
                             .DisplayAs("Detect package version"),
 
-                        StepTemplate(InstallDotNetTemplate.Path, new()
+                        StepTemplate(Pipelines.TemplateLocation + "install-dotnet-sdk.yml", new()
                         {
                             { "version", "6.0.100" }
                         }),

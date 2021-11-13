@@ -178,6 +178,55 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
     }
 }
 
+public abstract class StepTemplateDefinitionCollection : TemplateDefinition, ISharplinerDefinitionCollection
+{
+    public abstract IEnumerable<TemplateDefinitionData<Step>> Templates { get; }
+
+    public IEnumerable<ISharplinerDefinition> Definitions => Templates.Select(t => new StepTemplateDefinitionWrapper(
+        t.TargetFile, t.PathType, t.Definition, t.Parameters ?? new List<TemplateParameter>(), t.Header));
+
+    // Only us inheriting from this
+    internal StepTemplateDefinitionCollection()
+    {
+    }
+
+    private class StepTemplateDefinitionWrapper : StepTemplateDefinition
+    {
+        private readonly string[]? _header;
+
+        public StepTemplateDefinitionWrapper(
+            string targetFile,
+            TargetPathType pathType,
+            ConditionedList<Step> definition,
+            List<TemplateParameter> parameters,
+            string[]? header = null)
+        {
+            TargetFile = targetFile;
+            Definition = definition;
+            TargetPathType = pathType;
+            Parameters = parameters;
+            _header = header;
+        }
+
+        public override string TargetFile { get; }
+
+        public override TargetPathType TargetPathType { get; }
+
+        public override ConditionedList<Step> Definition { get; }
+
+        public override List<TemplateParameter> Parameters { get; }
+
+        // TODO string[]? Header => _header ?? base(ISharplinerDefinition).Header;
+    }
+}
+
+public record TemplateDefinitionData<T>(
+    string TargetFile,
+    ConditionedList<T> Definition,
+    List<TemplateParameter>? Parameters = null,
+    TargetPathType PathType = TargetPathType.RelativeToGitRoot,
+    string[]? Header = null);
+
 public sealed class TemplateParameterReference
 {
     public string this[string parameterName] => "${{ parameters." + parameterName + " }}";

@@ -24,7 +24,7 @@ namespace Sharpliner.CI
                     Pool = new HostedPool("Azure Pipelines", "windows-latest"),
                     Steps =
                     {
-                        StepTemplate(InstallDotNetTemplate.Path, new()
+                        StepTemplate(Pipelines.TemplateLocation + "install-dotnet-sdk.yml", new()
                         {
                             { "version", "6.0.100" }
                         }),

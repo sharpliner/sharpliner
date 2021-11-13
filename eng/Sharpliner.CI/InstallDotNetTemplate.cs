@@ -1,28 +1,36 @@
 ﻿using System.Collections.Generic;
 using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
 
 namespace Sharpliner.CI
 {
-    internal class InstallDotNetTemplate : StepTemplateDefinition
+    internal class InstallDotNetTemplate : StepTemplateDefinitions
     {
-        public const string Path = Pipelines.TemplateLocation + "install-dotnet.yml";
-
-        public override string TargetFile => Pipelines.Location + Path;
-
-        public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
-
-        public override List<TemplateParameter> Parameters => new()
+        public override IEnumerable<TemplateDefinitionData<Step>> Templates => new[]
         {
-            StringParameter("version"),
+            GetTemplate(false),
+            GetTemplate(true),
         };
 
-        public override ConditionedList<Step> Definition => new()
+        private TemplateDefinitionData<Step> GetTemplate(bool isFullSdk)
         {
-            // dotnet build fails with .NET 5 SDK and the new() statements
-            DotNet
-                .Install.Sdk(parameters["version"])
-                .DisplayAs("Install .NET " + parameters["version"]),
-        };
+            var targetFile = Pipelines.Location + Pipelines.TemplateLocation + $"install-dotnet-{(isFullSdk ? "sdk" : "runtime")}.yml";
+            Step step;
+
+            if (isFullSdk)
+            {
+                step = DotNet.Install.Sdk(parameters["version"])
+                    .DisplayAs("Install .NET SDK " + parameters["version"]);
+            }
+            else
+            {
+                step = DotNet.Install.Runtime(parameters["version"])
+                    .DisplayAs("Install .NET runtime " + parameters["version"]);
+            }
+
+            return new(
+                targetFile,
+                new() { step },
+                new() { StringParameter("version") });
+        }
     }
 }

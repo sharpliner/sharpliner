@@ -52,6 +52,14 @@ public abstract class StepTemplateDefinition : TemplateDefinition<Step>
 }
 
 /// <summary>
+/// Inherit from this class when you want to dynamically generate multiple step templates
+/// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
+/// </summary>
+public abstract class StepTemplateDefinitions : StepTemplateDefinitionCollection
+{
+}
+
+/// <summary>
 /// Inherit from this class to define a variable template.
 /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
 /// </summary>

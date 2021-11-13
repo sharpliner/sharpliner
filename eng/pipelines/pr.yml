@@ -23,7 +23,7 @@ jobs:
     name: Azure Pipelines
     vmImage: windows-latest
   steps:
-  - template: templates/install-dotnet.yml
+  - template: eng/pipelines/templates/install-dotnet-sdk.yml
     parameters:
       version: 6.0.100
 

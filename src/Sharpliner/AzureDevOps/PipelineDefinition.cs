@@ -4,7 +4,8 @@ namespace Sharpliner.AzureDevOps;
 /// Common internal ancestor. Do not inherit from this class, use PipelineDefinition or SingleStagePipelineDefinition.
 /// </summary>
 /// <typeparam name="TPipeline">Type of the pipeline (single stage, full..)</typeparam>
-public abstract class PipelineDefinitionBase<TPipeline> : AzureDevOpsDefinition, ISharplinerDefinition where TPipeline : PipelineBase
+public abstract class PipelineDefinitionBase<TPipeline>
+    : AzureDevOpsDefinition, ISharplinerDefinition where TPipeline : PipelineBase
 {
     /// <summary>
     /// Path to the YAML file where this pipeline will be exported to.
