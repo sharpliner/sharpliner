@@ -5,6 +5,10 @@ using System.Text.RegularExpressions;
 
 namespace Sharpliner;
 
+/// <summary>
+/// Every class that implements this interface will be serialized into a YAML file.
+/// We recommend to inherit from some of the more concrete definitions such as PipelineDefinition.
+/// </summary>
 public interface ISharplinerDefinition
 {
     /// <summary>
