@@ -32,7 +32,7 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
     /// </summary>
     private bool PublishAllDefinitions()
     {
-        var pipelines = FindAllImplementations<IDefinition>(isInterface: true);
+        var pipelines = FindAllImplementations<ISharplinerDefinition>(isInterface: true);
 
         foreach (var pipeline in pipelines)
         {
@@ -76,10 +76,10 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
     {
         // I am unable to just cat to IDefinition for some reason (they come from the same code, but maybe different .dll files or something)
         Type type = definition.GetType();
-        Type iface = type.GetInterfaces().First(i => i.GUID == typeof(IDefinition).GUID);
-        var getPath = iface.GetMethod(nameof(IDefinition.GetTargetPath));
-        var validate = iface.GetMethod(nameof(IDefinition.Validate));
-        var publish = iface.GetMethod(nameof(IDefinition.Publish));
+        Type iface = type.GetInterfaces().First(i => i.GUID == typeof(ISharplinerDefinition).GUID);
+        var getPath = iface.GetMethod(nameof(ISharplinerDefinition.GetTargetPath));
+        var validate = iface.GetMethod(nameof(ISharplinerDefinition.Validate));
+        var publish = iface.GetMethod(nameof(ISharplinerDefinition.Publish));
 
         if (publish is null || validate is null || getPath is null)
         {

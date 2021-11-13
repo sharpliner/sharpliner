@@ -5,13 +5,13 @@ using System.Text.RegularExpressions;
 
 namespace Sharpliner;
 
-public interface IDefinition
+public interface ISharplinerDefinition
 {
     /// <summary>
     /// Path to the YAML file/folder where this definition/collection will be exported to.
     /// Example: "/pipelines/ci.yaml"
     /// </summary>
-    internal string TargetPath { get; }
+    string TargetFile { get; }
 
     /// <summary>
     /// Override this to define where the resulting YAML should be stored (together with TargetFile).
@@ -24,7 +24,15 @@ public interface IDefinition
     /// 
     /// Leave null or empty to omit file header.
     /// </summary>
-    string[]? Header { get; }
+    string[]? Header => new[]
+    {
+        string.Empty,
+        "DO NOT MODIFY THIS FILE!",
+        string.Empty,
+        $"This YAML was auto-generated from { GetType().Name }",
+        $"To make changes, change the C# definition and rebuild its project",
+        string.Empty,
+    };
 
     /// <summary>
     /// Gets the path where YAML of this definition should be published to.
@@ -46,16 +54,16 @@ public interface IDefinition
                     }
                 }
 
-                return Path.Combine(currentDir.FullName, TargetPath);
+                return Path.Combine(currentDir.FullName, TargetFile);
 
             case TargetPathType.RelativeToCurrentDir:
-                return TargetPath;
+                return TargetFile;
 
             case TargetPathType.RelativeToAssembly:
-                return Path.Combine(Assembly.GetExecutingAssembly().Location, TargetPath);
+                return Path.Combine(Assembly.GetExecutingAssembly().Location, TargetFile);
 
             case TargetPathType.Absolute:
-                return TargetPath;
+                return TargetFile;
 
             default:
                 throw new ArgumentOutOfRangeException(nameof(TargetPathType));

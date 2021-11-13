@@ -6,7 +6,7 @@ namespace Sharpliner;
 /// Use this data class to create pipeline definitions dynamically inside of PipelineDefinitionCollection.
 /// </summary>
 /// <typeparam name="TDefinition">Type of the definition</typeparam>
-public abstract class DefinitionCollection<TDefinition> where TDefinition : DefinitionBase
+public abstract class DefinitionCollection<TDefinition> where TDefinition : ISharplinerDefinition
 {
     /// <summary>
     /// If set, override's the target directory set for the parent collection
