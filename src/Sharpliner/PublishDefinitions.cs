@@ -25,22 +25,21 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
     /// </summary>
     public bool FailIfChanged { get; set; }
 
-    public override bool Execute() => PublishAllDefinitions<DefinitionBase>();
+    public override bool Execute() => PublishAllDefinitions();
 
     /// <summary>
     /// This method finds all pipeline definitions via reflection and publishes them to YAML.
     /// </summary>
-    /// <typeparam name="T">Base type of the definitions we're looking for</typeparam>
-    private bool PublishAllDefinitions<T>() where T : DefinitionBase
+    private bool PublishAllDefinitions()
     {
-        var pipelines = FindAllImplementations<T>();
+        var pipelines = FindAllImplementations<ISharplinerDefinition>(isInterface: true);
 
         foreach (var pipeline in pipelines)
         {
             PublishDefinition(pipeline);
         }
 
-        return pipelines.Count > 0;
+        return pipelines.Any();
     }
 
     /// <summary>
@@ -75,10 +74,12 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
 
     private void PublishDefinition(object definition)
     {
+        // I am unable to just cat to IDefinition for some reason (they come from the same code, but maybe different .dll files or something)
         Type type = definition.GetType();
-        var getPath = type.GetMethod(nameof(DefinitionBase.GetTargetPath));
-        var validate = type.GetMethod(nameof(DefinitionBase.Validate));
-        var publish = type.GetMethod(nameof(DefinitionBase.Publish));
+        Type iface = type.GetInterfaces().First(i => i.GUID == typeof(ISharplinerDefinition).GUID);
+        var getPath = iface.GetMethod(nameof(ISharplinerDefinition.GetTargetPath));
+        var validate = iface.GetMethod(nameof(ISharplinerDefinition.Validate));
+        var publish = iface.GetMethod(nameof(ISharplinerDefinition.Publish));
 
         if (publish is null || validate is null || getPath is null)
         {
@@ -147,7 +148,7 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
         }
     }
 
-    private List<object> FindAllImplementations<T>()
+    private List<object> FindAllImplementations<T>(bool isInterface)
     {
         var assembly = LoadAssembly(Assembly ?? throw new ArgumentNullException(nameof(Assembly), "Assembly parameter not set"));
 
@@ -156,21 +157,35 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
 
         foreach (Type type in assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract))
         {
-            bool isPipelineDefinition = false;
-            var baseType = type.BaseType;
-
-            // I am unable to cast this to PipelineDefinitionBase and just do t.IsSubClass or t.IsAssignableTo because the types don't seem
-            // to be the same even when they are (they come from the same code, but maybe different .dll files)..
-            // I tried to make sure there is only one Sharpliner.dll but still couldn't get it to work so we have to parse invoke Publish via reflection
-            while (baseType is not null)
+            if (isInterface)
             {
-                isPipelineDefinition |= baseType.FullName == typeof(T).FullName && baseType.GUID == typeof(T).GUID;
-                baseType = baseType.BaseType;
+                // I am unable to just do "is T" because the types from the assembly cannot be cast for some reasone
+                // (they come from the same code, but maybe different .dll files or something)..
+                // I tried to make sure there is only one Sharpliner.dll but still couldn't get it to work so we have to treat them as anonymous
+                var interfaces = type.GetInterfaces();
+                if (!interfaces.Any(iface => iface.FullName == typeof(T).FullName && iface.GUID == typeof(T).GUID))
+                {
+                    continue;
+                }
             }
-
-            if (!isPipelineDefinition)
+            else
             {
-                continue;
+                bool isChild = false;
+                var baseType = type.BaseType;
+
+                // I am unable to cast this to PipelineDefinitionBase and just do t.IsSubClass or t.IsAssignableTo because the types don't seem
+                // to be the same even when they are (they come from the same code, but maybe different .dll files)..
+                // I tried to make sure there is only one Sharpliner.dll but still couldn't get it to work so we have to parse invoke Publish via reflection
+                while (!isChild && baseType is not null)
+                {
+                    isChild |= baseType.FullName == typeof(T).FullName && baseType.GUID == typeof(T).GUID;
+                    baseType = baseType.BaseType;
+                }
+
+                if (!isChild)
+                {
+                    continue;
+                }
             }
 
             object? pipelineDefinition = Activator.CreateInstance(type);

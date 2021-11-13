@@ -5,8 +5,17 @@ using Sharpliner.AzureDevOps.ConditionedExpressions;
 
 namespace Sharpliner.AzureDevOps;
 
-public abstract class TemplateDefinition<T> : AzureDevOpsDefinition
+public abstract class TemplateDefinition<T> : AzureDevOpsDefinition, ISharplinerDefinition
 {
+    /// <summary>
+    /// Path to the YAML file where this template will be exported to.
+    /// When you build the project, the template will be saved into a file on this path.
+    /// Example: "pipelines/ci.yaml"
+    /// </summary>
+    public abstract string TargetFile { get; }
+
+    public virtual TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
+
     [DisallowNull]
     public virtual List<TemplateParameter> Parameters { get; } = new();
 
@@ -15,7 +24,7 @@ public abstract class TemplateDefinition<T> : AzureDevOpsDefinition
 
     internal abstract string YamlProperty { get; }
 
-    public sealed override string Serialize()
+    public string Serialize()
     {
         var template = new Dictionary<string, object>();
 
@@ -26,10 +35,12 @@ public abstract class TemplateDefinition<T> : AzureDevOpsDefinition
 
         template.Add(YamlProperty, Definition);
 
-        return PrettifyYaml(SharplinerSerializer.Serialize(template));
+        return SharplinerSerializer.Serialize(template);
     }
 
-    public sealed override void Validate() { }
+    public void Validate()
+    {
+    }
 
     /// <summary>
     /// Disallow any other types than what we define here as AzDO only supports these.

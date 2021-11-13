@@ -6,7 +6,7 @@ namespace Sharpliner.AzureDevOps;
 /// <summary>
 /// This is a common ancestor for AzDO related definitions (pipelines, templates..) containing useful macros.
 /// </summary>
-public abstract class AzureDevOpsDefinition : DefinitionBase
+public abstract class AzureDevOpsDefinition
 {
     /// <summary>
     /// Start an ${{ if () }} section.
