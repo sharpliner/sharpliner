@@ -74,13 +74,15 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
 
     private void PublishDefinition(object definition)
     {
+        // I am unable to just cat to IDefinition for some reason (they come from the same code, but maybe different .dll files or something)
         Type type = definition.GetType();
         Type iface = type.GetInterfaces().First(i => i.GUID == typeof(IDefinition).GUID);
         var getPath = iface.GetMethod(nameof(IDefinition.GetTargetPath));
+        var serialize = type.GetMethod(nameof(IDefinition.Serialize));
         var validate = type.GetMethod(nameof(IDefinition.Validate));
-        var publish = iface.GetMethod(nameof(IDefinition.Publish));
+        var header = type.GetProperty(nameof(IDefinition.Header));
 
-        if (publish is null || validate is null || getPath is null)
+        if (serialize is null || validate is null || getPath is null || header is null)
         {
             Log.LogError($"Failed to get pipeline definition metadata for {type.FullName}");
             return;
@@ -110,10 +112,12 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
             return;
         }
 
+        string? content = serialize.Invoke(definition, null) as string;
+        string? fileHeader = header.GetValue(definition, null) as string;
         string? hash = GetFileHash(path);
 
         // Publish pipeline
-        publish.Invoke(definition, null);
+        PublishDefinition(path, fileHeader!, content!);
 
         if (hash == null)
         {
@@ -145,6 +149,24 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
                 }
             }
         }
+    }
+
+    private void PublishDefinition(string targetPath, string fileHeader, string fileContents)
+    {
+        if (fileHeader?.Length > 0)
+        {
+            const string hash = "### ";
+            fileContents = hash + string.Join(Environment.NewLine + hash, fileHeader) + Environment.NewLine + Environment.NewLine + fileContents;
+            fileContents = fileContents.Replace(" \r\n", "\r\n").Replace(" \n", "\n"); // Remove trailing spaces from the default template
+        }
+
+        var targetDirectory = Path.GetDirectoryName(targetPath)!;
+        if (!string.IsNullOrEmpty(targetDirectory) && !Directory.Exists(targetDirectory))
+        {
+            Directory.CreateDirectory(targetDirectory);
+        }
+
+        File.WriteAllText(targetPath, fileContents);
     }
 
     private List<object> FindAllImplementations<T>()
