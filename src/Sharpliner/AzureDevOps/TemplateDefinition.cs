@@ -5,50 +5,11 @@ using Sharpliner.AzureDevOps.ConditionedExpressions;
 
 namespace Sharpliner.AzureDevOps;
 
-public abstract class TemplateDefinition<T> : AzureDevOpsDefinition, ISharplinerDefinition
+/// <summary>
+/// This class is just a simple collection of handy macros that make template definition easier.
+/// </summary>
+public abstract class TemplateDefinition : AzureDevOpsDefinition
 {
-    /// <summary>
-    /// Path to the YAML file where this template will be exported to.
-    /// When you build the project, the template will be saved into a file on this path.
-    /// Example: "pipelines/ci.yaml"
-    /// </summary>
-    public abstract string TargetFile { get; }
-
-    public virtual TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
-
-    [DisallowNull]
-    public virtual List<TemplateParameter> Parameters { get; } = new();
-
-    [DisallowNull]
-    public abstract ConditionedList<T> Definition { get; }
-
-    internal abstract string YamlProperty { get; }
-
-    public string Serialize()
-    {
-        var template = new Dictionary<string, object>();
-
-        if (Parameters != null && Parameters.Any())
-        {
-            template.Add("parameters", Parameters);
-        }
-
-        template.Add(YamlProperty, Definition);
-
-        return SharplinerSerializer.Serialize(template);
-    }
-
-    public void Validate()
-    {
-    }
-
-    /// <summary>
-    /// Disallow any other types than what we define here as AzDO only supports these.
-    /// </summary>
-    internal TemplateDefinition()
-    {
-    }
-
     /// <summary>
     /// Defines a string template parameter
     /// </summary>
@@ -169,39 +130,52 @@ public abstract class TemplateDefinition<T> : AzureDevOpsDefinition, ISharpliner
 }
 
 /// <summary>
-/// Inherit from this class to define a stage template.
-/// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
+/// This is the ancestor of all definitions that produce a Azure pipelines template.
 /// </summary>
-public abstract class StageTemplateDefinition : TemplateDefinition<Stage>
+/// <typeparam name="T">Type of the part of the pipeline that this template is for (one of stages, steps, jobs or variables)</typeparam>
+public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDefinition
 {
-    internal sealed override string YamlProperty => "stages";
-}
+    /// <summary>
+    /// Path to the YAML file where this template will be exported to.
+    /// When you build the project, the template will be saved into a file on this path.
+    /// Example: "pipelines/ci.yaml"
+    /// </summary>
+    public abstract string TargetFile { get; }
 
-/// <summary>
-/// Inherit from this class to define a job template.
-/// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
-/// </summary>
-public abstract class JobTemplateDefinition : TemplateDefinition<JobBase>
-{
-    internal sealed override string YamlProperty => "jobs";
-}
+    public virtual TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
 
-/// <summary>
-/// Inherit from this class to define a step template.
-/// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
-/// </summary>
-public abstract class StepTemplateDefinition : TemplateDefinition<Step>
-{
-    internal sealed override string YamlProperty => "steps";
-}
+    [DisallowNull]
+    public virtual List<TemplateParameter> Parameters { get; } = new();
 
-/// <summary>
-/// Inherit from this class to define a variable template.
-/// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
-/// </summary>
-public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBase>
-{
-    internal sealed override string YamlProperty => "variables";
+    [DisallowNull]
+    public abstract ConditionedList<T> Definition { get; }
+
+    internal abstract string YamlProperty { get; }
+
+    public string Serialize()
+    {
+        var template = new Dictionary<string, object>();
+
+        if (Parameters != null && Parameters.Any())
+        {
+            template.Add("parameters", Parameters);
+        }
+
+        template.Add(YamlProperty, Definition);
+
+        return SharplinerSerializer.Serialize(template);
+    }
+
+    public void Validate()
+    {
+    }
+
+    /// <summary>
+    /// Disallow any other types than what we define here as AzDO only supports these.
+    /// </summary>
+    internal TemplateDefinition()
+    {
+    }
 }
 
 public sealed class TemplateParameterReference

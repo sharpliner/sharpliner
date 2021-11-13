@@ -53,6 +53,8 @@ class PullRequestPipeline : PipelineDefinition
 
 You can also decide to override `SingleStagePipelineDefinition` in case you have a simpler pipeline with only a single stage.
 
+For full list of classes that you can override, see [PublicDefinitions.cs](https://github.com/sharpliner/sharpliner/blob/main/src/Sharpliner/AzureDevOps/PublicDefinitions.cs).
+
 ## 3. Define the pipeline
 
 To define the pipeline, just start setting properties of the `Pipeline` member and Intellisense should do the rest.
