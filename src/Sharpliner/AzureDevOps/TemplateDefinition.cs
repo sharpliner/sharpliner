@@ -185,64 +185,6 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
     }
 }
 
-public abstract class StepTemplateDefinitionCollection : TemplateDefinition, ISharplinerDefinitionCollection
-{
-    public abstract IEnumerable<TemplateDefinitionData<Step>> Templates { get; }
-
-    public IEnumerable<ISharplinerDefinition> Definitions => Templates.Select(t => new StepTemplateDefinitionWrapper(
-        t.TargetFile, t.PathType, t.Definition, t.Parameters ?? new List<TemplateParameter>(), t.Header));
-
-    // Only us inheriting from this
-    internal StepTemplateDefinitionCollection()
-    {
-    }
-
-    private class StepTemplateDefinitionWrapper : StepTemplateDefinition
-    {
-        private readonly string[]? _header;
-
-        public StepTemplateDefinitionWrapper(
-            string targetFile,
-            TargetPathType pathType,
-            ConditionedList<Step> definition,
-            List<TemplateParameter> parameters,
-            string[]? header = null)
-        {
-            TargetFile = targetFile;
-            Definition = definition;
-            TargetPathType = pathType;
-            Parameters = parameters;
-            _header = header;
-        }
-
-        public override string TargetFile { get; }
-
-        public override TargetPathType TargetPathType { get; }
-
-        public override ConditionedList<Step> Definition { get; }
-
-        public override List<TemplateParameter> Parameters { get; }
-
-        public override string[]? Header => _header ?? base.Header;
-    }
-}
-
-/// <summary>
-/// Use this class to dynamically populate a template definition.
-/// </summary>
-/// <typeparam name="T">Type of the template</typeparam>
-/// <param name="TargetFile"></param>
-/// <param name="Definition"></param>
-/// <param name="Parameters"></param>
-/// <param name="PathType"></param>
-/// <param name="Header"></param>
-public record TemplateDefinitionData<T>(
-    string TargetFile,
-    ConditionedList<T> Definition,
-    List<TemplateParameter>? Parameters = null,
-    TargetPathType PathType = TargetPathType.RelativeToGitRoot,
-    string[]? Header = null);
-
 public sealed class TemplateParameterReference
 {
     public string this[string parameterName] => "${{ parameters." + parameterName + " }}";

@@ -11,7 +11,7 @@ namespace Sharpliner;
 public interface ISharplinerDefinition
 {
     /// <summary>
-    /// Default YAML file header.
+    /// Default YAML file header
     /// </summary>
     public static string[] GetDefaultHeader(Type type) => new[]
     {
@@ -24,26 +24,25 @@ public interface ISharplinerDefinition
     };
 
     /// <summary>
-    /// Path to the YAML file/folder where this definition/collection will be exported to.
+    /// Path to the YAML file/folder where this definition/collection will be exported to
     /// Example: "/pipelines/ci.yaml"
     /// </summary>
     string TargetFile { get; }
 
     /// <summary>
-    /// Override this to define where the resulting YAML should be stored (together with TargetFile).
-    /// Default is RelativeToCurrentDir.
+    /// Override this to define where the resulting YAML should be stored (together with TargetFile)
+    /// Default is RelativeToGit
     /// </summary>
     TargetPathType TargetPathType { get; }
 
     /// <summary>
     /// Header that will be shown at the top of the generated YAML file
-    /// 
-    /// Leave empty array to omit file header.
+    /// Leave empty array to omit file header
     /// </summary>
     string[]? Header { get; }
 
     /// <summary>
-    /// Gets the path where YAML of this definition should be published to.
+    /// Gets the path where YAML of this definition should be published to
     /// </summary>
     string GetTargetPath()
     {
@@ -78,26 +77,14 @@ public interface ISharplinerDefinition
     }
 
     /// <summary>
-    /// Publishes the definition into a YAML file.
+    /// Publishes the definition into a YAML file
     /// </summary>
     void Publish()
     {
         string fileName = GetTargetPath();
         var fileContents = Serialize();
 
-        var header = Header;
-
-        if (header == null)
-        {
-            if (this is ISharplinerDefinitionCollection)
-            {
-                header = GetDefaultHeader(GetType());
-            }
-            else
-            {
-                header = GetDefaultHeader(GetType());
-            }
-        }
+        var header = Header ?? GetDefaultHeader(GetType());
 
         if (header.Length > 0)
         {
@@ -116,12 +103,12 @@ public interface ISharplinerDefinition
     }
 
     /// <summary>
-    /// Validates the definition for runtime errors (e.g. wrong dependsOn, artifact name typos..).
+    /// Validates the definition for runtime errors (e.g. wrong dependsOn, artifact name typos..)
     /// </summary>
     void Validate();
 
     /// <summary>
-    /// Serializes the definition into a YAML string.
+    /// Serializes the definition into a YAML string
     /// </summary>
     string Serialize();
 }
