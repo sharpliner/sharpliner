@@ -3,7 +3,7 @@ using Sharpliner.AzureDevOps;
 
 namespace Sharpliner.CI
 {
-    internal class InstallDotNetTemplate : StepTemplateDefinitions
+    internal class InstallDotNetTemplate : StepTemplateCollection
     {
         public override IEnumerable<TemplateDefinitionData<Step>> Templates => new[]
         {

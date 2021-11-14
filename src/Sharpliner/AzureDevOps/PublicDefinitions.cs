@@ -68,14 +68,14 @@ public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBa
 /// Inherit from this class when you want to dynamically generate multiple pipelines
 /// For a pipeline with only a single stage, consider using SingleStagePipelineDefinitions
 /// </summary>
-public abstract class PipelineDefinitions : PipelineDefinitionCollection<Pipeline>
+public abstract class PipelineCollection : PipelineDefinitionCollection<Pipeline>
 {
 }
 
 /// <summary>
 /// Inherit from this class to dynamically generate multiple pipelines with a single stage
 /// </summary>
-public abstract class SingleStagePipelineDefinitions : PipelineDefinitionCollection<SingleStagePipeline>
+public abstract class SingleStagePipelineCollection : PipelineDefinitionCollection<SingleStagePipeline>
 {
 }
 
@@ -83,7 +83,7 @@ public abstract class SingleStagePipelineDefinitions : PipelineDefinitionCollect
 /// Inherit from this class when you want to dynamically generate multiple stage templates
 /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
 /// </summary>
-public abstract class StageTemplateDefinitions : TemplateDefinitionCollection<Stage>
+public abstract class StageTemplateCollection : TemplateDefinitionCollection<Stage>
 {
     internal sealed override string YamlProperty => "stages";
 }
@@ -92,7 +92,7 @@ public abstract class StageTemplateDefinitions : TemplateDefinitionCollection<St
 /// Inherit from this class when you want to dynamically generate multiple job templates
 /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
 /// </summary>
-public abstract class JobTemplateDefinitions : TemplateDefinitionCollection<Job>
+public abstract class JobTemplateCollection : TemplateDefinitionCollection<Job>
 {
     internal sealed override string YamlProperty => "jobs";
 }
@@ -101,7 +101,7 @@ public abstract class JobTemplateDefinitions : TemplateDefinitionCollection<Job>
 /// Inherit from this class when you want to dynamically generate multiple step templates
 /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
 /// </summary>
-public abstract class StepTemplateDefinitions : TemplateDefinitionCollection<Step>
+public abstract class StepTemplateCollection : TemplateDefinitionCollection<Step>
 {
     internal sealed override string YamlProperty => "steps";
 }
@@ -110,7 +110,7 @@ public abstract class StepTemplateDefinitions : TemplateDefinitionCollection<Ste
 /// Inherit from this class when you want to dynamically generate multiple step templates
 /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
 /// </summary>
-public abstract class VariableTemplateDefinitions : TemplateDefinitionCollection<VariableBase>
+public abstract class VariableTemplateCollection : TemplateDefinitionCollection<VariableBase>
 {
     internal sealed override string YamlProperty => "variables";
 }
