@@ -28,18 +28,12 @@ public abstract class TemplateDefinitionCollection<T> : TemplateDefinition, ISha
     internal abstract string YamlProperty { get; }
 
     public IEnumerable<ISharplinerDefinition> Definitions
-        => Templates.Select(data => TemplateDefinitionCollectionFactory.Create(data, YamlProperty, GetType()));
+        => Templates.Select(data => new TemplateDefinitionWrapper<T>(data, YamlProperty, GetType()));
 
     // Only us inheriting from this
     internal TemplateDefinitionCollection()
     {
     }
-}
-
-internal static class TemplateDefinitionCollectionFactory
-{
-    public static TemplateDefinitionWrapper<T> Create<T>(TemplateDefinitionData<T> data, string yamlPropertyName, Type definitionType)
-        => new(data, yamlPropertyName, definitionType);
 }
 
 internal class TemplateDefinitionWrapper<T> : TemplateDefinition<T>

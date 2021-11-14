@@ -6,15 +6,15 @@ namespace Sharpliner.AzureDevOps;
 #region Pipelines - override these to define pipelines
 
 /// <summary>
-/// Inherit from this class to define a full Azure DevOps pipeline.
-/// For a pipeline with only a single stage, consider using SingleStagePipelineDefinition.
+/// Inherit from this class to define a full Azure DevOps pipeline
+/// For a pipeline with only a single stage, consider using SingleStagePipelineDefinition
 /// </summary>
 public abstract class PipelineDefinition : PipelineDefinitionBase<Pipeline>
 {
 }
 
 /// <summary>
-/// Inherit from this class to define a pipeline with a single stage where you only define jobs.
+/// Inherit from this class to define a pipeline with a single stage where you only define jobs
 /// </summary>
 public abstract class SingleStagePipelineDefinition : PipelineDefinitionBase<SingleStagePipeline>
 {
@@ -63,6 +63,21 @@ public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBa
 #endregion
 
 #region Definition collections - use these to generate multiple definitions dynamically
+
+/// <summary>
+/// Inherit from this class when you want to dynamically generate multiple pipelines
+/// For a pipeline with only a single stage, consider using SingleStagePipelineDefinitions
+/// </summary>
+public abstract class PipelineDefinitions : PipelineDefinitionCollection<Pipeline>
+{
+}
+
+/// <summary>
+/// Inherit from this class to dynamically generate multiple pipelines with a single stage
+/// </summary>
+public abstract class SingleStagePipelineDefinitions : PipelineDefinitionCollection<SingleStagePipeline>
+{
+}
 
 /// <summary>
 /// Inherit from this class when you want to dynamically generate multiple stage templates
