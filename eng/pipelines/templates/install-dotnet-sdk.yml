@@ -1,0 +1,17 @@
+###
+### DO NOT MODIFY THIS FILE!
+###
+### This YAML was auto-generated from StepTemplateDefinitionWrapper
+### To make changes, change the C# definition and rebuild its project
+###
+
+parameters:
+- name: version
+  type: string
+
+steps:
+- task: UseDotNet@2
+  displayName: Install .NET SDK ${{ parameters.version }}
+  inputs:
+    packageType: sdk
+    version: ${{ parameters.version }}

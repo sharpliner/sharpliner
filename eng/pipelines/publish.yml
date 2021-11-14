@@ -23,7 +23,7 @@ jobs:
       Write-Host "##vso[task.setvariable variable=packageVersion]$tag"
     displayName: Detect package version
 
-  - template: eng/pipelines/templates/install-dotnet-sdk.yml
+  - template: templates/install-dotnet-sdk.yml
     parameters:
       version: 6.0.100
 

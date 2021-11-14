@@ -1,7 +1,7 @@
 ###
 ### DO NOT MODIFY THIS FILE!
 ###
-### This YAML was auto-generated from InstallDotNetTemplate
+### This YAML was auto-generated from StepTemplateDefinitionWrapper
 ### To make changes, change the C# definition and rebuild its project
 ###
 
@@ -11,7 +11,7 @@ parameters:
 
 steps:
 - task: UseDotNet@2
-  displayName: Install .NET ${{ parameters.version }}
+  displayName: Install .NET runtime ${{ parameters.version }}
   inputs:
-    packageType: sdk
+    packageType: runtime
     version: ${{ parameters.version }}
