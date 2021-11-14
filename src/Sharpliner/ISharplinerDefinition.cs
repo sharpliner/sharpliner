@@ -11,6 +11,19 @@ namespace Sharpliner;
 public interface ISharplinerDefinition
 {
     /// <summary>
+    /// Default YAML file header.
+    /// </summary>
+    public static string[] GetDefaultHeader(Type type) => new[]
+    {
+        string.Empty,
+        "DO NOT MODIFY THIS FILE!",
+        string.Empty,
+        $"This YAML was auto-generated from { type.Name }",
+        $"To make changes, change the C# definition and rebuild its project",
+        string.Empty,
+    };
+
+    /// <summary>
     /// Path to the YAML file/folder where this definition/collection will be exported to.
     /// Example: "/pipelines/ci.yaml"
     /// </summary>
@@ -25,17 +38,9 @@ public interface ISharplinerDefinition
     /// <summary>
     /// Header that will be shown at the top of the generated YAML file
     /// 
-    /// Leave null or empty to omit file header.
+    /// Leave empty array to omit file header.
     /// </summary>
-    string[]? Header => new[]
-    {
-        string.Empty,
-        "DO NOT MODIFY THIS FILE!",
-        string.Empty,
-        $"This YAML was auto-generated from { GetType().Name }",
-        $"To make changes, change the C# definition and rebuild its project",
-        string.Empty,
-    };
+    string[]? Header { get; }
 
     /// <summary>
     /// Gets the path where YAML of this definition should be published to.
@@ -81,7 +86,20 @@ public interface ISharplinerDefinition
         var fileContents = Serialize();
 
         var header = Header;
-        if (header?.Length > 0)
+
+        if (header == null)
+        {
+            if (this is ISharplinerDefinitionCollection)
+            {
+                header = GetDefaultHeader(GetType());
+            }
+            else
+            {
+                header = GetDefaultHeader(GetType());
+            }
+        }
+
+        if (header.Length > 0)
         {
             const string hash = "### ";
             fileContents = hash + string.Join(Environment.NewLine + hash, header) + Environment.NewLine + Environment.NewLine + fileContents;

@@ -17,6 +17,13 @@ public abstract class PipelineDefinitionBase<TPipeline>
     public virtual TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
 
     /// <summary>
+    /// Header that will be shown at the top of the generated YAML file
+    /// 
+    /// Leave empty array to omit file header.
+    /// </summary>
+    public virtual string[]? Header => ISharplinerDefinition.GetDefaultHeader(GetType());
+
+    /// <summary>
     /// Define the pipeline by implementing this field.
     /// </summary>
     public abstract TPipeline Pipeline { get; }

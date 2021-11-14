@@ -140,9 +140,8 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
             var type = collection.GetType();
             Type iface = type.GetInterfaces().First(i => i.GUID == typeof(ISharplinerDefinitionCollection).GUID);
 
-            var definitions = iface.GetProperty(nameof(ISharplinerDefinitionCollection.Definitions))?.GetValue(collection, null) as IEnumerable;
-
-            if (definitions == null)
+            var definitionsProperty = iface.GetProperty(nameof(ISharplinerDefinitionCollection.Definitions))?.GetValue(collection, null);
+            if (definitionsProperty is not IEnumerable definitions)
             {
                 Log.LogError($"Failed to get definitions from collection {type.FullName}");
                 continue;

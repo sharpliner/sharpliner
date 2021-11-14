@@ -171,6 +171,13 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
     }
 
     /// <summary>
+    /// Header that will be shown at the top of the generated YAML file
+    /// 
+    /// Leave empty array to omit file header.
+    /// </summary>
+    public virtual string[]? Header => ISharplinerDefinition.GetDefaultHeader(GetType());
+
+    /// <summary>
     /// Disallow any other types than what we define here as AzDO only supports these.
     /// </summary>
     internal TemplateDefinition()
@@ -216,10 +223,19 @@ public abstract class StepTemplateDefinitionCollection : TemplateDefinition, ISh
 
         public override List<TemplateParameter> Parameters { get; }
 
-        // TODO string[]? Header => _header ?? base(ISharplinerDefinition).Header;
+        public override string[]? Header => _header ?? base.Header;
     }
 }
 
+/// <summary>
+/// Use this class to dynamically populate a template definition.
+/// </summary>
+/// <typeparam name="T">Type of the template</typeparam>
+/// <param name="TargetFile"></param>
+/// <param name="Definition"></param>
+/// <param name="Parameters"></param>
+/// <param name="PathType"></param>
+/// <param name="Header"></param>
 public record TemplateDefinitionData<T>(
     string TargetFile,
     ConditionedList<T> Definition,
