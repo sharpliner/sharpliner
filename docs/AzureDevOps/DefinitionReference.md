@@ -2,7 +2,7 @@
 
 Here you can find detailed reference on how to define various parts of the pipeline.
 
-For full list of classes that you can override to create a YAML file, see [PublicDefinitions.cs](https://github.com/sharpliner/sharpliner/blob/main/src/Sharpliner/AzureDevOps/PublicDefinitions.cs).
+For a full list of classes you can override to create a YAML file, see [PublicDefinitions.cs](https://github.com/sharpliner/sharpliner/blob/main/src/Sharpliner/AzureDevOps/PublicDefinitions.cs).
 
 ## Build steps
 

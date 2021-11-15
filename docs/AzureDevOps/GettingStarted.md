@@ -53,7 +53,9 @@ class PullRequestPipeline : PipelineDefinition
 
 You can also decide to override `SingleStagePipelineDefinition` in case you have a simpler pipeline with only a single stage.
 
-For full list of classes that you can override, see [PublicDefinitions.cs](https://github.com/sharpliner/sharpliner/blob/main/src/Sharpliner/AzureDevOps/PublicDefinitions.cs).
+> **Note:** Sometimes you need to generate a large number of similar YAML files dynamically. In this case, please see [DefinitionCollections.md](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionCollections.md).
+
+For a full list of classes you can override, see [PublicDefinitions.cs](https://github.com/sharpliner/sharpliner/blob/main/src/Sharpliner/AzureDevOps/PublicDefinitions.cs).
 
 ## 3. Define the pipeline
 
