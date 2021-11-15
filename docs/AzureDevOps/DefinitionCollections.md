@@ -15,42 +15,48 @@ It is much easier to accomodate for these inside C# than in YAML using if's and 
 ```csharp
 class TestPipelines : SingleStagePipelineCollection
 {
+    // Define your data
     private readonly string[] Platforms = new[]
     {
         "ubuntu-20.04",
         "windows-2019",
     };
 
+    // Create a list of definitions, each is published in its own YAML file
     public override IEnumerable<PipelineDefinitionData<SingleStagePipeline>> Pipelines =>
         Platforms.Select(platform => new PipelineDefinitionData<SingleStagePipeline>(
+            // Say where the YAML goes
             TargetFile: platform + ".yml",
-            Pipeline: Define(platform),
-            Header: new[] // Optional custom YAML file header
+
+            // Optional custom YAML file header
+            Header: new[]
             {
                 "This pipeline is not used in CI",
                 "It has been generated from " + nameof(TestPipelines) + ".cs for E2E test purposes",
-            }));
+            }),
 
-    private static SingleStagePipeline Define(string platform) => new()
-    {
-        Jobs =
-        {
-            new Job("Build")
+            // Define the pipeline itself
+            Pipeline: new()
             {
-                Pool = new HostedPool(name: platform),
-
-                Steps =
+                Jobs =
                 {
-                    DotNet.Build("Sharpliner.sln", includeNuGetOrg: true)
-                          .DisplayAs("Build projects"),
+                    new Job("Build")
+                    {
+                        Pool = new HostedPool(name: platform),
 
-                    DotNet.Test("Sharpliner.sln")
-                          .DisplayAs("Run unit tests")
+                        Steps =
+                        {
+                            DotNet.Build("Sharpliner.sln", includeNuGetOrg: true)
+                                .DisplayAs("Build projects"),
+
+                            DotNet.Test("Sharpliner.sln")
+                                .DisplayAs("Run unit tests")
+                        }
+                    }
                 }
-            }
-        }
-    };
+            });
 }
 ```
 
 The code above would end up generating two YAML files `ubuntu-20.04.yml` and `windows-2019.yml`.
+You can check what they would look like [here](https://github.com/sharpliner/sharpliner/tree/main/eng/pipelines/test).
