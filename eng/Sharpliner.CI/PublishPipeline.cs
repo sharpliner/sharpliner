@@ -1,68 +1,67 @@
 ﻿using Sharpliner.AzureDevOps;
 
-namespace Sharpliner.CI
+namespace Sharpliner.CI;
+
+class PublishPipeline : SingleStagePipelineDefinition
 {
-    internal class PublishPipeline : SingleStagePipelineDefinition
+    private const string DestPath = "artifacts/packages";
+
+    public override string TargetFile => Pipelines.Location + "publish.yml";
+
+    public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
+
+    public override SingleStagePipeline Pipeline => new()
     {
-        private const string DestPath = "artifacts/packages";
-
-        public override string TargetFile => Pipelines.Location + "publish.yml";
-
-        public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
-
-        public override SingleStagePipeline Pipeline => new()
+        Jobs =
         {
-            Jobs =
+            new Job("Publish", "Publish to nuget.org")
             {
-                new Job("Publish", "Publish to nuget.org")
+                Pool = new HostedPool("Azure Pipelines", "windows-latest"),
+                Steps =
                 {
-                    Pool = new HostedPool("Azure Pipelines", "windows-latest"),
-                    Steps =
+                    Powershell
+                        .FromResourceFile("Get-Version.ps1")
+                        .DisplayAs("Detect package version"),
+
+                    StepTemplate(Pipelines.TemplateLocation + "install-dotnet-sdk.yml", new()
                     {
-                        Powershell
-                            .FromResourceFile("Get-Version.ps1")
-                            .DisplayAs("Detect package version"),
+                        { "version", "6.0.100" }
+                    }),
 
-                        StepTemplate(InstallDotNetTemplate.Path, new()
+                    Powershell
+                        .Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'")
+                        .DisplayAs($"Create {DestPath}"),
+
+                    DotNet
+                        .Build("src/Sharpliner/Sharpliner.csproj", includeNuGetOrg: true)
+                        .DisplayAs("Build"),
+
+                    DotNet
+                        .Pack("src/Sharpliner/Sharpliner.csproj", $"-p:PackageVersion=$(packageVersion)") with
                         {
-                            { "version", "6.0.100" }
-                        }),
+                            DisplayName = "Pack the .nupkg",
+                            OutputDir = DestPath,
+                            ConfigurationToPack = "Release",
+                        },
 
-                        Powershell
-                            .Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'")
-                            .DisplayAs($"Create {DestPath}"),
+                    Publish("Sharpliner",
+                        filePath: DestPath + "/Sharpliner.$(packageVersion).nupkg",
+                        displayName: "Publish build artifacts"),
 
-                        DotNet
-                            .Build("src/Sharpliner/Sharpliner.csproj", includeNuGetOrg: true)
-                            .DisplayAs("Build"),
-
-                        DotNet
-                            .Pack("src/Sharpliner/Sharpliner.csproj", $"-p:PackageVersion=$(packageVersion)") with
+                    If.And(IsNotPullRequest, IsBranch("main"))
+                        .Step(Task("NuGetAuthenticate@0", "Authenticate NuGet"))
+                        .Step(Task("NuGetCommand@2", "Publish to nuget.org") with
+                        {
+                            Inputs = new()
                             {
-                                DisplayName = "Pack the .nupkg",
-                                OutputDir = DestPath,
-                                ConfigurationToPack = "Release",
-                            },
-
-                        Publish("Sharpliner",
-                            filePath: DestPath + "/Sharpliner.$(packageVersion).nupkg",
-                            displayName: "Publish build artifacts"),
-
-                        If.And(IsNotPullRequest, IsBranch("main"))
-                            .Step(Task("NuGetAuthenticate@0", "Authenticate NuGet"))
-                            .Step(Task("NuGetCommand@2", "Publish to nuget.org") with
-                            {
-                                Inputs = new()
-                                {
-                                    { "command", "push" },
-                                    { "packagesToPush", DestPath + "/Sharpliner.$(packageVersion).nupkg" },
-                                    { "nuGetFeedType", "external" },
-                                    { "publishFeedCredentials", "Sharpliner / nuget.org" },
-                                }
-                            })
-                    }
+                                { "command", "push" },
+                                { "packagesToPush", DestPath + "/Sharpliner.$(packageVersion).nupkg" },
+                                { "nuGetFeedType", "external" },
+                                { "publishFeedCredentials", "Sharpliner / nuget.org" },
+                            }
+                        })
                 }
-            },
-        };
-    }
+            }
+        },
+    };
 }

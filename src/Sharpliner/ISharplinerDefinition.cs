@@ -11,34 +11,38 @@ namespace Sharpliner;
 public interface ISharplinerDefinition
 {
     /// <summary>
-    /// Path to the YAML file/folder where this definition/collection will be exported to.
-    /// Example: "/pipelines/ci.yaml"
+    /// Default YAML file header
     /// </summary>
-    string TargetFile { get; }
-
-    /// <summary>
-    /// Override this to define where the resulting YAML should be stored (together with TargetFile).
-    /// Default is RelativeToCurrentDir.
-    /// </summary>
-    TargetPathType TargetPathType { get; }
-
-    /// <summary>
-    /// Header that will be shown at the top of the generated YAML file
-    /// 
-    /// Leave null or empty to omit file header.
-    /// </summary>
-    string[]? Header => new[]
+    public static string[] GetDefaultHeader(Type type) => new[]
     {
         string.Empty,
         "DO NOT MODIFY THIS FILE!",
         string.Empty,
-        $"This YAML was auto-generated from { GetType().Name }",
+        $"This YAML was auto-generated from { type.Name }",
         $"To make changes, change the C# definition and rebuild its project",
         string.Empty,
     };
 
     /// <summary>
-    /// Gets the path where YAML of this definition should be published to.
+    /// Path to the YAML file/folder where this definition/collection will be exported to
+    /// Example: "/pipelines/ci.yaml"
+    /// </summary>
+    string TargetFile { get; }
+
+    /// <summary>
+    /// Override this to define where the resulting YAML should be stored (together with TargetFile)
+    /// Default is RelativeToGit
+    /// </summary>
+    TargetPathType TargetPathType { get; }
+
+    /// <summary>
+    /// Header that will be shown at the top of the generated YAML file
+    /// Leave empty array to omit file header
+    /// </summary>
+    string[]? Header { get; }
+
+    /// <summary>
+    /// Gets the path where YAML of this definition should be published to
     /// </summary>
     string GetTargetPath()
     {
@@ -73,15 +77,16 @@ public interface ISharplinerDefinition
     }
 
     /// <summary>
-    /// Publishes the definition into a YAML file.
+    /// Publishes the definition into a YAML file
     /// </summary>
     void Publish()
     {
         string fileName = GetTargetPath();
         var fileContents = Serialize();
 
-        var header = Header;
-        if (header?.Length > 0)
+        var header = Header ?? GetDefaultHeader(GetType());
+
+        if (header.Length > 0)
         {
             const string hash = "### ";
             fileContents = hash + string.Join(Environment.NewLine + hash, header) + Environment.NewLine + Environment.NewLine + fileContents;
@@ -98,12 +103,12 @@ public interface ISharplinerDefinition
     }
 
     /// <summary>
-    /// Validates the definition for runtime errors (e.g. wrong dependsOn, artifact name typos..).
+    /// Validates the definition for runtime errors (e.g. wrong dependsOn, artifact name typos..)
     /// </summary>
     void Validate();
 
     /// <summary>
-    /// Serializes the definition into a YAML string.
+    /// Serializes the definition into a YAML string
     /// </summary>
     string Serialize();
 }

@@ -3,18 +3,18 @@
 
 namespace Sharpliner.AzureDevOps;
 
-#region Azure DevOps pipelines
+#region Pipelines - override these to define pipelines
 
 /// <summary>
-/// Inherit from this class to define a full Azure DevOps pipeline.
-/// For a pipeline with only a single stage, consider using SingleStagePipelineDefinition.
+/// Inherit from this class to define a full Azure DevOps pipeline
+/// For a pipeline with only a single stage, consider using SingleStagePipelineDefinition
 /// </summary>
 public abstract class PipelineDefinition : PipelineDefinitionBase<Pipeline>
 {
 }
 
 /// <summary>
-/// Inherit from this class to define a pipeline with a single stage where you only define jobs.
+/// Inherit from this class to define a pipeline with a single stage where you only define jobs
 /// </summary>
 public abstract class SingleStagePipelineDefinition : PipelineDefinitionBase<SingleStagePipeline>
 {
@@ -22,7 +22,7 @@ public abstract class SingleStagePipelineDefinition : PipelineDefinitionBase<Sin
 
 #endregion
 
-#region Pipeline templates
+#region Pipeline templates - override these to define pipeline templates
 
 /// <summary>
 /// Inherit from this class to define a stage template.
@@ -56,6 +56,61 @@ public abstract class StepTemplateDefinition : TemplateDefinition<Step>
 /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
 /// </summary>
 public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBase>
+{
+    internal sealed override string YamlProperty => "variables";
+}
+
+#endregion
+
+#region Definition collections - use these to generate multiple definitions dynamically
+
+/// <summary>
+/// Inherit from this class when you want to dynamically generate multiple pipelines
+/// For a pipeline with only a single stage, consider using SingleStagePipelineDefinitions
+/// </summary>
+public abstract class PipelineCollection : PipelineDefinitionCollection<Pipeline>
+{
+}
+
+/// <summary>
+/// Inherit from this class to dynamically generate multiple pipelines with a single stage
+/// </summary>
+public abstract class SingleStagePipelineCollection : PipelineDefinitionCollection<SingleStagePipeline>
+{
+}
+
+/// <summary>
+/// Inherit from this class when you want to dynamically generate multiple stage templates
+/// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
+/// </summary>
+public abstract class StageTemplateCollection : TemplateDefinitionCollection<Stage>
+{
+    internal sealed override string YamlProperty => "stages";
+}
+
+/// <summary>
+/// Inherit from this class when you want to dynamically generate multiple job templates
+/// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
+/// </summary>
+public abstract class JobTemplateCollection : TemplateDefinitionCollection<Job>
+{
+    internal sealed override string YamlProperty => "jobs";
+}
+
+/// <summary>
+/// Inherit from this class when you want to dynamically generate multiple step templates
+/// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
+/// </summary>
+public abstract class StepTemplateCollection : TemplateDefinitionCollection<Step>
+{
+    internal sealed override string YamlProperty => "steps";
+}
+
+/// <summary>
+/// Inherit from this class when you want to dynamically generate multiple step templates
+/// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
+/// </summary>
+public abstract class VariableTemplateCollection : TemplateDefinitionCollection<VariableBase>
 {
     internal sealed override string YamlProperty => "variables";
 }

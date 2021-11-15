@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -25,54 +26,34 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
     /// </summary>
     public bool FailIfChanged { get; set; }
 
-    public override bool Execute() => PublishAllDefinitions();
-
     /// <summary>
     /// This method finds all pipeline definitions via reflection and publishes them to YAML.
     /// </summary>
-    private bool PublishAllDefinitions()
+    public override bool Execute()
     {
-        var pipelines = FindAllImplementations<ISharplinerDefinition>(isInterface: true);
+        var definitionFound = false;
 
-        foreach (var pipeline in pipelines)
+        foreach (var definition in FindAllImplementations<ISharplinerDefinition>(isInterface: true))
         {
-            PublishDefinition(pipeline);
+            definitionFound = true;
+            PublishDefinition(definition);
         }
 
-        return pipelines.Any();
+        foreach (var d in FindDefinitionsInCollections())
+        {
+            definitionFound = true;
+            PublishDefinition(d.Definition, d.Collection);
+        }
+
+        return definitionFound;
     }
 
     /// <summary>
-    /// Loads the assembly and all of its dependencies (such as YamlDotNet).
+    /// Publishes given ISharplinerDefinition into a YAML file.
     /// </summary>
-    private Assembly LoadAssembly(string assemblyPath)
-    {
-        // Preload dependencies needed for things to work
-        var assemblies = new[] { "YamlDotNet.dll", "Sharpliner.dll" }
-            .Select(assemblyName => Path.Combine(Path.GetDirectoryName(assemblyPath) ?? throw new Exception($"Failed to find directory of {assemblyPath}"), assemblyName))
-            .Select(Path.GetFullPath)
-            .Select(path => System.Reflection.Assembly.LoadFile(path) ?? throw new Exception($"Failed to find a Sharpliner dependency at {path}. Make sure the bin/ directory of your project contains this library."))
-            .Where(a => a is not null)
-            .ToDictionary(a => a.FullName!);
-
-        Assembly ResolveAssembly(object? sender, ResolveEventArgs e)
-        {
-            if (!assemblies.TryGetValue(e.Name, out var res))
-            {
-                throw new Exception("Failed to find Sharpliner dependency " + e.Name);
-            }
-
-            return res;
-        }
-
-        AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += ResolveAssembly;
-        AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly;
-
-        // Load the final assembly where pipeline is defined
-        return System.Reflection.Assembly.LoadFile(Path.GetFullPath(assemblyPath));
-    }
-
-    private void PublishDefinition(object definition)
+    /// <param name="definition">ISharplinerDefinition object</param>
+    /// <param name="collection">Type of the collection the definition is coming from (if it is)</param>
+    private void PublishDefinition(object definition, Type? collection = null)
     {
         // I am unable to just cat to IDefinition for some reason (they come from the same code, but maybe different .dll files or something)
         Type type = definition.GetType();
@@ -83,18 +64,20 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
 
         if (publish is null || validate is null || getPath is null)
         {
-            Log.LogError($"Failed to get pipeline definition metadata for {type.FullName}");
+            Log.LogError($"Failed to get definition metadata for {collection?.FullName ?? type.FullName}");
             return;
         }
 
         if (getPath.Invoke(definition, null) is not string path)
         {
-            Log.LogError($"Failed to get target path for {type.Name} ");
+            Log.LogError($"Failed to get target path for {collection?.Name ?? type.Name} ");
             return;
         }
 
-        Log.LogMessage(MessageImportance.High, $"{type.Name}:");
-        Log.LogMessage(MessageImportance.High, $"  Validating pipeline..");
+        var typeName = collection == null ? type.Name : collection.Name + " / " + Path.GetFileName(path);
+
+        Log.LogMessage(MessageImportance.High, $"{typeName}:");
+        Log.LogMessage(MessageImportance.High, $"  Validating definition..");
 
         try
         {
@@ -102,12 +85,12 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
         }
         catch (TargetInvocationException e)
         {
-            Log.LogError("Validation of pipeline {0} failed: {1}{2}{3}",
-                type.Name,
+            Log.LogError("Validation of definition {0} failed: {1}{2}{3}",
+                typeName,
                 e.InnerException?.Message ?? e.ToString(),
                 Environment.NewLine,
                 "To see exception details, build with more verbosity (dotnet build -v:n)");
-            Log.LogMessage(MessageImportance.Normal, "Validation of pipeline {0} failed: {1}", type.Name, e.InnerException);
+            Log.LogMessage(MessageImportance.Normal, "Validation of definition {0} failed: {1}", typeName, e.InnerException);
             return;
         }
 
@@ -120,11 +103,11 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
         {
             if (FailIfChanged)
             {
-                Log.LogError($"  This pipeline hasn't been published yet!");
+                Log.LogError($"  This definition hasn't been published yet!");
             }
             else
             {
-                Log.LogMessage(MessageImportance.High, $"  {type.Name} created at {path}");
+                Log.LogMessage(MessageImportance.High, $"  {typeName} created at {path}");
             }
         }
         else
@@ -138,12 +121,36 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
             {
                 if (FailIfChanged)
                 {
-                    Log.LogError($"  Changes detected between {type.Name} and {path}!");
+                    Log.LogError($"  Changes detected between {typeName} and {path}!");
                 }
                 else
                 {
                     Log.LogMessage(MessageImportance.High, $"  Published new changes to {path}");
                 }
+            }
+        }
+    }
+
+    private IEnumerable<(object Definition, Type Collection, int Number)> FindDefinitionsInCollections()
+    {
+        var collections = FindAllImplementations<ISharplinerDefinitionCollection>(isInterface: true);
+
+        foreach (var collection in collections)
+        {
+            var type = collection.GetType();
+            Type iface = type.GetInterfaces().First(i => i.GUID == typeof(ISharplinerDefinitionCollection).GUID);
+
+            var definitionsProperty = iface.GetProperty(nameof(ISharplinerDefinitionCollection.Definitions))?.GetValue(collection, null);
+            if (definitionsProperty is not IEnumerable definitions)
+            {
+                Log.LogError($"Failed to get definitions from collection {type.FullName}");
+                continue;
+            }
+
+            int i = 1;
+            foreach (var definition in definitions)
+            {
+                yield return (definition, type, i++);
             }
         }
     }
@@ -198,6 +205,36 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
         }
 
         return pipelines;
+    }
+
+    /// <summary>
+    /// Loads the assembly and all of its dependencies (such as YamlDotNet).
+    /// </summary>
+    private Assembly LoadAssembly(string assemblyPath)
+    {
+        // Preload dependencies needed for things to work
+        var assemblies = new[] { "YamlDotNet.dll", "Sharpliner.dll" }
+            .Select(assemblyName => Path.Combine(Path.GetDirectoryName(assemblyPath) ?? throw new Exception($"Failed to find directory of {assemblyPath}"), assemblyName))
+            .Select(Path.GetFullPath)
+            .Select(path => System.Reflection.Assembly.LoadFile(path) ?? throw new Exception($"Failed to find a Sharpliner dependency at {path}. Make sure the bin/ directory of your project contains this library."))
+            .Where(a => a is not null)
+            .ToDictionary(a => a.FullName!);
+
+        Assembly ResolveAssembly(object? sender, ResolveEventArgs e)
+        {
+            if (!assemblies.TryGetValue(e.Name, out var res))
+            {
+                throw new Exception("Failed to find Sharpliner dependency " + e.Name);
+            }
+
+            return res;
+        }
+
+        AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += ResolveAssembly;
+        AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly;
+
+        // Load the final assembly where pipeline is defined
+        return System.Reflection.Assembly.LoadFile(Path.GetFullPath(assemblyPath));
     }
 
     private static string? GetFileHash(string path)

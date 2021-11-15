@@ -1,50 +1,49 @@
 ﻿using Sharpliner.AzureDevOps;
 
-namespace Sharpliner.CI
+namespace Sharpliner.CI;
+
+class PullRequestPipeline : SingleStagePipelineDefinition
 {
-    internal class PullRequestPipeline : SingleStagePipelineDefinition
+    public override string TargetFile => Pipelines.Location + "pr.yml";
+
+    public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
+
+    public override SingleStagePipeline Pipeline => new()
     {
-        public override string TargetFile => Pipelines.Location + "pr.yml";
-
-        public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
-
-        public override SingleStagePipeline Pipeline => new()
+        Trigger = new Trigger("main")
         {
-            Trigger = new Trigger("main")
-            {
-                Batch = true,
-            },
+            Batch = true,
+        },
 
-            Pr = new PrTrigger("main"),
+        Pr = new PrTrigger("main"),
 
-            Jobs =
+        Jobs =
+        {
+            new Job("Build", "Build and test")
             {
-                new Job("Build", "Build and test")
+                Pool = new HostedPool("Azure Pipelines", "windows-latest"),
+                Steps =
                 {
-                    Pool = new HostedPool("Azure Pipelines", "windows-latest"),
-                    Steps =
+                    StepTemplate(Pipelines.TemplateLocation + "install-dotnet-sdk.yml", new()
                     {
-                        StepTemplate(InstallDotNetTemplate.Path, new()
-                        {
-                            { "version", "6.0.100" }
-                        }),
+                        { "version", "6.0.100" }
+                    }),
 
-                        Powershell
-                            .Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'")
-                            .DisplayAs("Create artifacts/packages"),
+                    Powershell
+                        .Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'")
+                        .DisplayAs("Create artifacts/packages"),
 
-                        DotNet
-                            .Build("src/**/*.csproj", includeNuGetOrg: true)
-                            .DisplayAs("Build"),
+                    DotNet
+                        .Build("src/**/*.csproj", includeNuGetOrg: true)
+                        .DisplayAs("Build"),
 
-                        ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj"),
+                    ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj"),
 
-                        DotNet
-                            .Test("tests/**/*.csproj")
-                            .DisplayAs("Test"),
-                    }
+                    DotNet
+                        .Test("tests/**/*.csproj")
+                        .DisplayAs("Test"),
                 }
-            },
-        };
-    }
+            }
+        },
+    };
 }

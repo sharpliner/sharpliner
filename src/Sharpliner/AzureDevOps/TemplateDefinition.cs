@@ -171,6 +171,13 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
     }
 
     /// <summary>
+    /// Header that will be shown at the top of the generated YAML file
+    /// 
+    /// Leave empty array to omit file header.
+    /// </summary>
+    public virtual string[]? Header => ISharplinerDefinition.GetDefaultHeader(GetType());
+
+    /// <summary>
     /// Disallow any other types than what we define here as AzDO only supports these.
     /// </summary>
     internal TemplateDefinition()

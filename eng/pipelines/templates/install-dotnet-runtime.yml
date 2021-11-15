@@ -11,7 +11,7 @@ parameters:
 
 steps:
 - task: UseDotNet@2
-  displayName: Install .NET ${{ parameters.version }}
+  displayName: Install .NET runtime ${{ parameters.version }}
   inputs:
-    packageType: sdk
+    packageType: runtime
     version: ${{ parameters.version }}

@@ -9,7 +9,7 @@ public static class SharplinerSerializer
 {
     public static ISerializer Serializer { get; } = InitializeSerializer();
 
-    public static bool PrettifyYaml = true;
+    public static bool PrettifyYaml { get; set; } = true;
 
     public static string Serialize(object data)
     {
