@@ -21,7 +21,7 @@ public record PipelineDefinitionData<T>(
 public abstract class PipelineDefinitionCollection<TPipeline>
     : AzureDevOpsDefinition, ISharplinerDefinitionCollection where TPipeline : PipelineBase
 {
-    public IEnumerable<ISharplinerDefinition> Definitions => Pipelines.Cast<ISharplinerDefinition>();
+    public IEnumerable<ISharplinerDefinition> Definitions => Pipelines.Select(data => new PipelineDefinitionWrapper<TPipeline>(data, GetType()));
 
     /// <summary>
     /// Override this with your dynamically generated list of definitions.

@@ -1,0 +1,20 @@
+### This pipeline is not used in CI
+### It has been generated from TestPipelines.cs for E2E test purposes
+
+jobs:
+- job: Build
+  pool:
+    name: windows-2019
+  steps:
+  - task: DotNetCoreCLI@2
+    displayName: Build projects
+    inputs:
+      command: build
+      projects: Sharpliner.sln
+      includeNuGetOrg: true
+
+  - task: DotNetCoreCLI@2
+    displayName: Run unit tests
+    inputs:
+      command: test
+      projects: Sharpliner.sln
