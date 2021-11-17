@@ -157,25 +157,29 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static ConditionedList<string> NoDependsOn => new EmptyDependsOn();
 
-    protected static Condition<T> And<T>(Condition condition1, Condition condition2) => new AndCondition<T>(condition1, condition2);
+    protected static Condition<T> And<T>(params string[] expressions) => new AndCondition<T>(expressions);
 
-    protected static Condition Or<T>(Condition condition1, Condition condition2) => new OrCondition<T>(condition1, condition2);
+    protected static Condition Or<T>(params string[] expressions) => new OrCondition<T>(expressions);
 
-    protected static Condition<T> Equal<T>(string expression1, string expression2) => new EqualityCondition<T>(expression1, expression2, true);
+    protected static Condition<T> And<T>(params Condition[] expressions) => new AndCondition<T>(expressions);
 
-    protected static Condition<T> NotEqual<T>(string expression1, string expression2) => new EqualityCondition<T>(expression1, expression2, false);
+    protected static Condition Or<T>(params Condition[] expressions) => new OrCondition<T>(expressions);
+
+    protected static Condition<T> Equal<T>(string expression1, string expression2) => new EqualityCondition<T>(true, expression1, expression2);
+
+    protected static Condition<T> NotEqual<T>(string expression1, string expression2) => new EqualityCondition<T>(false, expression1, expression2);
 
     protected static Condition And(string condition1, string condition2) => new AndCondition(condition1, condition2);
 
     protected static Condition Or(string condition1, string condition2) => new OrCondition(condition1, condition2);
 
-    protected static Condition And(Condition condition1, Condition condition2) => new AndCondition(condition1, condition2);
+    protected static Condition And(params Condition[] expressions) => new AndCondition(expressions);
 
-    protected static Condition Or(Condition condition1, Condition condition2) => new OrCondition(condition1, condition2);
+    protected static Condition Or(params Condition[] expressions) => new OrCondition(expressions);
 
-    protected static Condition Equal(string expression1, string expression2) => new EqualityCondition(expression1, expression2, true);
+    protected static Condition Equal(string expression1, string expression2) => new EqualityCondition(true, expression1, expression2);
 
-    protected static Condition NotEqual(string expression1, string expression2) => new EqualityCondition(expression1, expression2, false);
+    protected static Condition NotEqual(string expression1, string expression2) => new EqualityCondition(false, expression1, expression2);
 
     protected static Condition IsBranch(string branchName) => new BranchCondition(branchName, true);
 

@@ -117,7 +117,7 @@ public class NotCondition : Condition
 
 public class EqualityCondition : Condition
 {
-    internal EqualityCondition(string expression1, string expression2, bool equal)
+    internal EqualityCondition(bool equal, string expression1, string expression2)
         : base(equal ? "eq" : "ne", true, expression1, expression2)
     {
     }
@@ -164,7 +164,7 @@ public class NotCondition<T> : Condition<T>
 
 public class EqualityCondition<T> : Condition<T>
 {
-    internal EqualityCondition(string expression1, string expression2, bool equal)
+    internal EqualityCondition(bool equal, string expression1, string expression2)
         : base(equal ? "eq" : "ne", true, expression1, expression2)
     {
     }
@@ -198,7 +198,7 @@ public class OrCondition<T> : Condition<T>
 public class BranchCondition : EqualityCondition
 {
     internal BranchCondition(string branchName, bool equal)
-        : base("variables['Build.SourceBranch']", '\'' + (branchName.StartsWith("refs/heads/") ? branchName : "refs/heads/" + branchName) + '\'', equal)
+        : base(equal, "variables['Build.SourceBranch']", '\'' + (branchName.StartsWith("refs/heads/") ? branchName : "refs/heads/" + branchName) + '\'')
     {
     }
 }
@@ -206,7 +206,7 @@ public class BranchCondition : EqualityCondition
 public class BranchCondition<T> : EqualityCondition<T>
 {
     internal BranchCondition(string branchName, bool equal)
-        : base("variables['Build.SourceBranch']", '\'' + (branchName.StartsWith("refs/heads/") ? branchName : "refs/heads/" + branchName) + '\'', equal)
+        : base(equal, "variables['Build.SourceBranch']", '\'' + (branchName.StartsWith("refs/heads/") ? branchName : "refs/heads/" + branchName) + '\'')
     {
     }
 }
@@ -214,7 +214,7 @@ public class BranchCondition<T> : EqualityCondition<T>
 public class BuildReasonCondition : EqualityCondition
 {
     internal BuildReasonCondition(string reason, bool equal)
-        : base("variables['Build.Reason']", reason, equal)
+        : base(equal, "variables['Build.Reason']", reason)
     {
     }
 }
@@ -222,7 +222,7 @@ public class BuildReasonCondition : EqualityCondition
 public class BuildReasonCondition<T> : EqualityCondition<T>
 {
     internal BuildReasonCondition(string reason, bool equal)
-        : base("variables['Build.Reason']", reason, equal)
+        : base(equal, "variables['Build.Reason']", reason)
     {
     }
 }
