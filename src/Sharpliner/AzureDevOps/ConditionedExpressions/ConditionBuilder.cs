@@ -21,10 +21,10 @@ public class ConditionBuilder
         => Link(condition);
 
     public Condition Equal(string expression1, string expression2)
-        => Link(new EqualityCondition(expression1, expression2, true));
+        => Link(new EqualityCondition(true, expression1, expression2));
 
     public Condition NotEqual(string expression1, string expression2)
-        => Link(new EqualityCondition(expression1, expression2, false));
+        => Link(new EqualityCondition(false, expression1, expression2));
 
     public Condition And(params Condition[] expressions)
         => Link(new AndCondition(expressions));
@@ -67,10 +67,10 @@ public class ConditionBuilder<T>
     }
 
     public Condition<T> Equal(string expression1, string expression2)
-        => Link(new EqualityCondition<T>(expression1, expression2, true));
+        => Link(new EqualityCondition<T>(true, expression1, expression2));
 
     public Condition<T> NotEqual(string expression1, string expression2)
-        => Link(new EqualityCondition<T>(expression1, expression2, false));
+        => Link(new EqualityCondition<T>(false, expression1, expression2));
 
     public Condition<T> And(params Condition[] expressions)
         => Link(new AndCondition<T>(expressions));
