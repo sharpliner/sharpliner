@@ -9,6 +9,9 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 /// </summary>
 public abstract class Condition
 {
+    internal const string IfTagStart = "${{ if ";
+    internal const string IfTagEnd = " }}";
+
     protected readonly string _condition;
 
     protected Condition(string condition) => _condition = condition;
@@ -17,7 +20,19 @@ public abstract class Condition
 
     public override string ToString() => _condition;
 
-    public static implicit operator string(Condition value) => value.ToString();
+    public static implicit operator string(Condition value) => IfTagStart + value.ToString() + IfTagEnd;
+
+    protected static string RemoveIf(Condition condition) => RemoveIf(condition.ToString());
+
+    protected static string RemoveIf(string condition)
+    {
+        if (condition.StartsWith(IfTagStart) && condition.EndsWith(IfTagEnd))
+        {
+            return condition.Substring(IfTagStart.Length, condition.Length - IfTagEnd.Length);
+        }
+
+        return condition;
+    }
 }
 
 /// <summary>
@@ -37,12 +52,12 @@ public abstract class Condition<T> : Condition
 public class NotCondition : Condition
 {
     internal NotCondition(Condition condition)
-        : base(NotConditionHelper.NegateCondition(condition.ToString()))
+        : this(condition.ToString())
     {
     }
 
     internal NotCondition(string condition)
-        : base(NotConditionHelper.NegateCondition(condition))
+        : base(NotConditionHelper.NegateCondition(RemoveIf(condition)))
     {
     }
 }
@@ -50,7 +65,7 @@ public class NotCondition : Condition
 public class EqualityCondition : Condition
 {
     internal EqualityCondition(string expression1, string expression2, bool equal)
-        : base((equal ? "eq" : "ne") + $"({expression1}, {expression2})")
+        : base((equal ? "eq" : "ne") + $"({RemoveIf(expression1)}, {RemoveIf(expression2)})")
     {
     }
 }
@@ -63,7 +78,7 @@ public class AndCondition : Condition
     }
 
     internal AndCondition(string expression1, string expression2)
-        : base($"and({expression1}, {expression2})")
+        : base($"and({RemoveIf(expression1)}, {RemoveIf(expression2)})")
     {
     }
 }
@@ -76,7 +91,7 @@ public class OrCondition : Condition
     }
 
     internal OrCondition(string expression1, string expression2)
-        : base($"or({expression1}, {expression2})")
+        : base($"or({RemoveIf(expression1)}, {RemoveIf(expression2)})")
     {
     }
 }
@@ -105,7 +120,12 @@ public class EqualityCondition<T> : Condition<T>
 public class AndCondition<T> : Condition<T>
 {
     internal AndCondition(Condition expression1, Condition expression2)
-        : base($"and({expression1}, {expression2})")
+        : this(expression1.ToString(), expression2.ToString())
+    {
+    }
+
+    internal AndCondition(string expression1, string expression2)
+        : base($"and({RemoveIf(expression1)}, {RemoveIf(expression2)})")
     {
     }
 }
@@ -113,7 +133,12 @@ public class AndCondition<T> : Condition<T>
 public class OrCondition<T> : Condition<T>
 {
     internal OrCondition(Condition expression1, Condition expression2)
-        : base($"or({expression1}, {expression2})")
+        : this(expression1.ToString(), expression2.ToString())
+    {
+    }
+
+    internal OrCondition(string expression1, string expression2)
+        : base($"or({RemoveIf(expression1)}, {RemoveIf(expression2)})")
     {
     }
 }

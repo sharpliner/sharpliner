@@ -190,7 +190,7 @@ public record Conditioned<T> : Conditioned
     {
         if (!string.IsNullOrEmpty(Condition))
         {
-            emitter.Emit(new Scalar("${{ if " + Condition + " }}"));
+            emitter.Emit(new Scalar(ConditionedExpressions.Condition.IfTagStart + Condition + ConditionedExpressions.Condition.IfTagEnd));
         }
         else if (Definitions.Count > 0)
         {
@@ -222,7 +222,7 @@ public record Conditioned<T> : Conditioned
         if (!string.IsNullOrEmpty(Condition))
         {
             emitter.Emit(new MappingStart());
-            emitter.Emit(new Scalar("${{ if " + Condition + " }}"));
+            emitter.Emit(new Scalar(ConditionedExpressions.Condition.IfTagStart + Condition + ConditionedExpressions.Condition.IfTagEnd));
             emitter.Emit(new SequenceStart(AnchorName.Empty, TagName.Empty, true, SequenceStyle.Block));
         }
 

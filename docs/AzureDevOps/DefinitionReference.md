@@ -178,6 +178,34 @@ The resulting YAML will look like this:
       - group: azure-pr
 ```
 
+You can also specify conditions in places like template parameters (which are improved dictionaries really):
+
+```csharp
+StepTemplate("template1.yaml", new()
+{
+    { "some", "value" },
+    {
+        If.IsPullRequest,
+        new TemplateParameters()
+        {
+            { "pr", true }
+        }
+    },
+    { "other", 123 },
+}),
+```
+
+This will produce following YAML:
+
+```yaml
+template: template1.yaml
+parameters:
+  some: value
+  ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+    pr: true
+  other: 123
+```
+
 ### Conditions
 
 The conditions themselves are defined similarly to what Azure DevOps requires, so this example YAML condition:
