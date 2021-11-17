@@ -8,12 +8,22 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
 
+/// <summary>
+/// Represents a template refernce
+/// </summary>
+/// <typeparam name="T">Part of the pipeline this template substitutes (allowed are stage, job, step, variable)</typeparam>
 public record Template<T> : Conditioned<T>
 {
     private readonly string _path;
     public TemplateParameters Parameters { get; init; } = new();
 
-    public Template(string path, TemplateParameters? parameters = null) : this(null, path, parameters)
+    /// <summary>
+    /// We shouldn't allow any type of template as Azure DevOps doesn't accept it.
+    /// Use methods such as StageTemplate, JobTemplate, StepTemplate or VariableTemplate.
+    /// </summary>
+    /// <param name="path">Path to the yaml file</param>
+    /// <param name="parameters">Parameters to be passed to the template</param>
+    internal Template(string path, TemplateParameters? parameters = null) : this(null, path, parameters)
     {
     }
 
@@ -41,19 +51,18 @@ public record Template<T> : Conditioned<T>
         if (Parameters != null && Parameters.Any())
         {
             emitter.Emit(new Scalar("parameters"));
-            emitter.Emit(new MappingStart());
-
-            foreach (var parameter in Parameters)
-            {
-                emitter.Emit(new Scalar(parameter.Key));
-                nestedObjectSerializer(parameter.Value);
-            }
-
-            emitter.Emit(new MappingEnd());
+            nestedObjectSerializer(Parameters);
         }
 
         emitter.Emit(new MappingEnd());
     }
 }
 
-public class TemplateParameters : Dictionary<string, object> { }
+/// <summary>
+/// This class allows you to pass parameters to to templates.
+/// To nest objects, insert another TemplateParameters value.
+/// You can also specify a condition in the key and nest values conditionally.
+/// </summary>
+public class TemplateParameters : Dictionary<string, object>
+{
+}

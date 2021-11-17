@@ -65,9 +65,6 @@ public static class ConditionExtensions
     public static Conditioned<Pool> Pool(this Condition condition, Conditioned<Pool> pool)
         => Conditioned.Link(condition, pool);
 
-    public static Conditioned<T> Template<T>(this Condition condition, string path, TemplateParameters? parameters = null)
-        => Conditioned.Link(condition, new Template<T>(condition: condition.ToString(), path: path, parameters ?? new TemplateParameters()));
-
     public static Conditioned<JobBase> JobTemplate(this Condition condition, string path, TemplateParameters? parameters = null)
         => Conditioned.Link(condition, new Template<JobBase>(condition: condition.ToString(), path: path, parameters ?? new TemplateParameters()));
 

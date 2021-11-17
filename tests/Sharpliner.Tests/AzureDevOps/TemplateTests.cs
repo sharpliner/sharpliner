@@ -8,40 +8,6 @@ namespace Sharpliner.Tests.AzureDevOps;
 
 public class TemplateTests
 {
-    private class Template_Pipeline : SimpleTestPipeline
-    {
-        public override SingleStagePipeline Pipeline => new()
-        {
-            Jobs =
-                {
-                    new Job("job")
-                    {
-                        Pool =
-                            If.Equal("foo", "bar")
-                                .Template<Pool>("pool1.yml")
-                            .Else
-                                .Template<Pool>("pool2.yml")
-                    }
-                }
-        };
-    }
-
-    [Fact]
-    public void Template_Serialization_Test()
-    {
-        var yaml = new Template_Pipeline().Serialize();
-
-        yaml.Should().Be(
-@"jobs:
-- job: job
-  pool:
-    ${{ if eq(foo, bar) }}:
-      template: pool1.yml
-    ${{ if ne(foo, bar) }}:
-      template: pool2.yml
-");
-    }
-
     private class TemplateList_Pipeline : SimpleTestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
@@ -181,6 +147,43 @@ steps:
 
     - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
       - template: template3.yaml
+");
+    }
+
+    private class Conditioned_Parameters : SimpleStepTestPipeline
+    {
+        protected override ConditionedList<Step> Steps => new()
+        {
+            StepTemplate("template1.yaml", new()
+            {
+                { "some", "value" },
+                {
+                    If.IsPullRequest,
+                    new TemplateParameters()
+                    {
+                        { "pr", true }
+                    }
+                },
+                { "other", 123 },
+            }),
+        };
+    }
+
+    [Fact]
+    public void Conditioned_Parameters_Serialization_Test()
+    {
+        var yaml = new Conditioned_Parameters().Serialize();
+
+        yaml.Should().Be(
+@"jobs:
+- job: testJob
+  steps:
+  - template: template1.yaml
+    parameters:
+      some: value
+      ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+        pr: true
+      other: 123
 ");
     }
 }
