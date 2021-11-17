@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 
@@ -14,7 +16,27 @@ public abstract class Condition
 
     protected readonly string _condition;
 
-    protected Condition(string condition) => _condition = condition;
+    protected Condition(string condition)
+    {
+        _condition = condition;
+    }
+    protected Condition(string keyword, bool requireTwoPlus, params Condition[] expressions)
+        : this(keyword, requireTwoPlus, expressions.Select(e => e.ToString()))
+    {}
+
+    protected Condition(string keyword, bool requireTwoPlus, params string[] expressions)
+        : this(keyword, requireTwoPlus, expressions as IEnumerable<string>)
+    {}
+
+    protected Condition(string keyword, bool requireTwoPlus, IEnumerable<string> expressions)
+    {
+        if (requireTwoPlus && expressions.Count() < 2)
+        {
+            throw new ArgumentException($"You need to provide at least 2 values for the {keyword}() operator");
+        }
+
+        _condition = $"{keyword}({string.Join(", ", expressions.Select(RemoveIf))})";
+    }
 
     internal Conditioned? Parent { get; set; }
 
@@ -28,10 +50,26 @@ public abstract class Condition
     {
         if (condition.StartsWith(IfTagStart) && condition.EndsWith(IfTagEnd))
         {
-            return condition.Substring(IfTagStart.Length, condition.Length - IfTagEnd.Length);
+            return condition.Substring(IfTagStart.Length, condition.Length - IfTagStart.Length - IfTagEnd.Length);
         }
 
         return condition;
+    }
+
+    protected static string BuildExpression(string keyword, params Condition[] expressions)
+        => BuildExpression(keyword, expressions.Select(e => e.ToString()));
+
+    protected static string BuildExpression(string keyword, params string[] expressions)
+        => BuildExpression(keyword, expressions as IEnumerable<string>);
+
+    protected static string BuildExpression(string keyword, IEnumerable<string> expressions)
+    {
+        if (expressions.Count() < 2)
+        {
+            throw new ArgumentException($"You need to provide at least 2 values for the {keyword}() operator");
+        }
+
+        return $"{keyword}({string.Join(", ", expressions.Select(RemoveIf))})";
     }
 }
 
@@ -46,6 +84,21 @@ public abstract class Condition<T> : Condition
     protected Condition(string condition, Conditioned<T>? parent = null) : base(condition)
     {
         Parent = parent;
+    }
+
+    protected Condition(string keyword, bool requireTwoPlus, params Condition[] expressions)
+        : base(keyword, requireTwoPlus, expressions)
+    {
+    }
+
+    protected Condition(string keyword, bool requireTwoPlus, params string[] expressions)
+        : base(keyword, requireTwoPlus, expressions)
+    {
+    }
+
+    protected Condition(string keyword, bool requireTwoPlus, IEnumerable<string> expressions)
+        : base(keyword, requireTwoPlus, expressions)
+    {
     }
 }
 
@@ -65,33 +118,33 @@ public class NotCondition : Condition
 public class EqualityCondition : Condition
 {
     internal EqualityCondition(string expression1, string expression2, bool equal)
-        : base((equal ? "eq" : "ne") + $"({RemoveIf(expression1)}, {RemoveIf(expression2)})")
+        : base(equal ? "eq" : "ne", true, expression1, expression2)
     {
     }
 }
 
 public class AndCondition : Condition
 {
-    internal AndCondition(Condition expression1, Condition expression2)
-        : this(expression1.ToString(), expression2.ToString())
+    internal AndCondition(params Condition[] expressions)
+        : base("and", true, expressions)
     {
     }
 
-    internal AndCondition(string expression1, string expression2)
-        : base($"and({RemoveIf(expression1)}, {RemoveIf(expression2)})")
+    internal AndCondition(params string[] expressions)
+        : base("and", true, expressions)
     {
     }
 }
 
 public class OrCondition : Condition
 {
-    internal OrCondition(Condition expression1, Condition expression2)
-        : this(expression1.ToString(), expression2.ToString())
+    internal OrCondition(params Condition[] expressions)
+        : base("or", true, expressions)
     {
     }
 
-    internal OrCondition(string expression1, string expression2)
-        : base($"or({RemoveIf(expression1)}, {RemoveIf(expression2)})")
+    internal OrCondition(params string[] expressions)
+        : base("or", true, expressions)
     {
     }
 }
@@ -112,33 +165,33 @@ public class NotCondition<T> : Condition<T>
 public class EqualityCondition<T> : Condition<T>
 {
     internal EqualityCondition(string expression1, string expression2, bool equal)
-        : base((equal ? "eq" : "ne") + $"({expression1}, {expression2})")
+        : base(equal ? "eq" : "ne", true, expression1, expression2)
     {
     }
 }
 
 public class AndCondition<T> : Condition<T>
 {
-    internal AndCondition(Condition expression1, Condition expression2)
-        : this(expression1.ToString(), expression2.ToString())
+    internal AndCondition(params Condition[] expressions)
+        : base("and", true, expressions)
     {
     }
 
-    internal AndCondition(string expression1, string expression2)
-        : base($"and({RemoveIf(expression1)}, {RemoveIf(expression2)})")
+    internal AndCondition(params string[] expressions)
+        : base("and", true, expressions)
     {
     }
 }
 
 public class OrCondition<T> : Condition<T>
 {
-    internal OrCondition(Condition expression1, Condition expression2)
-        : this(expression1.ToString(), expression2.ToString())
+    internal OrCondition(params Condition[] expressions)
+        : base("or", true, expressions)
     {
     }
 
-    internal OrCondition(string expression1, string expression2)
-        : base($"or({RemoveIf(expression1)}, {RemoveIf(expression2)})")
+    internal OrCondition(params string[] expressions)
+        : base("or", true, expressions)
     {
     }
 }

@@ -26,11 +26,17 @@ public class ConditionBuilder
     public Condition NotEqual(string expression1, string expression2)
         => Link(new EqualityCondition(expression1, expression2, false));
 
-    public Condition And(Condition condition1, Condition condition2)
-        => Link(new AndCondition(condition1, condition2));
+    public Condition And(params Condition[] expressions)
+        => Link(new AndCondition(expressions));
 
-    public Condition Or(Condition condition1, Condition condition2)
-        => Link(new OrCondition(condition1, condition2));
+    public Condition Or(params Condition[] expressions)
+        => Link(new OrCondition(expressions));
+
+    public Condition And(params string[] expressions)
+        => Link(new AndCondition(expressions));
+
+    public Condition Or(params string[] expressions)
+        => Link(new OrCondition(expressions));
 
     public Condition IsBranch(string branchName)
         => Link(new BranchCondition(branchName, true));
@@ -60,29 +66,23 @@ public class ConditionBuilder<T>
         Parent = parent;
     }
 
-    public Condition<T> Equal(Condition<T> condition)
-        => Link(condition);
-
-    public Condition<T> NotEqual(Condition<T> condition)
-        => Link(condition);
-
     public Condition<T> Equal(string expression1, string expression2)
         => Link(new EqualityCondition<T>(expression1, expression2, true));
 
     public Condition<T> NotEqual(string expression1, string expression2)
         => Link(new EqualityCondition<T>(expression1, expression2, false));
 
-    public Condition<T> And(Condition<T> condition1, Condition<T> condition2)
-        => Link(new AndCondition<T>(condition1, condition2));
+    public Condition<T> And(params Condition[] expressions)
+        => Link(new AndCondition<T>(expressions));
 
-    public Condition<T> Or(Condition<T> condition1, Condition<T> condition2)
-        => Link(new OrCondition<T>(condition1, condition2));
+    public Condition<T> Or(params Condition[] expressions)
+        => Link(new OrCondition<T>(expressions));
 
-    public Condition<T> And(Condition condition1, Condition condition2)
-        => Link(new AndCondition<T>(condition1, condition2));
+    public Condition<T> And(params string[] expressions)
+        => Link(new AndCondition<T>(expressions));
 
-    public Condition<T> Or(Condition condition1, Condition condition2)
-        => Link(new OrCondition<T>(condition1, condition2));
+    public Condition<T> Or(params string[] expressions)
+        => Link(new OrCondition<T>(expressions));
 
     public Condition<T> IsBranch(string branchName)
         => Link(new BranchCondition<T>(branchName, true));

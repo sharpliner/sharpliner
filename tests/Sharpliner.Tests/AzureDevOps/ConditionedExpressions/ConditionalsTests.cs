@@ -12,12 +12,13 @@ public class ConditionalsTests
         public override Pipeline Pipeline => new()
         {
             Variables =
-                {
-                    If.And(
-                        IsBranch("production"),
-                        NotEqual(variables["Configuration"], "'Debug'"))
-                      .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
-                }
+            {
+                If.And(
+                    IsBranch("production"),
+                    NotEqual(variables["Configuration"], "'Debug'"),
+                    "containsValue($(System.User), 'azdobot')")
+                    .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
+            }
         };
     }
 
@@ -27,7 +28,10 @@ public class ConditionalsTests
         var pipeline = new And_Condition_Test_Pipeline();
         var variable = pipeline.Pipeline.Variables.First();
         variable.Condition.Should().Be(
-            "and(eq(variables['Build.SourceBranch'], 'refs/heads/production'), ne(variables['Configuration'], 'Debug'))");
+            "and(" +
+                "eq(variables['Build.SourceBranch'], 'refs/heads/production'), " +
+                "ne(variables['Configuration'], 'Debug'), " +
+                "containsValue($(System.User), 'azdobot'))");
     }
 
     private class Or_Condition_Test_Pipeline : TestPipeline
@@ -35,14 +39,15 @@ public class ConditionalsTests
         public override Pipeline Pipeline => new()
         {
             Variables =
-                {
-                    If.Or(
-                        And(
-                            NotEqual("true", "true"),
-                            Equal(variables["Build.SourceBranch"], "'refs/heads/production'")),
-                        NotEqual(variables["Configuration"], "'Debug'"))
-                        .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
-                }
+            {
+                If.Or(
+                    And(
+                        NotEqual("true", "true"),
+                        Equal(variables["Build.SourceBranch"], "'refs/heads/production'")),
+                    NotEqual(variables["Configuration"], "'Debug'"),
+                    IsPullRequest)
+                    .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
+            }
         };
     }
 
@@ -52,8 +57,11 @@ public class ConditionalsTests
         var pipeline = new Or_Condition_Test_Pipeline();
         var variable = pipeline.Pipeline.Variables.First();
         variable.Condition.Should().Be(
-            "or(and(ne(true, true), eq(variables['Build.SourceBranch'], 'refs/heads/production')), " +
-            "ne(variables['Configuration'], 'Debug'))");
+            "or(" +
+                "and(" +
+                    "ne(true, true), eq(variables['Build.SourceBranch'], 'refs/heads/production')), " +
+                "ne(variables['Configuration'], 'Debug'), " +
+                "eq(variables['Build.Reason'], 'PullRequest'))");
     }
 
     private class Branch_Condition_Test_Pipeline : TestPipeline
@@ -61,13 +69,13 @@ public class ConditionalsTests
         public override Pipeline Pipeline => new()
         {
             Variables =
-                {
-                    If.IsBranch("main")
-                      .Variable("feature", "on"),
+            {
+                If.IsBranch("main")
+                    .Variable("feature", "on"),
 
-                    If.And(IsPullRequest, IsNotBranch("main"))
-                      .Group("pr-group"),
-                }
+                If.And(IsPullRequest, IsNotBranch("main"))
+                    .Group("pr-group"),
+            }
         };
     }
 
@@ -88,24 +96,24 @@ public class ConditionalsTests
         public override Pipeline Pipeline => new()
         {
             Variables =
-                {
-                    If.Equal("a", "b")
+            {
+                If.Equal("a", "b")
+                    .Variable("feature", "on")
+                    .Variable("feature2", "on")
+                .Else
+                    .Variable("feature", "off")
+                    .Variable("feature2", "off"),
+
+                If.NotEqual("c", "d")
+                    .Variable("feature", "on")
+                    .Variable("feature2", "on")
+                    .If.And(Equal("e", "f"), NotEqual("g", "h"))
                         .Variable("feature", "on")
                         .Variable("feature2", "on")
                     .Else
                         .Variable("feature", "off")
                         .Variable("feature2", "off"),
-
-                    If.NotEqual("c", "d")
-                      .Variable("feature", "on")
-                      .Variable("feature2", "on")
-                      .If.And(Equal("e", "f"), NotEqual("g", "h"))
-                          .Variable("feature", "on")
-                          .Variable("feature2", "on")
-                      .Else
-                          .Variable("feature", "off")
-                          .Variable("feature2", "off"),
-                }
+            }
         };
     }
 
@@ -157,18 +165,18 @@ public class ConditionalsTests
         public override SingleStagePipeline Pipeline => new()
         {
             Jobs =
+            {
+                new Job("Job")
                 {
-                    new Job("Job")
-                    {
-                        Pool = If.Equal("A", "B")
-                                    .Pool(new HostedPool("pool-A")
-                                    {
-                                        Demands = { "SomeProperty -equals SomeValue" }
-                                    })
-                                .Else
-                                    .Pool(new HostedPool("pool-B")),
-                    }
+                    Pool = If.Equal("A", "B")
+                                .Pool(new HostedPool("pool-A")
+                                {
+                                    Demands = { "SomeProperty -equals SomeValue" }
+                                })
+                            .Else
+                                .Pool(new HostedPool("pool-B")),
                 }
+            }
         };
     }
 
@@ -194,19 +202,19 @@ public class ConditionalsTests
         public override SingleStagePipeline Pipeline => new()
         {
             Jobs =
+            {
+                new Job("Job")
                 {
-                    new Job("Job")
-                    {
-                        Pool = If.Equal("A", "B")
-                                    .Pool(new HostedPool("pool-A")
-                                    {
-                                        Demands = { "SomeProperty -equals SomeValue" }
-                                    })
-                                .EndIf
-                                .If.Equal("C", "D")
-                                    .Pool(new HostedPool("pool-B")),
-                    }
+                    Pool = If.Equal("A", "B")
+                                .Pool(new HostedPool("pool-A")
+                                {
+                                    Demands = { "SomeProperty -equals SomeValue" }
+                                })
+                            .EndIf
+                            .If.Equal("C", "D")
+                                .Pool(new HostedPool("pool-B")),
                 }
+            }
         };
     }
 
