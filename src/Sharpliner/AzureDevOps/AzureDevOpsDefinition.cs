@@ -166,9 +166,13 @@ public abstract class AzureDevOpsDefinition
 
     protected static Condition Or<T>(params string[] expressions) => new OrCondition<T>(expressions);
 
+    protected static Condition Xor<T>(string expression1, string expression2) => new XorCondition<T>(expression1, expression2);
+
     protected static Condition<T> And<T>(params Condition[] expressions) => new AndCondition<T>(expressions);
 
     protected static Condition Or<T>(params Condition[] expressions) => new OrCondition<T>(expressions);
+
+    protected static Condition Xor<T>(Condition expression1, Condition expression2) => new XorCondition<T>(expression1, expression2);
 
     protected static Condition<T> Equal<T>(string expression1, string expression2) => new EqualityCondition<T>(true, expression1, expression2);
 
@@ -186,13 +190,17 @@ public abstract class AzureDevOpsDefinition
 
     protected static Condition NotIn<T>(string needle, params string[] haystack) => new NotInCondition<T>(needle, haystack);
 
-    protected static Condition And(string condition1, string condition2) => new AndCondition(condition1, condition2);
+    protected static Condition And(params string[] expressions) => new AndCondition(expressions);
 
-    protected static Condition Or(string condition1, string condition2) => new OrCondition(condition1, condition2);
+    protected static Condition Or(params string[] expressions) => new OrCondition(expressions);
+
+    protected static Condition Xor(string condition1, string condition2) => new XorCondition(condition1, condition2);
 
     protected static Condition And(params Condition[] expressions) => new AndCondition(expressions);
 
     protected static Condition Or(params Condition[] expressions) => new OrCondition(expressions);
+
+    protected static Condition Xor(Condition[] expression1, Condition[] expression2) => new XorCondition(expression1, expression2);
 
     protected static Condition Contains(string needle, string haystack) => new ContainsCondition(needle, haystack);
 

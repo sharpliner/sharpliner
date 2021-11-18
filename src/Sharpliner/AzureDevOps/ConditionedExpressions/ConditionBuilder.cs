@@ -44,6 +44,12 @@ public class ConditionBuilder
     public Condition Or(params string[] expressions)
         => Link(new OrCondition(expressions));
 
+    public Condition Xor(Condition expression1, Condition expression2)
+        => Link(new XorCondition(expression1, expression2));
+
+    public Condition Xor(string expression1, string expression2)
+        => Link(new XorCondition(expression1, expression2));
+
     public Condition Contains(string needle, string haystack)
         => new ContainsCondition(needle, haystack);
 
@@ -98,6 +104,12 @@ public class ConditionBuilder<T>
 
     public Condition<T> Or(params Condition[] expressions)
         => Link(new OrCondition<T>(expressions));
+
+    public Condition<T> Xor(Condition expression1, Condition expression2)
+        => Link(new XorCondition<T>(expression1, expression2));
+
+    public Condition<T> Xor(string expression1, string expression2)
+        => Link(new XorCondition<T>(expression1, expression2));
 
     public Condition<T> And(params string[] expressions)
         => Link(new AndCondition<T>(expressions));

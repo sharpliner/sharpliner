@@ -156,6 +156,19 @@ public class OrCondition : Condition
     }
 }
 
+public class XorCondition : Condition
+{
+    internal XorCondition(Condition expression1, Condition expression2)
+        : base("xor", true, expression1, expression2)
+    {
+    }
+
+    internal XorCondition(string expression1, string expression2)
+        : base("xor", true, expression1, expression2)
+    {
+    }
+}
+
 public class ContainsCondition : Condition
 {
     internal ContainsCondition(string needle, string haystack)
@@ -254,6 +267,19 @@ public class OrCondition<T> : Condition<T>
 
     internal OrCondition(params string[] expressions)
         : base("or", true, expressions)
+    {
+    }
+}
+
+public class XorCondition<T> : Condition<T>
+{
+    internal XorCondition(Condition expression1, Condition expression2)
+        : base("xor", true, expression1, expression2)
+    {
+    }
+
+    internal XorCondition(string expression1, string expression2)
+        : base("xor", true, expression1, expression2)
     {
     }
 }
