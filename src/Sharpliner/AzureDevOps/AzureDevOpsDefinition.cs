@@ -176,7 +176,15 @@ public abstract class AzureDevOpsDefinition
 
     protected static Condition Contains<T>(string needle, string haystack) => new ContainsCondition<T>(needle, haystack);
 
+    protected static Condition StartsWith<T>(string needle, string haystack) => new StartsWithCondition<T>(needle, haystack);
+
+    protected static Condition EndsWith<T>(string needle, string haystack) => new EndsWithCondition<T>(needle, haystack);
+
     protected static Condition ContainsValue<T>(string needle, params string[] haystack) => new ContainsValueCondition<T>(needle, haystack);
+
+    protected static Condition In<T>(string needle, params string[] haystack) => new InCondition<T>(needle, haystack);
+
+    protected static Condition NotIn<T>(string needle, params string[] haystack) => new NotInCondition<T>(needle, haystack);
 
     protected static Condition And(string condition1, string condition2) => new AndCondition(condition1, condition2);
 
@@ -187,6 +195,14 @@ public abstract class AzureDevOpsDefinition
     protected static Condition Or(params Condition[] expressions) => new OrCondition(expressions);
 
     protected static Condition Contains(string needle, string haystack) => new ContainsCondition(needle, haystack);
+
+    protected static Condition StartsWith(string needle, string haystack) => new StartsWithCondition(needle, haystack);
+
+    protected static Condition EndsWith(string needle, string haystack) => new EndsWithCondition(needle, haystack);
+
+    protected static Condition In(string needle, params string[] haystack) => new InCondition(needle, haystack);
+
+    protected static Condition NotIn(string needle, params string[] haystack) => new NotInCondition(needle, haystack);
 
     protected static Condition ContainsValue(string needle, params string[] haystack) => new ContainsValueCondition(needle, haystack);
 

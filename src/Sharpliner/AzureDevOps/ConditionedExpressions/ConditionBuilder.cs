@@ -50,6 +50,12 @@ public class ConditionBuilder
     public Condition ContainsValue(string needle, params string[] haystack)
         => new ContainsValueCondition(needle, haystack);
 
+    public Condition In(string needle, string haystack)
+        => new InCondition(needle, haystack);
+
+    public Condition NotIn(string needle, params string[] haystack)
+        => new NotInCondition(needle, haystack);
+
     public Condition IsBranch(string branchName)
         => Link(new BranchCondition(branchName, true));
 
@@ -101,6 +107,12 @@ public class ConditionBuilder<T>
 
     public Condition<T> Contains(string needle, string haystack)
         => new ContainsCondition<T>(needle, haystack);
+
+    public Condition In(string needle, string haystack)
+        => new InCondition<T>(needle, haystack);
+
+    public Condition NotIn(string needle, params string[] haystack)
+        => new NotInCondition<T>(needle, haystack);
 
     public Condition<T> ContainsValue(string needle, params string[] haystack)
         => new ContainsValueCondition<T>(needle, haystack);

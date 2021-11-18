@@ -164,6 +164,38 @@ public class ContainsCondition : Condition
     }
 }
 
+public class StartsWithCondition : Condition
+{
+    internal StartsWithCondition(string needle, string haystack)
+        : base("startsWith", false, haystack, needle)
+    {
+    }
+}
+
+public class EndsWithCondition : Condition
+{
+    internal EndsWithCondition(string needle, string haystack)
+        : base("endsWith", false, haystack, needle)
+    {
+    }
+}
+
+public class InCondition : Condition
+{
+    internal InCondition(string needle, params string[] haystack)
+        : base("in", true, haystack.Prepend(needle))
+    {
+    }
+}
+
+public class NotInCondition : Condition
+{
+    internal NotInCondition(string needle, params string[] haystack)
+        : base("notin", true, haystack.Prepend(needle))
+    {
+    }
+}
+
 public class ContainsValueCondition : Condition
 {
     internal ContainsValueCondition(string needle, params string[] haystack)
@@ -234,10 +266,42 @@ public class ContainsCondition<T> : Condition<T>
     }
 }
 
+public class StartsWithCondition<T> : Condition<T>
+{
+    internal StartsWithCondition(string needle, string haystack)
+        : base("startsWith", false, haystack, needle)
+    {
+    }
+}
+
+public class EndsWithCondition<T> : Condition<T>
+{
+    internal EndsWithCondition(string needle, string haystack)
+        : base("endsWith", false, haystack, needle)
+    {
+    }
+}
+
 public class ContainsValueCondition<T> : Condition<T>
 {
     internal ContainsValueCondition(string needle, params string[] haystack)
         : base("containsValue", true, haystack.Append(needle))
+    {
+    }
+}
+
+public class InCondition<T> : Condition<T>
+{
+    internal InCondition(string needle, params string[] haystack)
+        : base("in", true, haystack.Prepend(needle))
+    {
+    }
+}
+
+public class NotInCondition<T> : Condition<T>
+{
+    internal NotInCondition(string needle, params string[] haystack)
+        : base("notin", true, haystack.Prepend(needle))
     {
     }
 }
