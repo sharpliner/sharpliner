@@ -190,6 +190,10 @@ public abstract class AzureDevOpsDefinition
 
     protected static Condition NotIn<T>(string needle, params string[] haystack) => new NotInCondition<T>(needle, haystack);
 
+    protected static Condition Greater<T>(string expression1, string expression2) => new GreaterCondition<T>(expression1, expression2);
+
+    protected static Condition Less<T>(string expression1, string expression2) => new LessCondition<T>(expression1, expression2);
+
     protected static Condition And(params string[] expressions) => new AndCondition(expressions);
 
     protected static Condition Or(params string[] expressions) => new OrCondition(expressions);
@@ -200,7 +204,7 @@ public abstract class AzureDevOpsDefinition
 
     protected static Condition Or(params Condition[] expressions) => new OrCondition(expressions);
 
-    protected static Condition Xor(Condition[] expression1, Condition[] expression2) => new XorCondition(expression1, expression2);
+    protected static Condition Xor(Condition expression1, Condition expression2) => new XorCondition(expression1, expression2);
 
     protected static Condition Contains(string needle, string haystack) => new ContainsCondition(needle, haystack);
 
@@ -217,6 +221,10 @@ public abstract class AzureDevOpsDefinition
     protected static Condition Equal(string expression1, string expression2) => new EqualityCondition(true, expression1, expression2);
 
     protected static Condition NotEqual(string expression1, string expression2) => new EqualityCondition(false, expression1, expression2);
+
+    protected static Condition Greater(string expression1, string expression2) => new GreaterCondition(expression1, expression2);
+
+    protected static Condition Less(string expression1, string expression2) => new LessCondition(expression1, expression2);
 
     protected static Condition IsBranch(string branchName) => new BranchCondition(branchName, true);
 

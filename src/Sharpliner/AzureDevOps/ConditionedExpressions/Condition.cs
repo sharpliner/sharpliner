@@ -204,7 +204,7 @@ public class InCondition : Condition
 public class NotInCondition : Condition
 {
     internal NotInCondition(string needle, params string[] haystack)
-        : base("notin", true, haystack.Prepend(needle))
+        : base("notIn", true, haystack.Prepend(needle))
     {
     }
 }
@@ -213,6 +213,22 @@ public class ContainsValueCondition : Condition
 {
     internal ContainsValueCondition(string needle, params string[] haystack)
         : base("containsValue", true, haystack.Append(needle))
+    {
+    }
+}
+
+public class GreaterCondition : Condition
+{
+    internal GreaterCondition(string first, string second)
+        : base("gt", true, first, second)
+    {
+    }
+}
+
+public class LessCondition : Condition
+{
+    internal LessCondition(string first, string second)
+        : base("lt", true, first, second)
     {
     }
 }
@@ -328,6 +344,22 @@ public class NotInCondition<T> : Condition<T>
 {
     internal NotInCondition(string needle, params string[] haystack)
         : base("notin", true, haystack.Prepend(needle))
+    {
+    }
+}
+
+public class GreaterCondition<T> : Condition<T>
+{
+    internal GreaterCondition(string first, string second)
+        : base("gt", true, first, second)
+    {
+    }
+}
+
+public class LessCondition<T> : Condition<T>
+{
+    internal LessCondition(string first, string second)
+        : base("lt", true, first, second)
     {
     }
 }

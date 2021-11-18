@@ -62,6 +62,12 @@ public class ConditionBuilder
     public Condition NotIn(string needle, params string[] haystack)
         => new NotInCondition(needle, haystack);
 
+    public Condition Greater(string first, string second)
+        => Link(new GreaterCondition(first, second));
+
+    public Condition Less(string first, string second)
+        => Link(new LessCondition(first, second));
+
     public Condition IsBranch(string branchName)
         => Link(new BranchCondition(branchName, true));
 
@@ -134,6 +140,12 @@ public class ConditionBuilder<T>
 
     public Condition<T> IsNotBranch(string branchName)
         => Link(new BranchCondition<T>(branchName, false));
+
+    public Condition<T> Greater(string first, string second)
+        => Link(new GreaterCondition<T>(first, second));
+
+    public Condition<T> Less(string first, string second)
+        => Link(new LessCondition<T>(first, second));
 
     public Condition<T> IsPullRequest
         => Link(new BuildReasonCondition<T>("'PullRequest'", true));
