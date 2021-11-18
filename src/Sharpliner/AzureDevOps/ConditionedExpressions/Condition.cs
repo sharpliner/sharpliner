@@ -102,6 +102,13 @@ public abstract class Condition<T> : Condition
     }
 }
 
+public class CustomCondition : Condition
+{
+    public CustomCondition(string condition) : base(RemoveIf(condition))
+    {
+    }
+}
+
 public class NotCondition : Condition
 {
     internal NotCondition(Condition condition)
@@ -145,6 +152,13 @@ public class OrCondition : Condition
 
     internal OrCondition(params string[] expressions)
         : base("or", true, expressions)
+    {
+    }
+}
+
+public class CustomCondition<T> : Condition<T>
+{
+    public CustomCondition(string condition) : base(condition)
     {
     }
 }

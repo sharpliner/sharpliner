@@ -14,6 +14,12 @@ public class ConditionBuilder
         Parent = parent;
     }
 
+    /// <summary>
+    /// Specify any condition
+    /// </summary>
+    public Condition Condition(string condition)
+        => Link(new CustomCondition(condition));
+
     public Condition Equal(Condition condition)
         => Link(condition);
 
@@ -65,6 +71,9 @@ public class ConditionBuilder<T>
     {
         Parent = parent;
     }
+
+    public Condition<T> Equal(string condition)
+        => Link(new CustomCondition<T>(condition));
 
     public Condition<T> Equal(string expression1, string expression2)
         => Link(new EqualityCondition<T>(true, expression1, expression2));
