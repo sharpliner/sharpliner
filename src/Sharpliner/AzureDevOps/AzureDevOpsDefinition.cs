@@ -157,6 +157,11 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static ConditionedList<string> NoDependsOn => new EmptyDependsOn();
 
+    /// <summary>
+    /// Use this to specify any custom condition (in case you miss some operator or expression).
+    /// </summary>
+    protected static Condition Condition(string condition) => new CustomCondition(condition);
+
     protected static Condition<T> And<T>(params string[] expressions) => new AndCondition<T>(expressions);
 
     protected static Condition Or<T>(params string[] expressions) => new OrCondition<T>(expressions);

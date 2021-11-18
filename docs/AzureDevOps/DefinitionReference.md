@@ -236,6 +236,9 @@ If.IsNotPullRequest
 
 // You can mix these too
 If.And(IsNotPullRequest, IsBranch("production"))
+
+// You can specify any custom condition in case we missed an API :)
+If.Condition("containsValue(...)")
 ```
 
 ## Templates

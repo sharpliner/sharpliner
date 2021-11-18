@@ -43,7 +43,8 @@ public class ConditionalsTests
                 If.Or(
                     And(
                         NotEqual("true", "true"),
-                        Equal(variables["Build.SourceBranch"], "'refs/heads/production'")),
+                        Equal(variables["Build.SourceBranch"], "'refs/heads/production'"),
+                        IsBranch("release")),
                     NotEqual(variables["Configuration"], "'Debug'"),
                     IsPullRequest)
                     .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
@@ -59,7 +60,9 @@ public class ConditionalsTests
         variable.Condition.Should().Be(
             "or(" +
                 "and(" +
-                    "ne(true, true), eq(variables['Build.SourceBranch'], 'refs/heads/production')), " +
+                    "ne(true, true), " +
+                    "eq(variables['Build.SourceBranch'], 'refs/heads/production'), " +
+                    "eq(variables['Build.SourceBranch'], 'refs/heads/release')), " +
                 "ne(variables['Configuration'], 'Debug'), " +
                 "eq(variables['Build.Reason'], 'PullRequest'))");
     }
@@ -233,5 +236,35 @@ public class ConditionalsTests
     ${{ if eq(C, D) }}:
       name: pool-B
 ");
+    }
+
+    private class Custom_Condition_Test_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Variables =
+            {
+                If.Condition("containsValue($(System.User), 'azdobot')")
+                    .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
+
+                If.Condition(Condition("in('foo', 'bar'))"))
+                    .Variable("TargetBranch", "production"),
+
+                If.Condition(IsPullRequest)
+                    .Variable("TargetBranch", "main"),
+            }
+        };
+    }
+
+    [Fact]
+    public void Custom_Condition_Test()
+    {
+        var pipeline = new Custom_Condition_Test_Pipeline();
+        var variable = pipeline.Pipeline.Variables.First();
+        variable.Condition.Should().Be("containsValue($(System.User), 'azdobot')");
+        variable = pipeline.Pipeline.Variables.ElementAt(1);
+        variable.Condition.Should().Be("in('foo', 'bar'))");
+        variable = pipeline.Pipeline.Variables.Last();
+        variable.Condition.Should().Be("eq(variables['Build.Reason'], 'PullRequest')");
     }
 }
