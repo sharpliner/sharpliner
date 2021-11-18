@@ -14,7 +14,7 @@ public class ConditionalsTests
             Variables =
             {
                 If.And(
-                    IsBranch("production"),
+                    NotIn("'bar'", "'foo'", "'xyz'", "'foo'"),
                     NotEqual(variables["Configuration"], "'Debug'"),
                     "containsValue($(System.User), 'azdobot')")
                     .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
@@ -29,7 +29,7 @@ public class ConditionalsTests
         var variable = pipeline.Pipeline.Variables.First();
         variable.Condition.Should().Be(
             "and(" +
-                "eq(variables['Build.SourceBranch'], 'refs/heads/production'), " +
+                "notIn('bar', 'foo', 'xyz', 'foo'), " +
                 "ne(variables['Configuration'], 'Debug'), " +
                 "containsValue($(System.User), 'azdobot'))");
     }
@@ -42,7 +42,7 @@ public class ConditionalsTests
             {
                 If.Or(
                     And(
-                        NotEqual("true", "true"),
+                        Less("5", "3"),
                         Equal(variables["Build.SourceBranch"], "'refs/heads/production'"),
                         IsBranch("release")),
                     NotEqual(variables["Configuration"], "'Debug'"),
@@ -60,7 +60,7 @@ public class ConditionalsTests
         variable.Condition.Should().Be(
             "or(" +
                 "and(" +
-                    "ne(true, true), " +
+                    "lt(5, 3), " +
                     "eq(variables['Build.SourceBranch'], 'refs/heads/production'), " +
                     "eq(variables['Build.SourceBranch'], 'refs/heads/release')), " +
                 "ne(variables['Configuration'], 'Debug'), " +
@@ -107,7 +107,7 @@ public class ConditionalsTests
                     .Variable("feature", "off")
                     .Variable("feature2", "off"),
 
-                If.NotEqual("c", "d")
+                If.ContainsValue("'foo'", "'bar'", "'foo'", "'xyz'")
                     .Variable("feature", "on")
                     .Variable("feature2", "on")
                     .If.And(Equal("e", "f"), NotEqual("g", "h"))
@@ -140,7 +140,7 @@ public class ConditionalsTests
   - name: feature2
     value: off
 
-- ${{ if ne(c, d) }}:
+- ${{ if containsValue('bar', 'foo', 'xyz', 'foo') }}:
   - name: feature
     value: on
 
@@ -247,10 +247,10 @@ public class ConditionalsTests
                 If.Condition("containsValue($(System.User), 'azdobot')")
                     .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
 
-                If.Condition(Condition("in('foo', 'bar'))"))
+                If.Condition(In("'foo'", "'bar'"))
                     .Variable("TargetBranch", "production"),
 
-                If.Condition(IsPullRequest)
+                If.Condition(Xor("True", "$(Variable)"))
                     .Variable("TargetBranch", "main"),
             }
         };
@@ -263,8 +263,8 @@ public class ConditionalsTests
         var variable = pipeline.Pipeline.Variables.First();
         variable.Condition.Should().Be("containsValue($(System.User), 'azdobot')");
         variable = pipeline.Pipeline.Variables.ElementAt(1);
-        variable.Condition.Should().Be("in('foo', 'bar'))");
+        variable.Condition.Should().Be("in('foo', 'bar')");
         variable = pipeline.Pipeline.Variables.Last();
-        variable.Condition.Should().Be("eq(variables['Build.Reason'], 'PullRequest')");
+        variable.Condition.Should().Be("xor(True, $(Variable))");
     }
 }
