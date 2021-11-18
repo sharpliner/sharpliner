@@ -44,6 +44,12 @@ public class ConditionBuilder
     public Condition Or(params string[] expressions)
         => Link(new OrCondition(expressions));
 
+    public Condition Contains(string needle, string haystack)
+        => new ContainsCondition(needle, haystack);
+
+    public Condition ContainsValue(string needle, params string[] haystack)
+        => new ContainsValueCondition(needle, haystack);
+
     public Condition IsBranch(string branchName)
         => Link(new BranchCondition(branchName, true));
 
@@ -92,6 +98,12 @@ public class ConditionBuilder<T>
 
     public Condition<T> Or(params string[] expressions)
         => Link(new OrCondition<T>(expressions));
+
+    public Condition<T> Contains(string needle, string haystack)
+        => new ContainsCondition<T>(needle, haystack);
+
+    public Condition<T> ContainsValue(string needle, params string[] haystack)
+        => new ContainsValueCondition<T>(needle, haystack);
 
     public Condition<T> IsBranch(string branchName)
         => Link(new BranchCondition<T>(branchName, true));

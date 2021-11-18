@@ -156,6 +156,22 @@ public class OrCondition : Condition
     }
 }
 
+public class ContainsCondition : Condition
+{
+    internal ContainsCondition(string needle, string haystack)
+        : base("contains", false, haystack, needle)
+    {
+    }
+}
+
+public class ContainsValueCondition : Condition
+{
+    internal ContainsValueCondition(string needle, params string[] haystack)
+        : base("containsValue", true, haystack.Append(needle))
+    {
+    }
+}
+
 public class CustomCondition<T> : Condition<T>
 {
     public CustomCondition(string condition) : base(condition)
@@ -209,6 +225,23 @@ public class OrCondition<T> : Condition<T>
     {
     }
 }
+
+public class ContainsCondition<T> : Condition<T>
+{
+    internal ContainsCondition(string haystack, string needle)
+        : base("contains", false, haystack, needle)
+    {
+    }
+}
+
+public class ContainsValueCondition<T> : Condition<T>
+{
+    internal ContainsValueCondition(string needle, params string[] haystack)
+        : base("containsValue", true, haystack.Append(needle))
+    {
+    }
+}
+
 public class BranchCondition : EqualityCondition
 {
     internal BranchCondition(string branchName, bool equal)

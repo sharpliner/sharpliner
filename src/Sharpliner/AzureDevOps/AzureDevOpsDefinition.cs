@@ -174,6 +174,10 @@ public abstract class AzureDevOpsDefinition
 
     protected static Condition<T> NotEqual<T>(string expression1, string expression2) => new EqualityCondition<T>(false, expression1, expression2);
 
+    protected static Condition Contains<T>(string needle, string haystack) => new ContainsCondition<T>(needle, haystack);
+
+    protected static Condition ContainsValue<T>(string needle, params string[] haystack) => new ContainsValueCondition<T>(needle, haystack);
+
     protected static Condition And(string condition1, string condition2) => new AndCondition(condition1, condition2);
 
     protected static Condition Or(string condition1, string condition2) => new OrCondition(condition1, condition2);
@@ -181,6 +185,10 @@ public abstract class AzureDevOpsDefinition
     protected static Condition And(params Condition[] expressions) => new AndCondition(expressions);
 
     protected static Condition Or(params Condition[] expressions) => new OrCondition(expressions);
+
+    protected static Condition Contains(string needle, string haystack) => new ContainsCondition(needle, haystack);
+
+    protected static Condition ContainsValue(string needle, params string[] haystack) => new ContainsValueCondition(needle, haystack);
 
     protected static Condition Equal(string expression1, string expression2) => new EqualityCondition(true, expression1, expression2);
 
