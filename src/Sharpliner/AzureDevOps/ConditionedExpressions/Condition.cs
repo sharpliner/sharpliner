@@ -156,6 +156,83 @@ public class OrCondition : Condition
     }
 }
 
+public class XorCondition : Condition
+{
+    internal XorCondition(Condition expression1, Condition expression2)
+        : base("xor", true, expression1, expression2)
+    {
+    }
+
+    internal XorCondition(string expression1, string expression2)
+        : base("xor", true, expression1, expression2)
+    {
+    }
+}
+
+public class ContainsCondition : Condition
+{
+    internal ContainsCondition(string needle, string haystack)
+        : base("contains", false, haystack, needle)
+    {
+    }
+}
+
+public class StartsWithCondition : Condition
+{
+    internal StartsWithCondition(string needle, string haystack)
+        : base("startsWith", false, haystack, needle)
+    {
+    }
+}
+
+public class EndsWithCondition : Condition
+{
+    internal EndsWithCondition(string needle, string haystack)
+        : base("endsWith", false, haystack, needle)
+    {
+    }
+}
+
+public class InCondition : Condition
+{
+    internal InCondition(string needle, params string[] haystack)
+        : base("in", true, haystack.Prepend(needle))
+    {
+    }
+}
+
+public class NotInCondition : Condition
+{
+    internal NotInCondition(string needle, params string[] haystack)
+        : base("notIn", true, haystack.Prepend(needle))
+    {
+    }
+}
+
+public class ContainsValueCondition : Condition
+{
+    internal ContainsValueCondition(string needle, params string[] haystack)
+        : base("containsValue", true, haystack.Append(needle))
+    {
+    }
+}
+
+public class GreaterCondition : Condition
+{
+    internal GreaterCondition(string first, string second)
+        : base("gt", true, first, second)
+    {
+    }
+}
+
+public class LessCondition : Condition
+{
+    internal LessCondition(string first, string second)
+        : base("lt", true, first, second)
+    {
+    }
+}
+
 public class CustomCondition<T> : Condition<T>
 {
     public CustomCondition(string condition) : base(condition)
@@ -209,6 +286,84 @@ public class OrCondition<T> : Condition<T>
     {
     }
 }
+
+public class XorCondition<T> : Condition<T>
+{
+    internal XorCondition(Condition expression1, Condition expression2)
+        : base("xor", true, expression1, expression2)
+    {
+    }
+
+    internal XorCondition(string expression1, string expression2)
+        : base("xor", true, expression1, expression2)
+    {
+    }
+}
+
+public class ContainsCondition<T> : Condition<T>
+{
+    internal ContainsCondition(string haystack, string needle)
+        : base("contains", false, haystack, needle)
+    {
+    }
+}
+
+public class StartsWithCondition<T> : Condition<T>
+{
+    internal StartsWithCondition(string needle, string haystack)
+        : base("startsWith", false, haystack, needle)
+    {
+    }
+}
+
+public class EndsWithCondition<T> : Condition<T>
+{
+    internal EndsWithCondition(string needle, string haystack)
+        : base("endsWith", false, haystack, needle)
+    {
+    }
+}
+
+public class ContainsValueCondition<T> : Condition<T>
+{
+    internal ContainsValueCondition(string needle, params string[] haystack)
+        : base("containsValue", true, haystack.Append(needle))
+    {
+    }
+}
+
+public class InCondition<T> : Condition<T>
+{
+    internal InCondition(string needle, params string[] haystack)
+        : base("in", true, haystack.Prepend(needle))
+    {
+    }
+}
+
+public class NotInCondition<T> : Condition<T>
+{
+    internal NotInCondition(string needle, params string[] haystack)
+        : base("notin", true, haystack.Prepend(needle))
+    {
+    }
+}
+
+public class GreaterCondition<T> : Condition<T>
+{
+    internal GreaterCondition(string first, string second)
+        : base("gt", true, first, second)
+    {
+    }
+}
+
+public class LessCondition<T> : Condition<T>
+{
+    internal LessCondition(string first, string second)
+        : base("lt", true, first, second)
+    {
+    }
+}
+
 public class BranchCondition : EqualityCondition
 {
     internal BranchCondition(string branchName, bool equal)

@@ -166,25 +166,65 @@ public abstract class AzureDevOpsDefinition
 
     protected static Condition Or<T>(params string[] expressions) => new OrCondition<T>(expressions);
 
+    protected static Condition Xor<T>(string expression1, string expression2) => new XorCondition<T>(expression1, expression2);
+
     protected static Condition<T> And<T>(params Condition[] expressions) => new AndCondition<T>(expressions);
 
     protected static Condition Or<T>(params Condition[] expressions) => new OrCondition<T>(expressions);
+
+    protected static Condition Xor<T>(Condition expression1, Condition expression2) => new XorCondition<T>(expression1, expression2);
 
     protected static Condition<T> Equal<T>(string expression1, string expression2) => new EqualityCondition<T>(true, expression1, expression2);
 
     protected static Condition<T> NotEqual<T>(string expression1, string expression2) => new EqualityCondition<T>(false, expression1, expression2);
 
-    protected static Condition And(string condition1, string condition2) => new AndCondition(condition1, condition2);
+    protected static Condition Contains<T>(string needle, string haystack) => new ContainsCondition<T>(needle, haystack);
 
-    protected static Condition Or(string condition1, string condition2) => new OrCondition(condition1, condition2);
+    protected static Condition StartsWith<T>(string needle, string haystack) => new StartsWithCondition<T>(needle, haystack);
+
+    protected static Condition EndsWith<T>(string needle, string haystack) => new EndsWithCondition<T>(needle, haystack);
+
+    protected static Condition ContainsValue<T>(string needle, params string[] haystack) => new ContainsValueCondition<T>(needle, haystack);
+
+    protected static Condition In<T>(string needle, params string[] haystack) => new InCondition<T>(needle, haystack);
+
+    protected static Condition NotIn<T>(string needle, params string[] haystack) => new NotInCondition<T>(needle, haystack);
+
+    protected static Condition Greater<T>(string expression1, string expression2) => new GreaterCondition<T>(expression1, expression2);
+
+    protected static Condition Less<T>(string expression1, string expression2) => new LessCondition<T>(expression1, expression2);
+
+    protected static Condition And(params string[] expressions) => new AndCondition(expressions);
+
+    protected static Condition Or(params string[] expressions) => new OrCondition(expressions);
+
+    protected static Condition Xor(string condition1, string condition2) => new XorCondition(condition1, condition2);
 
     protected static Condition And(params Condition[] expressions) => new AndCondition(expressions);
 
     protected static Condition Or(params Condition[] expressions) => new OrCondition(expressions);
 
+    protected static Condition Xor(Condition expression1, Condition expression2) => new XorCondition(expression1, expression2);
+
+    protected static Condition Contains(string needle, string haystack) => new ContainsCondition(needle, haystack);
+
+    protected static Condition StartsWith(string needle, string haystack) => new StartsWithCondition(needle, haystack);
+
+    protected static Condition EndsWith(string needle, string haystack) => new EndsWithCondition(needle, haystack);
+
+    protected static Condition In(string needle, params string[] haystack) => new InCondition(needle, haystack);
+
+    protected static Condition NotIn(string needle, params string[] haystack) => new NotInCondition(needle, haystack);
+
+    protected static Condition ContainsValue(string needle, params string[] haystack) => new ContainsValueCondition(needle, haystack);
+
     protected static Condition Equal(string expression1, string expression2) => new EqualityCondition(true, expression1, expression2);
 
     protected static Condition NotEqual(string expression1, string expression2) => new EqualityCondition(false, expression1, expression2);
+
+    protected static Condition Greater(string expression1, string expression2) => new GreaterCondition(expression1, expression2);
+
+    protected static Condition Less(string expression1, string expression2) => new LessCondition(expression1, expression2);
 
     protected static Condition IsBranch(string branchName) => new BranchCondition(branchName, true);
 

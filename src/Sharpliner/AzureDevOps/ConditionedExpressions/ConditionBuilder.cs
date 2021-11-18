@@ -44,6 +44,30 @@ public class ConditionBuilder
     public Condition Or(params string[] expressions)
         => Link(new OrCondition(expressions));
 
+    public Condition Xor(Condition expression1, Condition expression2)
+        => Link(new XorCondition(expression1, expression2));
+
+    public Condition Xor(string expression1, string expression2)
+        => Link(new XorCondition(expression1, expression2));
+
+    public Condition Contains(string needle, string haystack)
+        => new ContainsCondition(needle, haystack);
+
+    public Condition ContainsValue(string needle, params string[] haystack)
+        => new ContainsValueCondition(needle, haystack);
+
+    public Condition In(string needle, string haystack)
+        => new InCondition(needle, haystack);
+
+    public Condition NotIn(string needle, params string[] haystack)
+        => new NotInCondition(needle, haystack);
+
+    public Condition Greater(string first, string second)
+        => Link(new GreaterCondition(first, second));
+
+    public Condition Less(string first, string second)
+        => Link(new LessCondition(first, second));
+
     public Condition IsBranch(string branchName)
         => Link(new BranchCondition(branchName, true));
 
@@ -87,17 +111,41 @@ public class ConditionBuilder<T>
     public Condition<T> Or(params Condition[] expressions)
         => Link(new OrCondition<T>(expressions));
 
+    public Condition<T> Xor(Condition expression1, Condition expression2)
+        => Link(new XorCondition<T>(expression1, expression2));
+
+    public Condition<T> Xor(string expression1, string expression2)
+        => Link(new XorCondition<T>(expression1, expression2));
+
     public Condition<T> And(params string[] expressions)
         => Link(new AndCondition<T>(expressions));
 
     public Condition<T> Or(params string[] expressions)
         => Link(new OrCondition<T>(expressions));
 
+    public Condition<T> Contains(string needle, string haystack)
+        => new ContainsCondition<T>(needle, haystack);
+
+    public Condition In(string needle, string haystack)
+        => new InCondition<T>(needle, haystack);
+
+    public Condition NotIn(string needle, params string[] haystack)
+        => new NotInCondition<T>(needle, haystack);
+
+    public Condition<T> ContainsValue(string needle, params string[] haystack)
+        => new ContainsValueCondition<T>(needle, haystack);
+
     public Condition<T> IsBranch(string branchName)
         => Link(new BranchCondition<T>(branchName, true));
 
     public Condition<T> IsNotBranch(string branchName)
         => Link(new BranchCondition<T>(branchName, false));
+
+    public Condition<T> Greater(string first, string second)
+        => Link(new GreaterCondition<T>(first, second));
+
+    public Condition<T> Less(string first, string second)
+        => Link(new LessCondition<T>(first, second));
 
     public Condition<T> IsPullRequest
         => Link(new BuildReasonCondition<T>("'PullRequest'", true));
