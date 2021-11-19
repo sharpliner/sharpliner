@@ -90,6 +90,7 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
                 e.InnerException?.Message ?? e.ToString(),
                 Environment.NewLine,
                 "To see exception details, build with more verbosity (dotnet build -v:n)");
+
             Log.LogMessage(MessageImportance.Normal, "Validation of definition {0} failed: {1}", typeName, e.InnerException);
             return;
         }
@@ -121,7 +122,7 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
             {
                 if (FailIfChanged)
                 {
-                    Log.LogError($"  Changes detected between {typeName} and {path}!");
+                    Log.LogError($"  Changes detected between {typeName} and {path}");
                 }
                 else
                 {
