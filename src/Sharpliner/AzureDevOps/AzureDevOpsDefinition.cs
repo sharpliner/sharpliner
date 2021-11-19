@@ -1,4 +1,6 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Security.Policy;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.AzureDevOps;
@@ -147,9 +149,11 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     /// <param name="pipelineProject">Path to the .csproj where pipelines are defined</param>
     protected static Step ValidateYamlsArePublished(string pipelineProject)
-        => Script
-            .Inline($"dotnet build \"{pipelineProject}\" -p:{nameof(PublishDefinitions.FailIfChanged)}=true -p:{nameof(PublishDefinitions.IsAzureDevOpsBuild)}=true")
-            .DisplayAs("Validate YAML has been published");
+        => DotNet.Build(pipelineProject) with
+        {
+            DisplayName = "Validate YAML has been published",
+            Arguments = $"-p:{nameof(PublishDefinitions.FailIfChanged)}=true -p:{nameof(PublishDefinitions.IsAzureDevOpsBuild)}=true"
+        };
 
     /// <summary>
     /// AzDO allows an empty dependsOn which then forces the stage/job to kick off in parallel.

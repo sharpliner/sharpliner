@@ -38,9 +38,12 @@ jobs:
       projects: src/**/*.csproj
       includeNuGetOrg: true
 
-  - script: |-
-      dotnet build "eng/Sharpliner.CI/Sharpliner.CI.csproj" -p:FailIfChanged=true -p:IsAzureDevOpsBuild=true
+  - task: DotNetCoreCLI@2
     displayName: Validate YAML has been published
+    inputs:
+      command: build
+      projects: eng/Sharpliner.CI/Sharpliner.CI.csproj
+      arguments: -p:FailIfChanged=true -p:IsAzureDevOpsBuild=true
 
   - task: DotNetCoreCLI@2
     displayName: Test
