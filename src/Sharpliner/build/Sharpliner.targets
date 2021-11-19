@@ -4,6 +4,8 @@
       <_AssemblyToSearch>$(OutputPath)$(AssemblyName).dll</_AssemblyToSearch>
       <_FailIfChanged>false</_FailIfChanged>
       <_FailIfChanged Condition="$(FailIfChanged) == 'true'">true</_FailIfChanged>
+      <_IsAzureDevOpsBuild>false</_IsAzureDevOpsBuild>
+      <_IsAzureDevOpsBuild Condition="$(IsAzureDevOpsBuild) == 'true'">true</_IsAzureDevOpsBuild>
     </PropertyGroup>
 
     <Message Importance="high" Text="Publishing all definitions inside $(_AssemblyToSearch)" />
@@ -11,6 +13,6 @@
     <Error Text="To publish the YAML using Sharpliner please build the project using 'dotnet build' and not from Visual Studio (it needs the .NET Core MSBuild)"
            Condition=" '$(MSBuildRuntimeType)' != 'Core' " />
 
-    <PublishDefinitions Assembly="$(_AssemblyToSearch)" FailIfChanged="$(_FailIfChanged)" />
+    <PublishDefinitions Assembly="$(_AssemblyToSearch)" FailIfChanged="$(_FailIfChanged)" IsAzureDevOpsBuild="$(_IsAzureDevOpsBuild)" />
   </Target>
 </Project>
