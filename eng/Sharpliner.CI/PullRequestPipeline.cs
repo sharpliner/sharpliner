@@ -19,7 +19,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
 
         Jobs =
         {
-            new Job("Build", "Build and test TODO")
+            new Job("Build", "Build and test")
             {
                 Pool = new HostedPool("Azure Pipelines", "windows-latest"),
                 Steps =
