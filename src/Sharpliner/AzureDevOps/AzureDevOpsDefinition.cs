@@ -152,7 +152,7 @@ public abstract class AzureDevOpsDefinition
         => DotNet.Build(pipelineProject) with
         {
             DisplayName = "Validate YAML has been published",
-            Arguments = $"-p:{nameof(PublishDefinitions.FailIfChanged)}=true -p:{nameof(PublishDefinitions.IsAzureDevOpsBuild)}=true"
+            Arguments = $"-p:{nameof(PublishDefinitions.FailIfChanged)}=true"
         };
 
     /// <summary>
