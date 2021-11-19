@@ -43,7 +43,7 @@ jobs:
     inputs:
       command: build
       projects: eng/Sharpliner.CI/Sharpliner.CI.csproj
-      arguments: -p:FailIfChanged=true -p:IsAzureDevOpsBuild=true
+      arguments: -p:FailIfChanged=true
 
   - task: DotNetCoreCLI@2
     displayName: Test
