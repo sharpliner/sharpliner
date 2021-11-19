@@ -69,13 +69,13 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
 
         if (publish is null || validate is null || getPath is null)
         {
-            Log.LogError($"Failed to get definition metadata for {collection?.FullName ?? type.FullName}");
+            LogError($"Failed to get definition metadata for {collection?.FullName ?? type.FullName}");
             return;
         }
 
         if (getPath.Invoke(definition, null) is not string path)
         {
-            Log.LogError($"Failed to get target path for {collection?.Name ?? type.Name} ");
+            LogError($"Failed to get target path for {collection?.Name ?? type.Name} ");
             return;
         }
 
@@ -96,7 +96,7 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
                 Environment.NewLine,
                 "To see exception details, build with more verbosity (dotnet build -v:n)");
 
-            Log.LogError(IsAzureDevOpsBuild ? $"##[error]{errorMessage}" : errorMessage);
+            LogError(errorMessage);
             Log.LogMessage(MessageImportance.Normal, "Validation of definition {0} failed: {1}", typeName, e.InnerException);
             return;
         }
@@ -110,7 +110,7 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
         {
             if (FailIfChanged)
             {
-                Log.LogError($"  This definition hasn't been published yet!");
+                LogError($"  This definition hasn't been published yet!");
             }
             else
             {
@@ -128,7 +128,7 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
             {
                 if (FailIfChanged)
                 {
-                    Log.LogError($"  Changes detected between {typeName} and {path}!");
+                    LogError($"  Changes detected between {typeName} and {path}!");
                 }
                 else
                 {
@@ -150,7 +150,7 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
             var definitionsProperty = iface.GetProperty(nameof(ISharplinerDefinitionCollection.Definitions))?.GetValue(collection, null);
             if (definitionsProperty is not IEnumerable definitions)
             {
-                Log.LogError($"Failed to get definitions from collection {type.FullName}");
+                LogError($"Failed to get definitions from collection {type.FullName}");
                 continue;
             }
 
@@ -254,5 +254,15 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
         using var md5 = MD5.Create();
         using var stream = File.OpenRead(path);
         return System.Text.Encoding.UTF8.GetString(md5.ComputeHash(stream));
+    }
+
+    private void LogError(string message, params string[] objects)
+    {
+        if (objects.Any())
+        {
+            message = string.Format(message, objects);
+        }
+
+        Log.LogError(IsAzureDevOpsBuild ? $"##[error]{message}" : message);
     }
 }
