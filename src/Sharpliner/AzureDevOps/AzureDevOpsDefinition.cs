@@ -148,7 +148,7 @@ public abstract class AzureDevOpsDefinition
     /// <param name="pipelineProject">Path to the .csproj where pipelines are defined</param>
     protected static Step ValidateYamlsArePublished(string pipelineProject)
         => Script
-            .Inline($"dotnet build \"{pipelineProject}\" -p:{nameof(PublishDefinitions.FailIfChanged)}=true")
+            .Inline($"dotnet build \"{pipelineProject}\" -p:{nameof(PublishDefinitions.FailIfChanged)}=true -p:{nameof(PublishDefinitions.IsAzureDevOpsBuild)}=true")
             .DisplayAs("Validate YAML has been published");
 
     /// <summary>

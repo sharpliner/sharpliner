@@ -27,6 +27,11 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
     public bool FailIfChanged { get; set; }
 
     /// <summary>
+    /// Changes how we log errors in case we are running this task as part of an Azure DevOps pipeline.
+    /// </summary>
+    public bool IsAzureDevOpsBuild { get; set; }
+
+    /// <summary>
     /// This method finds all pipeline definitions via reflection and publishes them to YAML.
     /// </summary>
     public override bool Execute()
@@ -85,11 +90,13 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
         }
         catch (TargetInvocationException e)
         {
-            Log.LogError("Validation of definition {0} failed: {1}{2}{3}",
+            var errorMessage = string.Format("Validation of definition {0} failed: {1}{2}{3}",
                 typeName,
                 e.InnerException?.Message ?? e.ToString(),
                 Environment.NewLine,
                 "To see exception details, build with more verbosity (dotnet build -v:n)");
+
+            Log.LogError(IsAzureDevOpsBuild ? $"##[error]{errorMessage}" : errorMessage);
             Log.LogMessage(MessageImportance.Normal, "Validation of definition {0} failed: {1}", typeName, e.InnerException);
             return;
         }
