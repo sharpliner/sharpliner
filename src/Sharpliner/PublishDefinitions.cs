@@ -263,6 +263,6 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
             message = string.Format(message, objects);
         }
 
-        Log.LogError(IsAzureDevOpsBuild ? $"##[error]{message}" : message);
+        Log.LogError(message);
     }
 }
