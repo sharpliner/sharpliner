@@ -128,7 +128,7 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
             {
                 if (FailIfChanged)
                 {
-                    LogError($"  Changes detected between {typeName} and {path}!");
+                    LogError($"  Changes detected between {typeName} and {path}");
                 }
                 else
                 {
@@ -263,6 +263,13 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
             message = string.Format(message, objects);
         }
 
-        Log.LogError(IsAzureDevOpsBuild ? $"##[error]{message}" : message);
+        if (IsAzureDevOpsBuild)
+        {
+            Log.LogMessage(MessageImportance.High, $"##[error]{message}");
+        }
+        else
+        {
+            Log.LogError(message);
+        }
     }
 }
