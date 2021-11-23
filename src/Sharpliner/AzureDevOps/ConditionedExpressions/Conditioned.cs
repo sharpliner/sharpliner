@@ -27,7 +27,7 @@ public abstract record Conditioned : IYamlConvertible
     /// <summary>
     /// When serializing, we need to distinguish whether serializing a list of items under a condition or just a value.
     /// </summary>
-    internal bool IsList { get; set; } = false;
+    internal bool IsList { get; private set; } = false;
 
     protected Conditioned(string? condition)
     {
@@ -38,6 +38,16 @@ public abstract record Conditioned : IYamlConvertible
         => throw new NotImplementedException();
 
     public abstract void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer);
+
+    internal virtual void SetIsList(bool isList)
+    {
+        IsList = isList;
+
+        foreach (var child in Definitions)
+        {
+            child.SetIsList(isList);
+        }
+    }
 
     /// <summary>
     /// This method is used for double-linking of the definition expression tree.
@@ -171,6 +181,16 @@ public record Conditioned<T> : Conditioned
         else
         {
             WriteValue(emitter, nestedObjectSerializer);
+        }
+    }
+
+    internal override void SetIsList(bool isList)
+    {
+        base.SetIsList(isList);
+
+        if (Definition is Conditioned conditioned)
+        {
+            conditioned.SetIsList(isList);
         }
     }
 

@@ -41,7 +41,7 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected TemplateParameter ObjectParameter(string name, Dictionary<string, object>? defaultValue = null)
+    protected TemplateParameter ObjectParameter(string name, ConditionedDictionary? defaultValue = null)
         => new ObjectTemplateParameter(name, defaultValue);
 
     /// <summary>
@@ -154,7 +154,7 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
 
     public string Serialize()
     {
-        var template = new Dictionary<string, object>();
+        var template = new ConditionedDictionary();
 
         if (Parameters != null && Parameters.Any())
         {

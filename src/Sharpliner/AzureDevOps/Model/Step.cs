@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -78,7 +79,7 @@ public abstract record Step
     /// </summary>
     [YamlMember(Order = 220)]
     [DisallowNull]
-    public Dictionary<string, string> Env { get; init; } = new();
+    public ConditionedDictionary Env { get; init; } = new();
 
     /// <summary>
     /// Make step only run when a condition is met.

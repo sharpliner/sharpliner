@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -39,7 +40,7 @@ public record ContainerResource
     /// A map of environment variables that are available to all steps of the jobs. When more than one variable
     /// with the same name is used, the latter one will be used.
     /// </summary>
-    public Dictionary<string, string> Env { get; } = new();
+    public ConditionedDictionary Env { get; } = new();
 
     /// <summary>
     /// Ports to expose on the container
