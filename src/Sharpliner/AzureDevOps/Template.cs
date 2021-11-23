@@ -57,12 +57,3 @@ public record Template<T> : Conditioned<T>
         emitter.Emit(new MappingEnd());
     }
 }
-
-/// <summary>
-/// This class allows you to pass parameters to to templates.
-/// To nest objects, insert another TemplateParameters value.
-/// You can also specify a condition in the key and nest values conditionally.
-/// </summary>
-public class TemplateParameters : Dictionary<string, object>
-{
-}

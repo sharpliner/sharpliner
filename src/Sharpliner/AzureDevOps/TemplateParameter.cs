@@ -95,14 +95,14 @@ public sealed record BooleanTemplateParameter : TemplateParameter<bool>
     public override string Type => "boolean";
 }
 
-public sealed record ObjectTemplateParameter : TemplateParameter<Dictionary<string, object>>
+public sealed record ObjectTemplateParameter : TemplateParameter<ConditionedDictionary>
 {
     /// <summary>
     /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public ObjectTemplateParameter(string name, Dictionary<string, object>? defaultValue = null)
+    public ObjectTemplateParameter(string name, ConditionedDictionary? defaultValue = null)
         : base(name, defaultValue, null)
     {
     }

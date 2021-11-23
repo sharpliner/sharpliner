@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -73,4 +73,4 @@ public record AzureDevOpsTask : Step
     }
 }
 
-public class TaskInputs : Dictionary<string, object> { }
+public class TaskInputs : ConditionedDictionary { }

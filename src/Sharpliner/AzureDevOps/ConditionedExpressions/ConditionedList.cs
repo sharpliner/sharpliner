@@ -29,27 +29,7 @@ public class ConditionedList<T> : List<Conditioned<T>>
             item = parent;
         }
 
-        SetIsListForAll(item);
+        item.SetIsList(true);
         base.Add(item);
-    }
-
-    private static void SetIsListForAll(Conditioned? item)
-    {
-        if (item == null)
-        {
-            return;
-        }
-
-        item.IsList = true;
-
-        if (item is Conditioned<T> temp && temp.Definition is Conditioned temp2)
-        {
-            SetIsListForAll(temp2);
-        }
-
-        foreach (var child in item.Definitions)
-        {
-            SetIsListForAll(child);
-        }
     }
 }

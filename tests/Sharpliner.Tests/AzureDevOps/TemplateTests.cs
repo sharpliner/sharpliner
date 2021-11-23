@@ -13,17 +13,17 @@ public class TemplateTests
         public override SingleStagePipeline Pipeline => new()
         {
             Jobs =
-                {
-                    If.Equal("foo", "bar")
-                        .JobTemplate("template1.yml", new TemplateParameters
-                        {
-                            { "enableTelemetry", true },
-                        })
-                        .JobTemplate("template2.yml", new TemplateParameters
-                        {
-                            { "enableTelemetry", false },
-                        })
-                }
+            {
+                If.Equal("foo", "bar")
+                    .JobTemplate("template1.yml", new TemplateParameters
+                    {
+                        { "enableTelemetry", true },
+                    })
+                    .JobTemplate("template2.yml", new TemplateParameters
+                    {
+                        { "enableTelemetry", false },
+                    })
+            }
         };
     }
 
@@ -164,7 +164,19 @@ steps:
                         { "pr", true }
                     }
                 },
-                { "other", 123 },
+                {
+                    "other",
+                    If.Equal("parameters['container']", "''")
+                        .Value(new TemplateParameters
+                        {
+                            { "image", "ubuntu-16.04-cross-arm64-20210719121212-8a8d3be" }
+                        })
+                    .Else
+                        .Value(new TemplateParameters
+                        {
+                            { "image", "${{ parameters.container }}" }
+                        })
+                },
             }),
         };
     }
@@ -172,7 +184,8 @@ steps:
     [Fact]
     public void Conditioned_Parameters_Serialization_Test()
     {
-        var yaml = new Conditioned_Parameters().Serialize();
+        var pipeline = new Conditioned_Parameters();
+        var yaml = pipeline.Serialize();
 
         yaml.Should().Be(
 @"jobs:
@@ -183,7 +196,11 @@ steps:
       some: value
       ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
         pr: true
-      other: 123
+      other:
+        ${{ if eq(parameters['container'], '') }}:
+          image: ubuntu-16.04-cross-arm64-20210719121212-8a8d3be
+        ${{ if ne(parameters['container'], '') }}:
+          image: ${{ parameters.container }}
 ");
     }
 }
