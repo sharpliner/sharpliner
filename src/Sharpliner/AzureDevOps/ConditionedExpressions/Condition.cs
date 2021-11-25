@@ -412,10 +412,10 @@ internal static class NotConditionHelper
 
         if (condition.StartsWith("in("))
         {
-            return string.Concat("notin", condition.AsSpan(2));
+            return string.Concat("notIn", condition.AsSpan(2));
         }
 
-        if (condition.StartsWith("notin("))
+        if (condition.StartsWith("notIn("))
         {
             return string.Concat("in", condition.AsSpan(2));
         }

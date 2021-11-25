@@ -72,4 +72,71 @@ public class LibraryTests
       echo 'Goodbye World'
 ");
     }
+
+    private class Variable_Library : VariableLibrary
+    {
+        private readonly string _env;
+
+        public Variable_Library(string env)
+        {
+            _env = env;
+        }
+
+        public override List<Conditioned<VariableBase>> Variables => new()
+        {
+            Variable($"connection-string-{_env}", $"{_env}_123"),
+
+            If.Equal($"'{_env}'", "prod")
+                .Group("prod-kv")
+        };
+    }
+
+    private class ConditionalPipeline : SimpleTestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Variables =
+            {
+                Variable("test", true),
+
+                If.NotIn("'$(Environment)'", "'prod'")
+                    .VariableLibrary(new Variable_Library("dev"))
+                    .VariableLibrary(new Variable_Library("staging"))
+                .Else
+                    .VariableLibrary(new Variable_Library("prod"))
+            }
+        };
+    }
+
+    [Fact]
+    public void Conditional_Library_Test()
+    {
+        var yaml = new ConditionalPipeline().Serialize();
+
+        yaml.Should().Be(
+@"variables:
+- name: test
+  value: true
+
+- ${{ if notIn('$(Environment)', 'prod') }}:
+  - name: connection-string-dev
+    value: dev_123
+
+  - ${{ if eq('dev', prod) }}:
+    - group: prod-kv
+
+  - name: connection-string-staging
+    value: staging_123
+
+  - ${{ if eq('staging', prod) }}
+    - group: prod-kv
+
+- ${{ if in('$(Environment)', 'prod')) }}:
+  - name: connection-string-prod
+    value: prod_123
+
+  - ${{ if eq('prod', prod) }}:
+    - group: prod-kv
+");
+    }
 }
