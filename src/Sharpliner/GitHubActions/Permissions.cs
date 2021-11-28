@@ -1,56 +1,55 @@
 using System;
 using System.Collections.Generic;
 
-namespace Sharpliner.GitHubActions
+namespace Sharpliner.GitHubActions;
+
+public enum GitHubPermissionScope
 {
-    public enum GitHubPermissionScope
-    {
-        Actions,
-        Checks,
-        Contents,
-        Deployments,
-        Issues,
-        Packages,
-        PullRequests,
-        RepositoryProjects,
-        SecurityEvents,
-        Statuses,
-    }
+    Actions,
+    Checks,
+    Contents,
+    Deployments,
+    Issues,
+    Packages,
+    PullRequests,
+    RepositoryProjects,
+    SecurityEvents,
+    Statuses,
+}
 
-    public enum GitHubPermission
-    {
-        None,
-        Read,
-        Write
-    }
+public enum GitHubPermission
+{
+    None,
+    Read,
+    Write
+}
 
-    public record Permissions
-    {
-        public HashSet<GitHubPermissionScope> Read { get; } = new();
-        public HashSet<GitHubPermissionScope> Write { get; } = new();
+public record Permissions
+{
+    public HashSet<GitHubPermissionScope> Read { get; } = new();
+    public HashSet<GitHubPermissionScope> Write { get; } = new();
 
-        public Permissions All(GitHubPermission permission)
+    public Permissions All(GitHubPermission permission)
+    {
+        // loop and add, we are not worried because it is a hasset, we add
+        // to the correct hashset or remove from both in the case of None
+        foreach (var scope in Enum.GetValues<GitHubPermissionScope>())
         {
-            // loop and add, we are not worried because it is a hasset, we add
-            // to the correct hashset or remove from both in the case of None
-            foreach (var scope in Enum.GetValues<GitHubPermissionScope>())
+            switch (permission)
             {
-                switch (permission)
-                {
-                    case GitHubPermission.Read:
-                        Read.Add(scope);
-                        break;
-                    case GitHubPermission.Write:
-                        Write.Add(scope);
-                        break;
-                    default:
-                        Read.Remove(scope);
-                        Write.Remove(scope);
-                        break;
-                }
+                case GitHubPermission.Read:
+                    Read.Add(scope);
+                    break;
+                case GitHubPermission.Write:
+                    Write.Add(scope);
+                    break;
+                default:
+                    Read.Remove(scope);
+                    Write.Remove(scope);
+                    break;
             }
-            return this;
         }
-
+        return this;
     }
+
 }

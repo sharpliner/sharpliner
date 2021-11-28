@@ -1,20 +1,19 @@
 using System;
 
-namespace Sharpliner.GitHubActions
+namespace Sharpliner.GitHubActions;
+
+/// <summary>
+///
+/// </summary>
+public record Environment
 {
-    /// <summary>
-    ///
-    /// </summary>
-    public record Environment
+    public Environment(string name, string? url = null)
     {
-        public Environment(string name, string? url = null)
-        {
-            if (string.IsNullOrEmpty(name))
-                throw new ArgumentNullException(nameof (name));
-            Name = name;
-            Url = url;
-        }
-        public string Name { get; init; }
-        public string? Url { get; init; }
+        if (string.IsNullOrEmpty(name))
+            throw new ArgumentNullException(nameof(name));
+        Name = name;
+        Url = url;
     }
+    public string Name { get; init; }
+    public string? Url { get; init; }
 }

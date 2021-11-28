@@ -1,36 +1,35 @@
 using System;
 
-namespace Sharpliner.GitHubActions
+namespace Sharpliner.GitHubActions;
+
+/// <summary>
+/// Represents the service container that will be used for the job
+/// </summary>
+public record Service
 {
     /// <summary>
-    /// Represents the service container that will be used for the job
+    /// Get the Id of the service.
     /// </summary>
-    public record Service
+    public string Id { get; }
+
+    /// <summary>
+    /// Get/Set the container of the service.
+    /// </summary>
+    public Container? Container { get; set; }
+
+    /// <summary>
+    /// The service with the given Id and container will be used for the job.
+    /// </summary>
+    /// <param name="id">Id of the service.</param>
+    /// <param name="container">Container of the service.</param>
+    public Service(string id, Container? container = null)
     {
-        /// <summary>
-        /// Get the Id of the service.
-        /// </summary>
-        public string Id { get; }
-
-        /// <summary>
-        /// Get/Set the container of the service.
-        /// </summary>
-        public Container? Container { get; set; }
-
-        /// <summary>
-        /// The service with the given Id and container will be used for the job.
-        /// </summary>
-        /// <param name="id">Id of the service.</param>
-        /// <param name="container">Container of the service.</param>
-        public Service(string id, Container? container = null)
+        if (string.IsNullOrEmpty(id))
         {
-            if (string.IsNullOrEmpty(id))
-            {
-                throw new ArgumentNullException(nameof(id));
-            }
-
-            Id = id;
-            Container = container;
+            throw new ArgumentNullException(nameof(id));
         }
+
+        Id = id;
+        Container = container;
     }
 }

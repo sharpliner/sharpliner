@@ -2,17 +2,17 @@ using System;
 using Sharpliner.GitHubActions;
 using Xunit;
 
-namespace Sharpliner.Tests.GitHub
-{
-    public class WorkflowTests
-    {
+namespace Sharpliner.Tests.GitHub;
 
-        [Fact]
-        public void Workflow_Single_Manual_Workflow()
+public class WorkflowTests
+{
+
+    [Fact]
+    public void Workflow_Single_Manual_Workflow()
+    {
+        var w = new Workflow
         {
-            var w = new Workflow
-            {
-                On =
+            On =
                 {
                     Manuals =
                     {
@@ -28,21 +28,21 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 }
-            };
+        };
 
-            Assert.NotNull(w);
-            Assert.NotNull(w.On.Manuals.WorkflowDispatch);
-            Assert.Null(w.On.Manuals.RepositoryDispatch);
-            Assert.Empty(w.On.Schedules);
-            Assert.Empty(w.On.Webhooks);
-        }
+        Assert.NotNull(w);
+        Assert.NotNull(w.On.Manuals.WorkflowDispatch);
+        Assert.Null(w.On.Manuals.RepositoryDispatch);
+        Assert.Empty(w.On.Schedules);
+        Assert.Empty(w.On.Webhooks);
+    }
 
-        [Fact]
-        public void Workflow_Manual_RepositoryDispatch()
+    [Fact]
+    public void Workflow_Manual_RepositoryDispatch()
+    {
+        var w = new Workflow
         {
-            var w = new Workflow
-            {
-                On =
+            On =
                 {
                    Manuals =
                    {
@@ -51,41 +51,41 @@ namespace Sharpliner.Tests.GitHub
                        }
                    }
                 }
-            };
+        };
 
-            Assert.NotNull(w);
-            Assert.Null(w.On.Manuals.WorkflowDispatch);
-            Assert.NotNull(w.On.Manuals.RepositoryDispatch);
-            Assert.Empty(w.On.Schedules);
-            Assert.Empty(w.On.Webhooks);
-        }
+        Assert.NotNull(w);
+        Assert.Null(w.On.Manuals.WorkflowDispatch);
+        Assert.NotNull(w.On.Manuals.RepositoryDispatch);
+        Assert.Empty(w.On.Schedules);
+        Assert.Empty(w.On.Webhooks);
+    }
 
-        [Fact]
-        public void Workflow_Single_Schedule()
+    [Fact]
+    public void Workflow_Single_Schedule()
+    {
+        var w = new Workflow
         {
-            var w = new Workflow
-            {
-                On =
+            On =
                 {
                     Schedules =
                     {
                         new ("'*/30 5,17 * * *'")
                     }
                 }
-            };
-            Assert.NotNull(w);
-            Assert.Null(w.On.Manuals.WorkflowDispatch);
-            Assert.Null(w.On.Manuals.RepositoryDispatch);
-            Assert.Single(w.On.Schedules);
-            Assert.Empty(w.On.Webhooks);
-        }
+        };
+        Assert.NotNull(w);
+        Assert.Null(w.On.Manuals.WorkflowDispatch);
+        Assert.Null(w.On.Manuals.RepositoryDispatch);
+        Assert.Single(w.On.Schedules);
+        Assert.Empty(w.On.Webhooks);
+    }
 
-        [Fact]
-        public void Workflow_Several_Sechedule()
+    [Fact]
+    public void Workflow_Several_Sechedule()
+    {
+        var w = new Workflow
         {
-            var w = new Workflow
-            {
-                On =
+            On =
                 {
                     Schedules =
                     {
@@ -93,20 +93,20 @@ namespace Sharpliner.Tests.GitHub
                         new ("'*/30 1,17 * * *'")
                     }
                 }
-            };
-            Assert.NotNull(w);
-            Assert.Null(w.On.Manuals.WorkflowDispatch);
-            Assert.Null(w.On.Manuals.RepositoryDispatch);
-            Assert.Equal(2, w.On.Schedules.Count);
-            Assert.Empty(w.On.Webhooks);
-        }
+        };
+        Assert.NotNull(w);
+        Assert.Null(w.On.Manuals.WorkflowDispatch);
+        Assert.Null(w.On.Manuals.RepositoryDispatch);
+        Assert.Equal(2, w.On.Schedules.Count);
+        Assert.Empty(w.On.Webhooks);
+    }
 
-        [Fact]
-        public void Workflow_Single_Webhook()
+    [Fact]
+    public void Workflow_Single_Webhook()
+    {
+        var w = new Workflow()
         {
-            var w = new Workflow()
-            {
-                On =
+            On =
                 {
                     Webhooks =
                     {
@@ -116,20 +116,20 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 }
-            };
-            Assert.NotNull(w);
-            Assert.Null(w.On.Manuals.WorkflowDispatch);
-            Assert.Null(w.On.Manuals.RepositoryDispatch);
-            Assert.Empty(w.On.Schedules);
-            Assert.Single(w.On.Webhooks);
-        }
+        };
+        Assert.NotNull(w);
+        Assert.Null(w.On.Manuals.WorkflowDispatch);
+        Assert.Null(w.On.Manuals.RepositoryDispatch);
+        Assert.Empty(w.On.Schedules);
+        Assert.Single(w.On.Webhooks);
+    }
 
-        [Fact]
-        public void Workflow_Several_webhook()
+    [Fact]
+    public void Workflow_Several_webhook()
+    {
+        var w = new Workflow
         {
-            var w = new Workflow
-            {
-                On =
+            On =
                 {
                     Webhooks =
                     {
@@ -143,21 +143,21 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 }
-            };
+        };
 
-            Assert.NotNull(w);
-            Assert.Null(w.On.Manuals.WorkflowDispatch);
-            Assert.Null(w.On.Manuals.RepositoryDispatch);
-            Assert.Empty(w.On.Schedules);
-            Assert.Equal(2, w.On.Webhooks.Count);
-        }
+        Assert.NotNull(w);
+        Assert.Null(w.On.Manuals.WorkflowDispatch);
+        Assert.Null(w.On.Manuals.RepositoryDispatch);
+        Assert.Empty(w.On.Schedules);
+        Assert.Equal(2, w.On.Webhooks.Count);
+    }
 
-        [Fact]
-        public void Workflow_ReadAll_Permissions()
+    [Fact]
+    public void Workflow_ReadAll_Permissions()
+    {
+        var w = new Workflow
         {
-            var w = new Workflow
-            {
-                On =
+            On =
                 {
                     Webhooks =
                     {
@@ -167,21 +167,21 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 },
-                Permissions = new Permissions().All(GitHubPermission.Read)
-            };
-            foreach (var scope in Enum.GetValues<GitHubPermissionScope>())
-            {
-                Assert.Contains(scope, w.Permissions.Read);
-            }
-        }
-
-        [Fact]
-        public void Workflow_WriteAll_Permissions()
+            Permissions = new Permissions().All(GitHubPermission.Read)
+        };
+        foreach (var scope in Enum.GetValues<GitHubPermissionScope>())
         {
+            Assert.Contains(scope, w.Permissions.Read);
+        }
+    }
 
-            var w = new Workflow
-            {
-                On =
+    [Fact]
+    public void Workflow_WriteAll_Permissions()
+    {
+
+        var w = new Workflow
+        {
+            On =
                 {
                     Webhooks =
                     {
@@ -191,21 +191,21 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 },
-                Permissions = new Permissions().All(GitHubPermission.Write)
-            };
-            foreach (var scope in Enum.GetValues<GitHubPermissionScope>())
-            {
-                Assert.Contains(scope, w.Permissions.Write);
-            }
-        }
-
-        [Fact]
-        public void Workflow_OneRead_WriteAll_Permissions()
+            Permissions = new Permissions().All(GitHubPermission.Write)
+        };
+        foreach (var scope in Enum.GetValues<GitHubPermissionScope>())
         {
+            Assert.Contains(scope, w.Permissions.Write);
+        }
+    }
 
-            var w = new Workflow
-            {
-                On =
+    [Fact]
+    public void Workflow_OneRead_WriteAll_Permissions()
+    {
+
+        var w = new Workflow
+        {
+            On =
                 {
                     Webhooks =
                     {
@@ -215,27 +215,27 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 },
-                Permissions = new Permissions
-                {
-                    Read =
+            Permissions = new Permissions
+            {
+                Read =
                     {
                         GitHubPermissionScope.Actions,
                     }
-                }.All(GitHubPermission.Write)
-            };
-            Assert.Contains(GitHubPermissionScope.Actions, w.Permissions.Read);
-            foreach (var scope in Enum.GetValues<GitHubPermissionScope>())
-            {
-                Assert.Contains(scope, w.Permissions.Write);
-            }
-        }
-
-        [Fact]
-        public void Workflow_OneWrite_ReadAll_Permissions()
+            }.All(GitHubPermission.Write)
+        };
+        Assert.Contains(GitHubPermissionScope.Actions, w.Permissions.Read);
+        foreach (var scope in Enum.GetValues<GitHubPermissionScope>())
         {
-            var w = new Workflow
-            {
-                On =
+            Assert.Contains(scope, w.Permissions.Write);
+        }
+    }
+
+    [Fact]
+    public void Workflow_OneWrite_ReadAll_Permissions()
+    {
+        var w = new Workflow
+        {
+            On =
                 {
                     Webhooks =
                     {
@@ -245,27 +245,27 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 },
-                Permissions = new Permissions
-                {
-                    Write =
+            Permissions = new Permissions
+            {
+                Write =
                     {
                         GitHubPermissionScope.Actions,
                     }
-                }.All(GitHubPermission.Read)
-            };
-            Assert.Contains(GitHubPermissionScope.Actions, w.Permissions.Write);
-            foreach (var scope in Enum.GetValues<GitHubPermissionScope>())
-            {
-                Assert.Contains(scope, w.Permissions.Read);
-            }
-        }
-
-        [Fact]
-        public void Workflow_Detailed_Permissions()
+            }.All(GitHubPermission.Read)
+        };
+        Assert.Contains(GitHubPermissionScope.Actions, w.Permissions.Write);
+        foreach (var scope in Enum.GetValues<GitHubPermissionScope>())
         {
-            var w = new Workflow
-            {
-                On =
+            Assert.Contains(scope, w.Permissions.Read);
+        }
+    }
+
+    [Fact]
+    public void Workflow_Detailed_Permissions()
+    {
+        var w = new Workflow
+        {
+            On =
                 {
                     Webhooks =
                     {
@@ -275,7 +275,7 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 },
-                Permissions =
+            Permissions =
                 {
                     Write =
                     {
@@ -286,18 +286,18 @@ namespace Sharpliner.Tests.GitHub
                         GitHubPermissionScope.Contents
                     }
                 }
-            };
-            Assert.Contains(GitHubPermissionScope.Actions, w.Permissions.Write);
-            Assert.Contains(GitHubPermissionScope.Actions, w.Permissions.Read);
-            Assert.Contains(GitHubPermissionScope.Contents, w.Permissions.Read);
-        }
+        };
+        Assert.Contains(GitHubPermissionScope.Actions, w.Permissions.Write);
+        Assert.Contains(GitHubPermissionScope.Actions, w.Permissions.Read);
+        Assert.Contains(GitHubPermissionScope.Contents, w.Permissions.Read);
+    }
 
-        [Fact]
-        public void Workflow_No_Environment_Variables()
+    [Fact]
+    public void Workflow_No_Environment_Variables()
+    {
+        var w = new Workflow
         {
-            var w = new Workflow
-            {
-                On =
+            On =
                 {
                     Webhooks =
                     {
@@ -307,16 +307,16 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 },
-            };
-            Assert.Empty(w.Env.Keys);
-        }
+        };
+        Assert.Empty(w.Env.Keys);
+    }
 
-        [Fact]
-        public void Workflow_Environment_Variables()
+    [Fact]
+    public void Workflow_Environment_Variables()
+    {
+        var w = new Workflow
         {
-            var w = new Workflow
-            {
-                On =
+            On =
                 {
                     Webhooks =
                     {
@@ -326,21 +326,21 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 },
-                Env =
+            Env =
                 {
                     ["Database"] = "production",
                     ["Bot"] = "builder"
                 }
-            };
-            Assert.NotEmpty(w.Env.Keys);
-        }
+        };
+        Assert.NotEmpty(w.Env.Keys);
+    }
 
-        [Fact]
-        public void Workflow_With_Concurrency()
+    [Fact]
+    public void Workflow_With_Concurrency()
+    {
+        var w = new Workflow
         {
-            var w = new Workflow
-            {
-                On =
+            On =
                 {
                     Webhooks =
                     {
@@ -350,17 +350,17 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 },
-                Concurrency = new ("build", true)
-            };
-            Assert.NotNull(w.Concurrency);
-        }
+            Concurrency = new("build", true)
+        };
+        Assert.NotNull(w.Concurrency);
+    }
 
-        [Fact]
-        public void Workflow_Defaults_Defaults()
+    [Fact]
+    public void Workflow_Defaults_Defaults()
+    {
+        var w = new Workflow
         {
-            var w = new Workflow
-            {
-                On =
+            On =
                 {
                     Webhooks =
                     {
@@ -370,18 +370,18 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 },
-            };
-            Assert.Equal(Shell.Default, w.Defaults.Run.Shell);
-            Assert.Null(w.Defaults.Run.WorkingDirectory);
-            Assert.Null(w.Defaults.Run.CustomShell);
-        }
+        };
+        Assert.Equal(Shell.Default, w.Defaults.Run.Shell);
+        Assert.Null(w.Defaults.Run.WorkingDirectory);
+        Assert.Null(w.Defaults.Run.CustomShell);
+    }
 
-        [Fact]
-        public void Workflow_Defaults_Shell()
+    [Fact]
+    public void Workflow_Defaults_Shell()
+    {
+        var w = new Workflow
         {
-            var w = new Workflow
-            {
-                On =
+            On =
                 {
                     Webhooks =
                     {
@@ -391,25 +391,25 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 },
-                Defaults =
+            Defaults =
                 {
                     Run =
                     {
                         Shell = Shell.Pwsh
                     }
                 }
-            };
-            Assert.Equal(Shell.Pwsh, w.Defaults.Run.Shell);
-            Assert.Null(w.Defaults.Run.WorkingDirectory);
-            Assert.Null(w.Defaults.Run.CustomShell);
-        }
+        };
+        Assert.Equal(Shell.Pwsh, w.Defaults.Run.Shell);
+        Assert.Null(w.Defaults.Run.WorkingDirectory);
+        Assert.Null(w.Defaults.Run.CustomShell);
+    }
 
-        [Fact]
-        public void Workflow_Defaults_WorkingDir()
+    [Fact]
+    public void Workflow_Defaults_WorkingDir()
+    {
+        var w = new Workflow
         {
-            var w = new Workflow
-            {
-                On =
+            On =
                 {
                     Webhooks =
                     {
@@ -419,25 +419,25 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 },
-                Defaults =
+            Defaults =
                 {
                     Run =
                     {
                         WorkingDirectory = "scripts"
                     }
                 }
-            };
-            Assert.Equal(Shell.Default, w.Defaults.Run.Shell);
-            Assert.NotNull(w.Defaults.Run.WorkingDirectory);
-            Assert.Null(w.Defaults.Run.CustomShell);
-        }
+        };
+        Assert.Equal(Shell.Default, w.Defaults.Run.Shell);
+        Assert.NotNull(w.Defaults.Run.WorkingDirectory);
+        Assert.Null(w.Defaults.Run.CustomShell);
+    }
 
-        [Fact]
-        public void Workflow_Defaults_CustomShell()
+    [Fact]
+    public void Workflow_Defaults_CustomShell()
+    {
+        var w = new Workflow
         {
-            var w = new Workflow
-            {
-                On =
+            On =
                 {
                     Webhooks =
                     {
@@ -447,27 +447,27 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 },
-                Defaults =
+            Defaults =
                 {
                     Run =
                     {
                         CustomShell=  "perl {0}"
                     }
                 }
-            };
+        };
 
-            Assert.Equal(Shell.Default, w.Defaults.Run.Shell);
-            Assert.Null(w.Defaults.Run.WorkingDirectory);
-            Assert.NotNull(w.Defaults.Run.CustomShell);
-            Assert.Equal("perl {0}", w.Defaults.Run.CustomShell);
-        }
+        Assert.Equal(Shell.Default, w.Defaults.Run.Shell);
+        Assert.Null(w.Defaults.Run.WorkingDirectory);
+        Assert.NotNull(w.Defaults.Run.CustomShell);
+        Assert.Equal("perl {0}", w.Defaults.Run.CustomShell);
+    }
 
-        [Fact]
-        public void Workflow_With_Job()
+    [Fact]
+    public void Workflow_With_Job()
+    {
+        var w = new Workflow
         {
-            var w = new Workflow
-            {
-                On =
+            On =
                 {
                     Webhooks =
                     {
@@ -477,7 +477,7 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 },
-                Jobs =
+            Jobs =
                 {
                     new Job("configuration")
                     {
@@ -498,10 +498,9 @@ namespace Sharpliner.Tests.GitHub
                         }
                     }
                 }
-            };
-            Assert.Equal(2, w.Jobs.Count);
-            Assert.Equal("configuration", w.Jobs[0].Id);
-            Assert.Equal("tests", w.Jobs[1].Id);
-        }
+        };
+        Assert.Equal(2, w.Jobs.Count);
+        Assert.Equal("configuration", w.Jobs[0].Id);
+        Assert.Equal("tests", w.Jobs[1].Id);
     }
 }

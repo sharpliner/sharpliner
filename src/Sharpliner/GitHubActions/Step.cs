@@ -1,7 +1,6 @@
-namespace Sharpliner.GitHubActions
-{
-    public record Step
-    {
+namespace Sharpliner.GitHubActions;
 
-    }
+public record Step
+{
+
 }

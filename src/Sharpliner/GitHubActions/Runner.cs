@@ -1,7 +1,6 @@
-namespace Sharpliner.GitHubActions
-{
-    public record Runner
-    {
+namespace Sharpliner.GitHubActions;
 
-    }
+public record Runner
+{
+
 }
