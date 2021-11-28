@@ -31,6 +31,11 @@ public record LibraryReference<T> : Conditioned<T>
         Items = library.Items;
     }
 
+    public LibraryReference(IEnumerable<Conditioned<T>> items) : base()
+    {
+        Items = items;
+    }
+
     protected override void SerializeSelf(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
         foreach (var item in Items)

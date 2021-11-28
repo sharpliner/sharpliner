@@ -87,3 +87,22 @@ Then you can use this library for different projects easily:
     }
 ...
 ```
+
+Furthermore, you can also pass a list of items to the methods that reference libraries and get those expanded without the need to declare a new library class.
+This gives you quite a bit flexibility when dealing with repetitive patterns:
+
+```csharp
+...
+    new Job("Build")
+    {
+        Steps =
+        {
+            Script.Inline("echo 'Hello World'"),
+
+            ExpandSteps(new[] { "5.0.403", "6.0.100" }.Select(version => DotNet.Install.Sdk(version))),
+
+            Script.Inline("echo 'Goodbye World'"),
+        }
+    }
+...
+```

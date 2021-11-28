@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Tasks;
 
@@ -69,6 +71,102 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static Conditioned<VariableBase> VariableLibrary(VariableLibrary library)
         => new LibraryReference<VariableBase>(library);
+
+    /// <summary>
+    /// Reference a step library (series of library stages).
+    /// </summary>
+    protected static Conditioned<Stage> ExpandStages(params Conditioned<Stage>[] stages)
+        => new LibraryReference<Stage>(stages);
+
+    /// <summary>
+    /// Reference a step library (series of library jobs).
+    /// </summary>
+    protected static Conditioned<Job> ExpandJobs(params Conditioned<Job>[] jobs)
+        => new LibraryReference<Job>(jobs);
+
+    /// <summary>
+    /// Reference a step library (series of library steps).
+    /// </summary>
+    protected static Conditioned<Step> ExpandSteps(params Conditioned<Step>[] steps)
+        => new LibraryReference<Step>(steps);
+
+    /// <summary>
+    /// Reference a step library (series of library variables).
+    /// </summary>
+    protected static Conditioned<VariableBase> ExpandVariables(params Conditioned<VariableBase>[] variables)
+        => new LibraryReference<VariableBase>(variables);
+
+    /// <summary>
+    /// Reference a step library (series of library stages).
+    /// </summary>
+    protected static Conditioned<Stage> ExpandStages(IEnumerable<Conditioned<Stage>> stages)
+        => new LibraryReference<Stage>(stages);
+
+    /// <summary>
+    /// Reference a step library (series of library jobs).
+    /// </summary>
+    protected static Conditioned<Job> ExpandJobs(IEnumerable<Conditioned<Job>> jobs)
+        => new LibraryReference<Job>(jobs);
+
+    /// <summary>
+    /// Reference a step library (series of library steps).
+    /// </summary>
+    protected static Conditioned<Step> ExpandSteps(IEnumerable<Conditioned<Step>> steps)
+        => new LibraryReference<Step>(steps);
+
+    /// <summary>
+    /// Reference a step library (series of library variables).
+    /// </summary>
+    protected static Conditioned<VariableBase> ExpandVariables(IEnumerable<Conditioned<VariableBase>> variables)
+        => new LibraryReference<VariableBase>(variables);
+
+    /// <summary>
+    /// Reference a step library (series of library stages).
+    /// </summary>
+    protected static Conditioned<Stage> ExpandStages(params Stage[] stages)
+        => ExpandStages(stages.Select(x => new Conditioned<Stage>(x)));
+
+    /// <summary>
+    /// Reference a step library (series of library jobs).
+    /// </summary>
+    protected static Conditioned<Job> ExpandJobs(params Job[] jobs)
+        => ExpandJobs(jobs.Select(x => new Conditioned<Job>(x)));
+
+    /// <summary>
+    /// Reference a step library (series of library steps).
+    /// </summary>
+    protected static Conditioned<Step> ExpandSteps(params Step[] steps)
+        => ExpandSteps(steps.Select(x => new Conditioned<Step>(x)));
+
+    /// <summary>
+    /// Reference a step library (series of library variables).
+    /// </summary>
+    protected static Conditioned<VariableBase> ExpandVariables(params VariableBase[] variables)
+        => ExpandVariables(variables.Select(x => new Conditioned<VariableBase>(x)));
+
+    /// <summary>
+    /// Reference a step library (series of library stages).
+    /// </summary>
+    protected static Conditioned<Stage> ExpandStages(IEnumerable<Stage> stages)
+        => ExpandStages(stages.ToArray());
+
+    /// <summary>
+    /// Reference a step library (series of library jobs).
+    /// </summary>
+    protected static Conditioned<Job> ExpandJobs(IEnumerable<Job> jobs)
+        => ExpandJobs(jobs.ToArray());
+
+    /// <summary>
+    /// Reference a step library (series of library steps).
+    /// </summary>
+    protected static Conditioned<Step> ExpandSteps(IEnumerable<Step> steps)
+        => ExpandSteps(steps.ToArray());
+
+    /// <summary>
+    /// Reference a step library (series of library variables).
+    /// </summary>
+    protected static Conditioned<VariableBase> ExpandVariables(IEnumerable<VariableBase> variables)
+        => ExpandVariables(variables.ToArray());
 
     /// <summary>
     /// Reference a stage library (series of library stages).

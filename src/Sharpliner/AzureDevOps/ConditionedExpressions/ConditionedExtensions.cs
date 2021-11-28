@@ -1,4 +1,6 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -231,6 +233,158 @@ public static class ConditionedExtensions
         conditionedDefinition.Definitions.Add(new LibraryReference<VariableBase>(library));
         return conditionedDefinition;
     }
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<Stage> Stages(
+        this Conditioned<Stage> conditionedDefinition,
+        IEnumerable<Conditioned<Stage>> stages)
+    {
+        conditionedDefinition.Definitions.Add(new LibraryReference<Stage>(stages));
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<Job> Jobs(
+        this Conditioned<Job> conditionedDefinition,
+        IEnumerable<Conditioned<Job>> jobs)
+    {
+        conditionedDefinition.Definitions.Add(new LibraryReference<Job>(jobs));
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<Step> Steps(
+        this Conditioned<Step> conditionedDefinition,
+        IEnumerable<Conditioned<Step>> steps)
+    {
+        conditionedDefinition.Definitions.Add(new LibraryReference<Step>(steps));
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<VariableBase> Variables(
+        this Conditioned<VariableBase> conditionedDefinition,
+        IEnumerable<Conditioned<VariableBase>> variables)
+    {
+        conditionedDefinition.Definitions.Add(new LibraryReference<VariableBase>(variables));
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<Stage> Stages(
+        this Conditioned<Stage> conditionedDefinition,
+        params Conditioned<Stage>[] stages)
+    {
+        conditionedDefinition.Definitions.Add(new LibraryReference<Stage>(stages));
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<Job> Jobs(
+        this Conditioned<Job> conditionedDefinition,
+        params Conditioned<Job>[] jobs)
+    {
+        conditionedDefinition.Definitions.Add(new LibraryReference<Job>(jobs));
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<Step> Steps(
+        this Conditioned<Step> conditionedDefinition,
+        params Conditioned<Step>[] steps)
+    {
+        conditionedDefinition.Definitions.Add(new LibraryReference<Step>(steps));
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<VariableBase> Variables(
+        this Conditioned<VariableBase> conditionedDefinition,
+        params Conditioned<VariableBase>[] variables)
+    {
+        conditionedDefinition.Definitions.Add(new LibraryReference<VariableBase>(variables));
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<Stage> Stages(
+        this Conditioned<Stage> conditionedDefinition,
+        IEnumerable<Stage> stages)
+        => conditionedDefinition.Stages(stages.ToArray());
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<Job> Jobs(
+        this Conditioned<Job> conditionedDefinition,
+        IEnumerable<Job> jobs)
+        => conditionedDefinition.Jobs(jobs.ToArray());
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<Step> Steps(
+        this Conditioned<Step> conditionedDefinition,
+        IEnumerable<Step> steps)
+        => conditionedDefinition.Steps(steps.ToArray());
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<VariableBase> Variables(
+        this Conditioned<VariableBase> conditionedDefinition,
+        IEnumerable<VariableBase> variables)
+        => conditionedDefinition.Variables(variables.ToArray());
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<Stage> Stages(
+        this Conditioned<Stage> conditionedDefinition,
+        params Stage[] stages)
+        => conditionedDefinition.Stages(stages.Select(x => new Conditioned<Stage>(x)));
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<Job> Jobs(
+        this Conditioned<Job> conditionedDefinition,
+        params Job[] jobs)
+        => conditionedDefinition.Jobs(jobs.Select(x => new Conditioned<Job>(x)));
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<Step> Steps(
+        this Conditioned<Step> conditionedDefinition,
+        params Step[] steps)
+        => conditionedDefinition.Steps(steps.Select(x => new Conditioned<Step>(x)));
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<VariableBase> Variables(
+        this Conditioned<VariableBase> conditionedDefinition,
+        params VariableBase[] variables)
+        => conditionedDefinition.Variables(variables.Select(x => new Conditioned<VariableBase>(x)));
 
     /// <summary>
     /// Reference a step library (series of library stages).

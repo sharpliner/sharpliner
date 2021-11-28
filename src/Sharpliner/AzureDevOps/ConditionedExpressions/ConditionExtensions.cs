@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 
 namespace Sharpliner.AzureDevOps;
@@ -161,13 +162,13 @@ public static class ConditionExtensions
         => Conditioned.Link(condition, new Template<VariableBase>(condition: condition.ToString(), path: path, parameters ?? new TemplateParameters()));
 
     /// <summary>
-    /// Reference a step library (series of library stages).
+    /// Reference a stage library (series of library stages).
     /// </summary>
     public static Conditioned<Stage> StageLibrary(this Condition condition, StageLibrary library)
         => Conditioned.Link(condition, library.Items);
 
     /// <summary>
-    /// Reference a step library (series of library jobs).
+    /// Reference a job library (series of library jobs).
     /// </summary>
     public static Conditioned<Job> JobLibrary(this Condition condition, JobLibrary library)
         => Conditioned.Link(condition, library.Items);
@@ -179,7 +180,7 @@ public static class ConditionExtensions
         => Conditioned.Link(condition, library.Items);
 
     /// <summary>
-    /// Reference a step library (series of library Variables).
+    /// Reference a variable library (series of library Variables).
     /// </summary>
     public static Conditioned<VariableBase> VariableLibrary(this Condition condition, VariableLibrary library)
         => Conditioned.Link(condition, library.Items);
@@ -211,6 +212,102 @@ public static class ConditionExtensions
     public static Conditioned<VariableBase> VariableLibrary<T>(this Condition condition)
         where T : VariableLibrary, new()
         => Conditioned.Link(condition, AzureDevOpsDefinition.CreateInstance<T>().Items);
+
+    /// <summary>
+    /// Include a set of stages.
+    /// </summary>
+    public static Conditioned<Stage> Stages(this Condition condition, params Conditioned<Stage>[] stages)
+        => Conditioned.Link<Stage>(condition, stages);
+
+    /// <summary>
+    /// Include a set of jobs.
+    /// </summary>
+    public static Conditioned<Job> Jobs(this Condition condition, params Conditioned<Job>[] jobs)
+        => Conditioned.Link<Job>(condition, jobs);
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<Step> Steps(this Condition condition, params Conditioned<Step>[] steps)
+        => Conditioned.Link<Step>(condition, steps);
+
+    /// <summary>
+    /// Include a set of variables.
+    /// </summary>
+    public static Conditioned<VariableBase> Variables(this Condition condition, params Conditioned<VariableBase>[] variables)
+        => Conditioned.Link<VariableBase>(condition, variables);
+
+    /// <summary>
+    /// Include a set of stages.
+    /// </summary>
+    public static Conditioned<Stage> Stages(this Condition condition, IEnumerable<Conditioned<Stage>> stages)
+        => Conditioned.Link(condition, stages);
+
+    /// <summary>
+    /// Include a set of jobs.
+    /// </summary>
+    public static Conditioned<Job> Jobs(this Condition condition, IEnumerable<Conditioned<Job>> jobs)
+        => Conditioned.Link(condition, jobs);
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<Step> Steps(this Condition condition, IEnumerable<Conditioned<Step>> steps)
+        => Conditioned.Link(condition, steps);
+
+    /// <summary>
+    /// Include a set of variables.
+    /// </summary>
+    public static Conditioned<VariableBase> Variables(this Condition condition, IEnumerable<Conditioned<VariableBase>> variables)
+        => Conditioned.Link(condition, variables);
+
+    /// <summary>
+    /// Include a set of stages.
+    /// </summary>
+    public static Conditioned<Stage> Stages(this Condition condition, params Stage[] stages)
+        => Conditioned.Link<Stage>(condition, stages.Select(x => new Conditioned<Stage>(x)));
+
+    /// <summary>
+    /// Include a set of jobs.
+    /// </summary>
+    public static Conditioned<Job> Jobs(this Condition condition, params Job[] jobs)
+        => Conditioned.Link<Job>(condition, jobs.Select(x => new Conditioned<Job>(x)));
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<Step> Steps(this Condition condition, params Step[] steps)
+        => Conditioned.Link<Step>(condition, steps.Select(x => new Conditioned<Step>(x)));
+
+    /// <summary>
+    /// Include a set of variables.
+    /// </summary>
+    public static Conditioned<VariableBase> Variables(this Condition condition, params VariableBase[] variables)
+        => Conditioned.Link<VariableBase>(condition, variables.Select(x => new Conditioned<VariableBase>(x)));
+
+    /// <summary>
+    /// Include a set of stages.
+    /// </summary>
+    public static Conditioned<Stage> Stages(this Condition condition, IEnumerable<Stage> stages)
+        => condition.Stages(stages.ToArray());
+
+    /// <summary>
+    /// Include a set of jobs.
+    /// </summary>
+    public static Conditioned<Job> Jobs(this Condition condition, IEnumerable<Job> jobs)
+        => condition.Jobs(jobs.ToArray());
+
+    /// <summary>
+    /// Include a set of steps.
+    /// </summary>
+    public static Conditioned<Step> Steps(this Condition condition, IEnumerable<Step> steps)
+        => condition.Steps(steps.ToArray());
+
+    /// <summary>
+    /// Include a set of variables.
+    /// </summary>
+    public static Conditioned<VariableBase> Variables(this Condition condition, IEnumerable<VariableBase> variables)
+        => condition.Variables(variables.ToArray());
 
     public static Conditioned<Strategy> Strategy(this Condition condition, Strategy strategy)
         => Conditioned.Link(condition, strategy);
