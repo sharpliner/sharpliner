@@ -1,6 +1,4 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Security.Policy;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Tasks;
 

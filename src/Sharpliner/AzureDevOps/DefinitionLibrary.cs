@@ -5,15 +5,23 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
 
+/// <summary>
+/// Abstract parent for all libraries (re-usable sets of items).
+/// </summary>
+/// <typeparam name="T">Type of items in the library</typeparam>
 public abstract class DefinitionLibrary<T> : AzureDevOpsDefinition
 {
     internal abstract IEnumerable<Conditioned<T>> Items { get; }
 
-    public DefinitionLibrary() : base()
+    internal DefinitionLibrary() : base()
     {
     }
 }
 
+/// <summary>
+/// This class is used to reference a library in a pipeline.
+/// </summary>
+/// <typeparam name="T">Type of items in the library</typeparam>
 public record LibraryReference<T> : Conditioned<T>
 {
     internal IEnumerable<Conditioned<T>> Items { get; }

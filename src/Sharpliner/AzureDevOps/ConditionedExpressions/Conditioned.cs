@@ -80,7 +80,7 @@ public abstract record Conditioned : IYamlConvertible
     /// This method is used for double-linking of the definition expression tree.
     /// </summary>
     /// <param name="condition">Parent condition</param>
-    /// <param name="conditionedDefinition">Definition that was added below the condition</param>
+    /// <param name="libraryItems">Library items to add to a condition</param>
     /// <returns>The conditioned definition coming out of the inputs</returns>
     internal static Conditioned<T> Link<T>(Condition condition, IEnumerable<Conditioned<T>> libraryItems)
     {

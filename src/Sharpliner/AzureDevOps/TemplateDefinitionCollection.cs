@@ -4,6 +4,7 @@ using System.Linq;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 
 namespace Sharpliner.AzureDevOps;
+
 /// <summary>
 /// Use this data object to generate a list of definitions dynamically.
 /// </summary>
