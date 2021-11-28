@@ -111,7 +111,7 @@ public abstract class AzureDevOpsDefinition
     /// <summary>
     /// Allows the variables[""] notation for conditional definitions.
     /// </summary>
-    protected readonly PipelineVariable variables = new();
+    protected static readonly VariableReference variables = new();
 
     /// <summary>
     /// Defines a variable.
@@ -299,7 +299,7 @@ public abstract class AzureDevOpsDefinition
 
     protected static Condition IsNotPullRequest => new BuildReasonCondition("'PullRequest'", false);
 
-    public sealed class PipelineVariable
+    public sealed class VariableReference
     {
         public string this[string variableName] => $"variables['{variableName}']";
     }
