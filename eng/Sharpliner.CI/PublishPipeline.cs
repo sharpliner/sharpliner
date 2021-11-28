@@ -4,8 +4,6 @@ namespace Sharpliner.CI;
 
 class PublishPipeline : SingleStagePipelineDefinition
 {
-    private const string DestPath = "artifacts/packages";
-
     public override string TargetFile => Pipelines.Location + "publish.yml";
 
     public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
@@ -23,29 +21,18 @@ class PublishPipeline : SingleStagePipelineDefinition
                         .FromResourceFile("Get-Version.ps1")
                         .DisplayAs("Detect package version"),
 
-                    StepTemplate(Pipelines.TemplateLocation + "install-dotnet-sdk.yml", new()
-                    {
-                        { "version", "6.0.100" }
-                    }),
-
-                    Powershell
-                        .Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'")
-                        .DisplayAs($"Create {DestPath}"),
-
-                    DotNet
-                        .Build("src/Sharpliner/Sharpliner.csproj", includeNuGetOrg: true)
-                        .DisplayAs("Build"),
+                    StepLibrary(new ProjectBuildSteps("src/Sharpliner/Sharpliner.csproj")),
 
                     DotNet
                         .Pack("src/Sharpliner/Sharpliner.csproj", $"-p:PackageVersion=$(packageVersion)") with
                         {
                             DisplayName = "Pack the .nupkg",
-                            OutputDir = DestPath,
+                            OutputDir = ProjectBuildSteps.PackagePath,
                             ConfigurationToPack = "Release",
                         },
 
                     Publish("Sharpliner",
-                        filePath: DestPath + "/Sharpliner.$(packageVersion).nupkg",
+                        filePath: ProjectBuildSteps.PackagePath + "/Sharpliner.$(packageVersion).nupkg",
                         displayName: "Publish build artifacts"),
 
                     If.And(IsNotPullRequest, IsBranch("main"))
@@ -55,7 +42,7 @@ class PublishPipeline : SingleStagePipelineDefinition
                             Inputs = new()
                             {
                                 { "command", "push" },
-                                { "packagesToPush", DestPath + "/Sharpliner.$(packageVersion).nupkg" },
+                                { "packagesToPush", ProjectBuildSteps.PackagePath + "/Sharpliner.$(packageVersion).nupkg" },
                                 { "nuGetFeedType", "external" },
                                 { "publishFeedCredentials", "Sharpliner / nuget.org" },
                             }

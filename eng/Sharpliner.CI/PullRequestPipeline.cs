@@ -24,18 +24,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                 Pool = new HostedPool("Azure Pipelines", "windows-latest"),
                 Steps =
                 {
-                    StepTemplate(Pipelines.TemplateLocation + "install-dotnet-sdk.yml", new()
-                    {
-                        { "version", "6.0.100" }
-                    }),
-
-                    Powershell
-                        .Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'")
-                        .DisplayAs("Create artifacts/packages"),
-
-                    DotNet
-                        .Build("src/**/*.csproj", includeNuGetOrg: true)
-                        .DisplayAs("Build"),
+                    StepLibrary(new ProjectBuildSteps("src/**/*.csproj")),
 
                     ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj"),
 
