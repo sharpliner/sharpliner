@@ -180,6 +180,46 @@ If.IsBranch("production")
     .Variable("rg-suffix", "-prod")
 ```
 
+### Re-usable pipeline blocks
+Sharpliner lets you re-use code more easily than via YAML templates.
+Apart from obvious C# code re-use, you can also define sets of C# building blocks and re-use them in your pipelines:
+
+```csharp
+class ProjectBuildSteps : StepLibrary
+{
+    public override List<Conditioned<Step>> Steps => new()
+    {
+        DotNet.Install.Sdk("6.0.100"),
+
+        If.IsBranch("main")
+            .Step(DotNet.Restore.Projects("src/MyProject.sln")),
+
+        DotNet.Build("src/MyProject.sln"),
+    };
+}
+```
+
+You can then reference this library in between build steps and it will get expanded into the pipeline's YAML:
+
+```csharp
+...
+    new Job("Build")
+    {
+        Steps =
+        {
+            Script.Inline("echo 'Hello World'"),
+
+            StepLibrary<ProjectBuildSteps>(),
+
+            Script.Inline("echo 'Goodbye World'"),
+        }
+    }
+...
+```
+
+More about this feature can be found [here (DefinitionLibraries.md)](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionLibraries.md).
+
+
 ### Sourcing scripts from files
 When you need to add cmd, PowerShell or bash steps into your pipeline, mainatining these bits inside YAML can be error prone.
 With Sharpliner you can keep scripts in their own files (`.ps1`, `.sh`..) where you get the natural environment you're used to such as syntax highlighting.
@@ -217,8 +257,9 @@ In these cases, it is worth starting with describing your intent in an issue fir
 
 ### Azure DevOps
 
-Azure DevOps pipelines can be already defined and have been tested on several pipelines in the wild already.
+Azure DevOps pipelines are production ready and have been tested on several pipelines in the wild already.
 The Sharpliner project itself is self-hosted and is [using Sharpliner](https://github.com/sharpliner/sharpliner/tree/main/eng/Sharpliner.CI) for its PR and publish pipelines.
+You can take inspiration there, however it's a bit more complex than needed since we also test some of the features there.
 
 Status:
 - All of the known models from the official documentation have now appropriate C# counterparts.
@@ -229,9 +270,10 @@ Status:
 
 ### GitHub Actions
 
-Currently under development, but very behind compared to Azure DevOps:
+Currently the development is stalled and very behind compared to Azure DevOps:
 - Model is not complete
 - Actions cannot be currently defined as a whole
 - Documentation is missing
 
+Contributors have already written a large portion of the model but there is still considerable amount of work needed to make GitHub actions work.
 We welcome all contributors, no contribution is small enough!
