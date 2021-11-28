@@ -16,18 +16,28 @@ public abstract class DefinitionLibrary<T> : AzureDevOpsDefinition
 
 public record LibraryReference<T> : Conditioned<T>
 {
-    internal DefinitionLibrary<T> Library { get; }
+    internal IEnumerable<Conditioned<T>> Items { get; }
 
     public LibraryReference(DefinitionLibrary<T> library) : base()
     {
-        Library = library;
+        Items = library.Items;
     }
 
-    public override void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    protected override void SerializeSelf(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
-        foreach (var item in Library.Items)
+        foreach (var item in Items)
         {
             nestedObjectSerializer(item);
+        }
+    }
+
+    internal override void SetIsList(bool isList)
+    {
+        base.SetIsList(true);
+
+        foreach (var item in Items)
+        {
+            item.SetIsList(true);
         }
     }
 }

@@ -27,7 +27,7 @@ public abstract record Conditioned : IYamlConvertible
     /// <summary>
     /// When serializing, we need to distinguish whether serializing a list of items under a condition or just a value.
     /// </summary>
-    internal bool IsList { get; private set; } = false;
+    internal bool IsList { get; set; } = false;
 
     protected Conditioned(string? condition)
     {
@@ -303,4 +303,6 @@ public record Conditioned<T> : Conditioned
 
         return definitions;
     }
+
+    public override string ToString() => $"{(string.IsNullOrEmpty(Condition) ? "" : Condition + ": ")}{typeof(T).Name} with {(Definition == null ? Definitions.Count : Definitions.Count + 1)} items";
 }

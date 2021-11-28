@@ -417,7 +417,7 @@ internal static class NotConditionHelper
 
         if (condition.StartsWith("notIn("))
         {
-            return string.Concat("in", condition.AsSpan(2));
+            return string.Concat("in", condition.AsSpan(5));
         }
 
         return $"not({condition})";

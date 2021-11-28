@@ -30,18 +30,6 @@ public class ConditionedList<T> : List<Conditioned<T>>
         }
 
         item.SetIsList(true);
-
-        if (item is LibraryReference<T> libraryRef)
-        {
-            foreach (var libraryItem in libraryRef.Library.Items)
-            {
-                libraryItem.SetIsList(true);
-                base.Add(libraryItem);
-            }
-        }
-        else
-        {
-            base.Add(item);
-        }
+        base.Add(item);
     }
 }

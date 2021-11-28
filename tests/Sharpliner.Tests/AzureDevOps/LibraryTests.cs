@@ -14,7 +14,8 @@ public class LibraryTests
         {
             DotNet.Install.Sdk("6.0.100"),
 
-            DotNet.Restore.Projects("src/MyProject.sln"),
+            If.IsBranch("main")
+                .Step(DotNet.Restore.Projects("src/MyProject.sln")),
 
             DotNet.Build("src/MyProject.sln"),
         };
@@ -58,10 +59,11 @@ public class LibraryTests
       packageType: sdk
       version: 6.0.100
 
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: restore
-      projects: src/MyProject.sln
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: restore
+        projects: src/MyProject.sln
 
   - task: DotNetCoreCLI@2
     inputs:
@@ -86,7 +88,7 @@ public class LibraryTests
         {
             Variable($"connection-string-{_env}", $"{_env}_123"),
 
-            If.Equal($"'{_env}'", "prod")
+            If.IsBranch(_env)
                 .Group("prod-kv")
         };
     }
@@ -122,20 +124,20 @@ public class LibraryTests
   - name: connection-string-dev
     value: dev_123
 
-  - ${{ if eq('dev', prod) }}:
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/dev') }}:
     - group: prod-kv
 
   - name: connection-string-staging
     value: staging_123
 
-  - ${{ if eq('staging', prod) }}
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/staging') }}:
     - group: prod-kv
 
-- ${{ if in('$(Environment)', 'prod')) }}:
+- ${{ if in('$(Environment)', 'prod') }}:
   - name: connection-string-prod
     value: prod_123
 
-  - ${{ if eq('prod', prod) }}:
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/prod') }}:
     - group: prod-kv
 ");
     }

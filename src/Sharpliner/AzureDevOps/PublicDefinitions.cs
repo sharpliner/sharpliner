@@ -65,7 +65,7 @@ public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBa
 
 #endregion
 
-#region Definition collections - use these to generate multiple definitions dynamically
+#region Definition collections - use these to generate definitions dynamically
 
 /// <summary>
 /// Inherit from this class when you want to dynamically generate multiple pipelines
@@ -120,7 +120,7 @@ public abstract class VariableTemplateCollection : TemplateDefinitionCollection<
 
 #endregion
 
-#region Definition libraries - use these to create sets of reusable definitions
+#region Definition libraries - override these to create sets of reusable parts (like templates but in C# only)
 
 /// <summary>
 /// Inherit from this class to create a reusable set of stages.
