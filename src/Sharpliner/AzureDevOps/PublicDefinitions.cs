@@ -1,6 +1,9 @@
 ﻿// This file contains all definitions that users should override to use Sharpliner.
 // To learn more, see https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/GettingStarted.md
 
+using Sharpliner.AzureDevOps.ConditionedExpressions;
+using System.Collections.Generic;
+
 namespace Sharpliner.AzureDevOps;
 
 #region Pipelines - override these to define pipelines
@@ -62,7 +65,7 @@ public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBa
 
 #endregion
 
-#region Definition collections - use these to generate multiple definitions dynamically
+#region Definition collections - use these to generate definitions dynamically
 
 /// <summary>
 /// Inherit from this class when you want to dynamically generate multiple pipelines
@@ -113,6 +116,50 @@ public abstract class StepTemplateCollection : TemplateDefinitionCollection<Step
 public abstract class VariableTemplateCollection : TemplateDefinitionCollection<VariableBase>
 {
     internal sealed override string YamlProperty => "variables";
+}
+
+#endregion
+
+#region Definition libraries - override these to create sets of reusable parts (like templates but in C# only)
+
+/// <summary>
+/// Inherit from this class to create a reusable set of stages.
+/// This library can then be inserted to multiple places.
+/// </summary>
+public abstract class StageLibrary : DefinitionLibrary<Stage>
+{
+    internal override IEnumerable<Conditioned<Stage>> Items => Stages;
+    public abstract List<Conditioned<Stage>> Stages { get; }
+}
+
+/// <summary>
+/// Inherit from this class to create a reusable set of build jobs.
+/// This library can then be inserted to multiple places.
+/// </summary>
+public abstract class JobLibrary : DefinitionLibrary<Job>
+{
+    internal override IEnumerable<Conditioned<Job>> Items => Jobs;
+    public abstract List<Conditioned<Job>> Jobs { get; }
+}
+
+/// <summary>
+/// Inherit from this class to create a reusable set of build steps.
+/// This library can then be inserted to multiple places.
+/// </summary>
+public abstract class StepLibrary : DefinitionLibrary<Step>
+{
+    internal override IEnumerable<Conditioned<Step>> Items => Steps;
+    public abstract List<Conditioned<Step>> Steps { get; }
+}
+
+/// <summary>
+/// Inherit from this class to create a reusable set of variable definitions.
+/// This library can then be inserted to multiple places.
+/// </summary>
+public abstract class VariableLibrary : DefinitionLibrary<VariableBase>
+{
+    internal override IEnumerable<Conditioned<VariableBase>> Items => Variables;
+    public abstract List<Conditioned<VariableBase>> Variables { get; }
 }
 
 #endregion

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Security.Policy;
+﻿using System;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Tasks;
 
@@ -46,6 +45,68 @@ public abstract class AzureDevOpsDefinition
     /// <param name="parameters">Values for template parameters</param>
     protected static Template<Step> StepTemplate(string path, TemplateParameters? parameters = null)
         => new(path, parameters);
+
+    /// <summary>
+    /// Reference a step library (series of library stages).
+    /// </summary>
+    protected static Conditioned<Stage> StageLibrary(StageLibrary library)
+        => new LibraryReference<Stage>(library);
+
+    /// <summary>
+    /// Reference a step library (series of library jobs).
+    /// </summary>
+    protected static Conditioned<Job> JobLibrary(JobLibrary library)
+        => new LibraryReference<Job>(library);
+
+    /// <summary>
+    /// Reference a step library (series of library steps).
+    /// </summary>
+    protected static Conditioned<Step> StepLibrary(StepLibrary library)
+        => new LibraryReference<Step>(library);
+
+    /// <summary>
+    /// Reference a step library (series of library variables).
+    /// </summary>
+    protected static Conditioned<VariableBase> VariableLibrary(VariableLibrary library)
+        => new LibraryReference<VariableBase>(library);
+
+    /// <summary>
+    /// Reference a stage library (series of library stages).
+    /// </summary>
+    protected static Conditioned<Stage> StageLibrary<T>() where T : StageLibrary, new()
+        => CreateLibraryRef<T, Stage>();
+
+    /// <summary>
+    /// Reference a job library (series of library jobs).
+    /// </summary>
+    protected static Conditioned<Job> JobLibrary<T>() where T : JobLibrary, new()
+        => CreateLibraryRef<T, Job>();
+
+    /// <summary>
+    /// Reference a step library (series of library steps).
+    /// </summary>
+    protected static Conditioned<Step> StepLibrary<T>() where T : StepLibrary, new()
+        => CreateLibraryRef<T, Step>();
+
+    /// <summary>
+    /// Reference a variable library (set of variable definition).
+    /// </summary>
+    protected static Conditioned<VariableBase> VariableLibrary<T>() where T : VariableLibrary, new()
+        => CreateLibraryRef<T, VariableBase>();
+
+    /// <summary>
+    /// Helper method to create instances of LibraryReference.
+    /// </summary>
+    /// <typeparam name="TLibrary">User's implementation type of the library</typeparam>
+    /// <typeparam name="TDefinition">Definition type (Stage/Job/Step/Variable)</typeparam>
+    internal static LibraryReference<TDefinition> CreateLibraryRef<TLibrary, TDefinition>()
+        where TLibrary : DefinitionLibrary<TDefinition>, new()
+        => new(CreateInstance<TLibrary>());
+
+    /// <summary>
+    /// Helper method to create instances of T.
+    /// </summary>
+    internal static T CreateInstance<T>() where T : new() => (T)Activator.CreateInstance(typeof(T))!;
 
     /// <summary>
     /// Allows the variables[""] notation for conditional definitions.

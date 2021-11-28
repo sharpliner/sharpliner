@@ -107,7 +107,7 @@ DotNet.Build("src/MyProject.csproj") with
 
 Note how we use the `with` keyword to extend the `record` object with new properties.
 
-### Help needed
+### Contributions welcome
 
 Currently, we don't support many marketplace tasks in C# as the project is still growing.
 If you find one useful, hit us up with a request, or better, with a pull request and we can add it to our library.
@@ -339,3 +339,43 @@ Steps =
     })
 }
 ```
+
+## Definition libraries
+
+Sharpliner lets you re-use code more easily than YAML templates do.
+Apart from obvious C# code re-use, you can also define sets of C# building blocks and re-use them in your pipelines:
+
+```csharp
+class ProjectBuildSteps : StepLibrary
+{
+    public override List<Conditioned<Step>> Steps => new()
+    {
+        DotNet.Install.Sdk("6.0.100"),
+
+        If.IsBranch("main")
+            .Step(DotNet.Restore.Projects("src/MyProject.sln")),
+
+        DotNet.Build("src/MyProject.sln"),
+    };
+}
+```
+
+You can then reference this library in between build steps and it will get expanded into the pipeline's YAML:
+
+```csharp
+...
+    new Job("Build")
+    {
+        Steps =
+        {
+            Script.Inline("echo 'Hello World'"),
+
+            StepLibrary<ProjectBuildSteps>(),
+
+            Script.Inline("echo 'Goodbye World'"),
+        }
+    }
+...
+```
+
+More about this feature can be found [here (DefinitionLibraries.md)](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionLibraries.md).

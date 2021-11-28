@@ -205,3 +205,5 @@ You can add this step to your pipeline:
     ValidateYamlsArePublished("src/MyProject.Pipelines.csproj"),
 ...
 ```
+
+Please note that this step builds the given project using .NET so the SDK has to be available on the build agent.

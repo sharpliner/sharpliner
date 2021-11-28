@@ -188,6 +188,90 @@ public static class ConditionedExtensions
         return conditionedDefinition;
     }
 
+    /// <summary>
+    /// Reference a step library (series of library stages).
+    /// </summary>
+    public static Conditioned<Stage> StageLibrary(
+        this Conditioned<Stage> conditionedDefinition,
+        StageLibrary library)
+    {
+        conditionedDefinition.Definitions.Add(new LibraryReference<Stage>(library));
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Reference a step library (series of library jobs).
+    /// </summary>
+    public static Conditioned<Job> JobLibrary(
+        this Conditioned<Job> conditionedDefinition,
+        JobLibrary library)
+    {
+        conditionedDefinition.Definitions.Add(new LibraryReference<Job>(library));
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Reference a step library (series of library steps).
+    /// </summary>
+    public static Conditioned<Step> StepLibrary(
+        this Conditioned<Step> conditionedDefinition,
+        StepLibrary library)
+    {
+        conditionedDefinition.Definitions.Add(new LibraryReference<Step>(library));
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Reference a step library (series of library Variables).
+    /// </summary>
+    public static Conditioned<VariableBase> VariableLibrary(
+        this Conditioned<VariableBase> conditionedDefinition,
+        VariableLibrary library)
+    {
+        conditionedDefinition.Definitions.Add(new LibraryReference<VariableBase>(library));
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Reference a step library (series of library stages).
+    /// </summary>
+    public static Conditioned<Stage> StageLibrary<T>(this Conditioned<Stage> conditionedDefinition)
+        where T : StageLibrary, new()
+    {
+        conditionedDefinition.Definitions.Add(AzureDevOpsDefinition.CreateLibraryRef<T, Stage>());
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Reference a step library (series of library jobs).
+    /// </summary>
+    public static Conditioned<Job> JobLibrary<T>(this Conditioned<Job> conditionedDefinition)
+        where T : JobLibrary, new()
+    {
+        conditionedDefinition.Definitions.Add(AzureDevOpsDefinition.CreateLibraryRef<T, Job>());
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Reference a step library (series of library steps).
+    /// </summary>
+    public static Conditioned<Step> StepLibrary<T>(this Conditioned<Step> conditionedDefinition)
+        where T : StepLibrary, new()
+    {
+        conditionedDefinition.Definitions.Add(AzureDevOpsDefinition.CreateLibraryRef<T, Step>());
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// Reference a step library (series of library Variables).
+    /// </summary>
+    public static Conditioned<VariableBase> VariableLibrary<T>(this Conditioned<VariableBase> conditionedDefinition)
+        where T : VariableLibrary, new()
+    {
+        conditionedDefinition.Definitions.Add(AzureDevOpsDefinition.CreateLibraryRef<T, VariableBase>());
+        return conditionedDefinition;
+    }
+
     internal static Conditioned<T>? GetRoot<T>(this Conditioned<T> conditionedDefinition)
     {
         var parent = conditionedDefinition;

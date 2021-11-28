@@ -27,7 +27,7 @@ public abstract record Conditioned : IYamlConvertible
     /// <summary>
     /// When serializing, we need to distinguish whether serializing a list of items under a condition or just a value.
     /// </summary>
-    internal bool IsList { get; private set; } = false;
+    internal bool IsList { get; set; } = false;
 
     protected Conditioned(string? condition)
     {
@@ -71,6 +71,21 @@ public abstract record Conditioned : IYamlConvertible
     /// <returns>The conditioned definition coming out of the inputs</returns>
     internal static Conditioned<T> Link<T>(Condition condition, Conditioned<T> conditionedDefinition)
     {
+        condition.Parent?.Definitions.Add(conditionedDefinition);
+        conditionedDefinition.Parent = condition.Parent;
+        return conditionedDefinition;
+    }
+
+    /// <summary>
+    /// This method is used for double-linking of the definition expression tree.
+    /// </summary>
+    /// <param name="condition">Parent condition</param>
+    /// <param name="libraryItems">Library items to add to a condition</param>
+    /// <returns>The conditioned definition coming out of the inputs</returns>
+    internal static Conditioned<T> Link<T>(Condition condition, IEnumerable<Conditioned<T>> libraryItems)
+    {
+        var conditionedDefinition = new Conditioned<T>(default!, condition.ToString());
+        conditionedDefinition.Definitions.AddRange(libraryItems);
         condition.Parent?.Definitions.Add(conditionedDefinition);
         conditionedDefinition.Parent = condition.Parent;
         return conditionedDefinition;
@@ -288,4 +303,6 @@ public record Conditioned<T> : Conditioned
 
         return definitions;
     }
+
+    public override string ToString() => $"{(string.IsNullOrEmpty(Condition) ? "" : Condition + ": ")}{typeof(T).Name} with {(Definition == null ? Definitions.Count : Definitions.Count + 1)} items";
 }
