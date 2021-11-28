@@ -80,12 +80,12 @@ public abstract record Conditioned : IYamlConvertible
     /// This method is used for double-linking of the definition expression tree.
     /// </summary>
     /// <param name="condition">Parent condition</param>
-    /// <param name="libraryItems">Library items to add to a condition</param>
+    /// <param name="items">Items to add to a condition</param>
     /// <returns>The conditioned definition coming out of the inputs</returns>
-    internal static Conditioned<T> Link<T>(Condition condition, IEnumerable<Conditioned<T>> libraryItems)
+    internal static Conditioned<T> Link<T>(Condition condition, IEnumerable<Conditioned<T>> items)
     {
         var conditionedDefinition = new Conditioned<T>(default!, condition.ToString());
-        conditionedDefinition.Definitions.AddRange(libraryItems);
+        conditionedDefinition.Definitions.AddRange(items);
         condition.Parent?.Definitions.Add(conditionedDefinition);
         conditionedDefinition.Parent = condition.Parent;
         return conditionedDefinition;
