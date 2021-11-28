@@ -181,7 +181,7 @@ If.IsBranch("production")
 ```
 
 ### Re-usable pipeline blocks
-Sharpliner lets you re-use code more easily than via YAML templates.
+Sharpliner lets you re-use code more easily than YAML templates do.
 Apart from obvious C# code re-use, you can also define sets of C# building blocks and re-use them in your pipelines:
 
 ```csharp
@@ -263,7 +263,7 @@ You can take inspiration there, however it's a bit more complex than needed sinc
 
 Status:
 - All of the known models from the official documentation have now appropriate C# counterparts.
-- The `${{ if }}` statements are working and they can be put (and nested) almost everywhere.  
+- The `${{ if }}` statements are working and they can be put (and nested) almost everywhere.
   There are places where if statemets didn't make sense but in case you need to "if" some property or value, let us know by opening an issue, it should be easy to add.
 - Defining and using [templates](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionReference.md#Templates) works!
 - It can happen that we have some of the default values or property names wrong - please let us know (by creating an issue for example)!

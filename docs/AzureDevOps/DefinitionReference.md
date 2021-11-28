@@ -342,7 +342,7 @@ Steps =
 
 ## Definition libraries
 
-Sharpliner lets you re-use code more easily than via YAML templates.
+Sharpliner lets you re-use code more easily than YAML templates do.
 Apart from obvious C# code re-use, you can also define sets of C# building blocks and re-use them in your pipelines:
 
 ```csharp
