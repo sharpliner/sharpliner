@@ -44,9 +44,9 @@ public abstract class Condition
 
     public static implicit operator string(Condition value) => IfTagStart + value.ToString() + IfTagEnd;
 
-    protected static string RemoveIf(Condition condition) => RemoveIf(condition.ToString());
+    public static string RemoveIf(Condition condition) => RemoveIf(condition.ToString());
 
-    protected static string RemoveIf(string condition)
+    public static string RemoveIf(string condition)
     {
         if (condition.StartsWith(IfTagStart) && condition.EndsWith(IfTagEnd))
         {
