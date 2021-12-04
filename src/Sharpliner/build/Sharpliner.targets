@@ -8,9 +8,15 @@
 
     <Message Importance="high" Text="Publishing all definitions inside $(_AssemblyToSearch)" />
 
-    <Error Text="To publish the YAML using Sharpliner please build the project using 'dotnet build' and not from Visual Studio (it needs the .NET Core MSBuild)"
-           Condition=" '$(MSBuildRuntimeType)' != 'Core' " />
+    <Error Text="To publish the YAML using Sharpliner please build the project using 'dotnet build' and not from Visual Studio because it uses .NET FW MSBuild"
+           Condition=" '$(MSBuildRuntimeType)' != 'Core' and '$(SharplinerVsBuild)' == 'true' " />
 
-    <PublishDefinitions Assembly="$(_AssemblyToSearch)" FailIfChanged="$(_FailIfChanged)" />
+    <Message Importance="high" Text="Unable to build using Visual Studio MSBuild, trying dotnet build .."
+             Condition=" '$(MSBuildRuntimeType)' != 'Core' and '$(SharplinerVsBuild)' != 'true' " />
+
+    <Exec Command="dotnet build &quot;$(MSBuildProjectFullPath)&quot; /p:SharplinerVsBuild=true -c $(Configuration)"
+          Condition=" '$(MSBuildRuntimeType)' != 'Core' and '$(SharplinerVsBuild)' != 'true' " />
+
+    <PublishDefinitions Assembly="$(_AssemblyToSearch)" FailIfChanged="$(_FailIfChanged)" Condition="'$(MSBuildRuntimeType)' == 'Core'" />
   </Target>
 </Project>
