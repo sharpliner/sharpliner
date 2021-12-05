@@ -16,11 +16,6 @@ public class VariableSerializationTests
                     Variable("Configuration", "Release"),     // Or we have this more YAML-like definition
                     Group("PR keyvault variables"),
 
-                    // We can also define multiple variables at once
-                    Variables(
-                        ("one", 1),
-                        ("two", true)),
-
                     If.Equal(variables["Build.Reason"], "PullRequest")
                         .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)")
                         .Variable("IsPr", true),
@@ -52,12 +47,6 @@ public class VariableSerializationTests
   value: Release
 
 - group: PR keyvault variables
-
-- name: one
-  value: 1
-
-- name: two
-  value: true
 
 - ${{ if eq(variables['Build.Reason'], PullRequest) }}:
   - name: TargetBranch
