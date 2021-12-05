@@ -132,7 +132,7 @@ public static class ConditionExtensions
     /// <param name="path">Relative path to the YAML file with the template</param>
     /// <param name="parameters">Values for template parameters</param>
     public static Conditioned<Stage> StageTemplate(this Condition condition, string path, TemplateParameters? parameters = null)
-        => Conditioned.Link(condition, new Template<Stage>(condition: condition.ToString(), path: path, parameters ?? new TemplateParameters()));
+        => Conditioned.Link(condition, new Template<Stage>(condition: condition, path: path, parameters ?? new TemplateParameters()));
 
     /// <summary>
     /// Reference a YAML job template.
@@ -141,7 +141,7 @@ public static class ConditionExtensions
     /// <param name="path">Relative path to the YAML file with the template</param>
     /// <param name="parameters">Values for template parameters</param>
     public static Conditioned<JobBase> JobTemplate(this Condition condition, string path, TemplateParameters? parameters = null)
-        => Conditioned.Link(condition, new Template<JobBase>(condition: condition.ToString(), path: path, parameters ?? new TemplateParameters()));
+        => Conditioned.Link(condition, new Template<JobBase>(condition: condition, path: path, parameters ?? new TemplateParameters()));
 
     /// <summary>
     /// Reference a YAML step template.
@@ -150,7 +150,7 @@ public static class ConditionExtensions
     /// <param name="path">Relative path to the YAML file with the template</param>
     /// <param name="parameters">Values for template parameters</param>
     public static Conditioned<Step> StepTemplate(this Condition condition, string path, TemplateParameters? parameters = null)
-        => Conditioned.Link(condition, new Template<Step>(condition: condition.ToString(), path: path, parameters ?? new TemplateParameters()));
+        => Conditioned.Link(condition, new Template<Step>(condition: condition, path: path, parameters ?? new TemplateParameters()));
 
     /// <summary>
     /// Reference a YAML variable template.
@@ -159,7 +159,7 @@ public static class ConditionExtensions
     /// <param name="path">Relative path to the YAML file with the template</param>
     /// <param name="parameters">Values for template parameters</param>
     public static Conditioned<VariableBase> VariableTemplate(this Condition condition, string path, TemplateParameters? parameters = null)
-        => Conditioned.Link(condition, new Template<VariableBase>(condition: condition.ToString(), path: path, parameters ?? new TemplateParameters()));
+        => Conditioned.Link(condition, new Template<VariableBase>(condition: condition, path: path, parameters ?? new TemplateParameters()));
 
     /// <summary>
     /// Reference a stage library (series of library stages).

@@ -41,7 +41,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
         Variables =
         {
             // YAML ${{ if }} conditions are available with handy macros that expand into the
-            // expressions such as comparing branch names. We even have "else" :)
+            // expressions such as comparing branch names. We also have "else"
             If.IsBranch("net-6.0")
                 .Variable("DotnetVersion", "6.0.100")
                 .Group("net6-kv")

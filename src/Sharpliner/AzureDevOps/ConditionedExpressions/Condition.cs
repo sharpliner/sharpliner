@@ -11,8 +11,13 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 /// </summary>
 public abstract class Condition
 {
-    internal const string IfTagStart = "${{ if ";
-    internal const string IfTagEnd = " }}";
+    private const string IfTagStart = "${{ if ";
+    private const string IfTagEnd = " }}";
+    protected const string ElseTagStart = "${{ else";
+    protected const string ElseTagEnd = IfTagEnd;
+
+    internal virtual string TagStart => IfTagStart;
+    internal virtual string TagEnd => IfTagEnd;
 
     protected readonly string _condition;
 
@@ -35,22 +40,27 @@ public abstract class Condition
             throw new ArgumentException($"You need to provide at least 2 values for the {keyword}() operator");
         }
 
-        _condition = $"{keyword}({string.Join(", ", expressions.Select(RemoveIf))})";
+        _condition = $"{keyword}({string.Join(", ", expressions.Select(RemoveTags))})";
     }
 
     internal Conditioned? Parent { get; set; }
 
     public override string ToString() => _condition;
 
-    public static implicit operator string(Condition value) => IfTagStart + value.ToString() + IfTagEnd;
+    public static implicit operator string(Condition value) => value.TagStart + value.ToString() + value.TagEnd;
 
-    public static string RemoveIf(Condition condition) => RemoveIf(condition.ToString());
+    public static string RemoveTags(Condition condition) => RemoveTags(condition.ToString());
 
-    public static string RemoveIf(string condition)
+    public static string RemoveTags(string condition)
     {
         if (condition.StartsWith(IfTagStart) && condition.EndsWith(IfTagEnd))
         {
-            return condition.Substring(IfTagStart.Length, condition.Length - IfTagStart.Length - IfTagEnd.Length);
+            condition = condition.Substring(IfTagStart.Length, condition.Length - IfTagStart.Length - IfTagEnd.Length);
+        }
+
+        if (condition.StartsWith(ElseTagStart) && condition.EndsWith(ElseTagEnd))
+        {
+            condition = condition.Substring(ElseTagStart.Length, condition.Length - ElseTagStart.Length - ElseTagEnd.Length);
         }
 
         return condition;
@@ -69,7 +79,7 @@ public abstract class Condition
             throw new ArgumentException($"You need to provide at least 2 values for the {keyword}() operator");
         }
 
-        return $"{keyword}({string.Join(", ", expressions.Select(RemoveIf))})";
+        return $"{keyword}({string.Join(", ", expressions.Select(RemoveTags))})";
     }
 }
 
@@ -104,7 +114,7 @@ public abstract class Condition<T> : Condition
 
 public class CustomCondition : Condition
 {
-    public CustomCondition(string condition) : base(RemoveIf(condition))
+    public CustomCondition(string condition) : base(RemoveTags(condition))
     {
     }
 }
@@ -117,7 +127,7 @@ public class NotCondition : Condition
     }
 
     internal NotCondition(string condition)
-        : base(NotConditionHelper.NegateCondition(RemoveIf(condition)))
+        : base(NotConditionHelper.NegateCondition(RemoveTags(condition)))
     {
     }
 }
@@ -251,6 +261,20 @@ public class NotCondition<T> : Condition<T>
         : base(NotConditionHelper.NegateCondition(condition))
     {
     }
+}
+
+public class ElseCondition<T> : Condition<T>
+{
+    internal override string TagStart => ElseTagStart;
+
+    internal ElseCondition()
+        : base("else")
+    {
+    }
+
+    public static implicit operator string(ElseCondition<T> value) => ElseTagStart + ElseTagEnd;
+
+    public override string ToString() => ElseTagStart + ElseTagEnd;
 }
 
 public class EqualityCondition<T> : Condition<T>

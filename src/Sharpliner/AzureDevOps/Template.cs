@@ -27,7 +27,7 @@ public record Template<T> : Conditioned<T>
     {
     }
 
-    internal Template(string? condition, string path, TemplateParameters? parameters = null) : base(condition)
+    internal Template(Condition? condition, string path, TemplateParameters? parameters = null) : base(condition)
     {
         if (string.IsNullOrEmpty(path))
         {
