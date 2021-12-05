@@ -233,24 +233,6 @@ public abstract class AzureDevOpsDefinition
     protected static Conditioned<VariableBase> Variable(string name, bool value) => new(new Variable(name, value));
 
     /// <summary>
-    /// Defines multiple variables at once.
-    /// </summary>
-    /// <param name="conditionedDefinition">Conditioned definition</param>
-    /// <param name="variables">List of (key, value) pairs</param>
-    public static LibraryReference<VariableBase> Variables(params (string name, object value)[] variables)
-    {
-        var definitions = variables.Select(variable => new Conditioned<VariableBase>(variable.value switch
-        {
-            int number => new Variable(variable.name, number),
-            bool boolean => new Variable(variable.name, boolean),
-            string s => new Variable(variable.name, s),
-            object any => new Variable(variable.name, any?.ToString() ?? string.Empty),
-        }));
-
-        return new LibraryReference<VariableBase>(definitions);
-    }
-
-    /// <summary>
     /// References a variable group.
     /// </summary>
     /// <param name="name">Group name</param>
