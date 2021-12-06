@@ -133,7 +133,7 @@ public class LibraryTests
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/staging') }}:
     - group: prod-kv
 
-- ${{ if in('$(Environment)', 'prod') }}:
+- ${{ else }}:
   - name: connection-string-prod
     value: prod_123
 

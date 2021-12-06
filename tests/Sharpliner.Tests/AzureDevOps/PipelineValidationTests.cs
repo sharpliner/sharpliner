@@ -49,7 +49,7 @@ public class PipelineValidationTests
   - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
     - stage_1
 
-  - ${{ if ne(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - ${{ else }}:
     - stage_2
 ");
     }

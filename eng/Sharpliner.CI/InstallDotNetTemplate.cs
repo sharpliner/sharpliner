@@ -11,7 +11,7 @@ class InstallDotNetTemplate : StepTemplateCollection
         GetTemplate(true),
     };
 
-    private TemplateDefinitionData<Step> GetTemplate(bool isFullSdk)
+    private static TemplateDefinitionData<Step> GetTemplate(bool isFullSdk)
     {
         var targetFile = Pipelines.Location + Pipelines.TemplateLocation + $"install-dotnet-{(isFullSdk ? "sdk" : "runtime")}.yml";
         Step step;

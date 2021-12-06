@@ -114,11 +114,8 @@ public override SingleStagePipelineDefinition Pipeline => new()
 
 ## 4. Export the pipeline
 
-Save the changes and build the project using `dotnet`.
+Save the changes and build the project.
 Based on the settings provided in the overriden members, Sharpliner will determine where you want your YAML file created.
-
-> **Note:** It is recommended to `dotnet build` the project rather than "F5" it in Visual Studio as we are hooking into the build process and this is not working as expected yet (https://github.com/sharpliner/sharpliner/issues/108).
-
 The output should look something like this:
 
 ```cmd
@@ -157,7 +154,7 @@ variables:
 
   - group: net6-kv
 
-- ${{ if ne(variables['Build.SourceBranch'], 'refs/heads/net-6.0') }}:
+- ${{ else }}:
   - name: DotnetVersion
     value: 5.0.202
 

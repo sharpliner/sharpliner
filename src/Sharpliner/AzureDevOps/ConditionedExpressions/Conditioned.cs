@@ -12,7 +12,7 @@ public abstract record Conditioned : IYamlConvertible
     /// <summary>
     /// Evaluated textual representation of the condition, e.g. "ne('foo', 'bar')".
     /// </summary>
-    internal string? Condition { get; set; }
+    internal Condition? Condition { get; set; }
 
     /// <summary>
     /// Pointer in case of nested conditional blocks.
@@ -29,7 +29,7 @@ public abstract record Conditioned : IYamlConvertible
     /// </summary>
     internal bool IsList { get; set; } = false;
 
-    protected Conditioned(string? condition)
+    protected Conditioned(Condition? condition)
     {
         Condition = condition;
     }
@@ -57,7 +57,7 @@ public abstract record Conditioned : IYamlConvertible
     /// <returns>The conditioned definition coming out of the inputs</returns>
     internal static Conditioned<T> Link<T>(Condition condition, T definition)
     {
-        var conditionedDefinition = new Conditioned<T>(definition, condition.ToString());
+        var conditionedDefinition = new Conditioned<T>(definition, condition);
         condition.Parent?.Definitions.Add(conditionedDefinition);
         conditionedDefinition.Parent = condition.Parent;
         return conditionedDefinition;
@@ -84,7 +84,7 @@ public abstract record Conditioned : IYamlConvertible
     /// <returns>The conditioned definition coming out of the inputs</returns>
     internal static Conditioned<T> Link<T>(Condition condition, IEnumerable<Conditioned<T>> items)
     {
-        var conditionedDefinition = new Conditioned<T>(default!, condition.ToString());
+        var conditionedDefinition = new Conditioned<T>(default!, condition);
         conditionedDefinition.Definitions.AddRange(items);
         condition.Parent?.Definitions.Add(conditionedDefinition);
         conditionedDefinition.Parent = condition.Parent;
@@ -101,7 +101,7 @@ public abstract record Conditioned : IYamlConvertible
     {
         if (condition.Parent == null)
         {
-            template.Condition = condition.ToString();
+            template.Condition = condition;
         }
         else
         {
@@ -131,7 +131,7 @@ public record Conditioned<T> : Conditioned
     /// </summary>
     internal T? Definition { get; }
 
-    internal Conditioned(T definition, string condition) : base(condition)
+    internal Conditioned(T definition, Condition condition) : base(condition)
     {
         Definition = definition;
     }
@@ -141,11 +141,11 @@ public record Conditioned<T> : Conditioned
         Definition = definition;
     }
 
-    protected Conditioned(string? condition) : base(condition)
+    protected Conditioned(Condition? condition) : base(condition)
     {
     }
 
-    protected Conditioned() : base((string?)null)
+    protected Conditioned() : base((Condition?)null)
     {
     }
 
@@ -178,12 +178,25 @@ public record Conditioned<T> : Conditioned
                 Parent.Definitions.Add(this);
             }
 
-            var notCondition = new NotCondition<T>(Condition ?? throw new InvalidOperationException("No condition to match Else against"))
+            if (Condition == null)
             {
-                Parent = Parent
-            };
+                throw new InvalidOperationException("No condition to match Else against");
+            }
 
-            return notCondition;
+            if (SharplinerSerializer.UseElseExpression)
+            {
+                return new ElseCondition<T>()
+                {
+                    Parent = Parent
+                };
+            }
+            else
+            {
+                return new NotCondition<T>(Condition)
+                {
+                    Parent = Parent
+                };
+            }
         }
     }
 
@@ -223,9 +236,9 @@ public record Conditioned<T> : Conditioned
     /// </summary>
     private void WriteValue(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
-        if (!string.IsNullOrEmpty(Condition))
+        if (Condition != null)
         {
-            emitter.Emit(new Scalar(ConditionedExpressions.Condition.IfTagStart + Condition + ConditionedExpressions.Condition.IfTagEnd));
+            emitter.Emit(new Scalar(Condition.TagStart + Condition.RemoveTags(Condition) + Condition.TagEnd));
         }
         else if (Definitions.Count > 0)
         {
@@ -243,7 +256,7 @@ public record Conditioned<T> : Conditioned
             nestedObjectSerializer(childDefinition);
         }
 
-        if (string.IsNullOrEmpty(Condition) && Definitions.Count > 0)
+        if (Condition == null && Definitions.Count > 0)
         {
             emitter.Emit(new MappingEnd());
         }
@@ -254,10 +267,10 @@ public record Conditioned<T> : Conditioned
     /// </summary>
     private void WriteList(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
-        if (!string.IsNullOrEmpty(Condition))
+        if (Condition != null)
         {
             emitter.Emit(new MappingStart());
-            emitter.Emit(new Scalar(ConditionedExpressions.Condition.IfTagStart + Condition + ConditionedExpressions.Condition.IfTagEnd));
+            emitter.Emit(new Scalar(Condition.TagStart + Condition.RemoveTags(Condition) + Condition.TagEnd));
             emitter.Emit(new SequenceStart(AnchorName.Empty, TagName.Empty, true, SequenceStyle.Block));
         }
 
@@ -272,7 +285,7 @@ public record Conditioned<T> : Conditioned
             nestedObjectSerializer(childDefinition);
         }
 
-        if (!string.IsNullOrEmpty(Condition))
+        if (Condition != null)
         {
             emitter.Emit(new SequenceEnd());
             emitter.Emit(new MappingEnd());
@@ -304,5 +317,7 @@ public record Conditioned<T> : Conditioned
         return definitions;
     }
 
-    public override string ToString() => $"{(string.IsNullOrEmpty(Condition) ? "" : Condition + ": ")}{typeof(T).Name} with {(Definition == null ? Definitions.Count : Definitions.Count + 1)} items";
+    public override string ToString() =>
+        $"{(Condition == null ? "" : Condition + ": ")}{typeof(T).Name} " +
+        $"with {(Definition == null ? Definitions.Count : Definitions.Count + 1)} items";
 }

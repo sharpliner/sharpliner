@@ -27,7 +27,7 @@ public class ConditionalsTests
     {
         var pipeline = new And_Condition_Test_Pipeline();
         var variable = pipeline.Pipeline.Variables.First();
-        variable.Condition.Should().Be(
+        variable.Condition!.ToString().Should().Be(
             "and(" +
                 "notIn('bar', 'foo', 'xyz', 'foo'), " +
                 "ne(variables['Configuration'], 'Debug'), " +
@@ -57,7 +57,7 @@ public class ConditionalsTests
     {
         var pipeline = new Or_Condition_Test_Pipeline();
         var variable = pipeline.Pipeline.Variables.First();
-        variable.Condition.Should().Be(
+        variable.Condition!.ToString().Should().Be(
             "or(" +
                 "and(" +
                     "lt(5, 3), " +
@@ -90,8 +90,8 @@ public class ConditionalsTests
         var variable1 = pipeline.Pipeline.Variables.ElementAt(0);
         var variable2 = pipeline.Pipeline.Variables.ElementAt(1);
 
-        variable1.Condition.Should().Be("eq(variables['Build.SourceBranch'], 'refs/heads/main')");
-        variable2.Condition.Should().Be("and(eq(variables['Build.Reason'], 'PullRequest'), ne(variables['Build.SourceBranch'], 'refs/heads/main'))");
+        variable1.Condition!.ToString().Should().Be("eq(variables['Build.SourceBranch'], 'refs/heads/main')");
+        variable2.Condition!.ToString().Should().Be("and(eq(variables['Build.Reason'], 'PullRequest'), ne(variables['Build.SourceBranch'], 'refs/heads/main'))");
     }
 
     private class Else_Test_Pipeline : TestPipeline
@@ -133,7 +133,7 @@ public class ConditionalsTests
   - name: feature2
     value: on
 
-- ${{ if ne(a, b) }}:
+- ${{ else }}:
   - name: feature
     value: off
 
@@ -154,7 +154,7 @@ public class ConditionalsTests
     - name: feature2
       value: on
 
-  - ${{ if not(and(eq(e, f), ne(g, h))) }}:
+  - ${{ else }}:
     - name: feature
       value: off
 
@@ -195,7 +195,7 @@ public class ConditionalsTests
       name: pool-A
       demands:
       - SomeProperty -equals SomeValue
-    ${{ if ne(A, B) }}:
+    ${{ else }}:
       name: pool-B
 ");
     }
@@ -261,10 +261,10 @@ public class ConditionalsTests
     {
         var pipeline = new Custom_Condition_Test_Pipeline();
         var variable = pipeline.Pipeline.Variables.First();
-        variable.Condition.Should().Be("containsValue($(System.User), 'azdobot')");
+        variable.Condition!.ToString().Should().Be("containsValue($(System.User), 'azdobot')");
         variable = pipeline.Pipeline.Variables.ElementAt(1);
-        variable.Condition.Should().Be("in('foo', 'bar')");
+        variable.Condition!.ToString().Should().Be("in('foo', 'bar')");
         variable = pipeline.Pipeline.Variables.Last();
-        variable.Condition.Should().Be("xor(True, $(Variable))");
+        variable.Condition!.ToString().Should().Be("xor(True, $(Variable))");
     }
 }

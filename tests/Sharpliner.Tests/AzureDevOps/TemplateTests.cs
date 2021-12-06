@@ -199,7 +199,7 @@ steps:
       other:
         ${{ if eq(parameters['container'], '') }}:
           image: ubuntu-16.04-cross-arm64-20210719121212-8a8d3be
-        ${{ if ne(parameters['container'], '') }}:
+        ${{ else }}:
           image: ${{ parameters.container }}
 ");
     }

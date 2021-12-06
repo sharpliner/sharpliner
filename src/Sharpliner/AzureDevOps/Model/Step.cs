@@ -86,7 +86,7 @@ public abstract record Step
     /// </summary>
     public Step When(string condition) => this with
     {
-        Condition = ConditionedExpressions.Condition.RemoveIf(condition)
+        Condition = ConditionedExpressions.Condition.RemoveTags(condition)
     };
 
     /// <summary>

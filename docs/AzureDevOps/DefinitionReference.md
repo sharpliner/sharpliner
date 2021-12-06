@@ -153,6 +153,8 @@ Variables =
             .Group("azure-prod")
 
         // You can also swap the previous condition with an "else"
+        // Azure Pipelines now support ${{ else }} but you can also revert to using an
+        // inverted if condition using SharplinerSerializer.UseElseExpression setting
         .Else
             .Group("azure-pr"),
 },
@@ -174,7 +176,7 @@ The resulting YAML will look like this:
     - ${{ if eq(variables['Build.SourceBranch'], refs/heads/main) }}:
       - group: azure-prod
 
-    - ${{ if ne(variables['Build.SourceBranch'], refs/heads/main) }}:
+    - ${{ else }}:
       - group: azure-pr
 ```
 
