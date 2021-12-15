@@ -1,5 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -8,6 +12,11 @@ namespace Sharpliner.AzureDevOps;
 /// </summary>
 public record Trigger
 {
+    /// <summary>
+    /// Use this to explicitly set you want 'none' trigger.
+    /// </summary>
+    public static NoneTrigger None { get; } = new NoneTrigger();
+
     /// <summary>
     /// Batch changes if true; start a new build for every push if false (default).
     /// </summary>
@@ -33,4 +42,10 @@ public record Trigger
             Include = branches.ToList()
         };
     }
+}
+
+public record NoneTrigger : Trigger, IYamlConvertible
+{
+    public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
+    public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer) => emitter.Emit(new Scalar("none"));
 }
