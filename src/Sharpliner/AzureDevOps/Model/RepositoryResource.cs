@@ -13,7 +13,7 @@ public record RepositoryResource
     /// <summary>
     /// Identifier for the resource used in pipeline resource variables (A-Z, a-z, 0-9, and underscore)
     /// </summary>
-    [YamlMember(Alias = "pipeline")]
+    [YamlMember(Alias = "repository")]
     public string Identifier { get; }
 
     /// <summary>
