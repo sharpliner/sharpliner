@@ -1,4 +1,4 @@
-[![Build Status](https://dev.azure.com/premun/Sharpliner/_apis/build/status/sharpliner-pr?branchName=main)](https://dev.azure.com/premun/Sharpliner/_build/latest?definitionId=4&branchName=main) ![Nuget](https://img.shields.io/nuget/v/Sharpliner)
+[![Build Status](https://dev.azure.com/premun/Sharpliner/_apis/build/status/sharpliner-pr?branchName=main)](https://dev.azure.com/premun/Sharpliner/_build/latest?definitionId=4&branchName=main) [![Nuget](https://img.shields.io/nuget/v/Sharpliner)](https://www.nuget.org/packages/Sharpliner/)
 
 Sharpliner is a .NET library that lets you use C# for Azure DevOps pipeline definition.
 Exchange YAML indentation problems for the type-safe environment of C# and let the intellisense speed up your work!
