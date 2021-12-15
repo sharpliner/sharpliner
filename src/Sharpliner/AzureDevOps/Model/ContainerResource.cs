@@ -15,7 +15,7 @@ public record ContainerResource
     /// <summary>
     /// Identifier (A-Z, a-z, 0-9, and underscore)
     /// </summary>
-    [YamlMember(Alias = "pipeline")]
+    [YamlMember(Alias = "container")]
     public string Identifier { get; }
 
     /// <summary>
