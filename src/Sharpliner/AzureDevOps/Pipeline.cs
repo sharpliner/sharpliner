@@ -48,7 +48,7 @@ public abstract record PipelineBase
     /// </summary>
     [YamlMember(Order = 350)]
     [DisallowNull]
-    public List<ScheduledTrigger> Schedule { get; } = new();
+    public List<ScheduledTrigger> Schedule { get; init; } = new();
 
     /// <summary>
     /// A resource is any external service that is consumed as part of your pipeline
@@ -63,7 +63,7 @@ public abstract record PipelineBase
     /// You can add hard-coded values directly, reference variable groups, or insert via variable templates.
     /// </summary>
     [YamlMember(Order = 500)]
-    public ConditionedList<VariableBase> Variables { get; } = new();
+    public ConditionedList<VariableBase> Variables { get; init; } = new();
 
     public abstract void Validate();
 

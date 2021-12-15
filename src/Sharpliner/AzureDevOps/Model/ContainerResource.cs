@@ -40,7 +40,7 @@ public record ContainerResource
     /// A map of environment variables that are available to all steps of the jobs. When more than one variable
     /// with the same name is used, the latter one will be used.
     /// </summary>
-    public ConditionedDictionary Env { get; } = new();
+    public ConditionedDictionary Env { get; init; } = new();
 
     /// <summary>
     /// Ports to expose on the container

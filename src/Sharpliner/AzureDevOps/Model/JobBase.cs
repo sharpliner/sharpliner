@@ -80,7 +80,7 @@ public abstract record JobBase : IDependsOn
     /// Container resources to run as a service container.
     /// </summary>
     [YamlMember(Order = 1100)]
-    public Dictionary<string, string> Services { get; } = new();
+    public Dictionary<string, string> Services { get; init; } = new();
 
     [YamlMember(Order = 1100)]
     [DisallowNull]
