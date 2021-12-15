@@ -37,7 +37,7 @@ public class TriggerSerializationTests
     }
 
     [Fact]
-    public void Serialize_Pipeline_Test()
+    public void Serialize_Triggers_Test()
     {
         TriggerPipeline pipeline = new();
         string yaml = pipeline.Serialize();
@@ -67,6 +67,26 @@ schedule:
     - staging
     - production
   always: true
+");
+    }
+    private class NoneTriggerPipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Pr = PrTrigger.None,
+            Trigger = Trigger.None,
+        };
+    }
+
+    [Fact]
+    public void Serialize_None_Triggers_Test()
+    {
+        NoneTriggerPipeline pipeline = new();
+        string yaml = pipeline.Serialize();
+        yaml.Should().Be(
+@"trigger: none
+
+pr: none
 ");
     }
 }

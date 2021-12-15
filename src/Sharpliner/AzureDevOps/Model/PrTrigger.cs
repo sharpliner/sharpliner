@@ -1,6 +1,10 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -10,6 +14,11 @@ namespace Sharpliner.AzureDevOps;
 /// </summary>
 public record PrTrigger
 {
+    /// <summary>
+    /// Use this to explicitly set you want 'none' trigger.
+    /// </summary>
+    public static NonePrTrigger None { get; } = new NonePrTrigger();
+
     /// <summary>
     /// Indicates whether additional pushes to a PR should cancel in-progress runs for the same PR
     /// Defaults to true
@@ -41,4 +50,10 @@ public record PrTrigger
             Include = branches.ToList()
         };
     }
+}
+
+public record NonePrTrigger : PrTrigger, IYamlConvertible
+{
+    public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
+    public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer) => emitter.Emit(new Scalar("none"));
 }
