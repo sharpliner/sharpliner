@@ -48,7 +48,7 @@ public abstract record PipelineBase
     /// </summary>
     [YamlMember(Order = 350)]
     [DisallowNull]
-    public List<ScheduledTrigger> Schedule { get; init; } = new();
+    public List<ScheduledTrigger> Schedules { get; init; } = new();
 
     /// <summary>
     /// A resource is any external service that is consumed as part of your pipeline
