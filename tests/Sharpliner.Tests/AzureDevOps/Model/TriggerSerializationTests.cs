@@ -25,7 +25,7 @@ public class TriggerSerializationTests
                 }
             },
 
-            Schedule =
+            Schedules =
             {
                 new("0 0 24 * *", "staging", "production")
                 {
@@ -59,7 +59,7 @@ pr:
     - main
     - develop
 
-schedule:
+schedules:
 - cron: 0 0 24 * *
   displayName: Releases
   branches:
