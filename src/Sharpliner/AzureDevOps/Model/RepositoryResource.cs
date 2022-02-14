@@ -57,7 +57,7 @@ public record RepositoryResource
     /// Triggers are not enabled by default unless you add trigger section to the resource
     /// </summary>
     [DisallowNull]
-    public PipelineTrigger? Trigger { get; init; }
+    public Trigger? Trigger { get; init; }
 
     public RepositoryResource(string identifier)
     {
