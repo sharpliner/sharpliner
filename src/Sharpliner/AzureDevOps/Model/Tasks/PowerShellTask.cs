@@ -19,15 +19,47 @@ public abstract record PowershellTask : Step
     /// Default value: `stop`.
     /// </summary>
     [YamlMember(Order = 114)]
-    [DefaultValue(ErrorActionPreference.Stop)]
-    public ErrorActionPreference ErrorActionPreference { get; init; } = ErrorActionPreference.Stop;
+    [DefaultValue(ActionPreference.Stop)]
+    public ActionPreference ErrorActionPreference { get; init; } = ActionPreference.Stop;
+
+    /// <summary>
+    /// Prepends the line $WarningPreference = 'VALUE' at the top of your script.
+    /// Default value: `continue`.
+    /// </summary>
+    [YamlMember(Order = 114)]
+    [DefaultValue(ActionPreference.Continue)]
+    public ActionPreference WarningPreference { get; init; } = ActionPreference.Continue;
+
+    /// <summary>
+    /// Prepends the line $InformationPreference = 'VALUE' at the top of your script.
+    /// Default value: `continue`.
+    /// </summary>
+    [YamlMember(Order = 114)]
+    [DefaultValue(ActionPreference.Continue)]
+    public ActionPreference InformationPreference { get; init; } = ActionPreference.Continue;
+
+    /// <summary>
+    /// Prepends the line $VerbosePreference = 'VALUE' at the top of your script.
+    /// Default value: `continue`.
+    /// </summary>
+    [YamlMember(Order = 114)]
+    [DefaultValue(ActionPreference.Continue)]
+    public ActionPreference VerbosePreference { get; init; } = ActionPreference.Continue;
+
+    /// <summary>
+    /// Prepends the line $DebugPreference = 'VALUE' at the top of your script.
+    /// Default value: `continue`.
+    /// </summary>
+    [YamlMember(Order = 114)]
+    [DefaultValue(ActionPreference.Continue)]
+    public ActionPreference DebugPreference { get; init; } = ActionPreference.Continue;
 
     /// <summary>
     /// If this is true, this task will fail if any errors are written to the error pipeline, or if any data is written to the Standard Error stream.
     /// Otherwise the task will rely on the exit code to determine failure
     /// Default value: `false`.
     /// </summary>
-    [YamlMember(Order = 115)]
+    [YamlMember(Order = 125)]
     public bool FailOnStderr { get; init; } = false;
 
     /// <summary>
@@ -36,14 +68,14 @@ public abstract record PowershellTask : Step
     /// Otherwise the line is not appended to the end of your script
     /// Default value: `false`.
     /// </summary>
-    [YamlMember(Order = 116)]
+    [YamlMember(Order = 126)]
     public bool IgnoreLASTEXITCODE { get; init; } = false;
 
     /// <summary>
     /// If this is true, then on Windows the task will use pwsh.exe from your PATH instead of powershell.exe.
     /// Default value: `false`.
     /// </summary>
-    [YamlMember(Order = 117)]
+    [YamlMember(Order = 127)]
     public bool Pwsh { get; init; } = false;
 }
 
@@ -89,7 +121,7 @@ public record PowershellFileTask : PowershellTask
     }
 }
 
-public enum ErrorActionPreference
+public enum ActionPreference
 {
     /// <summary>
     /// (Default) Displays the error message and continues executing.
