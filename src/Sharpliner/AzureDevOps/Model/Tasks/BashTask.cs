@@ -58,22 +58,66 @@ public record InlineBashTask : BashTask
     }
 }
 
-public record BashFileTask : BashTask
+public record BashFileTask : BashTask, IYamlConvertible
 {
     /// <summary>
     /// Path of the script to execute.
     /// Must be a fully qualified path or relative to $(System.DefaultWorkingDirectory).
     /// </summary>
-    [YamlMember(Alias = "bash", Order = 1)]
     public string FilePath { get; }
+
+    public string TargetType => "filePath";
 
     /// <summary>
     /// Arguments passed to the Bash script.
     /// </summary>
     public string? Arguments { get; init; }
 
+    /// <summary>
+    /// If the related input is specified, the value will be used as the path of a startup file
+    /// that will be executed before running the script.
+    ///
+    /// If the environment variable BASH_ENV has already been defined, the task will override
+    /// this variable only for the current task.
+    /// </summary>
+    public string? BashEnv { get; init; }
+
     public BashFileTask(string filePath)
     {
         FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
+    }
+
+    public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+        => throw new NotImplementedException();
+
+    // This is unfortunately needed because when referencing a script file, the "powershell: ..." variant does not work
+    public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    {
+        var inputs = new TaskInputs();
+
+        void Add(string key, object? value, object? defaultValue)
+        {
+            if (value is null)
+            {
+                return;
+            }
+
+            if (!value.Equals(defaultValue))
+            {
+                inputs![key] = value;
+            }
+        }
+
+        Add("targetType", TargetType, null);
+        Add("filePath", FilePath, null);
+        Add("arguments", Arguments, null);
+        Add("workingDirectory", WorkingDirectory, null);
+        Add("failOnStderr", FailOnStderr, false);
+        Add("bashEnvValue", BashEnv, null);
+
+        nestedObjectSerializer(new AzureDevOpsTask("Bash@3", this)
+        {
+            Inputs = inputs
+        });
     }
 }
