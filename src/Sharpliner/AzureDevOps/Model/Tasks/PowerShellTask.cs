@@ -97,27 +97,64 @@ public record InlinePowershellTask : PowershellTask
     }
 }
 
-public record PowershellFileTask : PowershellTask
+public record PowershellFileTask : PowershellTask, IYamlConvertible
 {
     /// <summary>
     /// Path of the script to execute.
     /// Must be a fully qualified path or relative to $(System.DefaultWorkingDirectory).
     /// </summary>
-    [YamlMember(Alias = "powershell", Order = 1)]
     public string FilePath { get; }
 
-    [YamlMember(Order = 2)]
-    public string TargetType => "filepath";
+    public string TargetType => "filePath";
 
     /// <summary>
     /// Arguments passed to the Bash script.
     /// </summary>
-    [YamlMember(Order = 3)]
     public string? Arguments { get; init; }
 
     public PowershellFileTask(string filePath)
     {
         FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
+    }
+
+    public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+        => throw new NotImplementedException();
+
+    // This is unfortunately needed because when referencing a script file, the "powershell: ..." variant does not work
+    public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    {
+        var inputs = new TaskInputs();
+
+        void Add(string key, object? value, object? defaultValue)
+        {
+            if (value is null)
+            {
+                return;
+            }
+
+            if (!value.Equals(defaultValue))
+            {
+                inputs![key] = value;
+            }
+        }
+
+        Add("targetType", TargetType, null);
+        Add("filePath", FilePath, null);
+        Add("arguments", Arguments, null);
+        Add("workingDirectory", WorkingDirectory, null);
+        Add("errorActionPreference", ErrorActionPreference, ActionPreference.Stop);
+        Add("warningPreference", WarningPreference, ActionPreference.Continue);
+        Add("informationPreference", InformationPreference, ActionPreference.Continue);
+        Add("verbosePreference", VerbosePreference, ActionPreference.Continue);
+        Add("debugPreference", DebugPreference, ActionPreference.Continue);
+        Add("failOnStderr", FailOnStderr, false);
+        Add("ignoreLASTEXITCODE", IgnoreLASTEXITCODE, false);
+        Add("pwsh", Pwsh, false);
+
+        nestedObjectSerializer(new AzureDevOpsTask("PowerShell@2", this)
+        {
+            Inputs = inputs
+        });
     }
 }
 
