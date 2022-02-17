@@ -57,7 +57,10 @@ public class TaskBuilderTests
       cat /etc/passwd
       rm -rf tests.xml
 
-  - bash: foo.sh
+  - task: Bash@3
+    inputs:
+      targetType: filePath
+      filePath: foo.sh
 
   - bash: |
       echo ""foo""
@@ -107,8 +110,10 @@ public class TaskBuilderTests
       Connect-AzContext
       Set-AzSubscription --id foo-bar-xyz
 
-  - powershell: foo.ps1
-    targetType: filepath
+  - task: PowerShell@2
+    inputs:
+      targetType: filePath
+      filePath: foo.ps1
 
   - powershell: |+
       Set-ErrorActionPreference Stop
@@ -161,9 +166,11 @@ public class TaskBuilderTests
       Set-AzSubscription --id foo-bar-xyz
     pwsh: true
 
-  - powershell: foo.ps1
-    targetType: filepath
-    pwsh: true
+  - task: PowerShell@2
+    inputs:
+      targetType: filePath
+      filePath: foo.ps1
+      pwsh: true
 
   - powershell: |+
       Set-ErrorActionPreference Stop

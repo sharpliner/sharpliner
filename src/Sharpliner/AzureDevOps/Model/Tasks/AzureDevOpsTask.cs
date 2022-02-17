@@ -1,4 +1,5 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using System;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -45,7 +46,19 @@ public record AzureDevOpsTask : Step
     {
         if (string.IsNullOrEmpty(task))
         {
-            throw new System.ArgumentException($"'{nameof(task)}' cannot be null or empty.", nameof(task));
+            throw new ArgumentException($"'{nameof(task)}' cannot be null or empty.", nameof(task));
+        }
+
+        Task = task;
+    }
+
+    // This is intended for cases where we need to copy some other task as its full AzureDevOpsTask version
+    internal AzureDevOpsTask(string task, Step original)
+        : base(original)
+    {
+        if (string.IsNullOrEmpty(task))
+        {
+            throw new ArgumentException($"'{nameof(task)}' cannot be null or empty.", nameof(task));
         }
 
         Task = task;
