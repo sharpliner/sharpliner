@@ -1,22 +1,11 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Sharpliner.AzureDevOps.Tasks;
 using Xunit;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
-public class BashFileTaskTests : IDisposable
+public class BashFileTaskTests
 {
-    public BashFileTaskTests()
-    {
-        SharplinerSerializer.PrettifyYaml = false;
-    }
-
-    public void Dispose()
-    {
-        SharplinerSerializer.PrettifyYaml = true;
-    }
-
     [Fact]
     public void Serialize_Bash_File_Task_Test()
     {
@@ -31,13 +20,16 @@ public class BashFileTaskTests : IDisposable
 
         string yaml = SharplinerSerializer.Serialize(task);
         yaml.Should().Be(@"task: Bash@3
+
 displayName: Test task
+
 inputs:
   targetType: filePath
   filePath: some/script.sh
   arguments: foo bar
   failOnStderr: true
   bashEnvValue: ~/.bash_profile
+
 continueOnError: true
 ");
     }
@@ -49,7 +41,9 @@ continueOnError: true
 
         string yaml = SharplinerSerializer.Serialize(task);
         yaml.Should().Be(@"task: Bash@3
+
 displayName: Test task
+
 inputs:
   targetType: filePath
   filePath: some/script.sh

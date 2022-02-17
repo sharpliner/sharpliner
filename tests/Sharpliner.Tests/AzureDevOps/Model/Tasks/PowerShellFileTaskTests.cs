@@ -1,22 +1,11 @@
-﻿using System;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Sharpliner.AzureDevOps.Tasks;
 using Xunit;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
-public class PowerShellFileTaskTests : IDisposable
+public class PowerShellFileTaskTests
 {
-    public PowerShellFileTaskTests()
-    {
-        SharplinerSerializer.PrettifyYaml = false;
-    }
-
-    public void Dispose()
-    {
-        SharplinerSerializer.PrettifyYaml = true;
-    }
-
     [Fact]
     public void Serialize_Powershell_File_Task_Test()
     {
@@ -36,7 +25,9 @@ public class PowerShellFileTaskTests : IDisposable
 
         string yaml = SharplinerSerializer.Serialize(task);
         yaml.Should().Be(@"task: PowerShell@2
+
 displayName: Test task
+
 inputs:
   targetType: filePath
   filePath: some\script.ps1
@@ -48,6 +39,7 @@ inputs:
   debugPreference: Suspend
   failOnStderr: true
   ignoreLASTEXITCODE: true
+
 continueOnError: true
 ");
     }
@@ -59,7 +51,9 @@ continueOnError: true
 
         string yaml = SharplinerSerializer.Serialize(task);
         yaml.Should().Be(@"task: PowerShell@2
+
 displayName: Test task
+
 inputs:
   targetType: filePath
   filePath: some\script.ps1
