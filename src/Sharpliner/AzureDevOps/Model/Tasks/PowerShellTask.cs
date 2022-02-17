@@ -105,8 +105,6 @@ public record PowershellFileTask : PowershellTask, IYamlConvertible
     /// </summary>
     public string FilePath { get; }
 
-    public string TargetType => "filePath";
-
     /// <summary>
     /// Arguments passed to the Bash script.
     /// </summary>
@@ -138,18 +136,20 @@ public record PowershellFileTask : PowershellTask, IYamlConvertible
             }
         }
 
-        Add("targetType", TargetType, null);
+        var defaultValue = new PowershellFileTask(string.Empty);
+
+        Add("targetType", "filePath", null);
         Add("filePath", FilePath, null);
-        Add("arguments", Arguments, null);
-        Add("workingDirectory", WorkingDirectory, null);
-        Add("errorActionPreference", ErrorActionPreference, ActionPreference.Stop);
-        Add("warningPreference", WarningPreference, ActionPreference.Continue);
-        Add("informationPreference", InformationPreference, ActionPreference.Continue);
-        Add("verbosePreference", VerbosePreference, ActionPreference.Continue);
-        Add("debugPreference", DebugPreference, ActionPreference.Continue);
-        Add("failOnStderr", FailOnStderr, false);
-        Add("ignoreLASTEXITCODE", IgnoreLASTEXITCODE, false);
-        Add("pwsh", Pwsh, false);
+        Add("arguments", Arguments, defaultValue.Arguments);
+        Add("workingDirectory", WorkingDirectory, defaultValue.WorkingDirectory);
+        Add("errorActionPreference", ErrorActionPreference, defaultValue.ErrorActionPreference);
+        Add("warningPreference", WarningPreference, defaultValue.WarningPreference);
+        Add("informationPreference", InformationPreference, defaultValue.InformationPreference);
+        Add("verbosePreference", VerbosePreference, defaultValue.VerbosePreference);
+        Add("debugPreference", DebugPreference, defaultValue.DebugPreference);
+        Add("failOnStderr", FailOnStderr, defaultValue.FailOnStderr);
+        Add("ignoreLASTEXITCODE", IgnoreLASTEXITCODE, defaultValue.IgnoreLASTEXITCODE);
+        Add("pwsh", Pwsh, defaultValue.Pwsh);
 
         nestedObjectSerializer(new AzureDevOpsTask("PowerShell@2", this)
         {

@@ -66,8 +66,6 @@ public record BashFileTask : BashTask, IYamlConvertible
     /// </summary>
     public string FilePath { get; }
 
-    public string TargetType => "filePath";
-
     /// <summary>
     /// Arguments passed to the Bash script.
     /// </summary>
@@ -108,12 +106,14 @@ public record BashFileTask : BashTask, IYamlConvertible
             }
         }
 
-        Add("targetType", TargetType, null);
+        var defaultValue = new BashFileTask(string.Empty);
+
+        Add("targetType", "filePath", null);
         Add("filePath", FilePath, null);
-        Add("arguments", Arguments, null);
-        Add("workingDirectory", WorkingDirectory, null);
-        Add("failOnStderr", FailOnStderr, false);
-        Add("bashEnvValue", BashEnv, null);
+        Add("arguments", Arguments, defaultValue.Arguments);
+        Add("workingDirectory", WorkingDirectory, defaultValue.WorkingDirectory);
+        Add("failOnStderr", FailOnStderr, defaultValue.FailOnStderr);
+        Add("bashEnvValue", BashEnv, defaultValue.BashEnv);
 
         nestedObjectSerializer(new AzureDevOpsTask("Bash@3", this)
         {
