@@ -45,7 +45,12 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
             PublishDefinition(d.Definition, d.Collection);
         }
 
-        return definitionFound;
+        if (!definitionFound)
+        {
+            Log.LogMessage(MessageImportance.High, $"No definitions found in {Assembly}");
+        }
+
+        return true;
     }
 
     /// <summary>
