@@ -218,11 +218,17 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
     /// </summary>
     private Assembly LoadAssembly(string assemblyPath)
     {
+        var fullAssemblyPath = Path.GetFullPath(assemblyPath);
+        var assemblyDirectory = new DirectoryInfo(Path.GetDirectoryName(fullAssemblyPath)
+            ?? throw new Exception($"Failed to find directory {fullAssemblyPath}"));
+
         // Preload dependencies needed for things to work
-        var assemblies = new[] { "YamlDotNet.dll", "Sharpliner.dll" }
-            .Select(assemblyName => Path.Combine(Path.GetDirectoryName(assemblyPath) ?? throw new Exception($"Failed to find directory of {assemblyPath}"), assemblyName))
+        Dictionary<string, Assembly> assemblies = assemblyDirectory.GetFiles("*.dll")
+            .Select(assemblyName => Path.Combine(Path.GetDirectoryName(assemblyPath)
+                ?? throw new Exception($"Failed to find directory of {assemblyPath}"), assemblyName.Name))
             .Select(Path.GetFullPath)
-            .Select(path => System.Reflection.Assembly.LoadFile(path) ?? throw new Exception($"Failed to find a Sharpliner dependency at {path}. Make sure the bin/ directory of your project contains this library."))
+            .Select(path => System.Reflection.Assembly.LoadFile(path)
+                ?? throw new Exception($"Failed to find a Sharpliner dependency at {path}. Make sure the bin/ directory of your project contains this library."))
             .Where(a => a is not null)
             .ToDictionary(a => a.FullName!);
 
