@@ -163,7 +163,7 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
 
     private List<object> FindAllImplementations<T>(bool isInterface)
     {
-        var assembly = LoadAssembly(Assembly ?? throw new ArgumentNullException(nameof(Assembly), "Assembly parameter not set"));
+        var assembly = System.Reflection.Assembly.LoadFrom(Assembly ?? throw new ArgumentNullException(nameof(Assembly), "Assembly parameter not set"));
 
         var pipelines = new List<object>();
         var pipelineBaseType = typeof(T);
@@ -211,42 +211,6 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
         }
 
         return pipelines;
-    }
-
-    /// <summary>
-    /// Loads the assembly and all of its dependencies (such as YamlDotNet).
-    /// </summary>
-    private Assembly LoadAssembly(string assemblyPath)
-    {
-        var fullAssemblyPath = Path.GetFullPath(assemblyPath);
-        var assemblyDirectory = new DirectoryInfo(Path.GetDirectoryName(fullAssemblyPath)
-            ?? throw new Exception($"Failed to find directory {fullAssemblyPath}"));
-
-        // Preload dependencies needed for things to work
-        Dictionary<string, Assembly> assemblies = assemblyDirectory.GetFiles("*.dll")
-            .Select(assemblyName => Path.Combine(Path.GetDirectoryName(assemblyPath)
-                ?? throw new Exception($"Failed to find directory of {assemblyPath}"), assemblyName.Name))
-            .Select(Path.GetFullPath)
-            .Select(path => System.Reflection.Assembly.LoadFile(path)
-                ?? throw new Exception($"Failed to find a Sharpliner dependency at {path}. Make sure the bin/ directory of your project contains this library."))
-            .Where(a => a is not null)
-            .ToDictionary(a => a.FullName!);
-
-        Assembly ResolveAssembly(object? sender, ResolveEventArgs e)
-        {
-            if (!assemblies.TryGetValue(e.Name, out var res))
-            {
-                throw new Exception("Failed to find Sharpliner dependency " + e.Name);
-            }
-
-            return res;
-        }
-
-        AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += ResolveAssembly;
-        AppDomain.CurrentDomain.AssemblyResolve += ResolveAssembly;
-
-        // Load the final assembly where pipeline is defined
-        return System.Reflection.Assembly.LoadFile(Path.GetFullPath(assemblyPath));
     }
 
     private static string? GetFileHash(string path)
