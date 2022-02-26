@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.Loader;
 using System.Security.Cryptography;
 using Microsoft.Build.Framework;
 
@@ -164,7 +163,7 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
 
     private List<object> FindAllImplementations<T>(bool isInterface)
     {
-        var assembly = LoadAssembly(Assembly ?? throw new ArgumentNullException(nameof(Assembly), "Assembly parameter not set"));
+        var assembly = System.Reflection.Assembly.LoadFrom(Assembly ?? throw new ArgumentNullException(nameof(Assembly), "Assembly parameter not set"));
 
         var pipelines = new List<object>();
         var pipelineBaseType = typeof(T);
@@ -212,31 +211,6 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
         }
 
         return pipelines;
-    }
-
-    /// <summary>
-    /// Loads the assembly and all of its dependencies (such as YamlDotNet).
-    /// </summary>
-    private Assembly LoadAssembly(string assemblyPath)
-    {
-        var fullAssemblyPath = Path.GetFullPath(assemblyPath);
-        var assemblyDirectory = new DirectoryInfo(Path.GetDirectoryName(fullAssemblyPath)
-            ?? throw new Exception($"Failed to find directory {fullAssemblyPath}"));
-
-        // Preload dependencies needed for things to work
-        foreach (var assembly in assemblyDirectory.GetFiles("*.dll"))
-        {
-            Log.LogMessage($"Loading dependency {assembly.Name}");
-
-            string path = Path.Combine(Path.GetDirectoryName(assemblyPath)
-                ?? throw new Exception($"Failed to find directory of {assemblyPath}"), assembly.Name);
-            path = Path.GetFullPath(path);
-
-            AssemblyLoadContext.Default.LoadFromAssemblyPath(path);
-        }
-
-        // Load the final assembly where pipeline is defined
-        return AssemblyLoadContext.Default.LoadFromAssemblyPath(Path.GetFullPath(assemblyPath));
     }
 
     private static string? GetFileHash(string path)
