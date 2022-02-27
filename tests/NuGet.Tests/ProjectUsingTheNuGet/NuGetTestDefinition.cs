@@ -1,3 +1,5 @@
+using System.IO;
+using Sharpliner;
 using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.Tasks;
 
