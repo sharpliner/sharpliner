@@ -60,7 +60,10 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
     /// <param name="collection">Type of the collection the definition is coming from (if it is)</param>
     private void PublishDefinition(object definition, Type? collection = null)
     {
-        // I am unable to just cat to IDefinition for some reason (they come from the same code, but maybe different .dll files or something)
+        // PLEASE READ
+        // This method loads the desired classes from user's assembly and intantiates the definitions.
+        // We are unable to cast onto the interfaces directly because we are unable to load the assembly into the main binding context.
+        // Read more details here: https://github.com/sharpliner/sharpliner/issues/179
         Type type = definition.GetType();
         Type iface = type.GetInterfaces().First(i => i.GUID == typeof(ISharplinerDefinition).GUID);
         var getPath = iface.GetMethod(nameof(ISharplinerDefinition.GetTargetPath));
@@ -161,6 +164,10 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
         }
     }
 
+    // PLEASE READ
+    // This method loads the desired classes from user's assembly and intantiates the definitions.
+    // We are unable to cast onto the interfaces directly because we are unable to load the assembly into the main binding context.
+    // Read more details here: https://github.com/sharpliner/sharpliner/issues/179
     private List<object> FindAllImplementations<T>(bool isInterface)
     {
         var assembly = System.Reflection.Assembly.LoadFrom(Assembly ?? throw new ArgumentNullException(nameof(Assembly), "Assembly parameter not set"));
@@ -172,9 +179,6 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
         {
             if (isInterface)
             {
-                // I am unable to just do "is T" because the types from the assembly cannot be cast for some reasone
-                // (they come from the same code, but maybe different .dll files or something)..
-                // I tried to make sure there is only one Sharpliner.dll but still couldn't get it to work so we have to treat them as anonymous
                 var interfaces = type.GetInterfaces();
                 if (!interfaces.Any(iface => iface.FullName == typeof(T).FullName && iface.GUID == typeof(T).GUID))
                 {
@@ -186,9 +190,6 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
                 bool isChild = false;
                 var baseType = type.BaseType;
 
-                // I am unable to cast this to PipelineDefinitionBase and just do t.IsSubClass or t.IsAssignableTo because the types don't seem
-                // to be the same even when they are (they come from the same code, but maybe different .dll files)..
-                // I tried to make sure there is only one Sharpliner.dll but still couldn't get it to work so we have to parse invoke Publish via reflection
                 while (!isChild && baseType is not null)
                 {
                     isChild |= baseType.FullName == typeof(T).FullName && baseType.GUID == typeof(T).GUID;

@@ -10,7 +10,7 @@ jobs:
   displayName: Publish to nuget.org
   pool:
     name: Azure Pipelines
-    vmImage: windows-latest
+    vmImage: windows-2022
   steps:
   - powershell: |+
       $tag = git tag --points-at HEAD
@@ -25,7 +25,7 @@ jobs:
 
   - template: templates/install-dotnet-sdk.yml
     parameters:
-      version: 6.0.100
+      version: 6.0.200
 
   - powershell: |-
       New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'

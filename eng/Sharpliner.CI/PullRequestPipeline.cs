@@ -21,7 +21,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
         {
             new Job("Build", "Build and test")
             {
-                Pool = new HostedPool("Azure Pipelines", "windows-latest"),
+                Pool = new HostedPool("Azure Pipelines", "windows-2022"),
                 Steps =
                 {
                     StepLibrary(new ProjectBuildSteps("src/**/*.csproj")),
@@ -29,8 +29,23 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                     ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj"),
 
                     DotNet
-                        .Test("tests/**/*.csproj")
-                        .DisplayAs("Test"),
+                        .Test("tests/Sharpliner.Tests/Sharpliner.Tests.csproj")
+                        .DisplayAs("Run unit tests"),
+
+                    DotNet.Pack("tests/NuGet.Tests/NuGetWithBasePipeline/NuGetWithBasePipeline.csproj") with
+                    {
+                        DisplayName = "E2E tests - Pack NuGet.Tests library",
+                        ConfigurationToPack = "Release",
+                        OutputDir = "artifacts/packages",
+                        WorkingDirectory = "tests/NuGet.Tests",
+                    },
+
+                    DotNet.Build("tests/NuGet.Tests/ProjectUsingTheNuGet/ProjectUsingTheNuGet.csproj") with
+                    {
+                        DisplayName = "E2E tests - Build NuGet.Tests project",
+                        IncludeNuGetOrg = false,
+                        WorkingDirectory = "tests/NuGet.Tests",
+                    }
                 }
             }
         },
