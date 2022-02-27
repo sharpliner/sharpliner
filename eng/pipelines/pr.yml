@@ -52,10 +52,10 @@ jobs:
       projects: tests/Sharpliner.Tests/Sharpliner.Tests.csproj
 
   - task: DotNetCoreCLI@2
-    displayName: Pack NuGet.Tests library
+    displayName: E2E tests - Pack NuGet.Tests library
     inputs:
       command: pack
-      packagesToPack: NuGetWithBasePipeline/NuGetWithBasePipeline.csproj
+      packagesToPack: tests/NuGet.Tests/NuGetWithBasePipeline/NuGetWithBasePipeline.csproj
       versioningScheme: byPrereleaseNumber
       majorVersion: 43
       minorVersion: 43
@@ -64,9 +64,9 @@ jobs:
       workingDirectory: tests/NuGet.Tests
 
   - task: DotNetCoreCLI@2
-    displayName: Build NuGet.Tests project
+    displayName: E2E tests - Build NuGet.Tests project
     inputs:
       command: build
-      projects: ProjectUsingTheNuGet/ProjectUsingTheNuGet.csproj
+      projects: tests/NuGet.Tests/ProjectUsingTheNuGet/ProjectUsingTheNuGet.csproj
       includeNuGetOrg: false
       workingDirectory: tests/NuGet.Tests
