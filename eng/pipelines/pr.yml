@@ -61,7 +61,6 @@ jobs:
       minorVersion: 43
       patchVersion: 43
       configurationToPack: Release
-      workingDirectory: tests/NuGet.Tests
 
   - task: DotNetCoreCLI@2
     displayName: E2E tests - Build NuGet.Tests project
@@ -69,4 +68,3 @@ jobs:
       command: build
       projects: tests/NuGet.Tests/ProjectUsingTheNuGet/ProjectUsingTheNuGet.csproj
       includeNuGetOrg: false
-      workingDirectory: tests/NuGet.Tests

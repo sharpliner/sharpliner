@@ -36,15 +36,13 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                         .VersionManually("43", "43", "43") with
                     {
                         DisplayName = "E2E tests - Pack NuGet.Tests library",
-                        ConfigurationToPack = "Release",         
-                        WorkingDirectory = "tests/NuGet.Tests",
+                        ConfigurationToPack = "Release",
                     },
 
                     DotNet.Build("tests/NuGet.Tests/ProjectUsingTheNuGet/ProjectUsingTheNuGet.csproj") with
                     {
                         DisplayName = "E2E tests - Build NuGet.Tests project",
                         IncludeNuGetOrg = false,
-                        WorkingDirectory = "tests/NuGet.Tests",
                     }
                 }
             }
