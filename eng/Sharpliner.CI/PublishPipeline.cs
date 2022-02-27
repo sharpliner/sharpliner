@@ -14,7 +14,7 @@ class PublishPipeline : SingleStagePipelineDefinition
         {
             new Job("Publish", "Publish to nuget.org")
             {
-                Pool = new HostedPool("Azure Pipelines", "windows-latest"),
+                Pool = new HostedPool("Azure Pipelines", "windows-2022"),
                 Steps =
                 {
                     Powershell

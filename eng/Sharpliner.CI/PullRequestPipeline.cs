@@ -21,7 +21,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
         {
             new Job("Build", "Build and test")
             {
-                Pool = new HostedPool("Azure Pipelines", "windows-latest"),
+                Pool = new HostedPool("Azure Pipelines", "windows-2022"),
                 Steps =
                 {
                     StepLibrary(new ProjectBuildSteps("src/**/*.csproj")),

@@ -10,7 +10,7 @@ jobs:
   displayName: Publish to nuget.org
   pool:
     name: Azure Pipelines
-    vmImage: windows-latest
+    vmImage: windows-2022
   steps:
   - powershell: |+
       $tag = git tag --points-at HEAD

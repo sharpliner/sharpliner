@@ -21,7 +21,7 @@ jobs:
   displayName: Build and test
   pool:
     name: Azure Pipelines
-    vmImage: windows-latest
+    vmImage: windows-2022
   steps:
   - template: templates/install-dotnet-sdk.yml
     parameters:
