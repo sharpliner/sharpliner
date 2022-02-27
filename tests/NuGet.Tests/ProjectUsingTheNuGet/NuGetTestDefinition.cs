@@ -1,7 +1,7 @@
 using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.Tasks;
 
-namespace NuGetWithBasePipeline;
+namespace Tests.NuGetWithBasePipeline;
 
 // These NuGet.Tests are E2E testing following scenario:
 // 1. We create a "library" project with an arbitrary Sharpliner definition
