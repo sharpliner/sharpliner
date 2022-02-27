@@ -50,3 +50,23 @@ jobs:
     inputs:
       command: test
       projects: tests/**/*.csproj
+
+  - task: DotNetCoreCLI@2
+    displayName: Pack NuGet.Tests library
+    inputs:
+      command: pack
+      packagesToPack: NuGetWithBasePipeline/NuGetWithBasePipeline.csproj
+      versioningScheme: byPrereleaseNumber
+      majorVersion: 43
+      minorVersion: 43
+      patchVersion: 43
+      configurationToPack: Release
+      workingDirectory: tests/NuGet.Tests
+
+  - task: DotNetCoreCLI@2
+    displayName: Build NuGet.Tests project
+    inputs:
+      command: build
+      projects: ProjectUsingTheNuGet/ProjectUsingTheNuGet.csproj
+      includeNuGetOrg: false
+      workingDirectory: tests/NuGet.Tests

@@ -31,6 +31,21 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                     DotNet
                         .Test("tests/**/*.csproj")
                         .DisplayAs("Test"),
+
+                    DotNet.Pack("NuGetWithBasePipeline/NuGetWithBasePipeline.csproj")
+                        .VersionManually("43", "43", "43") with
+                    {
+                        DisplayName = "Pack NuGet.Tests library",
+                        ConfigurationToPack = "Release",         
+                        WorkingDirectory = "tests/NuGet.Tests",
+                    },
+
+                    DotNet.Build("ProjectUsingTheNuGet/ProjectUsingTheNuGet.csproj") with
+                    {
+                        DisplayName = "Build NuGet.Tests project",
+                        IncludeNuGetOrg = false,
+                        WorkingDirectory = "tests/NuGet.Tests",
+                    }
                 }
             }
         },
