@@ -56,10 +56,6 @@ jobs:
     inputs:
       command: pack
       packagesToPack: tests/NuGet.Tests/NuGetWithBasePipeline/NuGetWithBasePipeline.csproj
-      versioningScheme: byPrereleaseNumber
-      majorVersion: 43
-      minorVersion: 43
-      patchVersion: 43
       configurationToPack: Release
       outputDir: ../../artifacts/packages
       workingDirectory: tests/NuGet.Tests
