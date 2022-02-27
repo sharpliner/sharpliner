@@ -29,8 +29,8 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                     ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj"),
 
                     DotNet
-                        .Test("tests/**/*.csproj")
-                        .DisplayAs("Test"),
+                        .Test("tests/Sharpliner.Tests/Sharpliner.Tests.csproj")
+                        .DisplayAs("Run unit tests"),
 
                     DotNet.Pack("NuGetWithBasePipeline/NuGetWithBasePipeline.csproj")
                         .VersionManually("43", "43", "43") with

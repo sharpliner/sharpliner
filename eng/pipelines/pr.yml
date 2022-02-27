@@ -46,10 +46,10 @@ jobs:
       arguments: -p:FailIfChanged=true
 
   - task: DotNetCoreCLI@2
-    displayName: Test
+    displayName: Run unit tests
     inputs:
       command: test
-      projects: tests/**/*.csproj
+      projects: tests/Sharpliner.Tests/Sharpliner.Tests.csproj
 
   - task: DotNetCoreCLI@2
     displayName: Pack NuGet.Tests library
