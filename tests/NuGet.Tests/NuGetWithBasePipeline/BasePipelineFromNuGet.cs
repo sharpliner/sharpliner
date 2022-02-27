@@ -18,7 +18,7 @@ public abstract class BasePipelineFromNuGet : SingleStagePipelineDefinition
     {
         Jobs =
         {
-            new Job("Test job")
+            new Job("TestJob")
             {
                 Steps =
                 {
