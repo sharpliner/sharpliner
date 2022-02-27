@@ -36,7 +36,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                     {
                         DisplayName = "E2E tests - Pack NuGet.Tests library",
                         ConfigurationToPack = "Release",
-                        OutputDir = "../../artifacts/packages",
+                        OutputDir = "artifacts/packages",
                         WorkingDirectory = "tests/NuGet.Tests",
                     },
 
