@@ -7,7 +7,7 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// </summary>
 public record DotNetPublishCoreCliTask : DotNetCoreCliTask
 {
-    public DotNetPublishCoreCliTask() : base("public")
+    public DotNetPublishCoreCliTask() : base("publish")
     {
     }
 
