@@ -156,7 +156,7 @@ public class DotNetCoreCliTests
   steps:
   - task: DotNetCoreCLI@2
     inputs:
-      command: public
+      command: publish
       projects: src/*.csproj
       arguments: -c Release
       publishWebProjects: true
