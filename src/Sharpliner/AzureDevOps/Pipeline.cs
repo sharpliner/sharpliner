@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using System.Text.RegularExpressions;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Validation;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -14,8 +14,6 @@ namespace Sharpliner.AzureDevOps;
 /// </summary>
 public abstract record PipelineBase
 {
-    protected static readonly Regex s_nameRegex = new("^[A-Za-z0-9_]+$", RegexOptions.Compiled);
-
     private Conditioned<Resources>? _resources;
 
     /// <summary>
@@ -65,48 +63,7 @@ public abstract record PipelineBase
     [YamlMember(Order = 500)]
     public ConditionedList<VariableBase> Variables { get; init; } = new();
 
-    public abstract void Validate();
-
-    protected static void ValidateDependsOn<T>(ConditionedList<T> definitions) where T : IDependsOn
-    {
-        var allDefs = definitions.SelectMany(s => s.FlattenDefinitions());
-
-        var duplicate = allDefs.FirstOrDefault(d => allDefs.Count(o => o.Name == d.Name) > 1);
-        if (duplicate is not null)
-        {
-            throw new Exception($"Found duplicate {typeof(T).Name.ToLower()} name '{duplicate.Name}'");
-        }
-
-        var invalidName = allDefs.FirstOrDefault(d => !s_nameRegex.IsMatch(d.Name));
-        if (invalidName is not null)
-        {
-            throw new Exception($"Invalid character found in {typeof(T).Name.ToLower()} name '{invalidName.Name}', only A-Z, a-z, 0-9, and underscore are allowed");
-        }
-
-        foreach (var definition in allDefs)
-        {
-            if (definition.DependsOn is EmptyDependsOn)
-            {
-                continue;
-            }
-
-            foreach (var dependsOn in definition.DependsOn)
-            {
-                if (dependsOn.Definition == definition.Name)
-                {
-                    throw new Exception($"{typeof(T).Name} `{definition.Name}` depends on itself");
-                }
-
-                // TODO: This check can be disruptive since items can be defined inside templates and then we don't have the visiblity in there
-                //if (!allDefs.Any(d => d.Name == dependsOn))
-                //{
-                //    throw new Exception($"{typeof(T).Name} `{definition.Name}` depends on {typeof(T).Name.ToLower()} `{dependsOn.Definition}` which was not found");
-                //}
-            }
-        }
-
-        // TODO: Validate circular dependencies?
-    }
+    internal abstract IReadOnlyCollection<IDefinitionValidation> Validations { get; }
 }
 
 /// <summary>
@@ -118,19 +75,15 @@ public record Pipeline : PipelineBase
     [YamlMember(Order = 600)]
     public ConditionedList<Stage> Stages { get; init; } = new();
 
-    public override void Validate()
+    internal override IReadOnlyCollection<IDefinitionValidation> Validations => new List<IDefinitionValidation>
     {
-        ValidateDependsOn(Stages);
-
-        foreach (var stage in Stages.SelectMany(s => s.FlattenDefinitions()))
-        {
-            ValidateDependsOn(stage.Jobs);
-        }
-    }
+        new StageDependsOnValidation(Stages),
+        new JobsDependsOnValidation(Stages),
+    };
 
     internal static void ValidateName(string name)
     {
-        if (!s_nameRegex.IsMatch(name))
+        if (!DefinitionValidator.NameRegex.IsMatch(name))
         {
             throw new FormatException($"Invalid identifier '{name}'! Only A-Z, a-z, 0-9, and underscore are allowed.");
         }
@@ -146,8 +99,8 @@ public record SingleStagePipeline : PipelineBase
     [YamlMember(Order = 600)]
     public ConditionedList<JobBase> Jobs { get; init; } = new();
 
-    public override void Validate()
+    internal override IReadOnlyCollection<IDefinitionValidation> Validations => new List<IDefinitionValidation>
     {
-        ValidateDependsOn(Jobs);
-    }
+        new JobsDependsOnValidation(Jobs),
+    };
 }
