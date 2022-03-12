@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography;
 using Microsoft.Build.Framework;
 
 namespace Sharpliner;
@@ -31,198 +27,37 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
     /// </summary>
     public override bool Execute()
     {
-        var definitionFound = false;
-
-        foreach (var definition in FindAllImplementations<ISharplinerDefinition>(isInterface: true))
-        {
-            definitionFound = true;
-            PublishDefinition(definition);
-        }
-
-        foreach (var d in FindDefinitionsInCollections())
-        {
-            definitionFound = true;
-            PublishDefinition(d.Definition, d.Collection);
-        }
-
-        if (!definitionFound)
-        {
-            Log.LogMessage(MessageImportance.High, $"No definitions found in {Assembly}");
-        }
-
-        return true;
-    }
-
-    /// <summary>
-    /// Publishes given ISharplinerDefinition into a YAML file.
-    /// </summary>
-    /// <param name="definition">ISharplinerDefinition object</param>
-    /// <param name="collection">Type of the collection the definition is coming from (if it is)</param>
-    private void PublishDefinition(object definition, Type? collection = null)
-    {
         // PLEASE READ
-        // This method loads the desired classes from user's assembly and intantiates the definitions.
-        // We are unable to cast onto the interfaces directly because we are unable to load the assembly into the main binding context.
+        // This method loads and executes the Sharpliner publisher class BUT in the LoadFrom context.
+        // We are unable to load the user's assembly into the main binding context because we are running from the NuGet location.
+        // The user's assembly is not in the probing path of the Sharpliner NuGet but it has Sharpliner.dll as well.
         // Read more details here: https://github.com/sharpliner/sharpliner/issues/179
-        Type type = definition.GetType();
-        Type iface = type.GetInterfaces().First(i => i.GUID == typeof(ISharplinerDefinition).GUID);
-        var getPath = iface.GetMethod(nameof(ISharplinerDefinition.GetTargetPath));
-        var validate = iface.GetMethod(nameof(ISharplinerDefinition.Validate));
-        var publish = iface.GetMethod(nameof(ISharplinerDefinition.Publish));
+        var sharplinerAssemblyPath = Path.Combine(Path.GetDirectoryName(Assembly)!, "Sharpliner.dll");
 
-        if (publish is null || validate is null || getPath is null)
+        var assembly = System.Reflection.Assembly.LoadFrom(sharplinerAssemblyPath);
+        if (assembly is null)
         {
-            Log.LogError($"Failed to get definition metadata for {collection?.FullName ?? type.FullName}");
-            return;
+            Log.LogError("Failed to load Sharpliner.dll in the target project at {path}", sharplinerAssemblyPath);
+            return false;
         }
 
-        if (getPath.Invoke(definition, null) is not string path)
+        var publisherType = assembly.GetTypes().First(t => t.GUID == typeof(SharplinerPublisher).GUID);
+        var publisher = Activator.CreateInstance(publisherType, new object?[] { Log });
+
+        var publishMethod = publisherType.GetMethod(nameof(SharplinerPublisher.Publish));
+
+        if (publisher is null || publishMethod is null)
         {
-            Log.LogError($"Failed to get target path for {collection?.Name ?? type.Name} ");
-            return;
+            Log.LogError($"Failed to activate the Sharpliner publisher. The is one of the 'should never happen' ones. Please report this");
+            return false;
         }
 
-        var typeName = collection == null ? type.Name : collection.Name + " / " + Path.GetFileName(path);
-
-        Log.LogMessage(MessageImportance.High, $"{typeName}:");
-        Log.LogMessage(MessageImportance.High, $"  Validating definition..");
-
-        try
+        if (publishMethod!.Invoke(publisher, new object?[] { Assembly, FailIfChanged }) is not bool result)
         {
-            validate.Invoke(definition, null);
-        }
-        catch (TargetInvocationException e)
-        {
-            Log.LogError("Validation of definition {0} failed: {1}{2}{3}",
-                typeName,
-                e.InnerException?.Message ?? e.ToString(),
-                Environment.NewLine,
-                "To see exception details, build with more verbosity (dotnet build -v:n)");
-
-            Log.LogMessage(MessageImportance.Normal, "Validation of definition {0} failed: {1}", typeName, e.InnerException);
-            return;
+            Log.LogError($"Failed to call the Sharpliner publisher. The is one of the 'should never happen' ones. Please report this");
+            return false;
         }
 
-        string? hash = GetFileHash(path);
-
-        // Publish pipeline
-        publish.Invoke(definition, null);
-
-        if (hash == null)
-        {
-            if (FailIfChanged)
-            {
-                Log.LogError($"  This definition hasn't been published yet!");
-            }
-            else
-            {
-                Log.LogMessage(MessageImportance.High, $"  {typeName} created at {path}");
-            }
-        }
-        else
-        {
-            var newHash = GetFileHash(path);
-            if (hash == newHash)
-            {
-                Log.LogMessage(MessageImportance.High, $"  No new changes to publish");
-            }
-            else
-            {
-                if (FailIfChanged)
-                {
-                    Log.LogError($"  Changes detected between {typeName} and {path}");
-                }
-                else
-                {
-                    Log.LogMessage(MessageImportance.High, $"  Published new changes to {path}");
-                }
-            }
-        }
-    }
-
-    private IEnumerable<(object Definition, Type Collection, int Number)> FindDefinitionsInCollections()
-    {
-        var collections = FindAllImplementations<ISharplinerDefinitionCollection>(isInterface: true);
-
-        foreach (var collection in collections)
-        {
-            var type = collection.GetType();
-            Type iface = type.GetInterfaces().First(i => i.GUID == typeof(ISharplinerDefinitionCollection).GUID);
-
-            var definitionsProperty = iface.GetProperty(nameof(ISharplinerDefinitionCollection.Definitions))?.GetValue(collection, null);
-            if (definitionsProperty is not IEnumerable definitions)
-            {
-                Log.LogError($"Failed to get definitions from collection {type.FullName}");
-                continue;
-            }
-
-            int i = 1;
-            foreach (var definition in definitions)
-            {
-                yield return (definition, type, i++);
-            }
-        }
-    }
-
-    // PLEASE READ
-    // This method loads the desired classes from user's assembly and intantiates the definitions.
-    // We are unable to cast onto the interfaces directly because we are unable to load the assembly into the main binding context.
-    // Read more details here: https://github.com/sharpliner/sharpliner/issues/179
-    private List<object> FindAllImplementations<T>(bool isInterface)
-    {
-        var assembly = System.Reflection.Assembly.LoadFrom(Assembly ?? throw new ArgumentNullException(nameof(Assembly), "Assembly parameter not set"));
-
-        var pipelines = new List<object>();
-        var pipelineBaseType = typeof(T);
-
-        foreach (Type type in assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract))
-        {
-            if (isInterface)
-            {
-                var interfaces = type.GetInterfaces();
-                if (!interfaces.Any(iface => iface.FullName == typeof(T).FullName && iface.GUID == typeof(T).GUID))
-                {
-                    continue;
-                }
-            }
-            else
-            {
-                bool isChild = false;
-                var baseType = type.BaseType;
-
-                while (!isChild && baseType is not null)
-                {
-                    isChild |= baseType.FullName == typeof(T).FullName && baseType.GUID == typeof(T).GUID;
-                    baseType = baseType.BaseType;
-                }
-
-                if (!isChild)
-                {
-                    continue;
-                }
-            }
-
-            object? pipelineDefinition = Activator.CreateInstance(type);
-            if (pipelineDefinition is null)
-            {
-                throw new Exception($"Failed to instantiate {type.GetType().FullName}");
-            }
-
-            pipelines.Add(pipelineDefinition);
-        }
-
-        return pipelines;
-    }
-
-    private static string? GetFileHash(string path)
-    {
-        if (!File.Exists(path))
-        {
-            return null;
-        }
-
-        using var md5 = MD5.Create();
-        using var stream = File.OpenRead(path);
-        return System.Text.Encoding.UTF8.GetString(md5.ComputeHash(stream));
+        return result;
     }
 }
