@@ -4,7 +4,9 @@ namespace Sharpliner.AzureDevOps.Validation;
 
 internal interface IDefinitionValidation
 {
-    public void Validate();
+    void Validate();
+
+    ValidationSeverity SeveritySetings { get; }
 }
 
 public enum ValidationSeverity

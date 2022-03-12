@@ -12,7 +12,19 @@ internal static class DefinitionValidator
 
         foreach (var validation in validations)
         {
-            validation.Validate();
+            if (validation.SeveritySetings == ValidationSeverity.Off)
+            {
+                continue;
+            }
+
+            try
+            {
+                validation.Validate();
+            }
+            catch (ValidationException e)
+            {
+                TODO
+            }
         }
     }
 }

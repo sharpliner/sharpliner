@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text.RegularExpressions;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Validation;
 using YamlDotNet.Serialization;
