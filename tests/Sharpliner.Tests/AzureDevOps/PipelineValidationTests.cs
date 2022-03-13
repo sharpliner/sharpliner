@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using FluentAssertions;
-using Microsoft.VisualStudio.TestPlatform.CommunicationUtilities;
 using Sharpliner.AzureDevOps;
 using Xunit;
 
@@ -184,7 +183,7 @@ public class PipelineValidationTests
                 {
                     Jobs =
                     {
-                        Job("stage_3"),
+                        Job("stage_3"), // this should not conflict with the stage
                         Job("job_4"),
                         Job("job_4"),
                     }
