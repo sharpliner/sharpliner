@@ -11,7 +11,7 @@ internal abstract class DependsOnValidation : IDefinitionValidation
 
     protected DependsOnValidation()
     {
-        _severity = SharplinerConfiguration.Current.Validations.DependsOn;
+        _severity = SharplinerConfiguration.Current.Validations.DependsOnFields;
     }
 
     public abstract IReadOnlyCollection<ValidationError> Validate();

@@ -33,12 +33,12 @@ public abstract class SharplinerConfiguration
         /// <summary>
         /// Validates whether stage and job names are valid.
         /// </summary>
-        public ValidationSeverity Name { get; set; } = ValidationSeverity.Error;
+        public ValidationSeverity NameFields { get; set; } = ValidationSeverity.Error;
 
         /// <summary>
         /// Validates whether stages and jobs do not dependent on each other and similar.
         /// </summary>
-        public ValidationSeverity DependsOn { get; set; } = ValidationSeverity.Error;
+        public ValidationSeverity DependsOnFields { get; set; } = ValidationSeverity.Error;
     }
 
     /// <summary>

@@ -199,7 +199,7 @@ The validations are additional checks that Sharpliner does around your model to 
 To configure serialization/validations, add a class into your project that inherits from a pre-prepared `SharplinerConfiguration` class:
 
 ```csharp
-class SharplinerConfiguration : Sharpliner.SharplinerConfiguration
+class YourCustomConfiguration : SharplinerConfiguration
 {
     public override void Configure()
     {
@@ -213,7 +213,6 @@ class SharplinerConfiguration : Sharpliner.SharplinerConfiguration
     }
 }
 ```
-
 
 ## 6. Make sure you commit your changes
 

@@ -246,7 +246,7 @@ We are continuosly adding new validations as we find new error-prone spots.
 Each validation can be individually configured/silenced in case you don't wish to take advantage of these:
 
 ```csharp
-class SharplinerConfiguration : Sharpliner.SharplinerConfiguration
+class YourCustomConfiguration : SharplinerConfiguration
 {
     public override void Configure()
     {

@@ -12,7 +12,7 @@ internal class NameValidation : IDefinitionValidation
 
     private NameValidation(IReadOnlyCollection<IReadOnlyCollection<string>> nameGroups)
     {
-        _severity = SharplinerConfiguration.Current.Validations.Name;
+        _severity = SharplinerConfiguration.Current.Validations.NameFields;
         _nameGroups = nameGroups;
     }
 

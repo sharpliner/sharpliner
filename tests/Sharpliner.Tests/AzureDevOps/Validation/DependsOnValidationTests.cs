@@ -277,9 +277,9 @@ public class DependsOnValidationTests
     public void ValidationLevelMatchesConfiguration_Validation_Test()
     {
         var pipeline = new SelfDependencyPipeline();
-        SharplinerConfiguration.Current.Validations.DependsOn = ValidationSeverity.Warning;
+        SharplinerConfiguration.Current.Validations.DependsOnFields = ValidationSeverity.Warning;
         var errors = pipeline.Validations.SelectMany(v => v.Validate()).ToList();
-        SharplinerConfiguration.Current.Validations.DependsOn = ValidationSeverity.Error;
+        SharplinerConfiguration.Current.Validations.DependsOnFields = ValidationSeverity.Error;
         Assert.Single(errors);
         Assert.Equal(ValidationSeverity.Warning, errors.Single().Severity);
     }
@@ -288,9 +288,9 @@ public class DependsOnValidationTests
     public void ValidationIsTurnedOff_Validation_Test()
     {
         var pipeline = new SelfDependencyPipeline();
-        SharplinerConfiguration.Current.Validations.DependsOn = ValidationSeverity.Off;
+        SharplinerConfiguration.Current.Validations.DependsOnFields = ValidationSeverity.Off;
         var errors = pipeline.Validations.SelectMany(v => v.Validate()).ToList();
-        SharplinerConfiguration.Current.Validations.DependsOn = ValidationSeverity.Error;
+        SharplinerConfiguration.Current.Validations.DependsOnFields = ValidationSeverity.Error;
         Assert.Empty(errors);
     }
 }

@@ -2,11 +2,11 @@
 
 namespace Sharpliner.CI;
 
-class SharplinerConfiguration : Sharpliner.SharplinerConfiguration
+class Configuration : SharplinerConfiguration
 {
     public override void Configure()
     {
         Serialization.UseElseExpression = true;
-        Validations.DependsOn = ValidationSeverity.Error;
+        Validations.DependsOnFields = ValidationSeverity.Error;
     }
 }
