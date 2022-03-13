@@ -2,11 +2,17 @@
 
 namespace Sharpliner;
 
+public interface ISharplinerConfiguration
+{
+    SharplinerConfiguration.SerializationSettings Serialization { get; }
+    SharplinerConfiguration.ValidationsSettings Validations { get; }
+}
+
 /// <summary>
 /// Inherit from this class to configure the publishing process.
 /// You can customize how YAML is serialized, which validations are run and with what severity and more.
 /// </summary>
-public abstract class SharplinerConfiguration
+public abstract class SharplinerConfiguration : ISharplinerConfiguration
 {
     public class SerializationSettings
     {
@@ -44,7 +50,7 @@ public abstract class SharplinerConfiguration
     /// <summary>
     /// Settings we can reach from within model classes.
     /// </summary>
-    internal static SharplinerConfiguration Current { get; private set; } = new DefaultSharplinerConfiguration();
+    internal static ISharplinerConfiguration Current { get; private set; } = new DefaultSharplinerConfiguration();
 
     /// <summary>
     /// Use this property to customize how YAML is serialized.
