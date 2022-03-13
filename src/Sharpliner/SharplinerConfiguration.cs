@@ -67,5 +67,7 @@ public abstract class SharplinerConfiguration
 
 internal class DefaultSharplinerConfiguration : SharplinerConfiguration
 {
-    public override void Configure() => throw new System.NotImplementedException();
+    public override void Configure()
+    {
+    }
 }
