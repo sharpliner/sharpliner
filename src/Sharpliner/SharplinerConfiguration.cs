@@ -11,6 +11,12 @@ public abstract class SharplinerConfiguration
     public class SerializationSettings
     {
         /// <summary>
+        /// When true (default), inserts documentation headers into generated YAML files.
+        /// The content of the headers can be customized via the Headers field on your definitions.
+        /// </summary>
+        public bool IncludeHeaders { get; set; } = true;
+
+        /// <summary>
         /// When true (default), makes the YAML a little bit more human-readable.
         /// For instance, new lines are added.
         /// </summary>

@@ -86,13 +86,16 @@ public interface ISharplinerDefinition
         string fileName = GetTargetPath();
         var fileContents = Serialize();
 
-        var header = Header ?? GetDefaultHeader(GetType());
-
-        if (header.Length > 0)
+        if (SharplinerConfiguration.Current.Serialization.IncludeHeaders)
         {
-            const string hash = "### ";
-            fileContents = hash + string.Join(Environment.NewLine + hash, header) + Environment.NewLine + Environment.NewLine + fileContents;
-            fileContents = fileContents.Replace(" \r\n", "\r\n").Replace(" \n", "\n"); // Remove trailing spaces from the default template
+            var header = Header ?? GetDefaultHeader(GetType());
+
+            if (header.Length > 0)
+            {
+                const string hash = "### ";
+                fileContents = hash + string.Join(Environment.NewLine + hash, header) + Environment.NewLine + Environment.NewLine + fileContents;
+                fileContents = fileContents.Replace(" \r\n", "\r\n").Replace(" \n", "\n"); // Remove trailing spaces from the default template
+            }
         }
 
         var targetDirectory = Path.GetDirectoryName(fileName)!;
