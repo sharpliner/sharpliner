@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Tasks;
 
@@ -11,6 +12,8 @@ namespace Sharpliner.AzureDevOps;
 /// </summary>
 public abstract class AzureDevOpsDefinition
 {
+    internal static readonly Regex NameRegex = new("^[A-Za-z0-9_]+$", RegexOptions.Compiled);
+
     /// <summary>
     /// Start an ${{ if () }} section.
     /// </summary>

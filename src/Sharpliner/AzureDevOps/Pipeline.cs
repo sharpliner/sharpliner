@@ -63,6 +63,9 @@ public abstract record PipelineBase
     [YamlMember(Order = 500)]
     public ConditionedList<VariableBase> Variables { get; init; } = new();
 
+    /// <summary>
+    /// Returns the list of validations that should be run on the definition (e.g. wrong dependsOn, artifact name typos..).
+    /// </summary>
     internal abstract IReadOnlyCollection<IDefinitionValidation> Validations { get; }
 }
 
@@ -75,15 +78,11 @@ public record Pipeline : PipelineBase
     [YamlMember(Order = 600)]
     public ConditionedList<Stage> Stages { get; init; } = new();
 
-    internal override IReadOnlyCollection<IDefinitionValidation> Validations => new List<IDefinitionValidation>
-    {
-        new StageDependsOnValidation(Stages),
-        new JobsDependsOnValidation(Stages),
-    };
+    internal override IReadOnlyCollection<IDefinitionValidation> Validations => Stages.GetStageValidations();
 
     internal static void ValidateName(string name)
     {
-        if (!AzureDevOpsDefinitionValidator.NameRegex.IsMatch(name))
+        if (!AzureDevOpsDefinition.NameRegex.IsMatch(name))
         {
             throw new FormatException($"Invalid identifier '{name}'! Only A-Z, a-z, 0-9, and underscore are allowed.");
         }
@@ -99,8 +98,5 @@ public record SingleStagePipeline : PipelineBase
     [YamlMember(Order = 600)]
     public ConditionedList<JobBase> Jobs { get; init; } = new();
 
-    internal override IReadOnlyCollection<IDefinitionValidation> Validations => new List<IDefinitionValidation>
-    {
-        new JobsDependsOnValidation(Jobs),
-    };
+    internal override IReadOnlyCollection<IDefinitionValidation> Validations => Jobs.GetJobValidations();
 }

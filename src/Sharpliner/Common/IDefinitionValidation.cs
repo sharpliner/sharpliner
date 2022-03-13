@@ -1,12 +1,10 @@
-﻿using System;
+﻿using System.Collections.Generic;
 
 namespace Sharpliner.Common;
 
-internal interface IDefinitionValidation
+public interface IDefinitionValidation
 {
-    void Validate();
-
-    ValidationSeverity SeveritySetings { get; }
+    IReadOnlyCollection<ValidationError> Validate();
 }
 
 public enum ValidationSeverity
@@ -18,12 +16,15 @@ public enum ValidationSeverity
     Error = 4,
 }
 
-internal class ValidationException : Exception
+public class ValidationError
 {
     public ValidationSeverity Severity { get; }
 
-    public ValidationException(ValidationSeverity severity, string message) : base(message)
+    public string Message { get; }
+
+    public ValidationError(ValidationSeverity severity, string message)
     {
         Severity = severity;
+        Message = message;
     }
 }

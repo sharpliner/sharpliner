@@ -1,4 +1,5 @@
-using Sharpliner.AzureDevOps.Validation;
+using System.Collections.Generic;
+using Sharpliner.Common;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -31,10 +32,9 @@ public abstract class PipelineDefinitionBase<TPipeline>
     public abstract TPipeline Pipeline { get; }
 
     /// <summary>
-    /// This method is run by the Sharpliner publish process to validate for
-    /// some problems we can catch early and fail the publishing.
+    /// Returns the list of validations that should be run on the definition (e.g. wrong dependsOn, artifact name typos..).
     /// </summary>
-    public void Validate() => AzureDevOpsDefinitionValidator.Validate(Pipeline);
+    public IReadOnlyCollection<IDefinitionValidation> Validations => Pipeline.Validations;
 
     /// <summary>
     /// Serializes this pipeline into YAML.

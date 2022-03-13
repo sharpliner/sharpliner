@@ -183,7 +183,7 @@ public record Conditioned<T> : Conditioned
                 throw new InvalidOperationException("No condition to match Else against");
             }
 
-            return SharplinerSerializer.Settings.UseElseExpression
+            return SharplinerConfiguration.Current.Serialization.UseElseExpression
                 ? new ElseCondition<T>()
                 {
                     Parent = Parent
@@ -295,7 +295,7 @@ public record Conditioned<T> : Conditioned
         }
     }
 
-    internal IEnumerable<T> FlattenDefinitions()
+    internal IReadOnlyCollection<T> FlattenDefinitions()
     {
         var definitions = new List<T>();
 

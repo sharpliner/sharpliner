@@ -242,6 +242,26 @@ Steps =
 Your pipeline definition can be validated during publishing and you can uncover issues, such as typos inside `dependsOn`, you would only find by trying to run the pipeline in CI.
 This gives you a faster dev loop and greater productivity.
 
+We are continuosly adding new validations as we find new error-prone spots.
+Each validation can be individually configured/silenced in case you don't wish to take advantage of these:
+
+```csharp
+class SharplinerConfiguration : Sharpliner.SharplinerConfiguration
+{
+    public override void Configure()
+    {
+        Validations.DependsOn = ValidationSeverity.Off;
+        Validations.Name = ValidationSeverity.Warning;
+
+        // You can also further customize serialization.
+        Serialization.PrettifyYaml = false;
+        Serialization.UseElseExpression = true;
+        Serialization.IncludeHeaders = false;
+
+    }
+}
+```
+
 ## Something missing?
 
 If you find a missing feature / API / property / use case, file an issue in project's repository.
