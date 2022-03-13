@@ -1,11 +1,12 @@
 ﻿using System.Linq;
 using FluentAssertions;
 using Sharpliner.AzureDevOps;
+using Sharpliner.Common;
 using Xunit;
 
-namespace Sharpliner.Tests.AzureDevOps;
+namespace Sharpliner.Tests.AzureDevOps.Validation;
 
-public class PipelineValidationTests
+public class DependsOnValidationTests
 {
     private class ConditionedDependsOnPipeline : TestPipeline
     {
@@ -77,7 +78,7 @@ public class PipelineValidationTests
     public void MissingStageDependsOn_Validation_Test()
     {
         var pipeline = new MissingStageDependsOnErrorPipeline();
-        var errors = pipeline.Validations.SelectMany(v => v.Validate());
+        var errors = pipeline.Validations.SelectMany(v => v.Validate()).ToList();
         Assert.Single(errors);
         Assert.Equal("Stage `stage_3` depends on stage `foo` which was not found", errors.Single().Message);
     }
@@ -124,7 +125,7 @@ public class PipelineValidationTests
     public void MissingJobDependsOn_Validation_Test()
     {
         var pipeline = new MissingJobDependsOnErrorPipeline();
-        var errors = pipeline.Validations.SelectMany(v => v.Validate());
+        var errors = pipeline.Validations.SelectMany(v => v.Validate()).ToList();
         Assert.Single(errors);
         Assert.Equal("Job `job_5` depends on job `job_3` which was not found", errors.Single().Message);
     }
@@ -158,7 +159,7 @@ public class PipelineValidationTests
     public void DuplicateStageName_Validation_Test()
     {
         var pipeline = new DuplicateStageNamePipeline();
-        var errors = pipeline.Validations.SelectMany(v => v.Validate());
+        var errors = pipeline.Validations.SelectMany(v => v.Validate()).ToList();
         Assert.Single(errors);
         Assert.Equal("Found duplicate name `stage_1`", errors.Single().Message);
     }
@@ -196,7 +197,7 @@ public class PipelineValidationTests
     public void DuplicateJobName_Validation_Test()
     {
         var pipeline = new DuplicateJobNamePipeline();
-        var errors = pipeline.Validations.SelectMany(v => v.Validate());
+        var errors = pipeline.Validations.SelectMany(v => v.Validate()).ToList();
         Assert.Single(errors);
         Assert.Equal("Found duplicate name `job_4`", errors.Single().Message);
     }
@@ -217,7 +218,7 @@ public class PipelineValidationTests
     public void InvalidName_Validation_Test()
     {
         var pipeline = new InvalidNamePipeline();
-        var errors = pipeline.Validations.SelectMany(v => v.Validate());
+        var errors = pipeline.Validations.SelectMany(v => v.Validate()).ToList();
         Assert.Single(errors);
         Assert.Contains("stage_2", errors.Single().Message);
     }
@@ -239,7 +240,7 @@ public class PipelineValidationTests
     public void DuplicateJobNameSingleStage_Validation_Test()
     {
         var pipeline = new DuplicateJobNameSimplePipeline();
-        var errors = pipeline.Validations.SelectMany(v => v.Validate());
+        var errors = pipeline.Validations.SelectMany(v => v.Validate()).ToList();
         Assert.Single(errors);
         Assert.Equal("Found duplicate name `job_4`", errors.Single().Message);
     }
@@ -267,8 +268,29 @@ public class PipelineValidationTests
     public void SelfDependency_Validation_Test()
     {
         var pipeline = new SelfDependencyPipeline();
-        var errors = pipeline.Validations.SelectMany(v => v.Validate());
+        var errors = pipeline.Validations.SelectMany(v => v.Validate()).ToList();
         Assert.Single(errors);
         Assert.Equal("Job `job_3` depends on itself", errors.Single().Message);
+    }
+
+    [Fact]
+    public void ValidationLevelMatchesConfiguration_Validation_Test()
+    {
+        var pipeline = new SelfDependencyPipeline();
+        SharplinerConfiguration.Current.Validations.DependsOn = ValidationSeverity.Warning;
+        var errors = pipeline.Validations.SelectMany(v => v.Validate()).ToList();
+        SharplinerConfiguration.Current.Validations.DependsOn = ValidationSeverity.Error;
+        Assert.Single(errors);
+        Assert.Equal(ValidationSeverity.Warning, errors.Single().Severity);
+    }
+
+    [Fact]
+    public void ValidationIsTurnedOff_Validation_Test()
+    {
+        var pipeline = new SelfDependencyPipeline();
+        SharplinerConfiguration.Current.Validations.DependsOn = ValidationSeverity.Off;
+        var errors = pipeline.Validations.SelectMany(v => v.Validate()).ToList();
+        SharplinerConfiguration.Current.Validations.DependsOn = ValidationSeverity.Error;
+        Assert.Empty(errors);
     }
 }
