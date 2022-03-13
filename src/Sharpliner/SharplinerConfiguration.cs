@@ -45,6 +45,11 @@ public abstract class SharplinerConfiguration : ISharplinerConfiguration
         /// Validates whether stages and jobs do not dependent on each other and similar.
         /// </summary>
         public ValidationSeverity DependsOnFields { get; set; } = ValidationSeverity.Error;
+
+        /// <summary>
+        /// Validates whether checked out repositories are defined in resources.
+        /// </summary>
+        public ValidationSeverity RepositoryCheckouts { get; set; } = ValidationSeverity.Warning;
     }
 
     /// <summary>
