@@ -221,4 +221,54 @@ public class PipelineValidationTests
         Assert.Single(errors);
         Assert.Contains("stage_2", errors.Single().Message);
     }
+
+    private class DuplicateJobNameSimplePipeline : SimpleTestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                Job("job_1"),
+                Job("job_4"),
+                Job("job_4"),
+            }
+        };
+    }
+
+    [Fact]
+    public void DuplicateJobNameSingleStage_Validation_Test()
+    {
+        var pipeline = new DuplicateJobNameSimplePipeline();
+        var errors = pipeline.Validations.SelectMany(v => v.Validate());
+        Assert.Single(errors);
+        Assert.Equal("Found duplicate name `job_4`", errors.Single().Message);
+    }
+
+    private class SelfDependencyPipeline : SimpleTestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("job_1"),
+                new Job("job_2")
+                {
+                    DependsOn = { "job_1" }
+                },
+                new Job("job_3")
+                {
+                    DependsOn = { "job_2", "job_3" }
+                },
+            }
+        };
+    }
+
+    [Fact]
+    public void SelfDependency_Validation_Test()
+    {
+        var pipeline = new SelfDependencyPipeline();
+        var errors = pipeline.Validations.SelectMany(v => v.Validate());
+        Assert.Single(errors);
+        Assert.Equal("Job `job_3` depends on itself", errors.Single().Message);
+    }
 }
