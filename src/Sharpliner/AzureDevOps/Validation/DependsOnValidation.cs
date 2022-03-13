@@ -1,36 +1,50 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
-using Sharpliner.Common;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.Common;
 
 namespace Sharpliner.AzureDevOps.Validation;
 
-internal abstract class DependsOnValidation
+internal abstract class DependsOnValidation : IDefinitionValidation
 {
-    public ValidationSeverity SeveritySetings => SharplinerSerializer.Validations.DependsOn;
+    private readonly ValidationSeverity _severity;
 
-    protected void ValidateDependsOn<T>(ConditionedList<T> definitions) where T : IDependsOn
+    public DependsOnValidation(ValidationSeverity severity)
     {
-        ValidateDependsOn(definitions.SelectMany(s => s.FlattenDefinitions()));
+        _severity = severity;
     }
 
-    protected void ValidateDependsOn<T>(IEnumerable<Conditioned<T>> definitions) where T : IDependsOn
+    public abstract IReadOnlyCollection<ValidationError> Validate();
+
+    protected IReadOnlyCollection<ValidationError> ValidateDependsOn<T>(ConditionedList<T> definitions) where T : IDependsOn
     {
-        ValidateDependsOn(definitions.SelectMany(s => s.FlattenDefinitions()));
+        return ValidateDependsOn(definitions.SelectMany(s => s.FlattenDefinitions()));
     }
 
-    protected void ValidateDependsOn<T>(IEnumerable<T> definitions) where T : IDependsOn
+    protected IReadOnlyCollection<ValidationError> ValidateDependsOn<T>(IEnumerable<Conditioned<T>> definitions) where T : IDependsOn
     {
+        return ValidateDependsOn(definitions.SelectMany(s => s.FlattenDefinitions()));
+    }
+
+    protected IReadOnlyCollection<ValidationError> ValidateDependsOn<T>(IEnumerable<T> definitions) where T : IDependsOn
+    {
+        var errors = new List<ValidationError>();
+
+        if (_severity == ValidationSeverity.Off)
+        {
+            return errors;
+        }
+
         var duplicate = definitions.FirstOrDefault(d => definitions.Count(o => o.Name == d.Name) > 1);
         if (duplicate is not null)
         {
-            throw new ValidationException(SeveritySetings, $"Found duplicate {typeof(T).Name.ToLower()} name '{duplicate.Name}'");
+            errors.Add(new(_severity, $"Found duplicate {typeof(T).Name.ToLower()} name '{duplicate.Name}'"));
         }
 
-        var invalidName = definitions.FirstOrDefault(d => !AzureDevOpsDefinitionValidator.NameRegex.IsMatch(d.Name));
+        var invalidName = definitions.FirstOrDefault(d => !AzureDevOpsDefinition.NameRegex.IsMatch(d.Name));
         if (invalidName is not null)
         {
-            throw new ValidationException(SeveritySetings, $"Invalid character found in {typeof(T).Name.ToLower()} name '{invalidName.Name}', only A-Z, a-z, 0-9, and underscore are allowed");
+            errors.Add(new ValidationError(_severity, $"Invalid character found in {typeof(T).Name.ToLower()} name '{invalidName.Name}', only A-Z, a-z, 0-9, and underscore are allowed"));
         }
 
         foreach (var definition in definitions)
@@ -44,29 +58,33 @@ internal abstract class DependsOnValidation
             {
                 if (dependsOn.Definition == definition.Name)
                 {
-                    throw new ValidationException(SeveritySetings, $"{typeof(T).Name} `{definition.Name}` depends on itself");
+                    errors.Add(new ValidationError(_severity, $"{typeof(T).Name} `{definition.Name}` depends on itself"));
+                    continue;
                 }
 
-                // TODO: This check can be disruptive since items can be defined inside templates and then we don't have the visiblity in there
-                //if (!allDefs.Any(d => d.Name == dependsOn))
-                //{
-                //    throw new Exception($"{typeof(T).Name} `{definition.Name}` depends on {typeof(T).Name.ToLower()} `{dependsOn.Definition}` which was not found");
-                //}
+                if (!definitions.Any(d => d.Name == dependsOn))
+                {
+                    // This check can be a false positive since items can be defined inside templates and then we don't have the visiblity in there
+                    errors.Add(new(ValidationSeverity.Trace, $"{typeof(T).Name} `{definition.Name}` depends on {typeof(T).Name.ToLower()} `{dependsOn.Definition}` which was not found"));
+                }
             }
         }
 
-        // TODO: Validate circular dependencies?
+        // TODO: Validate circular dependencies
+
+        return errors;
     }
 }
 
 /// <summary>
 /// Validates that dependsOn field has a matching definition.
 /// </summary>
-internal class JobsDependsOnValidation : DependsOnValidation, IDefinitionValidation
+internal class JobsDependsOnValidation : DependsOnValidation
 {
     private readonly IEnumerable<Conditioned<JobBase>> _jobs;
 
     public JobsDependsOnValidation(IEnumerable<Conditioned<JobBase>> jobs)
+        : base(SharplinerConfiguration.Current.Validations.DependsOn)
     {
         _jobs = jobs;
     }
@@ -76,26 +94,27 @@ internal class JobsDependsOnValidation : DependsOnValidation, IDefinitionValidat
     {
     }
 
-    public void Validate()
+    public override IReadOnlyCollection<ValidationError> Validate()
     {
-        ValidateDependsOn(_jobs);
+        return ValidateDependsOn(_jobs);
     }
 }
 
 /// <summary>
 /// Validates that dependsOn field has a matching definition.
 /// </summary>
-internal class StageDependsOnValidation : DependsOnValidation, IDefinitionValidation
+internal class StageDependsOnValidation : DependsOnValidation
 {
     private readonly ConditionedList<Stage> _stages;
 
     public StageDependsOnValidation(ConditionedList<Stage> stages)
+        : base(SharplinerConfiguration.Current.Validations.DependsOn)
     {
         _stages = stages;
     }
 
-    public void Validate()
+    public override IReadOnlyCollection<ValidationError> Validate()
     {
-        ValidateDependsOn(_stages);
+        return ValidateDependsOn(_stages);
     }
 }

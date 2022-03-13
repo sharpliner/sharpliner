@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text.RegularExpressions;
-using Sharpliner.Common;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -13,7 +12,7 @@ public static class SharplinerSerializer
     public static string Serialize(object data)
     {
         var yaml = Serializer.Serialize(data);
-        return Settings.PrettifyYaml ? Prettify(yaml) : yaml;
+        return SharplinerConfiguration.Current.Serialization.PrettifyYaml ? Prettify(yaml) : yaml;
     }
 
     private static ISerializer InitializeSerializer()
@@ -35,24 +34,5 @@ public static class SharplinerSerializer
         yaml = Regex.Replace(yaml, "(:\r?\n\r?\n)", ":" + Environment.NewLine);
 
         return yaml;
-    }
-
-    public static class Settings
-    {
-        /// <summary>
-        /// When true (default), makes the YAML a little bit more human-readable.
-        /// For instance, new lines are added.
-        /// </summary>
-        public static bool PrettifyYaml { get; set; } = true;
-
-        /// <summary>
-        /// Set to false if you prefer Else branch to contain negated if condition rather than ${{ else }}
-        /// </summary>
-        public static bool UseElseExpression { get; set; } = true;
-    }
-
-    public static class Validations
-    {
-        public static ValidationSeverity DependsOn { get; set; } = ValidationSeverity.Error;
     }
 }

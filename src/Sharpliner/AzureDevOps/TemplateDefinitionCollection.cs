@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.Common;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -27,8 +28,10 @@ public abstract class TemplateDefinitionCollection<T> : TemplateDefinition, ISha
 
     internal abstract string YamlProperty { get; }
 
+    internal abstract IReadOnlyCollection<IDefinitionValidation> GetValidations(TemplateDefinitionData<T> definition);
+
     public IEnumerable<ISharplinerDefinition> Definitions
-        => Templates.Select(data => new TemplateDefinitionWrapper<T>(data, YamlProperty, GetType()));
+        => Templates.Select(data => new TemplateDefinitionWrapper<T>(data, YamlProperty, GetType(), GetValidations(data)));
 
     // Only us inheriting from this
     internal TemplateDefinitionCollection()
@@ -40,7 +43,11 @@ internal class TemplateDefinitionWrapper<T> : TemplateDefinition<T>
 {
     private readonly string[]? _header;
 
-    public TemplateDefinitionWrapper(TemplateDefinitionData<T> data, string yamlMemberName, Type definitionType)
+    public TemplateDefinitionWrapper(
+        TemplateDefinitionData<T> data,
+        string yamlMemberName,
+        Type definitionType,
+        IReadOnlyCollection<IDefinitionValidation> validations)
     {
         TargetFile = data.TargetFile;
         Definition = data.Definition;
@@ -48,6 +55,7 @@ internal class TemplateDefinitionWrapper<T> : TemplateDefinition<T>
         Parameters = data.Parameters ?? new List<TemplateParameter>();
         _header = data.Header ?? ISharplinerDefinition.GetDefaultHeader(definitionType);
         YamlProperty = yamlMemberName;
+        Validations = validations;
     }
 
     public override string TargetFile { get; }
@@ -61,4 +69,6 @@ internal class TemplateDefinitionWrapper<T> : TemplateDefinition<T>
     public override string[]? Header => _header;
 
     internal override string YamlProperty { get; }
+
+    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations { get; }
 }

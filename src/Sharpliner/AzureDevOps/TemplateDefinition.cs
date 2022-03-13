@@ -2,6 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.Common;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -171,9 +172,7 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
         return SharplinerSerializer.Serialize(template);
     }
 
-    public void Validate()
-    {
-    }
+    public abstract IReadOnlyCollection<IDefinitionValidation> Validations { get; }
 
     /// <summary>
     /// Header that will be shown at the top of the generated YAML file

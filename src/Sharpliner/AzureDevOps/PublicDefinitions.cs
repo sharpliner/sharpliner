@@ -2,6 +2,9 @@
 // To learn more, see https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/GettingStarted.md
 
 using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Validation;
+using Sharpliner.Common;
+using System;
 using System.Collections.Generic;
 
 namespace Sharpliner.AzureDevOps;
@@ -89,15 +92,25 @@ public abstract class SingleStagePipelineCollection : PipelineDefinitionCollecti
 public abstract class StageTemplateCollection : TemplateDefinitionCollection<Stage>
 {
     internal sealed override string YamlProperty => "stages";
+
+    internal sealed override IReadOnlyCollection<IDefinitionValidation> GetValidations(TemplateDefinitionData<Stage> definition) => new[]
+    {
+        new JobsDependsOnValidation(definition.Definition),
+    };
 }
 
 /// <summary>
 /// Inherit from this class when you want to dynamically generate multiple job templates
 /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
 /// </summary>
-public abstract class JobTemplateCollection : TemplateDefinitionCollection<Job>
+public abstract class JobTemplateCollection : TemplateDefinitionCollection<JobBase>
 {
     internal sealed override string YamlProperty => "jobs";
+
+    internal sealed override IReadOnlyCollection<IDefinitionValidation> GetValidations(TemplateDefinitionData<JobBase> definition) => new[]
+    {
+        new JobsDependsOnValidation(definition.Definition),
+    };
 }
 
 /// <summary>
@@ -107,6 +120,9 @@ public abstract class JobTemplateCollection : TemplateDefinitionCollection<Job>
 public abstract class StepTemplateCollection : TemplateDefinitionCollection<Step>
 {
     internal sealed override string YamlProperty => "steps";
+
+    internal sealed override IReadOnlyCollection<IDefinitionValidation> GetValidations(TemplateDefinitionData<Step> definition)
+        => Array.Empty<IDefinitionValidation>();
 }
 
 /// <summary>
@@ -116,6 +132,9 @@ public abstract class StepTemplateCollection : TemplateDefinitionCollection<Step
 public abstract class VariableTemplateCollection : TemplateDefinitionCollection<VariableBase>
 {
     internal sealed override string YamlProperty => "variables";
+
+    internal sealed override IReadOnlyCollection<IDefinitionValidation> GetValidations(TemplateDefinitionData<VariableBase> definition)
+        => Array.Empty<IDefinitionValidation>();
 }
 
 #endregion

@@ -183,7 +183,7 @@ public record Conditioned<T> : Conditioned
                 throw new InvalidOperationException("No condition to match Else against");
             }
 
-            return SharplinerSerializer.Settings.UseElseExpression
+            return SharplinerConfiguration.Current.Serialization.UseElseExpression
                 ? new ElseCondition<T>()
                 {
                     Parent = Parent

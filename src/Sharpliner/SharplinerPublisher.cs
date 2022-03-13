@@ -35,6 +35,8 @@ public class SharplinerPublisher
         var definitionFound = false;
         var assembly = Assembly.Load(AssemblyName.GetAssemblyName(assemblyPath));
 
+        LoadConfiguration(assembly);
+
         foreach (ISharplinerDefinition definition in FindAllImplementations<ISharplinerDefinition>(assembly))
         {
             definitionFound = true;
@@ -73,48 +75,23 @@ public class SharplinerPublisher
         _logger.LogMessage(MessageImportance.High, $"{typeName}:");
         _logger.LogMessage(MessageImportance.High, $"  Validating definition..");
 
-        try
+        foreach (var validation in definition.Validations)
         {
-            definition.Validate();
-        }
-        catch (ValidationException e)
-        {
-            var message = "Validation of definition {0} failed: {1}{2}{3}";
-            var arguments = new object?[]
-            {
-                typeName,
-                e.Message,
-                Environment.NewLine,
-                "To see exception details, build with more verbosity (dotnet build -v:n)"
-            };
+            var errors = validation.Validate();
 
-            switch (e.Severity)
+            if (errors.Any())
             {
-                case ValidationSeverity.Trace:
-                    _logger.LogMessage(message, arguments);
-                    break;
-                case ValidationSeverity.Information:
-                    _logger.LogMessage(MessageImportance.High, message, arguments);
-                    break;
-                case ValidationSeverity.Warning:
-                    _logger.LogWarning(message, arguments);
-                    break;
-                case ValidationSeverity.Error:
-                    _logger.LogError(message, arguments);
-                    break;
+                Log(errors.OrderByDescending(e => e.Severity).First().Severity,
+                    $"  Validation of definition {typeName} failed!");
             }
 
-            if (e.Severity != ValidationSeverity.Off)
+            foreach (var error in errors)
             {
-                _logger.LogMessage("Validation of definition {0} failed: {1}", typeName, e);
+                Log(error.Severity, "    - " + error.Message);
             }
-
-            return;
         }
 
         string? hash = GetFileHash(path);
-
-        // Publish pipeline
         definition.Publish();
 
         if (hash == null)
@@ -170,6 +147,41 @@ public class SharplinerPublisher
         }
 
         return pipelines;
+    }
+
+    private void LoadConfiguration(Assembly assembly)
+    {
+        var configurations = FindAllImplementations<SharplinerConfiguration>(assembly);
+
+        if (configurations.Count > 1)
+        {
+            _logger.LogWarning("Detected more than one Sharpliner configurations:"
+                + Environment.NewLine + "  -"
+                + string.Join(Environment.NewLine + "  -", configurations));
+        }
+
+        SharplinerConfiguration configuration = configurations.FirstOrDefault() ?? new DefaultSharplinerConfiguration();
+        _logger.LogMessage(MessageImportance.High, "Using {0} for configuration", configuration.GetType().Name);
+        configuration.ConfigureInternal();
+    }
+
+    private void Log(ValidationSeverity severity, string message)
+    {
+        switch (severity)
+        {
+            case ValidationSeverity.Trace:
+                _logger.LogMessage(message);
+                break;
+            case ValidationSeverity.Information:
+                _logger.LogMessage(MessageImportance.High, message);
+                break;
+            case ValidationSeverity.Warning:
+                _logger.LogWarning(message);
+                break;
+            case ValidationSeverity.Error:
+                _logger.LogError(message);
+                break;
+        }
     }
 
     private static string? GetFileHash(string path)

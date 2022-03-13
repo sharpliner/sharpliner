@@ -63,6 +63,9 @@ public abstract record PipelineBase
     [YamlMember(Order = 500)]
     public ConditionedList<VariableBase> Variables { get; init; } = new();
 
+    /// <summary>
+    /// Returns the list of validations that should be run on the definition (e.g. wrong dependsOn, artifact name typos..).
+    /// </summary>
     internal abstract IReadOnlyCollection<IDefinitionValidation> Validations { get; }
 }
 
@@ -83,7 +86,7 @@ public record Pipeline : PipelineBase
 
     internal static void ValidateName(string name)
     {
-        if (!AzureDevOpsDefinitionValidator.NameRegex.IsMatch(name))
+        if (!AzureDevOpsDefinition.NameRegex.IsMatch(name))
         {
             throw new FormatException($"Invalid identifier '{name}'! Only A-Z, a-z, 0-9, and underscore are allowed.");
         }

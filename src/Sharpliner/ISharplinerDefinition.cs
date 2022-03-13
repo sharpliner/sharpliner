@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Reflection;
 using System;
+using Sharpliner.Common;
+using System.Collections.Generic;
 
 namespace Sharpliner;
 
@@ -103,9 +105,9 @@ public interface ISharplinerDefinition
     }
 
     /// <summary>
-    /// Validates the definition for runtime errors (e.g. wrong dependsOn, artifact name typos..)
+    /// Returns the list of validations that should be run on the definition (e.g. wrong dependsOn, artifact name typos..).
     /// </summary>
-    void Validate();
+    IReadOnlyCollection<IDefinitionValidation> Validations { get; }
 
     /// <summary>
     /// Serializes the definition into a YAML string
