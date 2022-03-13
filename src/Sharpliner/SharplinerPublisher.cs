@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Security.Cryptography;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
+using Sharpliner.Common;
 
 namespace Sharpliner;
 
@@ -76,15 +77,37 @@ public class SharplinerPublisher
         {
             definition.Validate();
         }
-        catch (Exception e)
+        catch (ValidationException e)
         {
-            _logger.LogError("Validation of definition {0} failed: {1}{2}{3}",
+            var message = "Validation of definition {0} failed: {1}{2}{3}";
+            var arguments = new object?[]
+            {
                 typeName,
                 e.Message,
                 Environment.NewLine,
-                "To see exception details, build with more verbosity (dotnet build -v:n)");
+                "To see exception details, build with more verbosity (dotnet build -v:n)"
+            };
 
-            _logger.LogMessage("Validation of definition {0} failed: {1}", typeName, e);
+            switch (e.Severity)
+            {
+                case ValidationSeverity.Trace:
+                    _logger.LogMessage(message, arguments);
+                    break;
+                case ValidationSeverity.Information:
+                    _logger.LogMessage(MessageImportance.High, message, arguments);
+                    break;
+                case ValidationSeverity.Warning:
+                    _logger.LogWarning(message, arguments);
+                    break;
+                case ValidationSeverity.Error:
+                    _logger.LogError(message, arguments);
+                    break;
+            }
+
+            if (e.Severity != ValidationSeverity.Off)
+            {
+                _logger.LogMessage("Validation of definition {0} failed: {1}", typeName, e);
+            }
 
             return;
         }

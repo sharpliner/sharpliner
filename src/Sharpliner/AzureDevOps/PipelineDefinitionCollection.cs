@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sharpliner.AzureDevOps.Validation;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -52,7 +53,7 @@ internal class PipelineDefinitionWrapper<T> : ISharplinerDefinition where T : Pi
 
     public string[]? Header { get; private set; }
 
-    public void Validate() => Pipeline.Validate();
+    public void Validate() => AzureDevOpsDefinitionValidator.Validate(Pipeline);
 
     public string Serialize() => SharplinerSerializer.Serialize(Pipeline);
 }
