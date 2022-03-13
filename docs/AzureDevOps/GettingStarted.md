@@ -190,7 +190,32 @@ jobs:
       projects: src/MyProject.sln
 ```
 
-## 5. Make sure you commit your changes
+## 5. Customize serialization or configure validations
+
+The YAML publishing process can be configured in a few ways. It is possible to customize how YAML is serialized and you can also configure the level at which are validation errors shown.
+
+The validations are additional checks that Sharpliner does around your model to catch some errors before you try to run your pipeline. An example of such a check can be validation that the `dependsOn` fields have valid counterparts or that `name` fields do not contain invalid characters.
+
+To configure serialization/validations, add a class into your project that inherits from a pre-prepared `SharplinerConfiguration` class:
+
+```csharp
+class SharplinerConfiguration : Sharpliner.SharplinerConfiguration
+{
+    public override void Configure()
+    {
+        // Insert your overrides here
+        Serialization.PrettifyYaml = false;
+        Serialization.UseElseExpression = true;
+        Serialization.IncludeHeaders = false;
+
+        Validations.DependsOn = ValidationSeverity.Off;
+        Validations.Name = ValidationSeverity.Error;
+    }
+}
+```
+
+
+## 6. Make sure you commit your changes
 
 It can happen that you change your C# definition and you forget to publish or commit the exported YAML file with it.
 To safeguard against these cases, we have created an AzureDevOps task called `SharplinerValidateTask` which will compare what is in your definition and what is in the YAML and fail the build in case they don't match.
