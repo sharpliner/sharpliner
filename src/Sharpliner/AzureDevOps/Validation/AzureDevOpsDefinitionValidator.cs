@@ -1,8 +1,9 @@
 ﻿using System.Text.RegularExpressions;
+using Sharpliner.Common;
 
 namespace Sharpliner.AzureDevOps.Validation;
 
-internal static class DefinitionValidator
+internal static class AzureDevOpsDefinitionValidator
 {
     internal static readonly Regex NameRegex = new("^[A-Za-z0-9_]+$", RegexOptions.Compiled);
 
@@ -17,14 +18,7 @@ internal static class DefinitionValidator
                 continue;
             }
 
-            try
-            {
-                validation.Validate();
-            }
-            catch (ValidationException e)
-            {
-                TODO
-            }
+            validation.Validate();
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sharpliner.AzureDevOps.Validation;
+namespace Sharpliner.Common;
 
 internal interface IDefinitionValidation
 {
@@ -20,7 +20,10 @@ public enum ValidationSeverity
 
 internal class ValidationException : Exception
 {
-    public ValidationException(string message) : base(message)
+    public ValidationSeverity Severity { get; }
+
+    public ValidationException(ValidationSeverity severity, string message) : base(message)
     {
+        Severity = severity;
     }
 }

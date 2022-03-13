@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Validation;
+using Sharpliner.Common;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -82,7 +83,7 @@ public record Pipeline : PipelineBase
 
     internal static void ValidateName(string name)
     {
-        if (!DefinitionValidator.NameRegex.IsMatch(name))
+        if (!AzureDevOpsDefinitionValidator.NameRegex.IsMatch(name))
         {
             throw new FormatException($"Invalid identifier '{name}'! Only A-Z, a-z, 0-9, and underscore are allowed.");
         }

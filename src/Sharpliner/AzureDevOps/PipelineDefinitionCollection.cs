@@ -53,7 +53,7 @@ internal class PipelineDefinitionWrapper<T> : ISharplinerDefinition where T : Pi
 
     public string[]? Header { get; private set; }
 
-    public void Validate() => DefinitionValidator.Validate(Pipeline);
+    public void Validate() => AzureDevOpsDefinitionValidator.Validate(Pipeline);
 
     public string Serialize() => SharplinerSerializer.Serialize(Pipeline);
 }

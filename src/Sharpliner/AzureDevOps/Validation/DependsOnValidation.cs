@@ -1,4 +1,5 @@
 ﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.Common;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,28 +7,30 @@ namespace Sharpliner.AzureDevOps.Validation;
 
 internal abstract class DependsOnValidation
 {
-    protected static void ValidateDependsOn<T>(ConditionedList<T> definitions) where T : IDependsOn
+    public ValidationSeverity SeveritySetings => SharplinerSerializer.Validations.DependsOn;
+
+    protected void ValidateDependsOn<T>(ConditionedList<T> definitions) where T : IDependsOn
     {
         ValidateDependsOn(definitions.SelectMany(s => s.FlattenDefinitions()));
     }
 
-    protected static void ValidateDependsOn<T>(IEnumerable<Conditioned<T>> definitions) where T : IDependsOn
+    protected void ValidateDependsOn<T>(IEnumerable<Conditioned<T>> definitions) where T : IDependsOn
     {
         ValidateDependsOn(definitions.SelectMany(s => s.FlattenDefinitions()));
     }
 
-    protected static void ValidateDependsOn<T>(IEnumerable<T> definitions) where T : IDependsOn
+    protected void ValidateDependsOn<T>(IEnumerable<T> definitions) where T : IDependsOn
     {
         var duplicate = definitions.FirstOrDefault(d => definitions.Count(o => o.Name == d.Name) > 1);
         if (duplicate is not null)
         {
-            throw new ValidationException($"Found duplicate {typeof(T).Name.ToLower()} name '{duplicate.Name}'");
+            throw new ValidationException(SeveritySetings, $"Found duplicate {typeof(T).Name.ToLower()} name '{duplicate.Name}'");
         }
 
-        var invalidName = definitions.FirstOrDefault(d => !DefinitionValidator.NameRegex.IsMatch(d.Name));
+        var invalidName = definitions.FirstOrDefault(d => !AzureDevOpsDefinitionValidator.NameRegex.IsMatch(d.Name));
         if (invalidName is not null)
         {
-            throw new ValidationException($"Invalid character found in {typeof(T).Name.ToLower()} name '{invalidName.Name}', only A-Z, a-z, 0-9, and underscore are allowed");
+            throw new ValidationException(SeveritySetings, $"Invalid character found in {typeof(T).Name.ToLower()} name '{invalidName.Name}', only A-Z, a-z, 0-9, and underscore are allowed");
         }
 
         foreach (var definition in definitions)
@@ -41,7 +44,7 @@ internal abstract class DependsOnValidation
             {
                 if (dependsOn.Definition == definition.Name)
                 {
-                    throw new ValidationException($"{typeof(T).Name} `{definition.Name}` depends on itself");
+                    throw new ValidationException(SeveritySetings, $"{typeof(T).Name} `{definition.Name}` depends on itself");
                 }
 
                 // TODO: This check can be disruptive since items can be defined inside templates and then we don't have the visiblity in there
@@ -62,8 +65,6 @@ internal abstract class DependsOnValidation
 internal class JobsDependsOnValidation : DependsOnValidation, IDefinitionValidation
 {
     private readonly IEnumerable<Conditioned<JobBase>> _jobs;
-
-    public ValidationSeverity SeveritySetings => SharplinerSerializer.Validations.DependsOn;
 
     public JobsDependsOnValidation(IEnumerable<Conditioned<JobBase>> jobs)
     {
@@ -87,8 +88,6 @@ internal class JobsDependsOnValidation : DependsOnValidation, IDefinitionValidat
 internal class StageDependsOnValidation : DependsOnValidation, IDefinitionValidation
 {
     private readonly ConditionedList<Stage> _stages;
-
-    public ValidationSeverity SeveritySetings => SharplinerSerializer.Validations.DependsOn;
 
     public StageDependsOnValidation(ConditionedList<Stage> stages)
     {
