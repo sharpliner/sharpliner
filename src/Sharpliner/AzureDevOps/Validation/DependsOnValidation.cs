@@ -25,18 +25,6 @@ internal abstract class DependsOnValidation : IDefinitionValidation
             return errors;
         }
 
-        var duplicate = definitions.FirstOrDefault(d => definitions.Count(o => o.Name == d.Name) > 1);
-        if (duplicate is not null)
-        {
-            errors.Add(new(_severity, $"Found duplicate {GetTypeName<T>().ToLower()} name `{duplicate.Name}`"));
-        }
-
-        var invalidName = definitions.FirstOrDefault(d => !AzureDevOpsDefinition.NameRegex.IsMatch(d.Name));
-        if (invalidName is not null)
-        {
-            errors.Add(new ValidationError(_severity, $"Invalid character found in {GetTypeName<T>().ToLower()} name `{invalidName.Name}`, only A-Z, a-z, 0-9, and underscore are allowed"));
-        }
-
         foreach (var definition in definitions)
         {
             if (definition.DependsOn is EmptyDependsOn)

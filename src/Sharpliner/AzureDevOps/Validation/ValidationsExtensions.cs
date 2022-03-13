@@ -7,14 +7,16 @@ namespace Sharpliner.AzureDevOps.Validation;
 public static class ValidationsExtensions
 {
     public static IReadOnlyCollection<IDefinitionValidation> GetStageValidations(this ConditionedList<Stage> definitions)
-        => new[]
+        => new IDefinitionValidation[]
         {
-            new StageDependsOnValidation(definitions)
+            new StageDependsOnValidation(definitions),
+            new NameValidation(definitions),
         };
 
     public static IReadOnlyCollection<IDefinitionValidation> GetJobValidations(this ConditionedList<JobBase> definitions)
-        => new[]
+        => new IDefinitionValidation[]
         {
-            new JobDependsOnValidation(definitions)
+            new JobDependsOnValidation(definitions),
+            new NameValidation(definitions),
         };
 }

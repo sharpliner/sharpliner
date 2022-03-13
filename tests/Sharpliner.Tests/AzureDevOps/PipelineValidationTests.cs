@@ -161,7 +161,7 @@ public class PipelineValidationTests
         var pipeline = new DuplicateStageNamePipeline();
         var errors = pipeline.Validations.SelectMany(v => v.Validate());
         Assert.Single(errors);
-        Assert.Equal("Found duplicate stage name `stage_1`", errors.Single().Message);
+        Assert.Equal("Found duplicate name `stage_1`", errors.Single().Message);
     }
 
     private class DuplicateJobNamePipeline : TestPipeline
@@ -184,7 +184,7 @@ public class PipelineValidationTests
                 {
                     Jobs =
                     {
-                        Job("job_1"),
+                        Job("stage_3"),
                         Job("job_4"),
                         Job("job_4"),
                     }
@@ -199,7 +199,7 @@ public class PipelineValidationTests
         var pipeline = new DuplicateJobNamePipeline();
         var errors = pipeline.Validations.SelectMany(v => v.Validate());
         Assert.Single(errors);
-        Assert.Equal("Found duplicate job name `job_4`", errors.Single().Message);
+        Assert.Equal("Found duplicate name `job_4`", errors.Single().Message);
     }
 
     private class InvalidNamePipeline : TestPipeline
