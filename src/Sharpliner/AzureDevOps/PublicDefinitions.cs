@@ -37,6 +37,8 @@ public abstract class SingleStagePipelineDefinition : PipelineDefinitionBase<Sin
 public abstract class StageTemplateDefinition : TemplateDefinition<Stage>
 {
     internal sealed override string YamlProperty => "stages";
+
+    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetStageValidations();
 }
 
 /// <summary>
@@ -46,6 +48,8 @@ public abstract class StageTemplateDefinition : TemplateDefinition<Stage>
 public abstract class JobTemplateDefinition : TemplateDefinition<JobBase>
 {
     internal sealed override string YamlProperty => "jobs";
+
+    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetJobValidations();
 }
 
 /// <summary>
@@ -55,6 +59,8 @@ public abstract class JobTemplateDefinition : TemplateDefinition<JobBase>
 public abstract class StepTemplateDefinition : TemplateDefinition<Step>
 {
     internal sealed override string YamlProperty => "steps";
+
+    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Array.Empty<IDefinitionValidation>();
 }
 
 /// <summary>
@@ -64,6 +70,8 @@ public abstract class StepTemplateDefinition : TemplateDefinition<Step>
 public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBase>
 {
     internal sealed override string YamlProperty => "variables";
+
+    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Array.Empty<IDefinitionValidation>();
 }
 
 #endregion
@@ -93,10 +101,8 @@ public abstract class StageTemplateCollection : TemplateDefinitionCollection<Sta
 {
     internal sealed override string YamlProperty => "stages";
 
-    internal sealed override IReadOnlyCollection<IDefinitionValidation> GetValidations(TemplateDefinitionData<Stage> definition) => new[]
-    {
-        new JobsDependsOnValidation(definition.Definition),
-    };
+    internal sealed override IReadOnlyCollection<IDefinitionValidation> GetValidations(TemplateDefinitionData<Stage> definition)
+        => definition.Definition.GetStageValidations();
 }
 
 /// <summary>
@@ -107,10 +113,8 @@ public abstract class JobTemplateCollection : TemplateDefinitionCollection<JobBa
 {
     internal sealed override string YamlProperty => "jobs";
 
-    internal sealed override IReadOnlyCollection<IDefinitionValidation> GetValidations(TemplateDefinitionData<JobBase> definition) => new[]
-    {
-        new JobsDependsOnValidation(definition.Definition),
-    };
+    internal sealed override IReadOnlyCollection<IDefinitionValidation> GetValidations(TemplateDefinitionData<JobBase> definition)
+        => definition.Definition.GetJobValidations();
 }
 
 /// <summary>

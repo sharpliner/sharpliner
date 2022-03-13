@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Validation;
 using Sharpliner.Common;
@@ -78,11 +79,7 @@ public record Pipeline : PipelineBase
     [YamlMember(Order = 600)]
     public ConditionedList<Stage> Stages { get; init; } = new();
 
-    internal override IReadOnlyCollection<IDefinitionValidation> Validations => new List<IDefinitionValidation>
-    {
-        new StageDependsOnValidation(Stages),
-        new JobsDependsOnValidation(Stages),
-    };
+    internal override IReadOnlyCollection<IDefinitionValidation> Validations => Stages.GetStageValidations();
 
     internal static void ValidateName(string name)
     {
@@ -102,8 +99,5 @@ public record SingleStagePipeline : PipelineBase
     [YamlMember(Order = 600)]
     public ConditionedList<JobBase> Jobs { get; init; } = new();
 
-    internal override IReadOnlyCollection<IDefinitionValidation> Validations => new List<IDefinitionValidation>
-    {
-        new JobsDependsOnValidation(Jobs),
-    };
+    internal override IReadOnlyCollection<IDefinitionValidation> Validations => Jobs.GetJobValidations();
 }

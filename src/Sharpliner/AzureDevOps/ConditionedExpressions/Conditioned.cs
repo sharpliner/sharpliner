@@ -295,7 +295,7 @@ public record Conditioned<T> : Conditioned
         }
     }
 
-    internal IEnumerable<T> FlattenDefinitions()
+    internal IReadOnlyCollection<T> FlattenDefinitions()
     {
         var definitions = new List<T>();
 
