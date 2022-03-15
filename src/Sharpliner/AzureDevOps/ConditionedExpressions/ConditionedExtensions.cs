@@ -204,11 +204,11 @@ public static class ConditionedExtensions
     /// <summary>
     /// Reference a step library (series of library jobs).
     /// </summary>
-    public static Conditioned<Job> JobLibrary(
-        this Conditioned<Job> conditionedDefinition,
+    public static Conditioned<JobBase> JobLibrary(
+        this Conditioned<JobBase> conditionedDefinition,
         JobLibrary library)
     {
-        conditionedDefinition.Definitions.Add(new LibraryReference<Job>(library));
+        conditionedDefinition.Definitions.Add(new LibraryReference<JobBase>(library));
         return conditionedDefinition;
     }
 
@@ -399,10 +399,10 @@ public static class ConditionedExtensions
     /// <summary>
     /// Reference a step library (series of library jobs).
     /// </summary>
-    public static Conditioned<Job> JobLibrary<T>(this Conditioned<Job> conditionedDefinition)
+    public static Conditioned<JobBase> JobLibrary<T>(this Conditioned<JobBase> conditionedDefinition)
         where T : JobLibrary, new()
     {
-        conditionedDefinition.Definitions.Add(AzureDevOpsDefinition.CreateLibraryRef<T, Job>());
+        conditionedDefinition.Definitions.Add(AzureDevOpsDefinition.CreateLibraryRef<T, JobBase>());
         return conditionedDefinition;
     }
 
