@@ -60,8 +60,8 @@ public abstract class AzureDevOpsDefinition
     /// <summary>
     /// Reference a step library (series of library jobs).
     /// </summary>
-    protected static Conditioned<Job> JobLibrary(JobLibrary library)
-        => new LibraryReference<Job>(library);
+    protected static Conditioned<JobBase> JobLibrary(JobLibrary library)
+        => new LibraryReference<JobBase>(library);
 
     /// <summary>
     /// Reference a step library (series of library steps).
@@ -180,8 +180,8 @@ public abstract class AzureDevOpsDefinition
     /// <summary>
     /// Reference a job library (series of library jobs).
     /// </summary>
-    protected static Conditioned<Job> JobLibrary<T>() where T : JobLibrary, new()
-        => CreateLibraryRef<T, Job>();
+    protected static Conditioned<JobBase> JobLibrary<T>() where T : JobLibrary, new()
+        => CreateLibraryRef<T, JobBase>();
 
     /// <summary>
     /// Reference a step library (series of library steps).

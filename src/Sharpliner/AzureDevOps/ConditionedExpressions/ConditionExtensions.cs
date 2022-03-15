@@ -170,7 +170,7 @@ public static class ConditionExtensions
     /// <summary>
     /// Reference a job library (series of library jobs).
     /// </summary>
-    public static Conditioned<Job> JobLibrary(this Condition condition, JobLibrary library)
+    public static Conditioned<JobBase> JobLibrary(this Condition condition, JobLibrary library)
         => Conditioned.Link(condition, library.Items);
 
     /// <summary>
@@ -188,29 +188,25 @@ public static class ConditionExtensions
     /// <summary>
     /// Reference a step library (series of library stages).
     /// </summary>
-    public static Conditioned<Stage> StageLibrary<T>(this Condition condition)
-        where T : StageLibrary, new()
+    public static Conditioned<Stage> StageLibrary<T>(this Condition condition) where T : StageLibrary, new()
         => Conditioned.Link(condition, AzureDevOpsDefinition.CreateInstance<T>().Items);
 
     /// <summary>
     /// Reference a step library (series of library jobs).
     /// </summary>
-    public static Conditioned<Job> JobLibrary<T>(this Condition condition)
-        where T : JobLibrary, new()
+    public static Conditioned<JobBase> JobLibrary<T>(this Condition condition) where T : JobLibrary, new()
         => Conditioned.Link(condition, AzureDevOpsDefinition.CreateInstance<T>().Items);
 
     /// <summary>
     /// Reference a step library (series of library steps).
     /// </summary>
-    public static Conditioned<Step> StepLibrary<T>(this Condition condition)
-        where T : StepLibrary, new()
+    public static Conditioned<Step> StepLibrary<T>(this Condition condition) where T : StepLibrary, new()
         => Conditioned.Link(condition, AzureDevOpsDefinition.CreateInstance<T>().Items);
 
     /// <summary>
     /// Reference a step library (series of library Variables).
     /// </summary>
-    public static Conditioned<VariableBase> VariableLibrary<T>(this Condition condition)
-        where T : VariableLibrary, new()
+    public static Conditioned<VariableBase> VariableLibrary<T>(this Condition condition) where T : VariableLibrary, new()
         => Conditioned.Link(condition, AzureDevOpsDefinition.CreateInstance<T>().Items);
 
     /// <summary>

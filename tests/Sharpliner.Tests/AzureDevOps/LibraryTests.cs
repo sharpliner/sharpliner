@@ -8,6 +8,62 @@ namespace Sharpliner.Tests.AzureDevOps;
 
 public class LibraryTests
 {
+    private class Job_Library : JobLibrary
+    {
+        public override List<Conditioned<JobBase>> Jobs => new()
+        {
+            new Job("Start")
+            {
+                Steps =
+                {
+                    Script.Inline("echo 'Hello World'")
+                }
+            },
+
+            new Job("End")
+            {
+                Steps =
+                {
+                    Script.Inline("echo 'Goodbye World'")
+                }
+            }
+        };
+    }
+
+    private class JobReferencingPipeline : SimpleTestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("Init"),
+
+                JobLibrary<Job_Library>()
+            }
+        };
+    }
+
+    [Fact]
+    public void Job_Library_Test()
+    {
+        var yaml = new JobReferencingPipeline().Serialize();
+
+        yaml.Should().Be(
+@"jobs:
+- job: Init
+
+- job: Start
+  steps:
+  - script: |-
+      echo 'Hello World'
+
+- job: End
+  steps:
+  - script: |-
+      echo 'Goodbye World'
+");
+    }
+
     private class DotNet_Step_Library : StepLibrary
     {
         public override List<Conditioned<Step>> Steps => new()

@@ -159,10 +159,10 @@ public abstract class StageLibrary : DefinitionLibrary<Stage>
 /// Inherit from this class to create a reusable set of build jobs.
 /// This library can then be inserted to multiple places.
 /// </summary>
-public abstract class JobLibrary : DefinitionLibrary<Job>
+public abstract class JobLibrary : DefinitionLibrary<JobBase>
 {
-    internal override IEnumerable<Conditioned<Job>> Items => Jobs;
-    public abstract List<Conditioned<Job>> Jobs { get; }
+    internal override IEnumerable<Conditioned<JobBase>> Items => Jobs;
+    public abstract List<Conditioned<JobBase>> Jobs { get; }
 }
 
 /// <summary>
