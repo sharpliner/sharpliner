@@ -68,32 +68,19 @@ public class SharplinerPublisher
     /// <param name="collection">Type of the collection the definition is coming from (if it is)</param>
     private void PublishDefinition(ISharplinerDefinition definition, bool failIfChanged, Type? collection = null)
     {
-        var path = definition.GetTargetPath();
+        var path = GetDestinationPath(definition);
 
         var typeName = collection == null ? definition.GetType().Name : collection.Name + " / " + Path.GetFileName(path);
 
         _logger.LogMessage(MessageImportance.High, $"{typeName}:");
-        _logger.LogMessage(MessageImportance.High, $"  Validating definition..");
 
-        foreach (var validation in definition.Validations)
-        {
-            var errors = validation.Validate();
-
-            if (errors.Any())
-            {
-                Log(errors.OrderByDescending(e => e.Severity).First().Severity,
-                    $"  Validation of definition {typeName} failed!");
-            }
-
-            foreach (var error in errors)
-            {
-                Log(error.Severity, "    - " + error.Message);
-            }
-        }
+        Validate(definition, typeName);
 
         string? hash = GetFileHash(path);
-        definition.Publish();
 
+        Publish(definition);
+
+        // Find out if there are new changes in the YAML
         if (hash == null)
         {
             if (failIfChanged)
@@ -122,6 +109,32 @@ public class SharplinerPublisher
                 {
                     _logger.LogMessage(MessageImportance.High, $"  Published new changes to {path}");
                 }
+            }
+        }
+    }
+
+    /// <summary>
+    /// Runs all validations configured on the definition
+    /// </summary>
+    /// <param name="definition">Definition</param>
+    /// <param name="typeName">Type name, can include parent definition collection</param>
+    private void Validate(ISharplinerDefinition definition, string typeName)
+    {
+        _logger.LogMessage(MessageImportance.High, $"  Validating definition..");
+
+        foreach (var validation in definition.Validations)
+        {
+            var errors = validation.Validate();
+
+            if (errors.Any())
+            {
+                Log(errors.OrderByDescending(e => e.Severity).First().Severity,
+                    $"  Validation of definition {typeName} failed!");
+            }
+
+            foreach (var error in errors)
+            {
+                Log(error.Severity, "    - " + error.Message);
             }
         }
     }
@@ -165,6 +178,70 @@ public class SharplinerPublisher
         configuration.ConfigureInternal();
     }
 
+    /// <summary>
+    /// Gets the path where YAML of this definition should be published to
+    /// </summary>
+    private string GetDestinationPath(ISharplinerDefinition definition)
+    {
+        switch (definition.TargetPathType)
+        {
+            case TargetPathType.RelativeToGitRoot:
+                var currentDir = new DirectoryInfo(Directory.GetCurrentDirectory());
+                while (!Directory.Exists(Path.Combine(currentDir.FullName, ".git")))
+                {
+                    currentDir = currentDir.Parent;
+
+                    if (currentDir == null)
+                    {
+                        throw new Exception($"Failed to find git repository in {Directory.GetParent(Assembly.GetExecutingAssembly().Location)?.FullName}");
+                    }
+                }
+
+                return Path.Combine(currentDir.FullName, definition.TargetFile);
+
+            case TargetPathType.RelativeToCurrentDir:
+                return definition.TargetFile;
+
+            case TargetPathType.RelativeToAssembly:
+                return Path.Combine(Assembly.GetAssembly(definition.GetType())!.Location, definition.TargetFile);
+
+            case TargetPathType.Absolute:
+                return definition.TargetFile;
+
+            default:
+                throw new ArgumentOutOfRangeException(nameof(definition.TargetPathType));
+        }
+    }
+
+    /// <summary>
+    /// Publishes the definition into a YAML file
+    /// </summary>
+    private void Publish(ISharplinerDefinition definition)
+    {
+        string destinationPath = GetDestinationPath(definition);
+        string yaml = definition.Serialize();
+
+        if (SharplinerConfiguration.Current.Serialization.IncludeHeaders)
+        {
+            var header = definition.Header ?? GetDefaultHeader(GetType());
+
+            if (header.Length > 0)
+            {
+                const string hash = "### ";
+                yaml = hash + string.Join(Environment.NewLine + hash, header) + Environment.NewLine + Environment.NewLine + yaml;
+                yaml = yaml.Replace(" \r\n", "\r\n").Replace(" \n", "\n"); // Remove trailing spaces from the default template
+            }
+        }
+
+        var targetDirectory = Path.GetDirectoryName(destinationPath)!;
+        if (!string.IsNullOrEmpty(targetDirectory) && !Directory.Exists(targetDirectory))
+        {
+            Directory.CreateDirectory(targetDirectory);
+        }
+
+        File.WriteAllText(destinationPath, yaml);
+    }
+
     private void Log(ValidationSeverity severity, string message)
     {
         switch (severity)
@@ -183,6 +260,19 @@ public class SharplinerPublisher
                 break;
         }
     }
+
+    /// <summary>
+    /// Default YAML file header if one is not provided
+    /// </summary>
+    public static string[] GetDefaultHeader(Type type) => new[]
+    {
+        string.Empty,
+        "DO NOT MODIFY THIS FILE!",
+        string.Empty,
+        $"This YAML was auto-generated from { type.Name }",
+        $"To make changes, change the C# definition and rebuild its project",
+        string.Empty,
+    };
 
     private static string? GetFileHash(string path)
     {

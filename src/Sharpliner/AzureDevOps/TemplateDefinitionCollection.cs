@@ -53,7 +53,7 @@ internal class TemplateDefinitionWrapper<T> : TemplateDefinition<T>
         Definition = data.Definition;
         TargetPathType = data.PathType;
         Parameters = data.Parameters ?? new List<TemplateParameter>();
-        _header = data.Header ?? ISharplinerDefinition.GetDefaultHeader(definitionType);
+        _header = data.Header ?? SharplinerPublisher.GetDefaultHeader(definitionType);
         YamlProperty = yamlMemberName;
         Validations = validations;
     }
