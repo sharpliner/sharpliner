@@ -42,7 +42,7 @@ internal class PipelineDefinitionWrapper<T> : ISharplinerDefinition where T : Pi
         TargetFile = data.TargetFile;
         Pipeline = data.Pipeline;
         TargetPathType = data.PathType;
-        Header = data.Header ?? ISharplinerDefinition.GetDefaultHeader(definitionType);
+        Header = data.Header ?? SharplinerPublisher.GetDefaultHeader(definitionType);
     }
 
     public string TargetFile { get; }
