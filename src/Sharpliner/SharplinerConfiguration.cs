@@ -1,11 +1,25 @@
-﻿using Sharpliner.Common;
+﻿using System;
+using Sharpliner.Common;
 
 namespace Sharpliner;
 
+// This interface is needed to hide the Current static member from 
 public interface ISharplinerConfiguration
 {
+    /// <summary>
+    /// Settings around YAML serialization
+    /// </summary>
     SharplinerConfiguration.SerializationSettings Serialization { get; }
+
+    /// <summary>
+    /// Configuration of which validations run and with what severity
+    /// </summary>
     SharplinerConfiguration.ValidationsSettings Validations { get; }
+
+    /// <summary>
+    /// Hook into the publishing process
+    /// </summary>
+    SharplinerConfiguration.SerializationHooks Hooks { get; }
 }
 
 /// <summary>
@@ -14,6 +28,9 @@ public interface ISharplinerConfiguration
 /// </summary>
 public abstract class SharplinerConfiguration : ISharplinerConfiguration
 {
+    /// <summary>
+    /// Settings around YAML serialization
+    /// </summary>
     public class SerializationSettings
     {
         /// <summary>
@@ -34,6 +51,9 @@ public abstract class SharplinerConfiguration : ISharplinerConfiguration
         public bool UseElseExpression { get; set; } = true;
     }
 
+    /// <summary>
+    /// Configuration of which validations run and with what severity
+    /// </summary>
     public class ValidationsSettings
     {
         /// <summary>
@@ -53,19 +73,50 @@ public abstract class SharplinerConfiguration : ISharplinerConfiguration
     }
 
     /// <summary>
-    /// Settings we can reach from within model classes.
+    /// Hook into the publishing process
+    /// </summary>
+    public class SerializationHooks
+    {
+        public delegate void BeforePublishHandler(ISharplinerDefinition definition, string destinationPath);
+        public delegate void AfterPublishHandler(ISharplinerDefinition definition, string destinationPath, string yaml);
+
+        /// <summary>
+        /// This hook gets called right before the YAML is published.
+        /// Parameters passed are:
+        ///   - The definition being published
+        ///   - Destination path for the YAML file
+        /// </summary>
+        public BeforePublishHandler? BeforePublish { get; set; }
+
+        /// <summary>
+        /// This hook gets called right after the YAML is published.
+        /// Parameters passed are:
+        ///   - The definition being published
+        ///   - Destination path for the YAML file
+        ///   - The serialized YAML
+        /// </summary>
+        public AfterPublishHandler? AfterPublish { get; set; }
+    }
+
+    /// <summary>
+    /// Current configuration we can reach from anywhere
     /// </summary>
     internal static ISharplinerConfiguration Current { get; private set; } = new DefaultSharplinerConfiguration();
 
     /// <summary>
-    /// Use this property to customize how YAML is serialized.
+    /// Use this property to customize how YAML is serialized
     /// </summary>
-    public virtual SerializationSettings Serialization { get; } = new();
+    public SerializationSettings Serialization { get; } = new();
 
     /// <summary>
-    /// Use this property to control which validations are run and with what severity.
+    /// Use this property to control which validations are run and with what severity
     /// </summary>
-    public virtual ValidationsSettings Validations { get; } = new();
+    public ValidationsSettings Validations { get; } = new();
+
+    /// <summary>
+    /// Use this property to hook into the publishing process
+    /// </summary>
+    public SerializationHooks Hooks { get; } = new();
 
     internal void ConfigureInternal()
     {
