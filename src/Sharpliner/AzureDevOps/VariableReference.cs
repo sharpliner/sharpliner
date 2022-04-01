@@ -304,6 +304,17 @@ public sealed class BuildVariableReference
     /// </summary>
     public string SourceTfvcShelveset => GetReference("SourceTfvcShelveset");
 
+    /// <summary>
+    /// The local path on the agent where the test results are created.
+    /// For example: c:\agent_work\1\TestResults
+    ///
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
+    /// </summary>
+    public string CommonTestResultsDirectory => GetReference("Common.TestResultsDirectory");
+
+    /// <summary>
+    /// Variables connected to why the build was created.
+    /// </summary>
     public TriggeredByVariableReference TriggeredBy => new();
 
     private static string GetReference(string name) => VariableReference.GetReference("Build.", name);
@@ -313,7 +324,76 @@ public sealed class RepositoryVariableReference
 {
     public string this[string variableName] => GetReference(variableName);
 
+    /// <summary>
+    /// The value you've selected for Clean in the source repository settings.
+    /// 
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
+    /// </summary>
+    public string Clean => GetReference("Clean");
 
+    /// <summary>
+    /// The local path on the agent where your source code files are downloaded.
+    /// For example: c:\agent_work\1\s
+    ///
+    /// By default, new build pipelines update only the changed files.You can modify how files are downloaded on the Repository tab.
+    /// Important note: If you check out only one Git repository, this path will be the exact path to the code.If you check out multiple repositories, the behavior is as follows(and might differ from the value of the Build.SourcesDirectory variable) :
+    ///   - If the checkout step for the self(primary) repository has no custom checkout path defined, or the checkout path is the multi-checkout default path $(Pipeline.Workspace)/s/<RepoName> for the self repository, the value of this variable will revert to its default value, which is $(Pipeline.Workspace)/s.
+    ///   - If the checkout step for the self (primary) repository does have a custom checkout path defined (and it's not its multi-checkout default path), this variable will contain the exact path to the self repository.
+    /// 
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
+    /// </summary>
+    public string LocalPath => GetReference("LocalPath");
+
+    /// <summary>
+    /// The unique identifier of the repository.
+    /// This won't change, even if the name of the repository does.
+    /// 
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
+    /// </summary>
+    public string ID => GetReference("ID");
+
+    /// <summary>
+    /// The name of the triggering repository.
+    /// 
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
+    /// </summary>
+    public string Name => GetReference("Name");
+
+    /// <summary>
+    /// The type of the triggering repository.
+    ///   - TfsGit: TFS Git repository
+    ///   - TfsVersionControl: Team Foundation Version Control
+    ///   - Git: Git repository hosted on an external server
+    ///   - GitHub
+    ///   - Svn: Subversion
+    /// 
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
+    /// </summary>
+    public string Provider => GetReference("Provider");
+
+    /// <summary>
+    /// Defined if your repository is Team Foundation Version Control. The name of the TFVC workspace used by the build agent.
+    /// For example, if the Agent.BuildDirectory is c:\agent_work\12 and the Agent.Id is 8, the workspace name could be: ws_12_8
+    /// 
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
+    /// </summary>
+    public string TfvcWorkspace => GetReference("Tfvc.Workspace");
+
+    /// <summary>
+    /// The URL for the triggering repository. For example:
+    ///   - Git: https://dev.azure.com/fabrikamfiber/_git/Scripts
+    ///   - TFVC: https://dev.azure.com/fabrikamfiber/ 
+    /// 
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
+    /// </summary>
+    public string Uri => GetReference("Uri");
+
+    /// <summary>
+    /// The value you've selected for Checkout submodules on the repository tab. With multiple repos checked out, this value tracks the triggering repository's setting.
+    /// 
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
+    /// </summary>
+    public string GitSubmoduleCheckout => GetReference("Git.SubmoduleCheckout");
 
     private static string GetReference(string name) => VariableReference.GetReference("Build.Repository.", name);
 }
@@ -322,7 +402,45 @@ public sealed class TriggeredByVariableReference
 {
     public string this[string variableName] => GetReference(variableName);
 
+    /// <summary>
+    /// If the build was triggered by another build, then this variable is set to the BuildID of the triggering build. In Classic pipelines, this variable is triggered by a build completion trigger.
+    ///
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
+    /// If you are triggering a YAML pipeline using resources, you should use the resources variables instead.
+    /// </summary>
+    public string BuildId => GetReference("BuildId");
 
+    /// <summary>
+    /// If the build was triggered by another build, then this variable is set to the DefinitionID of the triggering build. In Classic pipelines, this variable is triggered by a build completion trigger.
+    ///
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
+    /// If you are triggering a YAML pipeline using resources, you should use the resources variables instead.
+    /// </summary>
+    public string DefinitionId => GetReference("DefinitionId");
+
+    /// <summary>
+    /// If the build was triggered by another build, then this variable is set to the name of the triggering build pipeline. In Classic pipelines, this variable is triggered by a build completion trigger.
+    ///
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
+    /// If you are triggering a YAML pipeline using resources, you should use the resources variables instead.
+    /// </summary>
+    public string DefinitionName => GetReference("DefinitionName");
+
+    /// <summary>
+    /// If the build was triggered by another build, then this variable is set to the number of the triggering build. In Classic pipelines, this variable is triggered by a build completion trigger.
+    ///
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
+    /// If you are triggering a YAML pipeline using resources, you should use the resources variables instead.
+    /// </summary>
+    public string BuildNumber => GetReference("BuildNumber");
+
+    /// <summary>
+    /// If the build was triggered by another build, then this variable is set to ID of the project that contains the triggering build. In Classic pipelines, this variable is triggered by a build completion trigger.
+    ///
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
+    /// If you are triggering a YAML pipeline using resources, you should use the resources variables instead.
+    /// </summary>
+    public string ProjectID => GetReference("ProjectID");
 
     private static string GetReference(string name) => VariableReference.GetReference("Build.TriggeredBy.", name);
 }
