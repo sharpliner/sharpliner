@@ -70,9 +70,9 @@ public class SharplinerPublisher
     {
         var path = GetDestinationPath(definition);
 
-        var typeName = collection == null ? definition.GetType().Name : collection.Name + " / " + Path.GetFileName(path);
+        var typeName = collection == null ? definition.GetType().Name : collection.Name;
 
-        _logger.LogMessage(MessageImportance.High, $"{typeName}:");
+        _logger.LogMessage(MessageImportance.High, $"{typeName} / {Path.GetFileName(path)}:");
 
         Validate(definition, typeName);
 
@@ -219,6 +219,9 @@ public class SharplinerPublisher
     private void Publish(ISharplinerDefinition definition)
     {
         string destinationPath = GetDestinationPath(definition);
+
+        SharplinerConfiguration.Current.Hooks.BeforePublish?.Invoke(definition, destinationPath);
+
         string yaml = definition.Serialize();
 
         if (SharplinerConfiguration.Current.Serialization.IncludeHeaders)
@@ -240,6 +243,8 @@ public class SharplinerPublisher
         }
 
         File.WriteAllText(destinationPath, yaml);
+
+        SharplinerConfiguration.Current.Hooks.AfterPublish?.Invoke(definition, destinationPath, yaml);
     }
 
     private void Log(ValidationSeverity severity, string message)

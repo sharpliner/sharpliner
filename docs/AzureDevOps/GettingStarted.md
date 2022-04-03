@@ -128,7 +128,7 @@ Copyright (C) Microsoft Corporation. All rights reserved.
   Restored MyProject.Pipelines.csproj (in 135 ms).
   MyProject.Pipelines -> bin/MyProject.Pipelines/net5.0/MyProject.Pipelines.dll
   Publishing all pipeline definitions inside bin/MyProject.Pipelines/net5.0/MyProject.Pipelines.dll
-  PullRequestPipeline:
+  PullRequestPipeline / azure-pipelines.yml:
     Validating pipeline..
     Publishing changes to azure-pipelines.yml..
 
@@ -203,13 +203,18 @@ class YourCustomConfiguration : SharplinerConfiguration
 {
     public override void Configure()
     {
-        // Insert your overrides here
+        // You can set severity for various validations
+        Validations.DependsOn = ValidationSeverity.Off;
+        Validations.Name = ValidationSeverity.Warning;
+
+        // You can also further customize serialization
         Serialization.PrettifyYaml = false;
         Serialization.UseElseExpression = true;
         Serialization.IncludeHeaders = false;
 
-        Validations.DependsOn = ValidationSeverity.Off;
-        Validations.Name = ValidationSeverity.Error;
+        // You can add hooks that execute during the publish process
+        Hooks.BeforePublish = (definition, path) => {};
+        Hooks.AfterPublish = (definition, path) => {};
     }
 }
 ```
