@@ -91,6 +91,10 @@ Apart from the obvious benefits of using static type language with IDE support, 
 One of the best things when using Sharpliner is that you won't have to go the YAML reference every time you're adding a new piece of your pipeline.
 Having everything strongly typed will make your IDE give you hints all the way!
 
+![Example intellisense for pipeline variables](https://raw.githubusercontent.com/sharpliner/sharpliner/main/docs/images/variables-intellisense.png)
+
+### Nice APIs
+
 Imagine you want to install the .NET SDK. For that, Azure Pipelines have the `DotNetCoreCLI@2` task.
 However, this task's specification is quite long since the task does many things:
 
