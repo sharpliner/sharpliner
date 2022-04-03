@@ -250,14 +250,18 @@ class YourCustomConfiguration : SharplinerConfiguration
 {
     public override void Configure()
     {
+        // You can set severity for various validations
         Validations.DependsOn = ValidationSeverity.Off;
         Validations.Name = ValidationSeverity.Warning;
 
-        // You can also further customize serialization.
+        // You can also further customize serialization
         Serialization.PrettifyYaml = false;
         Serialization.UseElseExpression = true;
         Serialization.IncludeHeaders = false;
 
+        // You can add hooks that execute during the publish process
+        Hooks.BeforePublish = (definition, path) => {};
+        Hooks.AfterPublish = (definition, path) => {};
     }
 }
 ```

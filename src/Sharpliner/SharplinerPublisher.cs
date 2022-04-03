@@ -70,9 +70,9 @@ public class SharplinerPublisher
     {
         var path = GetDestinationPath(definition);
 
-        var typeName = collection == null ? definition.GetType().Name : collection.Name + " / " + Path.GetFileName(path);
+        var typeName = collection == null ? definition.GetType().Name : collection.Name;
 
-        _logger.LogMessage(MessageImportance.High, $"{typeName}:");
+        _logger.LogMessage(MessageImportance.High, $"{typeName} / {Path.GetFileName(path)}:");
 
         Validate(definition, typeName);
 
