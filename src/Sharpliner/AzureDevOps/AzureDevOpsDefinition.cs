@@ -399,9 +399,4 @@ public abstract class AzureDevOpsDefinition
     protected static Condition IsPullRequest => new BuildReasonCondition("'PullRequest'", true);
 
     protected static Condition IsNotPullRequest => new BuildReasonCondition("'PullRequest'", false);
-
-    public sealed class VariableReference
-    {
-        public string this[string variableName] => $"variables['{variableName}']";
-    }
 }

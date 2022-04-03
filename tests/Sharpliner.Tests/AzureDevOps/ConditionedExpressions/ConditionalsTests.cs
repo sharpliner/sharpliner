@@ -15,8 +15,9 @@ public class ConditionalsTests
             {
                 If.And(
                     NotIn("'bar'", "'foo'", "'xyz'", "'foo'"),
-                    NotEqual(variables["Configuration"], "'Debug'"),
-                    "containsValue($(System.User), 'azdobot')")
+                    NotEqual(variables.Configuration, "'Debug'"),
+                    ContainsValue("10", variables.System.JobId)
+                )
                     .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
             }
         };
@@ -30,8 +31,8 @@ public class ConditionalsTests
         variable.Condition!.ToString().Should().Be(
             "and(" +
                 "notIn('bar', 'foo', 'xyz', 'foo'), " +
-                "ne(variables['Configuration'], 'Debug'), " +
-                "containsValue($(System.User), 'azdobot'))");
+                "ne($(Configuration), 'Debug'), " +
+                "containsValue($(System.JobId), 10))");
     }
 
     private class Or_Condition_Test_Pipeline : TestPipeline
@@ -43,11 +44,11 @@ public class ConditionalsTests
                 If.Or(
                     And(
                         Less("5", "3"),
-                        Equal(variables["Build.SourceBranch"], "'refs/heads/production'"),
+                        Equal(variables.Build.SourceBranch, "'refs/heads/production'"),
                         IsBranch("release")),
-                    NotEqual(variables["Configuration"], "'Debug'"),
+                    NotEqual(variables.Configuration, "'Debug'"),
                     IsPullRequest)
-                    .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
+                    .Variable("TargetBranch", variables.System.PullRequest.SourceBranch),
             }
         };
     }
@@ -61,9 +62,9 @@ public class ConditionalsTests
             "or(" +
                 "and(" +
                     "lt(5, 3), " +
-                    "eq(variables['Build.SourceBranch'], 'refs/heads/production'), " +
+                    "eq($(Build.SourceBranch), 'refs/heads/production'), " +
                     "eq(variables['Build.SourceBranch'], 'refs/heads/release')), " +
-                "ne(variables['Configuration'], 'Debug'), " +
+                "ne($(Configuration), 'Debug'), " +
                 "eq(variables['Build.Reason'], 'PullRequest'))");
     }
 
