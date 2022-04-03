@@ -6,13 +6,13 @@ public sealed class VariableReference
 
     /// <summary>
     /// Variables connected to the agent running the current build (e.g. Agent.HomeDirectory)
-    /// Read more at https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml#agent-variables-devops-services
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&amp;tabs=yaml#agent-variables-devops-services">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public AgentVariableReference Agent { get; } = new();
 
     /// <summary>
     /// Variables connected to the current build (e.g. build number)
-    /// Read more at https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&tabs=yaml#build-variables-devops-services
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&amp;tabs=yaml#build-variables-devops-services">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     public BuildVariableReference Build { get; } = new();
 
@@ -43,11 +43,13 @@ public sealed class VariableReference
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public string TF_BUILD => VariableReferenceBase.GetReference(string.Empty, "TF_BUILD");
+
+    public string Configuration => VariableReferenceBase.GetReference(string.Empty, "Configuration");
 }
 
 public abstract class VariableReferenceBase
 {
-    internal static string GetReference(string prefix, string variableName) => $"variables['{prefix}{variableName}']";
+    internal static string GetReference(string prefix, string variableName) => $"$({prefix}{variableName})";
 
     public string this[string variableName] => GetReference(Prefix, variableName);
 
@@ -317,7 +319,7 @@ public sealed class BuildVariableReference : VariableReferenceBase
     /// The local path on the agent where your source code files are downloaded. For example: c:\agent_work\1\s
     /// By default, new build pipelines update only the changed files.
     /// 
-    /// Important note: If you check out only one Git repository, this path will be the exact path to the code. If you check out multiple repositories, it will revert to its default value, which is $(Pipeline.Workspace)/s, even if the self (primary) repository is checked out to a custom path different from its multi-checkout default path $(Pipeline.Workspace)/s/<RepoName> (in this respect, the variable differs from the behavior of the Build.Repository.LocalPath variable).
+    /// Important note: If you check out only one Git repository, this path will be the exact path to the code. If you check out multiple repositories, it will revert to its default value, which is $(Pipeline.Workspace)/s, even if the self (primary) repository is checked out to a custom path different from its multi-checkout default path $(Pipeline.Workspace)/s/[RepoName] (in this respect, the variable differs from the behavior of the Build.Repository.LocalPath variable).
     /// 
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
@@ -380,7 +382,7 @@ public sealed class RepositoryVariableReference : VariableReferenceBase
     ///
     /// By default, new build pipelines update only the changed files.You can modify how files are downloaded on the Repository tab.
     /// Important note: If you check out only one Git repository, this path will be the exact path to the code.If you check out multiple repositories, the behavior is as follows(and might differ from the value of the Build.SourcesDirectory variable) :
-    ///   - If the checkout step for the self(primary) repository has no custom checkout path defined, or the checkout path is the multi-checkout default path $(Pipeline.Workspace)/s/<RepoName> for the self repository, the value of this variable will revert to its default value, which is $(Pipeline.Workspace)/s.
+    ///   - If the checkout step for the self(primary) repository has no custom checkout path defined, or the checkout path is the multi-checkout default path $(Pipeline.Workspace)/s/[RepoName] for the self repository, the value of this variable will revert to its default value, which is $(Pipeline.Workspace)/s.
     ///   - If the checkout step for the self (primary) repository does have a custom checkout path defined (and it's not its multi-checkout default path), this variable will contain the exact path to the self repository.
     /// 
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
@@ -520,7 +522,8 @@ public sealed class SystemVariableReference : VariableReferenceBase
     public string CollectionId => GetReference("CollectionId");
 
     /// <summary>
-    /// The URI of the TFS collection or Azure DevOps organization. For example: https://dev.azure.com/fabrikamfiber/. 
+    /// The URI of the TFS collection or Azure DevOps organization.
+    /// For example: https://dev.azure.com/fabrikamfiber/. 
     /// </summary>
     public string CollectionUri => GetReference("CollectionUri");
 

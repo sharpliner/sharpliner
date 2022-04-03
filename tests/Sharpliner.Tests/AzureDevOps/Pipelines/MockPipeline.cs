@@ -14,10 +14,10 @@ internal class MockPipeline : TestPipeline
             Branches = new()
             {
                 Include =
-                    {
-                        "main",
-                        "release/*",
-                    }
+                {
+                    "main",
+                    "release/*",
+                }
             }
         },
 
@@ -29,17 +29,17 @@ internal class MockPipeline : TestPipeline
                 Variable("Configuration", "Release"),     // Or we have this more YAML-like definition
                 Group("PR keyvault variables"),
 
-                If.Equal(variables["Build.Reason"], "PullRequest")
-                    .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)")
+                If.IsPullRequest
+                    .Variable("TargetBranch", variables.System.PullRequest.SourceBranch)
                     .Variable("IsPr", true),
 
-                If.And(Equal(variables["Build.SourceBranch"], "refs/heads/production"), NotEqual("Configuration", "Debug"))
+                If.And(IsBranch("production"), NotEqual("Configuration", "Debug"))
                     .Variable("PublishProfileFile", "Prod")
-                    .If.NotEqual(variables["Build.Reason"], "PullRequest")
+                    .If.IsNotPullRequest
                         .Variable("AzureSubscription", "Int")
                         .Group("azure-int")
                     .EndIf
-                    .If.Equal(variables["Build.Reason"], "PullRequest")
+                    .If.IsPullRequest
                         .Variable("AzureSubscription", "Prod")
                         .Group("azure-prod"),
             },
@@ -80,13 +80,13 @@ internal class MockPipeline : TestPipeline
                                 {
                                     DisplayName = "Run unit tests",
                                     ContinueOnError = true,
-                                    Condition = "eq(variables['Build.Reason'], \"PullRequest\")",
+                                    Condition = IsPullRequest,
                                 },
 
                                 Bash.Inline("./upload.sh ./**/TestResult.xml") with
                                 {
                                     DisplayName = "Upload tests results",
-                                    Condition = "eq(variables['Build.Reason'], \"PullRequest\")",
+                                    Condition = IsPullRequest,
                                 },
                             }
                         }
