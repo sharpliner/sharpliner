@@ -48,4 +48,18 @@ public record ScheduledTrigger
 
         CronSchedule = cronSchedule;
     }
+
+    /// <summary>
+    /// Creates the cron trigger for the pipeline.
+    /// </summary>
+    /// <param name="minute">Number or *</param>
+    /// <param name="hour">Number or *</param>
+    /// <param name="dayOfMonth">Number or *</param>
+    /// <param name="month">Number or *</param>
+    /// <param name="dayOfWeek">Number or *</param>
+    /// <param name="branches">List of branches for which the trigger should run</param>
+    public ScheduledTrigger(string minute, string hour, string dayOfMonth, string month, string dayOfWeek, params string[] branches)
+        : this($"{minute} {hour} {dayOfMonth} {month} {dayOfWeek}", branches)
+    {
+    }
 }
