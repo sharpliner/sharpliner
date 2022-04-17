@@ -1,6 +1,7 @@
 namespace Sharpliner.GitHubActions;
 
-public enum Shell
+// TODO (GitHub Actions): Made internal until we get to a more complete API
+internal enum Shell
 {
     Default,
     Bash,
@@ -14,7 +15,8 @@ public enum Shell
 /// <summary>
 /// Provide the default for the run step.
 /// </summary>
-public record RunDefaults
+// TODO (GitHub Actions): Made internal until we get to a more complete API
+internal record RunDefaults
 {
     /// <summary>
     /// Get/Set the shell to be used.
@@ -36,7 +38,8 @@ public record RunDefaults
 /// <summary>
 /// Default settings that will be applied to all jobs.
 /// </summary>
-public record Defaults
+// TODO (GitHub Actions): Made internal until we get to a more complete API
+internal record Defaults
 {
     /// <summary>
     /// Default values for the run step.

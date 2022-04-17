@@ -2,7 +2,8 @@ using System.Collections.Generic;
 
 namespace Sharpliner.GitHubActions;
 
-public record StrategyConfiguration
+// TODO (GitHub Actions): Made internal until we get to a more complete API
+internal record StrategyConfiguration
 {
     public Dictionary<string, object>? Configuration { get; set; }
     public Dictionary<string, string>? Variables { get; set; }
@@ -12,7 +13,8 @@ public record StrategyConfiguration
 /// Creates a matrix of the jobs. A matrix allows to create different jobs via
 /// variable substitution.
 /// </summary>
-public record Strategy
+// TODO (GitHub Actions): Made internal until we get to a more complete API
+internal record Strategy
 {
 
     /// <summary>

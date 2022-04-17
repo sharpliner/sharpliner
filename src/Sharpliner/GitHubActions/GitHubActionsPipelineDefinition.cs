@@ -3,7 +3,8 @@
 /// <summary>
 /// Inherit from this class to define a GitHub action.
 /// </summary>
-public abstract class GitHubActionsPipelineDefinition
+// TODO (GitHub Actions): Made internal until we get to a more complete API
+internal abstract class GitHubActionsPipelineDefinition
 {
     // TODO
 }
