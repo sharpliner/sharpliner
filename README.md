@@ -304,6 +304,7 @@ Currently the development is stalled and very behind compared to Azure DevOps:
 - Model is not complete
 - Actions cannot be currently defined as a whole
 - Documentation is missing
+- API is currently hidden to not confuse users
 
 Contributors have already written a large portion of the model but there is still considerable amount of work needed to make GitHub actions work.
 We welcome all contributors, no contribution is small enough!
