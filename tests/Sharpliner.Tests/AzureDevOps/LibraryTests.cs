@@ -48,20 +48,21 @@ public class LibraryTests
     {
         var yaml = new JobReferencingPipeline().Serialize();
 
-        yaml.Should().Be(
-@"jobs:
-- job: Init
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: Init
 
-- job: Start
-  steps:
-  - script: |-
-      echo 'Hello World'
+            - job: Start
+              steps:
+              - script: |-
+                  echo 'Hello World'
 
-- job: End
-  steps:
-  - script: |-
-      echo 'Goodbye World'
-");
+            - job: End
+              steps:
+              - script: |-
+                  echo 'Goodbye World'
+            """);
     }
 
     private class DotNet_Step_Library : StepLibrary
@@ -103,32 +104,33 @@ public class LibraryTests
     {
         var yaml = new SimpleDotNetPipeline().Serialize();
 
-        yaml.Should().Be(
-@"jobs:
-- job: Foo
-  steps:
-  - script: |-
-      echo 'Hello World'
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: Foo
+              steps:
+              - script: |-
+                  echo 'Hello World'
 
-  - task: UseDotNet@2
-    inputs:
-      packageType: sdk
-      version: 6.0.100
+              - task: UseDotNet@2
+                inputs:
+                  packageType: sdk
+                  version: 6.0.100
 
-  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-    - task: DotNetCoreCLI@2
-      inputs:
-        command: restore
-        projects: src/MyProject.sln
+              - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+                - task: DotNetCoreCLI@2
+                  inputs:
+                    command: restore
+                    projects: src/MyProject.sln
 
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: build
-      projects: src/MyProject.sln
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: build
+                  projects: src/MyProject.sln
 
-  - script: |-
-      echo 'Goodbye World'
-");
+              - script: |-
+                  echo 'Goodbye World'
+            """);
     }
 
     private class Variable_Library : VariableLibrary
@@ -171,30 +173,31 @@ public class LibraryTests
     {
         var yaml = new ConditionalPipeline().Serialize();
 
-        yaml.Should().Be(
-@"variables:
-- name: test
-  value: true
+        yaml.Trim().Should().Be(
+            """
+            variables:
+            - name: test
+              value: true
 
-- ${{ if notIn('$(Environment)', 'prod') }}:
-  - name: connection-string-dev
-    value: dev_123
+            - ${{ if notIn('$(Environment)', 'prod') }}:
+              - name: connection-string-dev
+                value: dev_123
 
-  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/dev') }}:
-    - group: prod-kv
+              - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/dev') }}:
+                - group: prod-kv
 
-  - name: connection-string-staging
-    value: staging_123
+              - name: connection-string-staging
+                value: staging_123
 
-  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/staging') }}:
-    - group: prod-kv
+              - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/staging') }}:
+                - group: prod-kv
 
-- ${{ else }}:
-  - name: connection-string-prod
-    value: prod_123
+            - ${{ else }}:
+              - name: connection-string-prod
+                value: prod_123
 
-  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/prod') }}:
-    - group: prod-kv
-");
+              - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/prod') }}:
+                - group: prod-kv
+            """);
     }
 }

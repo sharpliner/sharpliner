@@ -32,17 +32,18 @@ public class TemplateTests
     {
         var yaml = new TemplateList_Pipeline().Serialize();
 
-        yaml.Should().Be(
-@"jobs:
-- ${{ if eq(foo, bar) }}:
-  - template: template1.yml
-    parameters:
-      enableTelemetry: true
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - ${{ if eq(foo, bar) }}:
+              - template: template1.yml
+                parameters:
+                  enableTelemetry: true
 
-  - template: template2.yml
-    parameters:
-      enableTelemetry: false
-");
+              - template: template2.yml
+                parameters:
+                  enableTelemetry: false
+            """);
     }
 
     private class Template_Definition : StepTemplateDefinition
@@ -75,45 +76,46 @@ public class TemplateTests
     {
         var yaml = new Template_Definition().Serialize();
 
-        yaml.Should().Be(
-@"parameters:
-- name: project
-  type: string
+        yaml.Trim().Should().Be(
+            """
+            parameters:
+            - name: project
+              type: string
 
-- name: version
-  type: string
-  values:
-  - 5.0.100
-  - 5.0.102
+            - name: version
+              type: string
+              values:
+              - 5.0.100
+              - 5.0.102
 
-- name: restore
-  type: boolean
-  default: true
+            - name: restore
+              type: boolean
+              default: true
 
-- name: afterBuild
-  type: step
-  default:
-    bash: |-
-      cp -R logs $(Build.ArtifactStagingDirectory)
+            - name: afterBuild
+              type: step
+              default:
+                bash: |-
+                  cp -R logs $(Build.ArtifactStagingDirectory)
 
-steps:
-- task: UseDotNet@2
-  inputs:
-    packageType: sdk
-    version: ${{ parameters.version }}
+            steps:
+            - task: UseDotNet@2
+              inputs:
+                packageType: sdk
+                version: ${{ parameters.version }}
 
-- ${{ if eq(${{ parameters.restore }}, true) }}:
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: restore
-      projects: ${{ parameters.project }}
+            - ${{ if eq(${{ parameters.restore }}, true) }}:
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: restore
+                  projects: ${{ parameters.project }}
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: build
-    projects: ${{ parameters.project }}
-- ${{ parameters.afterBuild }}
-");
+            - task: DotNetCoreCLI@2
+              inputs:
+                command: build
+                projects: ${{ parameters.project }}
+            - ${{ parameters.afterBuild }}
+            """);
     }
 
     private class Conditioned_Template_Reference : SimpleStepTestPipeline
@@ -135,19 +137,20 @@ steps:
     {
         var yaml = new Conditioned_Template_Reference().Serialize();
 
-        yaml.Should().Be(
-@"jobs:
-- job: testJob
-  steps:
-  - ${{ if eq(restore, true) }}:
-    - template: template1.yaml
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: testJob
+              steps:
+              - ${{ if eq(restore, true) }}:
+                - template: template1.yaml
 
-  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-    - template: template2.yaml
+              - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+                - template: template2.yaml
 
-    - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-      - template: template3.yaml
-");
+                - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+                  - template: template3.yaml
+            """);
     }
 
     private class Conditioned_Parameters : SimpleStepTestPipeline
@@ -187,20 +190,21 @@ steps:
         var pipeline = new Conditioned_Parameters();
         var yaml = pipeline.Serialize();
 
-        yaml.Should().Be(
-@"jobs:
-- job: testJob
-  steps:
-  - template: template1.yaml
-    parameters:
-      some: value
-      ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-        pr: true
-      other:
-        ${{ if eq(parameters['container'], '') }}:
-          image: ubuntu-16.04-cross-arm64-20210719121212-8a8d3be
-        ${{ else }}:
-          image: ${{ parameters.container }}
-");
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: testJob
+              steps:
+              - template: template1.yaml
+                parameters:
+                  some: value
+                  ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+                    pr: true
+                  other:
+                    ${{ if eq(parameters['container'], '') }}:
+                      image: ubuntu-16.04-cross-arm64-20210719121212-8a8d3be
+                    ${{ else }}:
+                      image: ${{ parameters.container }}
+            """);
     }
 }

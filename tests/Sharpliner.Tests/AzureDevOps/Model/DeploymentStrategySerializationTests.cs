@@ -14,35 +14,36 @@ public class DeploymentStrategySerializationTests
         {
             MaxParallel = 4,
             PreDeploy =
+            {
+                Steps =
                 {
-                    Steps =
-                    {
-                        new CurrentDownloadTask(),
-                    }
-                },
+                    new CurrentDownloadTask(),
+                }
+            },
             Deploy =
+            {
+                Pool = new HostedPool("MacOS-latest"),
+                Steps =
                 {
-                    Pool = new HostedPool("MacOS-latest"),
-                    Steps =
-                    {
-                        new CurrentDownloadTask(),
-                    }
-                },
+                    new CurrentDownloadTask(),
+                }
+            },
         };
 
         string yaml = SharplinerSerializer.Serialize(strategy);
-        yaml.Should().Be(
-@"rolling:
-  maxParallel: 4
-  preDeploy:
-    steps:
-    - download: current
-  deploy:
-    pool:
-      name: MacOS-latest
-    steps:
-    - download: current
-");
+        yaml.Trim().Should().Be(
+            """
+            rolling:
+              maxParallel: 4
+              preDeploy:
+                steps:
+                - download: current
+              deploy:
+                pool:
+                  name: MacOS-latest
+                steps:
+                - download: current
+            """);
     }
 
     [Fact]
@@ -52,49 +53,50 @@ public class DeploymentStrategySerializationTests
         {
             Increments = { 10, 1000, 25000 },
             RouteTraffic =
+            {
+                Steps =
                 {
-                    Steps =
-                    {
-                        new CurrentDownloadTask(),
-                    }
-                },
-            PostRouteTraffic =
-                {
-                    Pool = new HostedPool("MacOS-latest"),
-                    Steps =
-                    {
-                        new CurrentDownloadTask(),
-                    }
-                },
-            OnFailure =
-                {
-                    Steps =
-                    {
-                        new InlineBashTask("echo 'failure!' && exit 1")
-                    }
+                    new CurrentDownloadTask(),
                 }
+            },
+            PostRouteTraffic =
+            {
+                Pool = new HostedPool("MacOS-latest"),
+                Steps =
+                {
+                    new CurrentDownloadTask(),
+                }
+            },
+            OnFailure =
+            {
+                Steps =
+                {
+                    new InlineBashTask("echo 'failure!' && exit 1")
+                }
+            }
         };
 
         string yaml = SharplinerSerializer.Serialize(strategy);
-        yaml.Should().Be(
-@"canary:
-  increments:
-  - 10
-  - 1000
-  - 25000
-  routeTraffic:
-    steps:
-    - download: current
-  postRouteTraffic:
-    pool:
-      name: MacOS-latest
-    steps:
-    - download: current
-  on:
-    failure:
-      steps:
-      - bash: |-
-          echo 'failure!' && exit 1
-");
+        yaml.Trim().Should().Be(
+            """
+            canary:
+              increments:
+              - 10
+              - 1000
+              - 25000
+              routeTraffic:
+                steps:
+                - download: current
+              postRouteTraffic:
+                pool:
+                  name: MacOS-latest
+                steps:
+                - download: current
+              on:
+                failure:
+                  steps:
+                  - bash: |-
+                      echo 'failure!' && exit 1
+            """);
     }
 }

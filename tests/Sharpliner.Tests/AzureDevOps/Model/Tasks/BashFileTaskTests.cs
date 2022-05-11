@@ -19,19 +19,21 @@ public class BashFileTaskTests
         };
 
         string yaml = SharplinerSerializer.Serialize(task);
-        yaml.Should().Be(@"task: Bash@3
+        yaml.Trim().Should().Be(
+            """
+            task: Bash@3
 
-displayName: Test task
+            displayName: Test task
 
-inputs:
-  targetType: filePath
-  filePath: some/script.sh
-  arguments: foo bar
-  failOnStderr: true
-  bashEnvValue: ~/.bash_profile
+            inputs:
+              targetType: filePath
+              filePath: some/script.sh
+              arguments: foo bar
+              failOnStderr: true
+              bashEnvValue: ~/.bash_profile
 
-continueOnError: true
-");
+            continueOnError: true
+            """);
     }
 
     [Fact]
@@ -40,13 +42,15 @@ continueOnError: true
         var task = new BashFileTask("some/script.sh").DisplayAs("Test task");
 
         string yaml = SharplinerSerializer.Serialize(task);
-        yaml.Should().Be(@"task: Bash@3
+        yaml.Trim().Should().Be(
+            """
+            task: Bash@3
 
-displayName: Test task
+            displayName: Test task
 
-inputs:
-  targetType: filePath
-  filePath: some/script.sh
-");
+            inputs:
+              targetType: filePath
+              filePath: some/script.sh
+            """);
     }
 }

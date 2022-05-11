@@ -25,11 +25,12 @@ public class NoopJobTests
     {
         NoopJobPipeline pipeline = new();
         string yaml = pipeline.Serialize();
-        yaml.Should().Be(
-@"jobs:
-- job: No_op
-  pool:
-    vmImage: windows-2019
-");
+        yaml.Trim().Should().Be(
+        """
+        jobs:
+        - job: No_op
+          pool:
+            vmImage: windows-2019
+        """);
     }
 }

@@ -20,19 +20,19 @@ public class TaskBuilderTests
         public override SingleStagePipeline Pipeline => new()
         {
             Jobs =
+            {
+                new Job("test")
                 {
-                    new Job("test")
+                    Steps =
                     {
-                        Steps =
-                        {
-                            Bash.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.test-script.sh"),
-                            Bash.FromResourceFile("test-script.sh"),
-                            Bash.Inline("cat /etc/passwd", "rm -rf tests.xml"),
-                            Bash.File("foo.sh"),
-                            Bash.FromFile( "AzureDevops/Resources/test-script.sh"),
-                        }
+                        Bash.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.test-script.sh"),
+                        Bash.FromResourceFile("test-script.sh"),
+                        Bash.Inline("cat /etc/passwd", "rm -rf tests.xml"),
+                        Bash.File("foo.sh"),
+                        Bash.FromFile( "AzureDevops/Resources/test-script.sh"),
                     }
                 }
+            }
         };
     }
 
@@ -41,31 +41,32 @@ public class TaskBuilderTests
     {
         BashTaskPipeline pipeline = new();
         string yaml = pipeline.Serialize();
-        yaml.Should().Be(
-@"jobs:
-- job: test
-  steps:
-  - bash: |
-      echo ""foo""
-      git clone $bar
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: test
+              steps:
+              - bash: |
+                  echo "foo"
+                  git clone $bar
 
-  - bash: |
-      echo ""foo""
-      git clone $bar
+              - bash: |
+                  echo "foo"
+                  git clone $bar
 
-  - bash: |-
-      cat /etc/passwd
-      rm -rf tests.xml
+              - bash: |-
+                  cat /etc/passwd
+                  rm -rf tests.xml
 
-  - task: Bash@3
-    inputs:
-      targetType: filePath
-      filePath: foo.sh
+              - task: Bash@3
+                inputs:
+                  targetType: filePath
+                  filePath: foo.sh
 
-  - bash: |
-      echo ""foo""
-      git clone $bar
-");
+              - bash: |
+                  echo "foo"
+                  git clone $bar
+            """);
     }
 
     private class PowershellTaskPipeline : TestPipeline
@@ -73,19 +74,19 @@ public class TaskBuilderTests
         public override SingleStagePipeline Pipeline => new()
         {
             Jobs =
+            {
+                new Job("test")
                 {
-                    new Job("test")
+                    Steps =
                     {
-                        Steps =
-                        {
-                            Powershell.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.Test-Script.ps1"),
-                            Powershell.FromResourceFile("Test-Script.ps1"),
-                            Powershell.Inline("Connect-AzContext", "Set-AzSubscription --id foo-bar-xyz"),
-                            Powershell.File("foo.ps1"),
-                            Powershell.FromFile("AzureDevops/Resources/Test-Script.ps1"),
-                        }
+                        Powershell.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.Test-Script.ps1"),
+                        Powershell.FromResourceFile("Test-Script.ps1"),
+                        Powershell.Inline("Connect-AzContext", "Set-AzSubscription --id foo-bar-xyz"),
+                        Powershell.File("foo.ps1"),
+                        Powershell.FromFile("AzureDevops/Resources/Test-Script.ps1"),
                     }
                 }
+            }
         };
     }
 
@@ -94,31 +95,32 @@ public class TaskBuilderTests
     {
         PowershellTaskPipeline pipeline = new();
         string yaml = pipeline.Serialize();
-        yaml.Should().Be(
-@"jobs:
-- job: test
-  steps:
-  - powershell: |+
-      Set-ErrorActionPreference Stop
-      Write-Host ""Lorem ipsum dolor sit amet""
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: test
+              steps:
+              - powershell: |+
+                  Set-ErrorActionPreference Stop
+                  Write-Host "Lorem ipsum dolor sit amet"
 
-  - powershell: |+
-      Set-ErrorActionPreference Stop
-      Write-Host ""Lorem ipsum dolor sit amet""
+              - powershell: |+
+                  Set-ErrorActionPreference Stop
+                  Write-Host "Lorem ipsum dolor sit amet"
 
-  - powershell: |-
-      Connect-AzContext
-      Set-AzSubscription --id foo-bar-xyz
+              - powershell: |-
+                  Connect-AzContext
+                  Set-AzSubscription --id foo-bar-xyz
 
-  - task: PowerShell@2
-    inputs:
-      targetType: filePath
-      filePath: foo.ps1
+              - task: PowerShell@2
+                inputs:
+                  targetType: filePath
+                  filePath: foo.ps1
 
-  - powershell: |+
-      Set-ErrorActionPreference Stop
-      Write-Host ""Lorem ipsum dolor sit amet""
-");
+              - powershell: |+
+                  Set-ErrorActionPreference Stop
+                  Write-Host "Lorem ipsum dolor sit amet"
+            """);
     }
 
     private class PwshTaskPipeline : TestPipeline
@@ -147,36 +149,37 @@ public class TaskBuilderTests
     {
         PwshTaskPipeline pipeline = new();
         string yaml = pipeline.Serialize();
-        yaml.Should().Be(
-@"jobs:
-- job: test
-  steps:
-  - powershell: |+
-      Set-ErrorActionPreference Stop
-      Write-Host ""Lorem ipsum dolor sit amet""
-    pwsh: true
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: test
+              steps:
+              - powershell: |+
+                  Set-ErrorActionPreference Stop
+                  Write-Host "Lorem ipsum dolor sit amet"
+                pwsh: true
 
-  - powershell: |+
-      Set-ErrorActionPreference Stop
-      Write-Host ""Lorem ipsum dolor sit amet""
-    pwsh: true
+              - powershell: |+
+                  Set-ErrorActionPreference Stop
+                  Write-Host "Lorem ipsum dolor sit amet"
+                pwsh: true
 
-  - powershell: |-
-      Connect-AzContext
-      Set-AzSubscription --id foo-bar-xyz
-    pwsh: true
+              - powershell: |-
+                  Connect-AzContext
+                  Set-AzSubscription --id foo-bar-xyz
+                pwsh: true
 
-  - task: PowerShell@2
-    inputs:
-      targetType: filePath
-      filePath: foo.ps1
-      pwsh: true
+              - task: PowerShell@2
+                inputs:
+                  targetType: filePath
+                  filePath: foo.ps1
+                  pwsh: true
 
-  - powershell: |+
-      Set-ErrorActionPreference Stop
-      Write-Host ""Lorem ipsum dolor sit amet""
-    pwsh: true
-");
+              - powershell: |+
+                  Set-ErrorActionPreference Stop
+                  Write-Host "Lorem ipsum dolor sit amet"
+                pwsh: true
+            """);
     }
 
     private class PublishTaskPipeline : TestPipeline
@@ -184,19 +187,19 @@ public class TaskBuilderTests
         public override SingleStagePipeline Pipeline => new()
         {
             Jobs =
+            {
+                new Job("test")
                 {
-                    new Job("test")
+                    Steps =
                     {
-                        Steps =
+                        Publish("Binary", "bin/Debug/net5.0/", "Publish artifact") with
                         {
-                            Publish("Binary", "bin/Debug/net5.0/", "Publish artifact") with
-                            {
-                                ContinueOnError = false,
-                                ArtifactType = ArtifactType.Pipeline,
-                            },
-                        }
+                            ContinueOnError = false,
+                            ArtifactType = ArtifactType.Pipeline,
+                        },
                     }
                 }
+            }
         };
     }
 
@@ -205,14 +208,15 @@ public class TaskBuilderTests
     {
         PublishTaskPipeline pipeline = new();
         string yaml = pipeline.Serialize();
-        yaml.Should().Be(
-@"jobs:
-- job: test
-  steps:
-  - publish: bin/Debug/net5.0/
-    displayName: Publish artifact
-    artifact: Binary
-");
+        yaml.Trim().Should().Be(
+        """
+        jobs:
+        - job: test
+          steps:
+          - publish: bin/Debug/net5.0/
+            displayName: Publish artifact
+            artifact: Binary
+        """);
     }
 
     private class CheckoutTaskPipeline : TestPipeline
@@ -220,22 +224,22 @@ public class TaskBuilderTests
         public override SingleStagePipeline Pipeline => new()
         {
             Jobs =
+            {
+                new Job("test")
                 {
-                    new Job("test")
+                    Steps =
                     {
-                        Steps =
+                        Checkout.None,
+                        Checkout.Self,
+                        Checkout.Repository("https://github.com/sharpliner/sharpliner.git") with
                         {
-                            Checkout.None,
-                            Checkout.Self,
-                            Checkout.Repository("https://github.com/sharpliner/sharpliner.git") with
-                            {
-                                Submodules = SubmoduleCheckout.Recursive,
-                                Clean = true,
-                                FetchDepth = 1,
-                            }
+                            Submodules = SubmoduleCheckout.Recursive,
+                            Clean = true,
+                            FetchDepth = 1,
                         }
                     }
                 }
+            }
         };
     }
 
@@ -244,19 +248,20 @@ public class TaskBuilderTests
     {
         CheckoutTaskPipeline pipeline = new();
         string yaml = pipeline.Serialize();
-        yaml.Should().Be(
-@"jobs:
-- job: test
-  steps:
-  - checkout: none
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: test
+              steps:
+              - checkout: none
 
-  - checkout: self
+              - checkout: self
 
-  - checkout: https://github.com/sharpliner/sharpliner.git
-    clean: true
-    fetchDepth: 1
-    submodules: recursive
-");
+              - checkout: https://github.com/sharpliner/sharpliner.git
+                clean: true
+                fetchDepth: 1
+                submodules: recursive
+            """);
     }
 
     private class DownloadTaskPipeline : TestPipeline
@@ -264,37 +269,37 @@ public class TaskBuilderTests
         public override SingleStagePipeline Pipeline => new()
         {
             Jobs =
+            {
+                new Job("test")
                 {
-                    new Job("test")
+                    Steps =
                     {
-                        Steps =
+                        Download.None,
+                        Download.Current with
                         {
-                            Download.None,
-                            Download.Current with
+                            Tags = new()
                             {
-                                Tags = new()
-                                {
-                                    "release",
-                                    "nightly",
-                                },
-                                AllowFailedBuilds = true,
-                                Artifact = "Frontend",
-                                Patterns = new()
-                                {
-                                    "frontend/**/*",
-                                    "frontend.config",
-                                }
+                                "release",
+                                "nightly",
                             },
-                            Download.SpecificBuild("dotnet-xharness") with
+                            AllowFailedBuilds = true,
+                            Artifact = "Frontend",
+                            Patterns = new()
                             {
-                                RunVersion = RunVersion.Latest,
-                                Project = "2a73171e-15d1-41f9-b283-49aa0633d1a2",
-                                BranchName = "main",
-                                Path = "$(Pipeline.Workspace)/xharness"
+                                "frontend/**/*",
+                                "frontend.config",
                             }
+                        },
+                        Download.SpecificBuild("dotnet-xharness") with
+                        {
+                            RunVersion = RunVersion.Latest,
+                            Project = "2a73171e-15d1-41f9-b283-49aa0633d1a2",
+                            BranchName = "main",
+                            Path = "$(Pipeline.Workspace)/xharness"
                         }
                     }
                 }
+            }
         };
     }
 
@@ -303,26 +308,27 @@ public class TaskBuilderTests
     {
         DownloadTaskPipeline pipeline = new();
         string yaml = pipeline.Serialize();
-        yaml.Should().Be(
-@"jobs:
-- job: test
-  steps:
-  - download: none
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: test
+              steps:
+              - download: none
 
-  - download: current
-    artifact: Frontend
-    patterns: |-
-      frontend/**/*
-      frontend.config
-    tags: release,nightly
-    allowFailedBuilds: true
+              - download: current
+                artifact: Frontend
+                patterns: |-
+                  frontend/**/*
+                  frontend.config
+                tags: release,nightly
+                allowFailedBuilds: true
 
-  - download: dotnet-xharness
-    path: $(Pipeline.Workspace)/xharness
-    project: 2a73171e-15d1-41f9-b283-49aa0633d1a2
-    runVersion: latest
-    runBranch: main
-");
+              - download: dotnet-xharness
+                path: $(Pipeline.Workspace)/xharness
+                project: 2a73171e-15d1-41f9-b283-49aa0633d1a2
+                runVersion: latest
+                runBranch: main
+            """);
     }
 
     private class TaskPipeline : TestPipeline
@@ -330,22 +336,22 @@ public class TaskBuilderTests
         public override SingleStagePipeline Pipeline => new()
         {
             Jobs =
+            {
+                new Job("test")
                 {
-                    new Job("test")
+                    Steps =
                     {
-                        Steps =
+                        Task("VSBuild@1", "Build") with
                         {
-                            Task("VSBuild@1", "Build") with
+                            Timeout = TimeSpan.FromHours(2),
+                            Inputs = new()
                             {
-                                Timeout = TimeSpan.FromHours(2),
-                                Inputs = new()
-                                {
-                                    { "solution", "**/*.sln" }
-                                }
+                                { "solution", "**/*.sln" }
                             }
                         }
                     }
                 }
+            }
         };
     }
 
@@ -354,15 +360,16 @@ public class TaskBuilderTests
     {
         TaskPipeline pipeline = new();
         string yaml = pipeline.Serialize();
-        yaml.Should().Be(
-@"jobs:
-- job: test
-  steps:
-  - task: VSBuild@1
-    displayName: Build
-    inputs:
-      solution: '**/*.sln'
-    timeoutInMinutes: 120
-");
+        yaml.Trim().Should().Be(
+        """
+        jobs:
+        - job: test
+          steps:
+          - task: VSBuild@1
+            displayName: Build
+            inputs:
+              solution: '**/*.sln'
+            timeoutInMinutes: 120
+        """);
     }
 }
