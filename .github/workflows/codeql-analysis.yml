@@ -40,7 +40,7 @@ jobs:
       shell: pwsh
       
     - name: Build
-      run: dotnet build src/Sharpliner/Sharpliner.csproj
+      run: dotnet build src/Sharpliner/Sharpliner.csproj -f net6.0 /p:UseSharedCompilation=false # CodeQL cannot do .NET 7.0 at the moment
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
