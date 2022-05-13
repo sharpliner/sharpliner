@@ -18,7 +18,7 @@ class ProjectBuildSteps : StepLibrary
     {
         StepTemplate(Pipelines.TemplateLocation + "install-dotnet-sdk.yml", new()
         {
-            { "version", "6.0.200" }
+            { "version", "7.0.100-preview.4" }
         }),
 
         Powershell

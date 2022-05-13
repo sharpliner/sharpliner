@@ -25,7 +25,7 @@ jobs:
 
   - template: templates/install-dotnet-sdk.yml
     parameters:
-      version: 6.0.200
+      version: 7.0.100-preview.4
 
   - powershell: |-
       New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'
