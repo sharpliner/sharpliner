@@ -40,16 +40,19 @@ public class DotNetCoreCliTests
         };
 
         var yaml = GetYaml(task);
-        yaml.Should().Be(@"jobs:
-- job: job
-  steps:
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: build
-      projects: project.csproj
-      arguments: -c Release
-      includeNuGetOrg: true
-      workingDirectory: /tmp");
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: job
+              steps:
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: build
+                  projects: project.csproj
+                  arguments: -c Release
+                  includeNuGetOrg: true
+                  workingDirectory: /tmp
+            """);
     }
 
     [Fact]
@@ -62,16 +65,19 @@ public class DotNetCoreCliTests
         };
 
         var yaml = GetYaml(task);
-        yaml.Should().Be(@"jobs:
-- job: job
-  steps:
-  - task: UseDotNet@2
-    inputs:
-      packageType: sdk
-      version: 6.0.100-rc.2.21505.57
-      includePreviewVersions: true
-      workingDirectory: /tmp
-      installationPath: /.dotnet");
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: job
+              steps:
+              - task: UseDotNet@2
+                inputs:
+                  packageType: sdk
+                  version: 6.0.100-rc.2.21505.57
+                  includePreviewVersions: true
+                  workingDirectory: /tmp
+                  installationPath: /.dotnet
+            """);
     }
 
     [Fact]
@@ -83,14 +89,17 @@ public class DotNetCoreCliTests
         };
 
         var yaml = GetYaml(task);
-        yaml.Should().Be(@"jobs:
-- job: job
-  steps:
-  - task: UseDotNet@2
-    inputs:
-      packageType: sdk
-      version: 5.0.100
-      performMultiLevelLookup: true");
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: job
+              steps:
+              - task: UseDotNet@2
+                inputs:
+                  packageType: sdk
+                  version: 5.0.100
+                  performMultiLevelLookup: true
+            """);
     }
 
     [Fact]
@@ -103,13 +112,16 @@ public class DotNetCoreCliTests
         };
 
         var yaml = GetYaml(task);
-        yaml.Should().Be(@"jobs:
-- job: job
-  steps:
-  - task: UseDotNet@2
-    inputs:
-      workingDirectory: /tmp
-      installationPath: /.dotnet");
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: job
+              steps:
+              - task: UseDotNet@2
+                inputs:
+                  workingDirectory: /tmp
+                  installationPath: /.dotnet
+            """);
     }
 
     [Fact]
@@ -125,19 +137,22 @@ public class DotNetCoreCliTests
         };
 
         var yaml = GetYaml(task);
-        yaml.Should().Be(@"jobs:
-- job: job
-  steps:
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: pack
-      packagesToPack: src/*.csproj
-      arguments: -c Release
-      nobuild: true
-      configurationToPack: Release
-      includesource: true
-      includesymbols: true
-      outputDir: /tmp/staging/");
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: job
+              steps:
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: pack
+                  packagesToPack: src/*.csproj
+                  arguments: -c Release
+                  nobuild: true
+                  configurationToPack: Release
+                  includesource: true
+                  includesymbols: true
+                  outputDir: /tmp/staging/
+            """);
     }
 
     [Fact]
@@ -151,18 +166,21 @@ public class DotNetCoreCliTests
         };
 
         var yaml = GetYaml(task);
-        yaml.Should().Be(@"jobs:
-- job: job
-  steps:
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: publish
-      projects: src/*.csproj
-      arguments: -c Release
-      publishWebProjects: true
-      modifyOutputPath: true
-      zipAfterPublish: true
-    timeoutInMinutes: 30");
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: job
+              steps:
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: publish
+                  projects: src/*.csproj
+                  arguments: -c Release
+                  publishWebProjects: true
+                  modifyOutputPath: true
+                  zipAfterPublish: true
+                timeoutInMinutes: 30
+            """);
     }
 
     [Fact]
@@ -174,15 +192,18 @@ public class DotNetCoreCliTests
         };
 
         var yaml = GetYaml(task);
-        yaml.Should().Be(@"jobs:
-- job: job
-  steps:
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: push
-      packagesToPush: $(Build.ArtifactStagingDirectory)/*.nupkg
-      arguments: -c Release
-      publishPackageMetadata: true");
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: job
+              steps:
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: push
+                  packagesToPush: $(Build.ArtifactStagingDirectory)/*.nupkg
+                  arguments: -c Release
+                  publishPackageMetadata: true
+            """);
     }
 
     [Fact]
@@ -195,15 +216,18 @@ public class DotNetCoreCliTests
         };
 
         var yaml = GetYaml(task);
-        yaml.Should().Be(@"jobs:
-- job: job
-  steps:
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: restore
-      projects: src/*.csproj
-      noCache: true
-      includeNuGetOrg: true");
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: job
+              steps:
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: restore
+                  projects: src/*.csproj
+                  noCache: true
+                  includeNuGetOrg: true
+            """);
     }
 
     [Fact]
@@ -217,18 +241,21 @@ public class DotNetCoreCliTests
         };
 
         var yaml = GetYaml(task);
-        yaml.Should().Be(@"jobs:
-- job: job
-  steps:
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: restore
-      includeNuGetOrg: false
-      feedsToUse: select
-      feedRestore: dotnet-7-preview-feed
-      externalFeedCredentials: feeds/dotnet-7
-      noCache: true
-      restoreDirectory: .packages");
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: job
+              steps:
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: restore
+                  includeNuGetOrg: false
+                  feedsToUse: select
+                  feedRestore: dotnet-7-preview-feed
+                  externalFeedCredentials: feeds/dotnet-7
+                  noCache: true
+                  restoreDirectory: .packages
+            """);
     }
 
     [Fact]
@@ -240,15 +267,18 @@ public class DotNetCoreCliTests
         };
 
         var yaml = GetYaml(task);
-        yaml.Should().Be(@"jobs:
-- job: job
-  steps:
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: restore
-      feedsToUse: config
-      nugetConfigPath: src/NuGet.config
-      arguments: foo");
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: job
+              steps:
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: restore
+                  feedsToUse: config
+                  nugetConfigPath: src/NuGet.config
+                  arguments: foo
+            """);
     }
 
     [Fact]
@@ -260,14 +290,17 @@ public class DotNetCoreCliTests
         };
 
         var yaml = GetYaml(task);
-        yaml.Should().Be(@"jobs:
-- job: job
-  steps:
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: custom
-      custom: --list-sdks
-    continueOnError: true");
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: job
+              steps:
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: custom
+                  custom: --list-sdks
+                continueOnError: true
+            """);
     }
 
     private static string GetYaml(Step task) => new DotNet_Pipeline(task).Serialize().Trim();

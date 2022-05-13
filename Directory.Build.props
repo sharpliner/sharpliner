@@ -3,7 +3,7 @@
 
   <PropertyGroup>
     <Nullable>enable</Nullable>
-    <LangVersion>10.0</LangVersion>
+    <LangVersion>preview</LangVersion>
   </PropertyGroup>
   
   <PropertyGroup>

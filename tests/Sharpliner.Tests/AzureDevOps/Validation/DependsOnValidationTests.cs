@@ -38,21 +38,23 @@ public class DependsOnValidationTests
     {
         var pipeline = new ConditionedDependsOnPipeline();
         var yaml = pipeline.Serialize();
-        yaml.Should().Be(@"stages:
-- stage: stage_1
+        yaml.Trim().Should().Be(
+            """
+            stages:
+            - stage: stage_1
 
-- stage: stage_2
-  dependsOn:
-  - stage_1
+            - stage: stage_2
+              dependsOn:
+              - stage_1
 
-- stage: stage_3
-  dependsOn:
-  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-    - stage_1
+            - stage: stage_3
+              dependsOn:
+              - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+                - stage_1
 
-  - ${{ else }}:
-    - stage_2
-");
+              - ${{ else }}:
+                - stage_2
+            """);
     }
 
     private class MissingStageDependsOnErrorPipeline : TestPipeline

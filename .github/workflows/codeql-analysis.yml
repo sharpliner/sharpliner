@@ -38,9 +38,13 @@ jobs:
     - name: Create artifacts/packages
       run: New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'
       shell: pwsh
-      
+
+    - uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '7.0.100-preview.4.22252.9'
+
     - name: Build
-      run: dotnet build src/Sharpliner/Sharpliner.csproj -f net6.0 /p:UseSharedCompilation=false # CodeQL cannot do .NET 7.0 at the moment
+      run: dotnet build src/Sharpliner/Sharpliner.csproj
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1

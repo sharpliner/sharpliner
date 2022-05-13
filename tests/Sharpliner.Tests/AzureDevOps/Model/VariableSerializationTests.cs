@@ -11,25 +11,25 @@ public class VariableSerializationTests
         public override Pipeline Pipeline => new()
         {
             Variables =
-                {
-                    new Variable("Configuration", "Release"), // We can create the objects and then resue them for definition too
-                    Variable("Configuration", "Release"),     // Or we have this more YAML-like definition
-                    Group("PR keyvault variables"),
+            {
+                new Variable("Configuration", "Release"), // We can create the objects and then resue them for definition too
+                Variable("Configuration", "Release"),     // Or we have this more YAML-like definition
+                Group("PR keyvault variables"),
 
-                    If.Equal(variables["Build.Reason"], "PullRequest")
-                        .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)")
-                        .Variable("IsPr", true),
+                If.Equal(variables["Build.Reason"], "PullRequest")
+                    .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)")
+                    .Variable("IsPr", true),
 
-                    If.And(Equal(variables["Build.SourceBranch"], "refs/heads/production"), NotEqual("Configuration", "Debug"))
-                        .Variables(("PublishProfileFile", "Prod"), ("foo", "bar"))
-                        .If.NotEqual(variables["Build.Reason"], "PullRequest")
-                            .Variable("AzureSubscription", "Int")
-                            .Group("azure-int")
-                        .EndIf
-                        .If.Equal(variables["Build.Reason"], "PullRequest")
-                            .Variable("AzureSubscription", "Prod")
-                            .Group("azure-prod"),
-                }
+                If.And(Equal(variables["Build.SourceBranch"], "refs/heads/production"), NotEqual("Configuration", "Debug"))
+                    .Variables(("PublishProfileFile", "Prod"), ("foo", "bar"))
+                    .If.NotEqual(variables["Build.Reason"], "PullRequest")
+                        .Variable("AzureSubscription", "Int")
+                        .Group("azure-int")
+                    .EndIf
+                    .If.Equal(variables["Build.Reason"], "PullRequest")
+                        .Variable("AzureSubscription", "Prod")
+                        .Group("azure-prod"),
+            }
         };
     }
 
@@ -38,41 +38,42 @@ public class VariableSerializationTests
     {
         VariablesPipeline pipeline = new();
         string yaml = pipeline.Serialize();
-        yaml.Should().Be(
-@"variables:
-- name: Configuration
-  value: Release
+        yaml.Trim().Should().Be(
+            """
+            variables:
+            - name: Configuration
+              value: Release
 
-- name: Configuration
-  value: Release
+            - name: Configuration
+              value: Release
 
-- group: PR keyvault variables
+            - group: PR keyvault variables
 
-- ${{ if eq(variables['Build.Reason'], PullRequest) }}:
-  - name: TargetBranch
-    value: $(System.PullRequest.SourceBranch)
+            - ${{ if eq(variables['Build.Reason'], PullRequest) }}:
+              - name: TargetBranch
+                value: $(System.PullRequest.SourceBranch)
 
-  - name: IsPr
-    value: true
+              - name: IsPr
+                value: true
 
-- ${{ if and(eq(variables['Build.SourceBranch'], refs/heads/production), ne(Configuration, Debug)) }}:
-  - name: PublishProfileFile
-    value: Prod
+            - ${{ if and(eq(variables['Build.SourceBranch'], refs/heads/production), ne(Configuration, Debug)) }}:
+              - name: PublishProfileFile
+                value: Prod
 
-  - name: foo
-    value: bar
+              - name: foo
+                value: bar
 
-  - ${{ if ne(variables['Build.Reason'], PullRequest) }}:
-    - name: AzureSubscription
-      value: Int
+              - ${{ if ne(variables['Build.Reason'], PullRequest) }}:
+                - name: AzureSubscription
+                  value: Int
 
-    - group: azure-int
+                - group: azure-int
 
-  - ${{ if eq(variables['Build.Reason'], PullRequest) }}:
-    - name: AzureSubscription
-      value: Prod
+              - ${{ if eq(variables['Build.Reason'], PullRequest) }}:
+                - name: AzureSubscription
+                  value: Prod
 
-    - group: azure-prod
-");
+                - group: azure-prod
+            """);
     }
 }

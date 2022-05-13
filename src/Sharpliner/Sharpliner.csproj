@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net5.0;net6.0;net7.0</TargetFrameworks>
 
     <!-- NuGet details -->
     <RepositoryType>git</RepositoryType>
@@ -30,8 +30,8 @@
 
   <ItemGroup>
     <PackageReference Include="YamlDotNet" Version="11.2.1" />
-    <PackageReference Include="Microsoft.Build.Framework" Version="16.9.0" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.9.0" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="17.1.0" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.1.0" />
   </ItemGroup>
 
   <ItemGroup>

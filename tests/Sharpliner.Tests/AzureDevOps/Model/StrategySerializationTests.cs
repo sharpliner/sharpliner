@@ -26,15 +26,16 @@ public class StrategySerializationTests
             MaxParallel = 2,
         };
         string yaml = SharplinerSerializer.Serialize(strategy);
-        yaml.Should().Be(
-@"matrix:
-  Release:
-    _BuildConfig: Release
-    _BuildConfig2: Release2
-  Debug:
-    _BuildConfig: Debug
+        yaml.Trim().Should().Be(
+            """
+            matrix:
+              Release:
+                _BuildConfig: Release
+                _BuildConfig2: Release2
+              Debug:
+                _BuildConfig: Debug
 
-maxParallel: 2
-");
+            maxParallel: 2
+            """);
     }
 }

@@ -125,43 +125,44 @@ public class ConditionalsTests
     public void Else_Test()
     {
         var pipeline = new Else_Test_Pipeline();
-        pipeline.Serialize().Should().Be(
-@"variables:
-- ${{ if eq(a, b) }}:
-  - name: feature
-    value: on
+        pipeline.Serialize().Trim().Should().Be(
+            """
+            variables:
+            - ${{ if eq(a, b) }}:
+              - name: feature
+                value: on
 
-  - name: feature2
-    value: on
+              - name: feature2
+                value: on
 
-- ${{ else }}:
-  - name: feature
-    value: off
+            - ${{ else }}:
+              - name: feature
+                value: off
 
-  - name: feature2
-    value: off
+              - name: feature2
+                value: off
 
-- ${{ if containsValue('bar', 'foo', 'xyz', 'foo') }}:
-  - name: feature
-    value: on
+            - ${{ if containsValue('bar', 'foo', 'xyz', 'foo') }}:
+              - name: feature
+                value: on
 
-  - name: feature2
-    value: on
+              - name: feature2
+                value: on
 
-  - ${{ if and(eq(e, f), ne(g, h)) }}:
-    - name: feature
-      value: on
+              - ${{ if and(eq(e, f), ne(g, h)) }}:
+                - name: feature
+                  value: on
 
-    - name: feature2
-      value: on
+                - name: feature2
+                  value: on
 
-  - ${{ else }}:
-    - name: feature
-      value: off
+              - ${{ else }}:
+                - name: feature
+                  value: off
 
-    - name: feature2
-      value: off
-");
+                - name: feature2
+                  value: off
+            """);
     }
 
     private class ConditionedValueWithElse_Pipeline : SimpleTestPipeline
@@ -188,17 +189,18 @@ public class ConditionalsTests
     public void ConditionedValueWithElse_Test()
     {
         var pipeline = new ConditionedValueWithElse_Pipeline();
-        pipeline.Serialize().Should().Be(
-@"jobs:
-- job: Job
-  pool:
-    ${{ if eq(A, B) }}:
-      name: pool-A
-      demands:
-      - SomeProperty -equals SomeValue
-    ${{ else }}:
-      name: pool-B
-");
+        pipeline.Serialize().Trim().Should().Be(
+            """
+            jobs:
+            - job: Job
+              pool:
+                ${{ if eq(A, B) }}:
+                  name: pool-A
+                  demands:
+                  - SomeProperty -equals SomeValue
+                ${{ else }}:
+                  name: pool-B
+            """);
     }
 
     private class ConditionedValueWithElseIf_Pipeline : SimpleTestPipeline
@@ -226,17 +228,18 @@ public class ConditionalsTests
     public void ConditionedValueWithElseIf_Test()
     {
         var pipeline = new ConditionedValueWithElseIf_Pipeline();
-        pipeline.Serialize().Should().Be(
-@"jobs:
-- job: Job
-  pool:
-    ${{ if eq(A, B) }}:
-      name: pool-A
-      demands:
-      - SomeProperty -equals SomeValue
-    ${{ if eq(C, D) }}:
-      name: pool-B
-");
+        pipeline.Serialize().Trim().Should().Be(
+            """
+            jobs:
+            - job: Job
+              pool:
+                ${{ if eq(A, B) }}:
+                  name: pool-A
+                  demands:
+                  - SomeProperty -equals SomeValue
+                ${{ if eq(C, D) }}:
+                  name: pool-B
+            """);
     }
 
     private class Custom_Condition_Test_Pipeline : TestPipeline

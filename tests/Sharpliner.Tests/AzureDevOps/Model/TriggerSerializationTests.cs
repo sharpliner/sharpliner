@@ -41,33 +41,34 @@ public class TriggerSerializationTests
     {
         TriggerPipeline pipeline = new();
         string yaml = pipeline.Serialize();
-        yaml.Should().Be(
-@"trigger:
-  branches:
-    include:
-    - main
-  paths:
-    include:
-    - src/**/*
-    exclude:
-    - docs/*
-    - '*.md'
+        yaml.Trim().Should().Be(
+            """
+            trigger:
+              branches:
+                include:
+                - main
+              paths:
+                include:
+                - src/**/*
+                exclude:
+                - docs/*
+                - '*.md'
 
-pr:
-  branches:
-    include:
-    - main
-    - develop
+            pr:
+              branches:
+                include:
+                - main
+                - develop
 
-schedules:
-- cron: 0 0 24 * *
-  displayName: Releases
-  branches:
-    include:
-    - staging
-    - production
-  always: true
-");
+            schedules:
+            - cron: 0 0 24 * *
+              displayName: Releases
+              branches:
+                include:
+                - staging
+                - production
+              always: true
+            """);
     }
     private class NoneTriggerPipeline : TestPipeline
     {
@@ -83,10 +84,11 @@ schedules:
     {
         NoneTriggerPipeline pipeline = new();
         string yaml = pipeline.Serialize();
-        yaml.Should().Be(
-@"trigger: none
+        yaml.Trim().Should().Be(
+            """
+            trigger: none
 
-pr: none
-");
+            pr: none
+            """);
     }
 }

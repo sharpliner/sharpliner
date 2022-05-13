@@ -24,24 +24,26 @@ public class PowerShellFileTaskTests
         };
 
         string yaml = SharplinerSerializer.Serialize(task);
-        yaml.Should().Be(@"task: PowerShell@2
+        yaml.Trim().Should().Be(
+            """
+            task: PowerShell@2
 
-displayName: Test task
+            displayName: Test task
 
-inputs:
-  targetType: filePath
-  filePath: some\script.ps1
-  arguments: foo bar
-  errorActionPreference: Inquire
-  warningPreference: Stop
-  informationPreference: Break
-  verbosePreference: Break
-  debugPreference: Suspend
-  failOnStderr: true
-  ignoreLASTEXITCODE: true
+            inputs:
+              targetType: filePath
+              filePath: some\script.ps1
+              arguments: foo bar
+              errorActionPreference: Inquire
+              warningPreference: Stop
+              informationPreference: Break
+              verbosePreference: Break
+              debugPreference: Suspend
+              failOnStderr: true
+              ignoreLASTEXITCODE: true
 
-continueOnError: true
-");
+            continueOnError: true
+            """);
     }
 
     [Fact]
@@ -50,13 +52,15 @@ continueOnError: true
         var task = new PowershellFileTask("some\\script.ps1").DisplayAs("Test task");
 
         string yaml = SharplinerSerializer.Serialize(task);
-        yaml.Should().Be(@"task: PowerShell@2
+        yaml.Trim().Should().Be(
+            """
+            task: PowerShell@2
 
-displayName: Test task
+            displayName: Test task
 
-inputs:
-  targetType: filePath
-  filePath: some\script.ps1
-");
+            inputs:
+              targetType: filePath
+              filePath: some\script.ps1
+            """);
     }
 }
