@@ -12,6 +12,7 @@ Exchange YAML indentation problems for the type-safe environment of C# and let t
   - [Sourcing scripts from files](#sourcing-scripts-from-files)
   - [Pipeline validation](#pipeline-validation)
 - [Something missing?](#something-missing)
+- [Developing Sharpliner](#developing-sharpliner)
 - [Project status](#project-status)
   - [Azure DevOps](#azure-devops)
   - [GitHub Actions](#github-actions)
@@ -282,6 +283,45 @@ Another way to start is to try out Sharpliner to define your own, already existi
 This way you can uncover missing features or you can introduce shortcuts for definitions of build tasks or similar that you use frequently.
 Contributions like these are also very welcome!
 In these cases, it is worth starting with describing your intent in an issue first.
+
+## Developing Sharpliner
+
+Contributions are very welcome and if you find yourself opening the codebase there are couple of things you should know.
+The repository layout is quite simple:
+
+```bash
+.
+├── artifacts            # All build outputs go here. Nuke it to clean
+├── docs                 # Documentation
+├── eng                  # CI/CD for the repo
+│   ├── Sharpliner.CI    # C# definitions for pipelines of this repo
+│   └── pipelines        # YAML pipelines of the repository
+├── src
+│   └── Sharpliner       # Main Sharpliner project
+│       └── build        # Targets/props for the Sharpliner .nupkg
+├── tests
+│   ├── NuGet.Tests      # E2E tests using the Sharpliner  .nupkg
+│   └── Sharpliner.Tests # Unit tests for the main Sharpliner project
+└── Sharpliner.sln       # Main solution of the project
+```
+
+Developing is quite easy - open the `Sharpliner.sln` solution in VS. However, the solution won't build 100% the first time.
+This is because of the `Sharpliner.CI` project.
+This projects uses Sharpliner and defines pipelines for the Sharpliner repository - the YAML is published to `eng/pipelines`.
+This way we test quite many Sharpliner features right in the PR build.
+The `Sharpliner.CI` project expects that a package `Sharpliner.43.43.43.nupkg` is built locally which it then references it simulating the real usage of Sharpliner from `nuget.org`.
+
+To build all of the solution 100%, **you have to build `Sharpliner.CI` from console** as building inside VS won't work on cold checkout.
+This will package `Sharpliner.csproj` first and produce the `43.43.43` package:
+```
+> dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj
+```
+
+If you make changes to the main library and want to test it using `Sharpliner.CI`, clean and then build the CI project from console:
+```
+> dotnet clean eng/Sharpliner.CI/Sharpliner.CI.csproj
+> dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj
+```
 
 ## Project status
 
