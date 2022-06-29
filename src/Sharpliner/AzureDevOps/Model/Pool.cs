@@ -22,6 +22,11 @@ public record Pool
     {
         Name = name;
     }
+
+    public static implicit operator Pool(string vmImage)
+    {
+        return new HostedPool(vmImage: vmImage);
+    }
 }
 
 public record HostedPool : Pool
