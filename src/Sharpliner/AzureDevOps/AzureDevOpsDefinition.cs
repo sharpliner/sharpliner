@@ -342,8 +342,8 @@ public abstract class AzureDevOpsDefinition
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
     /// <param name="allowedValues">Allowed list of values (for some data types)</param>
-    protected static TemplateParameter StringParameter(string name, string displayName, string? defaultValue = null, IEnumerable<string>? allowedValues = null)
-        => new StringTemplateParameter(name, displayName, defaultValue, allowedValues);
+    protected static Parameter StringParameter(string name, string? displayName = null, string? defaultValue = null, IEnumerable<string>? allowedValues = null)
+        => new StringParameter(name, displayName, defaultValue, allowedValues);
 
     /// <summary>
     /// Defines a number template parameter
@@ -352,8 +352,8 @@ public abstract class AzureDevOpsDefinition
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
     /// <param name="allowedValues">Allowed list of values (for some data types)</param>
-    protected static TemplateParameter NumberParameter(string name, string displayName, int defaultValue = 0, IEnumerable<int>? allowedValues = null)
-        => new NumberTemplateParameter(name, displayName, defaultValue, allowedValues);
+    protected static Parameter NumberParameter(string name, string? displayName = null, int defaultValue = 0, IEnumerable<int>? allowedValues = null)
+        => new NumberParameter(name, displayName, defaultValue, allowedValues);
 
     /// <summary>
     /// Defines a boolean template parameter
@@ -361,8 +361,8 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter BooleanParameter(string name, string displayName, bool defaultValue = false)
-        => new BooleanTemplateParameter(name, displayName, defaultValue);
+    protected static Parameter BooleanParameter(string name, string? displayName = null, bool defaultValue = false)
+        => new BooleanParameter(name, displayName, defaultValue);
 
     /// <summary>
     /// Defines a object template parameter
@@ -370,8 +370,8 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter ObjectParameter(string name, string displayName, ConditionedDictionary? defaultValue = null)
-        => new ObjectTemplateParameter(name, displayName, defaultValue);
+    protected static Parameter ObjectParameter(string name, string? displayName = null, ConditionedDictionary? defaultValue = null)
+        => new ObjectParameter(name, displayName, defaultValue);
 
     /// <summary>
     /// Defines a step template parameter
@@ -379,8 +379,8 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter StepParameter(string name, string displayName, Step? defaultValue = null)
-        => new StepTemplateParameter(name, displayName, defaultValue);
+    protected static Parameter StepParameter(string name, string? displayName = null, Step? defaultValue = null)
+        => new StepParameter(name, displayName, defaultValue);
 
     /// <summary>
     /// Defines a stepList template parameter
@@ -388,8 +388,8 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter StepListParameter(string name, string displayName, ConditionedList<Step>? defaultValue = null)
-        => new StepListTemplateParameter(name, displayName, defaultValue);
+    protected static Parameter StepListParameter(string name, string? displayName = null, ConditionedList<Step>? defaultValue = null)
+        => new StepListParameter(name, displayName, defaultValue);
 
     /// <summary>
     /// Defines a job template parameter
@@ -397,8 +397,8 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter JobParameter(string name, string displayName, JobBase? defaultValue = null)
-        => new JobTemplateParameter(name, displayName, defaultValue);
+    protected static Parameter JobParameter(string name, string? displayName = null, JobBase? defaultValue = null)
+        => new JobParameter(name, displayName, defaultValue);
 
     /// <summary>
     /// Defines a jobList template parameter
@@ -406,8 +406,8 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter JobListParameter(string name, string displayName, ConditionedList<JobBase>? defaultValue = null)
-        => new JobListTemplateParameter(name, displayName, defaultValue);
+    protected static Parameter JobListParameter(string name, string? displayName = null, ConditionedList<JobBase>? defaultValue = null)
+        => new JobListParameter(name, displayName, defaultValue);
 
     /// <summary>
     /// Defines a deployment job template parameter
@@ -415,8 +415,8 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter DeploymentParameter(string name, string displayName, DeploymentJob? defaultValue = null)
-        => new DeploymentTemplateParameter(name, displayName, defaultValue);
+    protected static Parameter DeploymentParameter(string name, string? displayName = null, DeploymentJob? defaultValue = null)
+        => new DeploymentParameter(name, displayName, defaultValue);
 
     /// <summary>
     /// Defines a deploymentList template parameter
@@ -424,8 +424,8 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter DeploymentListParameter(string name, string displayName, ConditionedList<DeploymentJob>? defaultValue = null)
-        => new DeploymentListTemplateParameter(name, displayName, defaultValue);
+    protected static Parameter DeploymentListParameter(string name, string? displayName = null, ConditionedList<DeploymentJob>? defaultValue = null)
+        => new DeploymentListParameter(name, displayName, defaultValue);
 
     /// <summary>
     /// Defines a stage template parameter
@@ -433,8 +433,8 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter StageParameter(string name, string displayName, Stage? defaultValue = null)
-        => new StageTemplateParameter(name, displayName, defaultValue);
+    protected static Parameter StageParameter(string name, string? displayName = null, Stage? defaultValue = null)
+        => new StageParameter(name, displayName, defaultValue);
 
     /// <summary>
     /// Defines a stageList template parameter
@@ -442,8 +442,8 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter StageListParameter(string name, string displayName, ConditionedList<Stage>? defaultValue = null)
-        => new StageListTemplateParameter(name, displayName, defaultValue);
+    protected static Parameter StageListParameter(string name, string? displayName = null, ConditionedList<Stage>? defaultValue = null)
+        => new StageListParameter(name, displayName, defaultValue);
 
     #endregion
 
