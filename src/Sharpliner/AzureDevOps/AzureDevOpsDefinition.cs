@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Tasks;
+using static Sharpliner.AzureDevOps.TemplateDefinition;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -210,6 +211,7 @@ public abstract class AzureDevOpsDefinition
     /// <summary>
     /// Allows the variables[""] notation for conditional definitions.
     /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Should not be capitalized to follow YAML syntax")]
     protected static readonly VariableReference variables = new();
 
     /// <summary>
@@ -322,6 +324,126 @@ public abstract class AzureDevOpsDefinition
     /// Creates a new deployment job.
     /// </summary>
     protected static DeploymentJob DeploymentJob(string jobName, string? displayName = null) => new(jobName, displayName);
+
+    #endregion
+
+    #region Pipeline parameter shorthands
+
+    /// <summary>
+    /// Allows the ${{ parameters.name }} notation for parameter reference.
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Should not be capitalized to follow YAML syntax")]
+    protected static readonly TemplateParameterReference parameters = new();
+
+    /// <summary>
+    /// Defines a string template parameter
+    /// </summary>
+    /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
+    /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
+    /// <param name="allowedValues">Allowed list of values (for some data types)</param>
+    protected static TemplateParameter StringParameter(string name, string displayName, string? defaultValue = null, IEnumerable<string>? allowedValues = null)
+        => new StringTemplateParameter(name, displayName, defaultValue, allowedValues);
+
+    /// <summary>
+    /// Defines a number template parameter
+    /// </summary>
+    /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
+    /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
+    /// <param name="allowedValues">Allowed list of values (for some data types)</param>
+    protected static TemplateParameter NumberParameter(string name, string displayName, int defaultValue = 0, IEnumerable<int>? allowedValues = null)
+        => new NumberTemplateParameter(name, displayName, defaultValue, allowedValues);
+
+    /// <summary>
+    /// Defines a boolean template parameter
+    /// </summary>
+    /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
+    /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
+    protected static TemplateParameter BooleanParameter(string name, string displayName, bool defaultValue = false)
+        => new BooleanTemplateParameter(name, displayName, defaultValue);
+
+    /// <summary>
+    /// Defines a object template parameter
+    /// </summary>
+    /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
+    /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
+    protected static TemplateParameter ObjectParameter(string name, string displayName, ConditionedDictionary? defaultValue = null)
+        => new ObjectTemplateParameter(name, displayName, defaultValue);
+
+    /// <summary>
+    /// Defines a step template parameter
+    /// </summary>
+    /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
+    /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
+    protected static TemplateParameter StepParameter(string name, string displayName, Step? defaultValue = null)
+        => new StepTemplateParameter(name, displayName, defaultValue);
+
+    /// <summary>
+    /// Defines a stepList template parameter
+    /// </summary>
+    /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
+    /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
+    protected static TemplateParameter StepListParameter(string name, string displayName, ConditionedList<Step>? defaultValue = null)
+        => new StepListTemplateParameter(name, displayName, defaultValue);
+
+    /// <summary>
+    /// Defines a job template parameter
+    /// </summary>
+    /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
+    /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
+    protected static TemplateParameter JobParameter(string name, string displayName, JobBase? defaultValue = null)
+        => new JobTemplateParameter(name, displayName, defaultValue);
+
+    /// <summary>
+    /// Defines a jobList template parameter
+    /// </summary>
+    /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
+    /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
+    protected static TemplateParameter JobListParameter(string name, string displayName, ConditionedList<JobBase>? defaultValue = null)
+        => new JobListTemplateParameter(name, displayName, defaultValue);
+
+    /// <summary>
+    /// Defines a deployment job template parameter
+    /// </summary>
+    /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
+    /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
+    protected static TemplateParameter DeploymentParameter(string name, string displayName, DeploymentJob? defaultValue = null)
+        => new DeploymentTemplateParameter(name, displayName, defaultValue);
+
+    /// <summary>
+    /// Defines a deploymentList template parameter
+    /// </summary>
+    /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
+    /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
+    protected static TemplateParameter DeploymentListParameter(string name, string displayName, ConditionedList<DeploymentJob>? defaultValue = null)
+        => new DeploymentListTemplateParameter(name, displayName, defaultValue);
+
+    /// <summary>
+    /// Defines a stage template parameter
+    /// </summary>
+    /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
+    /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
+    protected static TemplateParameter StageParameter(string name, string displayName, Stage? defaultValue = null)
+        => new StageTemplateParameter(name, displayName, defaultValue);
+
+    /// <summary>
+    /// Defines a stageList template parameter
+    /// </summary>
+    /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
+    /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
+    protected static TemplateParameter StageListParameter(string name, string displayName, ConditionedList<Stage>? defaultValue = null)
+        => new StageListTemplateParameter(name, displayName, defaultValue);
 
     #endregion
 

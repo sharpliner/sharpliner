@@ -16,8 +16,9 @@ public abstract record TemplateParameter
     public string Name { get; init; }
 
     /// <summary>
-    /// Display name of the parameter in case this is a pipeline parameter
+    /// Display name of the parameter (in case this is a pipeline parameter)
     /// </summary>
+    [YamlMember(Order = 101)]
     public string? DisplayName { get; }
 
     [YamlMember(Order = 110)]

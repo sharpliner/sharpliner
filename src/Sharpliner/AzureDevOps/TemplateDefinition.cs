@@ -110,11 +110,6 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
         => new StageListTemplateParameter(name, null, defaultValue);
 
     /// <summary>
-    /// Allows the ${{ parameters.name }} notation for parameter reference.
-    /// </summary>
-    protected static readonly TemplateParameterReference parameters = new();
-
-    /// <summary>
     /// Allows the ${{ parameters.name }} notation for a stage defined in parameters.
     /// </summary>
     protected static Stage StageParameterReference(string parameterName) => new StageParameterReference(parameterName);
