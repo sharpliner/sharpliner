@@ -18,7 +18,7 @@ namespace Sharpliner.AzureDevOps;
 public record TemplateDefinitionData<T>(
     string TargetFile,
     ConditionedList<T> Definition,
-    List<TemplateParameter>? Parameters = null,
+    List<Parameter>? Parameters = null,
     TargetPathType PathType = TargetPathType.RelativeToGitRoot,
     string[]? Header = null);
 
@@ -52,7 +52,7 @@ internal class TemplateDefinitionWrapper<T> : TemplateDefinition<T>
         TargetFile = data.TargetFile;
         Definition = data.Definition;
         TargetPathType = data.PathType;
-        Parameters = data.Parameters ?? new List<TemplateParameter>();
+        Parameters = data.Parameters ?? new List<Parameter>();
         _header = data.Header ?? SharplinerPublisher.GetDefaultHeader(definitionType);
         YamlProperty = yamlMemberName;
         Validations = validations;
@@ -64,7 +64,7 @@ internal class TemplateDefinitionWrapper<T> : TemplateDefinition<T>
 
     public override ConditionedList<T> Definition { get; }
 
-    public override List<TemplateParameter> Parameters { get; }
+    public override List<Parameter> Parameters { get; }
 
     public override string[]? Header => _header;
 

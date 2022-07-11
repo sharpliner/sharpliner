@@ -50,7 +50,7 @@ public class TemplateTests
     {
         public override string TargetFile => "template.yml";
 
-        public override List<TemplateParameter> Parameters => new()
+        public override List<Parameter> Parameters => new()
         {
             StringParameter("project"),
             StringParameter("version", allowedValues: new[] { "5.0.100", "5.0.102" }),
