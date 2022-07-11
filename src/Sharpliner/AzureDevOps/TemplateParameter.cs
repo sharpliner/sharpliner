@@ -15,12 +15,19 @@ public abstract record TemplateParameter
     [YamlMember(Order = 100)]
     public string Name { get; init; }
 
+    /// <summary>
+    /// Display name of the parameter (in case this is a pipeline parameter)
+    /// </summary>
+    [YamlMember(Order = 101)]
+    public string? DisplayName { get; }
+
     [YamlMember(Order = 110)]
     public abstract string Type { get; }
 
-    internal TemplateParameter(string name)
+    internal TemplateParameter(string name, string? displayName)
     {
         Name = name;
+        DisplayName = displayName;
     }
 }
 
@@ -41,7 +48,8 @@ public abstract record TemplateParameter<T> : TemplateParameter
     [YamlMember(Alias = "values", Order = 130)]
     public IEnumerable<T>? AllowedValues { get; init; }
 
-    internal TemplateParameter(string name, T? defaultValue = default, IEnumerable<T>? allowedValues = null) : base(name)
+    internal TemplateParameter(string name, string? displayName, T? defaultValue = default, IEnumerable<T>? allowedValues = null)
+        : base(name, displayName)
     {
         Default = defaultValue;
         AllowedValues = allowedValues;
@@ -54,10 +62,11 @@ public sealed record StringTemplateParameter : TemplateParameter<string>
     /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
     /// <param name="allowedValues">Allowed list of values (for some data types)</param>
-    public StringTemplateParameter(string name, string? defaultValue = null, IEnumerable<string>? allowedValues = null)
-        : base(name, defaultValue, allowedValues)
+    internal StringTemplateParameter(string name, string? displayName, string? defaultValue = null, IEnumerable<string>? allowedValues = null)
+        : base(name, displayName, defaultValue, allowedValues)
     {
     }
 
@@ -70,10 +79,11 @@ public sealed record NumberTemplateParameter : TemplateParameter<int>
     /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
     /// <param name="allowedValues">Allowed list of values (for some data types)</param>
-    public NumberTemplateParameter(string name, int defaultValue = 0, IEnumerable<int>? allowedValues = null)
-        : base(name, defaultValue, allowedValues)
+    internal NumberTemplateParameter(string name, string? displayName, int defaultValue = 0, IEnumerable<int>? allowedValues = null)
+        : base(name, displayName, defaultValue, allowedValues)
     {
     }
 
@@ -86,9 +96,10 @@ public sealed record BooleanTemplateParameter : TemplateParameter<bool>
     /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public BooleanTemplateParameter(string name, bool defaultValue = false)
-        : base(name, defaultValue)
+    internal BooleanTemplateParameter(string name, string? displayName, bool defaultValue = false)
+        : base(name, displayName, defaultValue)
     {
     }
 
@@ -101,9 +112,10 @@ public sealed record ObjectTemplateParameter : TemplateParameter<ConditionedDict
     /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public ObjectTemplateParameter(string name, ConditionedDictionary? defaultValue = null)
-        : base(name, defaultValue, null)
+    internal ObjectTemplateParameter(string name, string? displayName, ConditionedDictionary? defaultValue = null)
+        : base(name, displayName, defaultValue, null)
     {
     }
 
@@ -116,9 +128,10 @@ public sealed record StepTemplateParameter : TemplateParameter<Step>
     /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public StepTemplateParameter(string name, Step? defaultValue = null)
-        : base(name, defaultValue, null)
+    internal StepTemplateParameter(string name, string? displayName, Step? defaultValue = null)
+        : base(name, displayName, defaultValue, null)
     {
     }
 
@@ -131,9 +144,10 @@ public sealed record StepListTemplateParameter : TemplateParameter<ConditionedLi
     /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public StepListTemplateParameter(string name, ConditionedList<Step>? defaultValue = null)
-        : base(name, defaultValue, null)
+    internal StepListTemplateParameter(string name, string? displayName, ConditionedList<Step>? defaultValue = null)
+        : base(name, displayName, defaultValue, null)
     {
     }
 
@@ -146,9 +160,10 @@ public sealed record JobTemplateParameter : TemplateParameter<JobBase>
     /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public JobTemplateParameter(string name, JobBase? defaultValue = null)
-        : base(name, defaultValue, null)
+    internal JobTemplateParameter(string name, string? displayName, JobBase? defaultValue = null)
+        : base(name, displayName, defaultValue, null)
     {
     }
 
@@ -161,9 +176,10 @@ public sealed record JobListTemplateParameter : TemplateParameter<ConditionedLis
     /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public JobListTemplateParameter(string name, ConditionedList<JobBase>? defaultValue = null)
-        : base(name, defaultValue, null)
+    internal JobListTemplateParameter(string name, string? displayName, ConditionedList<JobBase>? defaultValue = null)
+        : base(name, displayName, defaultValue, null)
     {
     }
 
@@ -176,9 +192,10 @@ public sealed record DeploymentTemplateParameter : TemplateParameter<DeploymentJ
     /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public DeploymentTemplateParameter(string name, DeploymentJob? defaultValue = null)
-        : base(name, defaultValue, null)
+    internal DeploymentTemplateParameter(string name, string? displayName, DeploymentJob? defaultValue = null)
+        : base(name, displayName, defaultValue, null)
     {
     }
 
@@ -191,9 +208,10 @@ public sealed record DeploymentListTemplateParameter : TemplateParameter<Conditi
     /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public DeploymentListTemplateParameter(string name, ConditionedList<DeploymentJob>? defaultValue = null)
-        : base(name, defaultValue, null)
+    internal DeploymentListTemplateParameter(string name, string? displayName, ConditionedList<DeploymentJob>? defaultValue = null)
+        : base(name, displayName, defaultValue, null)
     {
     }
 
@@ -206,9 +224,10 @@ public sealed record StageTemplateParameter : TemplateParameter<Stage>
     /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public StageTemplateParameter(string name, Stage? defaultValue = null)
-        : base(name, defaultValue, null)
+    internal StageTemplateParameter(string name, string? displayName, Stage? defaultValue = null)
+        : base(name, displayName, defaultValue, null)
     {
     }
 
@@ -221,9 +240,10 @@ public sealed record StageListTemplateParameter : TemplateParameter<ConditionedL
     /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public StageListTemplateParameter(string name, ConditionedList<Stage>? defaultValue = null)
-        : base(name, defaultValue, null)
+    internal StageListTemplateParameter(string name, string? displayName, ConditionedList<Stage>? defaultValue = null)
+        : base(name, displayName, defaultValue, null)
     {
     }
 

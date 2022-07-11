@@ -209,7 +209,7 @@ public class SharplinerPublisher
                 return definition.TargetFile;
 
             default:
-                throw new ArgumentOutOfRangeException(nameof(definition.TargetPathType));
+                throw new ArgumentException(nameof(definition.TargetPathType));
         }
     }
 

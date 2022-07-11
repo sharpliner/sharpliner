@@ -4,7 +4,8 @@ using Sharpliner.AzureDevOps.Tasks;
 namespace Sharpliner.Tests.AzureDevOps;
 
 /// <summary>
-/// More details can be found in <see href="https://github.com/dotnet/xharness/blob/main/azure-pipelines.yml">official Azure DevOps pipelines documentation</see>.
+/// Definition of https://github.com/dotnet/xharness/blob/main/azure-pipelines.yml (not 100%)
+/// Used for testing of API inside of this repository
 /// </summary>
 internal class XHarnessPipeline : PipelineDefinition
 {
@@ -15,10 +16,10 @@ internal class XHarnessPipeline : PipelineDefinition
     public override Pipeline Pipeline => new()
     {
         Variables =
-            {
-                VariableTemplate("eng/common-variables.yml"),
-                Variable("Build.Repository.Clean", true),
-            },
+        {
+            VariableTemplate("eng/common-variables.yml"),
+            Variable("Build.Repository.Clean", true),
+        },
 
         Trigger = new Trigger("main", "xcode/*")
         {

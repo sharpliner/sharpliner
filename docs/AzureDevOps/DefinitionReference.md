@@ -127,6 +127,19 @@ Variables =
 }
 ```
 
+## Pipeline parameters
+To define [pipeline runtime parameters](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/runtime-parameters?view=azure-devops&tabs=script), utilize the `*Parameter` shorthands:
+
+```csharp
+Parameters =
+{
+    StringParameter("project", "AzureDevops project"),
+    StringParameter("version", ".NET version", allowedValues: new[] { "5.0.100", "5.0.102" }),
+    BooleanParameter("restore", "Restore NuGets", defaultValue: true),
+    StepParameter("afterBuild", "After steps", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)")),
+}
+```
+
 ## Conditioned expressions
 
 The Azure DevOps pipeline YAML allows you to specify conditioned expressions which are evaulated when pipeline is started.
