@@ -12,12 +12,7 @@ namespace Sharpliner.AzureDevOps;
 /// </summary>
 public abstract class AzureDevOpsDefinition
 {
-    internal static readonly Regex NameRegex = new("^[A-Za-z0-9_]+$", RegexOptions.Compiled);
-
-    /// <summary>
-    /// Start an ${{ if () }} section.
-    /// </summary>
-    protected static ConditionBuilder If => new();
+    #region Template references
 
     /// <summary>
     /// Reference a YAML template.
@@ -50,6 +45,10 @@ public abstract class AzureDevOpsDefinition
     /// <param name="parameters">Values for template parameters</param>
     protected static Template<Step> StepTemplate(string path, TemplateParameters? parameters = null)
         => new(path, parameters);
+
+    #endregion
+
+    #region Library references
 
     /// <summary>
     /// Reference a step library (series of library stages).
@@ -204,10 +203,9 @@ public abstract class AzureDevOpsDefinition
         where TLibrary : DefinitionLibrary<TDefinition>, new()
         => new(CreateInstance<TLibrary>());
 
-    /// <summary>
-    /// Helper method to create instances of T.
-    /// </summary>
-    internal static T CreateInstance<T>() where T : new() => (T)Activator.CreateInstance(typeof(T))!;
+    #endregion
+
+    #region Pipeline variable shorthands
 
     /// <summary>
     /// Allows the variables[""] notation for conditional definitions.
@@ -240,6 +238,10 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     /// <param name="name">Group name</param>
     protected static Conditioned<VariableBase> Group(string name) => new(new VariableGroup(name));
+
+    #endregion
+
+    #region Pipeline task shorthands
 
     /// <summary>
     /// Creates a bash task.
@@ -287,21 +289,6 @@ public abstract class AzureDevOpsDefinition
     protected static AzureDevOpsTask Task(string taskName, string? displayName = null) => new AzureDevOpsTask(taskName) with { DisplayName = displayName! };
 
     /// <summary>
-    /// Creates a new stage.
-    /// </summary>
-    protected static Stage Stage(string stageName, string? displayName = null) => new(stageName, displayName);
-
-    /// <summary>
-    /// Creates a new job.
-    /// </summary>
-    protected static Job Job(string jobName, string? displayName = null) => new(jobName, displayName);
-
-    /// <summary>
-    /// Creates a new deployment job.
-    /// </summary>
-    protected static DeploymentJob DeploymentJob(string jobName, string? displayName = null) => new(jobName, displayName);
-
-    /// <summary>
     /// Creates an UseDotNet or DotNetCoreCLI task.
     /// </summary>
     protected static DotNetTaskBuilder DotNet { get; } = new();
@@ -317,11 +304,33 @@ public abstract class AzureDevOpsDefinition
             Arguments = $"-p:{nameof(PublishDefinitions.FailIfChanged)}=true"
         };
 
+    #endregion
+
+    #region Pipeline member shorthands
+
     /// <summary>
-    /// AzDO allows an empty dependsOn which then forces the stage/job to kick off in parallel.
-    /// If dependsOn is omitted, stages/jobs run in the order they are defined.
+    /// Creates a new stage.
     /// </summary>
-    protected static ConditionedList<string> NoDependsOn => new EmptyDependsOn();
+    protected static Stage Stage(string stageName, string? displayName = null) => new(stageName, displayName);
+
+    /// <summary>
+    /// Creates a new job.
+    /// </summary>
+    protected static Job Job(string jobName, string? displayName = null) => new(jobName, displayName);
+
+    /// <summary>
+    /// Creates a new deployment job.
+    /// </summary>
+    protected static DeploymentJob DeploymentJob(string jobName, string? displayName = null) => new(jobName, displayName);
+
+    #endregion
+
+    #region Conditions
+
+    /// <summary>
+    /// Start an ${{ if () }} section.
+    /// </summary>
+    protected static ConditionBuilder If => new();
 
     /// <summary>
     /// Use this to specify any custom condition (in case you miss some operator or expression).
@@ -399,4 +408,23 @@ public abstract class AzureDevOpsDefinition
     protected static Condition IsPullRequest => new BuildReasonCondition("'PullRequest'", true);
 
     protected static Condition IsNotPullRequest => new BuildReasonCondition("'PullRequest'", false);
+
+    #endregion
+
+    #region Helpers
+
+    internal static readonly Regex NameRegex = new("^[A-Za-z0-9_]+$", RegexOptions.Compiled);
+
+    /// <summary>
+    /// AzDO allows an empty dependsOn which then forces the stage/job to kick off in parallel.
+    /// If dependsOn is omitted, stages/jobs run in the order they are defined.
+    /// </summary>
+    protected static ConditionedList<string> NoDependsOn => new EmptyDependsOn();
+
+    /// <summary>
+    /// Helper method to create instances of T.
+    /// </summary>
+    internal static T CreateInstance<T>() where T : new() => (T)Activator.CreateInstance(typeof(T))!;
+
+    #endregion
 }
