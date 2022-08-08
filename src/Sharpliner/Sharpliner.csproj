@@ -21,6 +21,9 @@
 
     <!-- Warnings about missing XML docs for public members -->
     <NoWarn>$(NoWarn);CS1591;CA1822</NoWarn>
+
+    <!-- This makes sure we incluse YamlDotNet.dll in the nuget -->
+    <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);IncludeYamlDotNetInNupkg</GenerateNuspecDependsOn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -45,14 +48,26 @@
     This Target makes sure we include YamlDotNet.dll in the NuGet as it will be needed by the task
     https://natemcmaster.com/blog/2017/11/11/msbuild-task-with-dependencies/#third-party-dependencies-and-nuget
   -->
-  <Target Name="PackTaskDependencies" BeforeTargets="GenerateNuspec">
+  <Target Name="IncludeYamlDotNetInNupkg">
     <!--
       The include needs to happen after output has been copied to build output folder
       but before NuGet generates a nuspec. See https://github.com/NuGet/Home/issues/4704.
     -->
     <ItemGroup>
-      <_PackageFiles Include="$(BaseOutputPath)\*\YamlDotNet.dll">
-        <PackagePath>lib</PackagePath>
+      <_PackageFiles Include="$(OutputPath)\net5.0\YamlDotNet.dll">
+        <PackagePath>lib\net5.0</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
+      
+      <_PackageFiles Include="$(OutputPath)\net6.0\YamlDotNet.dll">
+        <PackagePath>lib\net6.0</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
+      
+      <_PackageFiles Include="$(OutputPath)\net7.0\YamlDotNet.dll">
+        <PackagePath>lib\net7.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
