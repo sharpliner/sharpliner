@@ -30,7 +30,7 @@ public abstract record PipelineBase
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/runtime-parameters?view=azure-devops">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     [YamlMember(Order = 150)]
-    public ConditionedList<TemplateParameter> Parameters { get; init; } = new();
+    public ConditionedList<Parameter> Parameters { get; init; } = new();
 
     /// <summary>
     /// Specifies when the pipeline is supposed to run

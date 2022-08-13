@@ -17,8 +17,8 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
     /// <param name="allowedValues">Allowed list of values (for some data types)</param>
-    protected static TemplateParameter StringParameter(string name, string? defaultValue = null, IEnumerable<string>? allowedValues = null)
-        => new StringTemplateParameter(name, null, defaultValue, allowedValues);
+    protected static Parameter StringParameter(string name, string? defaultValue = null, IEnumerable<string>? allowedValues = null)
+        => new StringParameter(name, null, defaultValue, allowedValues);
 
     /// <summary>
     /// Defines a number template parameter
@@ -26,103 +26,103 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
     /// <param name="allowedValues">Allowed list of values (for some data types)</param>
-    protected static TemplateParameter NumberParameter(string name, int defaultValue = 0, IEnumerable<int>? allowedValues = null)
-        => new NumberTemplateParameter(name, null, defaultValue, allowedValues);
+    protected static Parameter NumberParameter(string name, int defaultValue = 0, IEnumerable<int>? allowedValues = null)
+        => new NumberParameter(name, null, defaultValue, allowedValues);
 
     /// <summary>
     /// Defines a boolean template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter BooleanParameter(string name, bool defaultValue = false)
-        => new BooleanTemplateParameter(name, null, defaultValue);
+    protected static Parameter BooleanParameter(string name, bool defaultValue = false)
+        => new BooleanParameter(name, null, defaultValue);
 
     /// <summary>
     /// Defines a object template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter ObjectParameter(string name, ConditionedDictionary? defaultValue = null)
-        => new ObjectTemplateParameter(name, null, defaultValue);
+    protected static Parameter ObjectParameter(string name, ConditionedDictionary? defaultValue = null)
+        => new ObjectParameter(name, null, defaultValue);
 
     /// <summary>
     /// Defines a step template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter StepParameter(string name, Step? defaultValue = null)
-        => new StepTemplateParameter(name, null, defaultValue);
+    protected static Parameter StepParameter(string name, Step? defaultValue = null)
+        => new StepParameter(name, null, defaultValue);
 
     /// <summary>
     /// Defines a stepList template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter StepListParameter(string name, ConditionedList<Step>? defaultValue = null)
-        => new StepListTemplateParameter(name, null, defaultValue);
+    protected static Parameter StepListParameter(string name, ConditionedList<Step>? defaultValue = null)
+        => new StepListParameter(name, null, defaultValue);
 
     /// <summary>
     /// Defines a job template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter JobParameter(string name, JobBase? defaultValue = null)
-        => new JobTemplateParameter(name, null, defaultValue);
+    protected static Parameter JobParameter(string name, JobBase? defaultValue = null)
+        => new JobParameter(name, null, defaultValue);
 
     /// <summary>
     /// Defines a jobList template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter JobListParameter(string name, ConditionedList<JobBase>? defaultValue = null)
-        => new JobListTemplateParameter(name, null, defaultValue);
+    protected static Parameter JobListParameter(string name, ConditionedList<JobBase>? defaultValue = null)
+        => new JobListParameter(name, null, defaultValue);
 
     /// <summary>
     /// Defines a deployment job template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter DeploymentParameter(string name, DeploymentJob? defaultValue = null)
-        => new DeploymentTemplateParameter(name, null, defaultValue);
+    protected static Parameter DeploymentParameter(string name, DeploymentJob? defaultValue = null)
+        => new DeploymentParameter(name, null, defaultValue);
 
     /// <summary>
     /// Defines a deploymentList template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter DeploymentListParameter(string name, ConditionedList<DeploymentJob>? defaultValue = null)
-        => new DeploymentListTemplateParameter(name, null, defaultValue);
+    protected static Parameter DeploymentListParameter(string name, ConditionedList<DeploymentJob>? defaultValue = null)
+        => new DeploymentListParameter(name, null, defaultValue);
 
     /// <summary>
     /// Defines a stage template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter StageParameter(string name, Stage? defaultValue = null)
-        => new StageTemplateParameter(name, null, defaultValue);
+    protected static Parameter StageParameter(string name, Stage? defaultValue = null)
+        => new StageParameter(name, null, defaultValue);
 
     /// <summary>
     /// Defines a stageList template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static TemplateParameter StageListParameter(string name, ConditionedList<Stage>? defaultValue = null)
-        => new StageListTemplateParameter(name, null, defaultValue);
+    protected static Parameter StageListParameter(string name, ConditionedList<Stage>? defaultValue = null)
+        => new StageListParameter(name, null, defaultValue);
 
     /// <summary>
     /// Allows the ${{ parameters.name }} notation for a stage defined in parameters.
     /// </summary>
-    protected static Stage StageParameterReference(string parameterName) => new StageParameterReference(parameterName);
+    protected static Stage StageParameterReference(string parameterName) => new StageReference(parameterName);
 
     /// <summary>
     /// Allows the ${{ parameters.name }} notation for a job defined in parameters.
     /// </summary>
-    protected static JobBase JobParameterReference(string parameterName) => new JobParameterReference(parameterName);
+    protected static JobBase JobParameterReference(string parameterName) => new JobReference(parameterName);
 
     /// <summary>
     /// Allows the ${{ parameters.name }} notation for a step defined in parameters.
     /// </summary>
-    protected static Step StepParameterReference(string parameterName) => new StepParameterReference(parameterName);
+    protected static Step StepParameterReference(string parameterName) => new StepReference(parameterName);
 
     public sealed class TemplateParameterReference
     {
@@ -146,7 +146,7 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
     public virtual TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
 
     [DisallowNull]
-    public virtual List<TemplateParameter> Parameters { get; } = new();
+    public virtual List<Parameter> Parameters { get; } = new();
 
     [DisallowNull]
     public abstract ConditionedList<T> Definition { get; }
