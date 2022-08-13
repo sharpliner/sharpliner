@@ -214,8 +214,8 @@ public class DotNetTaskBuilder
             IncludeNuGetOrg = includeNuGetOrg,
             Inputs =
                 {
-                    { "feedsToUse", "select" },
-                    { "feedRestore", feed },
+                    { DotNetRestoreCoreCliTask.FeedsToUseProperty, DotNetRestoreCoreCliTask.FeedsRestoreValue },
+                    { DotNetRestoreCoreCliTask.FeedRestoreProperty, feed },
                 }
         };
 
@@ -227,8 +227,8 @@ public class DotNetTaskBuilder
         {
             Inputs =
                 {
-                    { "feedsToUse", "config" },
-                    { "nugetConfigPath", nugetConfigPath },
+                    { DotNetRestoreCoreCliTask.FeedsToUseProperty, DotNetRestoreCoreCliTask.ConfigRestoreValue },
+                    { DotNetRestoreCoreCliTask.NugetConfigPathProperty, nugetConfigPath },
                 }
         };
     }
