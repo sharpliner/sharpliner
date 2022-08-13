@@ -1,5 +1,4 @@
-﻿using System;
-using Sharpliner.Common;
+﻿using Sharpliner.Common;
 
 namespace Sharpliner;
 
@@ -64,7 +63,7 @@ public abstract class SharplinerConfiguration : ISharplinerConfiguration
         /// <summary>
         /// Validates whether stages and jobs do not dependent on each other and similar.
         /// </summary>
-        public ValidationSeverity DependsOnFields { get; set; } = ValidationSeverity.Error;
+        public ValidationSeverity DependsOnFields { get; set; } = ValidationSeverity.Warning;
 
         /// <summary>
         /// Validates whether checked out repositories are defined in resources.
