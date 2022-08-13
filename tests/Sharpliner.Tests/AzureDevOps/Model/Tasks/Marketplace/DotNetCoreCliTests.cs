@@ -231,6 +231,33 @@ public class DotNetCoreCliTests
     }
 
     [Fact]
+    public void Restore_Projects_With_Config_Command_Test()
+    {
+        var task = _builder.Restore.Projects("src/*.csproj") with
+        {
+            NoCache = true,
+            IncludeNuGetOrg = true,
+            NuGetConfigPath = "src/nuget.config",
+        };
+
+        var yaml = GetYaml(task);
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: job
+              steps:
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: restore
+                  projects: src/*.csproj
+                  noCache: true
+                  includeNuGetOrg: true
+                  nugetConfigPath: src/nuget.config
+                  feedsToUse: config
+            """);
+    }
+
+    [Fact]
     public void Restore_FromFeed_Command_Test()
     {
         var task = _builder.Restore.FromFeed("dotnet-7-preview-feed", includeNuGetOrg: false) with
@@ -256,6 +283,23 @@ public class DotNetCoreCliTests
                   noCache: true
                   restoreDirectory: .packages
             """);
+    }
+
+    [Fact]
+    public void Restore_FromFeed_WithNugetConfig_Command_Test()
+    {
+        Action action = () =>
+        {
+            _ = _builder.Restore.FromFeed("dotnet-7-preview-feed", includeNuGetOrg: false) with
+            {
+                ExternalFeedCredentials = "feeds/dotnet-7",
+                NoCache = true,
+                RestoreDirectory = ".packages",
+                NuGetConfigPath = "this should cause an exception",
+            };
+        };
+
+        action.Should().Throw<Exception>();
     }
 
     [Fact]

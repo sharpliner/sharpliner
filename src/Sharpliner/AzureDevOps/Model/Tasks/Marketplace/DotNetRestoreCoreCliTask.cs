@@ -1,4 +1,6 @@
-﻿using YamlDotNet.Serialization;
+﻿using System;
+using YamlDotNet.Serialization;
+using static Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
@@ -7,6 +9,19 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// </summary>
 public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
 {
+    internal const string FeedsToUseProperty = "feedsToUse";
+    internal const string FeedRestoreProperty = "feedRestore";
+    internal const string NugetConfigPathProperty = "nugetConfigPath";
+    internal const string ConfigRestoreValue = "config";
+    internal const string FeedsRestoreValue = "select";
+
+    private const string RestoreDirectoryProperty = "restoreDirectory";
+    private const string RestoreArgumentsProperty = "restoreArguments";
+    private const string VerbosityRestoreProperty = "verbosityRestore";
+    private const string ExternalFeedCredentialsProperty = "externalFeedCredentials";
+    private const string NoCacheProperty = "noCache";
+    private const string IncludeNuGetOrgProperty = "includeNuGetOrg";
+
     public DotNetRestoreCoreCliTask() : base("restore")
     {
     }
@@ -19,8 +34,8 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public string? RestoreDirectory
     {
-        get => GetString("restoreDirectory");
-        init => SetProperty("restoreDirectory", value);
+        get => GetString(RestoreDirectoryProperty);
+        init => SetProperty(RestoreDirectoryProperty, value);
     }
 
     /// <summary>
@@ -29,8 +44,8 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public string? RestoreArguments
     {
-        get => GetString("restoreArguments");
-        init => SetProperty("restoreArguments", value);
+        get => GetString(RestoreArgumentsProperty);
+        init => SetProperty(RestoreArgumentsProperty, value);
     }
 
     /// <summary>
@@ -40,23 +55,23 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public BuildVerbosity VerbosityRestore
     {
-        get => GetString("verbosityRestore") switch
+        get => GetString(VerbosityRestoreProperty) switch
         {
             "quiet" => BuildVerbosity.Quiet,
             "minimal" => BuildVerbosity.Minimal,
             "normal" => BuildVerbosity.Normal,
             "detailed" => BuildVerbosity.Detailed,
             "diagnostic" => BuildVerbosity.Diagnostic,
-            _ => throw new System.NotImplementedException(),
+            _ => throw new NotImplementedException(),
         };
-        init => SetProperty("verbosityRestore", value switch
+        init => SetProperty(VerbosityRestoreProperty, value switch
         {
             BuildVerbosity.Quiet => "quiet",
             BuildVerbosity.Minimal => "minimal",
             BuildVerbosity.Normal => "normal",
             BuildVerbosity.Detailed => "detailed",
             BuildVerbosity.Diagnostic => "diagnostic",
-            _ => throw new System.NotImplementedException(),
+            _ => throw new NotImplementedException(),
         });
     }
 
@@ -66,8 +81,8 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public bool NoCache
     {
-        get => GetBool("noCache", false);
-        init => SetProperty("noCache", value ? "true" : "false");
+        get => GetBool(NoCacheProperty, false);
+        init => SetProperty(NoCacheProperty, value ? "true" : "false");
     }
 
     /// <summary>
@@ -76,8 +91,8 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public bool? IncludeNuGetOrg
     {
-        get => GetBool("includeNuGetOrg", false);
-        init => SetProperty("includeNuGetOrg", value.HasValue ? (value.Value ? "true" : "false") : null);
+        get => GetBool(IncludeNuGetOrgProperty, false);
+        init => SetProperty(IncludeNuGetOrgProperty, value.HasValue ? (value.Value ? "true" : "false") : null);
     }
 
     /// <summary>
@@ -86,8 +101,21 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public string? NuGetConfigPath
     {
-        get => GetString("nugetConfigPath");
-        init => SetProperty("nugetConfigPath", value);
+        get => GetString(NugetConfigPathProperty);
+        init
+        {
+            var feedsToUse = GetString(FeedsToUseProperty);
+
+            if (!string.IsNullOrEmpty(feedsToUse) && feedsToUse != ConfigRestoreValue)
+            {
+                throw new Exception(
+                    $"Using {NugetConfigPathProperty} requires `{FeedsToUseProperty}` set to `{ConfigRestoreValue}`. " +
+                    $"Please use DotNet.Restore.{nameof(DotNetRestoreBuilder.FromNuGetConfig)}() instead of DotNet.Restore.{nameof(DotNetRestoreBuilder.FromFeed)}()");
+            }
+
+            SetProperty(NugetConfigPathProperty, value);
+            SetProperty(FeedsToUseProperty, ConfigRestoreValue);
+        }
     }
 
     /// <summary>
@@ -99,8 +127,8 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public string? ExternalFeedCredentials
     {
-        get => GetString("externalFeedCredentials");
-        init => SetProperty("externalFeedCredentials", value);
+        get => GetString(ExternalFeedCredentialsProperty);
+        init => SetProperty(ExternalFeedCredentialsProperty, value);
     }
 }
 
