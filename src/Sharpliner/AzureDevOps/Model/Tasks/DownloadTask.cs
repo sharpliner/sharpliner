@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using YamlDotNet.Serialization;
@@ -41,14 +42,6 @@ public abstract record DownloadTask : Step
     public string Path { get; init; } = "$(Pipeline.Workspace)";
 
     /// <summary>
-    /// A boolean specifying whether to download artifacts from a triggering build.
-    /// Defaults to false.
-    /// </summary>
-    [YamlMember(Order = 100)]
-    [DefaultValue(false)]
-    public bool PreferTriggeringPipeline { get; init; } = false;
-
-    /// <summary>
     /// A list of tags. Only builds with these tags will be returned.
     /// </summary>
     [YamlIgnore]
@@ -56,26 +49,11 @@ public abstract record DownloadTask : Step
 
     [YamlMember(Alias = "tags", Order = 104)]
     public string? _Tags => Tags.Any() ? string.Join(",", Tags) : null;
-
-    /// <summary>
-    /// If checked, this build task will try to download artifacts whether the build is succeeded or partially succeeded.
-    /// Defaults to false.
-    /// </summary>
-    [YamlMember(Order = 105)]
-    [DefaultValue(false)]
-    public bool AllowPartiallySucceededBuilds { get; init; } = false;
-
-    /// <summary>
-    /// If checked, this build task will try to download artifacts whether the build is succeeded or failed.
-    /// Defaults to false.
-    /// </summary>
-    [YamlMember(Order = 106)]
-    [DefaultValue(false)]
-    public bool AllowFailedBuilds { get; init; } = false;
 }
 
 public record CurrentDownloadTask : DownloadTask
 {
+    [YamlMember(Order = 1)]
     public override string Download => "current";
 }
 
@@ -85,50 +63,173 @@ public record NoneDownloadTask : Step
     public string Download => "none";
 }
 
-public record SpecificDownloadTask : DownloadTask
+public record SpecificDownloadTask : AzureDevOpsTask
 {
-    private readonly string _pipelineResourceIdentifier;
+    private const string ProjectProperty = "project";
+    private const string PipelineProperty = "pipeline";
+    private const string RunVersionProperty = "runVersion";
+    private const string RunBranchProperty = "runBranch";
+    private const string RunIdProperty = "runId";
+    private const string TagsProperty = "tags";
+    private const string PreferTriggeringPipelineProperty = "preferTriggeringPipeline";
+    private const string AllowPartiallySucceededBuildsProperty = "allowPartiallySucceededBuilds";
+    private const string AllowFailedBuildsProperty = "allowFailedBuilds";
+    private const string CheckDownloadedFilesProperty = "checkDownloadedFiles";
+    private const string RetryDownloadCountProperty = "retryDownloadCount";
 
-    public override string Download => _pipelineResourceIdentifier;
+    public SpecificDownloadTask(string project, int pipeline) : base("DownloadPipelineArtifact@2")
+    {
+        SetProperty(RunVersionProperty, "specific");
+        Project = project;
+        Pipeline = pipeline;
+    }
 
     /// <summary>
     /// The project GUID from which to download the pipeline artifacts.
     /// </summary>
-    [YamlMember(Order = 64)]
-    public string? Project { get; init; }
+    [YamlIgnore]
+    public string Project
+    {
+        get => GetString(ProjectProperty) ?? throw new NullReferenceException();
+        init => SetProperty(ProjectProperty, value);
+    }
 
     /// <summary>
-    /// Specifies which build version to download.
+    /// The definition ID of the build pipeline.
     /// </summary>
     [YamlIgnore]
-    public RunVersion RunVersion { get; init; }
-
-    [YamlMember(Alias = "runVersion", Order = 65)]
-    public string _RunVersion => RunVersion switch
+    public int Pipeline
     {
-        RunVersion.LatestFromBranch => "latestFromBranch",
-        RunVersion.Specific => "specific",
-        _ => "latest",
-    };
+        get => GetInt(PipelineProperty) ?? 0;
+        init => SetProperty(PipelineProperty, value.ToString());
+    }
+
+    [YamlIgnore]
+    public RunVersion RunVersion { get; } = RunVersion.Specific;
 
     /// <summary>
     /// Specify to filter on branch/ref name.
     /// For example: refs/heads/develop
+    /// Argument aliases: branchName
     /// </summary>
-    [YamlMember(Alias = "runBranch", Order = 66)]
-    [DefaultValue("refs/heads/master")]
-    public string BranchName { get; init; } = "refs/heads/master";
+    [YamlIgnore]
+    public string RunBranch
+    {
+        get => GetString(RunBranchProperty)!;
+        init => SetProperty(RunBranchProperty, value);
+    }
+
+    /// <summary>
+    /// Specify to filter on branch/ref name.
+    /// For example: refs/heads/develop
+    /// Argument aliases: runBranch
+    /// </summary>
+    [YamlIgnore]
+    public string BranchName
+    {
+        get => GetString(RunBranchProperty)!;
+        init => SetProperty(RunBranchProperty, value);
+    }
 
     /// <summary>
     /// The build from which to download the artifacts.
     /// For example: 1764
+    /// Argument aliases: pipelineId, buildId
     /// </summary>
-    [YamlMember(Alias = "runId", Order = 67)]
-    public int PipelineId { get; init; }
-
-    public SpecificDownloadTask(string pipelineResourceIdentifier)
+    [YamlIgnore]
+    public int RunId
     {
-        _pipelineResourceIdentifier = pipelineResourceIdentifier;
+        get => GetInt(RunIdProperty) ?? 0;
+        init => SetProperty(RunIdProperty, value.ToString());
+    }
+
+    /// <summary>
+    /// The build from which to download the artifacts.
+    /// For example: 1764
+    /// Argument aliases: runId, buildId
+    /// </summary>
+    [YamlIgnore]
+    public int PipelineId
+    {
+        get => GetInt(RunIdProperty) ?? 0;
+        init => SetProperty(RunIdProperty, value.ToString());
+    }
+
+    /// <summary>
+    /// The build from which to download the artifacts.
+    /// For example: 1764
+    /// Argument aliases: runId, pipelineId
+    /// </summary>
+    [YamlIgnore]
+    public int BuildId
+    {
+        get => GetInt(RunIdProperty) ?? 0;
+        init => SetProperty(RunIdProperty, value.ToString());
+    }
+
+    /// <summary>
+    /// A list of tags. Only builds with these tags will be returned.
+    /// </summary>
+    [YamlIgnore]
+    public List<string> Tags
+    {
+        get => (GetString(TagsProperty) ?? string.Empty).Split(",").ToList();
+        init => SetProperty(TagsProperty, string.Join(",", value));
+    }
+
+    /// <summary>
+    /// A boolean specifying whether to download artifacts from a triggering build.
+    /// Defaults to false.
+    /// </summary>
+    [YamlIgnore]
+    public bool PreferTriggeringPipeline
+    {
+        get => GetBool(PreferTriggeringPipelineProperty, false);
+        init => SetProperty(PreferTriggeringPipelineProperty, value ? "true" : "false");
+    }
+
+    /// <summary>
+    /// If checked, this build task will try to download artifacts whether the build is succeeded or partially succeeded.
+    /// Defaults to false.
+    /// </summary>
+    [YamlIgnore]
+    public bool AllowPartiallySucceededBuilds
+    {
+        get => GetBool(AllowPartiallySucceededBuildsProperty, false);
+        init => SetProperty(AllowPartiallySucceededBuildsProperty, value ? "true" : "false");
+    }
+
+    /// <summary>
+    /// If checked, this build task will try to download artifacts whether the build is succeeded or failed.
+    /// Defaults to false.
+    /// </summary>
+    [YamlIgnore]
+    public bool AllowFailedBuilds
+    {
+        get => GetBool(AllowFailedBuildsProperty, false);
+        init => SetProperty(AllowFailedBuildsProperty, value ? "true" : "false");
+    }
+
+    /// <summary>
+    /// A boolean specifying whether this build task will check that all files are fully downloaded.
+    /// Defaults to false.
+    /// </summary>
+    [YamlIgnore]
+    public bool CheckDownloadedFiles
+    {
+        get => GetBool(CheckDownloadedFilesProperty, false);
+        init => SetProperty(CheckDownloadedFilesProperty, value ? "true" : "false");
+    }
+
+    /// <summary>
+    /// Number of times to retry downloading a build artifact if the download fails.
+    /// Defaults to 4.
+    /// </summary>
+    [YamlIgnore]
+    public int RetryDownloadCount
+    {
+        get => GetInt(RetryDownloadCountProperty) ?? 0;
+        init => SetProperty(RetryDownloadCountProperty, value.ToString());
     }
 }
 

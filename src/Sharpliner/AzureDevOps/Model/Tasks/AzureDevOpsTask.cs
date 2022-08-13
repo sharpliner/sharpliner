@@ -67,6 +67,9 @@ public record AzureDevOpsTask : Step
     protected string? GetString(string name, string? defaultValue = null)
         => Inputs.TryGetValue(name, out var value) ? value.ToString() : defaultValue;
 
+    protected int? GetInt(string name, int? defaultValue = null)
+        => Inputs.TryGetValue(name, out var value) ? int.Parse(value.ToString()!) : defaultValue;
+
     protected bool GetBool(string name, bool defaultValue)
         => Inputs.TryGetValue(name, out var value) ? value.ToString() == "true" : defaultValue;
 
