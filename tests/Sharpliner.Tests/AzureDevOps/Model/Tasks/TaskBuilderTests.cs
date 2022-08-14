@@ -282,7 +282,6 @@ public class TaskBuilderTests
                                 "release",
                                 "nightly",
                             },
-                            AllowFailedBuilds = true,
                             Artifact = "Frontend",
                             Patterns = new()
                             {
@@ -290,12 +289,18 @@ public class TaskBuilderTests
                                 "frontend.config",
                             }
                         },
-                        Download.SpecificBuild("dotnet-xharness") with
+                        Download.SpecificBuild("public", 56, 1745, "MyProject.CLI", patterns: new[] { "**/*.dll", "**/*.exe" }) with
                         {
-                            RunVersion = RunVersion.Latest,
-                            Project = "2a73171e-15d1-41f9-b283-49aa0633d1a2",
-                            BranchName = "main",
-                            Path = "$(Pipeline.Workspace)/xharness"
+                            AllowPartiallySucceededBuilds = true,
+                            RetryDownloadCount = 3,
+                            Tags = new() { "non-release", "preview" },
+                        },
+                        Download.LatestFromBranch("internal", 23, "refs/heads/develop", path: variables.Build.ArtifactStagingDirectory) with
+                        {
+                            AllowFailedBuilds = true,
+                            CheckDownloadedFiles = true,
+                            PreferTriggeringPipeline = true,
+                            Artifact = "Another.CLI",
                         }
                     }
                 }
@@ -321,13 +326,32 @@ public class TaskBuilderTests
                   frontend/**/*
                   frontend.config
                 tags: release,nightly
-                allowFailedBuilds: true
 
-              - download: dotnet-xharness
-                path: $(Pipeline.Workspace)/xharness
-                project: 2a73171e-15d1-41f9-b283-49aa0633d1a2
-                runVersion: latest
-                runBranch: main
+              - task: DownloadPipelineArtifact@2
+                inputs:
+                  runVersion: specific
+                  project: public
+                  pipeline: 56
+                  runId: 1745
+                  artifact: MyProject.CLI
+                  patterns: |-
+                    **/*.dll
+                    **/*.exe
+                  allowPartiallySucceededBuilds: true
+                  retryDownloadCount: 3
+                  tags: non-release,preview
+
+              - task: DownloadPipelineArtifact@2
+                inputs:
+                  runVersion: latestFromBranch
+                  project: internal
+                  pipeline: 23
+                  runBranch: refs/heads/develop
+                  path: $(Build.ArtifactStagingDirectory)
+                  allowFailedBuilds: true
+                  checkDownloadedFiles: true
+                  preferTriggeringPipeline: true
+                  artifact: Another.CLI
             """);
     }
 

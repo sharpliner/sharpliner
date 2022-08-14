@@ -50,6 +50,13 @@ Steps =
 {
     Checkout.Self,
 
+    Download.LatestFromBranch("internal", 23, "refs/heads/develop", artifact: "CLI.Package") with
+    {
+        AllowPartiallySucceededBuilds = true,
+        CheckDownloadedFiles = true,
+        PreferTriggeringPipeline = true,
+    }
+
     // Tasks are represented as C# records so you can use the `with` keyword to override the properties
     DotNet.Build("src/MyProject.sln", includeNuGetOrg: true) with
     {
