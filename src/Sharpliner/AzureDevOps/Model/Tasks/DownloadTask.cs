@@ -119,8 +119,8 @@ public record SpecificDownloadTask : AzureDevOpsTask
     [YamlIgnore]
     public List<string>? Patterns
     {
-        get => (GetString(PatternsProperty) ?? string.Empty).Split("\n").ToList();
-        init => SetProperty(PatternsProperty, value is null || value.Count == 0 ? null : string.Join("\n", value));
+        get => (GetString(PatternsProperty) ?? string.Empty).Split(System.Environment.NewLine).ToList();
+        init => SetProperty(PatternsProperty, value is null || value.Count == 0 ? null : string.Join(System.Environment.NewLine, value));
     }
 
     /// <summary>

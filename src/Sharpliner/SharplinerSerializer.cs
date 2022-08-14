@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Text.RegularExpressions;
+using YamlDotNet.Core;
 using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.EventEmitters;
 using YamlDotNet.Serialization.NamingConventions;
 
 namespace Sharpliner;
@@ -19,7 +21,8 @@ public static class SharplinerSerializer
     {
         var serializerBuilder = new SerializerBuilder()
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
-            .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitDefaults | DefaultValuesHandling.OmitEmptyCollections);
+            .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitDefaults | DefaultValuesHandling.OmitEmptyCollections)
+            .WithEventEmitter(nextEmitter => new MultilineStringEmitter(nextEmitter));
 
         return serializerBuilder.Build();
     }

@@ -341,7 +341,7 @@ public class TaskBuilderTests
                   retryDownloadCount: 3
                   tags: non-release,preview
 
-            - task: DownloadPipelineArtifact@2
+              - task: DownloadPipelineArtifact@2
                 inputs:
                   runVersion: latestFromBranch
                   project: internal
