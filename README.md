@@ -1,6 +1,6 @@
 [![Build Status](https://dev.azure.com/premun/Sharpliner/_apis/build/status/sharpliner-pr?branchName=main)](https://dev.azure.com/premun/Sharpliner/_build/latest?definitionId=4&branchName=main) [![Nuget](https://img.shields.io/nuget/v/Sharpliner)](https://www.nuget.org/packages/Sharpliner/)
 
-Sharpliner is a .NET library that lets you use C# for Azure DevOps pipeline definition.
+Sharpliner is a .NET library that lets you use C# for Azure DevOps pipeline definition instead of YAML.
 Exchange YAML indentation problems for the type-safe environment of C# and let the intellisense speed up your work!
 
 ## Table of contents
@@ -24,14 +24,14 @@ For more detailed steps, check our [documentation](https://github.com/sharpliner
 
 ```csharp
 // Just override prepared abstract classes and `dotnet build` the project, nothing else is needed!
-// You can also generate collections of definitions dynamically
-//    see https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionCollections.md
 // For a full list of classes you can override
 //    see https://github.com/sharpliner/sharpliner/blob/main/src/Sharpliner/AzureDevOps/PublicDefinitions.cs
+// You can also generate collections of definitions dynamically
+//    see https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionCollections.md
 class PullRequestPipeline : SingleStagePipelineDefinition
 {
     // Say where to publish the YAML to
-    public override string TargetFile => "azure-pipelines.yml";
+    public override string TargetFile => "eng/pr.yml";
     public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
     public override SingleStagePipeline Pipeline => new()
@@ -44,7 +44,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
             // expressions such as comparing branch names. We also have "else"
             If.IsBranch("net-6.0")
                 .Variable("DotnetVersion", "6.0.100")
-                .Group("net6-kv")
+                .Group("net6-keyvault")
             .Else
                 .Variable("DotnetVersion", "5.0.202"),
         },
@@ -57,9 +57,9 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                 Steps =
                 {
                     // Many tasks have helper methods for shorter notation
-                    DotNet.Install.Sdk("$(DotnetVersion)").DisplayAs("Install .NET SDK"),
+                    DotNet.Install.Sdk(variables["DotnetVersion"]),
 
-                    // You can also specify any pipeline task in full
+                    // You can also specify any pipeline task in full too
                     Task("DotNetCoreCLI@2", "Build and test") with
                     {
                         Inputs = new()
@@ -69,7 +69,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                         }
                     },
 
-                    // If statements supported (almost) everywhere
+                    // Frequently used ${{ if }} statements have readable macros
                     If.IsPullRequest
                         // You can load script contents from a .ps1 file and inline them into YAML
                         // This way you can write scripts with syntax highlighting separately
