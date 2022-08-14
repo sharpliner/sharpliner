@@ -13,9 +13,6 @@ Exchange YAML indentation problems for the type-safe environment of C# and let t
   - [Pipeline validation](#pipeline-validation)
 - [Something missing?](#something-missing)
 - [Developing Sharpliner](#developing-sharpliner)
-- [Project status](#project-status)
-  - [Azure DevOps](#azure-devops)
-  - [GitHub Actions](#github-actions)
 
 ## Getting started
 
@@ -322,29 +319,3 @@ If you make changes to the main library and want to test it using `Sharpliner.CI
 > dotnet clean eng/Sharpliner.CI/Sharpliner.CI.csproj
 > dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj
 ```
-
-## Project status
-
-### Azure DevOps
-
-Azure DevOps pipelines are production ready and have been tested on several pipelines in the wild already.
-The Sharpliner project itself is self-hosted and is [using Sharpliner](https://github.com/sharpliner/sharpliner/tree/main/eng/Sharpliner.CI) for its PR and publish pipelines.
-You can take inspiration there, however it's a bit more complex than needed since we also test some of the features there.
-
-Status:
-- All of the known models from the official documentation have now appropriate C# counterparts.
-- The `${{ if }}` statements are working and they can be put (and nested) almost everywhere.
-  There are places where if statemets didn't make sense but in case you need to "if" some property or value, let us know by opening an issue, it should be easy to add.
-- Defining and using [templates](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionReference.md#Templates) works!
-- It can happen that we have some of the default values or property names wrong - please let us know (by creating an issue for example)!
-
-### GitHub Actions
-
-Currently the development is stalled and very behind compared to Azure DevOps:
-- Model is not complete
-- Actions cannot be currently defined as a whole
-- Documentation is missing
-- API is currently hidden to not confuse users
-
-Contributors have already written a large portion of the model but there is still considerable amount of work needed to make GitHub actions work.
-We welcome all contributors, no contribution is small enough!
