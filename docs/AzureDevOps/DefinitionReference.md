@@ -4,6 +4,17 @@ Here you can find detailed reference on how to define various parts of the pipel
 
 For a full list of classes you can override to create a YAML file, see [PublicDefinitions.cs](https://github.com/sharpliner/sharpliner/blob/main/src/Sharpliner/AzureDevOps/PublicDefinitions.cs).
 
+## Table of Contents
+- [Build steps](#build-steps)
+- [Azure Pipelines tasks](#azure-pipelines-tasks)
+  - [Contributions welcome](#contributions-welcome)
+- [Pipeline variables](#pipeline-variables)
+- [Pipeline parameters](#pipeline-parameters)
+- [Conditioned expressions](#conditioned-expressions)
+  - [Conditions](#conditions)
+- [Templates](#templates)
+- [Definition libraries](#definition-libraries)
+
 ## Build steps
 
 Build steps are basic building blocks of the build.

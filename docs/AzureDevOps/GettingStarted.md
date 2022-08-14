@@ -3,6 +3,14 @@
 This documentation shows how to define and publish YAML for [Azure DevOps pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/?view=azure-devops).
 For more detailed reference of various parts of the pipeline, see [Azure DevOps definition reference](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionReference.md).
 
+## Table of Contents
+- [1. Create a new project](#1-create-a-new-project)
+- [2. Create a pipeline definition](#2-create-a-pipeline-definition)
+- [3. Define the pipeline](#3-define-the-pipeline)
+- [4. Export the pipeline](#4-export-the-pipeline)
+- [5. Customize serialization or configure validations](#5-customize-serialization-or-configure-validations)
+- [6. Make sure you commit your changes](#6-make-sure-you-commit-your-changes)
+
 ## 1. Create a new project
 
 For best experience, we recommend creating a dedicated project that will contain your pipeline definitions.
