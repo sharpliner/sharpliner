@@ -65,6 +65,9 @@ public record NoneDownloadTask : Step
 
 public record SpecificDownloadTask : AzureDevOpsTask
 {
+    private const string ArtifactProperty = "artifact";
+    private const string PatternsProperty = "patterns";
+    private const string PathProperty = "path";
     private const string ProjectProperty = "project";
     private const string PipelineProperty = "pipeline";
     private const string RunVersionProperty = "runVersion";
@@ -77,11 +80,47 @@ public record SpecificDownloadTask : AzureDevOpsTask
     private const string CheckDownloadedFilesProperty = "checkDownloadedFiles";
     private const string RetryDownloadCountProperty = "retryDownloadCount";
 
-    public SpecificDownloadTask(string project, int pipeline) : base("DownloadPipelineArtifact@2")
+    public SpecificDownloadTask(RunVersion runVersion, string project, int pipeline)
+        : base("DownloadPipelineArtifact@2")
     {
-        SetProperty(RunVersionProperty, "specific");
+        RunVersion = runVersion;
         Project = project;
         Pipeline = pipeline;
+    }
+
+    /// <summary>
+    /// The name of the artifact to download. If left empty, all artifacts associated to the pipeline run will be downloaded.
+    /// </summary>
+    [YamlIgnore]
+    public string? Artifact
+    {
+        get => GetString(ArtifactProperty);
+        init => SetProperty(ArtifactProperty, value);
+    }
+
+    /// <summary>
+    /// Directory to download the artifact files. Can be relative to the pipeline workspace directory or absolute.
+    /// If multi-download option is applied (by leaving an empty artifact name), a sub-directory will be created for each.
+    /// Default value: $(Pipeline.Workspace)
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/artifacts/pipeline-artifacts?view=azure-devops">official Azure DevOps pipelines documentation</see>.
+    /// </summary>
+    [YamlIgnore]
+    public string? Path
+    {
+        get => GetString(PathProperty);
+        init => SetProperty(PathProperty, value);
+    }
+
+    /// <summary>
+    /// One or more file matching patterns that limit which files get downloaded.
+    /// Default value: **
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/file-matching-patterns?view=azure-devops">official Azure DevOps pipelines documentation</see>.
+    /// </summary>
+    [YamlIgnore]
+    public List<string>? Patterns
+    {
+        get => (GetString(PatternsProperty) ?? string.Empty).Split("\n").ToList();
+        init => SetProperty(PatternsProperty, value is null || value.Count == 0 ? null : string.Join("\n", value));
     }
 
     /// <summary>
@@ -91,7 +130,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     public string Project
     {
         get => GetString(ProjectProperty) ?? throw new NullReferenceException();
-        init => SetProperty(ProjectProperty, value);
+        private init => SetProperty(ProjectProperty, value);
     }
 
     /// <summary>
@@ -101,11 +140,25 @@ public record SpecificDownloadTask : AzureDevOpsTask
     public int Pipeline
     {
         get => GetInt(PipelineProperty) ?? 0;
-        init => SetProperty(PipelineProperty, value.ToString());
+        private init => SetProperty(PipelineProperty, value.ToString());
     }
 
     [YamlIgnore]
-    public RunVersion RunVersion { get; } = RunVersion.Specific;
+    public RunVersion RunVersion
+    {
+        get => GetString(RunVersionProperty) switch
+        {
+            "latestFromBranch" => RunVersion.LatestFromBranch,
+            "specific" => RunVersion.Specific,
+            _ => RunVersion.Latest,
+        };
+        internal init => SetProperty(RunVersionProperty, value switch
+        {
+            RunVersion.LatestFromBranch => "latestFromBranch",
+            RunVersion.Specific => "specific",
+            _ => "latest",
+        });
+    }
 
     /// <summary>
     /// Specify to filter on branch/ref name.
@@ -113,10 +166,10 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Argument aliases: branchName
     /// </summary>
     [YamlIgnore]
-    public string RunBranch
+    public string? RunBranch
     {
-        get => GetString(RunBranchProperty)!;
-        init => SetProperty(RunBranchProperty, value);
+        get => GetString(RunBranchProperty);
+        internal init => SetProperty(RunBranchProperty, value);
     }
 
     /// <summary>
@@ -125,10 +178,10 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Argument aliases: runBranch
     /// </summary>
     [YamlIgnore]
-    public string BranchName
+    public string? BranchName
     {
-        get => GetString(RunBranchProperty)!;
-        init => SetProperty(RunBranchProperty, value);
+        get => GetString(RunBranchProperty);
+        internal init => SetProperty(RunBranchProperty, value);
     }
 
     /// <summary>
@@ -140,7 +193,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     public int RunId
     {
         get => GetInt(RunIdProperty) ?? 0;
-        init => SetProperty(RunIdProperty, value.ToString());
+        internal init => SetProperty(RunIdProperty, value.ToString());
     }
 
     /// <summary>
@@ -152,7 +205,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     public int PipelineId
     {
         get => GetInt(RunIdProperty) ?? 0;
-        init => SetProperty(RunIdProperty, value.ToString());
+        internal init => SetProperty(RunIdProperty, value.ToString());
     }
 
     /// <summary>
@@ -164,7 +217,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     public int BuildId
     {
         get => GetInt(RunIdProperty) ?? 0;
-        init => SetProperty(RunIdProperty, value.ToString());
+        internal init => SetProperty(RunIdProperty, value.ToString());
     }
 
     /// <summary>
