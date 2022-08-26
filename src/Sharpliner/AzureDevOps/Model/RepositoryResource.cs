@@ -62,7 +62,6 @@ public record RepositoryResource
     public RepositoryResource(string identifier)
     {
         Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
-        Pipeline.ValidateName(Identifier);
     }
 }
 
