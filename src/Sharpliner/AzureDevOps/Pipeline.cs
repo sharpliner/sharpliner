@@ -15,6 +15,7 @@ namespace Sharpliner.AzureDevOps;
 /// </summary>
 public abstract record PipelineBase
 {
+    private Conditioned<Pool>? _pool;
     private Conditioned<Resources>? _resources;
 
     /// <summary>
@@ -70,6 +71,13 @@ public abstract record PipelineBase
     /// </summary>
     [YamlMember(Order = 500)]
     public ConditionedList<VariableBase> Variables { get; init; } = new();
+
+    /// <summary>
+    /// Specifies which pool to use for a job of the pipeline
+    /// A pool specification also holds information about the job's strategy for running.
+    /// </summary>
+    [YamlMember(Order = 550)]
+    public Conditioned<Pool>? Pool { get => _pool; init => _pool = value?.GetRoot(); }
 
     /// <summary>
     /// Returns the list of validations that should be run on the definition (e.g. wrong dependsOn, artifact name typos..).
