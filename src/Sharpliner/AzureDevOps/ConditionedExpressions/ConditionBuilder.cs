@@ -129,6 +129,12 @@ public class ConditionBuilder<T>
     public Condition<T> Or(params string[] expressions)
         => Link(new OrCondition<T>(expressions));
 
+    public Condition<T> StartsWith(string needle, string haystack)
+        => new StartsWithCondition<T>(needle, haystack);
+
+    public Condition<T> EndsWith(string needle, string haystack)
+        => new EndsWithCondition<T>(needle, haystack);
+
     public Condition<T> Contains(string needle, string haystack)
         => new ContainsCondition<T>(needle, haystack);
 
