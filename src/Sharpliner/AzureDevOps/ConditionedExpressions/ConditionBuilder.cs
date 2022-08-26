@@ -50,6 +50,12 @@ public class ConditionBuilder
     public Condition Xor(string expression1, string expression2)
         => Link(new XorCondition(expression1, expression2));
 
+    public Condition StartsWith(string needle, string haystack)
+        => new StartsWithCondition(needle, haystack);
+
+    public Condition EndsWith(string needle, string haystack)
+        => new EndsWithCondition(needle, haystack);
+
     public Condition Contains(string needle, string haystack)
         => new ContainsCondition(needle, haystack);
 
