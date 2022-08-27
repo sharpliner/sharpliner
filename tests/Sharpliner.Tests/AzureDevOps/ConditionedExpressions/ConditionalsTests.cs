@@ -271,4 +271,85 @@ public class ConditionalsTests
         variable = pipeline.Pipeline.Variables.Last();
         variable.Condition!.ToString().Should().Be("xor(True, $(Variable))");
     }
+
+    private class Contains_Condition_Test_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Variables =
+            {
+                If.Contains("refs/heads/feature/", variables.Build.SourceBranch)
+                    .Variable("feature", "on"),
+
+                If.Contains("refs/heads/feature/", variables["Build.SourceBranch"])
+                .Variable("feature", "on")
+            }
+        };
+    }
+
+    [Fact]
+    public void Contains_Condition_Test()
+    {
+        var pipeline = new Contains_Condition_Test_Pipeline();
+
+        var variable1 = pipeline.Pipeline.Variables.ElementAt(0);
+        var variable2 = pipeline.Pipeline.Variables.ElementAt(1);
+
+        variable1.Condition!.ToString().Should().Be("contains('$(Build.SourceBranch)', 'refs/heads/feature/')");
+        variable2.Condition!.ToString().Should().Be("contains(variables['Build.SourceBranch'], 'refs/heads/feature/')");
+    }
+
+    private class StartsWith_Condition_Test_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Variables =
+            {
+                If.StartsWith("refs/heads/feature/", variables.Build.SourceBranch)
+                    .Variable("feature", "on"),
+
+                If.StartsWith("refs/heads/feature/", variables["Build.SourceBranch"])
+                    .Variable("feature", "on")
+            }
+        };
+    }
+
+    [Fact]
+    public void StartsWith_Condition_Test()
+    {
+        var pipeline = new StartsWith_Condition_Test_Pipeline();
+
+        var variable1 = pipeline.Pipeline.Variables.ElementAt(0);
+        var variable2 = pipeline.Pipeline.Variables.ElementAt(1);
+
+        variable1.Condition!.ToString().Should().Be("startsWith('$(Build.SourceBranch)', 'refs/heads/feature/')");
+        variable2.Condition!.ToString().Should().Be("startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')");
+    }
+
+    private class EndsWith_Condition_Test_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Variables =
+            {
+                If.EndsWith("refs/heads/feature/", variables.Build.SourceBranch)
+                    .Variable("feature", "on"),
+
+                If.EndsWith("refs/heads/feature/", variables["Build.SourceBranch"])
+                    .Variable("feature", "on")
+            }
+        };
+    }
+
+    [Fact]
+    public void EndsWith_Condition_Test()
+    {
+        var pipeline = new EndsWith_Condition_Test_Pipeline();
+
+        var variable1 = pipeline.Pipeline.Variables.ElementAt(0);
+        var variable2 = pipeline.Pipeline.Variables.ElementAt(1);
+
+        variable1.Condition!.ToString().Should().Be("endsWith('$(Build.SourceBranch)', 'refs/heads/feature/')");
+        variable2.Condition!.ToString().Should().Be("endsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')");
+    }
 }
