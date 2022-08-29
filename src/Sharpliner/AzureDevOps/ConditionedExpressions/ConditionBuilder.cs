@@ -81,10 +81,10 @@ public class ConditionBuilder
         => Link(new BranchCondition(branchName, false));
 
     public Condition IsPullRequest
-        => Link(new BuildReasonCondition("'PullRequest'", true));
+        => Link(new BuildReasonCondition("PullRequest", true));
 
     public Condition IsNotPullRequest
-        => Link(new BuildReasonCondition("'PullRequest'", false));
+        => Link(new BuildReasonCondition("PullRequest", false));
 
     private Condition Link(Condition condition)
     {
@@ -160,10 +160,10 @@ public class ConditionBuilder<T>
         => Link(new LessCondition<T>(first, second));
 
     public Condition<T> IsPullRequest
-        => Link(new BuildReasonCondition<T>("'PullRequest'", true));
+        => Link(new BuildReasonCondition<T>("PullRequest", true));
 
     public Condition<T> IsNotPullRequest
-        => Link(new BuildReasonCondition<T>("'PullRequest'", false));
+        => Link(new BuildReasonCondition<T>("PullRequest", false));
 
     private Condition<T> Link(Condition<T> condition)
     {

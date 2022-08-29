@@ -31,7 +31,7 @@ public class ConditionalsTests
         variable.Condition!.ToString().Should().Be(
             "and(" +
                 "notIn('bar', 'foo', 'xyz', 'foo'), " +
-                "ne($(Configuration), 'Debug'), " +
+                "ne('$(Configuration)', 'Debug'), " +
                 "containsValue($(System.JobId), 10))");
     }
 
@@ -62,9 +62,9 @@ public class ConditionalsTests
             "or(" +
                 "and(" +
                     "lt(5, 3), " +
-                    "eq($(Build.SourceBranch), 'refs/heads/production'), " +
+                    "eq('$(Build.SourceBranch)', 'refs/heads/production'), " +
                     "eq(variables['Build.SourceBranch'], 'refs/heads/release')), " +
-                "ne($(Configuration), 'Debug'), " +
+                "ne('$(Configuration)', 'Debug'), " +
                 "eq(variables['Build.Reason'], 'PullRequest'))");
     }
 
@@ -128,7 +128,7 @@ public class ConditionalsTests
         pipeline.Serialize().Trim().Should().Be(
             """
             variables:
-            - ${{ if eq(a, b) }}:
+            - ${{ if eq('a', 'b') }}:
               - name: feature
                 value: on
 
@@ -149,7 +149,7 @@ public class ConditionalsTests
               - name: feature2
                 value: on
 
-              - ${{ if and(eq(e, f), ne(g, h)) }}:
+              - ${{ if and(eq('e', 'f'), ne('g', 'h')) }}:
                 - name: feature
                   value: on
 
@@ -194,7 +194,7 @@ public class ConditionalsTests
             jobs:
             - job: Job
               pool:
-                ${{ if eq(A, B) }}:
+                ${{ if eq('A', 'B') }}:
                   name: pool-A
                   demands:
                   - SomeProperty -equals SomeValue
@@ -233,11 +233,11 @@ public class ConditionalsTests
             jobs:
             - job: Job
               pool:
-                ${{ if eq(A, B) }}:
+                ${{ if eq('A', 'B') }}:
                   name: pool-A
                   demands:
                   - SomeProperty -equals SomeValue
-                ${{ if eq(C, D) }}:
+                ${{ if eq('C', 'D') }}:
                   name: pool-B
             """);
     }

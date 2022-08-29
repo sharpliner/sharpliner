@@ -71,7 +71,8 @@ public abstract class Condition
 
     protected static string WrapQuotes(string value)
     {
-        if (value.StartsWith(VariableIndexAccessStart)
+        if (value.StartsWith('\'')
+            || value.StartsWith(VariableIndexAccessStart)
             || value.StartsWith(VariablePropertyAccessStart))
         {
             return value;
@@ -146,7 +147,7 @@ public class NotCondition : Condition
     }
 }
 
-public class EqualityCondition : Condition
+public class EqualityCondition : StringCondition
 {
     internal EqualityCondition(bool equal, string expression1, string expression2)
         : base(equal ? "eq" : "ne", true, expression1, expression2)
@@ -291,13 +292,14 @@ public class ElseCondition<T> : Condition<T>
     public override string ToString() => ElseTagStart + ElseTagEnd;
 }
 
-public class EqualityCondition<T> : Condition<T>
+public class EqualityCondition<T> : StringCondition<T>
 {
     internal EqualityCondition(bool equal, string expression1, string expression2)
         : base(equal ? "eq" : "ne", true, expression1, expression2)
     {
     }
 }
+
 
 public class AndCondition<T> : Condition<T>
 {
@@ -401,6 +403,7 @@ public class LessCondition<T> : Condition<T>
     {
     }
 }
+
 
 public class BranchCondition : EqualityCondition
 {
