@@ -18,6 +18,8 @@ public abstract class Condition
 
     private const string VariableIndexAccessStart = "variables[";
     private const string VariablePropertyAccessStart = "variables.";
+    private const string ParametersIndexAccessStart = "parameters[";
+    private const string ParametersPropertyAccessStart = "parameters.";
 
     internal virtual string TagStart => IfTagStart;
     internal virtual string TagEnd => IfTagEnd;
@@ -73,7 +75,9 @@ public abstract class Condition
     {
         if (value.StartsWith('\'')
             || value.StartsWith(VariableIndexAccessStart)
-            || value.StartsWith(VariablePropertyAccessStart))
+            || value.StartsWith(VariablePropertyAccessStart)
+            || value.StartsWith(ParametersIndexAccessStart)
+            || value.StartsWith(ParametersPropertyAccessStart))
         {
             return value;
         }

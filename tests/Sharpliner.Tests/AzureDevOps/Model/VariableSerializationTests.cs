@@ -49,27 +49,27 @@ public class VariableSerializationTests
 
             - group: PR keyvault variables
 
-            - ${{ if eq(variables['Build.Reason'], PullRequest) }}:
+            - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
               - name: TargetBranch
                 value: $(System.PullRequest.SourceBranch)
 
               - name: IsPr
                 value: true
 
-            - ${{ if and(eq(variables['Build.SourceBranch'], refs/heads/production), ne(Configuration, Debug)) }}:
+            - ${{ if and(eq(variables['Build.SourceBranch'], 'refs/heads/production'), ne('Configuration', 'Debug')) }}:
               - name: PublishProfileFile
                 value: Prod
 
               - name: foo
                 value: bar
 
-              - ${{ if ne(variables['Build.Reason'], PullRequest) }}:
+              - ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
                 - name: AzureSubscription
                   value: Int
 
                 - group: azure-int
 
-              - ${{ if eq(variables['Build.Reason'], PullRequest) }}:
+              - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
                 - name: AzureSubscription
                   value: Prod
 

@@ -35,7 +35,7 @@ public class TemplateTests
         yaml.Trim().Should().Be(
             """
             jobs:
-            - ${{ if eq(foo, bar) }}:
+            - ${{ if eq('foo', 'bar') }}:
               - template: template1.yml
                 parameters:
                   enableTelemetry: true
@@ -104,7 +104,7 @@ public class TemplateTests
                 packageType: sdk
                 version: ${{ parameters.version }}
 
-            - ${{ if eq(${{ parameters.restore }}, true) }}:
+            - ${{ if eq('${{ parameters.restore }}', 'true') }}:
               - task: DotNetCoreCLI@2
                 inputs:
                   command: restore
@@ -142,7 +142,7 @@ public class TemplateTests
             jobs:
             - job: testJob
               steps:
-              - ${{ if eq(restore, true) }}:
+              - ${{ if eq('restore', 'true') }}:
                 - template: template1.yaml
 
               - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
