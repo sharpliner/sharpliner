@@ -282,7 +282,7 @@ public class ConditionalsTests
                     .Variable("feature", "on"),
 
                 If.Contains("refs/heads/feature/", variables["Build.SourceBranch"])
-                .Variable("feature", "on")
+                    .Variable("feature", "on")
             }
         };
     }
