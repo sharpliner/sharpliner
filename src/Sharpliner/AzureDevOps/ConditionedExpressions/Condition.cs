@@ -16,6 +16,11 @@ public abstract class Condition
     protected const string ElseTagStart = "${{ else";
     protected const string ElseTagEnd = IfTagEnd;
 
+    private const string VariableIndexAccessStart = "variables[";
+    private const string VariablePropertyAccessStart = "variables.";
+    private const string ParametersIndexAccessStart = "parameters[";
+    private const string ParametersPropertyAccessStart = "parameters.";
+
     internal virtual string TagStart => IfTagStart;
     internal virtual string TagEnd => IfTagEnd;
 
@@ -64,6 +69,20 @@ public abstract class Condition
         }
 
         return condition;
+    }
+
+    protected static string WrapQuotes(string value)
+    {
+        if (value.StartsWith('\'')
+            || value.StartsWith(VariableIndexAccessStart)
+            || value.StartsWith(VariablePropertyAccessStart)
+            || value.StartsWith(ParametersIndexAccessStart)
+            || value.StartsWith(ParametersPropertyAccessStart))
+        {
+            return value;
+        }
+
+        return $"'{value}'";
     }
 
     protected static string BuildExpression(string keyword, params Condition[] expressions)
@@ -132,7 +151,7 @@ public class NotCondition : Condition
     }
 }
 
-public class EqualityCondition : Condition
+public class EqualityCondition : StringCondition
 {
     internal EqualityCondition(bool equal, string expression1, string expression2)
         : base(equal ? "eq" : "ne", true, expression1, expression2)
@@ -179,7 +198,7 @@ public class XorCondition : Condition
     }
 }
 
-public class ContainsCondition : Condition
+public class ContainsCondition : StringCondition
 {
     internal ContainsCondition(string needle, string haystack)
         : base("contains", false, haystack, needle)
@@ -187,7 +206,7 @@ public class ContainsCondition : Condition
     }
 }
 
-public class StartsWithCondition : Condition
+public class StartsWithCondition : StringCondition
 {
     internal StartsWithCondition(string needle, string haystack)
         : base("startsWith", false, haystack, needle)
@@ -195,7 +214,7 @@ public class StartsWithCondition : Condition
     }
 }
 
-public class EndsWithCondition : Condition
+public class EndsWithCondition : StringCondition
 {
     internal EndsWithCondition(string needle, string haystack)
         : base("endsWith", false, haystack, needle)
@@ -277,13 +296,14 @@ public class ElseCondition<T> : Condition<T>
     public override string ToString() => ElseTagStart + ElseTagEnd;
 }
 
-public class EqualityCondition<T> : Condition<T>
+public class EqualityCondition<T> : StringCondition<T>
 {
     internal EqualityCondition(bool equal, string expression1, string expression2)
         : base(equal ? "eq" : "ne", true, expression1, expression2)
     {
     }
 }
+
 
 public class AndCondition<T> : Condition<T>
 {
@@ -324,7 +344,7 @@ public class XorCondition<T> : Condition<T>
     }
 }
 
-public class ContainsCondition<T> : Condition<T>
+public class ContainsCondition<T> : StringCondition<T>
 {
     internal ContainsCondition(string haystack, string needle)
         : base("contains", false, haystack, needle)
@@ -332,7 +352,7 @@ public class ContainsCondition<T> : Condition<T>
     }
 }
 
-public class StartsWithCondition<T> : Condition<T>
+public class StartsWithCondition<T> : StringCondition<T>
 {
     internal StartsWithCondition(string needle, string haystack)
         : base("startsWith", false, haystack, needle)
@@ -340,7 +360,7 @@ public class StartsWithCondition<T> : Condition<T>
     }
 }
 
-public class EndsWithCondition<T> : Condition<T>
+public class EndsWithCondition<T> : StringCondition<T>
 {
     internal EndsWithCondition(string needle, string haystack)
         : base("endsWith", false, haystack, needle)
@@ -387,6 +407,7 @@ public class LessCondition<T> : Condition<T>
     {
     }
 }
+
 
 public class BranchCondition : EqualityCondition
 {

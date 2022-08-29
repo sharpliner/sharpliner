@@ -31,7 +31,7 @@ public class ConditionalsTests
         variable.Condition!.ToString().Should().Be(
             "and(" +
                 "notIn('bar', 'foo', 'xyz', 'foo'), " +
-                "ne($(Configuration), 'Debug'), " +
+                "ne('$(Configuration)', 'Debug'), " +
                 "containsValue($(System.JobId), 10))");
     }
 
@@ -62,9 +62,9 @@ public class ConditionalsTests
             "or(" +
                 "and(" +
                     "lt(5, 3), " +
-                    "eq($(Build.SourceBranch), 'refs/heads/production'), " +
+                    "eq('$(Build.SourceBranch)', 'refs/heads/production'), " +
                     "eq(variables['Build.SourceBranch'], 'refs/heads/release')), " +
-                "ne($(Configuration), 'Debug'), " +
+                "ne('$(Configuration)', 'Debug'), " +
                 "eq(variables['Build.Reason'], 'PullRequest'))");
     }
 
@@ -128,7 +128,7 @@ public class ConditionalsTests
         pipeline.Serialize().Trim().Should().Be(
             """
             variables:
-            - ${{ if eq(a, b) }}:
+            - ${{ if eq('a', 'b') }}:
               - name: feature
                 value: on
 
@@ -149,7 +149,7 @@ public class ConditionalsTests
               - name: feature2
                 value: on
 
-              - ${{ if and(eq(e, f), ne(g, h)) }}:
+              - ${{ if and(eq('e', 'f'), ne('g', 'h')) }}:
                 - name: feature
                   value: on
 
@@ -194,7 +194,7 @@ public class ConditionalsTests
             jobs:
             - job: Job
               pool:
-                ${{ if eq(A, B) }}:
+                ${{ if eq('A', 'B') }}:
                   name: pool-A
                   demands:
                   - SomeProperty -equals SomeValue
@@ -233,11 +233,11 @@ public class ConditionalsTests
             jobs:
             - job: Job
               pool:
-                ${{ if eq(A, B) }}:
+                ${{ if eq('A', 'B') }}:
                   name: pool-A
                   demands:
                   - SomeProperty -equals SomeValue
-                ${{ if eq(C, D) }}:
+                ${{ if eq('C', 'D') }}:
                   name: pool-B
             """);
     }
@@ -270,5 +270,86 @@ public class ConditionalsTests
         variable.Condition!.ToString().Should().Be("in('foo', 'bar')");
         variable = pipeline.Pipeline.Variables.Last();
         variable.Condition!.ToString().Should().Be("xor(True, $(Variable))");
+    }
+
+    private class Contains_Condition_Test_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Variables =
+            {
+                If.Contains("refs/heads/feature/", variables.Build.SourceBranch)
+                    .Variable("feature", "on"),
+
+                If.Contains("refs/heads/feature/", variables["Build.SourceBranch"])
+                    .Variable("feature", "on")
+            }
+        };
+    }
+
+    [Fact]
+    public void Contains_Condition_Test()
+    {
+        var pipeline = new Contains_Condition_Test_Pipeline();
+
+        var variable1 = pipeline.Pipeline.Variables.ElementAt(0);
+        var variable2 = pipeline.Pipeline.Variables.ElementAt(1);
+
+        variable1.Condition!.ToString().Should().Be("contains('$(Build.SourceBranch)', 'refs/heads/feature/')");
+        variable2.Condition!.ToString().Should().Be("contains(variables['Build.SourceBranch'], 'refs/heads/feature/')");
+    }
+
+    private class StartsWith_Condition_Test_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Variables =
+            {
+                If.StartsWith("refs/heads/feature/", variables.Build.SourceBranch)
+                    .Variable("feature", "on"),
+
+                If.StartsWith("refs/heads/feature/", variables["Build.SourceBranch"])
+                    .Variable("feature", "on")
+            }
+        };
+    }
+
+    [Fact]
+    public void StartsWith_Condition_Test()
+    {
+        var pipeline = new StartsWith_Condition_Test_Pipeline();
+
+        var variable1 = pipeline.Pipeline.Variables.ElementAt(0);
+        var variable2 = pipeline.Pipeline.Variables.ElementAt(1);
+
+        variable1.Condition!.ToString().Should().Be("startsWith('$(Build.SourceBranch)', 'refs/heads/feature/')");
+        variable2.Condition!.ToString().Should().Be("startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')");
+    }
+
+    private class EndsWith_Condition_Test_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Variables =
+            {
+                If.EndsWith("refs/heads/feature/", variables.Build.SourceBranch)
+                    .Variable("feature", "on"),
+
+                If.EndsWith("refs/heads/feature/", variables["Build.SourceBranch"])
+                    .Variable("feature", "on")
+            }
+        };
+    }
+
+    [Fact]
+    public void EndsWith_Condition_Test()
+    {
+        var pipeline = new EndsWith_Condition_Test_Pipeline();
+
+        var variable1 = pipeline.Pipeline.Variables.ElementAt(0);
+        var variable2 = pipeline.Pipeline.Variables.ElementAt(1);
+
+        variable1.Condition!.ToString().Should().Be("endsWith('$(Build.SourceBranch)', 'refs/heads/feature/')");
+        variable2.Condition!.ToString().Should().Be("endsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')");
     }
 }
