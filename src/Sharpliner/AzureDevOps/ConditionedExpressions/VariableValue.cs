@@ -1,3 +1,5 @@
+using Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces;
+
 namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 
 public class VariableValue : IRuntimeExpression, ICompileTimeExpression, IMacroExpression

@@ -1,4 +1,4 @@
-namespace Sharpliner.AzureDevOps.ConditionedExpressions;
+namespace Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces;
 
 public interface IMacroExpression
 {
