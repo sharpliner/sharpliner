@@ -26,10 +26,28 @@ public class ConditionBuilder
     public Condition NotEqual(Condition condition)
         => Link(condition);
 
-    public Condition Equal(string expression1, string expression2)
+    public Condition Equal(StringRuntimeExpression expression1, StringRuntimeExpression expression2)
         => Link(new EqualityCondition(true, expression1, expression2));
 
-    public Condition NotEqual(string expression1, string expression2)
+    public Condition Equal(StringRuntimeExpression expression1, IRuntimeExpression expression2)
+        => Link(new EqualityCondition(true, expression1, expression2));
+
+    public Condition Equal(IRuntimeExpression expression1, StringRuntimeExpression expression2)
+        => Link(new EqualityCondition(true, expression1, expression2));
+
+    public Condition Equal(IRuntimeExpression expression1, IRuntimeExpression expression2)
+        => Link(new EqualityCondition(true, expression1, expression2));
+
+    public Condition NotEqual(StringRuntimeExpression expression1, StringRuntimeExpression expression2)
+        => Link(new EqualityCondition(false, expression1, expression2));
+
+    public Condition NotEqual(IRuntimeExpression expression1, StringRuntimeExpression expression2)
+        => Link(new EqualityCondition(false, expression1, expression2));
+
+    public Condition NotEqual(StringRuntimeExpression expression1, IRuntimeExpression expression2)
+        => Link(new EqualityCondition(false, expression1, expression2));
+
+    public Condition NotEqual(IRuntimeExpression expression1, IRuntimeExpression expression2)
         => Link(new EqualityCondition(false, expression1, expression2));
 
     public Condition And(params Condition[] expressions)
@@ -50,13 +68,40 @@ public class ConditionBuilder
     public Condition Xor(string expression1, string expression2)
         => Link(new XorCondition(expression1, expression2));
 
-    public Condition StartsWith(string needle, string haystack)
+    public Condition StartsWith(StringRuntimeExpression needle, StringRuntimeExpression haystack)
         => new StartsWithCondition(needle, haystack);
 
-    public Condition EndsWith(string needle, string haystack)
+    public Condition StartsWith(IRuntimeExpression needle, StringRuntimeExpression haystack)
+        => new StartsWithCondition(needle, haystack);
+
+    public Condition StartsWith(StringRuntimeExpression needle, IRuntimeExpression haystack)
+        => new StartsWithCondition(needle, haystack);
+
+    public Condition StartsWith(IRuntimeExpression needle, IRuntimeExpression haystack)
+        => new StartsWithCondition(needle, haystack);
+
+    public Condition EndsWith(StringRuntimeExpression needle, StringRuntimeExpression haystack)
         => new EndsWithCondition(needle, haystack);
 
-    public Condition Contains(string needle, string haystack)
+    public Condition EndsWith(IRuntimeExpression needle, StringRuntimeExpression haystack)
+        => new EndsWithCondition(needle, haystack);
+
+    public Condition EndsWith(StringRuntimeExpression needle, IRuntimeExpression haystack)
+        => new EndsWithCondition(needle, haystack);
+
+    public Condition EndsWith(IRuntimeExpression needle, IRuntimeExpression haystack)
+        => new EndsWithCondition(needle, haystack);
+
+    public Condition Contains(StringRuntimeExpression needle, StringRuntimeExpression haystack)
+        => new ContainsCondition(needle, haystack);
+
+    public Condition Contains(IRuntimeExpression needle, StringRuntimeExpression haystack)
+        => new ContainsCondition(needle, haystack);
+
+    public Condition Contains(StringRuntimeExpression needle, IRuntimeExpression haystack)
+        => new ContainsCondition(needle, haystack);
+
+    public Condition Contains(IRuntimeExpression needle, IRuntimeExpression haystack)
         => new ContainsCondition(needle, haystack);
 
     public Condition ContainsValue(string needle, params string[] haystack)
@@ -74,17 +119,23 @@ public class ConditionBuilder
     public Condition Less(string first, string second)
         => Link(new LessCondition(first, second));
 
-    public Condition IsBranch(string branchName)
+    public Condition IsBranch(StringRuntimeExpression branchName)
         => Link(new BranchCondition(branchName, true));
 
-    public Condition IsNotBranch(string branchName)
+    public Condition IsBranch(IRuntimeExpression branchName)
+        => Link(new BranchCondition(branchName, true));
+
+    public Condition IsNotBranch(StringRuntimeExpression branchName)
+        => Link(new BranchCondition(branchName, false));
+
+    public Condition IsNotBranch(IRuntimeExpression branchName)
         => Link(new BranchCondition(branchName, false));
 
     public Condition IsPullRequest
-        => Link(new BuildReasonCondition("PullRequest", true));
+        => Link(new BuildReasonCondition(new StringRuntimeExpression("PullRequest"), true));
 
     public Condition IsNotPullRequest
-        => Link(new BuildReasonCondition("PullRequest", false));
+        => Link(new BuildReasonCondition(new StringRuntimeExpression("PullRequest"), false));
 
     private Condition Link(Condition condition)
     {
@@ -105,10 +156,28 @@ public class ConditionBuilder<T>
     public Condition<T> Equal(string condition)
         => Link(new CustomCondition<T>(condition));
 
-    public Condition<T> Equal(string expression1, string expression2)
+    public Condition<T> Equal(StringRuntimeExpression expression1, StringRuntimeExpression expression2)
         => Link(new EqualityCondition<T>(true, expression1, expression2));
 
-    public Condition<T> NotEqual(string expression1, string expression2)
+    public Condition<T> Equal(IRuntimeExpression expression1, StringRuntimeExpression expression2)
+        => Link(new EqualityCondition<T>(true, expression1, expression2));
+
+    public Condition<T> Equal(StringRuntimeExpression expression1, IRuntimeExpression expression2)
+        => Link(new EqualityCondition<T>(true, expression1, expression2));
+
+    public Condition<T> Equal(IRuntimeExpression expression1, IRuntimeExpression expression2)
+        => Link(new EqualityCondition<T>(true, expression1, expression2));
+
+    public Condition<T> NotEqual(StringRuntimeExpression expression1, StringRuntimeExpression expression2)
+        => Link(new EqualityCondition<T>(false, expression1, expression2));
+
+    public Condition<T> NotEqual(IRuntimeExpression expression1, StringRuntimeExpression expression2)
+        => Link(new EqualityCondition<T>(false, expression1, expression2));
+
+    public Condition<T> NotEqual(StringRuntimeExpression expression1, IRuntimeExpression expression2)
+        => Link(new EqualityCondition<T>(false, expression1, expression2));
+
+    public Condition<T> NotEqual(IRuntimeExpression expression1, IRuntimeExpression expression2)
         => Link(new EqualityCondition<T>(false, expression1, expression2));
 
     public Condition<T> And(params Condition[] expressions)
@@ -129,13 +198,40 @@ public class ConditionBuilder<T>
     public Condition<T> Or(params string[] expressions)
         => Link(new OrCondition<T>(expressions));
 
-    public Condition<T> StartsWith(string needle, string haystack)
+    public Condition<T> StartsWith(StringRuntimeExpression needle, StringRuntimeExpression haystack)
         => new StartsWithCondition<T>(needle, haystack);
 
-    public Condition<T> EndsWith(string needle, string haystack)
+    public Condition<T> StartsWith(IRuntimeExpression needle, StringRuntimeExpression haystack)
+        => new StartsWithCondition<T>(needle, haystack);
+
+    public Condition<T> StartsWith(StringRuntimeExpression needle, IRuntimeExpression haystack)
+        => new StartsWithCondition<T>(needle, haystack);
+
+    public Condition<T> StartsWith(IRuntimeExpression needle, IRuntimeExpression haystack)
+        => new StartsWithCondition<T>(needle, haystack);
+
+    public Condition<T> EndsWith(StringRuntimeExpression needle, StringRuntimeExpression haystack)
         => new EndsWithCondition<T>(needle, haystack);
 
-    public Condition<T> Contains(string needle, string haystack)
+    public Condition<T> EndsWith(IRuntimeExpression needle, StringRuntimeExpression haystack)
+        => new EndsWithCondition<T>(needle, haystack);
+
+    public Condition<T> EndsWith(StringRuntimeExpression needle, IRuntimeExpression haystack)
+        => new EndsWithCondition<T>(needle, haystack);
+
+    public Condition<T> EndsWith(IRuntimeExpression needle, IRuntimeExpression haystack)
+        => new EndsWithCondition<T>(needle, haystack);
+
+    public Condition<T> Contains(StringRuntimeExpression needle, StringRuntimeExpression haystack)
+        => new ContainsCondition<T>(needle, haystack);
+
+    public Condition<T> Contains(IRuntimeExpression needle, StringRuntimeExpression haystack)
+        => new ContainsCondition<T>(needle, haystack);
+
+    public Condition<T> Contains(StringRuntimeExpression needle, IRuntimeExpression haystack)
+        => new ContainsCondition<T>(needle, haystack);
+
+    public Condition<T> Contains(IRuntimeExpression needle, IRuntimeExpression haystack)
         => new ContainsCondition<T>(needle, haystack);
 
     public Condition In(string needle, string haystack)
@@ -147,10 +243,16 @@ public class ConditionBuilder<T>
     public Condition<T> ContainsValue(string needle, params string[] haystack)
         => new ContainsValueCondition<T>(needle, haystack);
 
-    public Condition<T> IsBranch(string branchName)
+    public Condition<T> IsBranch(StringRuntimeExpression branchName)
         => Link(new BranchCondition<T>(branchName, true));
 
-    public Condition<T> IsNotBranch(string branchName)
+    public Condition<T> IsBranch(IRuntimeExpression branchName)
+        => Link(new BranchCondition<T>(branchName, true));
+
+    public Condition<T> IsNotBranch(StringRuntimeExpression branchName)
+        => Link(new BranchCondition<T>(branchName, false));
+
+    public Condition<T> IsNotBranch(IRuntimeExpression branchName)
         => Link(new BranchCondition<T>(branchName, false));
 
     public Condition<T> Greater(string first, string second)
@@ -160,10 +262,10 @@ public class ConditionBuilder<T>
         => Link(new LessCondition<T>(first, second));
 
     public Condition<T> IsPullRequest
-        => Link(new BuildReasonCondition<T>("PullRequest", true));
+        => Link(new BuildReasonCondition<T>(new StringRuntimeExpression("PullRequest"), true));
 
     public Condition<T> IsNotPullRequest
-        => Link(new BuildReasonCondition<T>("PullRequest", false));
+        => Link(new BuildReasonCondition<T>(new StringRuntimeExpression("PullRequest"), false));
 
     private Condition<T> Link(Condition<T> condition)
     {

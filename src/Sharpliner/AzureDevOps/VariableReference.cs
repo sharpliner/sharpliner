@@ -1,8 +1,10 @@
-﻿namespace Sharpliner.AzureDevOps;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+
+namespace Sharpliner.AzureDevOps;
 
 public sealed class VariableReference
 {
-    public string this[string variableName] => $"variables['{variableName}']";
+    public VariableValue this[string variableName] => new(variableName);
 
     /// <summary>
     /// Variables connected to the agent running the current build (e.g. Agent.HomeDirectory)
@@ -109,7 +111,7 @@ public sealed class AgentVariableReference : VariableReferenceBase
     ///   - Canceled
     ///   - Failed
     ///   - Succeeded
-    ///   - SucceededWithIssues (partially successful) 
+    ///   - SucceededWithIssues (partially successful)
     /// </summary>
     public string JobStatus => GetReference("JobStatus");
 
@@ -169,19 +171,19 @@ public sealed class BuildVariableReference : VariableReferenceBase
     protected override string Prefix => "Build.";
 
     internal BuildVariableReference()
-    {        
+    {
     }
-    
+
     /// <summary>
     /// The local path on the agent where any artifacts are copied to before being pushed to their destination.
     /// For example: c:\agent_work\1\a
-    /// 
+    ///
     /// A typical way to use this folder is to publish your build artifacts with the Copy files and Publish build artifacts tasks.
-    /// 
+    ///
     /// Note: Build.ArtifactStagingDirectory and Build.StagingDirectory are interchangeable. This directory is purged before each new build, so you don't have to clean it up yourself.
-    /// 
+    ///
     /// See Artifacts in Azure Pipelines.
-    /// 
+    ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public string ArtifactStagingDirectory => GetReference("ArtifactStagingDirectory");
@@ -204,9 +206,9 @@ public sealed class BuildVariableReference : VariableReferenceBase
     /// <summary>
     /// The name of the completed build, also known as the run number.You can specify what is included in this value.
     /// A typical use of this variable is to make it part of the label format, which you specify on the repository tab.
-    /// 
+    ///
     /// Note: This value can contain whitespace or other invalid label characters. In these cases, the label format will fail.
-    /// 
+    ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public string BuildNumber => GetReference("BuildNumber");
@@ -215,7 +217,7 @@ public sealed class BuildVariableReference : VariableReferenceBase
     /// The URI for the build.
     /// For example: vstfs:///Build/Build/1430
     ///
-    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag. 
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public string BuildUri => GetReference("BuildUri");
 
@@ -224,7 +226,7 @@ public sealed class BuildVariableReference : VariableReferenceBase
     /// By default, new build pipelines are not set up to clean this directory. You can define your build to clean it up on the Repository tab.
     /// For example: c:\agent_work\1\b
     ///
-    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag. 
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public string BinariesDirectory => GetReference("BinariesDirectory");
 
@@ -299,7 +301,7 @@ public sealed class BuildVariableReference : VariableReferenceBase
     ///   - TFVC repo gated check-in: Gated_2016-06-06_05.20.51.4369;username @live.com
     ///   - TFVC repo shelveset build: myshelveset; username @live.com
     ///   - When your pipeline is triggered by a tag: refs/tags/your-tag-name
-    ///   
+    ///
     /// When you use this variable in your build number format, the forward slash characters (/) are replaced with underscore characters _).
     /// Note: In TFVC, if you are running a gated check-in build or manually building a shelveset, you cannot use this variable in your build number format.
     /// </summary>
@@ -318,9 +320,9 @@ public sealed class BuildVariableReference : VariableReferenceBase
     /// <summary>
     /// The local path on the agent where your source code files are downloaded. For example: c:\agent_work\1\s
     /// By default, new build pipelines update only the changed files.
-    /// 
+    ///
     /// Important note: If you check out only one Git repository, this path will be the exact path to the code. If you check out multiple repositories, it will revert to its default value, which is $(Pipeline.Workspace)/s, even if the self (primary) repository is checked out to a custom path different from its multi-checkout default path $(Pipeline.Workspace)/s/[RepoName] (in this respect, the variable differs from the behavior of the Build.Repository.LocalPath variable).
-    /// 
+    ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public string SourcesDirectory => GetReference("SourcesDirectory");
@@ -371,7 +373,7 @@ public sealed class RepositoryVariableReference : VariableReferenceBase
 
     /// <summary>
     /// The value you've selected for Clean in the source repository settings.
-    /// 
+    ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public string Clean => GetReference("Clean");
@@ -384,7 +386,7 @@ public sealed class RepositoryVariableReference : VariableReferenceBase
     /// Important note: If you check out only one Git repository, this path will be the exact path to the code.If you check out multiple repositories, the behavior is as follows(and might differ from the value of the Build.SourcesDirectory variable) :
     ///   - If the checkout step for the self(primary) repository has no custom checkout path defined, or the checkout path is the multi-checkout default path $(Pipeline.Workspace)/s/[RepoName] for the self repository, the value of this variable will revert to its default value, which is $(Pipeline.Workspace)/s.
     ///   - If the checkout step for the self (primary) repository does have a custom checkout path defined (and it's not its multi-checkout default path), this variable will contain the exact path to the self repository.
-    /// 
+    ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public string LocalPath => GetReference("LocalPath");
@@ -392,14 +394,14 @@ public sealed class RepositoryVariableReference : VariableReferenceBase
     /// <summary>
     /// The unique identifier of the repository.
     /// This won't change, even if the name of the repository does.
-    /// 
+    ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public string ID => GetReference("ID");
 
     /// <summary>
     /// The name of the triggering repository.
-    /// 
+    ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public string Name => GetReference("Name");
@@ -411,7 +413,7 @@ public sealed class RepositoryVariableReference : VariableReferenceBase
     ///   - Git: Git repository hosted on an external server
     ///   - GitHub
     ///   - Svn: Subversion
-    /// 
+    ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public string Provider => GetReference("Provider");
@@ -419,7 +421,7 @@ public sealed class RepositoryVariableReference : VariableReferenceBase
     /// <summary>
     /// Defined if your repository is Team Foundation Version Control. The name of the TFVC workspace used by the build agent.
     /// For example: if the Agent.BuildDirectory is c:\agent_work\12 and the Agent.Id is 8, the workspace name could be: ws_12_8
-    /// 
+    ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public string TfvcWorkspace => GetReference("Tfvc.Workspace");
@@ -427,15 +429,15 @@ public sealed class RepositoryVariableReference : VariableReferenceBase
     /// <summary>
     /// The URL for the triggering repository. For example:
     ///   - Git: https://dev.azure.com/fabrikamfiber/_git/Scripts
-    ///   - TFVC: https://dev.azure.com/fabrikamfiber/ 
-    /// 
+    ///   - TFVC: https://dev.azure.com/fabrikamfiber/
+    ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public string Uri => GetReference("Uri");
 
     /// <summary>
     /// The value you've selected for Checkout submodules on the repository tab. With multiple repos checked out, this value tracks the triggering repository's setting.
-    /// 
+    ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public string GitSubmoduleCheckout => GetReference("Git.SubmoduleCheckout");
@@ -507,7 +509,7 @@ public sealed class SystemVariableReference : VariableReferenceBase
     /// System.AccessToken is a special variable that carries the security token used by the running build.
     /// Use the OAuth token to access the REST API.
     /// Use System.AccessToken from YAML scripts.
-    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag. 
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public string AccessToken => GetReference("AccessToken");
 
@@ -517,13 +519,13 @@ public sealed class SystemVariableReference : VariableReferenceBase
     public string Debug => GetReference("Debug");
 
     /// <summary>
-    /// The GUID of the TFS collection or Azure DevOps organization. 
+    /// The GUID of the TFS collection or Azure DevOps organization.
     /// </summary>
     public string CollectionId => GetReference("CollectionId");
 
     /// <summary>
     /// The URI of the TFS collection or Azure DevOps organization.
-    /// For example: https://dev.azure.com/fabrikamfiber/. 
+    /// For example: https://dev.azure.com/fabrikamfiber/.
     /// </summary>
     public string CollectionUri => GetReference("CollectionUri");
 
@@ -537,32 +539,32 @@ public sealed class SystemVariableReference : VariableReferenceBase
     public string DefaultWorkingDirectory => GetReference("DefaultWorkingDirectory");
 
     /// <summary>
-    /// The ID of the build pipeline. 
+    /// The ID of the build pipeline.
     /// </summary>
     public string DefinitionId => GetReference("DefinitionId");
 
     /// <summary>
-    /// Set to build if the pipeline is a build. For a release, the values are deployment for a Deployment group job, gates during evaluation of gates, and release for other (Agent and Agentless) jobs. 
+    /// Set to build if the pipeline is a build. For a release, the values are deployment for a Deployment group job, gates during evaluation of gates, and release for other (Agent and Agentless) jobs.
     /// </summary>
     public string HostType => GetReference("HostType");
 
     /// <summary>
-    /// Set to 1 the first time this job is attempted, and increments every time the job is retried. 
+    /// Set to 1 the first time this job is attempted, and increments every time the job is retried.
     /// </summary>
     public string JobAttempt => GetReference("JobAttempt");
 
     /// <summary>
-    /// The human-readable name given to a job. 
+    /// The human-readable name given to a job.
     /// </summary>
     public string JobDisplayName => GetReference("JobDisplayName");
 
     /// <summary>
-    /// A unique identifier for a single attempt of a single job. The value is unique to the current pipeline. 
+    /// A unique identifier for a single attempt of a single job. The value is unique to the current pipeline.
     /// </summary>
     public string JobId => GetReference("JobId");
 
     /// <summary>
-    /// The name of the job, typically used for expressing dependencies and accessing output variables. 
+    /// The name of the job, typically used for expressing dependencies and accessing output variables.
     /// </summary>
     public string JobName => GetReference("JobName");
 
@@ -570,49 +572,49 @@ public sealed class SystemVariableReference : VariableReferenceBase
     /// Set to 1 the first time this phase is attempted, and increments every time the job is retried.
     /// Note: "Phase" is a mostly-redundant concept which represents the design-time for a job (whereas job was the runtime version of a phase).
     /// We've mostly removed the concept of "phase" from Azure Pipelines. Matrix and multi-config jobs are the only place where "phase" is still distinct from "job".
-    /// One phase can instantiate multiple jobs which differ only in their inputs. 
+    /// One phase can instantiate multiple jobs which differ only in their inputs.
     /// </summary>
     public string PhaseAttempt => GetReference("PhaseAttempt");
 
     /// <summary>
-    /// The human-readable name given to a phase. 
+    /// The human-readable name given to a phase.
     /// </summary>
     public string PhaseDisplayName => GetReference("PhaseDisplayName");
 
     /// <summary>
-    /// A string-based identifier for a job, typically used for expressing dependencies and accessing output variables. 
+    /// A string-based identifier for a job, typically used for expressing dependencies and accessing output variables.
     /// </summary>
     public string PhaseName => GetReference("PhaseName");
 
     /// <summary>
-    /// Set to 1 the first time this stage is attempted, and increments every time the job is retried. 
+    /// Set to 1 the first time this stage is attempted, and increments every time the job is retried.
     /// </summary>
     public string StageAttempt => GetReference("StageAttempt");
 
     /// <summary>
-    /// The human-readable name given to a stage. 
+    /// The human-readable name given to a stage.
     /// </summary>
     public string StageDisplayName => GetReference("StageDisplayName");
 
     /// <summary>
-    /// A string-based identifier for a stage, typically used for expressing dependencies and accessing output variables. 
+    /// A string-based identifier for a stage, typically used for expressing dependencies and accessing output variables.
     /// </summary>
     public string StageName => GetReference("StageName");
 
     /// <summary>
     /// The URI of the TFS collection or Azure DevOps organization.
     /// For example: https://dev.azure.com/fabrikamfiber/.
-    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag. 
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public string TeamFoundationCollectionUri => GetReference("TeamFoundationCollectionUri");
 
     /// <summary>
-    /// The name of the project that contains this build. 
+    /// The name of the project that contains this build.
     /// </summary>
     public string TeamProject => GetReference("TeamProject");
 
     /// <summary>
-    /// The ID of the project that this build belongs to. 
+    /// The ID of the project that this build belongs to.
     /// </summary>
     public string TeamProjectId => GetReference("TeamProjectId");
 }
@@ -626,21 +628,21 @@ public sealed class PullRequestVariableReference : VariableReferenceBase
     }
 
     /// <summary>
-    /// If the pull request is from a fork of the repository, this variable is set to True. Otherwise, it is set to False. 
+    /// If the pull request is from a fork of the repository, this variable is set to True. Otherwise, it is set to False.
     /// </summary>
     public string IsFork => GetReference("IsFork");
 
     /// <summary>
     /// The ID of the pull request that caused this build.
     /// For example: 17.
-    /// (This variable is initialized only if the build ran because of a Git PR affected by a branch policy). 
+    /// (This variable is initialized only if the build ran because of a Git PR affected by a branch policy).
     /// </summary>
     public string PullRequestId => GetReference("PullRequestId");
 
     /// <summary>
     /// The number of the pull request that caused this build.
     /// This variable is populated for pull requests from GitHub which have a different pull request ID and pull request number.
-    /// This variable is only available in a YAML pipeline if the PR is a affected by a branch policy. 
+    /// This variable is only available in a YAML pipeline if the PR is a affected by a branch policy.
     /// </summary>
     public string PullRequestNumber => GetReference("PullRequestNumber");
 
@@ -648,13 +650,13 @@ public sealed class PullRequestVariableReference : VariableReferenceBase
     /// The branch that is being reviewed in a pull request.
     /// For example: refs/heads/users/raisa/new-feature for Azure Repos.
     /// (This variable is initialized only if the build ran because of a Git PR affected by a branch policy).
-    /// This variable is only available in a YAML pipeline if the PR is affected by a branch policy. 
+    /// This variable is only available in a YAML pipeline if the PR is affected by a branch policy.
     /// </summary>
     public string SourceBranch => GetReference("SourceBranch");
 
     /// <summary>
     /// The URL to the repo that contains the pull request.
-    /// For example: https://dev.azure.com/ouraccount/_git/OurProject. 
+    /// For example: https://dev.azure.com/ouraccount/_git/OurProject.
     /// </summary>
     public string SourceRepositoryURI => GetReference("SourceRepositoryURI");
 
@@ -662,7 +664,7 @@ public sealed class PullRequestVariableReference : VariableReferenceBase
     /// The branch that is the target of a pull request.
     /// For example: refs/heads/master when your repository is in Azure Repos and master when your repository is in GitHub.
     /// This variable is initialized only if the build ran because of a Git PR affected by a branch policy.
-    /// This variable is only available in a YAML pipeline if the PR is affected by a branch policy. 
+    /// This variable is only available in a YAML pipeline if the PR is affected by a branch policy.
     /// </summary>
     public string TargetBranch => GetReference("TargetBranch");
 }

@@ -126,7 +126,7 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
 
     public sealed class TemplateParameterReference
     {
-        public string this[string parameterName] => "${{ parameters." + parameterName + " }}";
+        public ParameterValue this[string parameterName] => new(parameterName);
     }
 }
 
@@ -171,7 +171,7 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
 
     /// <summary>
     /// Header that will be shown at the top of the generated YAML file
-    /// 
+    ///
     /// Leave empty array to omit file header.
     /// </summary>
     public virtual string[]? Header => SharplinerPublisher.GetDefaultHeader(GetType());
