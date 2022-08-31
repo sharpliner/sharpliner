@@ -11,18 +11,28 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 /// </summary>
 public abstract class Condition
 {
-    private const string IfTagStart = "${{ if ";
-    private const string IfTagEnd = " }}";
-    protected const string ElseTagStart = "${{ else";
-    protected const string ElseTagEnd = IfTagEnd;
+    private const string ExpressionStart = "${{ ";
+    private const string IfTagStart = $"{ExpressionStart}if ";
+    protected const string ElseTagStart = $"{ExpressionStart}else";
+    protected const string ExpressionEnd = " }}";
 
     private const string VariableIndexAccessStart = "variables[";
     private const string VariablePropertyAccessStart = "variables.";
     private const string ParametersIndexAccessStart = "parameters[";
     private const string ParametersPropertyAccessStart = "parameters.";
 
+    private static readonly (string Start, string End)[] _tagsToRemove = new[]
+    {
+        (IfTagStart, ExpressionEnd),
+        (ElseTagStart, ExpressionEnd),
+        ('\'' + IfTagStart, ExpressionEnd + '\''),
+        ('\'' + ElseTagStart, ExpressionEnd + '\''),
+        (ExpressionStart, ExpressionEnd),
+        ('\'' + ExpressionStart, ExpressionEnd + '\''),
+    };
+
     internal virtual string TagStart => IfTagStart;
-    internal virtual string TagEnd => IfTagEnd;
+    internal virtual string TagEnd => ExpressionEnd;
 
     protected readonly string _condition;
 
@@ -30,6 +40,7 @@ public abstract class Condition
     {
         _condition = condition;
     }
+    
     protected Condition(string keyword, bool requireTwoPlus, params Condition[] expressions)
         : this(keyword, requireTwoPlus, expressions.Select(e => e.ToString()))
     {}
@@ -58,14 +69,13 @@ public abstract class Condition
 
     public static string RemoveTags(string condition)
     {
-        if (condition.StartsWith(IfTagStart) && condition.EndsWith(IfTagEnd))
+        foreach (var (start, end) in _tagsToRemove)
         {
-            condition = condition.Substring(IfTagStart.Length, condition.Length - IfTagStart.Length - IfTagEnd.Length);
-        }
-
-        if (condition.StartsWith(ElseTagStart) && condition.EndsWith(ElseTagEnd))
-        {
-            condition = condition.Substring(ElseTagStart.Length, condition.Length - ElseTagStart.Length - ElseTagEnd.Length);
+            if (condition.StartsWith(start) && condition.EndsWith(end))
+            {
+                condition = condition.Substring(start.Length, condition.Length - start.Length - end.Length);
+                break;
+            }
         }
 
         return condition;
@@ -147,6 +157,21 @@ public class NotCondition : Condition
 
     internal NotCondition(string condition)
         : base(NotConditionHelper.NegateCondition(RemoveTags(condition)))
+    {
+    }
+}
+public abstract class StringCondition : Condition
+{
+    protected StringCondition(string keyword, bool requireTwoPlus, params string[] expressions)
+        : base(keyword, requireTwoPlus, expressions.Select(WrapQuotes))
+    {
+    }
+}
+
+public abstract class StringCondition<T> : Condition<T>
+{
+    protected StringCondition(string keyword, bool requireTwoPlus, params string[] expressions)
+        : base(keyword, requireTwoPlus, expressions.Select(WrapQuotes))
     {
     }
 }
@@ -291,9 +316,9 @@ public class ElseCondition<T> : Condition<T>
     {
     }
 
-    public static implicit operator string(ElseCondition<T> value) => ElseTagStart + ElseTagEnd;
+    public static implicit operator string(ElseCondition<T> value) => ElseTagStart + ExpressionEnd;
 
-    public override string ToString() => ElseTagStart + ElseTagEnd;
+    public override string ToString() => ElseTagStart + ExpressionEnd;
 }
 
 public class EqualityCondition<T> : StringCondition<T>
@@ -438,33 +463,5 @@ public class BuildReasonCondition<T> : EqualityCondition<T>
     internal BuildReasonCondition(string reason, bool equal)
         : base(equal, "variables['Build.Reason']", reason)
     {
-    }
-}
-
-internal static class NotConditionHelper
-{
-    public static string NegateCondition(string condition)
-    {
-        if (condition.StartsWith("eq("))
-        {
-            return string.Concat("ne", condition.AsSpan(2));
-        }
-
-        if (condition.StartsWith("ne("))
-        {
-            return string.Concat("eq", condition.AsSpan(2));
-        }
-
-        if (condition.StartsWith("in("))
-        {
-            return string.Concat("notIn", condition.AsSpan(2));
-        }
-
-        if (condition.StartsWith("notIn("))
-        {
-            return string.Concat("in", condition.AsSpan(5));
-        }
-
-        return $"not({condition})";
     }
 }

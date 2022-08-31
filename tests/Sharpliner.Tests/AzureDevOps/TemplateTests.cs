@@ -14,7 +14,7 @@ public class TemplateTests
         {
             Jobs =
             {
-                If.Equal("foo", "bar")
+                If.Equal(parameters["restore"], "bar")
                     .JobTemplate("template1.yml", new TemplateParameters
                     {
                         { "enableTelemetry", true },
@@ -35,7 +35,7 @@ public class TemplateTests
         yaml.Trim().Should().Be(
             """
             jobs:
-            - ${{ if eq('foo', 'bar') }}:
+            - ${{ if eq(parameters.restore, 'bar') }}:
               - template: template1.yml
                 parameters:
                   enableTelemetry: true
@@ -104,7 +104,7 @@ public class TemplateTests
                 packageType: sdk
                 version: ${{ parameters.version }}
 
-            - ${{ if eq('${{ parameters.restore }}', 'true') }}:
+            - ${{ if eq(parameters.restore, 'true') }}:
               - task: DotNetCoreCLI@2
                 inputs:
                   command: restore
