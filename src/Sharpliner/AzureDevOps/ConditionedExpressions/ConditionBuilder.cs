@@ -124,35 +124,23 @@ public class ConditionBuilder
     public Condition ContainsValue(IRuntimeExpression needle, params object[] haystack)
         => new ContainsValueCondition(needle, haystack.AsRuntimeExpressions());
 
-    public Condition In(StringRuntimeExpression needle, StringRuntimeExpression[] haystack)
+    public Condition In(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack)
         => new InCondition(needle, haystack);
 
-    public Condition In(StringRuntimeExpression needle, IRuntimeExpression[] haystack)
+    public Condition In(StringRuntimeExpression needle, params IRuntimeExpression[] haystack)
         => new InCondition(needle, haystack);
 
-    public Condition In(IRuntimeExpression needle, StringRuntimeExpression[] haystack)
+    public Condition In(IRuntimeExpression needle, params StringRuntimeExpression[] haystack)
         => new InCondition(needle, haystack);
 
-    public Condition In(IRuntimeExpression needle, IRuntimeExpression[] haystack)
+    public Condition In(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         => new InCondition(needle, haystack);
 
-    public Condition In(StringRuntimeExpression needle, object[] haystack)
+    public Condition In(StringRuntimeExpression needle, params object[] haystack)
         => new InCondition(needle, haystack.AsRuntimeExpressions());
 
-    public Condition In(IRuntimeExpression needle, object[] haystack)
+    public Condition In(IRuntimeExpression needle, params object[] haystack)
         => new InCondition(needle, haystack.AsRuntimeExpressions());
-
-    public Condition In(StringRuntimeExpression needle, StringRuntimeExpression haystack)
-        => new InCondition(needle, haystack);
-
-    public Condition In(StringRuntimeExpression needle, IRuntimeExpression haystack)
-        => new InCondition(needle, haystack);
-
-    public Condition In(IRuntimeExpression needle, StringRuntimeExpression haystack)
-        => new InCondition(needle, haystack);
-
-    public Condition In(IRuntimeExpression needle, IRuntimeExpression haystack)
-        => new InCondition(needle, haystack);
 
     public Condition NotIn(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack)
         => new NotInCondition(needle, haystack);
@@ -171,18 +159,6 @@ public class ConditionBuilder
 
     public Condition NotIn(IRuntimeExpression needle, params object[] haystack)
         => new NotInCondition(needle, haystack.AsRuntimeExpressions());
-
-    public Condition NotIn(StringRuntimeExpression needle, StringRuntimeExpression haystack)
-        => new NotInCondition(needle, haystack);
-
-    public Condition NotIn(StringRuntimeExpression needle, IRuntimeExpression haystack)
-        => new NotInCondition(needle, haystack);
-
-    public Condition NotIn(IRuntimeExpression needle, StringRuntimeExpression haystack)
-        => new NotInCondition(needle, haystack);
-
-    public Condition NotIn(IRuntimeExpression needle, IRuntimeExpression haystack)
-        => new NotInCondition(needle, haystack);
 
     public Condition Greater(StringRuntimeExpression first, StringRuntimeExpression second)
         => Link(new GreaterCondition(first, second));
