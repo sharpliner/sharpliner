@@ -6,11 +6,11 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 
-public class ParameterValue : IRuntimeExpression, ICompileTimeExpression, IYamlConvertible
+public class ParameterReference : IRuntimeExpression, ICompileTimeExpression, IYamlConvertible
 {
     public string ParameterName { get; }
 
-    internal ParameterValue(string parameterName)
+    internal ParameterReference(string parameterName)
     {
         ParameterName = parameterName;
     }
@@ -21,7 +21,7 @@ public class ParameterValue : IRuntimeExpression, ICompileTimeExpression, IYamlC
 
     public override string ToString() => CompileTimeExpression;
 
-    public static implicit operator string(ParameterValue value) => value.ToString();
+    public static implicit operator string(ParameterReference value) => value.ToString();
     public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
         => throw new NotImplementedException();
 

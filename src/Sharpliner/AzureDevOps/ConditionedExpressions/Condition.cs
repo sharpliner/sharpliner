@@ -438,7 +438,7 @@ public class LessCondition<T> : Condition<T>
 public class BranchCondition : EqualityCondition
 {
     internal BranchCondition(IRuntimeExpression branchName, bool equal)
-        : base(equal, new VariableValue("Build.SourceBranch"), new StringRuntimeExpression('\'' + (branchName.RuntimeExpression.StartsWith("refs/heads/") ? branchName.RuntimeExpression : "refs/heads/" + branchName.RuntimeExpression) + '\''))
+        : base(equal, new VariableReference("Build.SourceBranch"), new StringRuntimeExpression('\'' + (branchName.RuntimeExpression.StartsWith("refs/heads/") ? branchName.RuntimeExpression : "refs/heads/" + branchName.RuntimeExpression) + '\''))
     {
     }
 }
@@ -446,7 +446,7 @@ public class BranchCondition : EqualityCondition
 public class BranchCondition<T> : EqualityCondition<T>
 {
     internal BranchCondition(IRuntimeExpression branchName, bool equal)
-        : base(equal, new VariableValue("Build.SourceBranch"), new StringRuntimeExpression('\'' + (branchName.RuntimeExpression.StartsWith("refs/heads/") ? branchName.RuntimeExpression : "refs/heads/" + branchName.RuntimeExpression) + '\''))
+        : base(equal, new VariableReference("Build.SourceBranch"), new StringRuntimeExpression('\'' + (branchName.RuntimeExpression.StartsWith("refs/heads/") ? branchName.RuntimeExpression : "refs/heads/" + branchName.RuntimeExpression) + '\''))
     {
     }
 }
@@ -454,7 +454,7 @@ public class BranchCondition<T> : EqualityCondition<T>
 public class BuildReasonCondition : EqualityCondition
 {
     internal BuildReasonCondition(IRuntimeExpression reason, bool equal)
-        : base(equal, new VariableValue("Build.Reason"), reason)
+        : base(equal, new VariableReference("Build.Reason"), reason)
     {
     }
 }
@@ -462,7 +462,7 @@ public class BuildReasonCondition : EqualityCondition
 public class BuildReasonCondition<T> : EqualityCondition<T>
 {
     internal BuildReasonCondition(IRuntimeExpression reason, bool equal)
-        : base(equal, new VariableValue("Build.Reason"), reason)
+        : base(equal, new VariableReference("Build.Reason"), reason)
     {
     }
 }

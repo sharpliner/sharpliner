@@ -126,7 +126,7 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
 
     public sealed class TemplateParameterReference
     {
-        public ParameterValue this[string parameterName] => new(parameterName);
+        public ParameterReference this[string parameterName] => new(parameterName);
     }
 }
 

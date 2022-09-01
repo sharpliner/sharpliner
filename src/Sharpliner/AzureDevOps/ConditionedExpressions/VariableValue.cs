@@ -6,11 +6,11 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 
-public class VariableValue : IRuntimeExpression, ICompileTimeExpression, IMacroExpression, IYamlConvertible
+public class VariableReference : IRuntimeExpression, ICompileTimeExpression, IMacroExpression, IYamlConvertible
 {
     public string VariableName { get; }
 
-    internal VariableValue(string variableName)
+    internal VariableReference(string variableName)
     {
         VariableName = variableName;
     }
@@ -23,7 +23,7 @@ public class VariableValue : IRuntimeExpression, ICompileTimeExpression, IMacroE
 
     public override string ToString() => MacroExpression;
 
-    public static implicit operator string(VariableValue value) => value.ToString();
+    public static implicit operator string(VariableReference value) => value.ToString();
 
     public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
         => throw new NotImplementedException();

@@ -52,47 +52,49 @@ public class StrongTypedTests
     {
         var yaml = new Pipeline_With_Strong_Variables_And_Parameters().Serialize();
 
-        yaml.Trim().Should().Be(@"parameters:
-- name: Parameter1
-  type: string
-  default: SomeParameterValue1
+        yaml.Trim().Should().Be("""
+            parameters:
+            - name: Parameter1
+              type: string
+              default: SomeParameterValue1
 
-- name: Parameter2
-  type: string
-  default: SomeParameterValue2
+            - name: Parameter2
+              type: string
+              default: SomeParameterValue2
 
-variables:
-- name: Variable1
-  value: SomeVariableValue1
+            variables:
+            - name: Variable1
+              value: SomeVariableValue1
 
-- name: Variable2
-  value: SomeVariableValue2
+            - name: Variable2
+              value: SomeVariableValue2
 
-- ${{ if eq(parameters.Parameter1, 'SomeParameterValue1') }}:
-  - name: VariableBasedUponParameter
-    value: Parameter1 Equals SomeParameterValue1
+            - ${{ if eq(parameters.Parameter1, 'SomeParameterValue1') }}:
+              - name: VariableBasedUponParameter
+                value: Parameter1 Equals SomeParameterValue1
 
-- ${{ else }}:
-  - name: VariableBasedUponParameter
-    value: Parameter1 Does Not Equal SomeParameterValue1
+            - ${{ else }}:
+              - name: VariableBasedUponParameter
+                value: Parameter1 Does Not Equal SomeParameterValue1
 
-jobs:
-- job: Blah
-  displayName: Blah
-  steps:
-  - ${{ if eq(parameters.Parameter1, 'SomeParameterValue1') }}:
-    - script: |-
-        echo Hello
+            jobs:
+            - job: Blah
+              displayName: Blah
+              steps:
+              - ${{ if eq(parameters.Parameter1, 'SomeParameterValue1') }}:
+                - script: |-
+                    echo Hello
 
-  - ${{ if eq(variables['VariableBasedUponParameter'], 'Parameter1 Equals SomeParameterValue1') }}:
-    - script: |-
-        echo Hello again
+              - ${{ if eq(variables['VariableBasedUponParameter'], 'Parameter1 Equals SomeParameterValue1') }}:
+                - script: |-
+                    echo Hello again
 
-  - script: |-
-      echo $(VariableBasedUponParameter)
+              - script: |-
+                  echo $(VariableBasedUponParameter)
 
-  - script: |-
-      echo ${{ parameters.Parameter1 }}"
+              - script: |-
+                  echo ${{ parameters.Parameter1 }}
+            """
         );
     }
 }

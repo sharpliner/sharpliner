@@ -213,7 +213,7 @@ public abstract class AzureDevOpsDefinition
     /// Allows the variables[""] notation for conditional definitions.
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Should not be capitalized to follow YAML syntax")]
-    protected static readonly VariableReference variables = new();
+    protected static readonly VariablesReference variables = new();
 
     /// <summary>
     /// Defines a variable.

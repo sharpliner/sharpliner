@@ -2,9 +2,9 @@
 
 namespace Sharpliner.AzureDevOps;
 
-public sealed class VariableReference
+public sealed class VariablesReference
 {
-    public VariableValue this[string variableName] => new(variableName);
+    public VariableReference this[string variableName] => new(variableName);
 
     /// <summary>
     /// Variables connected to the agent running the current build (e.g. Agent.HomeDirectory)
