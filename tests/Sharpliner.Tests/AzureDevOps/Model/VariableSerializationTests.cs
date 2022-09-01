@@ -97,10 +97,12 @@ public class VariableSerializationTests
         var yaml = pipeline.Serialize();
 
         yaml.Trim().Should().Be(
-@"variables:
-- ${{ if containsValue('refs/heads/feature/', parameters.allowedTags, variables['foo'], '$(Build.Reason)', '$(Build.SourceBranch)') }}:
-  - name: feature
-    value: on"
+            """
+            variables:
+            - ${{ if containsValue('refs/heads/feature/', parameters.allowedTags, variables['foo'], '$(Build.Reason)', '$(Build.SourceBranch)') }}:
+              - name: feature
+                value: on
+            """
         );
     }
 
@@ -124,10 +126,12 @@ public class VariableSerializationTests
         var yaml = pipeline.Serialize();
 
         yaml.Trim().Should().Be(
-            @"variables:
-- ${{ if gt('$(Build.BuildNumber)', 100) }}:
-  - name: high
-    value: true"
+            """
+            variables:
+            - ${{ if gt('$(Build.BuildNumber)', 100) }}:
+              - name: high
+                value: true
+            """
         );
     }
 }

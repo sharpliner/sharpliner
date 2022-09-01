@@ -22,6 +22,7 @@ public class ParameterReference : IRuntimeExpression, ICompileTimeExpression, IY
     public override string ToString() => CompileTimeExpression;
 
     public static implicit operator string(ParameterReference value) => value.ToString();
+
     public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
         => throw new NotImplementedException();
 
