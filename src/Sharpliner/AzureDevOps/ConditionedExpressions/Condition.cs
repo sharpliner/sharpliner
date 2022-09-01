@@ -85,6 +85,9 @@ public abstract class Condition
     protected static string WrapQuotes(string value)
     {
         if (value.StartsWith('\'')
+            || bool.TryParse(value, out _)
+            || long.TryParse(value, out _)
+            || double.TryParse(value, out _)
             || value.StartsWith(VariableIndexAccessStart)
             || value.StartsWith(VariablePropertyAccessStart)
             || value.StartsWith(ParametersIndexAccessStart)
