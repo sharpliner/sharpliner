@@ -13,7 +13,7 @@ public class ParameterValue : IRuntimeExpression, ICompileTimeExpression
 
     public string RuntimeExpression => $"parameters.{ParameterName}";
 
-    public string CompileTimeExpression => $"${{{{ parameters.{ParameterName} }}}}";
+    public string CompileTimeExpression => Condition.ExpressionStart + $"parameters.{ParameterName}" + Condition.ExpressionEnd;
 
     public override string ToString() => CompileTimeExpression;
 

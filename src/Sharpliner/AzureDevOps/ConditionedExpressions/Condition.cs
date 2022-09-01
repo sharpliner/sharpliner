@@ -12,10 +12,10 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 /// </summary>
 public abstract class Condition
 {
-    private const string ExpressionStart = "${{ ";
+    internal const string ExpressionStart = "${{ ";
     private const string IfTagStart = $"{ExpressionStart}if ";
     protected const string ElseTagStart = $"{ExpressionStart}else";
-    protected const string ExpressionEnd = " }}";
+    internal const string ExpressionEnd = " }}";
 
     private const string VariableIndexAccessStart = "variables[";
     private const string VariablePropertyAccessStart = "variables.";

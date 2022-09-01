@@ -13,7 +13,7 @@ public class VariableValue : IRuntimeExpression, ICompileTimeExpression, IMacroE
 
     public string RuntimeExpression => $"variables['{VariableName}']";
 
-    public string CompileTimeExpression => $"${{{{ variables.{VariableName} }}}}";
+    public string CompileTimeExpression => Condition.ExpressionStart + $"variables.{VariableName}" + Condition.ExpressionEnd;
 
     public string MacroExpression => $"$({VariableName})";
 
