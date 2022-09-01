@@ -498,15 +498,32 @@ public abstract class AzureDevOpsDefinition
     protected static Condition EndsWith<T>(IRuntimeExpression needle, IRuntimeExpression haystack) => new EndsWithCondition<T>(needle, haystack);
 
 
-    protected static Condition ContainsValue<T>(string needle, params string[] haystack) => new ContainsValueCondition<T>(needle, haystack);
+    protected static Condition ContainsValue<T>(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new ContainsValueCondition<T>(needle, haystack);
+    protected static Condition ContainsValue<T>(StringRuntimeExpression needle, params IRuntimeExpression[] haystack) => new ContainsValueCondition<T>(needle, haystack);
+    protected static Condition ContainsValue<T>(IRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new ContainsValueCondition<T>(needle, haystack);
+    protected static Condition ContainsValue<T>(IRuntimeExpression needle, params IRuntimeExpression[] haystack) => new ContainsValueCondition<T>(needle, haystack);
 
-    protected static Condition In<T>(string needle, params string[] haystack) => new InCondition<T>(needle, haystack);
 
-    protected static Condition NotIn<T>(string needle, params string[] haystack) => new NotInCondition<T>(needle, haystack);
+    protected static Condition In<T>(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new InCondition<T>(needle, haystack);
+    protected static Condition In<T>(StringRuntimeExpression needle, params IRuntimeExpression[] haystack) => new InCondition<T>(needle, haystack);
+    protected static Condition In<T>(IRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new InCondition<T>(needle, haystack);
+    protected static Condition In<T>(IRuntimeExpression needle, params IRuntimeExpression[] haystack) => new InCondition<T>(needle, haystack);
 
-    protected static Condition Greater<T>(string expression1, string expression2) => new GreaterCondition<T>(expression1, expression2);
 
-    protected static Condition Less<T>(string expression1, string expression2) => new LessCondition<T>(expression1, expression2);
+    protected static Condition NotIn<T>(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new NotInCondition<T>(needle, haystack);
+    protected static Condition NotIn<T>(StringRuntimeExpression needle, params IRuntimeExpression[] haystack) => new NotInCondition<T>(needle, haystack);
+    protected static Condition NotIn<T>(IRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new NotInCondition<T>(needle, haystack);
+    protected static Condition NotIn<T>(IRuntimeExpression needle, params IRuntimeExpression[] haystack) => new NotInCondition<T>(needle, haystack);
+
+    protected static Condition Greater<T>(StringRuntimeExpression expression1, StringRuntimeExpression expression2) => new GreaterCondition<T>(expression1, expression2);
+    protected static Condition Greater<T>(StringRuntimeExpression expression1, IRuntimeExpression expression2) => new GreaterCondition<T>(expression1, expression2);
+    protected static Condition Greater<T>(IRuntimeExpression expression1, StringRuntimeExpression expression2) => new GreaterCondition<T>(expression1, expression2);
+    protected static Condition Greater<T>(IRuntimeExpression expression1, IRuntimeExpression expression2) => new GreaterCondition<T>(expression1, expression2);
+
+    protected static Condition Less<T>(StringRuntimeExpression expression1, StringRuntimeExpression expression2) => new LessCondition<T>(expression1, expression2);
+    protected static Condition Less<T>(StringRuntimeExpression expression1, IRuntimeExpression expression2) => new LessCondition<T>(expression1, expression2);
+    protected static Condition Less<T>(IRuntimeExpression expression1, StringRuntimeExpression expression2) => new LessCondition<T>(expression1, expression2);
+    protected static Condition Less<T>(IRuntimeExpression expression1, IRuntimeExpression expression2) => new LessCondition<T>(expression1, expression2);
 
     protected static Condition And(params string[] expressions) => new AndCondition(expressions);
 
@@ -535,11 +552,20 @@ public abstract class AzureDevOpsDefinition
     protected static Condition EndsWith(StringRuntimeExpression needle, IRuntimeExpression haystack) => new EndsWithCondition(needle, haystack);
     protected static Condition EndsWith(IRuntimeExpression needle, IRuntimeExpression haystack) => new EndsWithCondition(needle, haystack);
 
-    protected static Condition In(string needle, params string[] haystack) => new InCondition(needle, haystack);
+    protected static Condition In(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new InCondition(needle, haystack);
+    protected static Condition In(StringRuntimeExpression needle, params IRuntimeExpression[] haystack) => new InCondition(needle, haystack);
+    protected static Condition In(IRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new InCondition(needle, haystack);
+    protected static Condition In(IRuntimeExpression needle, params IRuntimeExpression[] haystack) => new InCondition(needle, haystack);
 
-    protected static Condition NotIn(string needle, params string[] haystack) => new NotInCondition(needle, haystack);
+    protected static Condition NotIn(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new NotInCondition(needle, haystack);
+    protected static Condition NotIn(StringRuntimeExpression needle, params IRuntimeExpression[] haystack) => new NotInCondition(needle, haystack);
+    protected static Condition NotIn(IRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new NotInCondition(needle, haystack);
+    protected static Condition NotIn(IRuntimeExpression needle, params IRuntimeExpression[] haystack) => new NotInCondition(needle, haystack);
 
-    protected static Condition ContainsValue(string needle, params string[] haystack) => new ContainsValueCondition(needle, haystack);
+    protected static Condition ContainsValue(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new ContainsValueCondition(needle, haystack);
+    protected static Condition ContainsValue(StringRuntimeExpression needle, params IRuntimeExpression[] haystack) => new ContainsValueCondition(needle, haystack);
+    protected static Condition ContainsValue(IRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new ContainsValueCondition(needle, haystack);
+    protected static Condition ContainsValue(IRuntimeExpression needle, params IRuntimeExpression[] haystack) => new ContainsValueCondition(needle, haystack);
 
     protected static Condition Equal(StringRuntimeExpression expression1, StringRuntimeExpression expression2) => new EqualityCondition(true, expression1, expression2);
     protected static Condition Equal(IRuntimeExpression expression1, StringRuntimeExpression expression2) => new EqualityCondition(true, expression1, expression2);
@@ -551,9 +577,15 @@ public abstract class AzureDevOpsDefinition
     protected static Condition NotEqual(StringRuntimeExpression expression1, IRuntimeExpression expression2) => new EqualityCondition(false, expression1, expression2);
     protected static Condition NotEqual(IRuntimeExpression expression1, IRuntimeExpression expression2) => new EqualityCondition(false, expression1, expression2);
 
-    protected static Condition Greater(string expression1, string expression2) => new GreaterCondition(expression1, expression2);
+    protected static Condition Greater(StringRuntimeExpression expression1, StringRuntimeExpression expression2) => new GreaterCondition(expression1, expression2);
+    protected static Condition Greater(StringRuntimeExpression expression1, IRuntimeExpression expression2) => new GreaterCondition(expression1, expression2);
+    protected static Condition Greater(IRuntimeExpression expression1, StringRuntimeExpression expression2) => new GreaterCondition(expression1, expression2);
+    protected static Condition Greater(IRuntimeExpression expression1, IRuntimeExpression expression2) => new GreaterCondition(expression1, expression2);
 
-    protected static Condition Less(string expression1, string expression2) => new LessCondition(expression1, expression2);
+    protected static Condition Less(StringRuntimeExpression expression1, StringRuntimeExpression expression2) => new LessCondition(expression1, expression2);
+    protected static Condition Less(StringRuntimeExpression expression1, IRuntimeExpression expression2) => new LessCondition(expression1, expression2);
+    protected static Condition Less(IRuntimeExpression expression1, StringRuntimeExpression expression2) => new LessCondition(expression1, expression2);
+    protected static Condition Less(IRuntimeExpression expression1, IRuntimeExpression expression2) => new LessCondition(expression1, expression2);
 
     protected static Condition IsBranch(StringRuntimeExpression branchName) => new BranchCondition(branchName, true);
     protected static Condition IsBranch(IRuntimeExpression branchName) => new BranchCondition(branchName, true);

@@ -106,19 +106,64 @@ public class ConditionBuilder
     public Condition Contains(IRuntimeExpression needle, IRuntimeExpression haystack)
         => new ContainsCondition(needle, haystack);
 
-    public Condition ContainsValue(string needle, params string[] haystack)
+    public Condition ContainsValue(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack)
         => new ContainsValueCondition(needle, haystack);
 
-    public Condition In(string needle, string haystack)
+    public Condition ContainsValue(StringRuntimeExpression needle, params IRuntimeExpression[] haystack)
+        => new ContainsValueCondition(needle, haystack);
+
+    public Condition ContainsValue(IRuntimeExpression needle, params StringRuntimeExpression[] haystack)
+        => new ContainsValueCondition(needle, haystack);
+
+    public Condition ContainsValue(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
+        => new ContainsValueCondition(needle, haystack);
+
+    public Condition In(StringRuntimeExpression needle, StringRuntimeExpression haystack)
         => new InCondition(needle, haystack);
 
-    public Condition NotIn(string needle, params string[] haystack)
+    public Condition In(StringRuntimeExpression needle, IRuntimeExpression haystack)
+        => new InCondition(needle, haystack);
+
+    public Condition In(IRuntimeExpression needle, StringRuntimeExpression haystack)
+        => new InCondition(needle, haystack);
+
+    public Condition In(IRuntimeExpression needle, IRuntimeExpression haystack)
+        => new InCondition(needle, haystack);
+
+    public Condition NotIn(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack)
         => new NotInCondition(needle, haystack);
 
-    public Condition Greater(string first, string second)
+    public Condition NotIn(StringRuntimeExpression needle, params IRuntimeExpression[] haystack)
+        => new NotInCondition(needle, haystack);
+
+    public Condition NotIn(IRuntimeExpression needle, params StringRuntimeExpression[] haystack)
+        => new NotInCondition(needle, haystack);
+
+    public Condition NotIn(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
+        => new NotInCondition(needle, haystack);
+
+    public Condition Greater(StringRuntimeExpression first, StringRuntimeExpression second)
         => Link(new GreaterCondition(first, second));
 
-    public Condition Less(string first, string second)
+    public Condition Greater(StringRuntimeExpression first, IRuntimeExpression second)
+        => Link(new GreaterCondition(first, second));
+
+    public Condition Greater(IRuntimeExpression first, StringRuntimeExpression second)
+        => Link(new GreaterCondition(first, second));
+
+    public Condition Greater(IRuntimeExpression first, IRuntimeExpression second)
+        => Link(new GreaterCondition(first, second));
+
+    public Condition Less(StringRuntimeExpression first, StringRuntimeExpression second)
+        => Link(new LessCondition(first, second));
+
+    public Condition Less(StringRuntimeExpression first, IRuntimeExpression second)
+        => Link(new LessCondition(first, second));
+
+    public Condition Less(IRuntimeExpression first, StringRuntimeExpression second)
+        => Link(new LessCondition(first, second));
+
+    public Condition Less(IRuntimeExpression first, IRuntimeExpression second)
         => Link(new LessCondition(first, second));
 
     public Condition IsBranch(StringRuntimeExpression branchName)
@@ -236,13 +281,40 @@ public class ConditionBuilder<T>
     public Condition<T> Contains(IRuntimeExpression needle, IRuntimeExpression haystack)
         => new ContainsCondition<T>(needle, haystack);
 
-    public Condition In(string needle, string haystack)
+    public Condition In(StringRuntimeExpression needle, StringRuntimeExpression haystack)
         => new InCondition<T>(needle, haystack);
 
-    public Condition NotIn(string needle, params string[] haystack)
+    public Condition In(StringRuntimeExpression needle, IRuntimeExpression haystack)
+        => new InCondition<T>(needle, haystack);
+
+    public Condition In(IRuntimeExpression needle, StringRuntimeExpression haystack)
+        => new InCondition<T>(needle, haystack);
+
+    public Condition In(IRuntimeExpression needle, IRuntimeExpression haystack)
+        => new InCondition<T>(needle, haystack);
+
+    public Condition NotIn(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack)
         => new NotInCondition<T>(needle, haystack);
 
-    public Condition<T> ContainsValue(string needle, params string[] haystack)
+    public Condition NotIn(StringRuntimeExpression needle, params IRuntimeExpression[] haystack)
+        => new NotInCondition<T>(needle, haystack);
+
+    public Condition NotIn(IRuntimeExpression needle, params StringRuntimeExpression[] haystack)
+        => new NotInCondition<T>(needle, haystack);
+
+    public Condition NotIn(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
+        => new NotInCondition<T>(needle, haystack);
+
+    public Condition<T> ContainsValue(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack)
+        => new ContainsValueCondition<T>(needle, haystack);
+
+    public Condition<T> ContainsValue(StringRuntimeExpression needle, params IRuntimeExpression[] haystack)
+        => new ContainsValueCondition<T>(needle, haystack);
+
+    public Condition<T> ContainsValue(IRuntimeExpression needle, params StringRuntimeExpression[] haystack)
+        => new ContainsValueCondition<T>(needle, haystack);
+
+    public Condition<T> ContainsValue(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         => new ContainsValueCondition<T>(needle, haystack);
 
     public Condition<T> IsBranch(StringRuntimeExpression branchName)
@@ -257,10 +329,28 @@ public class ConditionBuilder<T>
     public Condition<T> IsNotBranch(IRuntimeExpression branchName)
         => Link(new BranchCondition<T>(branchName, false));
 
-    public Condition<T> Greater(string first, string second)
+    public Condition<T> Greater(StringRuntimeExpression first, StringRuntimeExpression second)
         => Link(new GreaterCondition<T>(first, second));
 
-    public Condition<T> Less(string first, string second)
+    public Condition<T> Greater(StringRuntimeExpression first, IRuntimeExpression second)
+        => Link(new GreaterCondition<T>(first, second));
+
+    public Condition<T> Greater(IRuntimeExpression first, StringRuntimeExpression second)
+        => Link(new GreaterCondition<T>(first, second));
+
+    public Condition<T> Greater(IRuntimeExpression first, IRuntimeExpression second)
+        => Link(new GreaterCondition<T>(first, second));
+
+    public Condition<T> Less(StringRuntimeExpression first, StringRuntimeExpression second)
+        => Link(new LessCondition<T>(first, second));
+
+    public Condition<T> Less(StringRuntimeExpression first, IRuntimeExpression second)
+        => Link(new LessCondition<T>(first, second));
+
+    public Condition<T> Less(IRuntimeExpression first, StringRuntimeExpression second)
+        => Link(new LessCondition<T>(first, second));
+
+    public Condition<T> Less(IRuntimeExpression first, IRuntimeExpression second)
         => Link(new LessCondition<T>(first, second));
 
     public Condition<T> IsPullRequest
