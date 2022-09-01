@@ -502,18 +502,24 @@ public abstract class AzureDevOpsDefinition
     protected static Condition ContainsValue<T>(StringRuntimeExpression needle, params IRuntimeExpression[] haystack) => new ContainsValueCondition<T>(needle, haystack);
     protected static Condition ContainsValue<T>(IRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new ContainsValueCondition<T>(needle, haystack);
     protected static Condition ContainsValue<T>(IRuntimeExpression needle, params IRuntimeExpression[] haystack) => new ContainsValueCondition<T>(needle, haystack);
+    protected static Condition ContainsValue<T>(StringRuntimeExpression needle, params object[] haystack) => new ContainsValueCondition<T>(needle, haystack.AsRuntimeExpressions());
+    protected static Condition ContainsValue<T>(IRuntimeExpression needle, params object[] haystack) => new ContainsValueCondition<T>(needle, haystack.AsRuntimeExpressions());
 
 
     protected static Condition In<T>(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new InCondition<T>(needle, haystack);
     protected static Condition In<T>(StringRuntimeExpression needle, params IRuntimeExpression[] haystack) => new InCondition<T>(needle, haystack);
     protected static Condition In<T>(IRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new InCondition<T>(needle, haystack);
     protected static Condition In<T>(IRuntimeExpression needle, params IRuntimeExpression[] haystack) => new InCondition<T>(needle, haystack);
+    protected static Condition In<T>(StringRuntimeExpression needle, params object[] haystack) => new InCondition<T>(needle, haystack.AsRuntimeExpressions());
+    protected static Condition In<T>(IRuntimeExpression needle, params object[] haystack) => new InCondition<T>(needle, haystack.AsRuntimeExpressions());
 
 
     protected static Condition NotIn<T>(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new NotInCondition<T>(needle, haystack);
     protected static Condition NotIn<T>(StringRuntimeExpression needle, params IRuntimeExpression[] haystack) => new NotInCondition<T>(needle, haystack);
     protected static Condition NotIn<T>(IRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new NotInCondition<T>(needle, haystack);
     protected static Condition NotIn<T>(IRuntimeExpression needle, params IRuntimeExpression[] haystack) => new NotInCondition<T>(needle, haystack);
+    protected static Condition NotIn<T>(StringRuntimeExpression needle, params object[] haystack) => new NotInCondition<T>(needle, haystack.AsRuntimeExpressions());
+    protected static Condition NotIn<T>(IRuntimeExpression needle, params object[] haystack) => new NotInCondition<T>(needle, haystack.AsRuntimeExpressions());
 
     protected static Condition Greater<T>(StringRuntimeExpression expression1, StringRuntimeExpression expression2) => new GreaterCondition<T>(expression1, expression2);
     protected static Condition Greater<T>(StringRuntimeExpression expression1, IRuntimeExpression expression2) => new GreaterCondition<T>(expression1, expression2);
@@ -556,16 +562,22 @@ public abstract class AzureDevOpsDefinition
     protected static Condition In(StringRuntimeExpression needle, params IRuntimeExpression[] haystack) => new InCondition(needle, haystack);
     protected static Condition In(IRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new InCondition(needle, haystack);
     protected static Condition In(IRuntimeExpression needle, params IRuntimeExpression[] haystack) => new InCondition(needle, haystack);
+    protected static Condition In(StringRuntimeExpression needle, params object[] haystack) => new InCondition(needle, haystack.AsRuntimeExpressions());
+    protected static Condition In(IRuntimeExpression needle, params object[] haystack) => new InCondition(needle, haystack.AsRuntimeExpressions());
 
     protected static Condition NotIn(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new NotInCondition(needle, haystack);
     protected static Condition NotIn(StringRuntimeExpression needle, params IRuntimeExpression[] haystack) => new NotInCondition(needle, haystack);
     protected static Condition NotIn(IRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new NotInCondition(needle, haystack);
     protected static Condition NotIn(IRuntimeExpression needle, params IRuntimeExpression[] haystack) => new NotInCondition(needle, haystack);
+    protected static Condition NotIn(StringRuntimeExpression needle, params object[] haystack) => new NotInCondition(needle, haystack.AsRuntimeExpressions());
+    protected static Condition NotIn(IRuntimeExpression needle, params object[] haystack) => new NotInCondition(needle, haystack.AsRuntimeExpressions());
 
     protected static Condition ContainsValue(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new ContainsValueCondition(needle, haystack);
     protected static Condition ContainsValue(StringRuntimeExpression needle, params IRuntimeExpression[] haystack) => new ContainsValueCondition(needle, haystack);
     protected static Condition ContainsValue(IRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new ContainsValueCondition(needle, haystack);
     protected static Condition ContainsValue(IRuntimeExpression needle, params IRuntimeExpression[] haystack) => new ContainsValueCondition(needle, haystack);
+    protected static Condition ContainsValue(StringRuntimeExpression needle, params object[] haystack) => new ContainsValueCondition(needle, haystack.AsRuntimeExpressions());
+    protected static Condition ContainsValue(IRuntimeExpression needle, params object[] haystack) => new ContainsValueCondition(needle, haystack.AsRuntimeExpressions());
 
     protected static Condition Equal(StringRuntimeExpression expression1, StringRuntimeExpression expression2) => new EqualityCondition(true, expression1, expression2);
     protected static Condition Equal(IRuntimeExpression expression1, StringRuntimeExpression expression2) => new EqualityCondition(true, expression1, expression2);
