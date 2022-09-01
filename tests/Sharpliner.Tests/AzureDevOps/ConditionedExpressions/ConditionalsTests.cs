@@ -32,7 +32,7 @@ public class ConditionalsTests
             "and(" +
                 "notIn('bar', 'foo', 'xyz', 'foo'), " +
                 "ne('$(Configuration)', 'Debug'), " +
-                "containsValue($(System.JobId), 10))");
+                "containsValue('$(System.JobId)', 10))");
     }
 
     private class Or_Condition_Test_Pipeline : TestPipeline

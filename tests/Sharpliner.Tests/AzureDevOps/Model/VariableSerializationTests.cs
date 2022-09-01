@@ -76,4 +76,62 @@ public class VariableSerializationTests
                 - group: azure-prod
             """);
     }
+
+    private class ContainsValueCondition_Test_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Variables =
+            {
+                If.ContainsValue(variables.Build.SourceBranch, "refs/heads/feature/", parameters["allowedTags"], variables["foo"], variables.Build.Reason)
+                    .Variable("feature", "on"),
+            }
+        };
+    }
+
+    [Fact]
+    public void ContainsValue_Condition_Test()
+    {
+        var pipeline = new ContainsValueCondition_Test_Pipeline();
+
+        var yaml = pipeline.Serialize();
+
+        yaml.Trim().Should().Be(
+            """
+            variables:
+            - ${{ if containsValue('refs/heads/feature/', parameters.allowedTags, variables['foo'], '$(Build.Reason)', '$(Build.SourceBranch)') }}:
+              - name: feature
+                value: on
+            """
+        );
+    }
+
+    private class GreaterThanCondition_Test_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Variables =
+            {
+                If.Greater(variables.Build.BuildNumber, "100")
+                    .Variable("high", true),
+            }
+        };
+    }
+
+    [Fact]
+    public void GreaterThan_Condition_Test()
+    {
+        var pipeline = new GreaterThanCondition_Test_Pipeline();
+
+        var yaml = pipeline.Serialize();
+
+        yaml.Trim().Should().Be(
+            """
+            variables:
+            - ${{ if gt('$(Build.BuildNumber)', 100) }}:
+              - name: high
+                value: true
+            """
+        );
+    }
 }

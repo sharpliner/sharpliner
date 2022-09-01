@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces;
 
 namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 
@@ -11,10 +12,10 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 /// </summary>
 public abstract class Condition
 {
-    private const string ExpressionStart = "${{ ";
+    internal const string ExpressionStart = "${{ ";
     private const string IfTagStart = $"{ExpressionStart}if ";
     protected const string ElseTagStart = $"{ExpressionStart}else";
-    protected const string ExpressionEnd = " }}";
+    internal const string ExpressionEnd = " }}";
 
     private const string VariableIndexAccessStart = "variables[";
     private const string VariablePropertyAccessStart = "variables.";
@@ -40,10 +41,19 @@ public abstract class Condition
     {
         _condition = condition;
     }
-    
+
     protected Condition(string keyword, bool requireTwoPlus, params Condition[] expressions)
         : this(keyword, requireTwoPlus, expressions.Select(e => e.ToString()))
     {}
+
+    protected Condition(string keyword, bool requireTwoPlus, params IRuntimeExpression[] expressions)
+        : this(keyword, requireTwoPlus, expressions as IEnumerable<IRuntimeExpression>)
+    {}
+
+    protected Condition(string keyword, bool requireTwoPlus, IEnumerable<IRuntimeExpression> expressions)
+        : this(keyword, requireTwoPlus, expressions.Select(x => x.RuntimeExpression))
+    {
+    }
 
     protected Condition(string keyword, bool requireTwoPlus, params string[] expressions)
         : this(keyword, requireTwoPlus, expressions as IEnumerable<string>)
@@ -84,6 +94,9 @@ public abstract class Condition
     protected static string WrapQuotes(string value)
     {
         if (value.StartsWith('\'')
+            || bool.TryParse(value, out _)
+            || long.TryParse(value, out _)
+            || double.TryParse(value, out _)
             || value.StartsWith(VariableIndexAccessStart)
             || value.StartsWith(VariablePropertyAccessStart)
             || value.StartsWith(ParametersIndexAccessStart)
@@ -162,23 +175,33 @@ public class NotCondition : Condition
 }
 public abstract class StringCondition : Condition
 {
-    protected StringCondition(string keyword, bool requireTwoPlus, params string[] expressions)
-        : base(keyword, requireTwoPlus, expressions.Select(WrapQuotes))
+    protected StringCondition(string keyword, bool requireTwoPlus, params IRuntimeExpression[] expressions)
+        : this(keyword, requireTwoPlus, expressions as IEnumerable<IRuntimeExpression>)
+    {
+    }
+
+    protected StringCondition(string keyword, bool requireTwoPlus, IEnumerable<IRuntimeExpression> expressions)
+        : base(keyword, requireTwoPlus, expressions.Select(e => WrapQuotes(e.RuntimeExpression)))
     {
     }
 }
 
 public abstract class StringCondition<T> : Condition<T>
 {
-    protected StringCondition(string keyword, bool requireTwoPlus, params string[] expressions)
-        : base(keyword, requireTwoPlus, expressions.Select(WrapQuotes))
+    protected StringCondition(string keyword, bool requireTwoPlus, params IRuntimeExpression[] expressions)
+        : this(keyword, requireTwoPlus, expressions as IEnumerable<IRuntimeExpression>)
+    {
+    }
+
+    protected StringCondition(string keyword, bool requireTwoPlus, IEnumerable<IRuntimeExpression> expressions)
+        : base(keyword, requireTwoPlus, expressions.Select(e => WrapQuotes(e.RuntimeExpression)))
     {
     }
 }
 
 public class EqualityCondition : StringCondition
 {
-    internal EqualityCondition(bool equal, string expression1, string expression2)
+    internal EqualityCondition(bool equal, IRuntimeExpression expression1, IRuntimeExpression expression2)
         : base(equal ? "eq" : "ne", true, expression1, expression2)
     {
     }
@@ -225,7 +248,7 @@ public class XorCondition : Condition
 
 public class ContainsCondition : StringCondition
 {
-    internal ContainsCondition(string needle, string haystack)
+    internal ContainsCondition(IRuntimeExpression needle, IRuntimeExpression haystack)
         : base("contains", false, haystack, needle)
     {
     }
@@ -233,7 +256,7 @@ public class ContainsCondition : StringCondition
 
 public class StartsWithCondition : StringCondition
 {
-    internal StartsWithCondition(string needle, string haystack)
+    internal StartsWithCondition(IRuntimeExpression needle, IRuntimeExpression haystack)
         : base("startsWith", false, haystack, needle)
     {
     }
@@ -241,47 +264,47 @@ public class StartsWithCondition : StringCondition
 
 public class EndsWithCondition : StringCondition
 {
-    internal EndsWithCondition(string needle, string haystack)
+    internal EndsWithCondition(IRuntimeExpression needle, IRuntimeExpression haystack)
         : base("endsWith", false, haystack, needle)
     {
     }
 }
 
-public class InCondition : Condition
+public class InCondition : StringCondition
 {
-    internal InCondition(string needle, params string[] haystack)
+    internal InCondition(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         : base("in", true, haystack.Prepend(needle))
     {
     }
 }
 
-public class NotInCondition : Condition
+public class NotInCondition : StringCondition
 {
-    internal NotInCondition(string needle, params string[] haystack)
+    internal NotInCondition(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         : base("notIn", true, haystack.Prepend(needle))
     {
     }
 }
 
-public class ContainsValueCondition : Condition
+public class ContainsValueCondition : StringCondition
 {
-    internal ContainsValueCondition(string needle, params string[] haystack)
+    internal ContainsValueCondition(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         : base("containsValue", true, haystack.Append(needle))
     {
     }
 }
 
-public class GreaterCondition : Condition
+public class GreaterCondition : StringCondition
 {
-    internal GreaterCondition(string first, string second)
+    internal GreaterCondition(IRuntimeExpression first, IRuntimeExpression second)
         : base("gt", true, first, second)
     {
     }
 }
 
-public class LessCondition : Condition
+public class LessCondition : StringCondition
 {
-    internal LessCondition(string first, string second)
+    internal LessCondition(IRuntimeExpression first, IRuntimeExpression second)
         : base("lt", true, first, second)
     {
     }
@@ -323,7 +346,7 @@ public class ElseCondition<T> : Condition<T>
 
 public class EqualityCondition<T> : StringCondition<T>
 {
-    internal EqualityCondition(bool equal, string expression1, string expression2)
+    internal EqualityCondition(bool equal, IRuntimeExpression expression1, IRuntimeExpression expression2)
         : base(equal ? "eq" : "ne", true, expression1, expression2)
     {
     }
@@ -371,7 +394,7 @@ public class XorCondition<T> : Condition<T>
 
 public class ContainsCondition<T> : StringCondition<T>
 {
-    internal ContainsCondition(string haystack, string needle)
+    internal ContainsCondition(IRuntimeExpression haystack, IRuntimeExpression needle)
         : base("contains", false, haystack, needle)
     {
     }
@@ -379,7 +402,7 @@ public class ContainsCondition<T> : StringCondition<T>
 
 public class StartsWithCondition<T> : StringCondition<T>
 {
-    internal StartsWithCondition(string needle, string haystack)
+    internal StartsWithCondition(IRuntimeExpression needle, IRuntimeExpression haystack)
         : base("startsWith", false, haystack, needle)
     {
     }
@@ -387,47 +410,47 @@ public class StartsWithCondition<T> : StringCondition<T>
 
 public class EndsWithCondition<T> : StringCondition<T>
 {
-    internal EndsWithCondition(string needle, string haystack)
+    internal EndsWithCondition(IRuntimeExpression needle, IRuntimeExpression haystack)
         : base("endsWith", false, haystack, needle)
     {
     }
 }
 
-public class ContainsValueCondition<T> : Condition<T>
+public class ContainsValueCondition<T> : StringCondition<T>
 {
-    internal ContainsValueCondition(string needle, params string[] haystack)
+    internal ContainsValueCondition(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         : base("containsValue", true, haystack.Append(needle))
     {
     }
 }
 
-public class InCondition<T> : Condition<T>
+public class InCondition<T> : StringCondition<T>
 {
-    internal InCondition(string needle, params string[] haystack)
+    internal InCondition(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         : base("in", true, haystack.Prepend(needle))
     {
     }
 }
 
-public class NotInCondition<T> : Condition<T>
+public class NotInCondition<T> : StringCondition<T>
 {
-    internal NotInCondition(string needle, params string[] haystack)
+    internal NotInCondition(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         : base("notin", true, haystack.Prepend(needle))
     {
     }
 }
 
-public class GreaterCondition<T> : Condition<T>
+public class GreaterCondition<T> : StringCondition<T>
 {
-    internal GreaterCondition(string first, string second)
+    internal GreaterCondition(IRuntimeExpression first, IRuntimeExpression second)
         : base("gt", true, first, second)
     {
     }
 }
 
-public class LessCondition<T> : Condition<T>
+public class LessCondition<T> : StringCondition<T>
 {
-    internal LessCondition(string first, string second)
+    internal LessCondition(IRuntimeExpression first, IRuntimeExpression second)
         : base("lt", true, first, second)
     {
     }
@@ -436,32 +459,32 @@ public class LessCondition<T> : Condition<T>
 
 public class BranchCondition : EqualityCondition
 {
-    internal BranchCondition(string branchName, bool equal)
-        : base(equal, "variables['Build.SourceBranch']", '\'' + (branchName.StartsWith("refs/heads/") ? branchName : "refs/heads/" + branchName) + '\'')
+    internal BranchCondition(IRuntimeExpression branchName, bool equal)
+        : base(equal, new VariableReference("Build.SourceBranch"), new StringRuntimeExpression('\'' + (branchName.RuntimeExpression.StartsWith("refs/heads/") ? branchName.RuntimeExpression : "refs/heads/" + branchName.RuntimeExpression) + '\''))
     {
     }
 }
 
 public class BranchCondition<T> : EqualityCondition<T>
 {
-    internal BranchCondition(string branchName, bool equal)
-        : base(equal, "variables['Build.SourceBranch']", '\'' + (branchName.StartsWith("refs/heads/") ? branchName : "refs/heads/" + branchName) + '\'')
+    internal BranchCondition(IRuntimeExpression branchName, bool equal)
+        : base(equal, new VariableReference("Build.SourceBranch"), new StringRuntimeExpression('\'' + (branchName.RuntimeExpression.StartsWith("refs/heads/") ? branchName.RuntimeExpression : "refs/heads/" + branchName.RuntimeExpression) + '\''))
     {
     }
 }
 
 public class BuildReasonCondition : EqualityCondition
 {
-    internal BuildReasonCondition(string reason, bool equal)
-        : base(equal, "variables['Build.Reason']", reason)
+    internal BuildReasonCondition(IRuntimeExpression reason, bool equal)
+        : base(equal, new VariableReference("Build.Reason"), reason)
     {
     }
 }
 
 public class BuildReasonCondition<T> : EqualityCondition<T>
 {
-    internal BuildReasonCondition(string reason, bool equal)
-        : base(equal, "variables['Build.Reason']", reason)
+    internal BuildReasonCondition(IRuntimeExpression reason, bool equal)
+        : base(equal, new VariableReference("Build.Reason"), reason)
     {
     }
 }

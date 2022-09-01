@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -310,4 +311,12 @@ public static class ConditionExtensions
 
     public static Conditioned<T> Value<T>(this Condition condition, T value)
         => Conditioned.Link(condition, value);
+
+    public static IRuntimeExpression AsRuntimeExpression(this string condition)
+        => new StringRuntimeExpression(condition);
+
+    internal static IRuntimeExpression[] AsRuntimeExpressions(this IEnumerable<object> array)
+        => array.Select(x =>
+            x as IRuntimeExpression ?? x.ToString().AsRuntimeExpression()
+        ).ToArray();
 }

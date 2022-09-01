@@ -104,7 +104,7 @@ public class TemplateTests
                 packageType: sdk
                 version: ${{ parameters.version }}
 
-            - ${{ if eq(parameters.restore, 'true') }}:
+            - ${{ if eq(parameters.restore, true) }}:
               - task: DotNetCoreCLI@2
                 inputs:
                   command: restore
@@ -142,7 +142,7 @@ public class TemplateTests
             jobs:
             - job: testJob
               steps:
-              - ${{ if eq('restore', 'true') }}:
+              - ${{ if eq('restore', true) }}:
                 - template: template1.yaml
 
               - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
@@ -169,7 +169,7 @@ public class TemplateTests
                 },
                 {
                     "other",
-                    If.Equal("parameters['container']", "''")
+                    If.Equal(parameters["container"], "")
                         .Value(new TemplateParameters
                         {
                             { "image", "ubuntu-16.04-cross-arm64-20210719121212-8a8d3be" }
@@ -177,7 +177,7 @@ public class TemplateTests
                     .Else
                         .Value(new TemplateParameters
                         {
-                            { "image", "${{ parameters.container }}" }
+                            { "image", parameters["container"] }
                         })
                 },
             }),
@@ -201,7 +201,7 @@ public class TemplateTests
                   ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
                     pr: true
                   other:
-                    ${{ if eq(parameters['container'], '') }}:
+                    ${{ if eq(parameters.container, '') }}:
                       image: ubuntu-16.04-cross-arm64-20210719121212-8a8d3be
                     ${{ else }}:
                       image: ${{ parameters.container }}
