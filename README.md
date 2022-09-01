@@ -240,6 +240,10 @@ Steps =
 }
 ```
 
+### Correct variable/parameter types
+Frequent struggle people have with Azure pipelines is using the [right type of variable](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#understand-variable-syntax) in the right context.
+Be it a `${{ compile time parameter }}`, a `variable['used in runtime']` or a `$(macro)` syntax, with Sharpliner you won't have to worry about which one to pick as it understands the context and selects the right one for you.
+
 ### Pipeline validation
 Your pipeline definition can be validated during publishing and you can uncover issues, such as typos inside `dependsOn`, you would only find by trying to run the pipeline in CI.
 This gives you a faster dev loop and greater productivity.
