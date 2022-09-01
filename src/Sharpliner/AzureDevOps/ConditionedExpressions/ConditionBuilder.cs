@@ -118,6 +118,12 @@ public class ConditionBuilder
     public Condition ContainsValue(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         => new ContainsValueCondition(needle, haystack);
 
+    public Condition ContainsValue(StringRuntimeExpression needle, params object[] haystack)
+        => new ContainsValueCondition(needle, haystack.AsRuntimeExpressions());
+
+    public Condition ContainsValue(IRuntimeExpression needle, params object[] haystack)
+        => new ContainsValueCondition(needle, haystack.AsRuntimeExpressions());
+
     public Condition In(StringRuntimeExpression needle, StringRuntimeExpression haystack)
         => new InCondition(needle, haystack);
 
@@ -141,6 +147,12 @@ public class ConditionBuilder
 
     public Condition NotIn(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         => new NotInCondition(needle, haystack);
+
+    public Condition NotIn(StringRuntimeExpression needle, params object[] haystack)
+        => new NotInCondition(needle, haystack.AsRuntimeExpressions());
+
+    public Condition NotIn(IRuntimeExpression needle, params object[] haystack)
+        => new NotInCondition(needle, haystack.AsRuntimeExpressions());
 
     public Condition Greater(StringRuntimeExpression first, StringRuntimeExpression second)
         => Link(new GreaterCondition(first, second));
@@ -305,6 +317,12 @@ public class ConditionBuilder<T>
     public Condition NotIn(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         => new NotInCondition<T>(needle, haystack);
 
+    public Condition NotIn(StringRuntimeExpression needle, params object[] haystack)
+        => new NotInCondition<T>(needle, haystack.AsRuntimeExpressions());
+
+    public Condition NotIn(IRuntimeExpression needle, params object[] haystack)
+        => new NotInCondition<T>(needle, haystack.AsRuntimeExpressions());
+
     public Condition<T> ContainsValue(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack)
         => new ContainsValueCondition<T>(needle, haystack);
 
@@ -316,6 +334,12 @@ public class ConditionBuilder<T>
 
     public Condition<T> ContainsValue(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         => new ContainsValueCondition<T>(needle, haystack);
+
+    public Condition<T> ContainsValue(StringRuntimeExpression needle, params object[] haystack)
+        => new ContainsValueCondition<T>(needle, haystack.AsRuntimeExpressions());
+
+    public Condition<T> ContainsValue(IRuntimeExpression needle, params object[] haystack)
+        => new ContainsValueCondition<T>(needle, haystack.AsRuntimeExpressions());
 
     public Condition<T> IsBranch(StringRuntimeExpression branchName)
         => Link(new BranchCondition<T>(branchName, true));

@@ -143,16 +143,6 @@ public abstract class Condition<T> : Condition
     {
     }
 
-    protected Condition(string keyword, bool requireTwoPlus, params IRuntimeExpression[] expressions)
-        : this(keyword, requireTwoPlus, expressions as IEnumerable<IRuntimeExpression>)
-    {
-    }
-
-    protected Condition(string keyword, bool requireTwoPlus, IEnumerable<IRuntimeExpression> expressions)
-        : this(keyword, requireTwoPlus, expressions.Select(x => x.RuntimeExpression))
-    {
-    }
-
     protected Condition(string keyword, bool requireTwoPlus, params string[] expressions)
         : base(keyword, requireTwoPlus, expressions)
     {
@@ -186,6 +176,11 @@ public class NotCondition : Condition
 public abstract class StringCondition : Condition
 {
     protected StringCondition(string keyword, bool requireTwoPlus, params IRuntimeExpression[] expressions)
+        : this(keyword, requireTwoPlus, expressions as IEnumerable<IRuntimeExpression>)
+    {
+    }
+
+    protected StringCondition(string keyword, bool requireTwoPlus, IEnumerable<IRuntimeExpression> expressions)
         : base(keyword, requireTwoPlus, expressions.Select(e => WrapQuotes(e.RuntimeExpression)))
     {
     }
@@ -194,6 +189,11 @@ public abstract class StringCondition : Condition
 public abstract class StringCondition<T> : Condition<T>
 {
     protected StringCondition(string keyword, bool requireTwoPlus, params IRuntimeExpression[] expressions)
+        : this(keyword, requireTwoPlus, expressions as IEnumerable<IRuntimeExpression>)
+    {
+    }
+
+    protected StringCondition(string keyword, bool requireTwoPlus, IEnumerable<IRuntimeExpression> expressions)
         : base(keyword, requireTwoPlus, expressions.Select(e => WrapQuotes(e.RuntimeExpression)))
     {
     }
@@ -270,7 +270,7 @@ public class EndsWithCondition : StringCondition
     }
 }
 
-public class InCondition : Condition
+public class InCondition : StringCondition
 {
     internal InCondition(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         : base("in", true, haystack.Prepend(needle))
@@ -278,7 +278,7 @@ public class InCondition : Condition
     }
 }
 
-public class NotInCondition : Condition
+public class NotInCondition : StringCondition
 {
     internal NotInCondition(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         : base("notIn", true, haystack.Prepend(needle))
@@ -286,7 +286,7 @@ public class NotInCondition : Condition
     }
 }
 
-public class ContainsValueCondition : Condition
+public class ContainsValueCondition : StringCondition
 {
     internal ContainsValueCondition(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         : base("containsValue", true, haystack.Append(needle))
@@ -294,7 +294,7 @@ public class ContainsValueCondition : Condition
     }
 }
 
-public class GreaterCondition : Condition
+public class GreaterCondition : StringCondition
 {
     internal GreaterCondition(IRuntimeExpression first, IRuntimeExpression second)
         : base("gt", true, first, second)
@@ -302,7 +302,7 @@ public class GreaterCondition : Condition
     }
 }
 
-public class LessCondition : Condition
+public class LessCondition : StringCondition
 {
     internal LessCondition(IRuntimeExpression first, IRuntimeExpression second)
         : base("lt", true, first, second)
@@ -416,7 +416,7 @@ public class EndsWithCondition<T> : StringCondition<T>
     }
 }
 
-public class ContainsValueCondition<T> : Condition<T>
+public class ContainsValueCondition<T> : StringCondition<T>
 {
     internal ContainsValueCondition(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         : base("containsValue", true, haystack.Append(needle))
@@ -424,7 +424,7 @@ public class ContainsValueCondition<T> : Condition<T>
     }
 }
 
-public class InCondition<T> : Condition<T>
+public class InCondition<T> : StringCondition<T>
 {
     internal InCondition(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         : base("in", true, haystack.Prepend(needle))
@@ -432,7 +432,7 @@ public class InCondition<T> : Condition<T>
     }
 }
 
-public class NotInCondition<T> : Condition<T>
+public class NotInCondition<T> : StringCondition<T>
 {
     internal NotInCondition(IRuntimeExpression needle, params IRuntimeExpression[] haystack)
         : base("notin", true, haystack.Prepend(needle))
@@ -440,7 +440,7 @@ public class NotInCondition<T> : Condition<T>
     }
 }
 
-public class GreaterCondition<T> : Condition<T>
+public class GreaterCondition<T> : StringCondition<T>
 {
     internal GreaterCondition(IRuntimeExpression first, IRuntimeExpression second)
         : base("gt", true, first, second)
@@ -448,7 +448,7 @@ public class GreaterCondition<T> : Condition<T>
     }
 }
 
-public class LessCondition<T> : Condition<T>
+public class LessCondition<T> : StringCondition<T>
 {
     internal LessCondition(IRuntimeExpression first, IRuntimeExpression second)
         : base("lt", true, first, second)
