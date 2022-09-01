@@ -169,7 +169,7 @@ public class TemplateTests
                 },
                 {
                     "other",
-                    If.Equal("parameters['container']", "''")
+                    If.Equal(parameters["container"], "")
                         .Value(new TemplateParameters
                         {
                             { "image", "ubuntu-16.04-cross-arm64-20210719121212-8a8d3be" }
@@ -177,7 +177,7 @@ public class TemplateTests
                     .Else
                         .Value(new TemplateParameters
                         {
-                            { "image", "${{ parameters.container }}" }
+                            { "image", parameters["container"] }
                         })
                 },
             }),
@@ -201,7 +201,7 @@ public class TemplateTests
                   ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
                     pr: true
                   other:
-                    ${{ if eq(parameters['container'], '') }}:
+                    ${{ if eq(parameters.container, '') }}:
                       image: ubuntu-16.04-cross-arm64-20210719121212-8a8d3be
                     ${{ else }}:
                       image: ${{ parameters.container }}

@@ -1,8 +1,12 @@
+using System;
 using Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces;
+using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 
-public class VariableValue : IRuntimeExpression, ICompileTimeExpression, IMacroExpression
+public class VariableValue : IRuntimeExpression, ICompileTimeExpression, IMacroExpression, IYamlConvertible
 {
     public string VariableName { get; }
 
@@ -20,4 +24,10 @@ public class VariableValue : IRuntimeExpression, ICompileTimeExpression, IMacroE
     public override string ToString() => MacroExpression;
 
     public static implicit operator string(VariableValue value) => value.ToString();
+
+    public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+        => throw new NotImplementedException();
+
+    public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+        => emitter.Emit(new Scalar(ToString()));
 }
