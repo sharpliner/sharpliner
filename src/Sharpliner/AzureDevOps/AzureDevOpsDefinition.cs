@@ -497,7 +497,6 @@ public abstract class AzureDevOpsDefinition
     protected static Condition EndsWith<T>(StringRuntimeExpression needle, IRuntimeExpression haystack) => new EndsWithCondition<T>(needle, haystack);
     protected static Condition EndsWith<T>(IRuntimeExpression needle, IRuntimeExpression haystack) => new EndsWithCondition<T>(needle, haystack);
 
-
     protected static Condition ContainsValue<T>(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new ContainsValueCondition<T>(needle, haystack);
     protected static Condition ContainsValue<T>(StringRuntimeExpression needle, params IRuntimeExpression[] haystack) => new ContainsValueCondition<T>(needle, haystack);
     protected static Condition ContainsValue<T>(IRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new ContainsValueCondition<T>(needle, haystack);
@@ -505,14 +504,12 @@ public abstract class AzureDevOpsDefinition
     protected static Condition ContainsValue<T>(StringRuntimeExpression needle, params object[] haystack) => new ContainsValueCondition<T>(needle, haystack.AsRuntimeExpressions());
     protected static Condition ContainsValue<T>(IRuntimeExpression needle, params object[] haystack) => new ContainsValueCondition<T>(needle, haystack.AsRuntimeExpressions());
 
-
     protected static Condition In<T>(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new InCondition<T>(needle, haystack);
     protected static Condition In<T>(StringRuntimeExpression needle, params IRuntimeExpression[] haystack) => new InCondition<T>(needle, haystack);
     protected static Condition In<T>(IRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new InCondition<T>(needle, haystack);
     protected static Condition In<T>(IRuntimeExpression needle, params IRuntimeExpression[] haystack) => new InCondition<T>(needle, haystack);
     protected static Condition In<T>(StringRuntimeExpression needle, params object[] haystack) => new InCondition<T>(needle, haystack.AsRuntimeExpressions());
     protected static Condition In<T>(IRuntimeExpression needle, params object[] haystack) => new InCondition<T>(needle, haystack.AsRuntimeExpressions());
-
 
     protected static Condition NotIn<T>(StringRuntimeExpression needle, params StringRuntimeExpression[] haystack) => new NotInCondition<T>(needle, haystack);
     protected static Condition NotIn<T>(StringRuntimeExpression needle, params IRuntimeExpression[] haystack) => new NotInCondition<T>(needle, haystack);
