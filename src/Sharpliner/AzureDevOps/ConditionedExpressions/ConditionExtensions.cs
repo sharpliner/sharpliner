@@ -316,7 +316,5 @@ public static class ConditionExtensions
         => new StringRuntimeExpression(condition);
 
     internal static IRuntimeExpression[] AsRuntimeExpressions(this IEnumerable<object> array)
-        => array.Select(x =>
-            x as IRuntimeExpression ?? x.ToString().AsRuntimeExpression()
-        ).ToArray();
+        => array.Select(x => x as IRuntimeExpression ?? x.ToString()!.AsRuntimeExpression()).ToArray();
 }

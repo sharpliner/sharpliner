@@ -22,7 +22,7 @@ public abstract class Condition
     private const string ParametersIndexAccessStart = "parameters[";
     private const string ParametersPropertyAccessStart = "parameters.";
 
-    private static readonly (string Start, string End)[] _tagsToRemove = new[]
+    private static readonly (string Start, string End)[] s_tagsToRemove = new[]
     {
         (IfTagStart, ExpressionEnd),
         (ElseTagStart, ExpressionEnd),
@@ -79,7 +79,7 @@ public abstract class Condition
 
     public static string RemoveTags(string condition)
     {
-        foreach (var (start, end) in _tagsToRemove)
+        foreach (var (start, end) in s_tagsToRemove)
         {
             if (condition.StartsWith(start) && condition.EndsWith(end))
             {
