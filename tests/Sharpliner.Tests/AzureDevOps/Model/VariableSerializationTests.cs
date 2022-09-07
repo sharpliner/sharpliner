@@ -99,7 +99,7 @@ public class VariableSerializationTests
         yaml.Trim().Should().Be(
             """
             variables:
-            - ${{ if containsValue('refs/heads/feature/', parameters.allowedTags, variables['foo'], '$(Build.Reason)', '$(Build.SourceBranch)') }}:
+            - ${{ if containsValue('refs/heads/feature/', parameters.allowedTags, variables['foo'], variables['Build.Reason'], variables['Build.SourceBranch']) }}:
               - name: feature
                 value: on
             """
@@ -128,7 +128,7 @@ public class VariableSerializationTests
         yaml.Trim().Should().Be(
             """
             variables:
-            - ${{ if gt('$(Build.BuildNumber)', 100) }}:
+            - ${{ if gt(variables['Build.BuildNumber'], 100) }}:
               - name: high
                 value: true
             """

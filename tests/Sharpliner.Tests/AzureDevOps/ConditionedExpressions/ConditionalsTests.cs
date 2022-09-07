@@ -31,8 +31,8 @@ public class ConditionalsTests
         variable.Condition!.ToString().Should().Be(
             "and(" +
                 "notIn('bar', 'foo', 'xyz', 'foo'), " +
-                "ne('$(Configuration)', 'Debug'), " +
-                "containsValue('$(System.JobId)', 10))");
+                "ne(variables['Configuration'], 'Debug'), " +
+                "containsValue(variables['System.JobId'], 10))");
     }
 
     private class Or_Condition_Test_Pipeline : TestPipeline
@@ -62,9 +62,9 @@ public class ConditionalsTests
             "or(" +
                 "and(" +
                     "lt(5, 3), " +
-                    "eq('$(Build.SourceBranch)', 'refs/heads/production'), " +
+                    "eq(variables['Build.SourceBranch'], 'refs/heads/production'), " +
                     "eq(variables['Build.SourceBranch'], 'refs/heads/release')), " +
-                "ne('$(Configuration)', 'Debug'), " +
+                "ne(variables['Configuration'], 'Debug'), " +
                 "eq(variables['Build.Reason'], 'PullRequest'))");
     }
 
@@ -295,7 +295,7 @@ public class ConditionalsTests
         var variable1 = pipeline.Pipeline.Variables.ElementAt(0);
         var variable2 = pipeline.Pipeline.Variables.ElementAt(1);
 
-        variable1.Condition!.ToString().Should().Be("contains('$(Build.SourceBranch)', 'refs/heads/feature/')");
+        variable1.Condition!.ToString().Should().Be("contains(variables['Build.SourceBranch'], 'refs/heads/feature/')");
         variable2.Condition!.ToString().Should().Be("contains(variables['Build.SourceBranch'], 'refs/heads/feature/')");
     }
 
@@ -322,7 +322,7 @@ public class ConditionalsTests
         var variable1 = pipeline.Pipeline.Variables.ElementAt(0);
         var variable2 = pipeline.Pipeline.Variables.ElementAt(1);
 
-        variable1.Condition!.ToString().Should().Be("startsWith('$(Build.SourceBranch)', 'refs/heads/feature/')");
+        variable1.Condition!.ToString().Should().Be("startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')");
         variable2.Condition!.ToString().Should().Be("startsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')");
     }
 
@@ -349,7 +349,7 @@ public class ConditionalsTests
         var variable1 = pipeline.Pipeline.Variables.ElementAt(0);
         var variable2 = pipeline.Pipeline.Variables.ElementAt(1);
 
-        variable1.Condition!.ToString().Should().Be("endsWith('$(Build.SourceBranch)', 'refs/heads/feature/')");
+        variable1.Condition!.ToString().Should().Be("endsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')");
         variable2.Condition!.ToString().Should().Be("endsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')");
     }
 }
