@@ -352,4 +352,72 @@ public class ConditionalsTests
         variable1.Condition!.ToString().Should().Be("endsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')");
         variable2.Condition!.ToString().Should().Be("endsWith(variables['Build.SourceBranch'], 'refs/heads/feature/')");
     }
+
+    private class IfCondition_And_InlineCondition_Test_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Parameters = { StringParameter("Param1", defaultValue: "ParamValue1") },
+            Variables =
+            {
+                If.StartsWith(parameters["Param1"], "Param")
+                    .Variable("feature", "on"),
+            },
+            Stages =
+            {
+                new Stage("Stage1")
+                {
+                    Jobs =
+                    {
+                        new Job("Job1")
+                        {
+                            Steps =
+                            {
+                                Script.Inline("echo Does this condition work?") with
+                                {
+                                    Condition = If.StartsWith(parameters["Param1"], "Param")
+                                }
+                            },
+                            Condition = If.StartsWith(parameters["Param1"], "Param")
+                        }
+                    },
+                    Condition = If.StartsWith(parameters["Param1"], "Param")
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public void IfCondition_And_InlineCondition_Test()
+    {
+        var pipeline = new IfCondition_And_InlineCondition_Test_Pipeline();
+
+        var yaml = pipeline.Serialize();
+
+        yaml.Trim().Should().Be(
+            """
+            parameters:
+            - name: Param1
+              default: ParamValue1
+              type: string
+
+            variables:
+            - ${{ if startsWith(parameters.Param1, 'Param') }}:
+              - name: feature
+                value: on
+
+            stages:
+            - stage: Stage1
+              jobs:
+              - job: Job1
+                steps:
+                - script: |-
+                    echo Does this condition work?
+                  condition: startsWith('${{ parameters.Param1 }}', 'Param')
+                condition: startsWith('${{ parameters.Param1 }}', 'Param')
+              condition: startsWith('${{ parameters.Param1 }}', 'Param')
+            """
+            );
+    }
+
 }
