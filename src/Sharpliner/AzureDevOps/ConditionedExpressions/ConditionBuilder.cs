@@ -1,4 +1,5 @@
 ﻿using Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces;
+using Sharpliner.SourceGenerator;
 
 namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 
@@ -7,7 +8,7 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 /// and then forces us to add a condition. The condition then forces us to add
 /// an actual definition.
 /// </summary>
-public class ConditionBuilder
+public partial class ConditionBuilder
 {
     internal Conditioned? Parent { get; }
 
@@ -209,7 +210,7 @@ public class ConditionBuilder
     }
 }
 
-public class ConditionBuilder<T>
+public partial class ConditionBuilder<T>
 {
     internal Conditioned<T>? Parent { get; }
 
@@ -221,29 +222,15 @@ public class ConditionBuilder<T>
     public Condition<T> Equal(string condition)
         => Link(new CustomCondition<T>(condition));
 
-    public Condition<T> Equal(StringRuntimeExpression expression1, StringRuntimeExpression expression2)
+    [StringCondition]
+    public Condition<T> Equal(string expression1, string expression2)
         => Link(new EqualityCondition<T>(true, expression1, expression2));
 
-    public Condition<T> Equal(IRuntimeExpression expression1, StringRuntimeExpression expression2)
-        => Link(new EqualityCondition<T>(true, expression1, expression2));
-
-    public Condition<T> Equal(StringRuntimeExpression expression1, IRuntimeExpression expression2)
-        => Link(new EqualityCondition<T>(true, expression1, expression2));
-
-    public Condition<T> Equal(IRuntimeExpression expression1, IRuntimeExpression expression2)
-        => Link(new EqualityCondition<T>(true, expression1, expression2));
-
-    public Condition<T> NotEqual(StringRuntimeExpression expression1, StringRuntimeExpression expression2)
-        => Link(new EqualityCondition<T>(false, expression1, expression2));
-
-    public Condition<T> NotEqual(IRuntimeExpression expression1, StringRuntimeExpression expression2)
-        => Link(new EqualityCondition<T>(false, expression1, expression2));
-
-    public Condition<T> NotEqual(StringRuntimeExpression expression1, IRuntimeExpression expression2)
-        => Link(new EqualityCondition<T>(false, expression1, expression2));
-
-    public Condition<T> NotEqual(IRuntimeExpression expression1, IRuntimeExpression expression2)
-        => Link(new EqualityCondition<T>(false, expression1, expression2));
+    [StringCondition]
+    public Condition<T> NotEqual(string expression1, string expression2)
+    {
+        return Link(new EqualityCondition<T>(false, expression1, expression2));
+    }
 
     public Condition<T> And(params Condition[] expressions)
         => Link(new AndCondition<T>(expressions));
