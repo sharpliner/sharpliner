@@ -1,4 +1,5 @@
 ﻿
+using System.Collections.Immutable;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -14,6 +15,11 @@ public class StringConditionGenerator : ISourceGenerator
     private static readonly string[] _stringConditionsParameters =
     {
         "string ", "VariableReference ", "ParameterReference "
+    };
+
+    private static readonly string[] _stringArrayConditionsParameters =
+    {
+        "params string[] ", "params VariableReference[] ", "params ParameterReference[] "
     };
 
     public void Initialize(GeneratorInitializationContext context)
@@ -35,13 +41,15 @@ public class StringConditionGenerator : ISourceGenerator
             return;
         }
 
+        var index = 0;
         foreach (var containingClassGroup in syntaxReciever.IdentifiedMethods.GroupBy(x => x.ContainingType))
         {
+            index++;
             var containingClass = containingClassGroup.Key;
             var namespaceSymbol = containingClass.ContainingNamespace;
 
             var source = GenerateClass(context, containingClass, namespaceSymbol, containingClassGroup.ToList());
-            context.AddSource($"{containingClass.ContainingNamespace.ToDisplayString().Replace('.', '_')}_{containingClass.Name}_StringConditions.generated", SourceText.From(source, Encoding.UTF8));
+            context.AddSource($"{containingClass.ContainingNamespace.ToDisplayString().Replace('.', '_')}_{containingClass.Name}_StringConditions{index}.generated", SourceText.From(source, Encoding.UTF8));
         }
     }
 
@@ -68,19 +76,53 @@ public class StringConditionGenerator : ISourceGenerator
                     .OfType<MethodDeclarationSyntax>()
                     .First();
 
+            var methodParameters = methodSymbol.Parameters;
+            var countOfStringParameters = methodParameters.Count(p => p.Type.SpecialType == SpecialType.System_String);
+
             foreach (var parameter1 in _stringConditionsParameters)
             {
-                foreach (var parameter2 in _stringConditionsParameters)
+                if (methodParameters.Any(p =>
+                        p.Type.ToDisplayString(SymbolDisplayFormats.NamespaceAndType) == typeof(string[]).FullName))
                 {
-                    if (parameter1 == "string " && parameter2 == "string ")
+                    foreach (var parameter2 in _stringArrayConditionsParameters)
+                    {
+                        if (parameter1 == "string " && parameter2 == "string[] ")
+                        {
+                            // These are already declared by the base code.
+                            continue;
+                        }
+
+                        WriteArrayMethod(classBuilder, methodSymbol, methodDeclarationSyntax, parameter1, parameter2);
+                    }
+                    continue;
+                }
+
+                if (countOfStringParameters == 2)
+                {
+                    foreach (var parameter2 in _stringConditionsParameters)
+                    {
+                        if (parameter1 == "string " && parameter2 == "string ")
+                        {
+                            // These are already declared by the base code.
+                            continue;
+                        }
+
+                        WriteTwoStrings(classBuilder, methodSymbol, methodDeclarationSyntax, parameter1, parameter2);
+                    }
+
+                    continue;
+                }
+
+                if (countOfStringParameters == 1)
+                {
+                    if (parameter1 == "string ")
                     {
                         // These are already declared by the base code.
                         continue;
                     }
 
-                    classBuilder.WriteLine(
-                        $"public Condition {methodSymbol.Name}({parameter1}{GetParameterName(methodSymbol, 1)}, {parameter2} {GetParameterName(methodSymbol, 2)})");
-                    WriteMethodBody(classBuilder, methodDeclarationSyntax);
+                    WriteSingleString(classBuilder, methodSymbol, methodDeclarationSyntax, parameter1);
+                    continue;
                 }
             }
         }
@@ -89,6 +131,26 @@ public class StringConditionGenerator : ISourceGenerator
         classBuilder.WriteLine("}");
 
         return classBuilder.ToString();
+    }
+
+    private void WriteArrayMethod(CodeGenerationTextWriter classBuilder, IMethodSymbol methodSymbol, MethodDeclarationSyntax methodDeclarationSyntax, string parameter1, string parameter2)
+    {
+        WriteTwoStrings(classBuilder, methodSymbol, methodDeclarationSyntax, parameter1, parameter2);
+    }
+
+    private void WriteSingleString(CodeGenerationTextWriter classBuilder, IMethodSymbol methodSymbol, MethodDeclarationSyntax methodDeclarationSyntax, string parameter1)
+    {
+        classBuilder.WriteLine($"public Condition {methodSymbol.Name}({parameter1}{GetParameterName(methodSymbol, 1)})");
+        WriteMethodBody(classBuilder, methodDeclarationSyntax);
+    }
+
+    private void WriteTwoStrings(CodeGenerationTextWriter classBuilder, IMethodSymbol methodSymbol,
+        MethodDeclarationSyntax methodDeclarationSyntax, string parameter1,
+        string parameter2)
+    {
+        classBuilder.WriteLine(
+            $"public Condition {methodSymbol.Name}({parameter1}{GetParameterName(methodSymbol, 1)}, {parameter2}{GetParameterName(methodSymbol, 2)})");
+        WriteMethodBody(classBuilder, methodDeclarationSyntax);
     }
 
     private string GetGenericType(INamedTypeSymbol @class)
@@ -122,5 +184,8 @@ public class StringConditionGenerator : ISourceGenerator
     }
 
     private static string GetParameterName(IMethodSymbol methodSymbol, int index) =>
-        methodSymbol.Parameters.Where(x => x.Type.SpecialType == SpecialType.System_String).ToList()[index-1].Name;
+        methodSymbol.Parameters.Where(x =>
+            x.Type.ToDisplayString(SymbolDisplayFormats.NamespaceAndType) == typeof(string).FullName
+            || x.Type.ToDisplayString(SymbolDisplayFormats.NamespaceAndType) == typeof(string[]).FullName
+        ).ToList()[index - 1].Name;
 }
