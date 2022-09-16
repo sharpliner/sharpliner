@@ -39,7 +39,7 @@ public abstract record Parameter<T> : Parameter
     /// <summary>
     /// Default value; if no default, then the parameter MUST be given by the user at runtime
     /// </summary>
-    [YamlMember(Order = 120)]
+    [YamlMember(Order = 120, DefaultValuesHandling = DefaultValuesHandling.OmitNull)]
     public T? Default { get; init; }
 
     /// <summary>
@@ -73,7 +73,7 @@ public sealed record StringParameter : Parameter<string>
     public override string Type => "string";
 }
 
-public sealed record NumberParameter : Parameter<int>
+public sealed record NumberParameter : Parameter<int?>
 {
     /// <summary>
     /// Define a template parameter
@@ -82,7 +82,7 @@ public sealed record NumberParameter : Parameter<int>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
     /// <param name="allowedValues">Allowed list of values (for some data types)</param>
-    internal NumberParameter(string name, string? displayName = null, int defaultValue = 0, IEnumerable<int>? allowedValues = null)
+    internal NumberParameter(string name, string? displayName = null, int? defaultValue = null, IEnumerable<int?>? allowedValues = null)
         : base(name, displayName, defaultValue, allowedValues)
     {
     }
@@ -90,7 +90,7 @@ public sealed record NumberParameter : Parameter<int>
     public override string Type => "number";
 }
 
-public sealed record BooleanParameter : Parameter<bool>
+public sealed record BooleanParameter : Parameter<bool?>
 {
     /// <summary>
     /// Define a template parameter
@@ -98,7 +98,7 @@ public sealed record BooleanParameter : Parameter<bool>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    internal BooleanParameter(string name, string? displayName = null, bool defaultValue = false)
+    internal BooleanParameter(string name, string? displayName = null, bool? defaultValue = null)
         : base(name, displayName, defaultValue)
     {
     }
@@ -263,7 +263,7 @@ internal sealed record StageReference : Stage, IYamlConvertible
         => throw new NotImplementedException();
 
     public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
-        => emitter.Emit(new Scalar("${{ parameters." + _parameterName + " }}"));
+        => emitter.Emit(new Scalar(new ParameterReference(_parameterName)));
 }
 
 internal sealed record JobReference : JobBase, IYamlConvertible
@@ -279,7 +279,7 @@ internal sealed record JobReference : JobBase, IYamlConvertible
         => throw new NotImplementedException();
 
     public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
-        => emitter.Emit(new Scalar("${{ parameters." + _parameterName + " }}"));
+        => emitter.Emit(new Scalar(new ParameterReference(_parameterName)));
 }
 
 internal sealed record StepReference : Step, IYamlConvertible
@@ -295,5 +295,5 @@ internal sealed record StepReference : Step, IYamlConvertible
         => throw new NotImplementedException();
 
     public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
-        => emitter.Emit(new Scalar("${{ parameters." + _parameterName + " }}"));
+        => emitter.Emit(new Scalar(new ParameterReference(_parameterName)));
 }
