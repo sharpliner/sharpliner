@@ -353,7 +353,7 @@ public abstract class AzureDevOpsDefinition
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
     /// <param name="allowedValues">Allowed list of values (for some data types)</param>
-    protected static Parameter NumberParameter(string name, string? displayName = null, int defaultValue = 0, IEnumerable<int>? allowedValues = null)
+    protected static Parameter NumberParameter(string name, string? displayName = null, int defaultValue = 0, IEnumerable<int?>? allowedValues = null)
         => new NumberParameter(name, displayName, defaultValue, allowedValues);
 
     /// <summary>
@@ -362,7 +362,7 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static Parameter BooleanParameter(string name, string? displayName = null, bool defaultValue = false)
+    protected static Parameter BooleanParameter(string name, string? displayName = null, bool? defaultValue = null)
         => new BooleanParameter(name, displayName, defaultValue);
 
     /// <summary>
