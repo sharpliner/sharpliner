@@ -92,7 +92,7 @@ public partial class ConditionBuilder
         => Link(new BranchCondition(branchName, true));
 
     [StringCondition]
-    public Condition IsNotBranch(string branchName)
+    public Condition IsNotBranch(StringOrVariableOrParameter branchName)
         => Link(new BranchCondition(branchName, false));
 
     public Condition IsPullRequest
