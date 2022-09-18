@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces;
+using Sharpliner.SourceGenerator;
 
 namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 
@@ -215,6 +215,7 @@ public abstract class StringCondition<T> : Condition<T>
     }
 }
 
+[StringCondition("eq")]
 public class EqualityCondition : StringCondition
 {
     internal EqualityCondition(bool equal, StringOrVariableOrParameter expression1, StringOrVariableOrParameter expression2)

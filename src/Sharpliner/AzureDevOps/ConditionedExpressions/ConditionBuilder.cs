@@ -1,5 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces;
-using Sharpliner.SourceGenerator;
+﻿using Sharpliner.SourceGenerator;
 
 namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 

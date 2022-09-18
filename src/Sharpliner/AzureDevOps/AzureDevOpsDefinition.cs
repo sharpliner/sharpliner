@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
-using Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces;
 using Sharpliner.AzureDevOps.Tasks;
 using static Sharpliner.AzureDevOps.TemplateDefinition;
 
