@@ -167,7 +167,7 @@ public record Conditioned<T> : Conditioned
         }
     }
 
-    public Condition<T> Else
+    public IfCondition<T> Else
     {
         get
         {
@@ -188,7 +188,7 @@ public record Conditioned<T> : Conditioned
                 {
                     Parent = Parent
                 }
-                : new NotCondition<T>(Condition)
+                : new IfNotCondition<T>(Condition)
                 {
                     Parent = Parent
                 };
