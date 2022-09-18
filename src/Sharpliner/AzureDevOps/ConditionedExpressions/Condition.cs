@@ -144,6 +144,11 @@ public abstract class Condition
 /// </summary>
 public abstract class Condition<T> : Condition
 {
+    protected Condition(Conditioned<T>? parent = null)
+    {
+        Parent = parent;
+    }
+
     protected Condition(string condition, Conditioned<T>? parent = null) : base(condition)
     {
         Parent = parent;

@@ -9,6 +9,14 @@ public abstract class IfCondition : Condition
 {
 }
 
+public abstract class IfCondition<T> : IfCondition
+{
+    protected IfCondition(Conditioned<T>? parent = null)
+    {
+        Parent = parent;
+    }
+}
+
 public abstract class IfStringCondition : IfCondition
 {
     private readonly string _keyword;
@@ -53,48 +61,11 @@ public abstract class IfStringCondition : IfCondition
     protected override string Serialize() => Condition.ExpressionStart + $"{_keyword}({_one}, {_two})" + Condition.ExpressionEnd;
 }
 
-public abstract class InlineCondition : Condition
+public abstract class IfStringCondition<T> : IfStringCondition
 {
-}
-
-public abstract class InlineStringCondition : InlineCondition
-{
-    private readonly string _keyword;
-    private readonly string _one;
-    private readonly string _two;
-
-    protected InlineStringCondition(string keyword, string one, string two)
+    protected IfStringCondition(string keyword, string one, string two, Conditioned<T>? parent = null)
+        : base(keyword, one, two)
     {
-        _keyword = keyword;
-        _one = one;
-        _two = two;
+        Parent = parent;
     }
-
-    protected static string Serialize(VariableReference staticVariableReference)
-    {
-        return staticVariableReference.RuntimeExpression;
-    }
-
-    protected static string Serialize(ParameterReference parameterReference)
-    {
-        return Condition.ExpressionStart + parameterReference.RuntimeExpression + Condition.ExpressionEnd;
-    }
-
-    protected static string Serialize(IEnumerable<object> array)
-    {
-        var convertedStringArray = array.Select(item =>
-            {
-                return item switch
-                {
-                    VariableReference staticVariableReference => Serialize(staticVariableReference),
-                    ParameterReference parameterReference => Serialize(parameterReference),
-                    _ => item.ToString()
-                };
-            })
-            .Select(WrapQuotes);
-
-        return string.Join(", ", convertedStringArray);
-    }
-
-    protected override string Serialize() => $"{_keyword}({_one}, {_two})";
 }

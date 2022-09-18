@@ -161,11 +161,11 @@ public partial class ConditionBuilder<T>
         => new ContainsCondition<T>(needle, haystack);
 
     [StringCondition]
-    public Condition In(string needle, string haystack)
+    public Condition<T> In(string needle, string haystack)
         => new InCondition<T>(needle, haystack);
 
     [StringCondition]
-    public Condition NotIn(string needle, params string[] haystack)
+    public Condition<T> NotIn(string needle, params string[] haystack)
         => new NotInCondition<T>(needle, haystack);
 
     [StringCondition]
