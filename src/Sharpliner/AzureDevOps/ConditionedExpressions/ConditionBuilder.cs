@@ -188,10 +188,10 @@ public partial class ConditionBuilder<T>
         => Link(new LessCondition<T>(first, second));
 
     public Condition<T> IsPullRequest
-        => Link(new BuildReasonCondition<T>(new string("PullRequest"), true));
+        => Link(new BuildReasonCondition<T>(new StaticVariableReference("PullRequest"), true));
 
     public Condition<T> IsNotPullRequest
-        => Link(new BuildReasonCondition<T>(new string("PullRequest"), false));
+        => Link(new BuildReasonCondition<T>(new StaticVariableReference("PullRequest"), false));
 
     private Condition<T> Link(Condition<T> condition)
     {
