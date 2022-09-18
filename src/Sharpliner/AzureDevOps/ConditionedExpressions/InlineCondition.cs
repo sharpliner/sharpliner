@@ -12,12 +12,12 @@ public class InlineCondition
         _condition = condition;
     }
 
-    public InlineCondition(string keyword, IEnumerable<StringOrVariableOrParameter> expressions)
+    public InlineCondition(string keyword, IEnumerable<string> expressions)
     {
         _condition = $"{keyword}({string.Join(", ", expressions.Select(SerializeExpression).Select(Condition.WrapQuotes).Select(Condition.RemoveTags))})";
     }
 
-    private string SerializeExpression(StringOrVariableOrParameter expression)
+    private string SerializeExpression(string expression)
     {
         return expression.Match(
             str => str,

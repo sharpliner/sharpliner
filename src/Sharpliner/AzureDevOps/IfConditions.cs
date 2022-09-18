@@ -51,14 +51,6 @@ public class IfStringVariableCondition : IfStringCondition
     }
 }
 
-public class IfStringStringCondition : IfStringCondition
-{
-    internal IfStringStringCondition(string keyword, string str, string str2)
-        : base(keyword, str, str2)
-    {
-    }
-}
-
 public class IfStringArrayCondition : IfStringCondition
 {
     internal IfStringArrayCondition(string keyword, string str, IEnumerable<object> array)
@@ -145,14 +137,6 @@ public class InlineStringVariableCondition : InlineStringCondition
 {
     internal InlineStringVariableCondition(string keyword, string str, VariableReference variable)
         : base(keyword, str, Serialize(variable))
-    {
-    }
-}
-
-public class InlineStringStringCondition : InlineStringCondition
-{
-    internal InlineStringStringCondition(string keyword, string str, string str2)
-        : base(keyword, str, str2)
     {
     }
 }

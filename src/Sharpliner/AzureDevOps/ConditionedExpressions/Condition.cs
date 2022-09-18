@@ -43,7 +43,7 @@ public abstract class Condition
 
     internal readonly string ConditionString;
     internal readonly string? Keyword;
-    internal readonly IEnumerable<StringOrVariableOrParameter>? Expressions;
+    internal readonly IEnumerable<string>? Expressions;
 
     protected Condition(string condition)
     {
@@ -51,14 +51,14 @@ public abstract class Condition
     }
 
     protected Condition(string keyword, bool requireTwoPlus, params Condition[] expressions)
-        : this(keyword, requireTwoPlus, expressions.Select(e => new StringOrVariableOrParameter(e.ToString())))
+        : this(keyword, requireTwoPlus, expressions.Select(e => new string(e.ToString())))
     {}
 
-    protected Condition(string keyword, bool requireTwoPlus, params StringOrVariableOrParameter[] expressions)
-        : this(keyword, requireTwoPlus, expressions as IEnumerable<StringOrVariableOrParameter>)
+    protected Condition(string keyword, bool requireTwoPlus, params string[] expressions)
+        : this(keyword, requireTwoPlus, expressions as IEnumerable<string>)
     {}
 
-    protected Condition(string keyword, bool requireTwoPlus, IEnumerable<StringOrVariableOrParameter> expressions)
+    protected Condition(string keyword, bool requireTwoPlus, IEnumerable<string> expressions)
     {
         if (requireTwoPlus && expressions.Count() < 2)
         {
@@ -71,7 +71,7 @@ public abstract class Condition
         ConditionString = $"{keyword}({string.Join(", ", expressions.Select(SerializeExpression).Select(WrapQuotes).Select(RemoveTags))})";
     }
 
-    private string SerializeExpression(StringOrVariableOrParameter expression)
+    private string SerializeExpression(string expression)
     {
         return expression.Match(
             str => str,
@@ -159,12 +159,12 @@ public abstract class Condition<T> : Condition
     {
     }
 
-    protected Condition(string keyword, bool requireTwoPlus, params StringOrVariableOrParameter[] expressions)
+    protected Condition(string keyword, bool requireTwoPlus, params string[] expressions)
         : base(keyword, requireTwoPlus, expressions)
     {
     }
 
-    protected Condition(string keyword, bool requireTwoPlus, IEnumerable<StringOrVariableOrParameter> expressions)
+    protected Condition(string keyword, bool requireTwoPlus, IEnumerable<string> expressions)
         : base(keyword, requireTwoPlus, expressions)
     {
     }
@@ -191,12 +191,12 @@ public class NotCondition : Condition
 }
 public abstract class StringCondition : Condition
 {
-    protected StringCondition(string keyword, bool requireTwoPlus, params StringOrVariableOrParameter[] expressions)
-        : this(keyword, requireTwoPlus, expressions as IEnumerable<StringOrVariableOrParameter>)
+    protected StringCondition(string keyword, bool requireTwoPlus, params string[] expressions)
+        : this(keyword, requireTwoPlus, expressions as IEnumerable<string>)
     {
     }
 
-    protected StringCondition(string keyword, bool requireTwoPlus, IEnumerable<StringOrVariableOrParameter> expressions)
+    protected StringCondition(string keyword, bool requireTwoPlus, IEnumerable<string> expressions)
         : base(keyword, requireTwoPlus, expressions)
     {
     }
@@ -204,22 +204,31 @@ public abstract class StringCondition : Condition
 
 public abstract class StringCondition<T> : Condition<T>
 {
-    protected StringCondition(string keyword, bool requireTwoPlus, params StringOrVariableOrParameter[] expressions)
-        : this(keyword, requireTwoPlus, expressions as IEnumerable<StringOrVariableOrParameter>)
+    protected StringCondition(string keyword, bool requireTwoPlus, params string[] expressions)
+        : this(keyword, requireTwoPlus, expressions as IEnumerable<string>)
     {
     }
 
-    protected StringCondition(string keyword, bool requireTwoPlus, IEnumerable<StringOrVariableOrParameter> expressions)
+    protected StringCondition(string keyword, bool requireTwoPlus, IEnumerable<string> expressions)
         : base(keyword, requireTwoPlus, expressions)
     {
     }
 }
 
-[StringCondition("eq")]
-public class EqualityCondition : StringCondition
+[StringCondition]
+public class IfEqualityCondition : IfStringCondition
 {
-    internal EqualityCondition(bool equal, StringOrVariableOrParameter expression1, StringOrVariableOrParameter expression2)
-        : base(equal ? "eq" : "ne", true, expression1, expression2)
+    internal IfEqualityCondition(bool equal, string expression1, string expression2)
+        : base(equal ? "eq" : "ne", expression1, expression2)
+    {
+    }
+}
+
+[StringCondition]
+public class InlineEqualityCondition : InlineStringCondition
+{
+    internal InlineEqualityCondition(bool equal, string expression1, string expression2)
+        : base(equal ? "eq" : "ne", expression1, expression2)
     {
     }
 }
@@ -232,7 +241,7 @@ public class AndCondition : Condition
     }
 
     internal AndCondition(params string[] expressions)
-        : base("and", true, expressions.Select(e => new StringOrVariableOrParameter(e)))
+        : base("and", true, expressions.Select(e => new string(e)))
     {
     }
 }
@@ -245,7 +254,7 @@ public class OrCondition : Condition
     }
 
     internal OrCondition(params string[] expressions)
-        : base("or", true, expressions.Select(e => new StringOrVariableOrParameter(e)))
+        : base("or", true, expressions.Select(e => new string(e)))
     {
     }
 }
@@ -265,7 +274,7 @@ public class XorCondition : Condition
 
 public class ContainsCondition : StringCondition
 {
-    internal ContainsCondition(StringOrVariableOrParameter needle, StringOrVariableOrParameter haystack)
+    internal ContainsCondition(string needle, string haystack)
         : base("contains", false, haystack, needle)
     {
     }
@@ -273,7 +282,7 @@ public class ContainsCondition : StringCondition
 
 public class StartsWithCondition : StringCondition
 {
-    internal StartsWithCondition(StringOrVariableOrParameter needle, StringOrVariableOrParameter haystack)
+    internal StartsWithCondition(string needle, string haystack)
         : base("startsWith", false, haystack, needle)
     {
     }
@@ -281,7 +290,7 @@ public class StartsWithCondition : StringCondition
 
 public class EndsWithCondition : StringCondition
 {
-    internal EndsWithCondition(StringOrVariableOrParameter needle, StringOrVariableOrParameter haystack)
+    internal EndsWithCondition(string needle, string haystack)
         : base("endsWith", false, haystack, needle)
     {
     }
@@ -289,7 +298,7 @@ public class EndsWithCondition : StringCondition
 
 public class InCondition : StringCondition
 {
-    internal InCondition(StringOrVariableOrParameter needle, params StringOrVariableOrParameter[] haystack)
+    internal InCondition(string needle, params string[] haystack)
         : base("in", true, haystack.Prepend(needle))
     {
     }
@@ -297,7 +306,7 @@ public class InCondition : StringCondition
 
 public class NotInCondition : StringCondition
 {
-    internal NotInCondition(StringOrVariableOrParameter needle, params StringOrVariableOrParameter[] haystack)
+    internal NotInCondition(string needle, params string[] haystack)
         : base("notIn", true, haystack.Prepend(needle))
     {
     }
@@ -305,7 +314,7 @@ public class NotInCondition : StringCondition
 
 public class ContainsValueCondition : StringCondition
 {
-    internal ContainsValueCondition(StringOrVariableOrParameter needle, params StringOrVariableOrParameter[] haystack)
+    internal ContainsValueCondition(string needle, params string[] haystack)
         : base("containsValue", true, haystack.Append(needle))
     {
     }
@@ -313,7 +322,7 @@ public class ContainsValueCondition : StringCondition
 
 public class GreaterCondition : StringCondition
 {
-    internal GreaterCondition(StringOrVariableOrParameter first, StringOrVariableOrParameter second)
+    internal GreaterCondition(string first, string second)
         : base("gt", true, first, second)
     {
     }
@@ -321,7 +330,7 @@ public class GreaterCondition : StringCondition
 
 public class LessCondition : StringCondition
 {
-    internal LessCondition(StringOrVariableOrParameter first, StringOrVariableOrParameter second)
+    internal LessCondition(string first, string second)
         : base("lt", true, first, second)
     {
     }
@@ -363,7 +372,7 @@ public class ElseCondition<T> : Condition<T>
 
 public class EqualityCondition<T> : StringCondition<T>
 {
-    internal EqualityCondition(bool equal, StringOrVariableOrParameter expression1, StringOrVariableOrParameter expression2)
+    internal EqualityCondition(bool equal, string expression1, string expression2)
         : base(equal ? "eq" : "ne", true, expression1, expression2)
     {
     }
@@ -378,7 +387,7 @@ public class AndCondition<T> : Condition<T>
     }
 
     internal AndCondition(params string[] expressions)
-        : base("and", true, expressions.Select(e => new StringOrVariableOrParameter(e)))
+        : base("and", true, expressions.Select(e => new string(e)))
     {
     }
 }
@@ -391,7 +400,7 @@ public class OrCondition<T> : Condition<T>
     }
 
     internal OrCondition(params string[] expressions)
-        : base("or", true, expressions.Select(e => new StringOrVariableOrParameter(e)))
+        : base("or", true, expressions.Select(e => new string(e)))
     {
     }
 }
@@ -411,7 +420,7 @@ public class XorCondition<T> : Condition<T>
 
 public class ContainsCondition<T> : StringCondition<T>
 {
-    internal ContainsCondition(StringOrVariableOrParameter haystack, StringOrVariableOrParameter needle)
+    internal ContainsCondition(string haystack, string needle)
         : base("contains", false, haystack, needle)
     {
     }
@@ -419,7 +428,7 @@ public class ContainsCondition<T> : StringCondition<T>
 
 public class StartsWithCondition<T> : StringCondition<T>
 {
-    internal StartsWithCondition(StringOrVariableOrParameter needle, StringOrVariableOrParameter haystack)
+    internal StartsWithCondition(string needle, string haystack)
         : base("startsWith", false, haystack, needle)
     {
     }
@@ -427,7 +436,7 @@ public class StartsWithCondition<T> : StringCondition<T>
 
 public class EndsWithCondition<T> : StringCondition<T>
 {
-    internal EndsWithCondition(StringOrVariableOrParameter needle, StringOrVariableOrParameter haystack)
+    internal EndsWithCondition(string needle, string haystack)
         : base("endsWith", false, haystack, needle)
     {
     }
@@ -435,7 +444,7 @@ public class EndsWithCondition<T> : StringCondition<T>
 
 public class ContainsValueCondition<T> : StringCondition<T>
 {
-    internal ContainsValueCondition(StringOrVariableOrParameter needle, params StringOrVariableOrParameter[] haystack)
+    internal ContainsValueCondition(string needle, params string[] haystack)
         : base("containsValue", true, haystack.Append(needle))
     {
     }
@@ -443,7 +452,7 @@ public class ContainsValueCondition<T> : StringCondition<T>
 
 public class InCondition<T> : StringCondition<T>
 {
-    internal InCondition(StringOrVariableOrParameter needle, params StringOrVariableOrParameter[] haystack)
+    internal InCondition(string needle, params string[] haystack)
         : base("in", true, haystack.Prepend(needle))
     {
     }
@@ -451,7 +460,7 @@ public class InCondition<T> : StringCondition<T>
 
 public class NotInCondition<T> : StringCondition<T>
 {
-    internal NotInCondition(StringOrVariableOrParameter needle, params StringOrVariableOrParameter[] haystack)
+    internal NotInCondition(string needle, params string[] haystack)
         : base("notin", true, haystack.Prepend(needle))
     {
     }
@@ -459,7 +468,7 @@ public class NotInCondition<T> : StringCondition<T>
 
 public class GreaterCondition<T> : StringCondition<T>
 {
-    internal GreaterCondition(StringOrVariableOrParameter first, StringOrVariableOrParameter second)
+    internal GreaterCondition(string first, string second)
         : base("gt", true, first, second)
     {
     }
@@ -467,7 +476,7 @@ public class GreaterCondition<T> : StringCondition<T>
 
 public class LessCondition<T> : StringCondition<T>
 {
-    internal LessCondition(StringOrVariableOrParameter first, StringOrVariableOrParameter second)
+    internal LessCondition(string first, string second)
         : base("lt", true, first, second)
     {
     }
@@ -476,7 +485,7 @@ public class LessCondition<T> : StringCondition<T>
 
 public class BranchCondition : EqualityCondition
 {
-    internal BranchCondition(StringOrVariableOrParameter branchName, bool equal)
+    internal BranchCondition(string branchName, bool equal)
         : base(equal, new VariableReference("Build.SourceBranch"), branchName)
     {
     }
@@ -484,7 +493,7 @@ public class BranchCondition : EqualityCondition
 
 public class BranchCondition<T> : EqualityCondition<T>
 {
-    internal BranchCondition(StringOrVariableOrParameter branchName, bool equal)
+    internal BranchCondition(string branchName, bool equal)
         : base(equal, new VariableReference("Build.SourceBranch"), branchName)
     {
     }
@@ -492,7 +501,7 @@ public class BranchCondition<T> : EqualityCondition<T>
 
 public class BuildReasonCondition : EqualityCondition
 {
-    internal BuildReasonCondition(StringOrVariableOrParameter reason, bool equal)
+    internal BuildReasonCondition(string reason, bool equal)
         : base(equal, new VariableReference("Build.Reason"), reason)
     {
     }
@@ -500,7 +509,7 @@ public class BuildReasonCondition : EqualityCondition
 
 public class BuildReasonCondition<T> : EqualityCondition<T>
 {
-    internal BuildReasonCondition(StringOrVariableOrParameter reason, bool equal)
+    internal BuildReasonCondition(string reason, bool equal)
         : base(equal, new VariableReference("Build.Reason"), reason)
     {
     }

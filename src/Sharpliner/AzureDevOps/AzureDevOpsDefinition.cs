@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Tasks;
+using Sharpliner.SourceGenerator;
 using static Sharpliner.AzureDevOps.TemplateDefinition;
 
 namespace Sharpliner.AzureDevOps;
@@ -471,25 +472,35 @@ public abstract class AzureDevOpsDefinition
 
     protected static Condition Xor<T>(Condition expression1, Condition expression2) => new XorCondition<T>(expression1, expression2);
 
-    protected static Condition<T> Equal<T>(StringOrVariableOrParameter expression1, StringOrVariableOrParameter expression2) => new EqualityCondition<T>(true, expression1, expression2);
+    [StringCondition]
+    protected static Condition<T> Equal<T>(string expression1, string expression2) => new EqualityCondition<T>(true, expression1, expression2);
 
-    protected static Condition<T> NotEqual<T>(StringOrVariableOrParameter expression1, StringOrVariableOrParameter expression2) => new EqualityCondition<T>(false, expression1, expression2);
+    [StringCondition]
+    protected static Condition<T> NotEqual<T>(string expression1, string expression2) => new EqualityCondition<T>(false, expression1, expression2);
 
-    protected static Condition Contains<T>(StringOrVariableOrParameter needle, StringOrVariableOrParameter haystack) => new ContainsCondition<T>(needle, haystack);
+    [StringCondition]
+    protected static Condition Contains<T>(string needle, string haystack) => new ContainsCondition<T>(needle, haystack);
 
-    protected static Condition StartsWith<T>(StringOrVariableOrParameter needle, StringOrVariableOrParameter haystack) => new StartsWithCondition<T>(needle, haystack);
+    [StringCondition]
+    protected static Condition StartsWith<T>(string needle, string haystack) => new StartsWithCondition<T>(needle, haystack);
 
-    protected static Condition EndsWith<T>(StringOrVariableOrParameter needle, StringOrVariableOrParameter haystack) => new EndsWithCondition<T>(needle, haystack);
+    [StringCondition]
+    protected static Condition EndsWith<T>(string needle, string haystack) => new EndsWithCondition<T>(needle, haystack);
 
-    protected static Condition ContainsValue<T>(StringOrVariableOrParameter needle, params StringOrVariableOrParameter[] haystack) => new ContainsValueCondition<T>(needle, haystack);
+    [StringCondition]
+    protected static Condition ContainsValue<T>(string needle, params string[] haystack) => new ContainsValueCondition<T>(needle, haystack);
 
-    protected static Condition In<T>(StringOrVariableOrParameter needle, params StringOrVariableOrParameter[] haystack) => new InCondition<T>(needle, haystack);
+    [StringCondition]
+    protected static Condition In<T>(string needle, params string[] haystack) => new InCondition<T>(needle, haystack);
 
-    protected static Condition NotIn<T>(StringOrVariableOrParameter needle, params StringOrVariableOrParameter[] haystack) => new NotInCondition<T>(needle, haystack);
+    [StringCondition]
+    protected static Condition NotIn<T>(string needle, params string[] haystack) => new NotInCondition<T>(needle, haystack);
 
-    protected static Condition Greater<T>(StringOrVariableOrParameter expression1, StringOrVariableOrParameter expression2) => new GreaterCondition<T>(expression1, expression2);
+    [StringCondition]
+    protected static Condition Greater<T>(string expression1, string expression2) => new GreaterCondition<T>(expression1, expression2);
 
-    protected static Condition Less<T>(StringOrVariableOrParameter expression1, StringOrVariableOrParameter expression2) => new LessCondition<T>(expression1, expression2);
+    [StringCondition]
+    protected static Condition Less<T>(string expression1, string expression2) => new LessCondition<T>(expression1, expression2);
 
     protected static Condition And(params string[] expressions) => new AndCondition(expressions);
 
@@ -503,29 +514,41 @@ public abstract class AzureDevOpsDefinition
 
     protected static Condition Xor(Condition expression1, Condition expression2) => new XorCondition(expression1, expression2);
 
-    protected static Condition Contains(StringOrVariableOrParameter needle, StringOrVariableOrParameter haystack) => new ContainsCondition(needle, haystack);
+    [StringCondition]
+    protected static Condition Contains(string needle, string haystack) => new ContainsCondition(needle, haystack);
 
-    protected static Condition StartsWith(StringOrVariableOrParameter needle, StringOrVariableOrParameter haystack) => new StartsWithCondition(needle, haystack);
+    [StringCondition]
+    protected static Condition StartsWith(string needle, string haystack) => new StartsWithCondition(needle, haystack);
 
-    protected static Condition EndsWith(StringOrVariableOrParameter needle, StringOrVariableOrParameter haystack) => new EndsWithCondition(needle, haystack);
+    [StringCondition]
+    protected static Condition EndsWith(string needle, string haystack) => new EndsWithCondition(needle, haystack);
 
-    protected static Condition In(StringOrVariableOrParameter needle, params StringOrVariableOrParameter[] haystack) => new InCondition(needle, haystack);
+    [StringCondition]
+    protected static Condition In(string needle, params string[] haystack) => new InCondition(needle, haystack);
 
-    protected static Condition NotIn(StringOrVariableOrParameter needle, params StringOrVariableOrParameter[] haystack) => new NotInCondition(needle, haystack);
+    [StringCondition]
+    protected static Condition NotIn(string needle, params string[] haystack) => new NotInCondition(needle, haystack);
 
-    protected static Condition ContainsValue(StringOrVariableOrParameter needle, params StringOrVariableOrParameter[] haystack) => new ContainsValueCondition(needle, haystack);
+    [StringCondition]
+    protected static Condition ContainsValue(string needle, params string[] haystack) => new ContainsValueCondition(needle, haystack);
 
-    protected static Condition Equal(StringOrVariableOrParameter expression1, StringOrVariableOrParameter expression2) => new EqualityCondition(true, expression1, expression2);
+    [StringCondition]
+    protected static Condition Equal(string expression1, string expression2) => new EqualityCondition(true, expression1, expression2);
 
-    protected static Condition NotEqual(StringOrVariableOrParameter expression1, StringOrVariableOrParameter expression2) => new EqualityCondition(false, expression1, expression2);
+    [StringCondition]
+    protected static Condition NotEqual(string expression1, string expression2) => new EqualityCondition(false, expression1, expression2);
 
-    protected static Condition Greater(StringOrVariableOrParameter expression1, StringOrVariableOrParameter expression2) => new GreaterCondition(expression1, expression2);
+    [StringCondition]
+    protected static Condition Greater(string expression1, string expression2) => new GreaterCondition(expression1, expression2);
 
-    protected static Condition Less(StringOrVariableOrParameter expression1, StringOrVariableOrParameter expression2) => new LessCondition(expression1, expression2);
+    [StringCondition]
+    protected static Condition Less(string expression1, string expression2) => new LessCondition(expression1, expression2);
 
-    protected static Condition IsBranch(StringOrVariableOrParameter branchName) => new BranchCondition(branchName, true);
+    [StringCondition]
+    protected static Condition IsBranch(string branchName) => new BranchCondition(branchName, true);
 
-    protected static Condition IsNotBranch(StringOrVariableOrParameter branchName) => new BranchCondition(branchName, false);
+    [StringCondition]
+    protected static Condition IsNotBranch(string branchName) => new BranchCondition(branchName, false);
 
     protected static Condition IsPullRequest => new BuildReasonCondition("PullRequest", true);
 
