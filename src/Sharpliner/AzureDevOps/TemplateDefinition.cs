@@ -26,7 +26,7 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
     /// <param name="allowedValues">Allowed list of values (for some data types)</param>
-    protected static Parameter NumberParameter(string name, int defaultValue = 0, IEnumerable<int>? allowedValues = null)
+    protected static Parameter NumberParameter(string name, int? defaultValue = null, IEnumerable<int?>? allowedValues = null)
         => new NumberParameter(name, null, defaultValue, allowedValues);
 
     /// <summary>
@@ -34,7 +34,7 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static Parameter BooleanParameter(string name, bool defaultValue = false)
+    protected static Parameter BooleanParameter(string name, bool? defaultValue = null)
         => new BooleanParameter(name, null, defaultValue);
 
     /// <summary>

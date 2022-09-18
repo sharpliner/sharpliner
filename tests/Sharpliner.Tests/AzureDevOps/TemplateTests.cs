@@ -54,6 +54,8 @@ public class TemplateTests
         {
             StringParameter("project"),
             StringParameter("version", allowedValues: new[] { "5.0.100", "5.0.102" }),
+            BooleanParameter("skipBuild"),
+            BooleanParameter("useNugetOrg", defaultValue: false),
             BooleanParameter("restore", defaultValue: true),
             StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)")),
         };
@@ -87,6 +89,13 @@ public class TemplateTests
               values:
               - 5.0.100
               - 5.0.102
+
+            - name: skipBuild
+              type: boolean
+
+            - name: useNugetOrg
+              type: boolean
+              default: false
 
             - name: restore
               type: boolean
