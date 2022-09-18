@@ -11,6 +11,20 @@ public abstract class IfStringCondition : IfCondition
     private readonly string _one;
     private readonly string _two;
 
+    protected IfStringCondition(string keyword, string[] one, string two)
+    {
+        _keyword = keyword;
+        _one = Join(one);
+        _two = two;
+    }
+
+    protected IfStringCondition(string keyword, string one, string[] two)
+    {
+        _keyword = keyword;
+        _one = one;
+        _two = Join(two);
+    }
+
     protected IfStringCondition(string keyword, string one, string two)
     {
         _keyword = keyword;
@@ -46,13 +60,25 @@ public abstract class IfStringCondition : IfCondition
         return string.Join(", ", convertedStringArray);
     }
 
-    internal override string Serialize() => Condition.ExpressionStart + $"{_keyword}({_one}, {_two})" + Condition.ExpressionEnd;
+    internal override string Serialize() => WrapBraces($"{_keyword}({_one}, {_two})");
 }
 
 public abstract class IfStringCondition<T> : IfStringCondition
 {
     protected IfStringCondition(string keyword, string one, string two, Conditioned<T>? parent = null)
         : base(keyword, one, two)
+    {
+        Parent = parent;
+    }
+
+    protected IfStringCondition(string keyword, string[] one, string two, Conditioned<T>? parent = null)
+        : this(keyword, Join(one), two, parent)
+    {
+        Parent = parent;
+    }
+
+    protected IfStringCondition(string keyword, string one, string[] two, Conditioned<T>? parent = null)
+        : this(keyword, one, Join(two), parent)
     {
         Parent = parent;
     }

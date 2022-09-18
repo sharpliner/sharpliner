@@ -10,6 +10,20 @@ public abstract class InlineStringCondition : InlineCondition
     private readonly string _one;
     private readonly string _two;
 
+    protected InlineStringCondition(string keyword, string[] one, string two)
+    {
+        _keyword = keyword;
+        _one = Join(one);
+        _two = two;
+    }
+
+    protected InlineStringCondition(string keyword, string one, string[] two)
+    {
+        _keyword = keyword;
+        _one = one;
+        _two = Join(two);
+    }
+
     protected InlineStringCondition(string keyword, string one, string two)
     {
         _keyword = keyword;
@@ -50,6 +64,18 @@ public abstract class InlineStringCondition<T> : InlineStringCondition
 {
     protected InlineStringCondition(string keyword, string one, string two, Conditioned<T>? parent = null)
         : base(keyword, one, two)
+    {
+        Parent = parent;
+    }
+
+    protected InlineStringCondition(string keyword, string[] one, string two, Conditioned<T>? parent = null)
+    : this(keyword, Join(one), two, parent)
+    {
+        Parent = parent;
+    }
+
+    protected InlineStringCondition(string keyword, string one, string[] two, Conditioned<T>? parent = null)
+        : this(keyword, one, Join(two), parent)
     {
         Parent = parent;
     }
