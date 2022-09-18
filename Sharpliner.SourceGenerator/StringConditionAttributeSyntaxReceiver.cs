@@ -8,8 +8,6 @@ internal class StringConditionAttributeSyntaxReceiver : ISyntaxContextReceiver
     public List<IMethodSymbol> IdentifiedMethods { get; } = new();
     public List<ITypeSymbol> IdentifiedClasses { get; } = new();
 
-    public Dictionary<IPropertySymbol, List<IFieldSymbol>> IdentifiedPropertiesAndAssociatedFields { get; } = new();
-
     public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
     {
         if (context.Node is MethodDeclarationSyntax methodDeclarationSyntax
