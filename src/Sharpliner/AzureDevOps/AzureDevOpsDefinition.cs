@@ -12,7 +12,7 @@ namespace Sharpliner.AzureDevOps;
 /// <summary>
 /// This is a common ancestor for AzDO related definitions (pipelines, templates..) containing useful macros.
 /// </summary>
-public abstract class AzureDevOpsDefinition
+public abstract partial class AzureDevOpsDefinition
 {
     #region Template references
 
@@ -460,26 +460,26 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static InlineCondition Condition(string condition) => new InlineCustomCondition(condition);
 
-    protected static Condition<T> And<T>(params string[] expressions) => new InlineAndCondition<T>(expressions);
+    protected static InlineCondition<T> And<T>(params string[] expressions) => new InlineAndCondition<T>(expressions);
 
     protected static InlineCondition Or<T>(params string[] expressions) => new InlineOrCondition<T>(expressions);
 
     protected static InlineCondition Xor<T>(string expression1, string expression2) => new InlineXorCondition<T>(expression1, expression2);
 
-    protected static Condition<T> And<T>(params Condition[] expressions) => new InlineAndCondition<T>(expressions);
+    protected static InlineCondition And<T>(params InlineCondition[] expressions) => new InlineAndCondition<T>(expressions);
 
-    protected static InlineCondition Or<T>(params Condition[] expressions) => new InlineOrCondition<T>(expressions);
+    protected static InlineCondition Or<T>(params InlineCondition[] expressions) => new InlineOrCondition<T>(expressions);
 
     protected static InlineCondition Xor<T>(Condition expression1, Condition expression2) => new InlineXorCondition<T>(expression1, expression2);
 
     [StringCondition]
-    protected static Condition<T> Equal<T>(string expression1, string expression2) => new InlineEqualityCondition<T>(true, expression1, expression2);
+    protected static InlineCondition Equal<T>(string expression1, string expression2) => new InlineEqualityCondition<T>(true, expression1, expression2);
 
     [StringCondition]
-    protected static Condition<T> NotEqual<T>(string expression1, string expression2) => new InlineEqualityCondition<T>(false, expression1, expression2);
+    protected static InlineCondition NotEqual<T>(string expression1, string expression2) => new InlineEqualityCondition<T>(false, expression1, expression2);
 
     [StringCondition]
-    protected static InlineCondition Contains<T>(string needle, string haystack) => new ContainsCondition<T>(needle, haystack);
+    protected static InlineCondition Contains<T>(string needle, string haystack) => new InlineContainsCondition<T>(needle, haystack);
 
     [StringCondition]
     protected static InlineCondition StartsWith<T>(string needle, string haystack) => new InlineStartsWithCondition<T>(needle, haystack);
@@ -508,11 +508,11 @@ public abstract class AzureDevOpsDefinition
 
     protected static InlineCondition Xor(string condition1, string condition2) => new InlineXorCondition(condition1, condition2);
 
-    protected static InlineCondition And(params Condition[] expressions) => new InlineAndCondition(expressions);
+    protected static InlineCondition And(params InlineCondition[] expressions) => new InlineAndCondition(expressions);
 
-    protected static InlineCondition Or(params Condition[] expressions) => new InlineOrCondition(expressions);
+    protected static InlineCondition Or(params InlineCondition[] expressions) => new InlineOrCondition(expressions);
 
-    protected static InlineCondition Xor(Condition expression1, Condition expression2) => new InlineXorCondition(expression1, expression2);
+    protected static InlineCondition Xor(InlineCondition expression1, InlineCondition expression2) => new InlineXorCondition(expression1, expression2);
 
     [StringCondition]
     protected static InlineCondition Contains(string needle, string haystack) => new InlineContainsCondition(needle, haystack);

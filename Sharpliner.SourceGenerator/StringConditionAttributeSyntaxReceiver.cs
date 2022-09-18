@@ -25,12 +25,7 @@ internal class StringConditionAttributeSyntaxReceiver : ISyntaxContextReceiver
 
     private void ProcessClass(GeneratorSyntaxContext context, ClassDeclarationSyntax classDeclarationSyntax)
     {
-        if (!HasSourceGeneratorAttribute(context, classDeclarationSyntax, out ISymbol nodeSymbol))
-        {
-            return;
-        }
-
-        if (nodeSymbol is ITypeSymbol typeSymbol)
+        if (IsValid(context, classDeclarationSyntax, out ITypeSymbol? typeSymbol))
         {
             IdentifiedClasses.Add(typeSymbol);
         }
@@ -38,21 +33,17 @@ internal class StringConditionAttributeSyntaxReceiver : ISyntaxContextReceiver
 
     private void ProcessMethod(GeneratorSyntaxContext context, MethodDeclarationSyntax methodDeclarationSyntax)
     {
-        if (!HasSourceGeneratorAttribute(context, methodDeclarationSyntax, out ISymbol nodeSymbol))
-        {
-            return;
-        }
-
-        if (nodeSymbol is IMethodSymbol methodSymbol)
+        if (IsValid(context, methodDeclarationSyntax, out IMethodSymbol? methodSymbol))
         {
             IdentifiedMethods.Add(methodSymbol);
         }
     }
 
-    private static bool HasSourceGeneratorAttribute(GeneratorSyntaxContext context,
-        SyntaxNode methodDeclarationSyntax, out ISymbol nodeSymbol)
+    private static bool IsValid<TSymbol>(GeneratorSyntaxContext context,
+        SyntaxNode methodDeclarationSyntax, out TSymbol? outSymbol)
     {
-        nodeSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclarationSyntax);
+        outSymbol = default;
+        var nodeSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclarationSyntax);
 
         var attributes = nodeSymbol
             .GetAttributes()
@@ -60,11 +51,13 @@ internal class StringConditionAttributeSyntaxReceiver : ISyntaxContextReceiver
                         typeof(StringConditionAttribute).FullName)
             .ToList();
 
-        if (!attributes.Any())
+        if (!attributes.Any() || nodeSymbol is not TSymbol tSymbol)
         {
             return false;
         }
 
+        outSymbol = tSymbol;
         return true;
+
     }
 }
