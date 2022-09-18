@@ -26,7 +26,7 @@ public abstract class IfStringCondition : IfCondition
 
     protected static string Serialize(ParameterReference parameterReference)
     {
-        return parameterReference.RuntimeExpression;
+        return WrapQuotes(parameterReference.RuntimeExpression);
     }
 
     protected static string Serialize(IEnumerable<object> array)
@@ -46,7 +46,7 @@ public abstract class IfStringCondition : IfCondition
         return string.Join(", ", convertedStringArray);
     }
 
-    protected override string Serialize() => Condition.ExpressionStart + $"{_keyword}({_one}, {_two})" + Condition.ExpressionEnd;
+    internal override string Serialize() => Condition.ExpressionStart + $"{_keyword}({_one}, {_two})" + Condition.ExpressionEnd;
 }
 
 public abstract class IfStringCondition<T> : IfStringCondition

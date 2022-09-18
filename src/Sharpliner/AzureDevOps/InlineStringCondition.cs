@@ -43,7 +43,7 @@ public abstract class InlineStringCondition : InlineCondition
         return string.Join(", ", convertedStringArray);
     }
 
-    protected override string Serialize() => $"{_keyword}({_one}, {_two})";
+    internal override string Serialize() => $"{_keyword}({_one}, {_two})";
 }
 
 public abstract class InlineStringCondition<T> : InlineStringCondition
