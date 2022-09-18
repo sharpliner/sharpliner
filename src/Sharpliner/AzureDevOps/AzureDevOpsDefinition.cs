@@ -453,106 +453,106 @@ public abstract class AzureDevOpsDefinition
     /// <summary>
     /// Start an ${{ if () }} section.
     /// </summary>
-    protected static ConditionBuilder If => new();
+    protected static IfConditionBuilder If => new();
 
     /// <summary>
     /// Use this to specify any custom condition (in case you miss some operator or expression).
     /// </summary>
-    protected static Condition Condition(string condition) => new CustomCondition(condition);
+    protected static InlineCondition Condition(string condition) => new InlineCustomCondition(condition);
 
-    protected static Condition<T> And<T>(params string[] expressions) => new AndCondition<T>(expressions);
+    protected static Condition<T> And<T>(params string[] expressions) => new InlineAndCondition<T>(expressions);
 
-    protected static Condition Or<T>(params string[] expressions) => new OrCondition<T>(expressions);
+    protected static InlineCondition Or<T>(params string[] expressions) => new InlineOrCondition<T>(expressions);
 
-    protected static Condition Xor<T>(string expression1, string expression2) => new XorCondition<T>(expression1, expression2);
+    protected static InlineCondition Xor<T>(string expression1, string expression2) => new InlineXorCondition<T>(expression1, expression2);
 
-    protected static Condition<T> And<T>(params Condition[] expressions) => new AndCondition<T>(expressions);
+    protected static Condition<T> And<T>(params Condition[] expressions) => new InlineAndCondition<T>(expressions);
 
-    protected static Condition Or<T>(params Condition[] expressions) => new OrCondition<T>(expressions);
+    protected static InlineCondition Or<T>(params Condition[] expressions) => new InlineOrCondition<T>(expressions);
 
-    protected static Condition Xor<T>(Condition expression1, Condition expression2) => new XorCondition<T>(expression1, expression2);
-
-    [StringCondition]
-    protected static Condition<T> Equal<T>(string expression1, string expression2) => new EqualityCondition<T>(true, expression1, expression2);
+    protected static InlineCondition Xor<T>(Condition expression1, Condition expression2) => new InlineXorCondition<T>(expression1, expression2);
 
     [StringCondition]
-    protected static Condition<T> NotEqual<T>(string expression1, string expression2) => new EqualityCondition<T>(false, expression1, expression2);
+    protected static Condition<T> Equal<T>(string expression1, string expression2) => new InlineEqualityCondition<T>(true, expression1, expression2);
 
     [StringCondition]
-    protected static Condition Contains<T>(string needle, string haystack) => new ContainsCondition<T>(needle, haystack);
+    protected static Condition<T> NotEqual<T>(string expression1, string expression2) => new InlineEqualityCondition<T>(false, expression1, expression2);
 
     [StringCondition]
-    protected static Condition StartsWith<T>(string needle, string haystack) => new StartsWithCondition<T>(needle, haystack);
+    protected static InlineCondition Contains<T>(string needle, string haystack) => new ContainsCondition<T>(needle, haystack);
 
     [StringCondition]
-    protected static Condition EndsWith<T>(string needle, string haystack) => new EndsWithCondition<T>(needle, haystack);
+    protected static InlineCondition StartsWith<T>(string needle, string haystack) => new InlineStartsWithCondition<T>(needle, haystack);
 
     [StringCondition]
-    protected static Condition ContainsValue<T>(string needle, params string[] haystack) => new ContainsValueCondition<T>(needle, haystack);
+    protected static InlineCondition EndsWith<T>(string needle, string haystack) => new InlineEndsWithCondition<T>(needle, haystack);
 
     [StringCondition]
-    protected static Condition In<T>(string needle, params string[] haystack) => new InCondition<T>(needle, haystack);
+    protected static InlineCondition ContainsValue<T>(string needle, params string[] haystack) => new InlineContainsValueCondition<T>(needle, haystack);
 
     [StringCondition]
-    protected static Condition NotIn<T>(string needle, params string[] haystack) => new NotInCondition<T>(needle, haystack);
+    protected static InlineCondition In<T>(string needle, params string[] haystack) => new InlineInCondition<T>(needle, haystack);
 
     [StringCondition]
-    protected static Condition Greater<T>(string expression1, string expression2) => new GreaterCondition<T>(expression1, expression2);
+    protected static InlineCondition NotIn<T>(string needle, params string[] haystack) => new InlineNotInCondition<T>(needle, haystack);
 
     [StringCondition]
-    protected static Condition Less<T>(string expression1, string expression2) => new LessCondition<T>(expression1, expression2);
-
-    protected static Condition And(params string[] expressions) => new AndCondition(expressions);
-
-    protected static Condition Or(params string[] expressions) => new OrCondition(expressions);
-
-    protected static Condition Xor(string condition1, string condition2) => new XorCondition(condition1, condition2);
-
-    protected static Condition And(params Condition[] expressions) => new AndCondition(expressions);
-
-    protected static Condition Or(params Condition[] expressions) => new OrCondition(expressions);
-
-    protected static Condition Xor(Condition expression1, Condition expression2) => new XorCondition(expression1, expression2);
+    protected static InlineCondition Greater<T>(string expression1, string expression2) => new InlineGreaterCondition<T>(expression1, expression2);
 
     [StringCondition]
-    protected static Condition Contains(string needle, string haystack) => new ContainsCondition(needle, haystack);
+    protected static InlineCondition Less<T>(string expression1, string expression2) => new InlineLessCondition<T>(expression1, expression2);
+
+    protected static InlineCondition And(params string[] expressions) => new InlineAndCondition(expressions);
+
+    protected static InlineCondition Or(params string[] expressions) => new InlineOrCondition(expressions);
+
+    protected static InlineCondition Xor(string condition1, string condition2) => new InlineXorCondition(condition1, condition2);
+
+    protected static InlineCondition And(params Condition[] expressions) => new InlineAndCondition(expressions);
+
+    protected static InlineCondition Or(params Condition[] expressions) => new InlineOrCondition(expressions);
+
+    protected static InlineCondition Xor(Condition expression1, Condition expression2) => new InlineXorCondition(expression1, expression2);
 
     [StringCondition]
-    protected static Condition StartsWith(string needle, string haystack) => new StartsWithCondition(needle, haystack);
+    protected static InlineCondition Contains(string needle, string haystack) => new InlineContainsCondition(needle, haystack);
 
     [StringCondition]
-    protected static Condition EndsWith(string needle, string haystack) => new EndsWithCondition(needle, haystack);
+    protected static InlineCondition StartsWith(string needle, string haystack) => new InlineStartsWithCondition(needle, haystack);
 
     [StringCondition]
-    protected static Condition In(string needle, params string[] haystack) => new InCondition(needle, haystack);
+    protected static InlineCondition EndsWith(string needle, string haystack) => new InlineEndsWithCondition(needle, haystack);
 
     [StringCondition]
-    protected static Condition NotIn(string needle, params string[] haystack) => new NotInCondition(needle, haystack);
+    protected static InlineCondition In(string needle, params string[] haystack) => new InlineInCondition(needle, haystack);
 
     [StringCondition]
-    protected static Condition ContainsValue(string needle, params string[] haystack) => new ContainsValueCondition(needle, haystack);
+    protected static InlineCondition NotIn(string needle, params string[] haystack) => new InlineNotInCondition(needle, haystack);
 
     [StringCondition]
-    protected static Condition Equal(string expression1, string expression2) => new EqualityCondition(true, expression1, expression2);
+    protected static InlineCondition ContainsValue(string needle, params string[] haystack) => new InlineContainsValueCondition(needle, haystack);
 
     [StringCondition]
-    protected static Condition NotEqual(string expression1, string expression2) => new EqualityCondition(false, expression1, expression2);
+    protected static InlineCondition Equal(string expression1, string expression2) => new InlineEqualityCondition(true, expression1, expression2);
 
     [StringCondition]
-    protected static Condition Greater(string expression1, string expression2) => new GreaterCondition(expression1, expression2);
+    protected static InlineCondition NotEqual(string expression1, string expression2) => new InlineEqualityCondition(false, expression1, expression2);
 
     [StringCondition]
-    protected static Condition Less(string expression1, string expression2) => new LessCondition(expression1, expression2);
+    protected static InlineCondition Greater(string expression1, string expression2) => new InlineGreaterCondition(expression1, expression2);
 
     [StringCondition]
-    protected static Condition IsBranch(string branchName) => new BranchCondition(branchName, true);
+    protected static InlineCondition Less(string expression1, string expression2) => new InlineLessCondition(expression1, expression2);
 
     [StringCondition]
-    protected static Condition IsNotBranch(string branchName) => new BranchCondition(branchName, false);
+    protected static InlineCondition IsBranch(string branchName) => new InlineBranchCondition(branchName, true);
 
-    protected static Condition IsPullRequest => new BuildReasonCondition("PullRequest", true);
+    [StringCondition]
+    protected static InlineCondition IsNotBranch(string branchName) => new InlineBranchCondition(branchName, false);
 
-    protected static Condition IsNotPullRequest => new BuildReasonCondition("PullRequest", false);
+    protected static InlineCondition IsPullRequest => new InlineBuildReasonCondition("PullRequest", true);
+
+    protected static InlineCondition IsNotPullRequest => new InlineBuildReasonCondition("PullRequest", false);
 
     #endregion
 

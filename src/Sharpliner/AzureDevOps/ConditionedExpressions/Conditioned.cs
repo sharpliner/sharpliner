@@ -149,7 +149,7 @@ public record Conditioned<T> : Conditioned
     {
     }
 
-    public ConditionBuilder<T> If => new(this);
+    public IfConditionBuilder<T> If => new(this);
 
     public Conditioned<T> EndIf
     {

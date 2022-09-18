@@ -39,6 +39,12 @@ public class StringConditionGenerator : ISourceGenerator
             return;
         }
 
+        GenerateClassesForMethods(context, syntaxReciever);
+    }
+
+    private void GenerateClassesForMethods(GeneratorExecutionContext context,
+        StringConditionAttributeSyntaxReceiver syntaxReciever)
+    {
         var index = 0;
         foreach (var containingClassGroup in syntaxReciever.IdentifiedMethods.GroupBy(x => x.ContainingType))
         {
@@ -47,8 +53,87 @@ public class StringConditionGenerator : ISourceGenerator
             var namespaceSymbol = containingClass.ContainingNamespace;
 
             var source = GenerateClass(context, containingClass, namespaceSymbol, containingClassGroup.ToList());
-            context.AddSource($"{containingClass.ContainingNamespace.ToDisplayString().Replace('.', '_')}_{containingClass.Name}_StringConditions{index}.generated", SourceText.From(source, Encoding.UTF8));
+            context.AddSource(
+                $"{containingClass.ContainingNamespace.ToDisplayString().Replace('.', '_')}_{containingClass.Name}_StringConditions{index}.generated",
+                SourceText.From(source, Encoding.UTF8));
         }
+    }
+
+    private void GenerateClasses(GeneratorExecutionContext context,
+        StringConditionAttributeSyntaxReceiver syntaxReciever)
+    {
+        var index = 0;
+        foreach (var @class in syntaxReciever.IdentifiedClasses.Select(x => x.ContainingType))
+        {
+            index++;
+            var namespaceSymbol = @class.ContainingNamespace;
+
+            var source = GenerateClass(context, namespaceSymbol, @class);
+            context.AddSource(
+                $"{@class.ContainingNamespace.ToDisplayString().Replace('.', '_')}_{@class.Name}_StringConditions{index}.generated",
+                SourceText.From(source, Encoding.UTF8));
+        }
+    }
+
+    private string GenerateClass(GeneratorExecutionContext context, INamespaceSymbol @namespace, INamedTypeSymbol @class)
+    {
+        var classBuilder = new CodeGenerationTextWriter();
+
+        classBuilder.WriteLine(context.GetUsingStatementsForTypes(
+            typeof(string),
+            typeof(StringConditionAttribute),
+            typeof(CallerMemberNameAttribute)
+        ));
+        classBuilder.WriteLine("using Sharpliner.AzureDevOps.ConditionedExpressions;");
+        classBuilder.WriteLine();
+        classBuilder.WriteLine($"namespace {@namespace.ToDisplayString()}");
+        classBuilder.WriteLine("{");
+
+        var isInlineConditionClass = @class.Name.StartsWith("Inline");
+
+        var possibleTypes = isInlineConditionClass
+            ? PossibleType.InlinePossibleTypes
+            : PossibleType.IfPossibleTypes;
+
+        foreach (var possibleType in possibleTypes)
+        {
+            foreach (var possibleType2 in possibleTypes)
+            {
+                if (possibleType == PossibleType.String && possibleType2 == PossibleType.String)
+                {
+                    // Already defined manually.
+                    continue;
+                }
+
+                var newClassName = @class.Name.Replace(
+                    PossibleType.String.ShortName,
+                    $"{possibleType.ShortName}{possibleType2.ShortName}"
+                );
+
+                classBuilder.WriteLine($"public partial class {newClassName}{GetGenericType(@class)}");
+                classBuilder.WriteLine("{");
+
+                var constructor = @class.Constructors.First();
+
+                WriteConstructor(classBuilder, constructor, possibleType, possibleType2);
+
+                classBuilder.WriteLine("}");
+            }
+        }
+        classBuilder.WriteLine("}");
+
+        return classBuilder.ToString();
+    }
+
+    private void WriteConstructor(CodeGenerationTextWriter classBuilder, IMethodSymbol constructor, PossibleType possibleType, PossibleType possibleType2)
+    {
+        var methodDeclarationSyntax = constructor.DeclaringSyntaxReferences
+            .Select(s => s.GetSyntax())
+            .OfType<MethodDeclarationSyntax>()
+            .First();
+
+        classBuilder.WriteLine($"{constructor.Name}({possibleType.ClassName} {GetParameterName(constructor, 1)}, {possibleType2.ClassName} {GetParameterName(constructor, 2)})");
+        WriteMethodBody(classBuilder, methodDeclarationSyntax);
     }
 
     private string GenerateClass(GeneratorExecutionContext context, INamedTypeSymbol @class, INamespaceSymbol @namespace, List<IMethodSymbol> methods)
