@@ -4,7 +4,8 @@ namespace Sharpliner.SourceGenerator;
 
 public class CodeGenerationTextWriter : IndentedTextWriter
 {
-    public CodeGenerationTextWriter() : base(new StringWriter())
+    public CodeGenerationTextWriter()
+ : base(new StringWriter())
     {
     }
 

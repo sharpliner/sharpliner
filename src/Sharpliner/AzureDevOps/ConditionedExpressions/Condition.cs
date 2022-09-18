@@ -12,6 +12,12 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 /// </summary>
 public abstract class Condition
 {
+    protected Condition()
+    {
+    }
+
+    protected abstract string Serialize();
+
     internal const string ExpressionStart = "${{ ";
     private const string IfTagStart = $"{ExpressionStart}if ";
     protected const string ElseTagStart = $"{ExpressionStart}else";
