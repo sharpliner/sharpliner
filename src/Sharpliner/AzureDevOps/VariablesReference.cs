@@ -44,18 +44,18 @@ public sealed class VariablesReference
     /// Set to True if the script is being run by a build task.
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference TF_BUILD => VariableReferenceBase.GetReference(string.Empty, "TF_BUILD");
+    public StaticVariableReference TF_BUILD => VariableReferenceBase.GetReference(string.Empty, "TF_BUILD");
 
-    public VariableReference Configuration => VariableReferenceBase.GetReference(string.Empty, "Configuration");
+    public StaticVariableReference Configuration => VariableReferenceBase.GetReference(string.Empty, "Configuration");
 }
 
 public abstract class VariableReferenceBase
 {
-    internal static VariableReference GetReference(string prefix, string variableName) => new($"{prefix}{variableName}");
+    internal static StaticVariableReference GetReference(string prefix, string variableName) => new($"{prefix}{variableName}");
 
     public VariableReference this[string variableName] => GetReference(Prefix, variableName);
 
-    protected VariableReference GetReference(string name) => GetReference(Prefix, name);
+    protected StaticVariableReference GetReference(string name) => GetReference(Prefix, name);
 
     protected abstract string Prefix { get; }
 }
@@ -73,7 +73,7 @@ public sealed class AgentVariableReference : VariableReferenceBase
     /// This variable has the same value as Pipeline.Workspace.
     /// For example: /home/vsts/work/1
     /// </summary>
-    public VariableReference BuildDirectory => GetReference("BuildDirectory");
+    public StaticVariableReference BuildDirectory => GetReference("BuildDirectory");
 
     /// <summary>
     /// A mapping from container resource names in YAML to their Docker IDs at runtime.
@@ -87,24 +87,24 @@ public sealed class AgentVariableReference : VariableReferenceBase
     ///   }
     /// }
     /// </summary>
-    public VariableReference ContainerMapping => GetReference("ContainerMapping");
+    public StaticVariableReference ContainerMapping => GetReference("ContainerMapping");
 
     /// <summary>
     /// The directory the agent is installed into. This contains the agent software.
     /// For example: c:\agent.
     /// </summary>
-    public VariableReference HomeDirectory => GetReference("HomeDirectory");
+    public StaticVariableReference HomeDirectory => GetReference("HomeDirectory");
 
     /// <summary>
     /// The ID of the agent.
     /// </summary>
-    public VariableReference Id => GetReference("Id");
+    public StaticVariableReference Id => GetReference("Id");
 
     /// <summary>
     /// The name of the running job.
     /// This will usually be "Job" or "__default", but in multi-config scenarios, will be the configuration.
     /// </summary>
-    public VariableReference JobName => GetReference("JobName");
+    public StaticVariableReference JobName => GetReference("JobName");
 
     /// <summary>
     /// The status of the build.
@@ -113,18 +113,18 @@ public sealed class AgentVariableReference : VariableReferenceBase
     ///   - Succeeded
     ///   - SucceededWithIssues (partially successful)
     /// </summary>
-    public VariableReference JobStatus => GetReference("JobStatus");
+    public StaticVariableReference JobStatus => GetReference("JobStatus");
 
     /// <summary>
     /// The name of the machine on which the agent is installed.
     /// </summary>
-    public VariableReference MachineName => GetReference("MachineName");
+    public StaticVariableReference MachineName => GetReference("MachineName");
 
     /// <summary>
     /// The name of the agent that is registered with the pool.
     /// If you are using a self-hosted agent, then this name is specified by you. See agents.
     /// </summary>
-    public VariableReference Name => GetReference("Name");
+    public StaticVariableReference Name => GetReference("Name");
 
     /// <summary>
     /// The operating system of the agent host.
@@ -133,7 +133,7 @@ public sealed class AgentVariableReference : VariableReferenceBase
     ///   - Darwin
     ///   - Linux
     /// </summary>
-    public VariableReference OS => GetReference("OS");
+    public StaticVariableReference OS => GetReference("OS");
 
     /// <summary>
     /// The operating system processor architecture of the agent host.
@@ -142,28 +142,28 @@ public sealed class AgentVariableReference : VariableReferenceBase
     ///   - X64
     ///   - ARM
     /// </summary>
-    public VariableReference OSArchitecture => GetReference("OSArchitecture");
+    public StaticVariableReference OSArchitecture => GetReference("OSArchitecture");
 
     /// <summary>
     /// A temporary folder that is cleaned after each pipeline job.
     /// This directory is used by tasks such as .NET Core CLI task to hold temporary items like test results before they are published.
     /// For example: /home/vsts/work/_temp for Ubuntu
     /// </summary>
-    public VariableReference TempDirectory => GetReference("TempDirectory");
+    public StaticVariableReference TempDirectory => GetReference("TempDirectory");
 
     /// <summary>
     /// The directory used by tasks such as Node Tool Installer and Use Python Version to switch between multiple versions of a tool.
     /// These tasks will add tools from this directory to PATH so that subsequent build steps can use them.
     /// Learn about managing this directory on a self-hosted agent.
     /// </summary>
-    public VariableReference ToolsDirectory => GetReference("ToolsDirectory");
+    public StaticVariableReference ToolsDirectory => GetReference("ToolsDirectory");
 
     /// <summary>
     /// The working directory for this agent.
     /// For example: c:\agent_work
     /// Note: This directory is not guaranteed to be writable by pipeline tasks (eg. when mapped into a container)
     /// </summary>
-    public VariableReference WorkFolder => GetReference("WorkFolder");
+    public StaticVariableReference WorkFolder => GetReference("WorkFolder");
 }
 
 public sealed class BuildVariableReference : VariableReferenceBase
@@ -186,7 +186,7 @@ public sealed class BuildVariableReference : VariableReferenceBase
     ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference ArtifactStagingDirectory => GetReference("ArtifactStagingDirectory");
+    public StaticVariableReference ArtifactStagingDirectory => GetReference("ArtifactStagingDirectory");
 
     /// <summary>
     /// The local path on the agent where any artifacts are copied to before being pushed to their destination.
@@ -196,12 +196,12 @@ public sealed class BuildVariableReference : VariableReferenceBase
     /// See Artifacts in Azure Pipelines.
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference StagingDirectory => GetReference("StagingDirectory");
+    public StaticVariableReference StagingDirectory => GetReference("StagingDirectory");
 
     /// <summary>
     /// The ID of the record for the completed build.
     /// </summary>
-    public VariableReference BuildId => GetReference("BuildId");
+    public StaticVariableReference BuildId => GetReference("BuildId");
 
     /// <summary>
     /// The name of the completed build, also known as the run number.You can specify what is included in this value.
@@ -211,7 +211,7 @@ public sealed class BuildVariableReference : VariableReferenceBase
     ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference BuildNumber => GetReference("BuildNumber");
+    public StaticVariableReference BuildNumber => GetReference("BuildNumber");
 
     /// <summary>
     /// The URI for the build.
@@ -219,7 +219,7 @@ public sealed class BuildVariableReference : VariableReferenceBase
     ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference BuildUri => GetReference("BuildUri");
+    public StaticVariableReference BuildUri => GetReference("BuildUri");
 
     /// <summary>
     /// The local path on the agent you can use as an output folder for compiled binaries.
@@ -228,35 +228,35 @@ public sealed class BuildVariableReference : VariableReferenceBase
     ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference BinariesDirectory => GetReference("BinariesDirectory");
+    public StaticVariableReference BinariesDirectory => GetReference("BinariesDirectory");
 
     /// <summary>
     /// The ID of the container for your artifact.
     /// When you upload an artifact in your pipeline, it is added to a container that is specific for that particular artifact.
     /// </summary>
-    public VariableReference ContainerId => GetReference("ContainerId");
+    public StaticVariableReference ContainerId => GetReference("ContainerId");
 
     /// <summary>
     /// The name of the build pipeline.
     /// Note: This value can contain whitespace or other invalid label characters. In these cases, the label format will fail.
     /// </summary>
-    public VariableReference DefinitionName => GetReference("DefinitionName");
+    public StaticVariableReference DefinitionName => GetReference("DefinitionName");
 
     /// <summary>
     /// The version of the build pipeline.
     /// </summary>
-    public VariableReference DefinitionVersion => GetReference("DefinitionVersion");
+    public StaticVariableReference DefinitionVersion => GetReference("DefinitionVersion");
 
     /// <summary>
     /// See "How are the identity variables set?".
     /// Note: This value can contain whitespace or other invalid label characters. In these cases, the label format will fail.
     /// </summary>
-    public VariableReference QueuedBy => GetReference("QueuedBy");
+    public StaticVariableReference QueuedBy => GetReference("QueuedBy");
 
     /// <summary>
     /// See "How are the identity variables set?"
     /// </summary>
-    public VariableReference QueuedById => GetReference("QueuedById");
+    public StaticVariableReference QueuedById => GetReference("QueuedById");
 
     /// <summary>
     /// The event that caused the build to run.
@@ -269,7 +269,7 @@ public sealed class BuildVariableReference : VariableReferenceBase
     ///   - PullRequest: The build was triggered by a Git branch policy that requires a build.
     ///   - ResourceTrigger: The build was triggered by a resource trigger or it was triggered by another build.
     /// </summary>
-    public VariableReference Reason => GetReference("Reason");
+    public StaticVariableReference Reason => GetReference("Reason");
 
     /// <summary>
     /// Variables connected to repository information
@@ -280,17 +280,17 @@ public sealed class BuildVariableReference : VariableReferenceBase
     /// See "How are the identity variables set?"
     /// Note: This value can contain whitespace or other invalid label characters. In these cases, the label format will fail.
     /// </summary>
-    public VariableReference RequestedFor => GetReference("RequestedFor");
+    public StaticVariableReference RequestedFor => GetReference("RequestedFor");
 
     /// <summary>
     /// See "How are the identity variables set?"
     /// </summary>
-    public VariableReference RequestedForEmail => GetReference("RequestedForEmail");
+    public StaticVariableReference RequestedForEmail => GetReference("RequestedForEmail");
 
     /// <summary>
     /// See "How are the identity variables set?"
     /// </summary>
-    public VariableReference RequestedForId => GetReference("RequestedForId");
+    public StaticVariableReference RequestedForId => GetReference("RequestedForId");
 
     /// <summary>
     /// The branch of the triggering repo the build was queued for.
@@ -305,7 +305,7 @@ public sealed class BuildVariableReference : VariableReferenceBase
     /// When you use this variable in your build number format, the forward slash characters (/) are replaced with underscore characters _).
     /// Note: In TFVC, if you are running a gated check-in build or manually building a shelveset, you cannot use this variable in your build number format.
     /// </summary>
-    public VariableReference SourceBranch => GetReference("SourceBranch");
+    public StaticVariableReference SourceBranch => GetReference("SourceBranch");
 
     /// <summary>
     /// The name of the branch in the triggering repo the build was queued for.
@@ -315,7 +315,7 @@ public sealed class BuildVariableReference : VariableReferenceBase
     ///
     /// Note: In TFVC, if you are running a gated check-in build or manually building a shelveset, you cannot use this variable in your build number format. 	Yes
     /// </summary>
-    public VariableReference SourceBranchName => GetReference("SourceBranchName");
+    public StaticVariableReference SourceBranchName => GetReference("SourceBranchName");
 
     /// <summary>
     /// The local path on the agent where your source code files are downloaded. For example: c:\agent_work\1\s
@@ -325,14 +325,14 @@ public sealed class BuildVariableReference : VariableReferenceBase
     ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference SourcesDirectory => GetReference("SourcesDirectory");
+    public StaticVariableReference SourcesDirectory => GetReference("SourcesDirectory");
 
     /// <summary>
     /// The latest version control change of the triggering repo that is included in this build.
     ///   - Git: The commit ID
     ///   - TFVC: the changeset
     /// </summary>
-    public VariableReference SourceVersion => GetReference("SourceVersion");
+    public StaticVariableReference SourceVersion => GetReference("SourceVersion");
 
     /// <summary>
     /// The comment of the commit or changeset for the triggering repo. We truncate the message to the first line or 200 characters, whichever is shorter.
@@ -340,14 +340,14 @@ public sealed class BuildVariableReference : VariableReferenceBase
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag. Also, this variable is only available on the step level and is neither available in the job nor stage levels (i.e. the message is not extracted until the job had started and checked out the code).
     /// Note: This variable is available in TFS 2015.4.
     /// </summary>
-    public VariableReference SourceVersionMessage => GetReference("SourceVersionMessage");
+    public StaticVariableReference SourceVersionMessage => GetReference("SourceVersionMessage");
 
     /// <summary>
     /// Defined if your repository is Team Foundation Version Control.
     /// If you are running a gated build or a shelveset build, this is set to the name of the shelveset you are building.
     /// Note: This variable yields a value that is invalid for build use in a build number format.
     /// </summary>
-    public VariableReference SourceTfvcShelveset => GetReference("SourceTfvcShelveset");
+    public StaticVariableReference SourceTfvcShelveset => GetReference("SourceTfvcShelveset");
 
     /// <summary>
     /// The local path on the agent where the test results are created.
@@ -355,7 +355,7 @@ public sealed class BuildVariableReference : VariableReferenceBase
     ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference CommonTestResultsDirectory => GetReference("Common.TestResultsDirectory");
+    public StaticVariableReference CommonTestResultsDirectory => GetReference("Common.TestResultsDirectory");
 
     /// <summary>
     /// Variables connected to why the build was created.
@@ -376,7 +376,7 @@ public sealed class RepositoryVariableReference : VariableReferenceBase
     ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference Clean => GetReference("Clean");
+    public StaticVariableReference Clean => GetReference("Clean");
 
     /// <summary>
     /// The local path on the agent where your source code files are downloaded.
@@ -389,7 +389,7 @@ public sealed class RepositoryVariableReference : VariableReferenceBase
     ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference LocalPath => GetReference("LocalPath");
+    public StaticVariableReference LocalPath => GetReference("LocalPath");
 
     /// <summary>
     /// The unique identifier of the repository.
@@ -397,14 +397,14 @@ public sealed class RepositoryVariableReference : VariableReferenceBase
     ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference ID => GetReference("ID");
+    public StaticVariableReference ID => GetReference("ID");
 
     /// <summary>
     /// The name of the triggering repository.
     ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference Name => GetReference("Name");
+    public StaticVariableReference Name => GetReference("Name");
 
     /// <summary>
     /// The type of the triggering repository.
@@ -416,7 +416,7 @@ public sealed class RepositoryVariableReference : VariableReferenceBase
     ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference Provider => GetReference("Provider");
+    public StaticVariableReference Provider => GetReference("Provider");
 
     /// <summary>
     /// Defined if your repository is Team Foundation Version Control. The name of the TFVC workspace used by the build agent.
@@ -424,7 +424,7 @@ public sealed class RepositoryVariableReference : VariableReferenceBase
     ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference TfvcWorkspace => GetReference("Tfvc.Workspace");
+    public StaticVariableReference TfvcWorkspace => GetReference("Tfvc.Workspace");
 
     /// <summary>
     /// The URL for the triggering repository. For example:
@@ -433,14 +433,14 @@ public sealed class RepositoryVariableReference : VariableReferenceBase
     ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference Uri => GetReference("Uri");
+    public StaticVariableReference Uri => GetReference("Uri");
 
     /// <summary>
     /// The value you've selected for Checkout submodules on the repository tab. With multiple repos checked out, this value tracks the triggering repository's setting.
     ///
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference GitSubmoduleCheckout => GetReference("Git.SubmoduleCheckout");
+    public StaticVariableReference GitSubmoduleCheckout => GetReference("Git.SubmoduleCheckout");
 }
 
 public sealed class TriggeredByVariableReference : VariableReferenceBase
@@ -457,7 +457,7 @@ public sealed class TriggeredByVariableReference : VariableReferenceBase
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// If you are triggering a YAML pipeline using resources, you should use the resources variables instead.
     /// </summary>
-    public VariableReference BuildId => GetReference("BuildId");
+    public StaticVariableReference BuildId => GetReference("BuildId");
 
     /// <summary>
     /// If the build was triggered by another build, then this variable is set to the DefinitionID of the triggering build. In Classic pipelines, this variable is triggered by a build completion trigger.
@@ -465,7 +465,7 @@ public sealed class TriggeredByVariableReference : VariableReferenceBase
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// If you are triggering a YAML pipeline using resources, you should use the resources variables instead.
     /// </summary>
-    public VariableReference DefinitionId => GetReference("DefinitionId");
+    public StaticVariableReference DefinitionId => GetReference("DefinitionId");
 
     /// <summary>
     /// If the build was triggered by another build, then this variable is set to the name of the triggering build pipeline. In Classic pipelines, this variable is triggered by a build completion trigger.
@@ -473,7 +473,7 @@ public sealed class TriggeredByVariableReference : VariableReferenceBase
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// If you are triggering a YAML pipeline using resources, you should use the resources variables instead.
     /// </summary>
-    public VariableReference DefinitionName => GetReference("DefinitionName");
+    public StaticVariableReference DefinitionName => GetReference("DefinitionName");
 
     /// <summary>
     /// If the build was triggered by another build, then this variable is set to the number of the triggering build. In Classic pipelines, this variable is triggered by a build completion trigger.
@@ -481,7 +481,7 @@ public sealed class TriggeredByVariableReference : VariableReferenceBase
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// If you are triggering a YAML pipeline using resources, you should use the resources variables instead.
     /// </summary>
-    public VariableReference BuildNumber => GetReference("BuildNumber");
+    public StaticVariableReference BuildNumber => GetReference("BuildNumber");
 
     /// <summary>
     /// If the build was triggered by another build, then this variable is set to ID of the project that contains the triggering build. In Classic pipelines, this variable is triggered by a build completion trigger.
@@ -489,7 +489,7 @@ public sealed class TriggeredByVariableReference : VariableReferenceBase
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// If you are triggering a YAML pipeline using resources, you should use the resources variables instead.
     /// </summary>
-    public VariableReference ProjectID => GetReference("ProjectID");
+    public StaticVariableReference ProjectID => GetReference("ProjectID");
 }
 
 public sealed class SystemVariableReference : VariableReferenceBase
@@ -511,23 +511,23 @@ public sealed class SystemVariableReference : VariableReferenceBase
     /// Use System.AccessToken from YAML scripts.
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference AccessToken => GetReference("AccessToken");
+    public StaticVariableReference AccessToken => GetReference("AccessToken");
 
     /// <summary>
     /// Variable that can be set for a pipeline run manually (either true or false).
     /// </summary>
-    public VariableReference Debug => GetReference("Debug");
+    public StaticVariableReference Debug => GetReference("Debug");
 
     /// <summary>
     /// The GUID of the TFS collection or Azure DevOps organization.
     /// </summary>
-    public VariableReference CollectionId => GetReference("CollectionId");
+    public StaticVariableReference CollectionId => GetReference("CollectionId");
 
     /// <summary>
     /// The URI of the TFS collection or Azure DevOps organization.
     /// For example: https://dev.azure.com/fabrikamfiber/.
     /// </summary>
-    public VariableReference CollectionUri => GetReference("CollectionUri");
+    public StaticVariableReference CollectionUri => GetReference("CollectionUri");
 
     /// <summary>
     /// The local path on the agent where your source code files are downloaded.
@@ -536,37 +536,37 @@ public sealed class SystemVariableReference : VariableReferenceBase
     /// You can modify how files are downloaded on the Repository tab.
     /// This variable is agent-scoped. It can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference DefaultWorkingDirectory => GetReference("DefaultWorkingDirectory");
+    public StaticVariableReference DefaultWorkingDirectory => GetReference("DefaultWorkingDirectory");
 
     /// <summary>
     /// The ID of the build pipeline.
     /// </summary>
-    public VariableReference DefinitionId => GetReference("DefinitionId");
+    public StaticVariableReference DefinitionId => GetReference("DefinitionId");
 
     /// <summary>
     /// Set to build if the pipeline is a build. For a release, the values are deployment for a Deployment group job, gates during evaluation of gates, and release for other (Agent and Agentless) jobs.
     /// </summary>
-    public VariableReference HostType => GetReference("HostType");
+    public StaticVariableReference HostType => GetReference("HostType");
 
     /// <summary>
     /// Set to 1 the first time this job is attempted, and increments every time the job is retried.
     /// </summary>
-    public VariableReference JobAttempt => GetReference("JobAttempt");
+    public StaticVariableReference JobAttempt => GetReference("JobAttempt");
 
     /// <summary>
     /// The human-readable name given to a job.
     /// </summary>
-    public VariableReference JobDisplayName => GetReference("JobDisplayName");
+    public StaticVariableReference JobDisplayName => GetReference("JobDisplayName");
 
     /// <summary>
     /// A unique identifier for a single attempt of a single job. The value is unique to the current pipeline.
     /// </summary>
-    public VariableReference JobId => GetReference("JobId");
+    public StaticVariableReference JobId => GetReference("JobId");
 
     /// <summary>
     /// The name of the job, typically used for expressing dependencies and accessing output variables.
     /// </summary>
-    public VariableReference JobName => GetReference("JobName");
+    public StaticVariableReference JobName => GetReference("JobName");
 
     /// <summary>
     /// Set to 1 the first time this phase is attempted, and increments every time the job is retried.
@@ -574,49 +574,49 @@ public sealed class SystemVariableReference : VariableReferenceBase
     /// We've mostly removed the concept of "phase" from Azure Pipelines. Matrix and multi-config jobs are the only place where "phase" is still distinct from "job".
     /// One phase can instantiate multiple jobs which differ only in their inputs.
     /// </summary>
-    public VariableReference PhaseAttempt => GetReference("PhaseAttempt");
+    public StaticVariableReference PhaseAttempt => GetReference("PhaseAttempt");
 
     /// <summary>
     /// The human-readable name given to a phase.
     /// </summary>
-    public VariableReference PhaseDisplayName => GetReference("PhaseDisplayName");
+    public StaticVariableReference PhaseDisplayName => GetReference("PhaseDisplayName");
 
     /// <summary>
     /// A string-based identifier for a job, typically used for expressing dependencies and accessing output variables.
     /// </summary>
-    public VariableReference PhaseName => GetReference("PhaseName");
+    public StaticVariableReference PhaseName => GetReference("PhaseName");
 
     /// <summary>
     /// Set to 1 the first time this stage is attempted, and increments every time the job is retried.
     /// </summary>
-    public VariableReference StageAttempt => GetReference("StageAttempt");
+    public StaticVariableReference StageAttempt => GetReference("StageAttempt");
 
     /// <summary>
     /// The human-readable name given to a stage.
     /// </summary>
-    public VariableReference StageDisplayName => GetReference("StageDisplayName");
+    public StaticVariableReference StageDisplayName => GetReference("StageDisplayName");
 
     /// <summary>
     /// A string-based identifier for a stage, typically used for expressing dependencies and accessing output variables.
     /// </summary>
-    public VariableReference StageName => GetReference("StageName");
+    public StaticVariableReference StageName => GetReference("StageName");
 
     /// <summary>
     /// The URI of the TFS collection or Azure DevOps organization.
     /// For example: https://dev.azure.com/fabrikamfiber/.
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference TeamFoundationCollectionUri => GetReference("TeamFoundationCollectionUri");
+    public StaticVariableReference TeamFoundationCollectionUri => GetReference("TeamFoundationCollectionUri");
 
     /// <summary>
     /// The name of the project that contains this build.
     /// </summary>
-    public VariableReference TeamProject => GetReference("TeamProject");
+    public StaticVariableReference TeamProject => GetReference("TeamProject");
 
     /// <summary>
     /// The ID of the project that this build belongs to.
     /// </summary>
-    public VariableReference TeamProjectId => GetReference("TeamProjectId");
+    public StaticVariableReference TeamProjectId => GetReference("TeamProjectId");
 }
 
 public sealed class PullRequestVariableReference : VariableReferenceBase
@@ -630,21 +630,21 @@ public sealed class PullRequestVariableReference : VariableReferenceBase
     /// <summary>
     /// If the pull request is from a fork of the repository, this variable is set to True. Otherwise, it is set to False.
     /// </summary>
-    public VariableReference IsFork => GetReference("IsFork");
+    public StaticVariableReference IsFork => GetReference("IsFork");
 
     /// <summary>
     /// The ID of the pull request that caused this build.
     /// For example: 17.
     /// (This variable is initialized only if the build ran because of a Git PR affected by a branch policy).
     /// </summary>
-    public VariableReference PullRequestId => GetReference("PullRequestId");
+    public StaticVariableReference PullRequestId => GetReference("PullRequestId");
 
     /// <summary>
     /// The number of the pull request that caused this build.
     /// This variable is populated for pull requests from GitHub which have a different pull request ID and pull request number.
     /// This variable is only available in a YAML pipeline if the PR is a affected by a branch policy.
     /// </summary>
-    public VariableReference PullRequestNumber => GetReference("PullRequestNumber");
+    public StaticVariableReference PullRequestNumber => GetReference("PullRequestNumber");
 
     /// <summary>
     /// The branch that is being reviewed in a pull request.
@@ -652,13 +652,13 @@ public sealed class PullRequestVariableReference : VariableReferenceBase
     /// (This variable is initialized only if the build ran because of a Git PR affected by a branch policy).
     /// This variable is only available in a YAML pipeline if the PR is affected by a branch policy.
     /// </summary>
-    public VariableReference SourceBranch => GetReference("SourceBranch");
+    public StaticVariableReference SourceBranch => GetReference("SourceBranch");
 
     /// <summary>
     /// The URL to the repo that contains the pull request.
     /// For example: https://dev.azure.com/ouraccount/_git/OurProject.
     /// </summary>
-    public VariableReference SourceRepositoryURI => GetReference("SourceRepositoryURI");
+    public StaticVariableReference SourceRepositoryURI => GetReference("SourceRepositoryURI");
 
     /// <summary>
     /// The branch that is the target of a pull request.
@@ -666,7 +666,7 @@ public sealed class PullRequestVariableReference : VariableReferenceBase
     /// This variable is initialized only if the build ran because of a Git PR affected by a branch policy.
     /// This variable is only available in a YAML pipeline if the PR is affected by a branch policy.
     /// </summary>
-    public VariableReference TargetBranch => GetReference("TargetBranch");
+    public StaticVariableReference TargetBranch => GetReference("TargetBranch");
 }
 
 public sealed class PipelineVariableReference : VariableReferenceBase
@@ -681,7 +681,7 @@ public sealed class PipelineVariableReference : VariableReferenceBase
     /// Workspace directory for a particular pipeline. This variable has the same value as Agent.BuildDirectory.
     /// For example: /home/vsts/work/1
     /// </summary>
-    public VariableReference Workspace => GetReference("Workspace");
+    public StaticVariableReference Workspace => GetReference("Workspace");
 }
 
 public sealed class EnvironmentVariableReference : VariableReferenceBase
@@ -696,25 +696,25 @@ public sealed class EnvironmentVariableReference : VariableReferenceBase
     /// Name of the environment targeted in the deployment job to run the deployment steps and record the deployment history.
     /// For example: smarthotel-dev
     /// </summary>
-    public VariableReference Name => GetReference("Name");
+    public StaticVariableReference Name => GetReference("Name");
 
     /// <summary>
     /// ID of the environment targeted in the deployment job.
     /// For example: 10
     /// </summary>
-    public VariableReference Id => GetReference("Id");
+    public StaticVariableReference Id => GetReference("Id");
 
     /// <summary>
     /// Name of the specific resource within the environment targeted in the deployment job to run the deployment steps and record the deployment history.
     /// For example, bookings which is a Kubernetes namespace that has been added as a resource to the environment smarthotel-dev.
     /// </summary>
-    public VariableReference ResourceName => GetReference("ResourceName");
+    public StaticVariableReference ResourceName => GetReference("ResourceName");
 
     /// <summary>
     /// ID of the specific resource within the environment targeted in the deployment job to run the deployment steps.
     /// For example: 4
     /// </summary>
-    public VariableReference ResourceId => GetReference("ResourceId");
+    public StaticVariableReference ResourceId => GetReference("ResourceId");
 }
 
 public sealed class StrategyVariableReference : VariableReferenceBase
@@ -728,12 +728,12 @@ public sealed class StrategyVariableReference : VariableReferenceBase
     /// <summary>
     /// The name of the deployment strategy: canary, runOnce, or rolling.
     /// </summary>
-    public VariableReference Name => GetReference("Name");
+    public StaticVariableReference Name => GetReference("Name");
 
     /// <summary>
     /// The current cycle name in a deployment: PreIteration, Iteration, or PostIteration.
     /// </summary>
-    public VariableReference CycleName => GetReference("CycleName");
+    public StaticVariableReference CycleName => GetReference("CycleName");
 }
 
 public sealed class ChecksVariableReference : VariableReferenceBase
@@ -748,5 +748,5 @@ public sealed class ChecksVariableReference : VariableReferenceBase
     /// Set to 1 the first time this stage is attempted, and increments every time the stage is retried.
     /// This variable can only be used within an approval or check for an environment.For example, you could use $(Checks.StageAttempt) within an Invoke REST API check.
     /// </summary>
-    public VariableReference StageAttempt => GetReference("StageAttempt");
+    public StaticVariableReference StageAttempt => GetReference("StageAttempt");
 }
