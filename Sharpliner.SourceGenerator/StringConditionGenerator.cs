@@ -311,6 +311,7 @@ public class StringConditionGenerator : ISourceGenerator
 
     private static void WriteMethodBody(TextWriter classBuilder, BaseMethodDeclarationSyntax methodDeclarationSyntax)
     {
+        // TODO - Convert array types to string[]
         if (!string.IsNullOrEmpty(methodDeclarationSyntax.ExpressionBody?.ToString()))
         {
             classBuilder.Write(methodDeclarationSyntax.ExpressionBody);

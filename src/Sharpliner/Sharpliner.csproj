@@ -3,6 +3,9 @@
   <PropertyGroup>
     <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
 
+    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+    <CompilerGeneratedFilesOutputPath>generated</CompilerGeneratedFilesOutputPath>
+
     <!-- NuGet details -->
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/sharpliner/sharpliner</RepositoryUrl>
