@@ -381,7 +381,7 @@ public class ConditionalsTests
                             Condition = If.StartsWith(parameters["Param1"], "Param")
                         }
                     },
-                    Condition = If.StartsWith(parameters["Param1"], "Param")
+                    Condition = StartsWith(parameters["Param1"], "Param")
                 }
             }
         };

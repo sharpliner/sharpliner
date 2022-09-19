@@ -6,7 +6,7 @@ namespace Sharpliner.SourceGenerator;
 internal class StringConditionAttributeSyntaxReceiver : ISyntaxContextReceiver
 {
     public List<IMethodSymbol> IdentifiedMethods { get; } = new();
-    public List<ITypeSymbol> IdentifiedClasses { get; } = new();
+    public List<INamedTypeSymbol> IdentifiedClasses { get; } = new();
 
     public void OnVisitSyntaxNode(GeneratorSyntaxContext context)
     {
@@ -25,7 +25,7 @@ internal class StringConditionAttributeSyntaxReceiver : ISyntaxContextReceiver
 
     private void ProcessClass(GeneratorSyntaxContext context, ClassDeclarationSyntax classDeclarationSyntax)
     {
-        if (IsValid(context, classDeclarationSyntax, out ITypeSymbol? typeSymbol))
+        if (IsValid(context, classDeclarationSyntax, out INamedTypeSymbol? typeSymbol))
         {
             IdentifiedClasses.Add(typeSymbol);
         }
@@ -58,6 +58,5 @@ internal class StringConditionAttributeSyntaxReceiver : ISyntaxContextReceiver
 
         outSymbol = tSymbol;
         return true;
-
     }
 }

@@ -160,13 +160,8 @@ public class IfNotCondition : IfCondition
 }
 
 [StringCondition]
-public class IfEqualityCondition : IfStringCondition
+public partial class IfEqualityCondition : IfStringCondition
 {
-    internal IfEqualityCondition(bool equal, StaticVariableReference expression1, string expression2)
-        : this(equal, expression1.RuntimeExpression, expression2)
-    {
-    }
-
     internal IfEqualityCondition(bool equal, string expression1, string expression2)
         : base(equal ? "eq" : "ne", expression1, expression2)
     {
@@ -174,13 +169,8 @@ public class IfEqualityCondition : IfStringCondition
 }
 
 [StringCondition]
-public class InlineEqualityCondition : InlineStringCondition
+public partial class InlineEqualityCondition : InlineStringCondition
 {
-    internal InlineEqualityCondition(bool equal, StaticVariableReference expression1, string expression2)
-        : this(equal, expression1.RuntimeExpression, expression2)
-    {
-    }
-
     internal InlineEqualityCondition(bool equal, string expression1, string expression2)
         : base(equal ? "eq" : "ne", expression1, expression2)
     {
@@ -540,11 +530,6 @@ public class ElseCondition<T> : IfCondition<T>
 
 public class InlineEqualityCondition<T> : InlineStringCondition<T>
 {
-    internal InlineEqualityCondition(bool equal, StaticVariableReference expression1, string expression2)
-        : this(equal, expression1.RuntimeExpression, expression2)
-    {
-    }
-
     internal InlineEqualityCondition(bool equal, string expression1, string expression2)
         : base(equal ? "eq" : "ne", expression1, expression2)
     {
@@ -553,11 +538,6 @@ public class InlineEqualityCondition<T> : InlineStringCondition<T>
 
 public class IfEqualityCondition<T> : IfStringCondition<T>
 {
-    internal IfEqualityCondition(bool equal, StaticVariableReference expression1, string expression2)
-        : this(equal, expression1.RuntimeExpression, expression2)
-    {
-    }
-
     internal IfEqualityCondition(bool equal, string expression1, string expression2)
         : base(equal ? "eq" : "ne", expression1, expression2)
     {
