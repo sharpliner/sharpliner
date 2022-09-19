@@ -12,7 +12,7 @@ public abstract record Conditioned : IYamlConvertible
     /// <summary>
     /// Evaluated textual representation of the condition, e.g. "ne('foo', 'bar')".
     /// </summary>
-    internal Condition? Condition { get; set; }
+    internal IfCondition? Condition { get; set; }
 
     /// <summary>
     /// Pointer in case of nested conditional blocks.
@@ -29,7 +29,7 @@ public abstract record Conditioned : IYamlConvertible
     /// </summary>
     internal bool IsList { get; set; } = false;
 
-    protected Conditioned(Condition? condition)
+    protected Conditioned(IfCondition? condition)
     {
         Condition = condition;
     }
@@ -55,7 +55,7 @@ public abstract record Conditioned : IYamlConvertible
     /// <param name="condition">Parent condition</param>
     /// <param name="definition">Definition that was added below the condition</param>
     /// <returns>The conditioned definition coming out of the inputs</returns>
-    internal static Conditioned<T> Link<T>(Condition condition, T definition)
+    internal static Conditioned<T> Link<T>(IfCondition condition, T definition)
     {
         var conditionedDefinition = new Conditioned<T>(definition, condition);
         condition.Parent?.Definitions.Add(conditionedDefinition);
@@ -69,7 +69,7 @@ public abstract record Conditioned : IYamlConvertible
     /// <param name="condition">Parent condition</param>
     /// <param name="conditionedDefinition">Definition that was added below the condition</param>
     /// <returns>The conditioned definition coming out of the inputs</returns>
-    internal static Conditioned<T> Link<T>(Condition condition, Conditioned<T> conditionedDefinition)
+    internal static Conditioned<T> Link<T>(IfCondition condition, Conditioned<T> conditionedDefinition)
     {
         condition.Parent?.Definitions.Add(conditionedDefinition);
         conditionedDefinition.Parent = condition.Parent;
@@ -82,7 +82,7 @@ public abstract record Conditioned : IYamlConvertible
     /// <param name="condition">Parent condition</param>
     /// <param name="items">Items to add to a condition</param>
     /// <returns>The conditioned definition coming out of the inputs</returns>
-    internal static Conditioned<T> Link<T>(Condition condition, IEnumerable<Conditioned<T>> items)
+    internal static Conditioned<T> Link<T>(IfCondition condition, IEnumerable<Conditioned<T>> items)
     {
         var conditionedDefinition = new Conditioned<T>(default!, condition);
         conditionedDefinition.Definitions.AddRange(items);
@@ -97,7 +97,7 @@ public abstract record Conditioned : IYamlConvertible
     /// <param name="condition">Parent condition</param>
     /// <param name="template">Definition that was added below the condition</param>
     /// <returns>The conditioned definition coming out of the inputs</returns>
-    internal static Conditioned<T> Link<T>(Condition condition, Template<T> template)
+    internal static Conditioned<T> Link<T>(IfCondition condition, Template<T> template)
     {
         if (condition.Parent == null)
         {
@@ -131,7 +131,7 @@ public record Conditioned<T> : Conditioned
     /// </summary>
     internal T? Definition { get; }
 
-    internal Conditioned(T definition, Condition condition) : base(condition)
+    internal Conditioned(T definition, IfCondition condition) : base(condition)
     {
         Definition = definition;
     }
@@ -141,11 +141,11 @@ public record Conditioned<T> : Conditioned
         Definition = definition;
     }
 
-    protected Conditioned(Condition? condition) : base(condition)
+    protected Conditioned(IfCondition? condition) : base(condition)
     {
     }
 
-    protected Conditioned() : base((Condition?)null)
+    protected Conditioned() : base((IfCondition?)null)
     {
     }
 
@@ -233,7 +233,7 @@ public record Conditioned<T> : Conditioned
     {
         if (Condition != null)
         {
-            emitter.Emit(new Scalar(Condition.TagStart + Condition.RemoveTags(Condition) + Condition.TagEnd));
+            emitter.Emit(new Scalar(Condition.TagStart + Condition.RemoveBraces() + Condition.TagEnd));
         }
         else if (Definitions.Count > 0)
         {

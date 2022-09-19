@@ -15,7 +15,7 @@ public class StringConditionGenerator : ISourceGenerator
 #if DEBUG
         if (!Debugger.IsAttached)
         {
-            //Debugger.Launch();
+            Debugger.Launch();
         }
 #endif
 
@@ -122,7 +122,7 @@ public class StringConditionGenerator : ISourceGenerator
         }
         classBuilder.WriteLine("}");
 
-        if (@class.Name.StartsWith("InlineBranchCondition"))
+        if (@class.Name.StartsWith("IfBranchCondition"))
         {
             Console.WriteLine("BREAK");
         }
@@ -133,12 +133,12 @@ public class StringConditionGenerator : ISourceGenerator
     private void WriteConstructor(INamedTypeSymbol @class, PossibleType possibleType, PossibleType possibleType2,
         CodeGenerationTextWriter classBuilder, IMethodSymbol constructor)
     {
-        var newClassName = @class.Name.Replace(
-            PossibleType.String.ShortName,
-            $"{possibleType.ShortName}{possibleType2.ShortName}"
-        );
+        // var newClassName = @class.Name.Replace(
+        //     PossibleType.String.ShortName,
+        //     $"{possibleType.ShortName}{possibleType2.ShortName}"
+        // );
 
-        classBuilder.WriteLine($"public partial class {newClassName}{GetGenericType(@class)}");
+        classBuilder.WriteLine($"public partial class {@class.Name}{GetGenericType(@class)}");
         classBuilder.WriteLine("{");
 
         WriteConstructor(classBuilder, constructor, possibleType, possibleType2);
