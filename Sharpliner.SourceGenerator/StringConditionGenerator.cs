@@ -72,7 +72,8 @@ public class StringConditionGenerator : ISourceGenerator
         classBuilder.WriteLine(context.GetUsingStatementsForTypes(
             typeof(string),
             typeof(StringConditionAttribute),
-            typeof(CallerMemberNameAttribute)
+            typeof(CallerMemberNameAttribute),
+            typeof(IEnumerable<>)
         ));
         classBuilder.WriteLine("using Sharpliner.AzureDevOps.ConditionedExpressions;");
         classBuilder.WriteLine();
@@ -91,8 +92,23 @@ public class StringConditionGenerator : ISourceGenerator
         // TODO If(has attribute ArrayType param1) typesParam1.Add(Array);
         // TODO If(has attribute ArrayType param2) typesParam2.Add(Array);
 
+        var constructor = @class.Constructors.First();
+        var countOfStringParameters = @constructor.Parameters.Count(p => p.Type.SpecialType == SpecialType.System_String);
+
         foreach (var possibleType in possibleTypesForParameter1)
         {
+            if (countOfStringParameters == 1)
+            {
+                if (possibleType == PossibleType.String)
+                {
+                    // Already defined manually.
+                    continue;
+                }
+
+                WriteConstructor(@class, possibleType, null, classBuilder, constructor);
+                continue;
+            }
+
             foreach (var possibleType2 in possibleTypesForParameter2)
             {
                 if (possibleType == PossibleType.String && possibleType2 == PossibleType.String)
@@ -101,27 +117,36 @@ public class StringConditionGenerator : ISourceGenerator
                     continue;
                 }
 
-                var newClassName = @class.Name.Replace(
-                    PossibleType.String.ShortName,
-                    $"{possibleType.ShortName}{possibleType2.ShortName}"
-                );
-
-                classBuilder.WriteLine($"public partial class {newClassName}{GetGenericType(@class)}");
-                classBuilder.WriteLine("{");
-
-                var constructor = @class.Constructors.First();
-
-                WriteConstructor(classBuilder, constructor, possibleType, possibleType2);
-
-                classBuilder.WriteLine("}");
+                WriteConstructor(@class, possibleType, possibleType2, classBuilder, constructor);
             }
         }
         classBuilder.WriteLine("}");
 
+        if (@class.Name.StartsWith("InlineBranchCondition"))
+        {
+            Console.WriteLine("BREAK");
+        }
+
         return classBuilder.ToString();
     }
 
-    private void WriteConstructor(CodeGenerationTextWriter classBuilder, IMethodSymbol constructor, PossibleType possibleType, PossibleType possibleType2)
+    private void WriteConstructor(INamedTypeSymbol @class, PossibleType possibleType, PossibleType possibleType2,
+        CodeGenerationTextWriter classBuilder, IMethodSymbol constructor)
+    {
+        var newClassName = @class.Name.Replace(
+            PossibleType.String.ShortName,
+            $"{possibleType.ShortName}{possibleType2.ShortName}"
+        );
+
+        classBuilder.WriteLine($"public partial class {newClassName}{GetGenericType(@class)}");
+        classBuilder.WriteLine("{");
+
+        WriteConstructor(classBuilder, constructor, possibleType, possibleType2);
+
+        classBuilder.WriteLine("}");
+    }
+
+    private void WriteConstructor(CodeGenerationTextWriter classBuilder, IMethodSymbol constructor, PossibleType possibleType, PossibleType? possibleType2)
     {
         var methodDeclarationSyntax = constructor.DeclaringSyntaxReferences
             .Select(s => s.GetSyntax())
@@ -133,11 +158,14 @@ public class StringConditionGenerator : ISourceGenerator
 
         var newConstructor = methodDeclarationSyntax.WithBody(null).ToFullString()
             .Replace($"string {parameter1Name}", $"{possibleType.ClassName} {parameter1Name}")
-            .Replace($"string[] {parameter1Name}", $"{possibleType.ClassName}[] {parameter1Name}")
+            .Replace($"string[] {parameter1Name}", $"{possibleType.ClassName}[] {parameter1Name}");
 
-            .Replace($"string {parameter2Name}", $"{possibleType2.ClassName} {parameter2Name}")
-            .Replace($"string[] {parameter2Name}", $"{possibleType2.ClassName}[] {parameter2Name}")
-            .Trim();
+        if (possibleType2 != null && parameter2Name != null)
+        {
+            newConstructor = newConstructor.Replace($"string {parameter2Name}", $"{possibleType2.ClassName} {parameter2Name}")
+                .Replace($"string[] {parameter2Name}", $"{possibleType2.ClassName}[] {parameter2Name}")
+                .Trim();
+        }
 
         classBuilder.WriteLine(newConstructor);
         classBuilder.WriteLine("{");
@@ -151,7 +179,8 @@ public class StringConditionGenerator : ISourceGenerator
         classBuilder.WriteLine(context.GetUsingStatementsForTypes(
             typeof(string),
             typeof(StringConditionAttribute),
-            typeof(CallerMemberNameAttribute)
+            typeof(CallerMemberNameAttribute),
+            typeof(IEnumerable<>)
             ));
         classBuilder.WriteLine("using Sharpliner.AzureDevOps.ConditionedExpressions;");
         classBuilder.WriteLine();
@@ -172,6 +201,8 @@ public class StringConditionGenerator : ISourceGenerator
 
             var isInlineConditionClass = methodSymbol.ReturnType.Name.StartsWith("Inline");
 
+            var isArrayType = methodParameters.Any(p => p.Type.ToDisplayString(SymbolDisplayFormats.NamespaceAndType) == typeof(string[]).FullName);
+
             var possibleTypes = isInlineConditionClass
                 ? PossibleType.InlinePossibleTypes
                 : PossibleType.IfPossibleTypes;
@@ -183,9 +214,14 @@ public class StringConditionGenerator : ISourceGenerator
             {
                 foreach (var parameter2 in possibleTypesForParameter2)
                 {
-                    if (methodParameters.Any(p =>
-                            p.Type.ToDisplayString(SymbolDisplayFormats.NamespaceAndType) == typeof(string[]).FullName))
+                    if (isArrayType)
                     {
+                        if (parameter1 == PossibleType.String && parameter2 == PossibleType.String)
+                        {
+                            // These are already declared by the base code.
+                            continue;
+                        }
+
                         WriteArrayMethod(classBuilder, methodSymbol, methodDeclarationSyntax, parameter1.ClassName,
                             parameter2.ClassName + "[]");
                         continue;
@@ -202,6 +238,13 @@ public class StringConditionGenerator : ISourceGenerator
                         WriteTwoStrings(classBuilder, methodSymbol, methodDeclarationSyntax, parameter1.ClassName, parameter2.ClassName);
                         continue;
                     }
+                }
+
+                if (isArrayType)
+                {
+                    WriteArrayMethod(classBuilder, methodSymbol, methodDeclarationSyntax, parameter1.ClassName,
+                        PossibleType.ObjectArray.ClassName);
+                    continue;
                 }
 
                 if (countOfStringParameters == 1)
@@ -285,9 +328,9 @@ public class StringConditionGenerator : ISourceGenerator
         classBuilder.WriteLine();
     }
 
-    private static string GetParameterName(IMethodSymbol methodSymbol, int index) =>
+    private static string? GetParameterName(IMethodSymbol methodSymbol, int index) =>
         methodSymbol.Parameters.Where(x =>
             x.Type.ToDisplayString(SymbolDisplayFormats.NamespaceAndType) == typeof(string).FullName
             || x.Type.ToDisplayString(SymbolDisplayFormats.NamespaceAndType) == typeof(string[]).FullName
-        ).ToList()[index - 1].Name;
+        ).ToList().ElementAtOrDefault(index - 1)?.Name;
 }
