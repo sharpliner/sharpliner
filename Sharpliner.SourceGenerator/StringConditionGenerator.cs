@@ -15,7 +15,7 @@ public class StringConditionGenerator : ISourceGenerator
 #if DEBUG
         if (!Debugger.IsAttached)
         {
-            Debugger.Launch();
+            //Debugger.Launch();
         }
 #endif
 

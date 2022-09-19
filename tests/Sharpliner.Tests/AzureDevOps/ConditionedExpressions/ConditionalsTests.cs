@@ -375,10 +375,10 @@ public class ConditionalsTests
                             {
                                 Script.Inline("echo Does this condition work?") with
                                 {
-                                    Condition = If.StartsWith(parameters["Param1"], "Param")
+                                    Condition = StartsWith(parameters["Param1"], "Param")
                                 }
                             },
-                            Condition = If.StartsWith(parameters["Param1"], "Param")
+                            Condition = StartsWith(parameters["Param1"], "Param")
                         }
                     },
                     Condition = StartsWith(parameters["Param1"], "Param")

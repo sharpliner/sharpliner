@@ -7,10 +7,15 @@ public abstract class IfCondition : Condition
     internal const string IfExpressionStart = $"{ExpressionStart}if ";
     internal static string RemoveBraces(IfCondition condition)
     {
-        return condition.Serialize().TrimStart($"{ExpressionStart} if ").TrimEnd($" {ExpressionEnd}");
+        return RemoveBraces(condition.Serialize());
     }
 
     internal string RemoveBraces() => RemoveBraces(this);
+
+    internal static string RemoveBraces(string condition)
+    {
+        return condition.TrimStart($"{ExpressionStart} if ").TrimEnd($" {ExpressionEnd}");
+    }
 
     internal static string WrapBraces(string condition) =>
         IfExpressionStart + condition + Condition.ExpressionEnd;

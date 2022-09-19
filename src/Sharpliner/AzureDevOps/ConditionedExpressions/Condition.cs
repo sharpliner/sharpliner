@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sharpliner.SourceGenerator;
+using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 
@@ -10,7 +13,7 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 /// When we build trees of definitions with conditions on them, we either start with a definition or a condition.
 /// A condition then has to evolve into a conditioned definition (so that we have something inside the "if").
 /// </summary>
-public abstract class Condition
+public abstract class Condition : IYamlConvertible
 {
     protected Condition()
     {
@@ -85,6 +88,11 @@ public abstract class Condition
 
         return $"'{value}'";
     }
+
+    public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
+
+    public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer) =>
+        emitter.Emit(new Scalar(Serialize()));
 }
 
 /// <summary>
@@ -136,7 +144,7 @@ public class InlineNotCondition : InlineCondition
 
     internal InlineNotCondition(string condition)
     {
-        _condition = NotConditionHelper.NegateCondition(RemoveTags(condition));
+        _condition = NotConditionHelper.NegateCondition(condition);
     }
 
     internal override string Serialize() => _condition;
@@ -153,7 +161,7 @@ public class IfNotCondition : IfCondition
 
     internal IfNotCondition(string condition)
     {
-        _condition = NotConditionHelper.NegateCondition(RemoveTags(condition));
+        _condition = NotConditionHelper.NegateCondition(RemoveBraces(condition));
     }
 
     internal override string Serialize() => WrapBraces(_condition);
@@ -516,14 +524,14 @@ public class IfNotCondition<T> : IfCondition<T>
 {
     private readonly string _condition;
 
-    internal IfNotCondition(Condition condition)
-        : this(condition.Serialize())
+    internal IfNotCondition(IfCondition condition)
+        : this(condition.RemoveBraces())
     {
     }
 
     internal IfNotCondition(string condition)
     {
-        _condition = NotConditionHelper.NegateCondition(condition);
+        _condition = NotConditionHelper.NegateCondition(RemoveBraces(condition));
     }
 
     internal override string Serialize() => _condition;
