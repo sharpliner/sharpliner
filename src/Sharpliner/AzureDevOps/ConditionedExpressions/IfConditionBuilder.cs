@@ -19,7 +19,7 @@ public partial class IfConditionBuilder
     /// <summary>
     /// Specify any condition
     /// </summary>
-    public IfCondition IfCondition(string condition)
+    public IfCondition Condition(string condition)
         => Link(new IfCustomCondition(condition));
 
     public IfCondition Equal(IfCondition condition)
