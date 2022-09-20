@@ -45,11 +45,7 @@ internal class StringConditionAttributeSyntaxReceiver : ISyntaxContextReceiver
         outSymbol = default;
         var nodeSymbol = context.SemanticModel.GetDeclaredSymbol(methodDeclarationSyntax);
 
-        var attributes = nodeSymbol
-            .GetAttributes()
-            .Where(a => a.AttributeClass.ToDisplayString(SymbolDisplayFormats.NamespaceAndType) ==
-                        typeof(StringConditionAttribute).FullName)
-            .ToList();
+        var attributes = nodeSymbol.GetAttributes<StringConditionAttribute>();
 
         if (!attributes.Any() || nodeSymbol is not TSymbol tSymbol)
         {
