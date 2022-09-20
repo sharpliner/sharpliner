@@ -67,6 +67,16 @@ public abstract class InlineStringCondition : InlineCondition
         return string.Join(", ", convertedStringArray);
     }
 
+    protected static string Serialize(string value)
+    {
+        return value;
+    }
+
+    protected static string[] Serialize(string[] value)
+    {
+        return value;
+    }
+
     internal override string Serialize() => $"{_keyword}({_one}, {_two})";
 }
 
@@ -100,5 +110,15 @@ public abstract class InlineStringCondition<T> : InlineStringCondition
         : this(keyword, one, Join(two), parent)
     {
         Parent = parent;
+    }
+
+    protected static string Serialize(string value)
+    {
+        return value;
+    }
+
+    protected static string[] Serialize(string[] value)
+    {
+        return value;
     }
 }

@@ -59,6 +59,16 @@ public abstract class IfStringCondition : IfCondition
         return IfStringConditionHelper.Serialize(array);
     }
 
+    protected static string Serialize(string value)
+    {
+        return value;
+    }
+
+    protected static string[] Serialize(string[] value)
+    {
+        return value;
+    }
+
     internal override string Serialize() => WrapBraces($"{_keyword}({_one}, {_two})");
 }
 
@@ -120,6 +130,16 @@ public abstract class IfStringCondition<T> : IfCondition<T>
     protected static string Serialize(IEnumerable<object> array)
     {
         return IfStringConditionHelper.Serialize(array);
+    }
+
+    protected static string Serialize(string value)
+    {
+        return value;
+    }
+
+    protected static string[] Serialize(string[] value)
+    {
+        return value;
     }
 
     internal override string Serialize() => WrapBraces($"{_keyword}({_one}, {_two})");

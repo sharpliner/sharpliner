@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Text;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
@@ -15,7 +16,7 @@ public class StringConditionGenerator : ISourceGenerator
 #if DEBUG
         if (!Debugger.IsAttached)
         {
-           //Debugger.Launch();
+           Debugger.Launch();
         }
 #endif
 
@@ -153,7 +154,8 @@ public class StringConditionGenerator : ISourceGenerator
 
             classBuilder.Write(string.Join(", ", newParameters));
 
-            classBuilder.WriteLine($") {constructorDeclarationSyntax.Initializer}");
+            classBuilder.WriteLine($") {constructorDeclarationSyntax.Initializer?.WithArgumentsInSerializeMethodCall()}");
+
             classBuilder.WriteLine("{");
             classBuilder.WriteLine("}");
         }

@@ -22,6 +22,35 @@ public static class SourceGeneratorExtensions
             .First();
     }
 
+    public static ConstructorInitializerSyntax WithArgumentsInSerializeMethodCall(
+        this ConstructorInitializerSyntax constructorInitializerSyntax)
+    {
+        return constructorInitializerSyntax.WithArgumentList(
+            constructorInitializerSyntax.ArgumentList.WithArguments(
+                SyntaxFactory.SeparatedList(
+                    constructorInitializerSyntax.ArgumentList.Arguments
+                        .Select(x => x.WrapInSerializeMethodCall())
+                )
+            )
+        );
+    }
+
+    public static ArgumentSyntax WrapInSerializeMethodCall(this ArgumentSyntax argumentSyntax)
+    {
+        return SyntaxFactory.Argument(
+            SyntaxFactory.ExpressionStatement(
+                SyntaxFactory.InvocationExpression(
+                        SyntaxFactory.MemberAccessExpression(
+                            SyntaxKind.SimpleMemberAccessExpression,
+                            SyntaxFactory.ThisExpression(),
+                            SyntaxFactory.IdentifierName("Serialize"))
+                    )
+                    .WithArgumentList(
+                        SyntaxFactory.ArgumentList(
+                            SyntaxFactory.SingletonSeparatedList(argumentSyntax)))).Expression
+        );
+    }
+
     public static string GetClassDefinition(this ClassDeclarationSyntax @class)
     {
         return $"{@class.Modifiers} {@class.Keyword} {@class.Identifier}{@class.TypeParameterList} {@class.BaseList}";
