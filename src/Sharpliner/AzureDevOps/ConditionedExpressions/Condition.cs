@@ -109,13 +109,13 @@ public class IfNotCondition : IfCondition
     private readonly string _condition;
 
     internal IfNotCondition(IfCondition condition)
-        : this(condition.RemoveTags())
+        : this(condition.WithoutTags())
     {
     }
 
     internal IfNotCondition(string condition)
     {
-        _condition = NotConditionHelper.NegateCondition(RemoveTags(condition));
+        _condition = NotConditionHelper.NegateCondition(WithoutTags(condition));
     }
 
     internal override string Serialize() => WrapTag(_condition);
@@ -229,7 +229,7 @@ public class IfConjunctionCondition : IfCondition
     private readonly string[] _expressions;
 
     internal IfConjunctionCondition(string keyword, params IfCondition[] expressions)
-        : this(keyword, expressions.Select(RemoveTags).ToArray())
+        : this(keyword, expressions.Select(WithoutTags).ToArray())
     {
     }
 
@@ -248,17 +248,17 @@ public class IfConjunctionCondition<T> : IfCondition<T>
     private readonly string[] _expressions;
 
     internal IfConjunctionCondition(string keyword, IfCondition[] expressions, Conditioned<T>? parent = null)
-        : this(keyword, expressions.Select(RemoveTags).ToArray(), parent)
+        : this(keyword, expressions.Select(e => e.Serialize()).ToArray(), parent)
     {
     }
 
     internal IfConjunctionCondition(string keyword, string[] expressions, Conditioned<T>? parent = null) : base(parent)
     {
         _keyword = keyword;
-        _expressions = expressions;
+        _expressions = expressions.Select(WithoutTags).ToArray();
     }
 
-    internal override string Serialize() => $"{ExpressionStart} if {_keyword}({Join(_expressions)}) {ExpressionEnd}";
+    internal override string Serialize() => WrapTag($"{_keyword}({Join(_expressions)})");
 }
 
 public class InlineXorCondition : InlineConjunctionCondition
@@ -461,13 +461,13 @@ public class IfNotCondition<T> : IfCondition<T>
     private readonly string _condition;
 
     internal IfNotCondition(IfCondition condition)
-        : this(condition.RemoveTags())
+        : this(condition.WithoutTags())
     {
     }
 
     internal IfNotCondition(string condition)
     {
-        _condition = NotConditionHelper.NegateCondition(RemoveTags(condition));
+        _condition = NotConditionHelper.NegateCondition(WithoutTags(condition));
     }
 
     internal override string Serialize() => _condition;

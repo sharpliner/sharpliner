@@ -14,14 +14,14 @@ public abstract class IfCondition : Condition
         ('\'' + ExpressionStart, ExpressionEnd + '\''),
     };
 
-    internal static string RemoveTags(IfCondition condition)
+    internal static string WithoutTags(IfCondition condition)
     {
-        return RemoveTags(condition.Serialize());
+        return WithoutTags(condition.Serialize());
     }
 
-    internal string RemoveTags() => RemoveTags(this);
+    public string WithoutTags() => WithoutTags(this);
 
-    internal static string RemoveTags(string condition)
+    internal static string WithoutTags(string condition)
     {
         foreach (var (start, end) in _tagsToRemove)
         {
