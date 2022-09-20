@@ -123,7 +123,7 @@ public class IfNotCondition : IfCondition
 
 public class IfEqualityCondition : IfStringCondition
 {
-    internal IfEqualityCondition(bool equal, IfConditionOneOfStringValue expression1, IfConditionOneOfStringValue expression2)
+    internal IfEqualityCondition(bool equal, Arguments.IfConditionOneOfStringValue expression1, Arguments.IfConditionOneOfStringValue expression2)
         : base(equal ? "eq" : "ne", expression1, expression2)
     {
     }
@@ -131,7 +131,7 @@ public class IfEqualityCondition : IfStringCondition
 
 public class InlineEqualityCondition : InlineStringCondition
 {
-    internal InlineEqualityCondition(bool equal, InlineConditionOneOfStringValue expression1, InlineConditionOneOfStringValue expression2)
+    internal InlineEqualityCondition(bool equal, Arguments.InlineConditionOneOfStringValue expression1, Arguments.InlineConditionOneOfStringValue expression2)
         : base(equal ? "eq" : "ne", expression1, expression2)
     {
     }
@@ -289,7 +289,7 @@ public class IfXorCondition : IfConjunctionCondition
 
 public class InlineContainsCondition : InlineStringCondition
 {
-    internal InlineContainsCondition(InlineConditionOneOfStringValue needle, InlineConditionOneOfStringValue haystack)
+    internal InlineContainsCondition(Arguments.InlineConditionOneOfStringValue needle, Arguments.InlineConditionOneOfStringValue haystack)
         : base("contains", haystack, needle)
     {
     }
@@ -297,7 +297,7 @@ public class InlineContainsCondition : InlineStringCondition
 
 public class IfContainsCondition : IfStringCondition
 {
-    internal IfContainsCondition(IfConditionOneOfStringValue needle, IfConditionOneOfStringValue haystack)
+    internal IfContainsCondition(Arguments.IfConditionOneOfStringValue needle, Arguments.IfConditionOneOfStringValue haystack)
         : base("contains", haystack, needle)
     {
     }
@@ -305,7 +305,7 @@ public class IfContainsCondition : IfStringCondition
 
 public class InlineStartsWithCondition : InlineStringCondition
 {
-    internal InlineStartsWithCondition(InlineConditionOneOfStringValue needle, InlineConditionOneOfStringValue haystack)
+    internal InlineStartsWithCondition(Arguments.InlineConditionOneOfStringValue needle, Arguments.InlineConditionOneOfStringValue haystack)
         : base("startsWith", haystack, needle)
     {
     }
@@ -313,7 +313,7 @@ public class InlineStartsWithCondition : InlineStringCondition
 
 public class IfStartsWithCondition : IfStringCondition
 {
-    internal IfStartsWithCondition(IfConditionOneOfStringValue needle, IfConditionOneOfStringValue haystack)
+    internal IfStartsWithCondition(Arguments.IfConditionOneOfStringValue needle, Arguments.IfConditionOneOfStringValue haystack)
         : base("startsWith", haystack, needle)
     {
     }
@@ -321,7 +321,7 @@ public class IfStartsWithCondition : IfStringCondition
 
 public class InlineEndsWithCondition : InlineStringCondition
 {
-    internal InlineEndsWithCondition(InlineConditionOneOfStringValue needle, InlineConditionOneOfStringValue haystack)
+    internal InlineEndsWithCondition(Arguments.InlineConditionOneOfStringValue needle, Arguments.InlineConditionOneOfStringValue haystack)
         : base("endsWith", haystack, needle)
     {
     }
@@ -329,7 +329,7 @@ public class InlineEndsWithCondition : InlineStringCondition
 
 public class IfEndsWithCondition : IfStringCondition
 {
-    internal IfEndsWithCondition(IfConditionOneOfStringValue needle, IfConditionOneOfStringValue haystack)
+    internal IfEndsWithCondition(Arguments.IfConditionOneOfStringValue needle, Arguments.IfConditionOneOfStringValue haystack)
         : base("endsWith", haystack, needle)
     {
     }
@@ -337,7 +337,7 @@ public class IfEndsWithCondition : IfStringCondition
 
 public class InlineInCondition : InlineStringCondition
 {
-    internal InlineInCondition(InlineConditionOneOfStringValue needle, params InlineConditionOneOfStringValue[] haystack)
+    internal InlineInCondition(Arguments.InlineConditionOneOfStringValue needle, params Arguments.InlineConditionOneOfStringValue[] haystack)
         : base("in", needle, haystack)
     {
     }
@@ -345,7 +345,7 @@ public class InlineInCondition : InlineStringCondition
 
 public class IfInCondition : IfStringCondition
 {
-    internal IfInCondition(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
+    internal IfInCondition(Arguments.IfConditionOneOfStringValue needle, params Arguments.IfConditionOneOfStringValue[] haystack)
         : base("in", needle, haystack)
     {
     }
@@ -353,7 +353,7 @@ public class IfInCondition : IfStringCondition
 
 public class InlineNotInCondition : InlineStringCondition
 {
-    internal InlineNotInCondition(InlineConditionOneOfStringValue needle, params InlineConditionOneOfStringValue[] haystack)
+    internal InlineNotInCondition(Arguments.InlineConditionOneOfStringValue needle, params Arguments.InlineConditionOneOfStringValue[] haystack)
         : base("notIn", needle, haystack)
     {
     }
@@ -361,7 +361,7 @@ public class InlineNotInCondition : InlineStringCondition
 
 public class IfNotInCondition : IfStringCondition
 {
-    internal IfNotInCondition(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
+    internal IfNotInCondition(Arguments.IfConditionOneOfStringValue needle, params Arguments.IfConditionOneOfStringValue[] haystack)
         : base("notIn", needle, haystack)
     {
     }
@@ -369,7 +369,7 @@ public class IfNotInCondition : IfStringCondition
 
 public class InlineContainsValueCondition : InlineStringCondition
 {
-    internal InlineContainsValueCondition(InlineConditionOneOfStringValue needle, params InlineConditionOneOfStringValue[] haystack)
+    internal InlineContainsValueCondition(Arguments.InlineConditionOneOfStringValue needle, params Arguments.InlineConditionOneOfStringValue[] haystack)
         : base("containsValue", haystack, needle)
     {
     }
@@ -377,7 +377,7 @@ public class InlineContainsValueCondition : InlineStringCondition
 
 public class IfContainsValueCondition : IfStringCondition
 {
-    internal IfContainsValueCondition(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
+    internal IfContainsValueCondition(Arguments.IfConditionOneOfStringValue needle, params Arguments.IfConditionOneOfStringValue[] haystack)
         : base("containsValue", haystack, needle)
     {
     }
@@ -385,7 +385,7 @@ public class IfContainsValueCondition : IfStringCondition
 
 public class InlineGreaterCondition : InlineStringCondition
 {
-    internal InlineGreaterCondition(InlineConditionOneOfStringValue first, InlineConditionOneOfStringValue second)
+    internal InlineGreaterCondition(Arguments.InlineConditionOneOfStringValue first, Arguments.InlineConditionOneOfStringValue second)
         : base("gt", first, second)
     {
     }
@@ -393,7 +393,7 @@ public class InlineGreaterCondition : InlineStringCondition
 
 public class IfGreaterCondition : IfStringCondition
 {
-    internal IfGreaterCondition(IfConditionOneOfStringValue first, IfConditionOneOfStringValue second)
+    internal IfGreaterCondition(Arguments.IfConditionOneOfStringValue first, Arguments.IfConditionOneOfStringValue second)
         : base("gt", first, second)
     {
     }
@@ -401,7 +401,7 @@ public class IfGreaterCondition : IfStringCondition
 
 public class InlineLessCondition : InlineStringCondition
 {
-    internal InlineLessCondition(InlineConditionOneOfStringValue first, InlineConditionOneOfStringValue second)
+    internal InlineLessCondition(Arguments.InlineConditionOneOfStringValue first, Arguments.InlineConditionOneOfStringValue second)
         : base("lt", first, second)
     {
     }
@@ -409,7 +409,7 @@ public class InlineLessCondition : InlineStringCondition
 
 public class IfLessCondition : IfStringCondition
 {
-    internal IfLessCondition(IfConditionOneOfStringValue first, IfConditionOneOfStringValue second)
+    internal IfLessCondition(Arguments.IfConditionOneOfStringValue first, Arguments.IfConditionOneOfStringValue second)
         : base("lt", first, second)
     {
     }
@@ -490,7 +490,7 @@ public class ElseCondition<T> : IfCondition<T>
 
 public class InlineEqualityCondition<T> : InlineStringCondition<T>
 {
-    internal InlineEqualityCondition(bool equal, InlineConditionOneOfStringValue expression1, InlineConditionOneOfStringValue expression2)
+    internal InlineEqualityCondition(bool equal, Arguments.InlineConditionOneOfStringValue expression1, Arguments.InlineConditionOneOfStringValue expression2)
         : base(equal ? "eq" : "ne", expression1, expression2)
     {
     }
@@ -498,7 +498,7 @@ public class InlineEqualityCondition<T> : InlineStringCondition<T>
 
 public class IfEqualityCondition<T> : IfStringCondition<T>
 {
-    internal IfEqualityCondition(bool equal, IfConditionOneOfStringValue expression1, IfConditionOneOfStringValue expression2)
+    internal IfEqualityCondition(bool equal, Arguments.IfConditionOneOfStringValue expression1, Arguments.IfConditionOneOfStringValue expression2)
         : base(equal ? "eq" : "ne", expression1, expression2)
     {
     }
@@ -585,7 +585,7 @@ public class IfXorCondition<T> : IfConjunctionCondition<T>
 
 public class InlineContainsCondition<T> : InlineStringCondition<T>
 {
-    internal InlineContainsCondition(InlineConditionOneOfStringValue haystack, InlineConditionOneOfStringValue needle)
+    internal InlineContainsCondition(Arguments.InlineConditionOneOfStringValue haystack, Arguments.InlineConditionOneOfStringValue needle)
         : base("contains", haystack, needle)
     {
     }
@@ -593,7 +593,7 @@ public class InlineContainsCondition<T> : InlineStringCondition<T>
 
 public class IfContainsCondition<T> : IfStringCondition<T>
 {
-    internal IfContainsCondition(IfConditionOneOfStringValue haystack, IfConditionOneOfStringValue needle)
+    internal IfContainsCondition(Arguments.IfConditionOneOfStringValue haystack, Arguments.IfConditionOneOfStringValue needle)
         : base("contains", haystack, needle)
     {
     }
@@ -601,7 +601,7 @@ public class IfContainsCondition<T> : IfStringCondition<T>
 
 public class InlineStartsWithCondition<T> : InlineStringCondition<T>
 {
-    internal InlineStartsWithCondition(InlineConditionOneOfStringValue needle, InlineConditionOneOfStringValue haystack)
+    internal InlineStartsWithCondition(Arguments.InlineConditionOneOfStringValue needle, Arguments.InlineConditionOneOfStringValue haystack)
         : base("startsWith", haystack, needle)
     {
     }
@@ -609,7 +609,7 @@ public class InlineStartsWithCondition<T> : InlineStringCondition<T>
 
 public class IfStartsWithCondition<T> : IfStringCondition<T>
 {
-    internal IfStartsWithCondition(IfConditionOneOfStringValue needle, IfConditionOneOfStringValue haystack)
+    internal IfStartsWithCondition(Arguments.IfConditionOneOfStringValue needle, Arguments.IfConditionOneOfStringValue haystack)
         : base("startsWith", haystack, needle)
     {
     }
@@ -617,7 +617,7 @@ public class IfStartsWithCondition<T> : IfStringCondition<T>
 
 public class InlineEndsWithCondition<T> : InlineStringCondition<T>
 {
-    internal InlineEndsWithCondition(InlineConditionOneOfStringValue needle, InlineConditionOneOfStringValue haystack)
+    internal InlineEndsWithCondition(Arguments.InlineConditionOneOfStringValue needle, Arguments.InlineConditionOneOfStringValue haystack)
         : base("endsWith", haystack, needle)
     {
     }
@@ -625,7 +625,7 @@ public class InlineEndsWithCondition<T> : InlineStringCondition<T>
 
 public class IfEndsWithCondition<T> : IfStringCondition<T>
 {
-    internal IfEndsWithCondition(IfConditionOneOfStringValue needle, IfConditionOneOfStringValue haystack)
+    internal IfEndsWithCondition(Arguments.IfConditionOneOfStringValue needle, Arguments.IfConditionOneOfStringValue haystack)
         : base("endsWith", haystack, needle)
     {
     }
@@ -633,7 +633,7 @@ public class IfEndsWithCondition<T> : IfStringCondition<T>
 
 public class InlineContainsValueCondition<T> : InlineStringCondition<T>
 {
-    internal InlineContainsValueCondition(InlineConditionOneOfStringValue needle, params InlineConditionOneOfStringValue[] haystack)
+    internal InlineContainsValueCondition(Arguments.InlineConditionOneOfStringValue needle, params Arguments.InlineConditionOneOfStringValue[] haystack)
         : base("containsValue", haystack, needle)
     {
     }
@@ -641,7 +641,7 @@ public class InlineContainsValueCondition<T> : InlineStringCondition<T>
 
 public class IfContainsValueCondition<T> : IfStringCondition<T>
 {
-    internal IfContainsValueCondition(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
+    internal IfContainsValueCondition(Arguments.IfConditionOneOfStringValue needle, params Arguments.IfConditionOneOfStringValue[] haystack)
         : base("containsValue", haystack, needle)
     {
     }
@@ -649,7 +649,7 @@ public class IfContainsValueCondition<T> : IfStringCondition<T>
 
 public class InlineInCondition<T> : InlineStringCondition<T>
 {
-    internal InlineInCondition(InlineConditionOneOfStringValue needle, params InlineConditionOneOfStringValue[] haystack)
+    internal InlineInCondition(Arguments.InlineConditionOneOfStringValue needle, params Arguments.InlineConditionOneOfStringValue[] haystack)
         : base("in", needle, haystack)
     {
     }
@@ -657,7 +657,7 @@ public class InlineInCondition<T> : InlineStringCondition<T>
 
 public class IfInCondition<T> : IfStringCondition<T>
 {
-    internal IfInCondition(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
+    internal IfInCondition(Arguments.IfConditionOneOfStringValue needle, params Arguments.IfConditionOneOfStringValue[] haystack)
         : base("in", needle, haystack)
     {
     }
@@ -665,7 +665,7 @@ public class IfInCondition<T> : IfStringCondition<T>
 
 public class InlineNotInCondition<T> : InlineStringCondition<T>
 {
-    internal InlineNotInCondition(InlineConditionOneOfStringValue needle, params InlineConditionOneOfStringValue[] haystack)
+    internal InlineNotInCondition(Arguments.InlineConditionOneOfStringValue needle, params Arguments.InlineConditionOneOfStringValue[] haystack)
         : base("notin", needle, haystack)
     {
     }
@@ -673,7 +673,7 @@ public class InlineNotInCondition<T> : InlineStringCondition<T>
 
 public class IfNotInCondition<T> : IfStringCondition<T>
 {
-    internal IfNotInCondition(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
+    internal IfNotInCondition(Arguments.IfConditionOneOfStringValue needle, params Arguments.IfConditionOneOfStringValue[] haystack)
         : base("notin", needle, haystack)
     {
     }
@@ -681,7 +681,7 @@ public class IfNotInCondition<T> : IfStringCondition<T>
 
 public class InlineGreaterCondition<T> : InlineStringCondition<T>
 {
-    internal InlineGreaterCondition(InlineConditionOneOfStringValue first, InlineConditionOneOfStringValue second)
+    internal InlineGreaterCondition(Arguments.InlineConditionOneOfStringValue first, Arguments.InlineConditionOneOfStringValue second)
         : base("gt", first, second)
     {
     }
@@ -689,7 +689,7 @@ public class InlineGreaterCondition<T> : InlineStringCondition<T>
 
 public class IfGreaterCondition<T> : IfStringCondition<T>
 {
-    internal IfGreaterCondition(IfConditionOneOfStringValue first, IfConditionOneOfStringValue second)
+    internal IfGreaterCondition(Arguments.IfConditionOneOfStringValue first, Arguments.IfConditionOneOfStringValue second)
         : base("gt", first, second)
     {
     }
@@ -697,7 +697,7 @@ public class IfGreaterCondition<T> : IfStringCondition<T>
 
 public class InlineLessCondition<T> : InlineStringCondition<T>
 {
-    internal InlineLessCondition(InlineConditionOneOfStringValue first, InlineConditionOneOfStringValue second)
+    internal InlineLessCondition(Arguments.InlineConditionOneOfStringValue first, Arguments.InlineConditionOneOfStringValue second)
         : base("lt", first, second)
     {
     }
@@ -705,7 +705,7 @@ public class InlineLessCondition<T> : InlineStringCondition<T>
 
 public class IfLessCondition<T> : IfStringCondition<T>
 {
-    internal IfLessCondition(IfConditionOneOfStringValue first, IfConditionOneOfStringValue second)
+    internal IfLessCondition(Arguments.IfConditionOneOfStringValue first, Arguments.IfConditionOneOfStringValue second)
         : base("lt", first, second)
     {
     }
@@ -713,7 +713,7 @@ public class IfLessCondition<T> : IfStringCondition<T>
 
 public class InlineBranchCondition : InlineEqualityCondition
 {
-    internal InlineBranchCondition(InlineConditionOneOfStringValue branchName, bool equal)
+    internal InlineBranchCondition(Arguments.InlineConditionOneOfStringValue branchName, bool equal)
         : base(equal, new StaticVariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
     {
     }
@@ -721,7 +721,7 @@ public class InlineBranchCondition : InlineEqualityCondition
 
 public class IfBranchCondition : IfEqualityCondition
 {
-    internal IfBranchCondition(IfConditionOneOfStringValue branchName, bool equal)
+    internal IfBranchCondition(Arguments.IfConditionOneOfStringValue branchName, bool equal)
         : base(equal, new StaticVariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
     {
     }
@@ -729,7 +729,7 @@ public class IfBranchCondition : IfEqualityCondition
 
 public class InlineBranchCondition<T> : InlineEqualityCondition<T>
 {
-    internal InlineBranchCondition(InlineConditionOneOfStringValue branchName, bool equal)
+    internal InlineBranchCondition(Arguments.InlineConditionOneOfStringValue branchName, bool equal)
         : base(equal, new StaticVariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
     {
     }
@@ -737,7 +737,7 @@ public class InlineBranchCondition<T> : InlineEqualityCondition<T>
 
 public class IfBranchCondition<T> : IfEqualityCondition<T>
 {
-    internal IfBranchCondition(IfConditionOneOfStringValue branchName, bool equal)
+    internal IfBranchCondition(Arguments.IfConditionOneOfStringValue branchName, bool equal)
         : base(equal, new StaticVariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
     {
     }
@@ -745,7 +745,7 @@ public class IfBranchCondition<T> : IfEqualityCondition<T>
 
 public class InlineBuildReasonCondition : InlineEqualityCondition
 {
-    internal InlineBuildReasonCondition(InlineConditionOneOfStringValue reason, bool equal)
+    internal InlineBuildReasonCondition(Arguments.InlineConditionOneOfStringValue reason, bool equal)
         : base(equal, new StaticVariableReference("Build.Reason"), reason)
     {
     }
@@ -753,7 +753,7 @@ public class InlineBuildReasonCondition : InlineEqualityCondition
 
 public class IfBuildReasonCondition : IfEqualityCondition
 {
-    internal IfBuildReasonCondition(IfConditionOneOfStringValue reason, bool equal)
+    internal IfBuildReasonCondition(Arguments.IfConditionOneOfStringValue reason, bool equal)
         : base(equal, new StaticVariableReference("Build.Reason"), reason)
     {
     }
@@ -761,7 +761,7 @@ public class IfBuildReasonCondition : IfEqualityCondition
 
 public class InlineBuildReasonCondition<T> : InlineEqualityCondition<T>
 {
-    internal InlineBuildReasonCondition(InlineConditionOneOfStringValue reason, bool equal)
+    internal InlineBuildReasonCondition(Arguments.InlineConditionOneOfStringValue reason, bool equal)
         : base(equal, new StaticVariableReference("Build.Reason"), reason)
     {
     }
@@ -769,7 +769,7 @@ public class InlineBuildReasonCondition<T> : InlineEqualityCondition<T>
 
 public class IfBuildReasonCondition<T> : IfEqualityCondition<T>
 {
-    internal IfBuildReasonCondition(IfConditionOneOfStringValue reason, bool equal)
+    internal IfBuildReasonCondition(Arguments.IfConditionOneOfStringValue reason, bool equal)
         : base(equal, new StaticVariableReference("Build.Reason"), reason)
     {
     }

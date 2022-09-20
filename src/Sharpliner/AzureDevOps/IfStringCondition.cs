@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
+using IfConditionOneOfArrayStringValue = Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfConditionOneOfArrayStringValue;
+using IfConditionOneOfStringValue = Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfConditionOneOfStringValue;
 
 namespace Sharpliner.AzureDevOps;
 

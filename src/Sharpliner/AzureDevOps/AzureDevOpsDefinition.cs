@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Tasks;
 using static Sharpliner.AzureDevOps.TemplateDefinition;
+using InlineConditionOneOfStringValue = Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineConditionOneOfStringValue;
 
 namespace Sharpliner.AzureDevOps;
 
