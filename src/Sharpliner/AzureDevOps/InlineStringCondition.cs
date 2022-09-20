@@ -43,8 +43,8 @@ public abstract class InlineStringCondition : InlineCondition
 public abstract class InlineStringCondition<T> : InlineCondition<T>
 {
     private readonly string _keyword;
-    private string _one;
-    private string _two;
+    private readonly string _one;
+    private readonly string _two;
 
     protected InlineStringCondition(string keyword, InlineConditionOneOfArrayStringValue one, InlineConditionOneOfStringValue two, Conditioned<T>? parent = null)
         : this(keyword, Serialize(one), two, parent)
