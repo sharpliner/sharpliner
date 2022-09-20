@@ -1,4 +1,8 @@
-﻿namespace Sharpliner.CI;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Sharpliner.AzureDevOps;
+
+namespace Sharpliner.CI;
 
 /// <summary>
 /// These pipelines are just a minimal E2E test of the collection generation mechanism.

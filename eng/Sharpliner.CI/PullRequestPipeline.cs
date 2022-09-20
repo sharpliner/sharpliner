@@ -1,4 +1,6 @@
-﻿namespace Sharpliner.CI;
+﻿using Sharpliner.AzureDevOps;
+
+namespace Sharpliner.CI;
 
 class PullRequestPipeline : SingleStagePipelineDefinition
 {
