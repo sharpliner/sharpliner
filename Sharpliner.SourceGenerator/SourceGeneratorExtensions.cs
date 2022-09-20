@@ -37,18 +37,7 @@ public static class SourceGeneratorExtensions
 
     public static ArgumentSyntax WrapInSerializeMethodCall(this ArgumentSyntax argumentSyntax)
     {
-        return SyntaxFactory.Argument(
-            SyntaxFactory.ExpressionStatement(
-                SyntaxFactory.InvocationExpression(
-                        SyntaxFactory.MemberAccessExpression(
-                            SyntaxKind.SimpleMemberAccessExpression,
-                            SyntaxFactory.ThisExpression(),
-                            SyntaxFactory.IdentifierName("Serialize"))
-                    )
-                    .WithArgumentList(
-                        SyntaxFactory.ArgumentList(
-                            SyntaxFactory.SingletonSeparatedList(argumentSyntax)))).Expression
-        );
+        return SyntaxFactory.Argument(SyntaxFactory.ParseExpression($"Serialize({argumentSyntax.ToString()})"));
     }
 
     public static string GetClassDefinition(this ClassDeclarationSyntax @class)
