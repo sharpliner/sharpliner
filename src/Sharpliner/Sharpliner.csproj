@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
+    <TargetFrameworks>net5.0;net6.0;net7.0</TargetFrameworks>
     
     <!-- NuGet details -->
     <RepositoryType>git</RepositoryType>
@@ -45,54 +45,7 @@
     <Content Include="build\Sharpliner.props" PackagePath="build\" />
     <Content Include="build\Sharpliner.targets" PackagePath="build\" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineNotInCondition_StringConditions34.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineNotInCondition_StringConditions14.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineInCondition_StringConditions32.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineInCondition_StringConditions12.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineGreaterCondition_StringConditions36.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineEqualityCondition_StringConditions5.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineEqualityCondition_StringConditions22.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineEndsWithCondition_StringConditions10.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineContainsValueCondition_StringConditions30.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineContainsValueCondition_StringConditions16.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineBranchCondition_StringConditions42.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineBranchCondition_StringConditions40.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfStartsWithCondition_StringConditions9.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfStartsWithCondition_StringConditions27.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfNotInCondition_StringConditions35.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfNotInCondition_StringConditions15.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfGreaterCondition_StringConditions19.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfEqualityCondition_StringConditions4.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfEqualityCondition_StringConditions23.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfEndsWithCondition_StringConditions29.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfEndsWithCondition_StringConditions11.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfContainsValueCondition_StringConditions31.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfContainsValueCondition_StringConditions17.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineLessCondition_StringConditions38.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineLessCondition_StringConditions20.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineGreaterCondition_StringConditions18.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineEndsWithCondition_StringConditions28.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineContainsCondition_StringConditions6.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineContainsCondition_StringConditions24.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineBuildReasonCondition_StringConditions46.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_InlineBuildReasonCondition_StringConditions44.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfLessCondition_StringConditions21.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfInCondition_StringConditions33.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfInCondition_StringConditions13.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfContainsCondition_StringConditions7.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfContainsCondition_StringConditions25.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfConditionBuilder_StringConditions3.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfConditionBuilder_StringConditions2.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfBuildReasonCondition_StringConditions45.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfBranchCondition_StringConditions43.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfBranchCondition_StringConditions41.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfLessCondition_StringConditions39.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfGreaterCondition_StringConditions37.generated.cs" />
-    <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_AzureDevOpsDefinition_StringConditions1.generated.cs" />
-  </ItemGroup>
-
+  
   <!--
     This Target makes sure we include YamlDotNet.dll in the NuGet as it will be needed by the task
     https://natemcmaster.com/blog/2017/11/11/msbuild-task-with-dependencies/#third-party-dependencies-and-nuget

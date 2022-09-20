@@ -11,8 +11,7 @@ namespace Sharpliner;
 public class MultilineStringEmitter : ChainedEventEmitter
 {
     public MultilineStringEmitter(IEventEmitter nextEmitter)
-
- : base(nextEmitter)
+        : base(nextEmitter)
     {
     }
 
