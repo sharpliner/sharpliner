@@ -15,7 +15,7 @@ internal record PossibleType
     internal static PossibleType Variable = new("VariableReference", "Variable");
     internal static PossibleType StaticVariable = new("StaticVariableReference", "Variable");
     internal static PossibleType String = new("string", "String");
-    internal static PossibleType ObjectArray = new("IEnumerable<object>", "Array");
+    internal static PossibleType EnumerableObject = new("IEnumerable<object>", "Array");
     internal static PossibleType StringArray = new("string[]", "Array");
 
     internal static PossibleType[] InlinePossibleTypes = {Parameter, Variable, String};

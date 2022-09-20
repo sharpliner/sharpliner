@@ -18,6 +18,17 @@ public abstract class IfStringCondition : IfCondition
         _two = two;
     }
 
+
+    protected IfStringCondition(string keyword, IEnumerable<object> one, string two)
+        : this(keyword, Serialize(one), two)
+    {
+    }
+
+    protected IfStringCondition(string keyword, string one, IEnumerable<object> two)
+        : this(keyword, one, Serialize(two))
+    {
+    }
+
     protected IfStringCondition(string keyword, string one, string[] two)
     {
         _keyword = keyword;
@@ -62,6 +73,18 @@ public abstract class IfStringCondition<T> : IfCondition<T>
         _keyword = keyword;
         _one = one;
         _two = two;
+        Parent = parent;
+    }
+
+    protected IfStringCondition(string keyword, IEnumerable<object> one, string two, Conditioned<T>? parent = null)
+        : this(keyword, Serialize(one), two, parent)
+    {
+        Parent = parent;
+    }
+
+    protected IfStringCondition(string keyword, string one, IEnumerable<object> two, Conditioned<T>? parent = null)
+        : this(keyword, one, Serialize(two), parent)
+    {
         Parent = parent;
     }
 

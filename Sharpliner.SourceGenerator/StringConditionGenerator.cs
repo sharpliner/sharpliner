@@ -73,7 +73,8 @@ public class StringConditionGenerator : ISourceGenerator
             typeof(string),
             typeof(StringConditionAttribute),
             typeof(CallerMemberNameAttribute),
-            typeof(IEnumerable<>)
+            typeof(IEnumerable<>),
+            typeof(Enumerable)
         ));
         classBuilder.WriteLine("using Sharpliner.AzureDevOps.ConditionedExpressions;");
         classBuilder.WriteLine();
@@ -97,6 +98,14 @@ public class StringConditionGenerator : ISourceGenerator
 
         foreach (var possibleType in possibleTypesForParameter1)
         {
+            foreach (var otherConstructor in @class.Constructors
+                         .Where(c => c.Parameters
+                             .Any(p => p.Type.ToString().EndsWith("[]"))))
+            {
+                WriteConstructor(@class, possibleType, PossibleType.EnumerableObject, classBuilder, constructor, true);
+                WriteConstructor(@class, PossibleType.EnumerableObject, possibleType, classBuilder, constructor, true);
+            }
+
             if (countOfStringParameters == 1)
             {
                 if (possibleType == PossibleType.String)
@@ -131,7 +140,7 @@ public class StringConditionGenerator : ISourceGenerator
     }
 
     private void WriteConstructor(INamedTypeSymbol @class, PossibleType possibleType, PossibleType possibleType2,
-        CodeGenerationTextWriter classBuilder, IMethodSymbol constructor)
+        CodeGenerationTextWriter classBuilder, IMethodSymbol constructor, bool removeParams = false)
     {
         // var newClassName = @class.Name.Replace(
         //     PossibleType.String.ShortName,
@@ -141,30 +150,33 @@ public class StringConditionGenerator : ISourceGenerator
         classBuilder.WriteLine($"public partial class {@class.Name}{GetGenericType(@class)}");
         classBuilder.WriteLine("{");
 
-        WriteConstructor(classBuilder, constructor, possibleType, possibleType2);
+        WriteConstructor(classBuilder, constructor, possibleType, possibleType2, removeParams);
 
         classBuilder.WriteLine("}");
     }
 
-    private void WriteConstructor(CodeGenerationTextWriter classBuilder, IMethodSymbol constructor, PossibleType possibleType, PossibleType? possibleType2)
+    private void WriteConstructor(CodeGenerationTextWriter classBuilder, IMethodSymbol constructor, PossibleType possibleType, PossibleType? possibleType2, bool removeParams)
     {
-        var methodDeclarationSyntax = constructor.DeclaringSyntaxReferences
-            .Select(s => s.GetSyntax())
-            .OfType<ConstructorDeclarationSyntax>()
-            .First();
+        var constructorDeclarationSyntax = constructor.GetConstructorDeclarationSyntax();
 
         var parameter1Name = GetParameterName(constructor, 1);
         var parameter2Name = GetParameterName(constructor, 2);
 
-        var newConstructor = methodDeclarationSyntax.WithBody(null).ToFullString()
+        var newConstructor = constructorDeclarationSyntax.WithBody(null).ToFullString()
             .Replace($"string {parameter1Name}", $"{possibleType.ClassName} {parameter1Name}")
-            .Replace($"string[] {parameter1Name}", $"{possibleType.ClassName}[] {parameter1Name}");
+            .Replace($"string[] {parameter1Name}", $"{possibleType.ClassName}[] {parameter1Name}")
+            .Trim();
 
         if (possibleType2 != null && parameter2Name != null)
         {
-            newConstructor = newConstructor.Replace($"string {parameter2Name}", $"{possibleType2.ClassName} {parameter2Name}")
-                .Replace($"string[] {parameter2Name}", $"{possibleType2.ClassName}[] {parameter2Name}")
-                .Trim();
+            newConstructor = newConstructor
+                .Replace($"string {parameter2Name}", $"{possibleType2.ClassName} {parameter2Name}")
+                .Replace($"string[] {parameter2Name}", $"{possibleType2.ClassName}[] {parameter2Name}");
+        }
+
+        if (removeParams)
+        {
+            newConstructor = newConstructor.Replace(" params ", " ");
         }
 
         classBuilder.WriteLine(newConstructor);
@@ -180,7 +192,8 @@ public class StringConditionGenerator : ISourceGenerator
             typeof(string),
             typeof(StringConditionAttribute),
             typeof(CallerMemberNameAttribute),
-            typeof(IEnumerable<>)
+            typeof(IEnumerable<>),
+            typeof(Enumerable)
             ));
         classBuilder.WriteLine("using Sharpliner.AzureDevOps.ConditionedExpressions;");
         classBuilder.WriteLine();
@@ -243,7 +256,7 @@ public class StringConditionGenerator : ISourceGenerator
                 if (isArrayType)
                 {
                     WriteArrayMethod(classBuilder, methodSymbol, methodDeclarationSyntax, parameter1.ClassName,
-                        PossibleType.ObjectArray.ClassName);
+                        PossibleType.EnumerableObject.ClassName);
                     continue;
                 }
 
@@ -275,16 +288,18 @@ public class StringConditionGenerator : ISourceGenerator
     private void WriteSingleString(CodeGenerationTextWriter classBuilder, IMethodSymbol methodSymbol, MethodDeclarationSyntax methodDeclarationSyntax, string parameter1)
     {
         classBuilder.WriteLine($"public Condition {methodSymbol.Name}{GetGenericType(methodSymbol)}({parameter1} {GetParameterName(methodSymbol, 1)})");
-        WriteMethodBody(classBuilder, methodDeclarationSyntax);
+        WriteMethodBody(classBuilder, methodDeclarationSyntax, null);
     }
 
     private void WriteTwoStrings(CodeGenerationTextWriter classBuilder, IMethodSymbol methodSymbol,
         MethodDeclarationSyntax methodDeclarationSyntax, string parameter1,
         string parameter2)
     {
+        var parameter1Name = GetParameterName(methodSymbol, 1);
+        var parameter2Name = GetParameterName(methodSymbol, 2);
         classBuilder.WriteLine(
-            $"public {methodSymbol.ReturnType.Name} {methodSymbol.Name}{GetGenericType(methodSymbol)}({parameter1} {GetParameterName(methodSymbol, 1)}, {parameter2} {GetParameterName(methodSymbol, 2)})");
-        WriteMethodBody(classBuilder, methodDeclarationSyntax);
+            $"public {methodSymbol.ReturnType.Name} {methodSymbol.Name}{GetGenericType(methodSymbol)}({parameter1} {parameter1Name}, {parameter2} {parameter2Name})");
+        WriteMethodBody(classBuilder, methodDeclarationSyntax, parameter2.EndsWith("[]") ? parameter2Name : null);
     }
 
     private string GetGenericType(INamedTypeSymbol @class)
@@ -309,12 +324,19 @@ public class StringConditionGenerator : ISourceGenerator
         return $"<{string.Join(", ", genericTypes)}>";
     }
 
-    private static void WriteMethodBody(TextWriter classBuilder, BaseMethodDeclarationSyntax methodDeclarationSyntax)
+    private static void WriteMethodBody(TextWriter classBuilder, BaseMethodDeclarationSyntax methodDeclarationSyntax,
+        string? arrayParameterName)
     {
         // TODO - Convert array types to string[]
-        if (!string.IsNullOrEmpty(methodDeclarationSyntax.ExpressionBody?.ToString()))
+        var expressionBody = methodDeclarationSyntax.ExpressionBody?.ToString();
+        if (!string.IsNullOrEmpty(expressionBody))
         {
-            classBuilder.Write(methodDeclarationSyntax.ExpressionBody);
+            if (arrayParameterName != null)
+            {
+                expressionBody = expressionBody.Replace($" {arrayParameterName}", $" {arrayParameterName}.Cast<object>()");
+            }
+
+            classBuilder.Write(expressionBody);
             classBuilder.WriteLine(';');
             classBuilder.WriteLine();
             return;
@@ -323,7 +345,14 @@ public class StringConditionGenerator : ISourceGenerator
         classBuilder.WriteLine("{");
         foreach (StatementSyntax statementSyntax in methodDeclarationSyntax.Body.Statements)
         {
-            classBuilder.WriteLine(statementSyntax.ToFullString().Trim());
+            var statementString = statementSyntax.ToFullString();
+
+            if (arrayParameterName != null)
+            {
+                statementString = statementString.Replace($" {arrayParameterName}", $" {arrayParameterName}.Cast<object>()");
+            }
+
+            classBuilder.WriteLine(statementString.Trim());
         }
         classBuilder.WriteLine("}");
         classBuilder.WriteLine();

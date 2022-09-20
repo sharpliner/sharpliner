@@ -17,6 +17,16 @@ public abstract class InlineStringCondition : InlineCondition
         _two = two;
     }
 
+    protected InlineStringCondition(string keyword, IEnumerable<object> one, string two)
+        : this(keyword, Serialize(one), two)
+    {
+    }
+
+    protected InlineStringCondition(string keyword, string one, IEnumerable<object> two)
+        : this(keyword, one, Serialize(two))
+    {
+    }
+
     protected InlineStringCondition(string keyword, string one, string[] two)
     {
         _keyword = keyword;
@@ -64,6 +74,18 @@ public abstract class InlineStringCondition<T> : InlineStringCondition
 {
     protected InlineStringCondition(string keyword, string one, string two, Conditioned<T>? parent = null)
         : base(keyword, one, two)
+    {
+        Parent = parent;
+    }
+
+    protected InlineStringCondition(string keyword, IEnumerable<object> one, string two, Conditioned<T>? parent = null)
+        : this(keyword, Serialize(one), two, parent)
+    {
+        Parent = parent;
+    }
+
+    protected InlineStringCondition(string keyword, string one, IEnumerable<object> two, Conditioned<T>? parent = null)
+        : this(keyword, one, Serialize(two), parent)
     {
         Parent = parent;
     }
