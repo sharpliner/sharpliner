@@ -21,6 +21,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpliner.Tests", "tests\S
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "eng", "eng", "{4F21BBD4-0FBF-43FA-94E8-3119F47DD493}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Sharpliner.CI", "eng\Sharpliner.CI\Sharpliner.CI.csproj", "{DABB7F89-37B9-4AC8-9FEA-DCDE0B1E8DE0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,10 @@ Global
 		{70F30F92-B6D5-42C7-89B9-98AB72AFF192}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{70F30F92-B6D5-42C7-89B9-98AB72AFF192}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{70F30F92-B6D5-42C7-89B9-98AB72AFF192}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DABB7F89-37B9-4AC8-9FEA-DCDE0B1E8DE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DABB7F89-37B9-4AC8-9FEA-DCDE0B1E8DE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DABB7F89-37B9-4AC8-9FEA-DCDE0B1E8DE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DABB7F89-37B9-4AC8-9FEA-DCDE0B1E8DE0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -42,6 +48,7 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{14F6E156-9E87-4B14-9B7A-C7A83101A795} = {3909241C-F29B-4D22-BC56-504F7EA792D7}
 		{70F30F92-B6D5-42C7-89B9-98AB72AFF192} = {8FBB691D-7838-452D-AFF5-5CCEFFE7200E}
+		{DABB7F89-37B9-4AC8-9FEA-DCDE0B1E8DE0} = {4F21BBD4-0FBF-43FA-94E8-3119F47DD493}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BDFCD6C1-CAB3-4251-8F2E-7F0A7B2B9111}
