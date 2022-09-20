@@ -54,10 +54,10 @@ internal class MockPipeline : TestPipeline
                         {
                             Variables =
                             {
-                                If.Equal(variables["IsPr"], "true")
+                                If.Equal(staticVariables["IsPr"], "true")
                                     .Variable("DotnetVersion", "6.0-preview-4"),
 
-                                If.NotEqual(variables["IsPr"], "true")
+                                If.NotEqual(staticVariables["IsPr"], "true")
                                     .Variable("DotnetVersion", "6.0"),
                             },
 
@@ -93,7 +93,7 @@ internal class MockPipeline : TestPipeline
                     }
                 },
 
-                If.Equal(variables["IsPr"], "true")
+                If.Equal(staticVariables["IsPr"], "true")
                     .Stage(new("Test", "Run E2E tests")
                     {
                         DependsOn = { "Build" },

@@ -26,10 +26,10 @@ public class IfConditionBuilder
     public IfCondition NotEqual(IfCondition condition)
         => Link(condition);
 
-    public IfCondition Equal(string expression1, string expression2)
+    public IfCondition Equal(IfConditionOneOfStringValue expression1, IfConditionOneOfStringValue expression2)
         => Link(new IfEqualityCondition(true, expression1, expression2));
 
-    public IfCondition NotEqual(string expression1, string expression2)
+    public IfCondition NotEqual(IfConditionOneOfStringValue expression1, IfConditionOneOfStringValue expression2)
         => Link(new IfEqualityCondition(false, expression1, expression2));
 
     public IfCondition And(params IfCondition[] expressions)
@@ -68,16 +68,16 @@ public class IfConditionBuilder
     public IfCondition NotIn(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
         => new IfNotInCondition(needle, haystack);
 
-    public IfCondition Greater(IfConditionOneOfStringValue first, string second)
+    public IfCondition Greater(IfConditionOneOfStringValue first, IfConditionOneOfStringValue second)
         => Link(new IfGreaterCondition(first, second));
 
-    public IfCondition Less(IfConditionOneOfStringValue first, string second)
+    public IfCondition Less(IfConditionOneOfStringValue first, IfConditionOneOfStringValue second)
         => Link(new IfLessCondition(first, second));
 
-    public IfCondition IsBranch(string branchName)
+    public IfCondition IsBranch(IfConditionOneOfStringValue branchName)
         => Link(new IfBranchCondition(branchName, true));
 
-    public IfCondition IsNotBranch(string branchName)
+    public IfCondition IsNotBranch(IfConditionOneOfStringValue branchName)
         => Link(new IfBranchCondition(branchName, false));
 
     public IfCondition IsPullRequest
@@ -105,10 +105,10 @@ public class IfConditionBuilder<T>
     public IfCondition<T> Equal(string condition)
         => Link(new IfCustomCondition<T>(condition));
 
-    public IfCondition<T> Equal(string expression1, string expression2)
+    public IfCondition<T> Equal(IfConditionOneOfStringValue expression1, IfConditionOneOfStringValue expression2)
         => Link(new IfEqualityCondition<T>(true, expression1, expression2));
 
-    public IfCondition<T> NotEqual(string expression1, string expression2)
+    public IfCondition<T> NotEqual(IfConditionOneOfStringValue expression1, IfConditionOneOfStringValue expression2)
     {
         return Link(new IfEqualityCondition<T>(false, expression1, expression2));
     }
