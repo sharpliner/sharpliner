@@ -83,7 +83,7 @@ public class VariableSerializationTests
         {
             Variables =
             {
-                If.ContainsValue(variables.Build.SourceBranch, "refs/heads/feature/", parameters["allowedTags"], variables["foo"], variables.Build.Reason)
+                If.ContainsValue(variables.Build.SourceBranch, "refs/heads/feature/", parameters["allowedTags"], staticVariables["foo"], variables.Build.Reason)
                     .Variable("feature", "on"),
             }
         };

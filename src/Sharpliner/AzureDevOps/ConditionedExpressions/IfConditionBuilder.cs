@@ -1,13 +1,11 @@
-﻿using Sharpliner.SourceGenerator;
-
-namespace Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 
 /// <summary>
 /// The builder is what let's us start the definition with the "If."
 /// and then forces us to add a condition. The condition then forces us to add
 /// an actual definition.
 /// </summary>
-public partial class IfConditionBuilder
+public class IfConditionBuilder
 {
     internal Conditioned? Parent { get; }
 
@@ -28,11 +26,9 @@ public partial class IfConditionBuilder
     public IfCondition NotEqual(IfCondition condition)
         => Link(condition);
 
-    [StringCondition]
     public IfCondition Equal(string expression1, string expression2)
         => Link(new IfEqualityCondition(true, expression1, expression2));
 
-    [StringCondition]
     public IfCondition NotEqual(string expression1, string expression2)
         => Link(new IfEqualityCondition(false, expression1, expression2));
 
@@ -54,43 +50,33 @@ public partial class IfConditionBuilder
     public IfCondition Xor(string expression1, string expression2)
         => Link(new IfXorCondition(expression1, expression2));
 
-    [StringCondition]
-    public IfCondition StartsWith(string needle, string haystack)
+    public IfCondition StartsWith(IfConditionOneOfStringValue needle, IfConditionOneOfStringValue haystack)
         => new IfStartsWithCondition(needle, haystack);
 
-    [StringCondition]
-    public IfCondition EndsWith(string needle, string haystack)
+    public IfCondition EndsWith(IfConditionOneOfStringValue needle, IfConditionOneOfStringValue haystack)
         => new IfEndsWithCondition(needle, haystack);
 
-    [StringCondition]
-    public IfCondition Contains(string needle, string haystack)
+    public IfCondition Contains(IfConditionOneOfStringValue needle, IfConditionOneOfStringValue haystack)
         => new IfContainsCondition(needle, haystack);
 
-    [StringCondition]
-    public IfCondition ContainsValue(string needle, params string[] haystack)
+    public IfCondition ContainsValue(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
         => new IfContainsValueCondition(needle, haystack);
 
-    [StringCondition]
-    public IfCondition In(string needle, params string[] haystack)
+    public IfCondition In(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
         => new IfInCondition(needle, haystack);
 
-    [StringCondition]
-    public IfCondition NotIn(string needle, params string[] haystack)
+    public IfCondition NotIn(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
         => new IfNotInCondition(needle, haystack);
 
-    [StringCondition]
-    public IfCondition Greater(string first, string second)
+    public IfCondition Greater(IfConditionOneOfStringValue first, string second)
         => Link(new IfGreaterCondition(first, second));
 
-    [StringCondition]
-    public IfCondition Less(string first, string second)
+    public IfCondition Less(IfConditionOneOfStringValue first, string second)
         => Link(new IfLessCondition(first, second));
 
-    [StringCondition]
     public IfCondition IsBranch(string branchName)
         => Link(new IfBranchCondition(branchName, true));
 
-    [StringCondition]
     public IfCondition IsNotBranch(string branchName)
         => Link(new IfBranchCondition(branchName, false));
 
@@ -107,7 +93,7 @@ public partial class IfConditionBuilder
     }
 }
 
-public partial class IfConditionBuilder<T>
+public class IfConditionBuilder<T>
 {
     internal Conditioned<T>? Parent { get; }
 
@@ -119,11 +105,9 @@ public partial class IfConditionBuilder<T>
     public IfCondition<T> Equal(string condition)
         => Link(new IfCustomCondition<T>(condition));
 
-    [StringCondition]
     public IfCondition<T> Equal(string expression1, string expression2)
         => Link(new IfEqualityCondition<T>(true, expression1, expression2));
 
-    [StringCondition]
     public IfCondition<T> NotEqual(string expression1, string expression2)
     {
         return Link(new IfEqualityCondition<T>(false, expression1, expression2));
@@ -147,44 +131,34 @@ public partial class IfConditionBuilder<T>
     public IfCondition<T> Or(params string[] expressions)
         => Link(new IfOrCondition<T>(expressions));
 
-    [StringCondition]
-    public IfCondition<T> StartsWith(string needle, string haystack)
+    public IfCondition<T> StartsWith(IfConditionOneOfStringValue needle, IfConditionOneOfStringValue haystack)
         => new IfStartsWithCondition<T>(needle, haystack);
 
-    [StringCondition]
-    public IfCondition<T> EndsWith(string needle, string haystack)
+    public IfCondition<T> EndsWith(IfConditionOneOfStringValue needle, IfConditionOneOfStringValue haystack)
         => new IfEndsWithCondition<T>(needle, haystack);
 
-    [StringCondition]
-    public IfCondition<T> Contains(string needle, string haystack)
+    public IfCondition<T> Contains(IfConditionOneOfStringValue needle, IfConditionOneOfStringValue haystack)
         => new IfContainsCondition<T>(needle, haystack);
 
-    [StringCondition]
-    public IfCondition<T> In(string needle, string haystack)
+    public IfCondition<T> In(IfConditionOneOfStringValue needle, IfConditionOneOfStringValue haystack)
         => new IfInCondition<T>(needle, haystack);
 
-    [StringCondition]
-    public IfCondition<T> NotIn(string needle, params string[] haystack)
+    public IfCondition<T> NotIn(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
         => new IfNotInCondition<T>(needle, haystack);
 
-    [StringCondition]
-    public IfCondition<T> ContainsValue(string needle, params string[] haystack)
+    public IfCondition<T> ContainsValue(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
         => new IfContainsValueCondition<T>(needle, haystack);
 
-    [StringCondition]
-    public IfCondition<T> IsBranch(string branchName)
+    public IfCondition<T> IsBranch(IfConditionOneOfStringValue branchName)
         => Link(new IfBranchCondition<T>(branchName, true));
 
-    [StringCondition]
-    public IfCondition<T> IsNotBranch(string branchName)
+    public IfCondition<T> IsNotBranch(IfConditionOneOfStringValue branchName)
         => Link(new IfBranchCondition<T>(branchName, false));
 
-    [StringCondition]
-    public IfCondition<T> Greater(string first, string second)
+    public IfCondition<T> Greater(IfConditionOneOfStringValue first, IfConditionOneOfStringValue second)
         => Link(new IfGreaterCondition<T>(first, second));
 
-    [StringCondition]
-    public IfCondition<T> Less(string first, string second)
+    public IfCondition<T> Less(IfConditionOneOfStringValue first, IfConditionOneOfStringValue second)
         => Link(new IfLessCondition<T>(first, second));
 
     public IfCondition<T> IsPullRequest

@@ -2,10 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net5.0;net6.0</TargetFrameworks>
-
-    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-    <CompilerGeneratedFilesOutputPath>generated</CompilerGeneratedFilesOutputPath>
-
+    
     <!-- NuGet details -->
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/sharpliner/sharpliner</RepositoryUrl>
@@ -35,6 +32,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="OneOf" Version="3.0.223" />
+    <PackageReference Include="OneOf.SourceGenerator" Version="3.0.223" />
     <PackageReference Include="YamlDotNet" Version="11.2.1" />
     <PackageReference Include="Microsoft.Build.Framework" Version="17.1.0" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.1.0" />
@@ -45,10 +44,6 @@
     <Content Include="..\..\README.md" PackagePath="\" />
     <Content Include="build\Sharpliner.props" PackagePath="build\" />
     <Content Include="build\Sharpliner.targets" PackagePath="build\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.csproj" OutputItemType="Analyzer" PackagePath="analyzers/dotnet/cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -96,10 +91,6 @@
     <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfLessCondition_StringConditions39.generated.cs" />
     <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_ConditionedExpressions_IfGreaterCondition_StringConditions37.generated.cs" />
     <Compile Remove="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator\Sharpliner_AzureDevOps_AzureDevOpsDefinition_StringConditions1.generated.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="generated\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.StringConditionGenerator" />
   </ItemGroup>
 
   <!--

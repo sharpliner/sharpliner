@@ -281,7 +281,7 @@ public class ConditionalsTests
                 If.Contains("refs/heads/feature/", variables.Build.SourceBranch)
                     .Variable("feature", "on"),
 
-                If.Contains("refs/heads/feature/", variables["Build.SourceBranch"])
+                If.Contains("refs/heads/feature/", staticVariables["Build.SourceBranch"])
                     .Variable("feature", "on")
             }
         };
@@ -308,7 +308,7 @@ public class ConditionalsTests
                 If.StartsWith("refs/heads/feature/", variables.Build.SourceBranch)
                     .Variable("feature", "on"),
 
-                If.StartsWith("refs/heads/feature/", variables["Build.SourceBranch"])
+                If.StartsWith("refs/heads/feature/", staticVariables["Build.SourceBranch"])
                     .Variable("feature", "on")
             }
         };
@@ -335,7 +335,7 @@ public class ConditionalsTests
                 If.EndsWith("refs/heads/feature/", variables.Build.SourceBranch)
                     .Variable("feature", "on"),
 
-                If.EndsWith("refs/heads/feature/", variables["Build.SourceBranch"])
+                If.EndsWith("refs/heads/feature/", staticVariables["Build.SourceBranch"])
                     .Variable("feature", "on")
             }
         };

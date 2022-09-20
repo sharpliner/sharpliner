@@ -4,21 +4,39 @@ namespace Sharpliner.AzureDevOps;
 
 public abstract class IfCondition : Condition
 {
-    internal const string IfExpressionStart = $"{ExpressionStart}if ";
-    internal static string RemoveBraces(IfCondition condition)
+    private static readonly (string Start, string End)[] _tagsToRemove = new[]
     {
-        return RemoveBraces(condition.Serialize());
+        (IfTagStart, ExpressionEnd),
+        (ElseTagStart, ExpressionEnd),
+        ('\'' + IfTagStart, ExpressionEnd + '\''),
+        ('\'' + ElseTagStart, ExpressionEnd + '\''),
+        (ExpressionStart, ExpressionEnd),
+        ('\'' + ExpressionStart, ExpressionEnd + '\''),
+    };
+
+    internal static string RemoveTags(IfCondition condition)
+    {
+        return RemoveTags(condition.Serialize());
     }
 
-    internal string RemoveBraces() => RemoveBraces(this);
+    internal string RemoveTags() => RemoveTags(this);
 
-    internal static string RemoveBraces(string condition)
+    internal static string RemoveTags(string condition)
     {
-        return condition.TrimStart($"{ExpressionStart} if ").TrimEnd($" {ExpressionEnd}");
+        foreach (var (start, end) in _tagsToRemove)
+        {
+            if (condition.StartsWith(start) && condition.EndsWith(end))
+            {
+                condition = condition.TrimStart(start).TrimEnd(end);
+                break;
+            }
+        }
+
+        return condition;
     }
 
-    internal static string WrapBraces(string condition) =>
-        IfExpressionStart + condition + Condition.ExpressionEnd;
+    internal static string WrapTag(string condition) =>
+        IfTagStart + condition + ExpressionEnd;
 }
 
 public abstract class IfCondition<T> : IfCondition

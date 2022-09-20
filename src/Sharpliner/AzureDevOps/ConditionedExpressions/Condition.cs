@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sharpliner.SourceGenerator;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
@@ -22,7 +21,7 @@ public abstract class Condition : IYamlConvertible
     internal abstract string Serialize();
 
     internal const string ExpressionStart = "${{ ";
-    private const string IfTagStart = $"{ExpressionStart}if ";
+    protected const string IfTagStart = $"{ExpressionStart}if ";
     protected const string ElseTagStart = $"{ExpressionStart}else";
     internal const string ExpressionEnd = " }}";
 
@@ -130,7 +129,7 @@ public class IfCustomCondition : IfCondition
         _condition = condition;
     }
 
-    internal override string Serialize() => WrapBraces(_condition);
+    internal override string Serialize() => WrapTag(_condition);
 }
 
 public class InlineNotCondition : InlineCondition
@@ -155,31 +154,29 @@ public class IfNotCondition : IfCondition
     private readonly string _condition;
 
     internal IfNotCondition(IfCondition condition)
-        : this(condition.RemoveBraces())
+        : this(condition.RemoveTags())
     {
     }
 
     internal IfNotCondition(string condition)
     {
-        _condition = NotConditionHelper.NegateCondition(RemoveBraces(condition));
+        _condition = NotConditionHelper.NegateCondition(RemoveTags(condition));
     }
 
-    internal override string Serialize() => WrapBraces(_condition);
+    internal override string Serialize() => WrapTag(_condition);
 }
 
-[StringCondition]
-public partial class IfEqualityCondition : IfStringCondition
+public class IfEqualityCondition : IfStringCondition
 {
-    internal IfEqualityCondition(bool equal, string expression1, string expression2)
+    internal IfEqualityCondition(bool equal, IfConditionOneOfStringValue expression1, IfConditionOneOfStringValue expression2)
         : base(equal ? "eq" : "ne", expression1, expression2)
     {
     }
 }
 
-[StringCondition]
-public partial class InlineEqualityCondition : InlineStringCondition
+public class InlineEqualityCondition : InlineStringCondition
 {
-    internal InlineEqualityCondition(bool equal, string expression1, string expression2)
+    internal InlineEqualityCondition(bool equal, InlineConditionOneOfStringValue expression1, InlineConditionOneOfStringValue expression2)
         : base(equal ? "eq" : "ne", expression1, expression2)
     {
     }
@@ -277,7 +274,7 @@ public class IfConjunctionCondition : IfCondition
     private readonly string[] _expressions;
 
     internal IfConjunctionCondition(string keyword, params IfCondition[] expressions)
-        : this(keyword, expressions.Select(RemoveBraces).ToArray())
+        : this(keyword, expressions.Select(RemoveTags).ToArray())
     {
     }
 
@@ -287,7 +284,7 @@ public class IfConjunctionCondition : IfCondition
         _expressions = expressions;
     }
 
-    internal override string Serialize() => WrapBraces($"{_keyword}({Join(_expressions)})");
+    internal override string Serialize() => WrapTag($"{_keyword}({Join(_expressions)})");
 }
 
 public class IfConjunctionCondition<T> : IfCondition<T>
@@ -296,7 +293,7 @@ public class IfConjunctionCondition<T> : IfCondition<T>
     private readonly string[] _expressions;
 
     internal IfConjunctionCondition(string keyword, IfCondition[] expressions, Conditioned<T>? parent = null)
-        : this(keyword, expressions.Select(RemoveBraces).ToArray(), parent)
+        : this(keyword, expressions.Select(RemoveTags).ToArray(), parent)
     {
     }
 
@@ -335,145 +332,129 @@ public class IfXorCondition : IfConjunctionCondition
     }
 }
 
-[StringCondition]
-public partial class InlineContainsCondition : InlineStringCondition
+public class InlineContainsCondition : InlineStringCondition
 {
-    internal InlineContainsCondition(string needle, string haystack)
+    internal InlineContainsCondition(InlineConditionOneOfStringValue needle, InlineConditionOneOfStringValue haystack)
         : base("contains", haystack, needle)
     {
     }
 }
 
-[StringCondition]
-public partial class IfContainsCondition : IfStringCondition
+public class IfContainsCondition : IfStringCondition
 {
-    internal IfContainsCondition(string needle, string haystack)
+    internal IfContainsCondition(IfConditionOneOfStringValue needle, IfConditionOneOfStringValue haystack)
         : base("contains", haystack, needle)
     {
     }
 }
 
-[StringCondition]
-public partial class InlineStartsWithCondition : InlineStringCondition
+public class InlineStartsWithCondition : InlineStringCondition
 {
-    internal InlineStartsWithCondition(string needle, string haystack)
+    internal InlineStartsWithCondition(InlineConditionOneOfStringValue needle, InlineConditionOneOfStringValue haystack)
         : base("startsWith", haystack, needle)
     {
     }
 }
 
-[StringCondition]
-public partial class IfStartsWithCondition : IfStringCondition
+public class IfStartsWithCondition : IfStringCondition
 {
-    internal IfStartsWithCondition(string needle, string haystack)
+    internal IfStartsWithCondition(IfConditionOneOfStringValue needle, IfConditionOneOfStringValue haystack)
         : base("startsWith", haystack, needle)
     {
     }
 }
 
-[StringCondition]
-public partial class InlineEndsWithCondition : InlineStringCondition
+public class InlineEndsWithCondition : InlineStringCondition
 {
-    internal InlineEndsWithCondition(string needle, string haystack)
+    internal InlineEndsWithCondition(InlineConditionOneOfStringValue needle, InlineConditionOneOfStringValue haystack)
         : base("endsWith", haystack, needle)
     {
     }
 }
 
-[StringCondition]
-public partial class IfEndsWithCondition : IfStringCondition
+public class IfEndsWithCondition : IfStringCondition
 {
-    internal IfEndsWithCondition(string needle, string haystack)
+    internal IfEndsWithCondition(IfConditionOneOfStringValue needle, IfConditionOneOfStringValue haystack)
         : base("endsWith", haystack, needle)
     {
     }
 }
 
-[StringCondition]
-public partial class InlineInCondition : InlineStringCondition
+public class InlineInCondition : InlineStringCondition
 {
-    internal InlineInCondition(string needle, params string[] haystack)
+    internal InlineInCondition(InlineConditionOneOfStringValue needle, params InlineConditionOneOfStringValue[] haystack)
         : base("in", needle, haystack)
     {
     }
 }
 
-[StringCondition]
-public partial class IfInCondition : IfStringCondition
+public class IfInCondition : IfStringCondition
 {
-    internal IfInCondition(string needle, params string[] haystack)
+    internal IfInCondition(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
         : base("in", needle, haystack)
     {
     }
 }
 
-[StringCondition]
-public partial class InlineNotInCondition : InlineStringCondition
+public class InlineNotInCondition : InlineStringCondition
 {
-    internal InlineNotInCondition(string needle, params string[] haystack)
+    internal InlineNotInCondition(InlineConditionOneOfStringValue needle, params InlineConditionOneOfStringValue[] haystack)
         : base("notIn", needle, haystack)
     {
     }
 }
 
-[StringCondition]
-public partial class IfNotInCondition : IfStringCondition
+public class IfNotInCondition : IfStringCondition
 {
-    internal IfNotInCondition(string needle, params string[] haystack)
+    internal IfNotInCondition(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
         : base("notIn", needle, haystack)
     {
     }
 }
 
-[StringCondition]
-public partial class InlineContainsValueCondition : InlineStringCondition
+public class InlineContainsValueCondition : InlineStringCondition
 {
-    internal InlineContainsValueCondition(string needle, params string[] haystack)
+    internal InlineContainsValueCondition(InlineConditionOneOfStringValue needle, params InlineConditionOneOfStringValue[] haystack)
         : base("containsValue", haystack, needle)
     {
     }
 }
 
-[StringCondition]
-public partial class IfContainsValueCondition : IfStringCondition
+public class IfContainsValueCondition : IfStringCondition
 {
-    internal IfContainsValueCondition(string needle, params string[] haystack)
+    internal IfContainsValueCondition(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
         : base("containsValue", haystack, needle)
     {
     }
 }
 
-[StringCondition]
-public partial class InlineGreaterCondition : InlineStringCondition
+public class InlineGreaterCondition : InlineStringCondition
 {
-    internal InlineGreaterCondition(string first, string second)
+    internal InlineGreaterCondition(InlineConditionOneOfStringValue first, InlineConditionOneOfStringValue second)
         : base("gt", first, second)
     {
     }
 }
 
-[StringCondition]
-public partial class IfGreaterCondition : IfStringCondition
+public class IfGreaterCondition : IfStringCondition
 {
-    internal IfGreaterCondition(string first, string second)
+    internal IfGreaterCondition(IfConditionOneOfStringValue first, IfConditionOneOfStringValue second)
         : base("gt", first, second)
     {
     }
 }
 
-[StringCondition]
-public partial class InlineLessCondition : InlineStringCondition
+public class InlineLessCondition : InlineStringCondition
 {
-    internal InlineLessCondition(string first, string second)
+    internal InlineLessCondition(InlineConditionOneOfStringValue first, InlineConditionOneOfStringValue second)
         : base("lt", first, second)
     {
     }
 }
 
-[StringCondition]
-public partial class IfLessCondition : IfStringCondition
+public class IfLessCondition : IfStringCondition
 {
-    internal IfLessCondition(string first, string second)
+    internal IfLessCondition(IfConditionOneOfStringValue first, IfConditionOneOfStringValue second)
         : base("lt", first, second)
     {
     }
@@ -500,7 +481,7 @@ public class IfCustomCondition<T> : IfCondition<T>
         _condition = condition;
     }
 
-    internal override string Serialize() => WrapBraces(_condition);
+    internal override string Serialize() => WrapTag(_condition);
 }
 
 public class InlineNotCondition<T> : InlineCondition<T>
@@ -525,13 +506,13 @@ public class IfNotCondition<T> : IfCondition<T>
     private readonly string _condition;
 
     internal IfNotCondition(IfCondition condition)
-        : this(condition.RemoveBraces())
+        : this(condition.RemoveTags())
     {
     }
 
     internal IfNotCondition(string condition)
     {
-        _condition = NotConditionHelper.NegateCondition(RemoveBraces(condition));
+        _condition = NotConditionHelper.NegateCondition(RemoveTags(condition));
     }
 
     internal override string Serialize() => _condition;
@@ -552,19 +533,17 @@ public class ElseCondition<T> : IfCondition<T>
     public override string ToString() => ElseTagStart + ExpressionEnd;
 }
 
-[StringCondition]
-public partial class InlineEqualityCondition<T> : InlineStringCondition<T>
+public class InlineEqualityCondition<T> : InlineStringCondition<T>
 {
-    internal InlineEqualityCondition(bool equal, string expression1, string expression2)
+    internal InlineEqualityCondition(bool equal, InlineConditionOneOfStringValue expression1, InlineConditionOneOfStringValue expression2)
         : base(equal ? "eq" : "ne", expression1, expression2)
     {
     }
 }
 
-[StringCondition]
-public partial class IfEqualityCondition<T> : IfStringCondition<T>
+public class IfEqualityCondition<T> : IfStringCondition<T>
 {
-    internal IfEqualityCondition(bool equal, string expression1, string expression2)
+    internal IfEqualityCondition(bool equal, IfConditionOneOfStringValue expression1, IfConditionOneOfStringValue expression2)
         : base(equal ? "eq" : "ne", expression1, expression2)
     {
     }
@@ -649,208 +628,185 @@ public class IfXorCondition<T> : IfConjunctionCondition<T>
     }
 }
 
-[StringCondition]
-public partial class InlineContainsCondition<T> : InlineStringCondition<T>
+public class InlineContainsCondition<T> : InlineStringCondition<T>
 {
-    internal InlineContainsCondition(string haystack, string needle)
+    internal InlineContainsCondition(InlineConditionOneOfStringValue haystack, InlineConditionOneOfStringValue needle)
         : base("contains", haystack, needle)
     {
     }
 }
 
-[StringCondition]
-public partial class IfContainsCondition<T> : IfStringCondition<T>
+public class IfContainsCondition<T> : IfStringCondition<T>
 {
-    internal IfContainsCondition(string haystack, string needle)
+    internal IfContainsCondition(IfConditionOneOfStringValue haystack, IfConditionOneOfStringValue needle)
         : base("contains", haystack, needle)
     {
     }
 }
 
-[StringCondition]
-public partial class InlineStartsWithCondition<T> : InlineStringCondition<T>
+public class InlineStartsWithCondition<T> : InlineStringCondition<T>
 {
-    internal InlineStartsWithCondition(string needle, string haystack)
+    internal InlineStartsWithCondition(InlineConditionOneOfStringValue needle, InlineConditionOneOfStringValue haystack)
         : base("startsWith", haystack, needle)
     {
     }
 }
 
-[StringCondition]
-public partial class IfStartsWithCondition<T> : IfStringCondition<T>
+public class IfStartsWithCondition<T> : IfStringCondition<T>
 {
-    internal IfStartsWithCondition(string needle, string haystack)
+    internal IfStartsWithCondition(IfConditionOneOfStringValue needle, IfConditionOneOfStringValue haystack)
         : base("startsWith", haystack, needle)
     {
     }
 }
 
-[StringCondition]
-public partial class InlineEndsWithCondition<T> : InlineStringCondition<T>
+public class InlineEndsWithCondition<T> : InlineStringCondition<T>
 {
-    internal InlineEndsWithCondition(string needle, string haystack)
+    internal InlineEndsWithCondition(InlineConditionOneOfStringValue needle, InlineConditionOneOfStringValue haystack)
         : base("endsWith", haystack, needle)
     {
     }
 }
 
-[StringCondition]
-public partial class IfEndsWithCondition<T> : IfStringCondition<T>
+public class IfEndsWithCondition<T> : IfStringCondition<T>
 {
-    internal IfEndsWithCondition(string needle, string haystack)
+    internal IfEndsWithCondition(IfConditionOneOfStringValue needle, IfConditionOneOfStringValue haystack)
         : base("endsWith", haystack, needle)
     {
     }
 }
 
-[StringCondition]
-public partial class InlineContainsValueCondition<T> : InlineStringCondition<T>
+public class InlineContainsValueCondition<T> : InlineStringCondition<T>
 {
-    internal InlineContainsValueCondition(string needle, params string[] haystack)
+    internal InlineContainsValueCondition(InlineConditionOneOfStringValue needle, params InlineConditionOneOfStringValue[] haystack)
         : base("containsValue", haystack, needle)
     {
     }
 }
 
-[StringCondition]
-public partial class IfContainsValueCondition<T> : IfStringCondition<T>
+public class IfContainsValueCondition<T> : IfStringCondition<T>
 {
-    internal IfContainsValueCondition(string needle, params string[] haystack)
+    internal IfContainsValueCondition(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
         : base("containsValue", haystack, needle)
     {
     }
 }
 
-[StringCondition]
-public partial class InlineInCondition<T> : InlineStringCondition<T>
+public class InlineInCondition<T> : InlineStringCondition<T>
 {
-    internal InlineInCondition(string needle, params string[] haystack)
+    internal InlineInCondition(InlineConditionOneOfStringValue needle, params InlineConditionOneOfStringValue[] haystack)
         : base("in", needle, haystack)
     {
     }
 }
 
-[StringCondition]
-public partial class IfInCondition<T> : IfStringCondition<T>
+public class IfInCondition<T> : IfStringCondition<T>
 {
-    internal IfInCondition(string needle, params string[] haystack)
+    internal IfInCondition(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
         : base("in", needle, haystack)
     {
     }
 }
 
-[StringCondition]
-public partial class InlineNotInCondition<T> : InlineStringCondition<T>
+public class InlineNotInCondition<T> : InlineStringCondition<T>
 {
-    internal InlineNotInCondition(string needle, params string[] haystack)
+    internal InlineNotInCondition(InlineConditionOneOfStringValue needle, params InlineConditionOneOfStringValue[] haystack)
         : base("notin", needle, haystack)
     {
     }
 }
 
-[StringCondition]
-public partial class IfNotInCondition<T> : IfStringCondition<T>
+public class IfNotInCondition<T> : IfStringCondition<T>
 {
-    internal IfNotInCondition(string needle, params string[] haystack)
+    internal IfNotInCondition(IfConditionOneOfStringValue needle, params IfConditionOneOfStringValue[] haystack)
         : base("notin", needle, haystack)
     {
     }
 }
 
-[StringCondition]
-public partial class InlineGreaterCondition<T> : InlineStringCondition<T>
+public class InlineGreaterCondition<T> : InlineStringCondition<T>
 {
-    internal InlineGreaterCondition(string first, string second)
+    internal InlineGreaterCondition(InlineConditionOneOfStringValue first, InlineConditionOneOfStringValue second)
         : base("gt", first, second)
     {
     }
 }
 
-[StringCondition]
-public partial class IfGreaterCondition<T> : IfStringCondition<T>
+public class IfGreaterCondition<T> : IfStringCondition<T>
 {
-    internal IfGreaterCondition(string first, string second)
+    internal IfGreaterCondition(IfConditionOneOfStringValue first, IfConditionOneOfStringValue second)
         : base("gt", first, second)
     {
     }
 }
 
-[StringCondition]
-public partial class InlineLessCondition<T> : InlineStringCondition<T>
+public class InlineLessCondition<T> : InlineStringCondition<T>
 {
-    internal InlineLessCondition(string first, string second)
+    internal InlineLessCondition(InlineConditionOneOfStringValue first, InlineConditionOneOfStringValue second)
         : base("lt", first, second)
     {
     }
 }
 
-[StringCondition]
-public partial class IfLessCondition<T> : IfStringCondition<T>
+public class IfLessCondition<T> : IfStringCondition<T>
 {
-    internal IfLessCondition(string first, string second)
+    internal IfLessCondition(IfConditionOneOfStringValue first, IfConditionOneOfStringValue second)
         : base("lt", first, second)
     {
     }
 }
 
-[StringCondition]
-public partial class InlineBranchCondition : InlineEqualityCondition
+public class InlineBranchCondition : InlineEqualityCondition
 {
-    internal InlineBranchCondition(string branchName, bool equal)
-        : base(equal, new StaticVariableReference("Build.SourceBranch"), branchName)
+    internal InlineBranchCondition(InlineConditionOneOfStringValue branchName, bool equal)
+        : base(equal, new StaticVariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
     {
     }
 }
 
-[StringCondition]
-public partial class IfBranchCondition : IfEqualityCondition
+public class IfBranchCondition : IfEqualityCondition
 {
-    internal IfBranchCondition(string branchName, bool equal)
-        : base(equal, new StaticVariableReference("Build.SourceBranch"), branchName)
+    internal IfBranchCondition(IfConditionOneOfStringValue branchName, bool equal)
+        : base(equal, new StaticVariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
     {
     }
 }
 
-[StringCondition]
-public partial class InlineBranchCondition<T> : InlineEqualityCondition<T>
+public class InlineBranchCondition<T> : InlineEqualityCondition<T>
 {
-    internal InlineBranchCondition(string branchName, bool equal)
-        : base(equal, new StaticVariableReference("Build.SourceBranch"), branchName)
+    internal InlineBranchCondition(InlineConditionOneOfStringValue branchName, bool equal)
+        : base(equal, new StaticVariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
     {
     }
 }
 
-[StringCondition]
-public partial class IfBranchCondition<T> : IfEqualityCondition<T>
+public class IfBranchCondition<T> : IfEqualityCondition<T>
 {
-    internal IfBranchCondition(string branchName, bool equal)
-        : base(equal, new StaticVariableReference("Build.SourceBranch"), branchName)
+    internal IfBranchCondition(IfConditionOneOfStringValue branchName, bool equal)
+        : base(equal, new StaticVariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
     {
     }
 }
 
-[StringCondition]
-public partial class InlineBuildReasonCondition : InlineEqualityCondition
+public class InlineBuildReasonCondition : InlineEqualityCondition
 {
-    internal InlineBuildReasonCondition(string reason, bool equal)
+    internal InlineBuildReasonCondition(InlineConditionOneOfStringValue reason, bool equal)
         : base(equal, new StaticVariableReference("Build.Reason"), reason)
     {
     }
 }
 
-[StringCondition]
-public partial class IfBuildReasonCondition : IfEqualityCondition
+public class IfBuildReasonCondition : IfEqualityCondition
 {
-    internal IfBuildReasonCondition(string reason, bool equal)
+    internal IfBuildReasonCondition(IfConditionOneOfStringValue reason, bool equal)
         : base(equal, new StaticVariableReference("Build.Reason"), reason)
     {
     }
 }
 
-[StringCondition]
-public partial class InlineBuildReasonCondition<T> : InlineEqualityCondition<T>
+public class InlineBuildReasonCondition<T> : InlineEqualityCondition<T>
 {
-    internal InlineBuildReasonCondition(string reason, bool equal)
+    internal InlineBuildReasonCondition(InlineConditionOneOfStringValue reason, bool equal)
         : base(equal, new StaticVariableReference("Build.Reason"), reason)
     {
     }
@@ -858,7 +814,7 @@ public partial class InlineBuildReasonCondition<T> : InlineEqualityCondition<T>
 
 public class IfBuildReasonCondition<T> : IfEqualityCondition<T>
 {
-    internal IfBuildReasonCondition(string reason, bool equal)
+    internal IfBuildReasonCondition(IfConditionOneOfStringValue reason, bool equal)
         : base(equal, new StaticVariableReference("Build.Reason"), reason)
     {
     }

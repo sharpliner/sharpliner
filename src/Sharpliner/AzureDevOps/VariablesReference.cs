@@ -2,7 +2,7 @@
 
 namespace Sharpliner.AzureDevOps;
 
-public sealed class VariablesReference
+public class VariablesReference
 {
     public VariableReference this[string variableName] => new(variableName);
 

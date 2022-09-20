@@ -10,115 +10,110 @@ public abstract class InlineStringCondition : InlineCondition
     private readonly string _one;
     private readonly string _two;
 
-    protected InlineStringCondition(string keyword, string[] one, string two)
-    {
-        _keyword = keyword;
-        _one = Join(one);
-        _two = two;
-    }
-
-    protected InlineStringCondition(string keyword, IEnumerable<object> one, string two)
+    protected InlineStringCondition(string keyword, InlineConditionOneOfArrayStringValue one, InlineConditionOneOfStringValue two)
         : this(keyword, Serialize(one), two)
     {
     }
 
-    protected InlineStringCondition(string keyword, string one, IEnumerable<object> two)
+    protected InlineStringCondition(string keyword, InlineConditionOneOfStringValue one, InlineConditionOneOfArrayStringValue two)
         : this(keyword, one, Serialize(two))
     {
     }
 
-    protected InlineStringCondition(string keyword, string one, string[] two)
+    protected InlineStringCondition(string keyword, InlineConditionOneOfStringValue one, InlineConditionOneOfStringValue two)
     {
         _keyword = keyword;
-        _one = one;
-        _two = Join(two);
+        _one = Serialize(one);
+        _two = Serialize(two);
     }
 
-    protected InlineStringCondition(string keyword, string one, string two)
+    protected static string Serialize(InlineConditionOneOfArrayStringValue arrayValue)
+    {
+        return InlineStringConditionHelper.Serialize(arrayValue);
+    }
+
+    protected static string Serialize(InlineConditionOneOfStringValue value)
+    {
+        return InlineStringConditionHelper.Serialize(value);
+    }
+
+    internal override string Serialize() => $"{_keyword}({WrapQuotes(_one)}, {WrapQuotes(_two)})";
+}
+
+public abstract class InlineStringCondition<T> : InlineCondition<T>
+{
+    private readonly string _keyword;
+    private string _one;
+    private string _two;
+
+    protected InlineStringCondition(string keyword, InlineConditionOneOfArrayStringValue one, InlineConditionOneOfStringValue two, Conditioned<T>? parent = null)
+        : this(keyword, Serialize(one), two, parent)
+    {
+    }
+
+    protected InlineStringCondition(string keyword, InlineConditionOneOfStringValue one, InlineConditionOneOfArrayStringValue two, Conditioned<T>? parent = null)
+        : this(keyword, one, Serialize(two), parent)
+    {
+    }
+
+    protected InlineStringCondition(string keyword, InlineConditionOneOfStringValue one, InlineConditionOneOfStringValue two, Conditioned<T>? parent = null)
     {
         _keyword = keyword;
-        _one = one;
-        _two = two;
+        _one = Serialize(one);
+        _two = Serialize(two);
+        Parent = parent;
     }
 
-    protected static string Serialize(VariableReference staticVariableReference)
+    protected static string Serialize(InlineConditionOneOfArrayStringValue arrayValue)
     {
-        return staticVariableReference.RuntimeExpression;
+        return InlineStringConditionHelper.Serialize(arrayValue);
     }
 
-    protected static string Serialize(ParameterReference parameterReference)
+    protected static string Serialize(InlineConditionOneOfStringValue value)
     {
-        return Condition.ExpressionStart + parameterReference.RuntimeExpression + Condition.ExpressionEnd;
+        return InlineStringConditionHelper.Serialize(value);
     }
 
-    protected static string Serialize(IEnumerable<object> array)
+    internal override string Serialize() => $"{_keyword}({WrapQuotes(_one)}, {WrapQuotes(_two)})";
+}
+
+internal class InlineStringConditionHelper
+{
+    public static string Serialize(InlineConditionOneOfStringValue value)
+    {
+        return value.Match(
+
+            str => str,
+            parameter => parameter.CompileTimeExpression,
+            variable => variable.RuntimeExpression
+        );
+    }
+
+    public static string Serialize(InlineConditionOneOfArrayStringValue arrayValue)
+    {
+        return arrayValue.Match(
+            strings => string.Join(", ", strings),
+            objects => Serialize(objects),
+            parameters => string.Join(", ", parameters.Select(p => Serialize(p))),
+            variables => string.Join(", ", variables.Select(v => Serialize(v)))
+        );
+    }
+
+    public static string Serialize(object[] array)
     {
         var convertedStringArray = array.Select(item =>
             {
                 return item switch
                 {
-                    VariableReference staticVariableReference => Serialize(staticVariableReference),
+                    InlineConditionOneOfStringValue oneOfStringValue => Serialize(oneOfStringValue),
+                    InlineConditionOneOfArrayStringValue oneOfArrayStringValue => Serialize(oneOfArrayStringValue),
                     ParameterReference parameterReference => Serialize(parameterReference),
+                    VariableReference variableReference => Serialize(variableReference),
                     _ => item.ToString()
                 };
             })
-            .Select(WrapQuotes);
+            .Select(Condition.WrapQuotes);
 
         return string.Join(", ", convertedStringArray);
-    }
-
-    protected static string Serialize(string value)
-    {
-        return value;
-    }
-
-    protected static string[] Serialize(string[] value)
-    {
-        return value;
-    }
-
-    internal override string Serialize() => $"{_keyword}({_one}, {_two})";
-}
-
-public abstract class InlineStringCondition<T> : InlineStringCondition
-{
-    protected InlineStringCondition(string keyword, string one, string two, Conditioned<T>? parent = null)
-        : base(keyword, one, two)
-    {
-        Parent = parent;
-    }
-
-    protected InlineStringCondition(string keyword, IEnumerable<object> one, string two, Conditioned<T>? parent = null)
-        : this(keyword, Serialize(one), two, parent)
-    {
-        Parent = parent;
-    }
-
-    protected InlineStringCondition(string keyword, string one, IEnumerable<object> two, Conditioned<T>? parent = null)
-        : this(keyword, one, Serialize(two), parent)
-    {
-        Parent = parent;
-    }
-
-    protected InlineStringCondition(string keyword, string[] one, string two, Conditioned<T>? parent = null)
-    : this(keyword, Join(one), two, parent)
-    {
-        Parent = parent;
-    }
-
-    protected InlineStringCondition(string keyword, string one, string[] two, Conditioned<T>? parent = null)
-        : this(keyword, one, Join(two), parent)
-    {
-        Parent = parent;
-    }
-
-    protected static string Serialize(string value)
-    {
-        return value;
-    }
-
-    protected static string[] Serialize(string[] value)
-    {
-        return value;
     }
 }

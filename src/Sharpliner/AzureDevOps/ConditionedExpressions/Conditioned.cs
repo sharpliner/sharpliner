@@ -233,7 +233,7 @@ public record Conditioned<T> : Conditioned
     {
         if (Condition != null)
         {
-            emitter.Emit(new Scalar(Condition.TagStart + Condition.RemoveBraces() + Condition.TagEnd));
+            emitter.Emit(new Scalar(Condition.TagStart + Condition.RemoveTags() + Condition.TagEnd));
         }
         else if (Definitions.Count > 0)
         {
@@ -265,7 +265,7 @@ public record Conditioned<T> : Conditioned
         if (Condition != null)
         {
             emitter.Emit(new MappingStart());
-            emitter.Emit(new Scalar(Condition.TagStart + IfCondition.RemoveBraces(Condition) + Condition.TagEnd));
+            emitter.Emit(new Scalar(Condition.TagStart + IfCondition.RemoveTags(Condition) + Condition.TagEnd));
             emitter.Emit(new SequenceStart(AnchorName.Empty, TagName.Empty, true, SequenceStyle.Block));
         }
 

@@ -11,65 +11,34 @@ public abstract class IfStringCondition : IfCondition
     private readonly string _one;
     private readonly string _two;
 
-    protected IfStringCondition(string keyword, string[] one, string two)
-    {
-        _keyword = keyword;
-        _one = Join(one);
-        _two = two;
-    }
-
-
-    protected IfStringCondition(string keyword, IEnumerable<object> one, string two)
+    protected IfStringCondition(string keyword, IfConditionOneOfArrayStringValue one, IfConditionOneOfStringValue two)
         : this(keyword, Serialize(one), two)
     {
     }
 
-    protected IfStringCondition(string keyword, string one, IEnumerable<object> two)
+    protected IfStringCondition(string keyword, IfConditionOneOfStringValue one, IfConditionOneOfArrayStringValue two)
         : this(keyword, one, Serialize(two))
     {
     }
 
-    protected IfStringCondition(string keyword, string one, string[] two)
+    protected IfStringCondition(string keyword, IfConditionOneOfStringValue one, IfConditionOneOfStringValue two)
     {
         _keyword = keyword;
-        _one = one;
-        _two = Join(two);
+        _one = Serialize(one);
+        _two = Serialize(two);
     }
 
-    protected IfStringCondition(string keyword, string one, string two)
+    protected static string Serialize(IfConditionOneOfArrayStringValue arrayValue)
     {
-        _keyword = keyword;
-        _one = one;
-        _two = two;
+        return IfStringConditionHelper.Serialize(arrayValue);
     }
 
-    protected static string Serialize(StaticVariableReference staticVariableReference)
+    protected static string Serialize(IfConditionOneOfStringValue value)
     {
-        // If condition is compile time - So we can't use runtime variables
-        return IfStringConditionHelper.Serialize(staticVariableReference);
+        return IfStringConditionHelper.Serialize(value);
     }
 
-    protected static string Serialize(ParameterReference parameterReference)
-    {
-        return IfStringConditionHelper.Serialize(parameterReference);
-    }
-
-    protected static string Serialize(IEnumerable<object> array)
-    {
-        return IfStringConditionHelper.Serialize(array);
-    }
-
-    protected static string Serialize(string value)
-    {
-        return value;
-    }
-
-    protected static string[] Serialize(string[] value)
-    {
-        return value;
-    }
-
-    internal override string Serialize() => WrapBraces($"{_keyword}({_one}, {_two})");
+    internal override string Serialize() => WrapTag($"{_keyword}({WrapQuotes(_one)}, {WrapQuotes(_two)})");
 }
 
 public abstract class IfStringCondition<T> : IfCondition<T>
@@ -78,92 +47,67 @@ public abstract class IfStringCondition<T> : IfCondition<T>
     private readonly string _one;
     private readonly string _two;
 
-    protected IfStringCondition(string keyword, string one, string two, Conditioned<T>? parent = null)
-    {
-        _keyword = keyword;
-        _one = one;
-        _two = two;
-        Parent = parent;
-    }
-
-    protected IfStringCondition(string keyword, IEnumerable<object> one, string two, Conditioned<T>? parent = null)
+    protected IfStringCondition(string keyword, IfConditionOneOfArrayStringValue one, IfConditionOneOfStringValue two, Conditioned<T>? parent = null)
         : this(keyword, Serialize(one), two, parent)
     {
-        Parent = parent;
     }
 
-    protected IfStringCondition(string keyword, string one, IEnumerable<object> two, Conditioned<T>? parent = null)
+    protected IfStringCondition(string keyword, IfConditionOneOfStringValue one, IfConditionOneOfArrayStringValue two, Conditioned<T>? parent = null)
         : this(keyword, one, Serialize(two), parent)
     {
-        Parent = parent;
     }
 
-    protected IfStringCondition(string keyword, string[] one, string two, Conditioned<T>? parent = null)
-        : this(keyword, Join(one), two, parent)
+    protected IfStringCondition(string keyword, IfConditionOneOfStringValue one, IfConditionOneOfStringValue two, Conditioned<T>? parent = null)
     {
         _keyword = keyword;
-        _one = Join(one);
-        _two = two;
+        _one = Serialize(one);
+        _two = Serialize(two);
         Parent = parent;
     }
 
-    protected IfStringCondition(string keyword, string one, string[] two, Conditioned<T>? parent = null)
-        : this(keyword, one, Join(two), parent)
+    protected static string Serialize(IfConditionOneOfArrayStringValue arrayValue)
     {
-        _keyword = keyword;
-        _one = one;
-        _two = Join(two);
-        Parent = parent;
+        return IfStringConditionHelper.Serialize(arrayValue);
     }
 
-    protected static string Serialize(StaticVariableReference staticVariableReference)
+    protected static string Serialize(IfConditionOneOfStringValue value)
     {
-        // If condition is compile time - So we can't use runtime variables
-        return IfStringConditionHelper.Serialize(staticVariableReference);
+        return IfStringConditionHelper.Serialize(value);
     }
 
-    protected static string Serialize(ParameterReference parameterReference)
-    {
-        return IfStringConditionHelper.Serialize(parameterReference);
-    }
-
-    protected static string Serialize(IEnumerable<object> array)
-    {
-        return IfStringConditionHelper.Serialize(array);
-    }
-
-    protected static string Serialize(string value)
-    {
-        return value;
-    }
-
-    protected static string[] Serialize(string[] value)
-    {
-        return value;
-    }
-
-    internal override string Serialize() => WrapBraces($"{_keyword}({_one}, {_two})");
+    internal override string Serialize() => WrapTag($"{_keyword}({WrapQuotes(_one)}, {WrapQuotes(_two)})");
 }
 
 internal class IfStringConditionHelper
 {
-    public static string Serialize(StaticVariableReference staticVariableReference)
+    public static string Serialize(IfConditionOneOfStringValue value)
     {
-        // If condition is compile time - So we can't use runtime variables
-        return staticVariableReference.RuntimeExpression;
+        return value.Match(
+
+            str => str,
+            parameter => parameter.RuntimeExpression,
+            staticVariable => staticVariable.RuntimeExpression
+        );
     }
 
-    public static string Serialize(ParameterReference parameterReference)
+    public static string Serialize(IfConditionOneOfArrayStringValue arrayValue)
     {
-        return Condition.WrapQuotes(parameterReference.RuntimeExpression);
+        return arrayValue.Match(
+            strings => string.Join(", ", strings),
+            objects => Serialize(objects),
+            parameters => string.Join(", ", parameters.Select(p => Serialize(p))),
+            staticVariables => string.Join(", ", staticVariables.Select(v => Serialize(v)))
+        );
     }
 
-    public static string Serialize(IEnumerable<object> array)
+    public static string Serialize(object[] array)
     {
         var convertedStringArray = array.Select(item =>
             {
                 return item switch
                 {
+                    IfConditionOneOfStringValue oneOfStringValue => Serialize(oneOfStringValue),
+                    IfConditionOneOfArrayStringValue oneOfArrayStringValue => Serialize(oneOfArrayStringValue),
                     StaticVariableReference staticVariableReference => Serialize(staticVariableReference),
                     ParameterReference parameterReference => Serialize(parameterReference),
                     VariableReference => throw new ArgumentException("If Conditions are compile-time statements, therefore runtime variables cannot be evaluated. You can use static variables or parameters instead."),
