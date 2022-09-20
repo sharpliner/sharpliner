@@ -162,10 +162,10 @@ public class IfConditionBuilder<T>
         => Link(new IfLessCondition<T>(first, second));
 
     public IfCondition<T> IsPullRequest
-        => Link(new IfBuildReasonCondition<T>(new StaticVariableReference("PullRequest"), true));
+        => Link(new IfBuildReasonCondition<T>("PullRequest", true));
 
     public IfCondition<T> IsNotPullRequest
-        => Link(new IfBuildReasonCondition<T>(new StaticVariableReference("PullRequest"), false));
+        => Link(new IfBuildReasonCondition<T>("PullRequest", false));
 
     private IfCondition<T> Link(IfCondition<T> condition)
     {

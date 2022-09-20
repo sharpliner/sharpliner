@@ -30,46 +30,15 @@ public abstract class Condition : IYamlConvertible
     private const string ParametersIndexAccessStart = "parameters[";
     private const string ParametersPropertyAccessStart = "parameters.";
 
-    private static readonly (string Start, string End)[] s_tagsToRemove = new[]
-    {
-        (IfTagStart, ExpressionEnd),
-        (ElseTagStart, ExpressionEnd),
-        ('\'' + IfTagStart, ExpressionEnd + '\''),
-        ('\'' + ElseTagStart, ExpressionEnd + '\''),
-        (ExpressionStart, ExpressionEnd),
-        ('\'' + ExpressionStart, ExpressionEnd + '\''),
-    };
-
     internal virtual string TagStart => IfTagStart;
     internal virtual string TagEnd => ExpressionEnd;
 
-    internal readonly string ConditionString;
-    internal readonly string? Keyword;
-    internal readonly IEnumerable<string>? Expressions;
-
     internal Conditioned? Parent { get; set; }
 
-    public override string ToString() => ConditionString;
-
-    public static implicit operator string(Condition value) => value.TagStart + value.ToString() + value.TagEnd;
+    public static implicit operator string(Condition value) => value.Serialize();
+    public override string ToString() => this;
 
     public static string Join(IEnumerable<string> expressions) => string.Join(", ", expressions);
-
-    public static string RemoveTags(Condition condition) => RemoveTags(condition.ToString());
-
-    public static string RemoveTags(string condition)
-    {
-        foreach (var (start, end) in s_tagsToRemove)
-        {
-            if (condition.StartsWith(start) && condition.EndsWith(end))
-            {
-                condition = condition.Substring(start.Length, condition.Length - start.Length - end.Length);
-                break;
-            }
-        }
-
-        return condition;
-    }
 
     public static string WrapQuotes(string value)
     {
@@ -92,20 +61,6 @@ public abstract class Condition : IYamlConvertible
 
     public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer) =>
         emitter.Emit(new Scalar(Serialize()));
-}
-
-/// <summary>
-/// This generic version exists so that we can enforce the type of items that are bound by the condition.
-/// The condition eventually translates into a string but the added value is the Parent pointer.
-/// That way, when we define the whole tree of conditions, the expression ends with the leaf node.
-/// The Parent pointer allows us to traverse up to the top-level condition.
-/// </summary>
-public abstract class Condition<T> : Condition
-{
-    protected Condition(Conditioned<T>? parent = null)
-    {
-        Parent = parent;
-    }
 }
 
 public class InlineCustomCondition : InlineCondition
