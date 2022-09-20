@@ -23,21 +23,50 @@ public static class SourceGeneratorExtensions
     }
 
     public static ConstructorInitializerSyntax WithArgumentsInSerializeMethodCall(
-        this ConstructorInitializerSyntax constructorInitializerSyntax)
+        this ConstructorInitializerSyntax constructorInitializerSyntax, IMethodSymbol constructorSymbol)
     {
+        var parameters = constructorSymbol.Parameters;
+
         return constructorInitializerSyntax.WithArgumentList(
             constructorInitializerSyntax.ArgumentList.WithArguments(
                 SyntaxFactory.SeparatedList(
                     constructorInitializerSyntax.ArgumentList.Arguments
-                        .Select(x => x.WrapInSerializeMethodCall())
+                        .Select((x, i) => x.WrapInSerializeMethodCall(parameters.FirstOrDefault(p =>
+                        {
+                            if (x.Expression is not IdentifierNameSyntax)
+                            {
+                                return false;
+                            }
+                            return p.Name == x.Expression.ToString();
+                        })))
                 )
             )
         );
     }
 
-    public static ArgumentSyntax WrapInSerializeMethodCall(this ArgumentSyntax argumentSyntax)
+    public static ArgumentSyntax WrapInSerializeMethodCall(this ArgumentSyntax argumentSyntax,
+        IParameterSymbol? correspondingParameter)
     {
-        return SyntaxFactory.Argument(SyntaxFactory.ParseExpression($"Serialize({argumentSyntax.ToString()})"));
+        if (correspondingParameter == null)
+        {
+            return argumentSyntax;
+        }
+
+        var fullType = correspondingParameter.Type.ToDisplayString(SymbolDisplayFormats.NamespaceAndType);
+
+        var typesToSerialize = new[]
+        {
+            typeof(IEnumerable<object>).FullName,
+            "Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference",
+            "Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference",
+        };
+
+        if (typesToSerialize.Contains(fullType))
+        {
+            return SyntaxFactory.Argument(SyntaxFactory.ParseExpression($"Serialize({argumentSyntax.ToString()})"));
+        }
+
+        return argumentSyntax;
     }
 
     public static string GetClassDefinition(this ClassDeclarationSyntax @class)

@@ -16,7 +16,7 @@ public class StringConditionGenerator : ISourceGenerator
 #if DEBUG
         if (!Debugger.IsAttached)
         {
-           Debugger.Launch();
+            Debugger.Launch();
         }
 #endif
 
@@ -66,7 +66,8 @@ public class StringConditionGenerator : ISourceGenerator
         }
     }
 
-    private string GenerateClass(GeneratorExecutionContext context, INamespaceSymbol @namespace, INamedTypeSymbol @class)
+    private string GenerateClass(GeneratorExecutionContext context, INamespaceSymbol @namespace,
+        INamedTypeSymbol @class)
     {
         var classBuilder = new CodeGenerationTextWriter();
 
@@ -95,7 +96,8 @@ public class StringConditionGenerator : ISourceGenerator
         // TODO If(has attribute ArrayType param2) typesParam2.Add(Array);
 
         var constructor = @class.Constructors.First();
-        var countOfStringParameters = constructor.Parameters.Count(p => p.Type.SpecialType == SpecialType.System_String);
+        var countOfStringParameters =
+            constructor.Parameters.Count(p => p.Type.SpecialType == SpecialType.System_String);
 
         foreach (var possibleType in possibleTypesForParameter1)
         {
@@ -124,6 +126,7 @@ public class StringConditionGenerator : ISourceGenerator
                 WriteConstructor(@class, possibleType, possibleType2, classBuilder, constructor);
             }
         }
+
         classBuilder.WriteLine("}");
 
         if (@class.Name.StartsWith("IfBranchCondition"))
@@ -134,15 +137,16 @@ public class StringConditionGenerator : ISourceGenerator
         return classBuilder.ToString();
     }
 
-    private static void WriteEnumerableObjectConstructors(INamedTypeSymbol @class, CodeGenerationTextWriter classBuilder, PossibleType nonArrayParameterType)
+    private static void WriteEnumerableObjectConstructors(INamedTypeSymbol @class,
+        CodeGenerationTextWriter classBuilder, PossibleType nonArrayParameterType)
     {
-        classBuilder.WriteLine(@class.GetClassDeclarationSyntax().GetClassDefinition());
-        classBuilder.WriteLine("{");
-
         foreach (var constructor in @class.Constructors
                      .Where(c => c.Parameters
                          .Any(p => p.Type is IArrayTypeSymbol)))
         {
+            classBuilder.WriteLine(@class.GetClassDeclarationSyntax().GetClassDefinition());
+            classBuilder.WriteLine("{");
+
             var constructorDeclarationSyntax = constructor.GetConstructorDeclarationSyntax();
 
             classBuilder.Write($"{constructorDeclarationSyntax.Modifiers} {constructorDeclarationSyntax.Identifier}(");
@@ -154,13 +158,14 @@ public class StringConditionGenerator : ISourceGenerator
 
             classBuilder.Write(string.Join(", ", newParameters));
 
-            classBuilder.WriteLine($") {constructorDeclarationSyntax.Initializer?.WithArgumentsInSerializeMethodCall()}");
+            classBuilder.WriteLine(
+                $") {constructorDeclarationSyntax.Initializer?.WithArgumentsInSerializeMethodCall(constructor)}");
 
             classBuilder.WriteLine("{");
             classBuilder.WriteLine("}");
-        }
 
-        classBuilder.WriteLine("}");
+            classBuilder.WriteLine("}");
+        }
     }
 
     private void WriteConstructor(INamedTypeSymbol @class, PossibleType possibleType, PossibleType possibleType2,
@@ -183,32 +188,35 @@ public class StringConditionGenerator : ISourceGenerator
     {
         var constructorDeclarationSyntax = constructor.GetConstructorDeclarationSyntax();
 
-        if (constructor.ContainingType.Name.StartsWith("InlineContainsValue"))
-        {
-            Console.WriteLine("Break");
-        }
-
         var parameter1Name = GetParameterName(constructor, 1);
         var parameter2Name = GetParameterName(constructor, 2);
 
-        var newConstructor = constructorDeclarationSyntax.WithBody(null).ToFullString()
-            .Replace($"string {parameter1Name}", $"{possibleType.ClassName} {parameter1Name}")
-            .Replace($"string[] {parameter1Name}", $"{possibleType.ClassName}[] {parameter1Name}")
-            .Trim();
+        classBuilder.Write($"{constructorDeclarationSyntax.Modifiers} {constructorDeclarationSyntax.Identifier}(");
 
-        if (possibleType2 != null && parameter2Name != null)
-        {
-            newConstructor = newConstructor
-                .Replace($"string {parameter2Name}", $"{possibleType2.ClassName} {parameter2Name}")
-                .Replace($"string[] {parameter2Name}", $"{possibleType2.ClassName}[] {parameter2Name}");
-        }
+        var newParameters = constructor.Parameters
+            .Select(constructorParameter =>
+            {
+                var isArray = constructorParameter.Type is IArrayTypeSymbol;
+                var arraySyntax = isArray ? string.Empty : "[]";
 
-        if (removeParams)
-        {
-            newConstructor = newConstructor.Replace(" params ", " ");
-        }
+                if (constructorParameter.Name == parameter1Name)
+                {
+                    return $"{possibleType.ClassName}{arraySyntax} {constructorParameter.Name}";
+                }
 
-        classBuilder.WriteLine(newConstructor);
+                if (constructorParameter.Name == parameter2Name && possibleType2 != null)
+                {
+                    return $"{possibleType2?.ClassName}{arraySyntax} {constructorParameter.Name}";
+                }
+
+                return $"{constructorParameter.Type} {constructorParameter.Name}";
+            });
+
+        classBuilder.Write(string.Join(", ", newParameters));
+
+        classBuilder.WriteLine(
+            $") {constructorDeclarationSyntax.Initializer?.WithArgumentsInSerializeMethodCall(constructor)}");
+
         classBuilder.WriteLine("{");
         classBuilder.WriteLine("}");
     }
