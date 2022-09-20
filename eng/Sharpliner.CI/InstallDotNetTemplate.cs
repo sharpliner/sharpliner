@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Sharpliner.AzureDevOps;
-
-namespace Sharpliner.CI;
+﻿namespace Sharpliner.CI;
 
 class InstallDotNetTemplate : StepTemplateCollection
 {

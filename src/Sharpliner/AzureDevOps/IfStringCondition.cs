@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
 using IfConditionOneOfArrayStringValue = Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfConditionOneOfArrayStringValue;
 using IfConditionOneOfStringValue = Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfConditionOneOfStringValue;
 

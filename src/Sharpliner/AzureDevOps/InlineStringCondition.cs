@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
-using InlineConditionOneOfArrayStringValue = Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineConditionOneOfArrayStringValue;
-using InlineConditionOneOfStringValue = Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineConditionOneOfStringValue;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.ConditionedExpressions.Arguments;
 
 namespace Sharpliner.AzureDevOps;
 

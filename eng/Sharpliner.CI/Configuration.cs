@@ -1,7 +1,4 @@
-﻿using System;
-using Sharpliner.Common;
-
-namespace Sharpliner.CI;
+﻿namespace Sharpliner.CI;
 
 class Configuration : SharplinerConfiguration
 {

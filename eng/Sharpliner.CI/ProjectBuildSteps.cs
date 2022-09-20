@@ -1,8 +1,4 @@
-﻿using System.Collections.Generic;
-using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
-
-namespace Sharpliner.CI;
+﻿namespace Sharpliner.CI;
 
 class ProjectBuildSteps : StepLibrary
 {
