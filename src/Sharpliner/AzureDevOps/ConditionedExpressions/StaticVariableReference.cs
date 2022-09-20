@@ -8,5 +8,5 @@ public class StaticVariableReference : VariableReference, ICompileTimeExpression
     {
     }
 
-    public string CompileTimeExpression => Condition.ExpressionStart + $"variables.{VariableName}" + Condition.ExpressionEnd;
+    public string CompileTimeExpression => Condition.ExpressionStart + RuntimeExpression + Condition.ExpressionEnd;
 }
