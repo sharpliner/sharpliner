@@ -7,9 +7,9 @@ namespace Sharpliner.AzureDevOps;
 
 internal static class IfStringConditionHelper
 {
-    public static string Serialize(IfConditionOneOfStringValue value)
+    public static string Serialize(IfStringOrVariableOrParameter stringOrVariableOrParameter)
     {
-        return value.Match(
+        return stringOrVariableOrParameter.Match(
 
             str => str,
             parameter => parameter.RuntimeExpression,
@@ -17,7 +17,7 @@ internal static class IfStringConditionHelper
         );
     }
 
-    public static string Serialize(IfConditionOneOfArrayStringValue arrayValue)
+    public static string Serialize(IfStringOrVariableOrParameterArray arrayValue)
     {
         return arrayValue.Match(
             strings => string.Join(", ", strings),
@@ -33,8 +33,8 @@ internal static class IfStringConditionHelper
             {
                 return item switch
                 {
-                    IfConditionOneOfStringValue oneOfStringValue => Serialize(oneOfStringValue),
-                    IfConditionOneOfArrayStringValue oneOfArrayStringValue => Serialize(oneOfArrayStringValue),
+                    IfStringOrVariableOrParameter oneOfStringValue => Serialize(oneOfStringValue),
+                    IfStringOrVariableOrParameterArray oneOfArrayStringValue => Serialize(oneOfArrayStringValue),
                     StaticVariableReference staticVariableReference => Serialize(staticVariableReference),
                     ParameterReference parameterReference => Serialize(parameterReference),
                     VariableReference => throw new ArgumentException("If Conditions are compile-time statements, therefore runtime variables cannot be evaluated. You can use static variables or parameters instead."),
