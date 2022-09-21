@@ -1,4 +1,6 @@
+using System;
 using Sharpliner.GitHubActions;
+using Xunit;
 
 namespace Sharpliner.Tests.GitHub;
 

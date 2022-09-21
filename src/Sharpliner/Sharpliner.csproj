@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net5.0;net6.0;net7.0</TargetFrameworks>
-    
+
     <!-- NuGet details -->
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/sharpliner/sharpliner</RepositoryUrl>
@@ -23,7 +23,7 @@
     <NoWarn>$(NoWarn);CS1591;CA1822</NoWarn>
 
     <!-- This makes sure we incluse YamlDotNet.dll in the nuget -->
-    <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);IncludeYamlDotNetInNupkg</GenerateNuspecDependsOn>
+    <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);IncludeYamlDotNetInNupkg;IncludeOneOfDotNetInNupkg</GenerateNuspecDependsOn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
@@ -45,7 +45,7 @@
     <Content Include="build\Sharpliner.props" PackagePath="build\" />
     <Content Include="build\Sharpliner.targets" PackagePath="build\" />
   </ItemGroup>
-  
+
   <!--
     This Target makes sure we include YamlDotNet.dll in the NuGet as it will be needed by the task
     https://natemcmaster.com/blog/2017/11/11/msbuild-task-with-dependencies/#third-party-dependencies-and-nuget
@@ -69,6 +69,28 @@
       </_PackageFiles>
 
       <_PackageFiles Include="$(OutputPath)\net7.0\YamlDotNet.dll">
+        <PackagePath>lib\net7.0</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
+    </ItemGroup>
+  </Target>
+
+  <Target Name="IncludeOneOfDotNetInNupkg">
+    <ItemGroup>
+      <_PackageFiles Include="$(OutputPath)\net5.0\OneOf.dll">
+        <PackagePath>lib\net5.0</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
+
+      <_PackageFiles Include="$(OutputPath)\net6.0\OneOf.dll">
+        <PackagePath>lib\net6.0</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
+
+      <_PackageFiles Include="$(OutputPath)\net7.0\OneOf.dll">
         <PackagePath>lib\net7.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>

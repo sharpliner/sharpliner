@@ -39,7 +39,7 @@ internal static class InlineStringConditionHelper
                     _ => item.ToString()
                 };
             })
-            .Select(Condition.WrapQuotes);
+            .Select(value => Condition.WrapQuotes(value ?? string.Empty));
 
         return string.Join(", ", convertedStringArray);
     }
