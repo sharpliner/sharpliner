@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Linq;
 using System.Reflection;
+using FluentAssertions;
 using PublicApiGenerator;
 using Xunit;
 
@@ -14,7 +15,7 @@ public class PublicApiChangeTest
         var api = typeof(ISharplinerDefinition).Assembly.GeneratePublicApi().Trim();
         var exportedApi = GetResourceFile(typeof(PublicApiChangeTest).Assembly, "PublicApiExport.txt").Trim();
 
-        Assert.Equal(exportedApi, api);
+        api.Should().Be(exportedApi);
     }
 
     private static string GetResourceFile(Assembly assembly, string resourceFileName)
