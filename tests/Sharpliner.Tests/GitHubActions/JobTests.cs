@@ -1,8 +1,9 @@
 using System;
+using FluentAssertions;
 using Sharpliner.GitHubActions;
 using Xunit;
 
-namespace Sharpliner.Tests.GitHub;
+namespace Sharpliner.Tests.GitHubActions;
 
 public class JobTests
 {
@@ -21,103 +22,30 @@ public class JobTests
     }
 
     [Fact]
-    public void Job_Valid_Id()
-    {
-        var j = new Job("configure");
-        Assert.Equal("configure", j.Id);
-    }
-
-    [Fact]
-    public void Job_Enviroment()
-    {
-        var j = new Job("configure") { Environment = new("Name") };
-        Assert.Equal("Name", j.Environment.Name);
-        Assert.Null(j.Environment.Url);
-    }
-
-    [Fact]
-    public void Job_Concurrency()
-    {
-        var j = new Job("concurrency")
-        {
-            Concurrency = new("build", true)
-        };
-
-        Assert.NotNull(j.Concurrency);
-    }
-
-    [Fact]
-    public void Job_Outputs()
-    {
-        var j = new Job("concurrency")
-        {
-            Outputs =
-                {
-                    ["name"] = "expression",
-                    ["second"] = "expression"
-                }
-        };
-        Assert.NotEmpty(j.Outputs.Keys);
-    }
-
-    [Fact]
-    public void Job_No_Outputs()
-    {
-
-        var j = new Job("concurrency");
-
-        Assert.Empty(j.Outputs.Keys);
-    }
-
-    [Fact]
-    public void Job_Env_Empty()
-    {
-        var j = new Job("concurrency");
-
-        Assert.Empty(j.Env.Keys);
-    }
-
-    [Fact]
-    public void Job_Env()
-    {
-        var j = new Job("concurrency")
-        {
-            Env =
-                {
-                    ["Database"] = "production",
-                    ["Bot"] = "builder"
-                }
-        };
-
-        Assert.NotEmpty(j.Env.Keys);
-    }
-
-    [Fact]
     public void Job_Defaults()
     {
-
         var j = new Job("concurrency")
         {
             Defaults =
+            {
+                Run =
                 {
-                    Run =
-                    {
-                        Shell = Shell.Pwsh
-                    }
+                    Shell = Shell.Pwsh
                 }
+            }
         };
 
-        Assert.Equal(Shell.Pwsh, j.Defaults.Run.Shell);
-        Assert.Null(j.Defaults.Run.WorkingDirectory);
-        Assert.Null(j.Defaults.Run.CustomShell);
+        j.Defaults.Run.Shell.Should().Be(Shell.Pwsh);
+        j.Defaults.Run.WorkingDirectory.Should().BeNull();
+        j.Defaults.Run.CustomShell.Should().BeNull();
     }
 
     [Fact]
     public void Job_Defaults_Empty()
     {
         var j = new Job("concurrency");
-        Assert.Null(j.Defaults.Run.WorkingDirectory);
-        Assert.Null(j.Defaults.Run.CustomShell);
+        j.Defaults.Run.WorkingDirectory.Should().BeNull();
+        j.Defaults.Run.CustomShell.Should().BeNull();
     }
 
     [Fact]
@@ -128,19 +56,19 @@ public class JobTests
             RunsOn = new("node:14.16")
             {
                 Env =
-                    {
-                        ["Database"] = "production",
-                        ["Bot"] = "builder"
-                    },
+                {
+                    ["Database"] = "production",
+                    ["Bot"] = "builder"
+                },
                 Ports = { 495, 500, 43 },
                 Volumes = { "my_docker_volume:/volume_mount", "/data/my_data" }
             }
         };
 
-        Assert.Equal("node:14.16", j.RunsOn.Image);
-        Assert.Null(j.RunsOn.Credentials);
-        Assert.Contains(43, j.RunsOn.Ports);
-        Assert.Contains("/data/my_data", j.RunsOn.Volumes);
+        j.RunsOn.Image.Should().Be("node:14.16");
+        j.RunsOn.Credentials.Should().BeNull();
+        j.RunsOn.Ports.Should().Contain(43);
+        j.RunsOn.Volumes.Should().Contain("/data/my_data");
     }
 
     [Fact]
@@ -151,19 +79,19 @@ public class JobTests
             RunsOn = new("node:14.16", "mandel", "1234")
             {
                 Env =
-                    {
-                        ["Database"] = "production",
-                        ["Bot"] = "builder"
-                    },
+                {
+                    ["Database"] = "production",
+                    ["Bot"] = "builder"
+                },
                 Ports = { 495, 500, 43 },
                 Volumes = { "my_docker_volume:/volume_mount", "/data/my_data" }
             }
         };
-        Assert.Equal("node:14.16", j.RunsOn.Image);
-        Assert.Equal("mandel", j.RunsOn?.Credentials?.Username);
-        Assert.Equal("1234", j.RunsOn?.Credentials?.Password);
-        Assert.Contains(43, j.RunsOn?.Ports);
-        Assert.Contains("/data/my_data", j.RunsOn?.Volumes);
+        j.RunsOn.Image.Should().Be("node:14.16");
+        j.RunsOn.Credentials!.Username.Should().Be("mandel");
+        j.RunsOn.Credentials.Password.Should().Be("1234");
+        j.RunsOn.Ports.Should().Contain(43);
+        j.RunsOn.Volumes.Should().Contain("/data/my_data");
     }
 
     [Fact]
@@ -179,20 +107,20 @@ public class JobTests
                     Password = "1234"
                 },
                 Env =
-                    {
-                        ["Database"] = "production",
-                        ["Bot"] = "builder"
-                    },
+                {
+                    ["Database"] = "production",
+                    ["Bot"] = "builder"
+                },
                 Ports = { 495, 500, 43 },
                 Volumes = { "my_docker_volume:/volume_mount", "/data/my_data" }
             }
         };
 
-        Assert.Equal("node:14.16", j.RunsOn.Image);
-        Assert.Equal("mandel", j.RunsOn.Credentials.Username);
-        Assert.Equal("1234", j.RunsOn.Credentials.Password);
-        Assert.Contains(43, j.RunsOn.Ports);
-        Assert.Contains("/data/my_data", j.RunsOn.Volumes);
+        j.RunsOn.Image.Should().Be("node:14.16");
+        j.RunsOn.Credentials.Username.Should().Be("mandel");
+        j.RunsOn.Credentials.Password.Should().Be("1234");
+        j.RunsOn.Ports.Should().Contain(43);
+        j.RunsOn.Volumes.Should().Contain("/data/my_data");
     }
 
     [Fact]
@@ -201,42 +129,40 @@ public class JobTests
         var j = new Job("services")
         {
             Services =
+            {
+                new ("service_with_container_image")
                 {
-                    new ("service_with_container_image")
+                    Container = new ("nginx")
+                },
+                new ("service_with_container_ports_and_volumes")
+                {
+                    Container = new ("redis")
                     {
-                        Container = new ("nginx")
-                    },
-                    new ("service_with_container_ports_and_volumes")
+                        Ports = {495, 500, 43},
+                        Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
+                    }
+                },
+                new ("service_with_container_creds")
+                {
+                    Container = new ("node:14.16")
                     {
-                        Container = new ("redis")
+                        Credentials = new ()
                         {
-                            Ports = {495, 500, 43},
-                            Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
-                        }
-                    },
-                    new ("service_with_container_creds")
-                    {
-                        Container = new ("node:14.16")
-                        {
-                            Credentials = new ()
-                            {
-                                Username = "hope",
-                                Password = "1234"
-                            },
-                            Ports = {495, 500, 43},
-                            Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
-                        }
+                            Username = "hope",
+                            Password = "1234"
+                        },
+                        Ports = {495, 500, 43},
+                        Volumes = {"my_docker_volume:/volume_mount", "/data/my_data"}
                     }
                 }
+            }
         };
 
-        Assert.Equal("nginx", j.Services[0]?.Container?.Image);
-
-        Assert.Contains(495, j.Services[1]?.Container?.Ports);
-        Assert.Contains("my_docker_volume:/volume_mount", j.Services[1]?.Container?.Volumes);
-
-        Assert.Equal("hope", j.Services[2]?.Container?.Credentials?.Username);
-        Assert.Equal("1234", j.Services[2]?.Container?.Credentials?.Password);
+        j.Services[0].Container!.Image.Should().Be("nginx");
+        j.Services[1].Container!.Ports.Should().Contain(495);
+        j.Services[1].Container!.Volumes.Should().Contain("my_docker_volume:/volume_mount");
+        j.Services[2].Container!.Credentials!.Username.Should().Be("hope");
+        j.Services[2].Container!.Credentials!.Password.Should().Be("1234");
     }
 
     [Fact]
@@ -255,11 +181,11 @@ public class JobTests
         };
 
         // validate that we do have the values and can access them
-        Assert.NotNull(j.Strategy);
-        Assert.True(j.Strategy.Configuration?.ContainsKey("Foo"));
-        Assert.True(j.Strategy.Configuration?.ContainsKey("Bar"));
-        Assert.True(j.Strategy.FailFast);
-        Assert.Equal(int.MaxValue, j.Strategy.MaxParallel);
+        j.Strategy.Should().NotBeNull();
+        j.Strategy.Configuration.Should().ContainKey("Foo");
+        j.Strategy.Configuration.Should().ContainKey("Bar");
+        j.Strategy.FailFast.Should().BeTrue();
+        j.Strategy.MaxParallel.Should().Be(int.MaxValue);
     }
 
     [Fact]
@@ -295,7 +221,8 @@ public class JobTests
                 MaxParallel = 2,
             },
         };
-        Assert.Equal(2, j.Strategy.MaxParallel);
+        
+        j.Strategy.MaxParallel.Should().Be(2);
     }
 
     [Fact]
@@ -328,9 +255,9 @@ public class JobTests
             },
         };
 
-        Assert.True(j.Strategy.Include[0].Configuration?.ContainsKey("Foo"));
-        Assert.True(j.Strategy.Include[0].Configuration?.ContainsKey("Bar"));
-        Assert.True(j.Strategy.Include[0].Variables?.ContainsKey("ENV"));
+        j.Strategy.Include[0].Configuration.Should().ContainKey("Foo");
+        j.Strategy.Include[0].Configuration.Should().ContainKey("Bar");
+        j.Strategy.Include[0].Variables.Should().ContainKey("ENV");
     }
 
     [Fact]
@@ -363,8 +290,8 @@ public class JobTests
             },
         };
 
-        Assert.True(j.Strategy.Exclude[0].Configuration?.ContainsKey("Foo"));
-        Assert.True(j.Strategy.Exclude[0].Configuration?.ContainsKey("Bar"));
-        Assert.True(j.Strategy.Exclude[0].Variables?.ContainsKey("ENV"));
+        j.Strategy.Exclude[0].Configuration.Should().ContainKey("Foo");
+        j.Strategy.Exclude[0].Configuration.Should().ContainKey("Bar");
+        j.Strategy.Exclude[0].Variables.Should().ContainKey("ENV");
     }
 }
