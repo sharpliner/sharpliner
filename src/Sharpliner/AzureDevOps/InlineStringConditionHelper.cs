@@ -20,7 +20,7 @@ internal static class InlineStringConditionHelper
     {
         return arrayValue.Match(
             strings => string.Join(", ", strings),
-            objects => Serialize(objects),
+            Serialize,
             parameters => string.Join(", ", parameters.Select(p => Serialize(p))),
             variables => string.Join(", ", variables.Select(v => Serialize(v)))
         );

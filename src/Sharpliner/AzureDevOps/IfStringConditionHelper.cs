@@ -21,7 +21,7 @@ internal static class IfStringConditionHelper
     {
         return arrayValue.Match(
             strings => string.Join(", ", strings),
-            objects => Serialize(objects),
+            Serialize,
             parameters => string.Join(", ", parameters.Select(p => Serialize(p))),
             staticVariables => string.Join(", ", staticVariables.Select(v => Serialize(v)))
         );
