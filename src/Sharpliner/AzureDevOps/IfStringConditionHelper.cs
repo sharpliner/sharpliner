@@ -37,7 +37,7 @@ internal static class IfStringConditionHelper
                     IfStringOrVariableOrParameterArray oneOfArrayStringValue => Serialize(oneOfArrayStringValue),
                     StaticVariableReference staticVariableReference => Serialize(staticVariableReference),
                     ParameterReference parameterReference => Serialize(parameterReference),
-                    VariableReference => throw new ArgumentException("If Conditions are compile-time statements, therefore runtime variables cannot be evaluated. You can use static variables or parameters instead."),
+                    VariableReference => throw new ArgumentException("${{ if }} conditions are compile-time statements, therefore runtime variables cannot be evaluated. You can use staticVariables or parameters instead"),
                     _ => item.ToString()
                 };
             })
