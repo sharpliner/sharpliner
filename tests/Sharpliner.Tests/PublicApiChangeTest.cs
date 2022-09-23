@@ -15,6 +15,10 @@ public class PublicApiChangeTest
         var api = typeof(ISharplinerDefinition).Assembly.GeneratePublicApi().Trim();
         var exportedApi = GetResourceFile(typeof(PublicApiChangeTest).Assembly, "PublicApiExport.txt").Trim();
 
+        // There can be some unimportant differences in the header
+        api = api.Substring(api.IndexOf("namespace "));
+        exportedApi = exportedApi.Substring(exportedApi.IndexOf("namespace "));
+
         api.Should().Be(exportedApi);
     }
 
