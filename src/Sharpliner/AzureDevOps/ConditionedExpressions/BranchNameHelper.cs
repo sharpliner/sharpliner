@@ -2,13 +2,15 @@
 
 internal class BranchNameHelper
 {
+    private const string RefsPrefix = "refs/heads/";
+
     public static string FormatBranchName(string branchName)
     {
-        if (branchName.StartsWith("refs/heads/"))
+        if (branchName.StartsWith(RefsPrefix))
         {
             return branchName;
         }
 
-        return $"refs/heads/{branchName}";
+        return RefsPrefix + branchName;
     }
 }
