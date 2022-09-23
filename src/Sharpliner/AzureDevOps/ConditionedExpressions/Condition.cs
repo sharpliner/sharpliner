@@ -124,7 +124,7 @@ public class IfNotCondition : IfCondition
 
 public class IfEqualityCondition : IfStringCondition
 {
-    internal IfEqualityCondition(bool equal, IfStringOrVariableOrParameter expression1, IfStringOrVariableOrParameter expression2)
+    internal IfEqualityCondition(bool equal, IfExpression expression1, IfExpression expression2)
         : base(equal ? "eq" : "ne", expression1, expression2)
     {
     }
@@ -132,7 +132,7 @@ public class IfEqualityCondition : IfStringCondition
 
 public class InlineEqualityCondition : InlineStringCondition
 {
-    internal InlineEqualityCondition(bool equal, InlineStringOrVariableOrParameter expression1, InlineStringOrVariableOrParameter expression2)
+    internal InlineEqualityCondition(bool equal, InlineExpression expression1, InlineExpression expression2)
         : base(equal ? "eq" : "ne", expression1, expression2)
     {
     }
@@ -290,7 +290,7 @@ public class IfXorCondition : IfConjunctionCondition
 
 public class InlineContainsCondition : InlineStringCondition
 {
-    internal InlineContainsCondition(InlineStringOrVariableOrParameter needle, InlineStringOrVariableOrParameter haystack)
+    internal InlineContainsCondition(InlineExpression needle, InlineExpression haystack)
         : base("contains", haystack, needle)
     {
     }
@@ -298,7 +298,7 @@ public class InlineContainsCondition : InlineStringCondition
 
 public class IfContainsCondition : IfStringCondition
 {
-    internal IfContainsCondition(IfStringOrVariableOrParameter needle, IfStringOrVariableOrParameter haystack)
+    internal IfContainsCondition(IfExpression needle, IfExpression haystack)
         : base("contains", haystack, needle)
     {
     }
@@ -306,7 +306,7 @@ public class IfContainsCondition : IfStringCondition
 
 public class InlineStartsWithCondition : InlineStringCondition
 {
-    internal InlineStartsWithCondition(InlineStringOrVariableOrParameter needle, InlineStringOrVariableOrParameter haystack)
+    internal InlineStartsWithCondition(InlineExpression needle, InlineExpression haystack)
         : base("startsWith", haystack, needle)
     {
     }
@@ -314,7 +314,7 @@ public class InlineStartsWithCondition : InlineStringCondition
 
 public class IfStartsWithCondition : IfStringCondition
 {
-    internal IfStartsWithCondition(IfStringOrVariableOrParameter needle, IfStringOrVariableOrParameter haystack)
+    internal IfStartsWithCondition(IfExpression needle, IfExpression haystack)
         : base("startsWith", haystack, needle)
     {
     }
@@ -322,7 +322,7 @@ public class IfStartsWithCondition : IfStringCondition
 
 public class InlineEndsWithCondition : InlineStringCondition
 {
-    internal InlineEndsWithCondition(InlineStringOrVariableOrParameter needle, InlineStringOrVariableOrParameter haystack)
+    internal InlineEndsWithCondition(InlineExpression needle, InlineExpression haystack)
         : base("endsWith", haystack, needle)
     {
     }
@@ -330,7 +330,7 @@ public class InlineEndsWithCondition : InlineStringCondition
 
 public class IfEndsWithCondition : IfStringCondition
 {
-    internal IfEndsWithCondition(IfStringOrVariableOrParameter needle, IfStringOrVariableOrParameter haystack)
+    internal IfEndsWithCondition(IfExpression needle, IfExpression haystack)
         : base("endsWith", haystack, needle)
     {
     }
@@ -338,7 +338,7 @@ public class IfEndsWithCondition : IfStringCondition
 
 public class InlineInCondition : InlineStringCondition
 {
-    internal InlineInCondition(InlineStringOrVariableOrParameter needle, params InlineStringOrVariableOrParameter[] haystack)
+    internal InlineInCondition(InlineExpression needle, params InlineExpression[] haystack)
         : base("in", needle, haystack)
     {
     }
@@ -346,7 +346,7 @@ public class InlineInCondition : InlineStringCondition
 
 public class IfInCondition : IfStringCondition
 {
-    internal IfInCondition(IfStringOrVariableOrParameter needle, params IfStringOrVariableOrParameter[] haystack)
+    internal IfInCondition(IfExpression needle, params IfExpression[] haystack)
         : base("in", needle, haystack)
     {
     }
@@ -354,7 +354,7 @@ public class IfInCondition : IfStringCondition
 
 public class InlineNotInCondition : InlineStringCondition
 {
-    internal InlineNotInCondition(InlineStringOrVariableOrParameter needle, params InlineStringOrVariableOrParameter[] haystack)
+    internal InlineNotInCondition(InlineExpression needle, params InlineExpression[] haystack)
         : base("notIn", needle, haystack)
     {
     }
@@ -362,7 +362,7 @@ public class InlineNotInCondition : InlineStringCondition
 
 public class IfNotInCondition : IfStringCondition
 {
-    internal IfNotInCondition(IfStringOrVariableOrParameter needle, params IfStringOrVariableOrParameter[] haystack)
+    internal IfNotInCondition(IfExpression needle, params IfExpression[] haystack)
         : base("notIn", needle, haystack)
     {
     }
@@ -370,7 +370,7 @@ public class IfNotInCondition : IfStringCondition
 
 public class InlineContainsValueCondition : InlineStringCondition
 {
-    internal InlineContainsValueCondition(InlineStringOrVariableOrParameter needle, params InlineStringOrVariableOrParameter[] haystack)
+    internal InlineContainsValueCondition(InlineExpression needle, params InlineExpression[] haystack)
         : base("containsValue", haystack, needle)
     {
     }
@@ -378,7 +378,7 @@ public class InlineContainsValueCondition : InlineStringCondition
 
 public class IfContainsValueCondition : IfStringCondition
 {
-    internal IfContainsValueCondition(IfStringOrVariableOrParameter needle, params IfStringOrVariableOrParameter[] haystack)
+    internal IfContainsValueCondition(IfExpression needle, params IfExpression[] haystack)
         : base("containsValue", haystack, needle)
     {
     }
@@ -386,7 +386,7 @@ public class IfContainsValueCondition : IfStringCondition
 
 public class InlineGreaterCondition : InlineStringCondition
 {
-    internal InlineGreaterCondition(InlineStringOrVariableOrParameter first, InlineStringOrVariableOrParameter second)
+    internal InlineGreaterCondition(InlineExpression first, InlineExpression second)
         : base("gt", first, second)
     {
     }
@@ -394,7 +394,7 @@ public class InlineGreaterCondition : InlineStringCondition
 
 public class IfGreaterCondition : IfStringCondition
 {
-    internal IfGreaterCondition(IfStringOrVariableOrParameter first, IfStringOrVariableOrParameter second)
+    internal IfGreaterCondition(IfExpression first, IfExpression second)
         : base("gt", first, second)
     {
     }
@@ -402,7 +402,7 @@ public class IfGreaterCondition : IfStringCondition
 
 public class InlineLessCondition : InlineStringCondition
 {
-    internal InlineLessCondition(InlineStringOrVariableOrParameter first, InlineStringOrVariableOrParameter second)
+    internal InlineLessCondition(InlineExpression first, InlineExpression second)
         : base("lt", first, second)
     {
     }
@@ -410,7 +410,7 @@ public class InlineLessCondition : InlineStringCondition
 
 public class IfLessCondition : IfStringCondition
 {
-    internal IfLessCondition(IfStringOrVariableOrParameter first, IfStringOrVariableOrParameter second)
+    internal IfLessCondition(IfExpression first, IfExpression second)
         : base("lt", first, second)
     {
     }
@@ -491,7 +491,7 @@ public class ElseCondition<T> : IfCondition<T>
 
 public class InlineEqualityCondition<T> : InlineStringCondition<T>
 {
-    internal InlineEqualityCondition(bool equal, InlineStringOrVariableOrParameter expression1, InlineStringOrVariableOrParameter expression2)
+    internal InlineEqualityCondition(bool equal, InlineExpression expression1, InlineExpression expression2)
         : base(equal ? "eq" : "ne", expression1, expression2)
     {
     }
@@ -499,7 +499,7 @@ public class InlineEqualityCondition<T> : InlineStringCondition<T>
 
 public class IfEqualityCondition<T> : IfStringCondition<T>
 {
-    internal IfEqualityCondition(bool equal, IfStringOrVariableOrParameter expression1, IfStringOrVariableOrParameter expression2)
+    internal IfEqualityCondition(bool equal, IfExpression expression1, IfExpression expression2)
         : base(equal ? "eq" : "ne", expression1, expression2)
     {
     }
@@ -586,7 +586,7 @@ public class IfXorCondition<T> : IfConjunctionCondition<T>
 
 public class InlineContainsCondition<T> : InlineStringCondition<T>
 {
-    internal InlineContainsCondition(InlineStringOrVariableOrParameter haystack, InlineStringOrVariableOrParameter needle)
+    internal InlineContainsCondition(InlineExpression haystack, InlineExpression needle)
         : base("contains", haystack, needle)
     {
     }
@@ -594,7 +594,7 @@ public class InlineContainsCondition<T> : InlineStringCondition<T>
 
 public class IfContainsCondition<T> : IfStringCondition<T>
 {
-    internal IfContainsCondition(IfStringOrVariableOrParameter haystack, IfStringOrVariableOrParameter needle)
+    internal IfContainsCondition(IfExpression haystack, IfExpression needle)
         : base("contains", haystack, needle)
     {
     }
@@ -602,7 +602,7 @@ public class IfContainsCondition<T> : IfStringCondition<T>
 
 public class InlineStartsWithCondition<T> : InlineStringCondition<T>
 {
-    internal InlineStartsWithCondition(InlineStringOrVariableOrParameter needle, InlineStringOrVariableOrParameter haystack)
+    internal InlineStartsWithCondition(InlineExpression needle, InlineExpression haystack)
         : base("startsWith", haystack, needle)
     {
     }
@@ -610,7 +610,7 @@ public class InlineStartsWithCondition<T> : InlineStringCondition<T>
 
 public class IfStartsWithCondition<T> : IfStringCondition<T>
 {
-    internal IfStartsWithCondition(IfStringOrVariableOrParameter needle, IfStringOrVariableOrParameter haystack)
+    internal IfStartsWithCondition(IfExpression needle, IfExpression haystack)
         : base("startsWith", haystack, needle)
     {
     }
@@ -618,7 +618,7 @@ public class IfStartsWithCondition<T> : IfStringCondition<T>
 
 public class InlineEndsWithCondition<T> : InlineStringCondition<T>
 {
-    internal InlineEndsWithCondition(InlineStringOrVariableOrParameter needle, InlineStringOrVariableOrParameter haystack)
+    internal InlineEndsWithCondition(InlineExpression needle, InlineExpression haystack)
         : base("endsWith", haystack, needle)
     {
     }
@@ -626,7 +626,7 @@ public class InlineEndsWithCondition<T> : InlineStringCondition<T>
 
 public class IfEndsWithCondition<T> : IfStringCondition<T>
 {
-    internal IfEndsWithCondition(IfStringOrVariableOrParameter needle, IfStringOrVariableOrParameter haystack)
+    internal IfEndsWithCondition(IfExpression needle, IfExpression haystack)
         : base("endsWith", haystack, needle)
     {
     }
@@ -634,7 +634,7 @@ public class IfEndsWithCondition<T> : IfStringCondition<T>
 
 public class InlineContainsValueCondition<T> : InlineStringCondition<T>
 {
-    internal InlineContainsValueCondition(InlineStringOrVariableOrParameter needle, params InlineStringOrVariableOrParameter[] haystack)
+    internal InlineContainsValueCondition(InlineExpression needle, params InlineExpression[] haystack)
         : base("containsValue", haystack, needle)
     {
     }
@@ -642,7 +642,7 @@ public class InlineContainsValueCondition<T> : InlineStringCondition<T>
 
 public class IfContainsValueCondition<T> : IfStringCondition<T>
 {
-    internal IfContainsValueCondition(IfStringOrVariableOrParameter needle, params IfStringOrVariableOrParameter[] haystack)
+    internal IfContainsValueCondition(IfExpression needle, params IfExpression[] haystack)
         : base("containsValue", haystack, needle)
     {
     }
@@ -650,7 +650,7 @@ public class IfContainsValueCondition<T> : IfStringCondition<T>
 
 public class InlineInCondition<T> : InlineStringCondition<T>
 {
-    internal InlineInCondition(InlineStringOrVariableOrParameter needle, params InlineStringOrVariableOrParameter[] haystack)
+    internal InlineInCondition(InlineExpression needle, params InlineExpression[] haystack)
         : base("in", needle, haystack)
     {
     }
@@ -658,7 +658,7 @@ public class InlineInCondition<T> : InlineStringCondition<T>
 
 public class IfInCondition<T> : IfStringCondition<T>
 {
-    internal IfInCondition(IfStringOrVariableOrParameter needle, params IfStringOrVariableOrParameter[] haystack)
+    internal IfInCondition(IfExpression needle, params IfExpression[] haystack)
         : base("in", needle, haystack)
     {
     }
@@ -666,7 +666,7 @@ public class IfInCondition<T> : IfStringCondition<T>
 
 public class InlineNotInCondition<T> : InlineStringCondition<T>
 {
-    internal InlineNotInCondition(InlineStringOrVariableOrParameter needle, params InlineStringOrVariableOrParameter[] haystack)
+    internal InlineNotInCondition(InlineExpression needle, params InlineExpression[] haystack)
         : base("notin", needle, haystack)
     {
     }
@@ -674,7 +674,7 @@ public class InlineNotInCondition<T> : InlineStringCondition<T>
 
 public class IfNotInCondition<T> : IfStringCondition<T>
 {
-    internal IfNotInCondition(IfStringOrVariableOrParameter needle, params IfStringOrVariableOrParameter[] haystack)
+    internal IfNotInCondition(IfExpression needle, params IfExpression[] haystack)
         : base("notin", needle, haystack)
     {
     }
@@ -682,7 +682,7 @@ public class IfNotInCondition<T> : IfStringCondition<T>
 
 public class InlineGreaterCondition<T> : InlineStringCondition<T>
 {
-    internal InlineGreaterCondition(InlineStringOrVariableOrParameter first, InlineStringOrVariableOrParameter second)
+    internal InlineGreaterCondition(InlineExpression first, InlineExpression second)
         : base("gt", first, second)
     {
     }
@@ -690,7 +690,7 @@ public class InlineGreaterCondition<T> : InlineStringCondition<T>
 
 public class IfGreaterCondition<T> : IfStringCondition<T>
 {
-    internal IfGreaterCondition(IfStringOrVariableOrParameter first, IfStringOrVariableOrParameter second)
+    internal IfGreaterCondition(IfExpression first, IfExpression second)
         : base("gt", first, second)
     {
     }
@@ -698,7 +698,7 @@ public class IfGreaterCondition<T> : IfStringCondition<T>
 
 public class InlineLessCondition<T> : InlineStringCondition<T>
 {
-    internal InlineLessCondition(InlineStringOrVariableOrParameter first, InlineStringOrVariableOrParameter second)
+    internal InlineLessCondition(InlineExpression first, InlineExpression second)
         : base("lt", first, second)
     {
     }
@@ -706,7 +706,7 @@ public class InlineLessCondition<T> : InlineStringCondition<T>
 
 public class IfLessCondition<T> : IfStringCondition<T>
 {
-    internal IfLessCondition(IfStringOrVariableOrParameter first, IfStringOrVariableOrParameter second)
+    internal IfLessCondition(IfExpression first, IfExpression second)
         : base("lt", first, second)
     {
     }
@@ -714,7 +714,7 @@ public class IfLessCondition<T> : IfStringCondition<T>
 
 public class InlineBranchCondition : InlineEqualityCondition
 {
-    internal InlineBranchCondition(InlineStringOrVariableOrParameter branchName, bool equal)
+    internal InlineBranchCondition(InlineExpression branchName, bool equal)
         : base(equal, new StaticVariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
     {
     }
@@ -722,7 +722,7 @@ public class InlineBranchCondition : InlineEqualityCondition
 
 public class IfBranchCondition : IfEqualityCondition
 {
-    internal IfBranchCondition(IfStringOrVariableOrParameter branchName, bool equal)
+    internal IfBranchCondition(IfExpression branchName, bool equal)
         : base(equal, new StaticVariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
     {
     }
@@ -730,7 +730,7 @@ public class IfBranchCondition : IfEqualityCondition
 
 public class InlineBranchCondition<T> : InlineEqualityCondition<T>
 {
-    internal InlineBranchCondition(InlineStringOrVariableOrParameter branchName, bool equal)
+    internal InlineBranchCondition(InlineExpression branchName, bool equal)
         : base(equal, new StaticVariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
     {
     }
@@ -738,7 +738,7 @@ public class InlineBranchCondition<T> : InlineEqualityCondition<T>
 
 public class IfBranchCondition<T> : IfEqualityCondition<T>
 {
-    internal IfBranchCondition(IfStringOrVariableOrParameter branchName, bool equal)
+    internal IfBranchCondition(IfExpression branchName, bool equal)
         : base(equal, new StaticVariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
     {
     }
@@ -746,7 +746,7 @@ public class IfBranchCondition<T> : IfEqualityCondition<T>
 
 public class InlineBuildReasonCondition : InlineEqualityCondition
 {
-    internal InlineBuildReasonCondition(InlineStringOrVariableOrParameter reason, bool equal)
+    internal InlineBuildReasonCondition(InlineExpression reason, bool equal)
         : base(equal, new StaticVariableReference("Build.Reason"), reason)
     {
     }
@@ -754,7 +754,7 @@ public class InlineBuildReasonCondition : InlineEqualityCondition
 
 public class IfBuildReasonCondition : IfEqualityCondition
 {
-    internal IfBuildReasonCondition(IfStringOrVariableOrParameter reason, bool equal)
+    internal IfBuildReasonCondition(IfExpression reason, bool equal)
         : base(equal, new StaticVariableReference("Build.Reason"), reason)
     {
     }
@@ -762,7 +762,7 @@ public class IfBuildReasonCondition : IfEqualityCondition
 
 public class InlineBuildReasonCondition<T> : InlineEqualityCondition<T>
 {
-    internal InlineBuildReasonCondition(InlineStringOrVariableOrParameter reason, bool equal)
+    internal InlineBuildReasonCondition(InlineExpression reason, bool equal)
         : base(equal, new StaticVariableReference("Build.Reason"), reason)
     {
     }
@@ -770,7 +770,7 @@ public class InlineBuildReasonCondition<T> : InlineEqualityCondition<T>
 
 public class IfBuildReasonCondition<T> : IfEqualityCondition<T>
 {
-    internal IfBuildReasonCondition(IfStringOrVariableOrParameter reason, bool equal)
+    internal IfBuildReasonCondition(IfExpression reason, bool equal)
         : base(equal, new StaticVariableReference("Build.Reason"), reason)
     {
     }

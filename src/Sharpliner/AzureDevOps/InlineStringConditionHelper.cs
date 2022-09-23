@@ -6,7 +6,7 @@ namespace Sharpliner.AzureDevOps;
 
 internal static class InlineStringConditionHelper
 {
-    public static string Serialize(InlineStringOrVariableOrParameter stringOrVariableOrParameter)
+    public static string Serialize(InlineExpression stringOrVariableOrParameter)
     {
         return stringOrVariableOrParameter.Match(
 
@@ -16,7 +16,7 @@ internal static class InlineStringConditionHelper
         );
     }
 
-    public static string Serialize(InlineStringOrVariableOrParameterArray arrayValue)
+    public static string Serialize(InlineArrayExpression arrayValue)
     {
         return arrayValue.Match(
             strings => string.Join(", ", strings),
@@ -32,8 +32,8 @@ internal static class InlineStringConditionHelper
             {
                 return item switch
                 {
-                    InlineStringOrVariableOrParameter oneOfStringValue => Serialize(oneOfStringValue),
-                    InlineStringOrVariableOrParameterArray oneOfArrayStringValue => Serialize(oneOfArrayStringValue),
+                    InlineExpression oneOfStringValue => Serialize(oneOfStringValue),
+                    InlineArrayExpression oneOfArrayStringValue => Serialize(oneOfArrayStringValue),
                     ParameterReference parameterReference => Serialize(parameterReference),
                     VariableReference variableReference => Serialize(variableReference),
                     _ => item.ToString()

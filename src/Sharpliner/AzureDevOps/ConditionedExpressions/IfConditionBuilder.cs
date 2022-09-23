@@ -28,10 +28,10 @@ public class IfConditionBuilder
     public IfCondition NotEqual(IfCondition condition)
         => Link(condition);
 
-    public IfCondition Equal(IfStringOrVariableOrParameter expression1, IfStringOrVariableOrParameter expression2)
+    public IfCondition Equal(IfExpression expression1, IfExpression expression2)
         => Link(new IfEqualityCondition(true, expression1, expression2));
 
-    public IfCondition NotEqual(IfStringOrVariableOrParameter expression1, IfStringOrVariableOrParameter expression2)
+    public IfCondition NotEqual(IfExpression expression1, IfExpression expression2)
         => Link(new IfEqualityCondition(false, expression1, expression2));
 
     public IfCondition And(params IfCondition[] expressions)
@@ -52,34 +52,34 @@ public class IfConditionBuilder
     public IfCondition Xor(string expression1, string expression2)
         => Link(new IfXorCondition(expression1, expression2));
 
-    public IfCondition StartsWith(IfStringOrVariableOrParameter needle, IfStringOrVariableOrParameter haystack)
+    public IfCondition StartsWith(IfExpression needle, IfExpression haystack)
         => new IfStartsWithCondition(needle, haystack);
 
-    public IfCondition EndsWith(IfStringOrVariableOrParameter needle, IfStringOrVariableOrParameter haystack)
+    public IfCondition EndsWith(IfExpression needle, IfExpression haystack)
         => new IfEndsWithCondition(needle, haystack);
 
-    public IfCondition Contains(IfStringOrVariableOrParameter needle, IfStringOrVariableOrParameter haystack)
+    public IfCondition Contains(IfExpression needle, IfExpression haystack)
         => new IfContainsCondition(needle, haystack);
 
-    public IfCondition ContainsValue(IfStringOrVariableOrParameter needle, params IfStringOrVariableOrParameter[] haystack)
+    public IfCondition ContainsValue(IfExpression needle, params IfExpression[] haystack)
         => new IfContainsValueCondition(needle, haystack);
 
-    public IfCondition In(IfStringOrVariableOrParameter needle, params IfStringOrVariableOrParameter[] haystack)
+    public IfCondition In(IfExpression needle, params IfExpression[] haystack)
         => new IfInCondition(needle, haystack);
 
-    public IfCondition NotIn(IfStringOrVariableOrParameter needle, params IfStringOrVariableOrParameter[] haystack)
+    public IfCondition NotIn(IfExpression needle, params IfExpression[] haystack)
         => new IfNotInCondition(needle, haystack);
 
-    public IfCondition Greater(IfStringOrVariableOrParameter first, IfStringOrVariableOrParameter second)
+    public IfCondition Greater(IfExpression first, IfExpression second)
         => Link(new IfGreaterCondition(first, second));
 
-    public IfCondition Less(IfStringOrVariableOrParameter first, IfStringOrVariableOrParameter second)
+    public IfCondition Less(IfExpression first, IfExpression second)
         => Link(new IfLessCondition(first, second));
 
-    public IfCondition IsBranch(IfStringOrVariableOrParameter branchName)
+    public IfCondition IsBranch(IfExpression branchName)
         => Link(new IfBranchCondition(branchName, true));
 
-    public IfCondition IsNotBranch(IfStringOrVariableOrParameter branchName)
+    public IfCondition IsNotBranch(IfExpression branchName)
         => Link(new IfBranchCondition(branchName, false));
 
     public IfCondition IsPullRequest
@@ -107,10 +107,10 @@ public class IfConditionBuilder<T>
     public IfCondition<T> Equal(string condition)
         => Link(new IfCustomCondition<T>(condition));
 
-    public IfCondition<T> Equal(IfStringOrVariableOrParameter expression1, IfStringOrVariableOrParameter expression2)
+    public IfCondition<T> Equal(IfExpression expression1, IfExpression expression2)
         => Link(new IfEqualityCondition<T>(true, expression1, expression2));
 
-    public IfCondition<T> NotEqual(IfStringOrVariableOrParameter expression1, IfStringOrVariableOrParameter expression2)
+    public IfCondition<T> NotEqual(IfExpression expression1, IfExpression expression2)
     {
         return Link(new IfEqualityCondition<T>(false, expression1, expression2));
     }
@@ -133,34 +133,34 @@ public class IfConditionBuilder<T>
     public IfCondition<T> Or(params string[] expressions)
         => Link(new IfOrCondition<T>(expressions));
 
-    public IfCondition<T> StartsWith(IfStringOrVariableOrParameter needle, IfStringOrVariableOrParameter haystack)
+    public IfCondition<T> StartsWith(IfExpression needle, IfExpression haystack)
         => new IfStartsWithCondition<T>(needle, haystack);
 
-    public IfCondition<T> EndsWith(IfStringOrVariableOrParameter needle, IfStringOrVariableOrParameter haystack)
+    public IfCondition<T> EndsWith(IfExpression needle, IfExpression haystack)
         => new IfEndsWithCondition<T>(needle, haystack);
 
-    public IfCondition<T> Contains(IfStringOrVariableOrParameter needle, IfStringOrVariableOrParameter haystack)
+    public IfCondition<T> Contains(IfExpression needle, IfExpression haystack)
         => new IfContainsCondition<T>(needle, haystack);
 
-    public IfCondition<T> In(IfStringOrVariableOrParameter needle, IfStringOrVariableOrParameter haystack)
+    public IfCondition<T> In(IfExpression needle, IfExpression haystack)
         => new IfInCondition<T>(needle, haystack);
 
-    public IfCondition<T> NotIn(IfStringOrVariableOrParameter needle, params IfStringOrVariableOrParameter[] haystack)
+    public IfCondition<T> NotIn(IfExpression needle, params IfExpression[] haystack)
         => new IfNotInCondition<T>(needle, haystack);
 
-    public IfCondition<T> ContainsValue(IfStringOrVariableOrParameter needle, params IfStringOrVariableOrParameter[] haystack)
+    public IfCondition<T> ContainsValue(IfExpression needle, params IfExpression[] haystack)
         => new IfContainsValueCondition<T>(needle, haystack);
 
-    public IfCondition<T> IsBranch(IfStringOrVariableOrParameter branchName)
+    public IfCondition<T> IsBranch(IfExpression branchName)
         => Link(new IfBranchCondition<T>(branchName, true));
 
-    public IfCondition<T> IsNotBranch(IfStringOrVariableOrParameter branchName)
+    public IfCondition<T> IsNotBranch(IfExpression branchName)
         => Link(new IfBranchCondition<T>(branchName, false));
 
-    public IfCondition<T> Greater(IfStringOrVariableOrParameter first, IfStringOrVariableOrParameter second)
+    public IfCondition<T> Greater(IfExpression first, IfExpression second)
         => Link(new IfGreaterCondition<T>(first, second));
 
-    public IfCondition<T> Less(IfStringOrVariableOrParameter first, IfStringOrVariableOrParameter second)
+    public IfCondition<T> Less(IfExpression first, IfExpression second)
         => Link(new IfLessCondition<T>(first, second));
 
     public IfCondition<T> IsPullRequest

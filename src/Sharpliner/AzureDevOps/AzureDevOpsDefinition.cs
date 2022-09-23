@@ -475,25 +475,25 @@ public abstract class AzureDevOpsDefinition
 
     protected static InlineCondition Xor<T>(Condition expression1, Condition expression2) => new InlineXorCondition<T>(expression1, expression2);
 
-    protected static InlineCondition Equal<T>(InlineStringOrVariableOrParameter expression1, InlineStringOrVariableOrParameter expression2) => new InlineEqualityCondition<T>(true, expression1, expression2);
+    protected static InlineCondition Equal<T>(InlineExpression expression1, InlineExpression expression2) => new InlineEqualityCondition<T>(true, expression1, expression2);
 
-    protected static InlineCondition NotEqual<T>(InlineStringOrVariableOrParameter expression1, InlineStringOrVariableOrParameter expression2) => new InlineEqualityCondition<T>(false, expression1, expression2);
+    protected static InlineCondition NotEqual<T>(InlineExpression expression1, InlineExpression expression2) => new InlineEqualityCondition<T>(false, expression1, expression2);
 
-    protected static InlineCondition Contains<T>(InlineStringOrVariableOrParameter needle, InlineStringOrVariableOrParameter haystack) => new InlineContainsCondition<T>(needle, haystack);
+    protected static InlineCondition Contains<T>(InlineExpression needle, InlineExpression haystack) => new InlineContainsCondition<T>(needle, haystack);
 
-    protected static InlineCondition StartsWith<T>(InlineStringOrVariableOrParameter needle, InlineStringOrVariableOrParameter haystack) => new InlineStartsWithCondition<T>(needle, haystack);
+    protected static InlineCondition StartsWith<T>(InlineExpression needle, InlineExpression haystack) => new InlineStartsWithCondition<T>(needle, haystack);
 
-    protected static InlineCondition EndsWith<T>(InlineStringOrVariableOrParameter needle, InlineStringOrVariableOrParameter haystack) => new InlineEndsWithCondition<T>(needle, haystack);
+    protected static InlineCondition EndsWith<T>(InlineExpression needle, InlineExpression haystack) => new InlineEndsWithCondition<T>(needle, haystack);
 
-    protected static InlineCondition ContainsValue<T>(InlineStringOrVariableOrParameter needle, params InlineStringOrVariableOrParameter[] haystack) => new InlineContainsValueCondition<T>(needle, haystack);
+    protected static InlineCondition ContainsValue<T>(InlineExpression needle, params InlineExpression[] haystack) => new InlineContainsValueCondition<T>(needle, haystack);
 
-    protected static InlineCondition In<T>(InlineStringOrVariableOrParameter needle, params InlineStringOrVariableOrParameter[] haystack) => new InlineInCondition<T>(needle, haystack);
+    protected static InlineCondition In<T>(InlineExpression needle, params InlineExpression[] haystack) => new InlineInCondition<T>(needle, haystack);
 
-    protected static InlineCondition NotIn<T>(InlineStringOrVariableOrParameter needle, params InlineStringOrVariableOrParameter[] haystack) => new InlineNotInCondition<T>(needle, haystack);
+    protected static InlineCondition NotIn<T>(InlineExpression needle, params InlineExpression[] haystack) => new InlineNotInCondition<T>(needle, haystack);
 
-    protected static InlineCondition Greater<T>(InlineStringOrVariableOrParameter expression1, InlineStringOrVariableOrParameter expression2) => new InlineGreaterCondition<T>(expression1, expression2);
+    protected static InlineCondition Greater<T>(InlineExpression expression1, InlineExpression expression2) => new InlineGreaterCondition<T>(expression1, expression2);
 
-    protected static InlineCondition Less<T>(InlineStringOrVariableOrParameter expression1, InlineStringOrVariableOrParameter expression2) => new InlineLessCondition<T>(expression1, expression2);
+    protected static InlineCondition Less<T>(InlineExpression expression1, InlineExpression expression2) => new InlineLessCondition<T>(expression1, expression2);
 
     protected static InlineCondition And(params string[] expressions) => new InlineAndCondition(expressions);
 
@@ -507,29 +507,29 @@ public abstract class AzureDevOpsDefinition
 
     protected static InlineCondition Xor(InlineCondition expression1, InlineCondition expression2) => new InlineXorCondition(expression1, expression2);
 
-    protected static InlineCondition Contains(InlineStringOrVariableOrParameter needle, InlineStringOrVariableOrParameter haystack) => new InlineContainsCondition(needle, haystack);
+    protected static InlineCondition Contains(InlineExpression needle, InlineExpression haystack) => new InlineContainsCondition(needle, haystack);
 
-    protected static InlineCondition StartsWith(InlineStringOrVariableOrParameter needle, InlineStringOrVariableOrParameter haystack) => new InlineStartsWithCondition(needle, haystack);
+    protected static InlineCondition StartsWith(InlineExpression needle, InlineExpression haystack) => new InlineStartsWithCondition(needle, haystack);
 
-    protected static InlineCondition EndsWith(InlineStringOrVariableOrParameter needle, InlineStringOrVariableOrParameter haystack) => new InlineEndsWithCondition(needle, haystack);
+    protected static InlineCondition EndsWith(InlineExpression needle, InlineExpression haystack) => new InlineEndsWithCondition(needle, haystack);
 
-    protected static InlineCondition In(InlineStringOrVariableOrParameter needle, params InlineStringOrVariableOrParameter[] haystack) => new InlineInCondition(needle, haystack);
+    protected static InlineCondition In(InlineExpression needle, params InlineExpression[] haystack) => new InlineInCondition(needle, haystack);
 
-    protected static InlineCondition NotIn(InlineStringOrVariableOrParameter needle, params InlineStringOrVariableOrParameter[] haystack) => new InlineNotInCondition(needle, haystack);
+    protected static InlineCondition NotIn(InlineExpression needle, params InlineExpression[] haystack) => new InlineNotInCondition(needle, haystack);
 
-    protected static InlineCondition ContainsValue(InlineStringOrVariableOrParameter needle, params InlineStringOrVariableOrParameter[] haystack) => new InlineContainsValueCondition(needle, haystack);
+    protected static InlineCondition ContainsValue(InlineExpression needle, params InlineExpression[] haystack) => new InlineContainsValueCondition(needle, haystack);
 
-    protected static InlineCondition Equal(InlineStringOrVariableOrParameter expression1, InlineStringOrVariableOrParameter expression2) => new InlineEqualityCondition(true, expression1, expression2);
+    protected static InlineCondition Equal(InlineExpression expression1, InlineExpression expression2) => new InlineEqualityCondition(true, expression1, expression2);
 
-    protected static InlineCondition NotEqual(InlineStringOrVariableOrParameter expression1, InlineStringOrVariableOrParameter expression2) => new InlineEqualityCondition(false, expression1, expression2);
+    protected static InlineCondition NotEqual(InlineExpression expression1, InlineExpression expression2) => new InlineEqualityCondition(false, expression1, expression2);
 
-    protected static InlineCondition Greater(InlineStringOrVariableOrParameter expression1, InlineStringOrVariableOrParameter expression2) => new InlineGreaterCondition(expression1, expression2);
+    protected static InlineCondition Greater(InlineExpression expression1, InlineExpression expression2) => new InlineGreaterCondition(expression1, expression2);
 
-    protected static InlineCondition Less(InlineStringOrVariableOrParameter expression1, InlineStringOrVariableOrParameter expression2) => new InlineLessCondition(expression1, expression2);
+    protected static InlineCondition Less(InlineExpression expression1, InlineExpression expression2) => new InlineLessCondition(expression1, expression2);
 
-    protected static InlineCondition IsBranch(InlineStringOrVariableOrParameter branchName) => new InlineBranchCondition(branchName, true);
+    protected static InlineCondition IsBranch(InlineExpression branchName) => new InlineBranchCondition(branchName, true);
 
-    protected static InlineCondition IsNotBranch(InlineStringOrVariableOrParameter branchName) => new InlineBranchCondition(branchName, false);
+    protected static InlineCondition IsNotBranch(InlineExpression branchName) => new InlineBranchCondition(branchName, false);
 
     protected static InlineCondition IsPullRequest => new InlineBuildReasonCondition("PullRequest", true);
 
