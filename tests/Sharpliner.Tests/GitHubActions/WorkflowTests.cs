@@ -7,27 +7,167 @@ namespace Sharpliner.Tests.GitHubActions;
 
 public class WorkflowTests
 {
+    private class TestWorkflow : WorkflowDefinition
+    {
+        public override string TargetFile => "foo.yml";
+
+        public override Workflow Workflow => new()
+        {
+            On =
+            {
+                Manuals =
+                {
+                    WorkflowDispatch = new()
+                    {
+                        Inputs =
+                        {
+                            new("name")
+                            {
+                                Description = "Person to greet",
+                                Default = "Mona the Octocat",
+                                IsRequired = true,
+                            }
+                        }
+                    }
+                },
+
+                Schedules =
+                {
+                    new("'*/30 5,17 * * *'")
+                },
+
+                Webhooks =
+                {
+                    new CheckRun
+                    {
+                        Activities =  { CheckRun.Activity.Completed, CheckRun.Activity.RequestedAction }
+                    },
+                    new PullRequest
+                    {
+                        Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
+                    }
+                }
+            },
+
+
+            Permissions = new Permissions
+            {
+                Read =
+                {
+                    GitHubPermissionScope.Actions,
+                }
+            }.All(GitHubPermission.Write),
+
+            Jobs =
+            {
+                new Job("configuration")
+                {
+                    Name = "Configure Build",
+                    Env =
+                    {
+                        ["Database"] = "production",
+                        ["Bot"] = "builder"
+                    }
+                },
+                new Job("tests")
+                {
+                    Name = "Run Tests",
+                    Env =
+                    {
+                        ["Database"] = "production",
+                        ["Bot"] = "builder"
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public void Workflow_Serialization_Test()
+    {
+        var yaml = new TestWorkflow().Serialize();
+
+        yaml.Trim().Should().Be(
+            """
+            on:
+              schedules:
+              - cron: "'*/30 5,17 * * *'"
+              manuals:
+                workflowDispatch:
+                  inputs:
+                  - name: name
+                    description: Person to greet
+                    default: Mona the Octocat
+                    isRequired: true
+              webhooks:
+              - activities:
+                - Completed
+                - RequestedAction
+
+              - activities:
+                - Assigned
+                - Closed
+
+            permissions:
+              read:
+              - Actions
+              write:
+              - Actions
+              - Checks
+              - Contents
+              - Deployments
+              - Issues
+              - Packages
+              - PullRequests
+              - RepositoryProjects
+              - SecurityEvents
+              - Statuses
+
+            defaults: &o0
+              run: {}
+
+            jobs:
+            - id: configuration
+              name: Configure Build
+              permissions: {}
+              env:
+                Database: production
+                Bot: builder
+              defaults: *o0
+
+            - id: tests
+              name: Run Tests
+              permissions: {}
+              env:
+                Database: production
+                Bot: builder
+              defaults: *o0
+            """);
+    }
+    
     [Fact]
     public void Workflow_Single_Manual_Workflow()
     {
         var w = new Workflow
         {
             On =
+            {
+                Manuals =
                 {
-                    Manuals =
+                    WorkflowDispatch = new()
                     {
-                        WorkflowDispatch = new () {
-                            Inputs =
+                        Inputs =
+                        {
+                            new("name")
                             {
-                               new ("name") {
-                                    Description = "Person to greet",
-                                    Default = "Mona the Octocat",
-                                    IsRequired = true,
-                               }
+                                Description = "Person to greet",
+                                Default = "Mona the Octocat",
+                                IsRequired = true,
                             }
                         }
                     }
                 }
+            }
         };
 
         w.Should().NotBeNull();
@@ -46,7 +186,8 @@ public class WorkflowTests
             {
                 Manuals =
                 {
-                    RepositoryDispatch = new () {
+                    RepositoryDispatch = new()
+                    {
                         Activities = { "Opened", "MyActivity"}
                     }
                 }
@@ -69,7 +210,7 @@ public class WorkflowTests
             {
                 Schedules =
                 {
-                    new ("'*/30 5,17 * * *'")
+                    new("'*/30 5,17 * * *'")
                 }
             }
         };
@@ -90,8 +231,8 @@ public class WorkflowTests
             {
                 Schedules =
                 {
-                    new ("'*/30 5,17 * * *'"),
-                    new ("'*/30 1,17 * * *'")
+                    new("'*/30 5,17 * * *'"),
+                    new("'*/30 1,17 * * *'")
                 }
             }
         };
@@ -243,15 +384,15 @@ public class WorkflowTests
         var w = new Workflow
         {
             On =
+            {
+                Webhooks =
                 {
-                    Webhooks =
+                    new PullRequest
                     {
-                        new PullRequest
-                        {
-                            Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
-                        }
+                        Activities = { PullRequest.Activity.Assigned, PullRequest.Activity.Closed }
                     }
-                },
+                }
+            },
             Permissions = new Permissions
             {
                 Write =
@@ -260,7 +401,9 @@ public class WorkflowTests
                     }
             }.All(GitHubPermission.Read)
         };
+
         w.Permissions.Write.Should().Contain(GitHubPermissionScope.Actions);
+        
         foreach (var scope in Enum.GetValues<GitHubPermissionScope>())
         {
             w.Permissions.Read.Should().Contain(scope);
