@@ -1,7 +1,7 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
-using FluentAssertions;
 using PublicApiGenerator;
 using Xunit;
 
@@ -19,7 +19,14 @@ public class PublicApiChangeTest
         api = api.Substring(api.IndexOf("namespace "));
         exportedApi = exportedApi.Substring(exportedApi.IndexOf("namespace "));
 
-        api.Should().Be(exportedApi);
+        if (api != exportedApi)
+        {
+            throw new Exception("Detected a change in the public API of the library. If the change is intentional, please update the PublicApiExport.txt file."
+                + Environment.NewLine
+                + "Expected content:"
+                + Environment.NewLine
+                + api);
+        }
     }
 
     private static string GetResourceFile(Assembly assembly, string resourceFileName)
