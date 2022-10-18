@@ -1,8 +1,4 @@
-﻿[assembly: System.Reflection.AssemblyMetadata("RepositoryUrl", "***")]
-[assembly: System.Resources.NeutralResourcesLanguage("en")]
-[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner.Tests")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v7.0", FrameworkDisplayName="")]
-namespace Sharpliner.AzureDevOps
+﻿namespace Sharpliner.AzureDevOps
 {
     public sealed class AgentVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
@@ -757,6 +753,10 @@ namespace Sharpliner.AzureDevOps
         public Sharpliner.AzureDevOps.Trigger? Trigger { get; set; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.RepositoryType Type { get; set; }
+        public static Sharpliner.AzureDevOps.RepositoryResource AzureDevOps(string identifier, string project, string repoName, string? endpoint = null, string? refName = null) { }
+        public static Sharpliner.AzureDevOps.RepositoryResource BitBucket(string identifier, string orgOrUser, string repoName, string endpoint, string? refName = null) { }
+        public static Sharpliner.AzureDevOps.RepositoryResource GitHub(string identifier, string orgOrUser, string repoName, string endpoint, string? refName = null) { }
+        public static Sharpliner.AzureDevOps.RepositoryResource GitHubEnterprise(string identifier, string name, string endpoint, string? refName = null) { }
     }
     public enum RepositoryType
     {
