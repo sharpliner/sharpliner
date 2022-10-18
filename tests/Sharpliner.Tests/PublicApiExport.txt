@@ -756,7 +756,7 @@
         public static Sharpliner.AzureDevOps.RepositoryResource AzureDevOps(string identifier, string project, string repoName, string? endpoint = null, string? refName = null) { }
         public static Sharpliner.AzureDevOps.RepositoryResource BitBucket(string identifier, string orgOrUser, string repoName, string endpoint, string? refName = null) { }
         public static Sharpliner.AzureDevOps.RepositoryResource GitHub(string identifier, string orgOrUser, string repoName, string endpoint, string? refName = null) { }
-        public static Sharpliner.AzureDevOps.RepositoryResource GitHubEnterprise(string identifier, string name, string endpoint, string? refName = null) { }
+        public static Sharpliner.AzureDevOps.RepositoryResource GitHubEnterprise(string identifier, string orgOrUser, string repoName, string endpoint, string? refName = null) { }
     }
     public enum RepositoryType
     {
@@ -1287,6 +1287,8 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         protected ConditionedList(System.Collections.Generic.IEnumerable<T> values) { }
         public void Add(Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> item) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T> op_Implicit(System.Collections.Generic.List<T> list) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T> op_Implicit(System.Collections.ObjectModel.ReadOnlyCollection<T> values) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T> op_Implicit(T[] values) { }
     }
     public class Conditioned<T> : Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned, System.IEquatable<Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>>
     {
