@@ -1466,7 +1466,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [System.ComponentModel.DefaultValue(false)]
         [YamlDotNet.Serialization.YamlMember(Order=100)]
         public bool Clean { get; set; }
-        [System.ComponentModel.DefaultValue(0)]
+        [System.ComponentModel.DefaultValue(1)]
         [YamlDotNet.Serialization.YamlMember(Order=101)]
         public int FetchDepth { get; set; }
         [System.ComponentModel.DefaultValue(false)]
