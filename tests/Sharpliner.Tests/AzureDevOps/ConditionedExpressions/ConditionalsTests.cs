@@ -14,7 +14,7 @@ public class ConditionalsTests
             Variables =
             {
                 If.And(
-                    NotIn("'bar'", "'foo'", "'xyz'", "'foo'"),
+                    NotIn("bar", "foo", "xyz", "'foo'"),
                     NotEqual(variables.Configuration, "'Debug'"),
                     ContainsValue("10", variables.System.JobId)
                 )
