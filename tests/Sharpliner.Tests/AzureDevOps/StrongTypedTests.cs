@@ -35,7 +35,7 @@ public class StrongTypedTests
                         If.Equal(parameters["Parameter1"], "SomeParameterValue1")
                             .Step(Script.Inline("echo Hello")),
 
-                        If.Equal(staticVariables["VariableBasedUponParameter"], "Parameter1 Equals SomeParameterValue1")
+                        If.Equal(variables["VariableBasedUponParameter"], "Parameter1 Equals SomeParameterValue1")
                             .Step(Script.Inline("echo Hello again")),
 
                         Script.Inline($"echo {variables["VariableBasedUponParameter"]}"),

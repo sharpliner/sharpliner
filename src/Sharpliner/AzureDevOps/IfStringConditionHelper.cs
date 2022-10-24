@@ -23,7 +23,7 @@ internal static class IfStringConditionHelper
             strings => string.Join(", ", strings),
             Serialize,
             parameters => string.Join(", ", parameters.Select(p => Serialize(p))),
-            staticVariables => string.Join(", ", staticVariables.Select(v => Serialize(v)))
+            variables => string.Join(", ", variables.Select(v => Serialize(v)))
         );
     }
 
@@ -37,7 +37,7 @@ internal static class IfStringConditionHelper
                     IfArrayExpression oneOfArrayStringValue => Serialize(oneOfArrayStringValue),
                     StaticVariableReference staticVariableReference => Serialize(staticVariableReference),
                     ParameterReference parameterReference => Serialize(parameterReference),
-                    VariableReference => throw new ArgumentException("${{ if }} conditions are compile-time statements, therefore runtime variables cannot be evaluated. You can use staticVariables or parameters instead"),
+                    VariableReference => throw new ArgumentException("${{ if }} conditions are compile-time statements, therefore runtime variables cannot be evaluated. You can use variables or parameters instead"),
                     _ => item.ToString()
                 };
             })

@@ -215,9 +215,6 @@ public abstract class AzureDevOpsDefinition
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Should not be capitalized to follow YAML syntax")]
     protected static readonly VariablesReference variables = new();
 
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Should not be capitalized to follow YAML syntax")]
-    protected static readonly StaticVariablesReference staticVariables = new();
-
     /// <summary>
     /// Defines a variable.
     /// </summary>

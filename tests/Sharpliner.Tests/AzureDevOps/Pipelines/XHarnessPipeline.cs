@@ -49,17 +49,17 @@ internal class XHarnessPipeline : PipelineDefinition
                                     new Job("Windows_NT")
                                     {
                                         Pool =
-                                            If.Equal(staticVariables["_RunAsInternal"], "True")
+                                            If.Equal(variables["_RunAsInternal"], "True")
                                                 .Pool(new HostedPool("NetCore1ESPool-Internal")
                                                 {
                                                     Demands = { "ImageOverride -equals Build.Server.Amd64.VS2019" }
                                                 })
                                             .EndIf
-                                            .If.Equal(staticVariables["_RunAsPublic"], "True")
+                                            .If.Equal(variables["_RunAsPublic"], "True")
                                                 .Pool(new HostedPool(vmImage: "windows-2019")),
 
                                         Strategy =
-                                            If.Equal(staticVariables["_RunAsPublic"], "True")
+                                            If.Equal(variables["_RunAsPublic"], "True")
                                                 .Strategy(new MatrixStrategy
                                                 {
                                                     Matrix = new()
@@ -79,7 +79,7 @@ internal class XHarnessPipeline : PipelineDefinition
 
                                         Steps =
                                         {
-                                            If.Equal(staticVariables["_RunAsPublic"], "False")
+                                            If.Equal(variables["_RunAsPublic"], "False")
                                                 .Step(Script.Inline(
                                                         "eng\\common\\CIBuild.cmd" +
                                                         " -configuration $(_BuildConfig)" +
@@ -89,7 +89,7 @@ internal class XHarnessPipeline : PipelineDefinition
                                                     .DisplayAs("Build")
                                                     .WhenSucceeded()),
 
-                                            If.Equal(staticVariables["_RunAsPublic"], "True")
+                                            If.Equal(variables["_RunAsPublic"], "True")
                                                 .Step(Script.Inline(
                                                         "eng\\common\\CIBuild.cmd" +
                                                         " -configuration $(_BuildConfig)" +
@@ -129,7 +129,7 @@ internal class XHarnessPipeline : PipelineDefinition
                 }
             },
 
-            If.Equal(staticVariables["_RunAsPublic"], "True")
+            If.Equal(variables["_RunAsPublic"], "True")
                 .Stage(new Stage("Build_OSX", "Build OSX")
                 {
                     DependsOn = NoDependsOn,
@@ -151,7 +151,7 @@ internal class XHarnessPipeline : PipelineDefinition
                                             DisplayName = "Build OSX",
                                             Pool = new Pool("Hosted macOS"),
                                             Strategy =
-                                                If.Equal(staticVariables["_RunAsPublic"], "True")
+                                                If.Equal(variables["_RunAsPublic"], "True")
                                                     .Strategy(new MatrixStrategy
                                                     {
                                                         Matrix = new()
@@ -171,7 +171,7 @@ internal class XHarnessPipeline : PipelineDefinition
 
                                             Steps =
                                             {
-                                                If.Equal(staticVariables["_RunAsPublic"], "False")
+                                                If.Equal(variables["_RunAsPublic"], "False")
                                                     .Step(Script.Inline(
                                                             "eng/common/cibuild.sh" +
                                                             " --configuration $(_BuildConfig)" +
@@ -181,7 +181,7 @@ internal class XHarnessPipeline : PipelineDefinition
                                                         .DisplayAs("Build")
                                                         .WhenSucceeded()),
 
-                                                If.Equal(staticVariables["_RunAsPublic"], "True")
+                                                If.Equal(variables["_RunAsPublic"], "True")
                                                     .Step(Script.Inline(
                                                             "eng/common/cibuild.sh" +
                                                             " --configuration $(_BuildConfig)" +
@@ -289,7 +289,7 @@ internal class XHarnessPipeline : PipelineDefinition
                 }),
 
             // NuGet publishing
-            If.Equal(staticVariables["_RunAsInternal"], "True")
+            If.Equal(variables["_RunAsInternal"], "True")
                 .StageTemplate("eng/common/templates/post-build/post-build.yml", new()
                 {
                     { "publishingInfraVersion", 3 },
