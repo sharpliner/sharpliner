@@ -850,11 +850,6 @@
         protected StageTemplateDefinition() { }
         public virtual System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
     }
-    public class StaticVariablesReference : Sharpliner.AzureDevOps.VariablesReference
-    {
-        public StaticVariablesReference() { }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference this[string variableName] { get; }
-    }
     public abstract class Step : System.IEquatable<Sharpliner.AzureDevOps.Step>
     {
         protected Step() { }
@@ -1330,12 +1325,9 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
         public static string op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference value) { }
     }
-    public class VariableReference : Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference, Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.ICompileTimeExpression
+    public class VariableReference : Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.ICompileTimeExpression, Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.IMacroExpression, Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.IRuntimeExpression, YamlDotNet.Serialization.IYamlConvertible
     {
         public string CompileTimeExpression { get; }
-    }
-    public class VariableReference : Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.IMacroExpression, Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.IRuntimeExpression, YamlDotNet.Serialization.IYamlConvertible
-    {
         public string MacroExpression { get; }
         public string RuntimeExpression { get; }
         public string VariableName { get; }
