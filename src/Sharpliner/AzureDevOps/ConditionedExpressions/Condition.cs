@@ -715,7 +715,7 @@ public class IfLessCondition<T> : IfStringCondition<T>
 public class InlineBranchCondition : InlineEqualityCondition
 {
     internal InlineBranchCondition(InlineExpression branchName, bool equal)
-        : base(equal, new StaticVariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
+        : base(equal, new VariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
     {
     }
 }
@@ -723,7 +723,7 @@ public class InlineBranchCondition : InlineEqualityCondition
 public class IfBranchCondition : IfEqualityCondition
 {
     internal IfBranchCondition(IfExpression branchName, bool equal)
-        : base(equal, new StaticVariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
+        : base(equal, new VariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
     {
     }
 }
@@ -731,7 +731,7 @@ public class IfBranchCondition : IfEqualityCondition
 public class InlineBranchCondition<T> : InlineEqualityCondition<T>
 {
     internal InlineBranchCondition(InlineExpression branchName, bool equal)
-        : base(equal, new StaticVariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
+        : base(equal, new VariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
     {
     }
 }
@@ -739,7 +739,7 @@ public class InlineBranchCondition<T> : InlineEqualityCondition<T>
 public class IfBranchCondition<T> : IfEqualityCondition<T>
 {
     internal IfBranchCondition(IfExpression branchName, bool equal)
-        : base(equal, new StaticVariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
+        : base(equal, new VariableReference("Build.SourceBranch"), BranchNameHelper.FormatBranchName(Serialize(branchName)))
     {
     }
 }
@@ -747,7 +747,7 @@ public class IfBranchCondition<T> : IfEqualityCondition<T>
 public class InlineBuildReasonCondition : InlineEqualityCondition
 {
     internal InlineBuildReasonCondition(InlineExpression reason, bool equal)
-        : base(equal, new StaticVariableReference("Build.Reason"), reason)
+        : base(equal, new VariableReference("Build.Reason"), reason)
     {
     }
 }
@@ -755,7 +755,7 @@ public class InlineBuildReasonCondition : InlineEqualityCondition
 public class IfBuildReasonCondition : IfEqualityCondition
 {
     internal IfBuildReasonCondition(IfExpression reason, bool equal)
-        : base(equal, new StaticVariableReference("Build.Reason"), reason)
+        : base(equal, new VariableReference("Build.Reason"), reason)
     {
     }
 }
@@ -763,7 +763,7 @@ public class IfBuildReasonCondition : IfEqualityCondition
 public class InlineBuildReasonCondition<T> : InlineEqualityCondition<T>
 {
     internal InlineBuildReasonCondition(InlineExpression reason, bool equal)
-        : base(equal, new StaticVariableReference("Build.Reason"), reason)
+        : base(equal, new VariableReference("Build.Reason"), reason)
     {
     }
 }
@@ -771,7 +771,7 @@ public class InlineBuildReasonCondition<T> : InlineEqualityCondition<T>
 public class IfBuildReasonCondition<T> : IfEqualityCondition<T>
 {
     internal IfBuildReasonCondition(IfExpression reason, bool equal)
-        : base(equal, new StaticVariableReference("Build.Reason"), reason)
+        : base(equal, new VariableReference("Build.Reason"), reason)
     {
     }
 }

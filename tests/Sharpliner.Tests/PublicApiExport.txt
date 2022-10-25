@@ -2,20 +2,20 @@
 {
     public sealed class AgentVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference BuildDirectory { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference ContainerMapping { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference HomeDirectory { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference Id { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference JobName { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference JobStatus { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference MachineName { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference Name { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference OS { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference OSArchitecture { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference BuildDirectory { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference ContainerMapping { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference HomeDirectory { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Id { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference JobName { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference JobStatus { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference MachineName { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Name { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference OS { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference OSArchitecture { get; }
         protected override string Prefix { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference TempDirectory { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference ToolsDirectory { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference WorkFolder { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference TempDirectory { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference ToolsDirectory { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference WorkFolder { get; }
     }
     public abstract class AzureDevOpsDefinition
     {
@@ -140,30 +140,30 @@
     }
     public sealed class BuildVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference ArtifactStagingDirectory { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference BinariesDirectory { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference BuildId { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference BuildNumber { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference BuildUri { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference CommonTestResultsDirectory { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference ContainerId { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference DefinitionName { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference DefinitionVersion { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference ArtifactStagingDirectory { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference BinariesDirectory { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference BuildId { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference BuildNumber { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference BuildUri { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference CommonTestResultsDirectory { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference ContainerId { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference DefinitionName { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference DefinitionVersion { get; }
         protected override string Prefix { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference QueuedBy { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference QueuedById { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference Reason { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference QueuedBy { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference QueuedById { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Reason { get; }
         public Sharpliner.AzureDevOps.RepositoryVariableReference Repository { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference RequestedFor { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference RequestedForEmail { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference RequestedForId { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference SourceBranch { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference SourceBranchName { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference SourceTfvcShelveset { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference SourceVersion { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference SourceVersionMessage { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference SourcesDirectory { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference StagingDirectory { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference RequestedFor { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference RequestedForEmail { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference RequestedForId { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference SourceBranch { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference SourceBranchName { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference SourceTfvcShelveset { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference SourceVersion { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference SourceVersionMessage { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference SourcesDirectory { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference StagingDirectory { get; }
         public Sharpliner.AzureDevOps.TriggeredByVariableReference TriggeredBy { get; }
     }
     public class CanaryStrategy : Sharpliner.AzureDevOps.DeploymentStrategy, System.IEquatable<Sharpliner.AzureDevOps.CanaryStrategy>
@@ -176,7 +176,7 @@
     public sealed class ChecksVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
         protected override string Prefix { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference StageAttempt { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference StageAttempt { get; }
     }
     public static class ConditionExtensions
     {
@@ -360,11 +360,11 @@
     }
     public sealed class EnvironmentVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference Id { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference Name { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Id { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Name { get; }
         protected override string Prefix { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference ResourceId { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference ResourceName { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference ResourceId { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference ResourceName { get; }
     }
     public class HostedPool : Sharpliner.AzureDevOps.Pool, System.IEquatable<Sharpliner.AzureDevOps.HostedPool>
     {
@@ -683,7 +683,7 @@
     public sealed class PipelineVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
         protected override string Prefix { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference Workspace { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Workspace { get; }
     }
     public class Pool : System.IEquatable<Sharpliner.AzureDevOps.Pool>
     {
@@ -706,13 +706,13 @@
     }
     public sealed class PullRequestVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference IsFork { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference IsFork { get; }
         protected override string Prefix { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference PullRequestId { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference PullRequestNumber { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference SourceBranch { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference SourceRepositoryURI { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference TargetBranch { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference PullRequestId { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference PullRequestNumber { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference SourceBranch { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference SourceRepositoryURI { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference TargetBranch { get; }
     }
     public class RepositoryResource : System.IEquatable<Sharpliner.AzureDevOps.RepositoryResource>
     {
@@ -741,15 +741,15 @@
     }
     public sealed class RepositoryVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference Clean { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference GitSubmoduleCheckout { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference ID { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference LocalPath { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference Name { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Clean { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference GitSubmoduleCheckout { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference ID { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference LocalPath { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Name { get; }
         protected override string Prefix { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference Provider { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference TfvcWorkspace { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference Uri { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Provider { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference TfvcWorkspace { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Uri { get; }
     }
     public enum ResourceType
     {
@@ -853,7 +853,7 @@
     public class StaticVariablesReference : Sharpliner.AzureDevOps.VariablesReference
     {
         public StaticVariablesReference() { }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference this[string variableName] { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference this[string variableName] { get; }
     }
     public abstract class Step : System.IEquatable<Sharpliner.AzureDevOps.Step>
     {
@@ -910,8 +910,8 @@
     }
     public sealed class StrategyVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference CycleName { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference Name { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference CycleName { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Name { get; }
         protected override string Prefix { get; }
     }
     public sealed class StringParameter : Sharpliner.AzureDevOps.Parameter<string>, System.IEquatable<Sharpliner.AzureDevOps.StringParameter>
@@ -920,28 +920,28 @@
     }
     public sealed class SystemVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference AccessToken { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference CollectionId { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference CollectionUri { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference Debug { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference DefaultWorkingDirectory { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference DefinitionId { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference HostType { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference JobAttempt { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference JobDisplayName { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference JobId { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference JobName { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference PhaseAttempt { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference PhaseDisplayName { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference PhaseName { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference AccessToken { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference CollectionId { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference CollectionUri { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Debug { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference DefaultWorkingDirectory { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference DefinitionId { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference HostType { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference JobAttempt { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference JobDisplayName { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference JobId { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference JobName { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference PhaseAttempt { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference PhaseDisplayName { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference PhaseName { get; }
         protected override string Prefix { get; }
         public Sharpliner.AzureDevOps.PullRequestVariableReference PullRequest { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference StageAttempt { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference StageDisplayName { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference StageName { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference TeamFoundationCollectionUri { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference TeamProject { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference TeamProjectId { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference StageAttempt { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference StageDisplayName { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference StageName { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference TeamFoundationCollectionUri { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference TeamProject { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference TeamProjectId { get; }
     }
     public abstract class TemplateDefinition : Sharpliner.AzureDevOps.AzureDevOpsDefinition
     {
@@ -1012,12 +1012,12 @@
     }
     public sealed class TriggeredByVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference BuildId { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference BuildNumber { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference DefinitionId { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference DefinitionName { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference BuildId { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference BuildNumber { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference DefinitionId { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference DefinitionName { get; }
         protected override string Prefix { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference ProjectID { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference ProjectID { get; }
     }
     public class Uses : System.IEquatable<Sharpliner.AzureDevOps.Uses>
     {
@@ -1058,7 +1058,7 @@
         protected VariableReferenceBase() { }
         public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference this[string variableName] { get; }
         protected abstract string Prefix { get; }
-        protected Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference GetReference(string name) { }
+        protected Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference GetReference(string name) { }
     }
     public abstract class VariableTemplateCollection : Sharpliner.AzureDevOps.TemplateDefinitionCollection<Sharpliner.AzureDevOps.VariableBase>
     {
@@ -1074,13 +1074,13 @@
         public VariablesReference() { }
         public Sharpliner.AzureDevOps.AgentVariableReference Agent { get; }
         public Sharpliner.AzureDevOps.BuildVariableReference Build { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference Configuration { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Configuration { get; }
         public Sharpliner.AzureDevOps.EnvironmentVariableReference Environment { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference this[string variableName] { get; }
         public Sharpliner.AzureDevOps.PipelineVariableReference Pipeline { get; }
         public Sharpliner.AzureDevOps.StrategyVariableReference Strategy { get; }
         public Sharpliner.AzureDevOps.SystemVariableReference System { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference TF_BUILD { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference TF_BUILD { get; }
     }
     public class WebhookResource : System.IEquatable<Sharpliner.AzureDevOps.WebhookResource>
     {
@@ -1093,15 +1093,15 @@
 }
 namespace Sharpliner.AzureDevOps.ConditionedExpressions.Arguments
 {
-    public class IfArrayExpression : OneOf.OneOfBase<string[], object[], Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference[], Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference[]>
+    public class IfArrayExpression : OneOf.OneOfBase<string[], object[], Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference[], Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference[]>
     {
-        public IfArrayExpression(OneOf.OneOf<string[], object[], Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference[], Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference[]> _) { }
+        public IfArrayExpression(OneOf.OneOf<string[], object[], Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference[], Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference[]> _) { }
         public static string[] op_Explicit(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfArrayExpression _) { }
         public static object[] op_Explicit(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfArrayExpression _) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference[] op_Explicit(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfArrayExpression _) { }
-        public static Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference[] op_Explicit(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfArrayExpression _) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference[] op_Explicit(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfArrayExpression _) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfArrayExpression op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference[] _) { }
-        public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfArrayExpression op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.StaticVariableReference[] _) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfArrayExpression op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference[] _) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfArrayExpression op_Implicit(object[] _) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfArrayExpression op_Implicit(string[] _) { }
     }
@@ -1330,7 +1330,7 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
         public static string op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference value) { }
     }
-    public class StaticVariableReference : Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference, Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.ICompileTimeExpression
+    public class VariableReference : Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference, Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.ICompileTimeExpression
     {
         public string CompileTimeExpression { get; }
     }

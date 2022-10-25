@@ -3,6 +3,6 @@
 namespace Sharpliner.AzureDevOps.ConditionedExpressions.Arguments;
 
 [GenerateOneOf]
-public partial class IfArrayExpression : OneOfBase<string[], object[], ParameterReference[], StaticVariableReference[]>
+public partial class IfArrayExpression : OneOfBase<string[], object[], ParameterReference[], VariableReference[]>
 {
 }
