@@ -3,7 +3,6 @@
 Sharpliner is a .NET library that lets you use C# for Azure DevOps pipeline definition instead of YAML.
 Exchange YAML indentation problems for the type-safe environment of C# and let the intellisense speed up your work!
 
-## Table of contents
 - [Getting started](#getting-started)
 - [Example](#example)
 - [Sharpliner features](#sharpliner-features)
