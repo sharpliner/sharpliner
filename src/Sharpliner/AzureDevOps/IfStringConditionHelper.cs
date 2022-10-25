@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.ConditionedExpressions.Arguments;
 
@@ -10,10 +9,9 @@ internal static class IfStringConditionHelper
     public static string Serialize(IfExpression stringOrVariableOrParameter)
     {
         return stringOrVariableOrParameter.Match(
-
             str => str,
             parameter => parameter.RuntimeExpression,
-            staticVariable => staticVariable.RuntimeExpression
+            variable => variable.RuntimeExpression
         );
     }
 
@@ -29,17 +27,14 @@ internal static class IfStringConditionHelper
 
     public static string Serialize(object[] array)
     {
-        var convertedStringArray = array.Select(item =>
+        var convertedStringArray = array
+            .Select(item => item switch
             {
-                return item switch
-                {
-                    IfExpression oneOfStringValue => Serialize(oneOfStringValue),
-                    IfArrayExpression oneOfArrayStringValue => Serialize(oneOfArrayStringValue),
-                    StaticVariableReference staticVariableReference => Serialize(staticVariableReference),
-                    ParameterReference parameterReference => Serialize(parameterReference),
-                    VariableReference => throw new ArgumentException("${{ if }} conditions are compile-time statements, therefore runtime variables cannot be evaluated. You can use variables or parameters instead"),
-                    _ => item.ToString()
-                };
+                IfExpression oneOfStringValue => Serialize(oneOfStringValue),
+                IfArrayExpression oneOfArrayStringValue => Serialize(oneOfArrayStringValue),
+                VariableReference variableReference => Serialize(variableReference),
+                ParameterReference parameterReference => Serialize(parameterReference),
+                _ => item.ToString()
             })
             .Select(value => Condition.WrapQuotes(value ?? string.Empty));
 
