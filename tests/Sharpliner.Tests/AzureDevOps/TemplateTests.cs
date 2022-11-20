@@ -123,6 +123,7 @@ public class TemplateTests
               inputs:
                 command: build
                 projects: ${{ parameters.project }}
+
             - ${{ parameters.afterBuild }}
             """);
     }
