@@ -47,7 +47,7 @@ public record ConditionedParameterReference<T> : Conditioned<T>
 {
     private readonly ParameterReference _parameter;
 
-    internal ConditionedParameterReference(ParameterReference parameter) : base()
+    public ConditionedParameterReference(ParameterReference parameter) : base()
     {
         _parameter = parameter;
     }
