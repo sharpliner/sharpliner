@@ -30,8 +30,7 @@ public static class SharplinerSerializer
         // Add empty new lines to make text more readable
         yaml = Regex.Replace(yaml, "((\r?\n)[a-zA-Z]+:)", Environment.NewLine + "$1");
         yaml = Regex.Replace(yaml, "((\r?\n) {0,8}- ?[a-zA-Z]+@?[a-zA-Z\\.0-9]*:)", Environment.NewLine + "$1");
-        yaml = Regex.Replace(yaml, "((\r?\n) {0,8}- ?\\${{ ?if[^\n]+\n)", Environment.NewLine + "$1");
-        yaml = Regex.Replace(yaml, "((\r?\n) {0,8}- ?\\${{ ?else[^\n]+\n)", Environment.NewLine + "$1");
+        yaml = Regex.Replace(yaml, "((\r?\n) {0,8}- ?\\${{ ?(if|else|each)[^\n]+\n)", Environment.NewLine + "$1");
         yaml = Regex.Replace(yaml, "(:\r?\n\r?\n)", ":" + Environment.NewLine);
 
         return yaml;
