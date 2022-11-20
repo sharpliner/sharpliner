@@ -29,10 +29,7 @@ public record AzureDevOpsTask : Step
             {
                 if (value == null)
                 {
-                    if (_inputs.ContainsKey(item.Key))
-                    {
-                        _inputs.Remove(item.Key);
-                    }
+                    _inputs.Remove(item.Key);
                 }
                 else
                 {
@@ -77,10 +74,7 @@ public record AzureDevOpsTask : Step
     {
         if (value == null)
         {
-            if (Inputs.ContainsKey(name))
-            {
-                Inputs.Remove(name);
-            }
+            Inputs.Remove(name);
         }
         else
         {
