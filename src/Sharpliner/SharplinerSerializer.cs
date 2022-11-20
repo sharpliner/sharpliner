@@ -28,11 +28,16 @@ public static class SharplinerSerializer
     public static string Prettify(string yaml)
     {
         // Add empty new lines to make text more readable
-        yaml = Regex.Replace(yaml, "((\r?\n)[a-zA-Z]+:)", Environment.NewLine + "$1");
-        yaml = Regex.Replace(yaml, "((\r?\n) {0,8}- ?[a-zA-Z]+@?[a-zA-Z\\.0-9]*:)", Environment.NewLine + "$1");
-        yaml = Regex.Replace(yaml, "((\r?\n) {0,8}- ?\\${{ ?(if|else|each)[^\n]+\n)", Environment.NewLine + "$1");
-        yaml = Regex.Replace(yaml, "(:\r?\n\r?\n)", ":" + Environment.NewLine);
-
+        var newLineReplace = Environment.NewLine + "$1";
+        yaml = s_sectionStartRegex.Replace(yaml, newLineReplace);
+        yaml = s_mainItemStartRegex.Replace(yaml, newLineReplace);
+        yaml = s_conditionedBlockStartRegex.Replace(yaml, newLineReplace);
+        yaml = s_doubleNewLineStartRegex.Replace(yaml, ":" + Environment.NewLine);
         return yaml;
     }
+
+    private static readonly Regex s_sectionStartRegex = new("((\r?\n)[a-zA-Z]+:)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    private static readonly Regex s_mainItemStartRegex = new("((\r?\n) {0,8}- ?[a-zA-Z]+@?[a-zA-Z\\.0-9]*:)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    private static readonly Regex s_conditionedBlockStartRegex = new("((\r?\n) {0,8}- ?\\${{ ?(if|else|each)[^\n]+\n)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    private static readonly Regex s_doubleNewLineStartRegex = new("(:\r?\n\r?\n)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 }
