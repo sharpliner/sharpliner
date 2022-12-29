@@ -375,6 +375,15 @@ public abstract class AzureDevOpsDefinition
         => new ObjectParameter(name, displayName, defaultValue);
 
     /// <summary>
+    /// Defines a object template parameter
+    /// </summary>
+    /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
+    /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
+    protected static Parameter ObjectParameter<T>(string name, string? displayName = null, ConditionedList<T>? defaultValue = null)
+        => new ObjectParameter<T>(name, displayName, defaultValue);
+
+    /// <summary>
     /// Defines a step template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>

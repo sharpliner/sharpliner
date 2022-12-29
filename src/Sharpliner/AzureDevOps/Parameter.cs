@@ -122,6 +122,22 @@ public sealed record ObjectParameter : Parameter<ConditionedDictionary>
     public override string Type => "object";
 }
 
+public sealed record ObjectParameter<T> : Parameter<ConditionedList<T>>
+{
+    /// <summary>
+    /// Define a template parameter
+    /// </summary>
+    /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
+    /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
+    internal ObjectParameter(string name, string? displayName = null, ConditionedList<T>? defaultValue = null)
+        : base(name, displayName, defaultValue, null)
+    {
+    }
+
+    public override string Type => "object";
+}
+
 public sealed record StepParameter : Parameter<Step>
 {
     /// <summary>
