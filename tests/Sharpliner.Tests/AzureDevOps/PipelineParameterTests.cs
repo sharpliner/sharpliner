@@ -15,6 +15,7 @@ public class PipelineParameterTests
                 StringParameter("project", "AzureDevops project"),
                 StringParameter("version", ".NET version", allowedValues: new[] { "5.0.100", "5.0.102" }),
                 BooleanParameter("restore", "Restore NuGets", defaultValue: true),
+                ObjectParameter<string>("list", "List input", new() { "Azure" , "DevOps" }),
                 StepParameter("afterBuild", "After steps", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)")),
             }
         };
@@ -43,6 +44,13 @@ public class PipelineParameterTests
               displayName: Restore NuGets
               type: boolean
               default: true
+
+            - name: list
+              displayName: List input
+              type: object
+              default:
+              - Azure
+              - DevOps
 
             - name: afterBuild
               displayName: After steps

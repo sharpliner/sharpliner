@@ -88,6 +88,7 @@
         protected static Sharpliner.AzureDevOps.InlineCondition NotIn<T>(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression needle, params Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression[] haystack) { }
         protected static Sharpliner.AzureDevOps.Parameter NumberParameter(string name, string? displayName = null, int defaultValue = 0, System.Collections.Generic.IEnumerable<int?>? allowedValues = null) { }
         protected static Sharpliner.AzureDevOps.Parameter ObjectParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.Parameter ObjectParameter<T>(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T>? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.InlineCondition Or(params Sharpliner.AzureDevOps.InlineCondition[] expressions) { }
         protected static Sharpliner.AzureDevOps.InlineCondition Or(params string[] expressions) { }
         protected static Sharpliner.AzureDevOps.InlineCondition Or<T>(params Sharpliner.AzureDevOps.InlineCondition[] expressions) { }
@@ -565,6 +566,10 @@
         public override string Type { get; }
     }
     public sealed class ObjectParameter : Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary>, System.IEquatable<Sharpliner.AzureDevOps.ObjectParameter>
+    {
+        public override string Type { get; }
+    }
+    public sealed class ObjectParameter<T> : Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T>>, System.IEquatable<Sharpliner.AzureDevOps.ObjectParameter<T>>
     {
         public override string Type { get; }
     }
