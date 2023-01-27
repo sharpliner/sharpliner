@@ -17,8 +17,8 @@ public record DotNetTestCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public string? TestRunTitle
     {
-        get => GetString("restoreArguments");
-        init => SetProperty("restoreArguments", value);
+        get => GetString("testRunTitle");
+        init => SetProperty("testRunTitle", value);
     }
 
     /// <summary>
