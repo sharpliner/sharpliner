@@ -243,9 +243,9 @@ public abstract class AzureDevOpsDefinition
     protected static Conditioned<VariableBase> Group(string name) => new(new VariableGroup(name));
 
     /// <summary>
-    /// References a variable group.
+    /// References a variable template.
     /// </summary>
-    /// <param name="name">Group name</param>
+    /// <param name="name">Template name</param>
     protected static Conditioned<VariableBase> Template(string name) => new(new VariableTemplate(name));
 
     #endregion
