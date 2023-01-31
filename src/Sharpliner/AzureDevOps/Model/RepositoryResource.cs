@@ -20,19 +20,7 @@ public record RepositoryResource
     /// Project for the source
     /// Optional for current project
     /// </summary>
-    [YamlIgnore]
-    [DisallowNull]
     public RepositoryType Type { get; init; } = RepositoryType.Git;
-
-    [YamlMember(Alias = "type")]
-    public string RepoType => Type switch
-    {
-        RepositoryType.Git => "git",
-        RepositoryType.GitHub => "github",
-        RepositoryType.GitHubEnterprise => "githubenterprise",
-        RepositoryType.BitBucket => "bitbucket",
-        _ => throw new NotImplementedException(),
-    };
 
     /// <summary>
     /// Repository name (format depends on `Type`)
@@ -160,23 +148,27 @@ public enum RepositoryType
     /// To refer to a repository in another project within the same organization, prefix the name with that project's name.
     /// Example name: OtherProject/otherRepo.
     /// </summary>
+    [YamlMember(Alias = "git")]
     Git,
 
     /// <summary>
     /// The name value is the full name of the GitHub repository and includes the user or organization.
     /// Example name: Microsoft/vscode
     /// </summary>
+    [YamlMember(Alias = "github")]
     GitHub,
 
     /// <summary>
     /// The name value is the full name of the GitHub Enterprise repository and includes the user or organization.
     /// Example name: Microsoft/vscode
     /// </summary>
+    [YamlMember(Alias = "githubenterprise")]
     GitHubEnterprise,
 
     /// <summary>
     /// The name value is the full name of the Bitbucket Cloud repository and includes the user or organization.
     /// Example name: MyBitbucket/vscode
     /// </summary>
+    [YamlMember(Alias = "bitbucket")]
     BitBucket,
 }

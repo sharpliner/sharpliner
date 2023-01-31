@@ -357,10 +357,8 @@
         public string Name { get; }
         public int? ResourceId { get; set; }
         public string? ResourceName { get; set; }
-        public string? ResourceType { get; }
+        public Sharpliner.AzureDevOps.ResourceType? ResourceType { get; set; }
         public System.Collections.Generic.List<string> Tags { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.ResourceType? Type { get; set; }
     }
     public sealed class EnvironmentVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
@@ -739,10 +737,7 @@
         public string Identifier { get; }
         public string? Name { get; set; }
         public string? Ref { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Alias="type")]
-        public string RepoType { get; }
         public Sharpliner.AzureDevOps.Trigger? Trigger { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.RepositoryType Type { get; set; }
         public static Sharpliner.AzureDevOps.RepositoryResource AzureDevOps(string identifier, string project, string repoName, string? endpoint = null, string? refName = null) { }
         public static Sharpliner.AzureDevOps.RepositoryResource BitBucket(string identifier, string orgOrUser, string repoName, string endpoint, string? refName = null) { }
@@ -751,9 +746,13 @@
     }
     public enum RepositoryType
     {
+        [YamlDotNet.Serialization.YamlMember(Alias="git")]
         Git = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="github")]
         GitHub = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="githubenterprise")]
         GitHubEnterprise = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="bitbucket")]
         BitBucket = 3,
     }
     public sealed class RepositoryVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
@@ -770,7 +769,9 @@
     }
     public enum ResourceType
     {
+        [YamlDotNet.Serialization.YamlMember(Alias="virtualMachine")]
         VirtualMachine = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="Kubernetes")]
         Kubernetes = 1,
     }
     public class Resources : System.IEquatable<Sharpliner.AzureDevOps.Resources>
@@ -1475,11 +1476,8 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlMember(Order=105)]
         public bool PersistCredentials { get; set; }
         [System.ComponentModel.DefaultValue(Sharpliner.AzureDevOps.Tasks.SubmoduleCheckout.None)]
-        [YamlDotNet.Serialization.YamlIgnore]
+        [YamlDotNet.Serialization.YamlMember(Order=103)]
         public Sharpliner.AzureDevOps.Tasks.SubmoduleCheckout Submodules { get; set; }
-        [System.ComponentModel.DefaultValue("false")]
-        [YamlDotNet.Serialization.YamlMember(Alias="submodules", Order=103)]
-        public string _Submodules { get; }
     }
     public class CheckoutTaskBuilder
     {
@@ -1789,8 +1787,11 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
     public enum SubmoduleCheckout
     {
+        [YamlDotNet.Serialization.YamlMember(Alias="false")]
         None = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="true")]
         SingleLevel = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="recursive")]
         Recursive = 2,
     }
     public class TaskInputs : Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary

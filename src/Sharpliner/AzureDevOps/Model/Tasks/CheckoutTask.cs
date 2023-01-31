@@ -40,18 +40,9 @@ public abstract record CheckoutTask : Step
     /// Submodules checkout strategy (single level, recursive to get submodules of submodules).
     /// Defaults to not checking out submodules.
     /// </summary>
-    [YamlIgnore]
+    [YamlMember(Order = 103)]
     [DefaultValue(SubmoduleCheckout.None)]
     public SubmoduleCheckout Submodules { get; init; } = SubmoduleCheckout.None;
-
-    [YamlMember(Alias = "submodules", Order = 103)]
-    [DefaultValue("false")]
-    public string _Submodules => Submodules switch
-    {
-        SubmoduleCheckout.SingleLevel => "true",
-        SubmoduleCheckout.Recursive => "recursive",
-        _ => "false",
-    };
 
     /// <summary>
     /// Path to check out source code, relative to the agent's build directory (e.g. \_work\1).
@@ -95,7 +86,12 @@ public record RepositoryCheckoutTask : CheckoutTask
 
 public enum SubmoduleCheckout
 {
+    [YamlMember(Alias = "false")]
     None,
+
+    [YamlMember(Alias = "true")]
     SingleLevel,
+
+    [YamlMember(Alias = "recursive")]
     Recursive,
 }
