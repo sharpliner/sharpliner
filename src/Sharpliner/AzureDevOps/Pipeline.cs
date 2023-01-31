@@ -19,12 +19,18 @@ public abstract record PipelineBase
     private Conditioned<Resources>? _resources;
 
     /// <summary>
-    /// Name of the pipline in the build numbering format
+    /// Name of the pipeline in the build numbering format
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/run-number?view=azure-devops&amp;tabs=yaml">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     [YamlMember(Order = 100)]
     [DisallowNull]
     public string? Name { get; init; }
+
+    /// <summary>
+    /// LockBehavior of the pipeline
+    /// </summary>
+    [YamlMember(Order = 101)]
+    public Conditioned<LockBehaviour>? LockBehavior { get; init; }
 
     /// <summary>
     /// Specifies pipeline parameters

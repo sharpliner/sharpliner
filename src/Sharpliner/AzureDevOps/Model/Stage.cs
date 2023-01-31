@@ -20,6 +20,12 @@ public record Stage : IDependsOn
     public string? DisplayName { get; init; }
 
     /// <summary>
+    /// The lock behavior of the stage
+    /// </summary>
+    [YamlMember(Order = 3)]
+    public Conditioned<LockBehaviour>? LockBehavior { get; init; }
+
+    /// <summary>
     /// List of names of other jobs this job depends on
     /// </summary>
     [YamlMember(Order = 100)]
