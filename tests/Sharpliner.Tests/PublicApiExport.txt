@@ -531,6 +531,11 @@
         [YamlDotNet.Serialization.YamlMember(Order=700)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Step> Steps { get; set; }
     }
+    public enum LockBehaviour
+    {
+        runLatest = 0,
+        sequential = 1,
+    }
     public class MatrixStrategy : Sharpliner.AzureDevOps.Strategy, System.IEquatable<Sharpliner.AzureDevOps.MatrixStrategy>, YamlDotNet.Serialization.IYamlConvertible
     {
         public MatrixStrategy() { }
@@ -618,6 +623,8 @@
     public abstract class PipelineBase : System.IEquatable<Sharpliner.AzureDevOps.PipelineBase>
     {
         protected PipelineBase() { }
+        [YamlDotNet.Serialization.YamlMember(Order=101)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.LockBehaviour> LockBehavior { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
         public string? Name { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=150)]
@@ -831,6 +838,8 @@
         public string? DisplayName { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=300)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase> Jobs { get; set; }
+        [YamlDotNet.Serialization.YamlMember(Order=3)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.LockBehaviour> LockBehavior { get; set; }
         [YamlDotNet.Serialization.YamlMember(Alias="stage", Order=1)]
         public string Name { get; }
         [YamlDotNet.Serialization.YamlMember(Order=200)]
