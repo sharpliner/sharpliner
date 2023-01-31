@@ -23,7 +23,7 @@ public record Stage : IDependsOn
     /// The lock behavior of the stage
     /// </summary>
     [YamlMember(Order = 3)]
-    public Conditioned<LockBehaviour> LockBehavior { get; init; }
+    public Conditioned<LockBehaviour>? LockBehavior { get; init; }
 
     /// <summary>
     /// List of names of other jobs this job depends on
