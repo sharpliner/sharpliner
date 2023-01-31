@@ -66,6 +66,12 @@ public static class ConditionExtensions
         => Conditioned.Link<VariableBase>(condition, new VariableGroup(name));
 
     /// <summary>
+    /// References a variable template.
+    /// </summary>
+    public static Conditioned<VariableBase> Template(this IfCondition condition, string name)
+        => Conditioned.Link<VariableBase>(condition, new VariableTemplate(name));
+
+    /// <summary>
     /// Creates a new stage.
     /// </summary>
     public static Conditioned<Stage> Stage(this IfCondition condition, Stage stage)

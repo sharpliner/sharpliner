@@ -17,6 +17,17 @@ public record VariableGroup : VariableBase
     }
 }
 
+public record VariableTemplate : VariableBase
+{
+    [YamlMember(Alias = "template")]
+    public string Name { get; }
+
+    public VariableTemplate(string name)
+    {
+        Name = name ?? throw new ArgumentNullException(nameof(name));
+    }
+}
+
 public record Variable : VariableBase
 {
     [YamlMember(Alias = "name", Order = 1)]
