@@ -19,6 +19,7 @@ public static class SharplinerSerializer
     {
         var serializerBuilder = new SerializerBuilder()
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
+            .WithTypeConverter(new YamlStringEnumConverter())
             .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitDefaults | DefaultValuesHandling.OmitEmptyCollections)
             .WithEventEmitter(nextEmitter => new MultilineStringEmitter(nextEmitter));
 

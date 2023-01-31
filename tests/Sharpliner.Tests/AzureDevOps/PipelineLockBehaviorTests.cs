@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Runtime.InteropServices;
+using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Xunit;
 
@@ -19,29 +20,18 @@ public class PipelineLockBehaviorTests
         public override SingleStagePipeline Pipeline { get; }
     }
 
-    [Fact]
-    public void PipelineLockBehavior_Serialization_Test_Sequential()
+    [Theory]
+    [InlineData(LockBehaviour.Sequential, "sequential")]
+    [InlineData(LockBehaviour.RunLatest, "runLatest")]
+    public void PipelineLockBehavior_Serialization_TestValues(LockBehaviour lockBehaviour, string expectedSerializedValue)
     {
-        var yaml = new PipelineLockBehaviorTests_Pipeline(LockBehaviour.sequential).Serialize();
+        var yaml = new PipelineLockBehaviorTests_Pipeline(lockBehaviour).Serialize();
 
         yaml.Trim().Should().Be(
-            """
+            $"""
             name: LockBehaviorTest
 
-            lockBehavior: sequential
-            """);
-    }
-
-    [Fact]
-    public void PipelineLockBehavior_Serialization_Test_RunLatest()
-    {
-        var yaml = new PipelineLockBehaviorTests_Pipeline(LockBehaviour.runLatest).Serialize();
-
-        yaml.Trim().Should().Be(
-            """
-            name: LockBehaviorTest
-
-            lockBehavior: runLatest
+            lockBehavior: {expectedSerializedValue}
             """);
     }
 
@@ -49,17 +39,6 @@ public class PipelineLockBehaviorTests
     public void PipelineLockBehavior_Serialization_Test_Null()
     {
         var yaml = new PipelineLockBehaviorTests_Pipeline(null).Serialize();
-
-        yaml.Trim().Should().Be(
-            """
-            name: LockBehaviorTest
-            """);
-    }
-
-    [Fact]
-    public void PipelineLockBehavior_Serialization_Test_Default()
-    {
-        var yaml = new PipelineLockBehaviorTests_Pipeline(default).Serialize();
 
         yaml.Trim().Should().Be(
             """

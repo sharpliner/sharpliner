@@ -1,10 +1,12 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
 
-[SuppressMessage("ReSharper", "InconsistentNaming")]
 public enum LockBehaviour
 {
-    runLatest,
-    sequential
+    [YamlMember(Alias = "runLatest")]
+    RunLatest,
+
+    [YamlMember(Alias = "sequential")]
+    Sequential
 }

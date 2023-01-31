@@ -533,8 +533,10 @@
     }
     public enum LockBehaviour
     {
-        runLatest = 0,
-        sequential = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="runLatest")]
+        RunLatest = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="sequential")]
+        Sequential = 1,
     }
     public class MatrixStrategy : Sharpliner.AzureDevOps.Strategy, System.IEquatable<Sharpliner.AzureDevOps.MatrixStrategy>, YamlDotNet.Serialization.IYamlConvertible
     {
@@ -1935,5 +1937,12 @@ namespace Sharpliner
         RelativeToCurrentDir = 1,
         RelativeToAssembly = 2,
         Absolute = 3,
+    }
+    public class YamlStringEnumConverter : YamlDotNet.Serialization.IYamlTypeConverter
+    {
+        public YamlStringEnumConverter() { }
+        public bool Accepts(System.Type type) { }
+        public object ReadYaml(YamlDotNet.Core.IParser parser, System.Type type) { }
+        public void WriteYaml(YamlDotNet.Core.IEmitter emitter, object? value, System.Type type) { }
     }
 }
