@@ -624,7 +624,7 @@
     {
         protected PipelineBase() { }
         [YamlDotNet.Serialization.YamlMember(Order=101)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.LockBehaviour> LockBehavior { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.LockBehaviour>? LockBehavior { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
         public string? Name { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=150)]
@@ -839,7 +839,7 @@
         [YamlDotNet.Serialization.YamlMember(Order=300)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase> Jobs { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=3)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.LockBehaviour> LockBehavior { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.LockBehaviour>? LockBehavior { get; set; }
         [YamlDotNet.Serialization.YamlMember(Alias="stage", Order=1)]
         public string Name { get; }
         [YamlDotNet.Serialization.YamlMember(Order=200)]
