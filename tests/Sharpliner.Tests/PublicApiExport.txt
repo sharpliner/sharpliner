@@ -69,6 +69,7 @@
         protected static Sharpliner.AzureDevOps.InlineCondition Greater(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression1, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression2) { }
         protected static Sharpliner.AzureDevOps.InlineCondition Greater<T>(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression1, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression2) { }
         protected static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Group(string name) { }
+        protected static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Template(string name) { }
         protected static Sharpliner.AzureDevOps.InlineCondition In(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression needle, params Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression[] haystack) { }
         protected static Sharpliner.AzureDevOps.InlineCondition In<T>(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression needle, params Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression[] haystack) { }
         protected static Sharpliner.AzureDevOps.InlineCondition IsBranch(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression branchName) { }
@@ -184,6 +185,7 @@
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> DeploymentJob(this Sharpliner.AzureDevOps.IfCondition condition, Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> job) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> DeploymentJob(this Sharpliner.AzureDevOps.IfCondition condition, Sharpliner.AzureDevOps.JobBase job) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Group(this Sharpliner.AzureDevOps.IfCondition condition, string name) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Template(this Sharpliner.AzureDevOps.IfCondition condition, string name) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> Job(this Sharpliner.AzureDevOps.IfCondition condition, Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> job) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> Job(this Sharpliner.AzureDevOps.IfCondition condition, Sharpliner.AzureDevOps.JobBase job) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> JobLibrary(this Sharpliner.AzureDevOps.IfCondition condition, Sharpliner.AzureDevOps.JobLibrary library) { }
@@ -237,6 +239,7 @@
     {
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> DeploymentJob(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> condition, Sharpliner.AzureDevOps.JobBase job) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Group(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> conditionedDefinition, string name) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Template(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> conditionedDefinition, string name) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> Job(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> condition, Sharpliner.AzureDevOps.JobBase job) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> JobLibrary(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> conditionedDefinition, Sharpliner.AzureDevOps.JobLibrary library) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> JobLibrary<T>(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> conditionedDefinition)
@@ -1046,6 +1049,12 @@
     {
         public VariableGroup(string name) { }
         [YamlDotNet.Serialization.YamlMember(Alias="group")]
+        public string Name { get; }
+    }
+    public class VariableTemplate : Sharpliner.AzureDevOps.VariableBase, System.IEquatable<Sharpliner.AzureDevOps.VariableTemplate>
+    {
+        public VariableTemplate(string name) { }
+        [YamlDotNet.Serialization.YamlMember(Alias="template")]
         public string Name { get; }
     }
     public abstract class VariableLibrary : Sharpliner.AzureDevOps.DefinitionLibrary<Sharpliner.AzureDevOps.VariableBase>
