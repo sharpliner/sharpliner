@@ -1476,6 +1476,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlMember(Order=105)]
         public bool PersistCredentials { get; set; }
         [System.ComponentModel.DefaultValue(Sharpliner.AzureDevOps.Tasks.SubmoduleCheckout.None)]
+        [YamlDotNet.Serialization.YamlMember(Order=103)]
         public Sharpliner.AzureDevOps.Tasks.SubmoduleCheckout Submodules { get; set; }
     }
     public class CheckoutTaskBuilder
