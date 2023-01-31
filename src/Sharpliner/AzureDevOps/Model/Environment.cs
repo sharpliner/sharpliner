@@ -27,18 +27,10 @@ public record Environment
     [DisallowNull]
     public int? ResourceId { get; init; }
 
-    public string? ResourceType => Type switch
-    {
-        AzureDevOps.ResourceType.VirtualMachine => "virtualMachine",
-        AzureDevOps.ResourceType.Kubernetes => "Kuberenetes",
-        _ => null,
-    };
-
     /// <summary>
     /// Type of the resource you want to target
     /// </summary>
-    [YamlIgnore]
-    public ResourceType? Type { get; init; }
+    public ResourceType? ResourceType { get; init; }
 
     /// <summary>
     /// Tag names to filter the resources in the environment
@@ -54,6 +46,9 @@ public record Environment
 
 public enum ResourceType
 {
+    [YamlMember(Alias = "virtualMachine")]
     VirtualMachine,
+
+    [YamlMember(Alias = "Kubernetes")]
     Kubernetes,
 }
