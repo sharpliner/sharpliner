@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
@@ -15,7 +16,7 @@ public abstract record Strategy
     /// The maximum number of simultaneous matrix legs to run at once.
     /// If unspecified or set to 0, no limit is applied.
     /// </summary>
-    public int MaxParallel { get; init; } = 0;
+    public Conditioned<int>? MaxParallel { get; init; }
 }
 
 /// <summary>
@@ -54,7 +55,7 @@ public record MatrixStrategy : Strategy, IYamlConvertible
         if (MaxParallel != 0)
         {
             emitter.Emit(new Scalar("maxParallel"));
-            emitter.Emit(new Scalar(MaxParallel.ToString()));
+            emitter.Emit(new Scalar((MaxParallel?.Definition ?? 0).ToString()));
         }
 
         emitter.Emit(new MappingEnd());
@@ -69,5 +70,5 @@ public record ParallelStrategy : Strategy
     /// <summary>
     /// Specifies how many duplicates of a job should run
     /// </summary>
-    public int Parallel { get; init; }
+    public Conditioned<int>? Parallel { get; init; }
 }

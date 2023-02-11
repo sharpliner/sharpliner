@@ -216,6 +216,7 @@ public class TaskBuilderTests
           - publish: bin/Debug/net5.0/
             displayName: Publish artifact
             artifact: Binary
+            continueOnError: false
         """);
     }
 

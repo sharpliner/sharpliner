@@ -1,4 +1,5 @@
 ﻿using System;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 
@@ -20,14 +21,14 @@ public record ScriptTask : Step
     /// If you leave it empty, the working directory is $(Build.SourcesDirectory).
     /// </summary>
     [YamlMember(Order = 113)]
-    public string? WorkingDirectory { get; init; }
+    public Conditioned<string>? WorkingDirectory { get; init; }
 
     /// <summary>
     /// If this is true, this task will fail if any errors are written to stderr.
     /// Defaults to 'false'.
     /// </summary>
     [YamlMember(Order = 200)]
-    public bool FailOnStdErr { get; init; } = false;
+    public Conditioned<bool>? FailOnStdErr { get; init; }
 
     public ScriptTask(params string[] scriptLines)
     {

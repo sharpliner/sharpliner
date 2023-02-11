@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.Common.Model.Tasks;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -15,7 +16,7 @@ public class PowershellTaskBuilder : TaskBuilderBase
     public InlinePowershellTask FromResourceFile(string resourceFileName, string? displayName = null)
         => new InlinePowershellTask(GetResourceFile(Assembly.GetCallingAssembly()!, resourceFileName)) with
         {
-            DisplayName = displayName!,
+            DisplayName = displayName is null ? null! : new Conditioned<string>(displayName),
             Pwsh = _pwsh
         };
 
@@ -28,7 +29,7 @@ public class PowershellTaskBuilder : TaskBuilderBase
     public InlinePowershellTask FromFile(string path, string? displayName = null)
         => new InlinePowershellTask(System.IO.File.ReadAllText(path)) with
         {
-            DisplayName = displayName!,
+            DisplayName = displayName is null ? null! : new Conditioned<string>(displayName),
             Pwsh = _pwsh
         };
 
@@ -40,7 +41,7 @@ public class PowershellTaskBuilder : TaskBuilderBase
     public PowershellFileTask File(string filePath, string? displayName = null)
         => new PowershellFileTask(filePath) with
         {
-            DisplayName = displayName!,
+            DisplayName = displayName is null ? null! : new Conditioned<string>(displayName),
             Pwsh = _pwsh
         };
 

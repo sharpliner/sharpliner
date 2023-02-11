@@ -14,26 +14,30 @@ namespace Sharpliner.AzureDevOps;
 /// </summary>
 public abstract record Step
 {
-    private string? _name;
+    private Conditioned<string>? _name;
 
     /// <summary>
     /// Friendly name displayed in the UI.
     /// </summary>
     [YamlMember(Order = 100)]
     [DisallowNull]
-    public string? DisplayName { get; init; }
+    public Conditioned<string>? DisplayName { get; init; }
 
     /// <summary>
     /// Identifier for this step (A-Z, a-z, 0-9, and underscore).
     /// </summary>
     [YamlMember(Order = 150)]
     [DisallowNull]
-    public string? Name
+    public Conditioned<string>? Name
     {
         get => _name;
         init
         {
-            Pipeline.ValidateName(value);
+            if (value is not ConditionedParameterReference<string> && value.Definition is not null)
+            {
+                Pipeline.ValidateName(value.Definition);
+            }
+
             _name = value;
         }
     }
@@ -50,27 +54,27 @@ public abstract record Step
     /// </summary>
     [YamlMember(Order = 190)]
     [DisallowNull]
-    public InlineCondition? Condition { get; init; }
+    public Conditioned<InlineCondition>? Condition { get; init; }
 
     /// <summary>
     /// Whether future steps should run even if this step fails.
     /// Defaults to 'false'.
     /// </summary>
     [YamlMember(Order = 200)]
-    public bool ContinueOnError { get; init; } = false;
+    public Conditioned<bool>? ContinueOnError { get; init; }
 
     /// <summary>
     /// Timeout after which the step will be stopped.
     /// </summary>
     [YamlIgnore]
     [DisallowNull]
-    public TimeSpan? Timeout { get; init; }
+    public Conditioned<TimeSpan>? Timeout { get; init; }
 
     /// <summary>
     /// Timeout after which the step will be stopped.
     /// </summary>
     [YamlMember(Order = 210)]
-    public int? TimeoutInMinutes => Timeout != null ? (int)Timeout.Value.TotalMinutes : null;
+    public Conditioned<int>? TimeoutInMinutes => Timeout?.Definition != null ? (int)Timeout.Definition.TotalMinutes : null;
 
     /// <summary>
     /// A list of additional items to map into the process's environment.

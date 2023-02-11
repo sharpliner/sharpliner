@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -20,7 +21,7 @@ public record PublishTask : Step
     /// Your artifact name. You can specify any name you prefer. E.g.: drop
     /// </summary>
     [YamlMember(Order = 101)]
-    public string Artifact { get; init; }
+    public Conditioned<string>? Artifact { get; init; }
 
     /// <summary>
     /// Artifacts publish location. Choose whether to store the artifact in Azure Pipelines,
@@ -35,14 +36,14 @@ public record PublishTask : Step
     /// This can include variables. Required when ArtifactType = FilePath.
     /// </summary>
     [YamlMember(Order = 211)]
-    public string? FileSharePath { get; init; }
+    public Conditioned<string>? FileSharePath { get; init; }
 
     /// <summary>
     /// Select whether to copy files in parallel using multiple threads for greater potential throughput.
     /// If this setting is not enabled, one thread will be used.
     /// </summary>
     [YamlMember(Order = 212)]
-    public bool Parallel { get; init; }
+    public Conditioned<bool>? Parallel { get; init; }
 
     /// <summary>
     /// Enter the degree of parallelism, or number of threads used, to perform the copy.

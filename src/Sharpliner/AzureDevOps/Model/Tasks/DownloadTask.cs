@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -18,7 +19,7 @@ public abstract record DownloadTask : Step
     /// The name of the artifact to download. If left empty, all artifacts associated to the pipeline run will be downloaded.
     /// </summary>
     [YamlMember(Order = 60)]
-    public string? Artifact { get; init; } = null;
+    public Conditioned<string>? Artifact { get; init; }
 
     /// <summary>
     /// One or more file matching patterns (new line delimited) that limit which files get downloaded.
@@ -38,8 +39,7 @@ public abstract record DownloadTask : Step
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/artifacts/pipeline-artifacts?view=azure-devops">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     [YamlMember(Order = 62)]
-    [DefaultValue("$(Pipeline.Workspace)")]
-    public string Path { get; init; } = "$(Pipeline.Workspace)";
+    public Conditioned<string>? Path { get; init; }
 
     /// <summary>
     /// A list of tags. Only builds with these tags will be returned.
