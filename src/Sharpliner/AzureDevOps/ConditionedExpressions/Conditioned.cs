@@ -9,6 +9,21 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 
 public abstract record Conditioned : IYamlConvertible
 {
+    private class ValueEqualityList : List<Conditioned>
+    {
+        public override bool Equals(object? obj)
+        {
+            if (obj is ValueEqualityList other && Count == 0 && other.Count == 0)
+            {
+                return true;
+            }
+
+            return base.Equals(obj);
+        }
+
+        public override int GetHashCode() => base.GetHashCode();
+    }
+
     /// <summary>
     /// Evaluated textual representation of the condition, e.g. "ne('foo', 'bar')".
     /// </summary>
@@ -22,7 +37,7 @@ public abstract record Conditioned : IYamlConvertible
     /// <summary>
     /// In case we define multiple items inside one ${{ if }}, they are stored here.
     /// </summary>
-    internal List<Conditioned> Definitions { get; } = new();
+    internal List<Conditioned> Definitions { get; } = new ValueEqualityList();
 
     /// <summary>
     /// When serializing, we need to distinguish whether serializing a list of items under a condition or just a value.

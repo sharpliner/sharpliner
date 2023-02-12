@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -26,14 +27,14 @@ public record RepositoryResource
     /// Repository name (format depends on `Type`)
     /// </summary>
     [DisallowNull]
-    public string? Name { get; init; }
+    public Conditioned<string>? Name { get; init; }
 
     /// <summary>
     /// Ref name to use
     /// Defaults to 'refs/heads/main'
     /// </summary>
     [DisallowNull]
-    public string? Ref { get; init; }
+    public Conditioned<string>? Ref { get; init; }
 
     /// <summary>
     /// Name of the service connection to use (for types that aren't Azure Repos)

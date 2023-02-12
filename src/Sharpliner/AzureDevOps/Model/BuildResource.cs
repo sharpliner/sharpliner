@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -20,25 +21,25 @@ public record BuildResource
     /// The type of your build service like Jenkins, circleCI etc.
     /// </summary>
     [DisallowNull]
-    public string? Type { get; init; }
+    public Conditioned<string>? Type { get; init; }
 
     /// <summary>
     /// Service connection for your build service
     /// </summary>
     [DisallowNull]
-    public string? Connection { get; init; }
+    public Conditioned<string>? Connection { get; init; }
 
     /// <summary>
     /// Source definition of the build
     /// </summary>
     [DisallowNull]
-    public string? Source { get; init; }
+    public Conditioned<string>? Source { get; init; }
 
     /// <summary>
     /// The build number to pick the artifact, defaults to latest successful build
     /// </summary>
     [DisallowNull]
-    public string? Version { get; init; }
+    public Conditioned<string>? Version { get; init; }
 
     /// <summary>
     /// Triggers aren't enabled by default and should be explicitly set

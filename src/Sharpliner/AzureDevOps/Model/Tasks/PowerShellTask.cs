@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 
@@ -12,7 +13,7 @@ public abstract record PowershellTask : Step
     /// If you leave it empty, the working directory is $(Build.SourcesDirectory).
     /// </summary>
     [YamlMember(Order = 113)]
-    public string? WorkingDirectory { get; init; }
+    public Conditioned<string>? WorkingDirectory { get; init; }
 
     /// <summary>
     /// Prepends the line $ErrorActionPreference = 'VALUE' at the top of your script.
@@ -60,7 +61,7 @@ public abstract record PowershellTask : Step
     /// Default value: `false`.
     /// </summary>
     [YamlMember(Order = 125)]
-    public bool FailOnStderr { get; init; } = false;
+    public Conditioned<bool>? FailOnStderr { get; init; }
 
     /// <summary>
     /// If this is false, the line if ((Test-Path -LiteralPath variable:\\LASTEXITCODE)) { exit $LASTEXITCODE } is appended to the end of your script.
@@ -69,14 +70,14 @@ public abstract record PowershellTask : Step
     /// Default value: `false`.
     /// </summary>
     [YamlMember(Order = 126)]
-    public bool IgnoreLASTEXITCODE { get; init; } = false;
+    public Conditioned<bool>? IgnoreLASTEXITCODE { get; init; }
 
     /// <summary>
     /// If this is true, then on Windows the task will use pwsh.exe from your PATH instead of powershell.exe.
     /// Default value: `false`.
     /// </summary>
     [YamlMember(Order = 127)]
-    public bool Pwsh { get; init; } = false;
+    public bool Pwsh { get; init; }
 }
 
 public record InlinePowershellTask : PowershellTask
@@ -108,7 +109,7 @@ public record PowershellFileTask : PowershellTask, IYamlConvertible
     /// <summary>
     /// Arguments passed to the Bash script.
     /// </summary>
-    public string? Arguments { get; init; }
+    public Conditioned<string>? Arguments { get; init; }
 
     public PowershellFileTask(string filePath)
     {

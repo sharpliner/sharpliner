@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -16,8 +17,7 @@ public abstract record CheckoutTask : Step
     /// Defaults to false.
     /// </summary>
     [YamlMember(Order = 100)]
-    [DefaultValue(false)]
-    public bool Clean { get; init; } = false;
+    public Conditioned<bool>? Clean { get; init; }
 
     /// <summary>
     /// The depth of commits to ask Git to fetch.
@@ -25,16 +25,14 @@ public abstract record CheckoutTask : Step
     /// Set 0 to no limit (full clone).
     /// </summary>
     [YamlMember(Order = 101)]
-    [DefaultValue(1)]
-    public int FetchDepth { get; init; } = 1;
+    public Conditioned<int>? FetchDepth { get; init; }
 
     /// <summary>
     /// Whether to download Git-LFS files.
     /// Defaults to false.
     /// </summary>
     [YamlMember(Order = 102)]
-    [DefaultValue(false)]
-    public bool Lfs { get; init; } = false;
+    public Conditioned<bool>? Lfs { get; init; }
 
     /// <summary>
     /// Submodules checkout strategy (single level, recursive to get submodules of submodules).
@@ -49,16 +47,14 @@ public abstract record CheckoutTask : Step
     /// Defaults to a directory called `s`.
     /// </summary>
     [YamlMember(Order = 104)]
-    [DefaultValue("s")]
-    public string Path { get; init; } = "s";
+    public Conditioned<string>? Path { get; init; }
 
     /// <summary>
     /// When true, leave the OAuth token in the Git config after the initial fetch.
     /// Defaults to false.
     /// </summary>
     [YamlMember(Order = 105)]
-    [DefaultValue(false)]
-    public bool PersistCredentials { get; init; } = false;
+    public Conditioned<bool>? PersistCredentials { get; init; }
 }
 
 public record SelfCheckoutTask : CheckoutTask

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -16,14 +17,14 @@ public record ScheduledTrigger
     /// </summary>
     [YamlMember(Order = 1, Alias = "cron")]
     [DisallowNull]
-    public string? CronSchedule { get; init; }
+    public Conditioned<string>? CronSchedule { get; init; }
 
     /// <summary>
     /// Friendly name given to a specific schedule
     /// </summary>
     [YamlMember(Order = 100)]
     [DisallowNull]
-    public string? DisplayName { get; init; }
+    public Conditioned<string>? DisplayName { get; init; }
 
     [DisallowNull]
     [YamlMember(Order = 200)]
@@ -34,7 +35,7 @@ public record ScheduledTrigger
     /// Defaults to false
     /// </summary>
     [YamlMember(Order = 300)]
-    public bool Always { get; init; } = false;
+    public Conditioned<bool>? Always { get; init; }
 
     public ScheduledTrigger(string cronSchedule, params string[] branches)
     {

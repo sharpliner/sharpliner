@@ -20,7 +20,7 @@ public abstract record JobBase : IDependsOn
     /// </summary>
     [YamlMember(Order = 100)]
     [DisallowNull]
-    public string? DisplayName { get; init; }
+    public Conditioned<string>? DisplayName { get; init; }
 
     /// <summary>
     /// List of names of other jobs this job depends on
@@ -54,20 +54,20 @@ public abstract record JobBase : IDependsOn
     /// </summary>
     [YamlIgnore]
     [DisallowNull]
-    public TimeSpan? Timeout { get; init; }
+    public Conditioned<TimeSpan>? Timeout { get; init; }
 
     [YamlMember(Order = 800)]
-    public int? TimeoutInMinutes => Timeout != null ? (int)Timeout.Value.TotalMinutes : null;
+    public Conditioned<int>? TimeoutInMinutes => Timeout?.Definition != null ? (int)Timeout.Definition.TotalMinutes : null;
 
     /// <summary>
     /// How much time to give 'run always even if cancelled tasks' before killing them
     /// </summary>
     [YamlIgnore]
     [DisallowNull]
-    public TimeSpan? CancelTimeout { get; init; }
+    public Conditioned<TimeSpan>? CancelTimeout { get; init; }
 
     [YamlMember(Order = 900)]
-    public int? CancelTimeoutInMinutes => CancelTimeout != null ? (int)CancelTimeout.Value.TotalMinutes : null;
+    public Conditioned<int>? CancelTimeoutInMinutes => CancelTimeout?.Definition != null ? (int)CancelTimeout.Definition.TotalMinutes : null;
 
     /// <summary>
     /// What to clean up before the job runs
@@ -84,14 +84,14 @@ public abstract record JobBase : IDependsOn
 
     [YamlMember(Order = 1100)]
     [DisallowNull]
-    public InlineCondition? Condition { get; init; }
+    public Conditioned<InlineCondition>? Condition { get; init; }
 
     /// <summary>
     /// 'true' if future jobs should run even if this job fails
     /// defaults to 'false'
     /// </summary>
     [YamlMember(Order = 1200)]
-    public bool ContinueOnError { get; init; } = false;
+    public Conditioned<bool>? ContinueOnError { get; init; }
 
     protected JobBase(string name, string? displayName = null)
     {

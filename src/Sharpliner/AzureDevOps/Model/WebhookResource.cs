@@ -21,7 +21,7 @@ public record WebhookResource
     /// Service connection for your build service
     /// </summary>
     [DisallowNull]
-    public string? Connection { get; init; }
+    public Conditioned<string>? Connection { get; init; }
 
     /// <summary>
     /// Source definition of the build
@@ -41,12 +41,12 @@ public record JsonParameterFilter
     /// <summary>
     /// JSON path in the payload
     /// </summary>
-    public string Path { get; }
+    public Conditioned<string> Path { get; }
 
     /// <summary>
     /// Expected value in the path provided
     /// </summary>
-    public string Value { get; init; }
+    public Conditioned<string> Value { get; init; }
 
     public JsonParameterFilter(string path, string value)
     {

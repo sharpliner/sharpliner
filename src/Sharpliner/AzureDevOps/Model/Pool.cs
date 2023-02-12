@@ -16,31 +16,34 @@ public record Pool
     /// Identifier for this step (A-Z, a-z, 0-9, and underscore).
     /// </summary>
     [YamlMember(Order = 100)]
-    public string? Name { get; init; }
+    public Conditioned<string>? Name { get; init; }
 
     public Pool(string? name)
     {
-        Name = name;
+        if (name is not null)
+        {
+            Name = name;
+        }
     }
 
-    public static implicit operator Pool(string vmImage)
-    {
-        return new HostedPool(vmImage: vmImage);
-    }
+    public static implicit operator Pool(string vmImage) => new HostedPool(vmImage: vmImage);
 }
 
 public record HostedPool : Pool
 {
     public HostedPool(string? name = null, string? vmImage = null) : base(name)
     {
-        VmImage = vmImage;
+        if (vmImage is not null)
+        {
+            VmImage = vmImage;
+        }
     }
 
     /// <summary>
     /// Identifier for this step (A-Z, a-z, 0-9, and underscore).
     /// </summary>
     [YamlMember(Order = 105)]
-    public string? VmImage { get; init; }
+    public Conditioned<string>? VmImage { get; init; }
 
     [YamlMember(Order = 110)]
     [DisallowNull]
@@ -53,7 +56,7 @@ public record HostedPool : Pool
 /// </summary>
 public record ServerPool : Pool, IYamlConvertible
 {
-    public ServerPool() : base((string?)null)
+    public ServerPool() : base(null)
     {
     }
 

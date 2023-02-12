@@ -40,6 +40,11 @@ public class ParameterReferenceTests
                                 .Step(parameters["steps"]),
 
                             parameters["steps"],
+
+                            Bash.Inline("curl -o $(Agent.TempDirectory)/sharpliner.zip") with
+                            {
+                                ContinueOnError = parameters["continue"],
+                            }
                         }
                     },
 
@@ -85,7 +90,11 @@ public class ParameterReferenceTests
                 steps:
                 - ${{ parameters.steps }}
                 - ${{ parameters.steps }}
-            
+
+                - bash: |-
+                    curl -o $(Agent.TempDirectory)/sharpliner.zip
+                  continueOnError: ${{ parameters.continue }}
+
               - ${{ parameters.jobs }}
             - ${{ parameters.stages }}
             """);

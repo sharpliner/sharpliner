@@ -1,4 +1,5 @@
 ﻿using System;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -9,7 +10,7 @@ public abstract record VariableBase;
 public record VariableGroup : VariableBase
 {
     [YamlMember(Alias = "group")]
-    public string Name { get; }
+    public Conditioned<string> Name { get; }
 
     public VariableGroup(string name)
     {
@@ -20,7 +21,7 @@ public record VariableGroup : VariableBase
 public record VariableTemplate : VariableBase
 {
     [YamlMember(Alias = "template")]
-    public string Name { get; }
+    public Conditioned<string> Name { get; }
 
     public VariableTemplate(string name)
     {
@@ -37,7 +38,7 @@ public record Variable : VariableBase
     public object Value { get; }
 
     [YamlMember(Alias = "readonly", Order = 3, DefaultValuesHandling = DefaultValuesHandling.OmitDefaults)]
-    public bool Readonly { get; init; }
+    public Conditioned<bool>? Readonly { get; init; }
 
     private Variable(string name, object value)
     {

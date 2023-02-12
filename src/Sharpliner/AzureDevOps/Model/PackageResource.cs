@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -24,7 +25,7 @@ public abstract record PackageResource
     /// Github service connection with the PAT type
     /// </summary>
     [DisallowNull]
-    public string? Connection { get; init; }
+    public Conditioned<string>? Connection { get; init; }
 
     /// <summary>
     /// &lt;Repository&gt;/&lt;Name of the package&gt;

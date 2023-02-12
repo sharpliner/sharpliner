@@ -22,19 +22,19 @@ public record ContainerResource
     /// Container image name
     /// </summary>
     [DisallowNull]
-    public string? Image { get; init; }
+    public Conditioned<string>? Image { get; init; }
 
     /// <summary>
     /// Arguments to pass to container at startup
     /// </summary>
     [DisallowNull]
-    public string? Options { get; init; }
+    public Conditioned<string>? Options { get; init; }
 
     /// <summary>
     /// Reference to a service connection for the private registry
     /// </summary>
     [DisallowNull]
-    public string? Endpoint { get; init; }
+    public Conditioned<string>? Endpoint { get; init; }
 
     /// <summary>
     /// A map of environment variables that are available to all steps of the jobs. When more than one variable

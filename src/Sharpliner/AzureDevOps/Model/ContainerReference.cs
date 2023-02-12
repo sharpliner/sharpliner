@@ -13,13 +13,13 @@ public record ContainerReference
     /// Container image name
     /// </summary>
     [DisallowNull]
-    public string? Image { get; init; }
+    public Conditioned<string>? Image { get; init; }
 
     /// <summary>
     /// Arguments to pass to container at startup
     /// </summary>
     [DisallowNull]
-    public string? Options { get; init; }
+    public Conditioned<string>? Options { get; init; }
 
     /// <summary>
     /// Endpoint for a private container registry
