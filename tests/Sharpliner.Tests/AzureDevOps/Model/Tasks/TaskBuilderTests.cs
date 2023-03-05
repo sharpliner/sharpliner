@@ -197,6 +197,8 @@ public class TaskBuilderTests
                             ContinueOnError = false,
                             ArtifactType = ArtifactType.Pipeline,
                         },
+
+                        Publish("artifactName", "some/file/path.txt"),
                     }
                 }
             }
@@ -217,6 +219,9 @@ public class TaskBuilderTests
             displayName: Publish artifact
             artifact: Binary
             continueOnError: false
+
+          - publish: some/file/path.txt
+            artifact: artifactName
         """);
     }
 

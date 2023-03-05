@@ -276,11 +276,16 @@ public abstract class AzureDevOpsDefinition
     /// Creates a publish task.
     /// </summary>
     protected static PublishTask Publish(string artifactName, string filePath, string? displayName = null)
-        => new PublishTask(filePath) with
+    {
+        var task = new PublishTask(filePath, artifactName);
+
+        if (displayName != null)
         {
-            DisplayName = displayName!,
-            Artifact = artifactName!,
-        };
+            task = task with { DisplayName = displayName };
+        }
+
+        return task;
+    }
 
     /// <summary>
     /// Creates a checkout task.
