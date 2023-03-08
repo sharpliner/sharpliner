@@ -300,7 +300,17 @@ public abstract class AzureDevOpsDefinition
     /// <summary>
     /// Creates a generic pipeline task.
     /// </summary>
-    protected static AzureDevOpsTask Task(string taskName, string? displayName = null) => new AzureDevOpsTask(taskName) with { DisplayName = displayName! };
+    protected static AzureDevOpsTask Task(string taskName, string? displayName = null)
+    {
+        var task = new AzureDevOpsTask(taskName);
+
+        if (displayName != null)
+        {
+            task = task with { DisplayName = displayName };
+        }
+        
+        return task;
+    }
 
     /// <summary>
     /// Creates an UseDotNet or DotNetCoreCLI task.
