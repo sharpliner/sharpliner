@@ -21,6 +21,7 @@ public record RepositoryResource
     /// Project for the source
     /// Optional for current project
     /// </summary>
+    [YamlMember(DefaultValuesHandling = DefaultValuesHandling.Preserve)]
     public RepositoryType Type { get; init; } = RepositoryType.Git;
 
     /// <summary>
