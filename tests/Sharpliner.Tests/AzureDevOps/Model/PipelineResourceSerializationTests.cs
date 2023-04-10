@@ -35,6 +35,7 @@ public class PipelineResourceSerializationTests
             resources:
               repositories:
               - repository: sharpliner
+                type: git
                 endpoint: https://github.com/sharpliner.sharpliner
             """);
     }
