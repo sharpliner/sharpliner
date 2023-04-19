@@ -23,13 +23,19 @@ public abstract record PipelineBase
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/run-number?view=azure-devops&amp;tabs=yaml">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     [YamlMember(Order = 100)]
-    [DisallowNull]
     public string? Name { get; init; }
+
+    /// <summary>
+    /// Append the commit message to the build number. The default is true.
+    /// More details can be found in <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/pipeline?view=azure-pipelines#properties">official Azure DevOps pipelines documentation</see>.
+    /// </summary>
+    [YamlMember(Order = 110)]
+    public bool? AppendCommitMessageToRunName { get; init; }
 
     /// <summary>
     /// LockBehavior of the pipeline
     /// </summary>
-    [YamlMember(Order = 101)]
+    [YamlMember(Order = 120)]
     public Conditioned<LockBehaviour>? LockBehavior { get; init; }
 
     /// <summary>
