@@ -633,7 +633,9 @@
     public abstract class PipelineBase : System.IEquatable<Sharpliner.AzureDevOps.PipelineBase>
     {
         protected PipelineBase() { }
-        [YamlDotNet.Serialization.YamlMember(Order=101)]
+        [YamlDotNet.Serialization.YamlMember(Order=110)]
+        public bool? AppendCommitMessageToRunName { get; set; }
+        [YamlDotNet.Serialization.YamlMember(Order=120)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.LockBehaviour>? LockBehavior { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
         public string? Name { get; set; }
