@@ -19,7 +19,7 @@ public abstract record Parameter
     /// Display name of the parameter (in case this is a pipeline parameter)
     /// </summary>
     [YamlMember(Order = 101)]
-    public string? DisplayName { get; }
+    public string? DisplayName { get; init; }
 
     [YamlMember(Order = 110)]
     public abstract string Type { get; }
