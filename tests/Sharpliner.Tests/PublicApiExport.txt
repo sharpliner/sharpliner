@@ -1207,6 +1207,7 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public void Add(Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> item) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T> op_Implicit(System.Collections.Generic.List<T> list) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T> op_Implicit(System.Collections.ObjectModel.ReadOnlyCollection<T> values) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T> op_Implicit(T value) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T> op_Implicit(T[] values) { }
     }
     public class ConditionedParameterReference<T> : Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>, System.IEquatable<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedParameterReference<T>>
