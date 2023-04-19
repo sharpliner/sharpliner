@@ -83,6 +83,36 @@ public class DownloadTaskBuilder
             Patterns = patterns?.ToList()
         };
 
+    /// <summary>
+    /// Creates a download task that an artifact from a pipeline resource.
+    /// </summary>
+    /// <param name="resourceName">Alredy defined pipeline resource</param>
+    /// <param name="artifact">The name of the artifact to download. If left empty, all artifacts associated to the pipeline run will be downloaded.</param>
+    /// <param name="patterns">
+    /// One or more file matching patterns that limit which files get downloaded.
+    /// Default value: **
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/file-matching-patterns?view=azure-devops">official Azure DevOps pipelines documentation</see>.
+    /// </param>
+    public DownloadFromPipelineResourceTask FromPipelineResource(
+        string resourceName,
+        string? artifact = null,
+        IEnumerable<string>? patterns = null)
+    {
+        DownloadFromPipelineResourceTask task = new(resourceName);
+
+        if (artifact != null)
+        {
+            task = task with { Artifact = artifact };
+        }
+
+        if (patterns != null)
+        {
+            task = task with { Patterns = patterns.ToList() };
+        }
+
+        return task;
+    }
+
     internal DownloadTaskBuilder()
     {
     }

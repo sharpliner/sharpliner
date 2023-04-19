@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
@@ -61,6 +60,17 @@ public record NoneDownloadTask : Step
 {
     [YamlMember(Order = 1)]
     public string Download => "none";
+}
+
+public record DownloadFromPipelineResourceTask : DownloadTask
+{
+    [YamlMember(Order = 1)]
+    public override string Download { get; }
+
+    public DownloadFromPipelineResourceTask(string resourceName)
+    {
+        Download = resourceName;
+    }
 }
 
 public record SpecificDownloadTask : AzureDevOpsTask

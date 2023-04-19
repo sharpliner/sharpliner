@@ -610,7 +610,7 @@
     {
         public Parameter(string name, string? displayName = null) { }
         [YamlDotNet.Serialization.YamlMember(Order=101)]
-        public string? DisplayName { get; }
+        public string? DisplayName { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
         public string Name { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=110)]
@@ -1644,6 +1644,12 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public string? TestRunTitle { get; set; }
     }
+    public class DownloadFromPipelineResourceTask : Sharpliner.AzureDevOps.Tasks.DownloadTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DownloadFromPipelineResourceTask>
+    {
+        public DownloadFromPipelineResourceTask(string resourceName) { }
+        [YamlDotNet.Serialization.YamlMember(Order=1)]
+        public override string Download { get; }
+    }
     public abstract class DownloadTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DownloadTask>
     {
         protected DownloadTask() { }
@@ -1666,6 +1672,7 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public Sharpliner.AzureDevOps.Tasks.CurrentDownloadTask Current { get; }
         public Sharpliner.AzureDevOps.Tasks.NoneDownloadTask None { get; }
+        public Sharpliner.AzureDevOps.Tasks.DownloadFromPipelineResourceTask FromPipelineResource(string resourceName, string? artifact = null, System.Collections.Generic.IEnumerable<string>? patterns = null) { }
         public Sharpliner.AzureDevOps.Tasks.SpecificDownloadTask LatestFromBranch(string project, int definition, string? branchName = null, string? artifact = null, string? path = null, System.Collections.Generic.IEnumerable<string>? patterns = null) { }
         public Sharpliner.AzureDevOps.Tasks.SpecificDownloadTask SpecificBuild(string project, int definition, int buildId, string? artifact = null, string? path = null, System.Collections.Generic.IEnumerable<string>? patterns = null) { }
     }
