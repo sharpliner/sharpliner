@@ -66,11 +66,11 @@ public class DependsOnValidationTests
                 new Stage("stage_1"),
                 new Stage("stage_2")
                 {
-                    DependsOn = { "stage_1" }
+                    DependsOn = "stage_1"
                 },
                 new Stage("stage_3")
                 {
-                    DependsOn = { "foo" }
+                    DependsOn = "foo"
                 },
             }
         };
