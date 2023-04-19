@@ -24,7 +24,7 @@ public abstract record Parameter
     [YamlMember(Order = 110)]
     public abstract string Type { get; }
 
-    internal Parameter(string name, string? displayName = null)
+    public Parameter(string name, string? displayName = null)
     {
         Name = name;
         DisplayName = displayName;
@@ -48,7 +48,7 @@ public abstract record Parameter<T> : Parameter
     [YamlMember(Alias = "values", Order = 130)]
     public IEnumerable<T>? AllowedValues { get; init; }
 
-    internal Parameter(string name, string? displayName = null, T? defaultValue = default, IEnumerable<T>? allowedValues = null)
+    public Parameter(string name, string? displayName = null, T? defaultValue = default, IEnumerable<T>? allowedValues = null)
         : base(name, displayName)
     {
         Default = defaultValue;
@@ -65,7 +65,7 @@ public sealed record StringParameter : Parameter<string>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
     /// <param name="allowedValues">Allowed list of values (for some data types)</param>
-    internal StringParameter(string name, string? displayName = null, string? defaultValue = null, IEnumerable<string>? allowedValues = null)
+    public StringParameter(string name, string? displayName = null, string? defaultValue = null, IEnumerable<string>? allowedValues = null)
         : base(name, displayName, defaultValue, allowedValues)
     {
     }
@@ -82,7 +82,7 @@ public sealed record NumberParameter : Parameter<int?>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
     /// <param name="allowedValues">Allowed list of values (for some data types)</param>
-    internal NumberParameter(string name, string? displayName = null, int? defaultValue = null, IEnumerable<int?>? allowedValues = null)
+    public NumberParameter(string name, string? displayName = null, int? defaultValue = null, IEnumerable<int?>? allowedValues = null)
         : base(name, displayName, defaultValue, allowedValues)
     {
     }
@@ -98,7 +98,7 @@ public sealed record BooleanParameter : Parameter<bool?>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    internal BooleanParameter(string name, string? displayName = null, bool? defaultValue = null)
+    public BooleanParameter(string name, string? displayName = null, bool? defaultValue = null)
         : base(name, displayName, defaultValue)
     {
     }
@@ -114,7 +114,7 @@ public sealed record ObjectParameter : Parameter<ConditionedDictionary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    internal ObjectParameter(string name, string? displayName = null, ConditionedDictionary? defaultValue = null)
+    public ObjectParameter(string name, string? displayName = null, ConditionedDictionary? defaultValue = null)
         : base(name, displayName, defaultValue, null)
     {
     }
@@ -130,7 +130,7 @@ public sealed record ObjectParameter<T> : Parameter<ConditionedList<T>>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    internal ObjectParameter(string name, string? displayName = null, ConditionedList<T>? defaultValue = null)
+    public ObjectParameter(string name, string? displayName = null, ConditionedList<T>? defaultValue = null)
         : base(name, displayName, defaultValue, null)
     {
     }
@@ -146,7 +146,7 @@ public sealed record StepParameter : Parameter<Step>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    internal StepParameter(string name, string? displayName = null, Step? defaultValue = null)
+    public StepParameter(string name, string? displayName = null, Step? defaultValue = null)
         : base(name, displayName, defaultValue, null)
     {
     }
@@ -162,7 +162,7 @@ public sealed record StepListParameter : Parameter<ConditionedList<Step>>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    internal StepListParameter(string name, string? displayName = null, ConditionedList<Step>? defaultValue = null)
+    public StepListParameter(string name, string? displayName = null, ConditionedList<Step>? defaultValue = null)
         : base(name, displayName, defaultValue, null)
     {
     }
@@ -178,7 +178,7 @@ public sealed record JobParameter : Parameter<JobBase>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    internal JobParameter(string name, string? displayName = null, JobBase? defaultValue = null)
+    public JobParameter(string name, string? displayName = null, JobBase? defaultValue = null)
         : base(name, displayName, defaultValue, null)
     {
     }
@@ -194,7 +194,7 @@ public sealed record JobListParameter : Parameter<ConditionedList<JobBase>>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    internal JobListParameter(string name, string? displayName = null, ConditionedList<JobBase>? defaultValue = null)
+    public JobListParameter(string name, string? displayName = null, ConditionedList<JobBase>? defaultValue = null)
         : base(name, displayName, defaultValue, null)
     {
     }
@@ -210,7 +210,7 @@ public sealed record DeploymentParameter : Parameter<DeploymentJob>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    internal DeploymentParameter(string name, string? displayName = null, DeploymentJob? defaultValue = null)
+    public DeploymentParameter(string name, string? displayName = null, DeploymentJob? defaultValue = null)
         : base(name, displayName, defaultValue, null)
     {
     }
@@ -226,7 +226,7 @@ public sealed record DeploymentListParameter : Parameter<ConditionedList<Deploym
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    internal DeploymentListParameter(string name, string? displayName = null, ConditionedList<DeploymentJob>? defaultValue = null)
+    public DeploymentListParameter(string name, string? displayName = null, ConditionedList<DeploymentJob>? defaultValue = null)
         : base(name, displayName, defaultValue, null)
     {
     }
@@ -242,7 +242,7 @@ public sealed record StageParameter : Parameter<Stage>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    internal StageParameter(string name, string? displayName = null, Stage? defaultValue = null)
+    public StageParameter(string name, string? displayName = null, Stage? defaultValue = null)
         : base(name, displayName, defaultValue, null)
     {
     }
@@ -258,7 +258,7 @@ public sealed record StageListParameter : Parameter<ConditionedList<Stage>>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    internal StageListParameter(string name, string? displayName = null, ConditionedList<Stage>? defaultValue = null)
+    public StageListParameter(string name, string? displayName = null, ConditionedList<Stage>? defaultValue = null)
         : base(name, displayName, defaultValue, null)
     {
     }

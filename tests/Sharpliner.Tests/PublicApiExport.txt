@@ -127,6 +127,7 @@
     }
     public sealed class BooleanParameter : Sharpliner.AzureDevOps.Parameter<bool?>, System.IEquatable<Sharpliner.AzureDevOps.BooleanParameter>
     {
+        public BooleanParameter(string name, string? displayName = null, bool? defaultValue = default) { }
         public override string Type { get; }
     }
     public class BuildResource : System.IEquatable<Sharpliner.AzureDevOps.BuildResource>
@@ -326,10 +327,12 @@
     }
     public sealed class DeploymentListParameter : Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.DeploymentJob>>, System.IEquatable<Sharpliner.AzureDevOps.DeploymentListParameter>
     {
+        public DeploymentListParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.DeploymentJob>? defaultValue = null) { }
         public override string Type { get; }
     }
     public sealed class DeploymentParameter : Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.DeploymentJob>, System.IEquatable<Sharpliner.AzureDevOps.DeploymentParameter>
     {
+        public DeploymentParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.DeploymentJob? defaultValue = null) { }
         public override string Type { get; }
     }
     public abstract class DeploymentStrategy : System.IEquatable<Sharpliner.AzureDevOps.DeploymentStrategy>, YamlDotNet.Serialization.IYamlConvertible
@@ -488,10 +491,12 @@
     }
     public sealed class JobListParameter : Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase>>, System.IEquatable<Sharpliner.AzureDevOps.JobListParameter>
     {
+        public JobListParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase>? defaultValue = null) { }
         public override string Type { get; }
     }
     public sealed class JobParameter : Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.JobBase>, System.IEquatable<Sharpliner.AzureDevOps.JobParameter>
     {
+        public JobParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.JobBase? defaultValue = null) { }
         public override string Type { get; }
     }
     public abstract class JobTemplateCollection : Sharpliner.AzureDevOps.TemplateDefinitionCollection<Sharpliner.AzureDevOps.JobBase>
@@ -571,14 +576,17 @@
     }
     public sealed class NumberParameter : Sharpliner.AzureDevOps.Parameter<int?>, System.IEquatable<Sharpliner.AzureDevOps.NumberParameter>
     {
+        public NumberParameter(string name, string? displayName = null, int? defaultValue = default, System.Collections.Generic.IEnumerable<int?>? allowedValues = null) { }
         public override string Type { get; }
     }
     public sealed class ObjectParameter : Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary>, System.IEquatable<Sharpliner.AzureDevOps.ObjectParameter>
     {
+        public ObjectParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary? defaultValue = null) { }
         public override string Type { get; }
     }
     public sealed class ObjectParameter<T> : Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T>>, System.IEquatable<Sharpliner.AzureDevOps.ObjectParameter<T>>
     {
+        public ObjectParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T>? defaultValue = null) { }
         public override string Type { get; }
     }
     public abstract class PackageResource : System.IEquatable<Sharpliner.AzureDevOps.PackageResource>
@@ -600,6 +608,7 @@
     }
     public abstract class Parameter : System.IEquatable<Sharpliner.AzureDevOps.Parameter>
     {
+        public Parameter(string name, string? displayName = null) { }
         [YamlDotNet.Serialization.YamlMember(Order=101)]
         public string? DisplayName { get; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
@@ -609,6 +618,7 @@
     }
     public abstract class Parameter<T> : Sharpliner.AzureDevOps.Parameter, System.IEquatable<Sharpliner.AzureDevOps.Parameter<T>>
     {
+        public Parameter(string name, string? displayName = null, T? defaultValue = default, System.Collections.Generic.IEnumerable<T>? allowedValues = null) { }
         [YamlDotNet.Serialization.YamlMember(Alias="values", Order=130)]
         public System.Collections.Generic.IEnumerable<T>? AllowedValues { get; set; }
         [YamlDotNet.Serialization.YamlMember(DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.Preserve | YamlDotNet.Serialization.DefaultValuesHandling.OmitNull, Order=120)]
@@ -856,10 +866,12 @@
     }
     public sealed class StageListParameter : Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Stage>>, System.IEquatable<Sharpliner.AzureDevOps.StageListParameter>
     {
+        public StageListParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Stage>? defaultValue = null) { }
         public override string Type { get; }
     }
     public sealed class StageParameter : Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.Stage>, System.IEquatable<Sharpliner.AzureDevOps.StageParameter>
     {
+        public StageParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.Stage? defaultValue = null) { }
         public override string Type { get; }
     }
     public abstract class StageTemplateCollection : Sharpliner.AzureDevOps.TemplateDefinitionCollection<Sharpliner.AzureDevOps.Stage>
@@ -904,10 +916,12 @@
     }
     public sealed class StepListParameter : Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Step>>, System.IEquatable<Sharpliner.AzureDevOps.StepListParameter>
     {
+        public StepListParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Step>? defaultValue = null) { }
         public override string Type { get; }
     }
     public sealed class StepParameter : Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.Step>, System.IEquatable<Sharpliner.AzureDevOps.StepParameter>
     {
+        public StepParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.Step? defaultValue = null) { }
         public override string Type { get; }
     }
     public abstract class StepTemplateCollection : Sharpliner.AzureDevOps.TemplateDefinitionCollection<Sharpliner.AzureDevOps.Step>
@@ -932,6 +946,7 @@
     }
     public sealed class StringParameter : Sharpliner.AzureDevOps.Parameter<string>, System.IEquatable<Sharpliner.AzureDevOps.StringParameter>
     {
+        public StringParameter(string name, string? displayName = null, string? defaultValue = null, System.Collections.Generic.IEnumerable<string>? allowedValues = null) { }
         public override string Type { get; }
     }
     public sealed class SystemVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
