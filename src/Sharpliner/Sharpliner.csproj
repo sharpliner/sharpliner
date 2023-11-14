@@ -56,12 +56,6 @@
       but before NuGet generates a nuspec. See https://github.com/NuGet/Home/issues/4704.
     -->
     <ItemGroup>
-      <_PackageFiles Include="$(OutputPath)\net8.0\YamlDotNet.dll">
-        <PackagePath>lib\net8.0</PackagePath>
-        <Visible>false</Visible>
-        <BuildAction>Content</BuildAction>
-      </_PackageFiles>
-
       <_PackageFiles Include="$(OutputPath)\net6.0\YamlDotNet.dll">
         <PackagePath>lib\net6.0</PackagePath>
         <Visible>false</Visible>
@@ -73,15 +67,15 @@
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
-    </ItemGroup>
 
-    <ItemGroup>
-      <_PackageFiles Include="$(OutputPath)\net8.0\OneOf.dll">
+      <_PackageFiles Include="$(OutputPath)\net8.0\YamlDotNet.dll">
         <PackagePath>lib\net8.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
+    </ItemGroup>
 
+    <ItemGroup>
       <_PackageFiles Include="$(OutputPath)\net6.0\OneOf.dll">
         <PackagePath>lib\net6.0</PackagePath>
         <Visible>false</Visible>
@@ -90,6 +84,12 @@
 
       <_PackageFiles Include="$(OutputPath)\net7.0\OneOf.dll">
         <PackagePath>lib\net7.0</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
+
+      <_PackageFiles Include="$(OutputPath)\net8.0\OneOf.dll">
+        <PackagePath>lib\net8.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
