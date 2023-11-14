@@ -39,36 +39,25 @@ public abstract class TemplateDefinitionCollection<T> : TemplateDefinition, ISha
     }
 }
 
-internal class TemplateDefinitionWrapper<T> : TemplateDefinition<T>
+internal class TemplateDefinitionWrapper<T>(
+    TemplateDefinitionData<T> data,
+    string yamlMemberName,
+    Type definitionType,
+    IReadOnlyCollection<IDefinitionValidation> validations) : TemplateDefinition<T>
 {
-    private readonly string[]? _header;
+    private readonly string[]? _header = data.Header ?? SharplinerPublisher.GetDefaultHeader(definitionType);
 
-    public TemplateDefinitionWrapper(
-        TemplateDefinitionData<T> data,
-        string yamlMemberName,
-        Type definitionType,
-        IReadOnlyCollection<IDefinitionValidation> validations)
-    {
-        TargetFile = data.TargetFile;
-        Definition = data.Definition;
-        TargetPathType = data.PathType;
-        Parameters = data.Parameters ?? new List<Parameter>();
-        _header = data.Header ?? SharplinerPublisher.GetDefaultHeader(definitionType);
-        YamlProperty = yamlMemberName;
-        Validations = validations;
-    }
+    public override string TargetFile { get; } = data.TargetFile;
 
-    public override string TargetFile { get; }
+    public override TargetPathType TargetPathType { get; } = data.PathType;
 
-    public override TargetPathType TargetPathType { get; }
+    public override ConditionedList<T> Definition { get; } = data.Definition;
 
-    public override ConditionedList<T> Definition { get; }
-
-    public override List<Parameter> Parameters { get; }
+    public override List<Parameter> Parameters { get; } = data.Parameters ?? [];
 
     public override string[]? Header => _header;
 
-    internal override string YamlProperty { get; }
+    internal override string YamlProperty { get; } = yamlMemberName;
 
-    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations { get; }
+    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations { get; } = validations;
 }

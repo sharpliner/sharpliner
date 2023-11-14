@@ -11,8 +11,8 @@ public class VariableReferenceTests
     {
         public override string TargetFile => "stages.yml";
 
-        public override ConditionedList<Stage> Definition => new()
-        {
+        public override ConditionedList<Stage> Definition =>
+        [
             new Stage("Stage_1")
             {
                 Jobs =
@@ -40,7 +40,7 @@ public class VariableReferenceTests
             },
 
             variables["stages"],
-        };
+        ];
     }
 
     // This tests that we can include variables at any point of the pipeline

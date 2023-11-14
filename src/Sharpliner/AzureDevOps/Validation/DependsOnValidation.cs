@@ -58,15 +58,9 @@ internal abstract class DependsOnValidation : IDefinitionValidation
     private string GetTypeName<T>() => typeof(T).Name.Replace("Base", null);
 }
 
-internal class StageDependsOnValidation : DependsOnValidation
+internal class StageDependsOnValidation(ConditionedList<Stage> stages) : DependsOnValidation()
 {
-    private readonly IReadOnlyCollection<Stage> _stages;
-
-    public StageDependsOnValidation(ConditionedList<Stage> stages)
-        : base()
-    {
-        _stages = stages.SelectMany(s => s.FlattenDefinitions()).ToList();
-    }
+    private readonly IReadOnlyCollection<Stage> _stages = stages.SelectMany(s => s.FlattenDefinitions()).ToList();
 
     public override IReadOnlyCollection<ValidationError> Validate()
     {
@@ -84,15 +78,9 @@ internal class StageDependsOnValidation : DependsOnValidation
     }
 }
 
-internal class JobDependsOnValidation : DependsOnValidation
+internal class JobDependsOnValidation(ConditionedList<JobBase> jobs) : DependsOnValidation()
 {
-    private readonly IReadOnlyCollection<JobBase> _jobs;
-
-    public JobDependsOnValidation(ConditionedList<JobBase> jobs)
-        : base()
-    {
-        _jobs = jobs.SelectMany(s => s.FlattenDefinitions()).ToList();
-    }
+    private readonly IReadOnlyCollection<JobBase> _jobs = jobs.SelectMany(s => s.FlattenDefinitions()).ToList();
 
     public override IReadOnlyCollection<ValidationError> Validate() => ValidateDependsOn(_jobs);
 }

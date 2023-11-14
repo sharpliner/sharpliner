@@ -27,7 +27,7 @@ public record WebhookResource
     /// Source definition of the build
     /// </summary>
     [DisallowNull]
-    public ConditionedList<JsonParameterFilter> Filters { get; init; } = new();
+    public ConditionedList<JsonParameterFilter> Filters { get; init; } = [];
 
     public WebhookResource(string identifier)
     {

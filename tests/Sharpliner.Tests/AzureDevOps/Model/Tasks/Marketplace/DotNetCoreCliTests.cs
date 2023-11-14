@@ -10,24 +10,17 @@ public class DotNetCoreCliTests
 {
     private readonly DotNetTaskBuilder _builder = new();
 
-    private class DotNet_Pipeline : SimpleTestPipeline
+    private class DotNet_Pipeline(Step step) : SimpleTestPipeline
     {
-        private readonly Step _step;
-
-        public DotNet_Pipeline(Step step)
-        {
-            _step = step;
-        }
-
         public override SingleStagePipeline Pipeline => new()
         {
             Jobs =
+            {
+                new Job("job")
                 {
-                    new Job("job")
-                    {
-                        Steps = { _step }
-                    }
+                    Steps = { step }
                 }
+            }
         };
     }
 

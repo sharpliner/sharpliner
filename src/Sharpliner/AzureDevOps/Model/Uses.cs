@@ -8,7 +8,7 @@ namespace Sharpliner.AzureDevOps;
 /// </summary>
 public record Uses
 {
-    public ConditionedList<string> Repositories { get; init; } = new();
+    public ConditionedList<string> Repositories { get; init; } = [];
 
-    public ConditionedList<string> Pools { get; init; } = new();
+    public ConditionedList<string> Pools { get; init; } = [];
 }

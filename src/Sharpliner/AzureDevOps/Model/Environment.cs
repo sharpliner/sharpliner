@@ -35,7 +35,7 @@ public record Environment
     /// <summary>
     /// Tag names to filter the resources in the environment
     /// </summary>
-    public List<string> Tags { get; init; } = new();
+    public List<string> Tags { get; init; } = [];
 
     public Environment(string name, string? resourceName = null)
     {

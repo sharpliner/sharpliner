@@ -51,7 +51,7 @@ public record PipelineResource
     /// List of tags required on the pipeline to pickup default artifacts
     /// Optional, used only for manual or scheduled triggers
     /// </summary>
-    public List<string> Tags { get; init; } = new();
+    public List<string> Tags { get; init; } = [];
 
     /// <summary>
     /// Triggers are not enabled by default unless you add trigger section to the resource

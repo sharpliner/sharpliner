@@ -5,11 +5,11 @@ namespace Sharpliner.CI;
 
 class InstallDotNetTemplate : StepTemplateCollection
 {
-    public override List<TemplateDefinitionData<Step>> Templates => new()
-    {
+    public override List<TemplateDefinitionData<Step>> Templates =>
+    [
         GetTemplate(false),
         GetTemplate(true),
-    };
+    ];
 
     private static TemplateDefinitionData<Step> GetTemplate(bool isFullSdk)
     {
@@ -29,7 +29,7 @@ class InstallDotNetTemplate : StepTemplateCollection
 
         return new(
             targetFile,
-            new() { step },
-            new() { StringParameter("version") });
+            [step],
+            [StringParameter("version")]);
     }
 }

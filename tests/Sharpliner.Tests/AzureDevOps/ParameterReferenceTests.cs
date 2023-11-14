@@ -12,8 +12,8 @@ public class ParameterReferenceTests
     {
         public override string TargetFile => "stages.yml";
 
-        public override List<Parameter> Parameters => new()
-        {
+        public override List<Parameter> Parameters =>
+        [
             StageListParameter("stages"),
             JobListParameter("jobs"),
             StepListParameter("steps"),
@@ -22,10 +22,10 @@ public class ParameterReferenceTests
             {
                 { "vmImage", "windows-latest" }
             }),
-        };
+        ];
 
-        public override ConditionedList<Stage> Definition => new()
-        {
+        public override ConditionedList<Stage> Definition =>
+        [
             new Stage("Stage_1")
             {
                 Jobs =
@@ -53,7 +53,7 @@ public class ParameterReferenceTests
             },
 
             parameters["stages"],
-        };
+        ];
     }
 
     // This tests that we can include parameters at any point of the pipeline

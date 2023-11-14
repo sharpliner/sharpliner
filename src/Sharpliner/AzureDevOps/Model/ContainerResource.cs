@@ -40,17 +40,17 @@ public record ContainerResource
     /// A map of environment variables that are available to all steps of the jobs. When more than one variable
     /// with the same name is used, the latter one will be used.
     /// </summary>
-    public ConditionedDictionary Env { get; init; } = new();
+    public ConditionedDictionary Env { get; init; } = [];
 
     /// <summary>
     /// Ports to expose on the container
     /// </summary>
-    public List<string> Ports { get; init; } = new();
+    public List<string> Ports { get; init; } = [];
 
     /// <summary>
     /// Volumes to mount on the container
     /// </summary>
-    public List<string> Volumes { get; init; } = new();
+    public List<string> Volumes { get; init; } = [];
 
     /// <summary>
     /// Whether to map in the Docker daemon socket; defaults to true

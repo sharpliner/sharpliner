@@ -26,7 +26,7 @@ public abstract record DownloadTask : Step
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/file-matching-patterns?view=azure-devops">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     [YamlIgnore]
-    public List<string> Patterns { get; init; } = new();
+    public List<string> Patterns { get; init; } = [];
 
     [YamlMember(Alias = "patterns", Order = 61, ScalarStyle = YamlDotNet.Core.ScalarStyle.Literal)]
     public string _Patterns => string.Join("\n", Patterns);
@@ -44,10 +44,10 @@ public abstract record DownloadTask : Step
     /// A list of tags. Only builds with these tags will be returned.
     /// </summary>
     [YamlIgnore]
-    public List<string> Tags { get; init; } = new();
+    public List<string> Tags { get; init; } = [];
 
     [YamlMember(Alias = "tags", Order = 104)]
-    public string? _Tags => Tags.Any() ? string.Join(",", Tags) : null;
+    public string? _Tags => Tags.Count > 0 ? string.Join(",", Tags) : null;
 }
 
 public record CurrentDownloadTask : DownloadTask
@@ -129,7 +129,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     [YamlIgnore]
     public List<string>? Patterns
     {
-        get => (GetString(PatternsProperty) ?? string.Empty).Split(System.Environment.NewLine).ToList();
+        get => [.. (GetString(PatternsProperty) ?? string.Empty).Split(System.Environment.NewLine)];
         init => SetProperty(PatternsProperty, value is null || value.Count == 0 ? null : string.Join(System.Environment.NewLine, value));
     }
 
@@ -236,7 +236,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     [YamlIgnore]
     public List<string> Tags
     {
-        get => (GetString(TagsProperty) ?? string.Empty).Split(",").ToList();
+        get => [.. (GetString(TagsProperty) ?? string.Empty).Split(",")];
         init => SetProperty(TagsProperty, string.Join(",", value));
     }
 

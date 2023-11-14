@@ -53,7 +53,7 @@ internal class NameValidation : IDefinitionValidation
         return errors;
     }
 
-    private static IReadOnlyCollection<IReadOnlyCollection<string>> GetStageAndBuildNameGroups(ConditionedList<Stage> stages)
+    private static List<List<string>> GetStageAndBuildNameGroups(ConditionedList<Stage> stages)
     {
         var stageNames = stages
             .SelectMany(s => s.FlattenDefinitions())

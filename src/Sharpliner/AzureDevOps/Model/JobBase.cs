@@ -26,7 +26,7 @@ public abstract record JobBase : IDependsOn
     /// List of names of other jobs this job depends on
     /// </summary>
     [YamlMember(Order = 200)]
-    public ConditionedList<string> DependsOn { get; init; } = new();
+    public ConditionedList<string> DependsOn { get; init; } = [];
 
     /// <summary>
     /// Specifies which pool to use for a job of the pipeline
@@ -47,7 +47,7 @@ public abstract record JobBase : IDependsOn
     /// You can add hard-coded values directly, reference variable groups, or insert via variable templates.
     /// </summary>
     [YamlMember(Order = 600)]
-    public ConditionedList<VariableBase> Variables { get; init; } = new();
+    public ConditionedList<VariableBase> Variables { get; init; } = [];
 
     /// <summary>
     /// How long to run the job before automatically cancelling
@@ -80,7 +80,7 @@ public abstract record JobBase : IDependsOn
     /// Container resources to run as a service container.
     /// </summary>
     [YamlMember(Order = 1100)]
-    public Dictionary<string, string> Services { get; init; } = new();
+    public Dictionary<string, string> Services { get; init; } = [];
 
     [YamlMember(Order = 1100)]
     [DisallowNull]

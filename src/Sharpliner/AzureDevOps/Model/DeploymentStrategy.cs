@@ -177,7 +177,7 @@ public record CanaryStrategy : DeploymentStrategy
     /// This variable is available only in deploy, routeTraffic, and postRouteTraffic lifecycle hooks.
     /// </summary>
     [YamlMember(Order = 50)]
-    public List<int> Increments { get; init; } = new();
+    public List<int> Increments { get; init; } = [];
 
     public CanaryStrategy() : base("canary")
     {
@@ -185,7 +185,7 @@ public record CanaryStrategy : DeploymentStrategy
 
     protected override void WriteCustomFields(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
-        if (Increments.Any())
+        if (Increments.Count > 0)
         {
             emitter.Emit(new Scalar("increments"));
             nestedObjectSerializer(Increments);

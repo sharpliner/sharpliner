@@ -44,7 +44,7 @@ internal record CheckRun : Webhook
     /// <summary>
     /// List of activities that will be considered when the event is triggered.
     /// </summary>
-    public List<Activity> Activities { get; } = new();
+    public List<Activity> Activities { get; } = [];
 }
 
 /// <summary>
@@ -64,7 +64,7 @@ internal record CheckSuite : Webhook
     /// <summary>
     /// List of activities that will be considered when the event is triggered.
     /// </summary>
-    public List<Activity> Activities { get; } = new();
+    public List<Activity> Activities { get; } = [];
 }
 
 /// <summary>
@@ -120,7 +120,7 @@ internal record IssueComment : Webhook
     /// <summary>
     /// List of activities that will be considered when the event is triggered.
     /// </summary>
-    public List<Activity> Activities { get; } = new();
+    public List<Activity> Activities { get; } = [];
 }
 
 /// <summary>
@@ -153,7 +153,7 @@ internal record Issues : Webhook
     /// <summary>
     /// List of activities that will be considered when the event is triggered.
     /// </summary>
-    public List<Activity> Activities { get; } = new();
+    public List<Activity> Activities { get; } = [];
 }
 
 /// <summary>
@@ -173,7 +173,7 @@ internal record Label : Webhook
     /// <summary>
     /// List of activities that will be considered when the event is triggered.
     /// </summary>
-    public List<Activity> Activities { get; } = new();
+    public List<Activity> Activities { get; } = [];
 }
 
 /// <summary>
@@ -195,7 +195,7 @@ internal record Milestone : Webhook
     /// <summary>
     /// List of activities that will be considered when the event is triggered.
     /// </summary>
-    public List<Activity> Activities { get; } = new();
+    public List<Activity> Activities { get; } = [];
 }
 
 /// <summary>
@@ -224,7 +224,7 @@ internal record Project : Webhook
     /// <summary>
     /// List of activities that will be considered when the event is triggered.
     /// </summary>
-    public List<Activity> Activities { get; } = new();
+    public List<Activity> Activities { get; } = [];
 }
 
 /// <summary>
@@ -246,7 +246,7 @@ internal record ProjectCard : Webhook
     /// <summary>
     /// List of activities that will be considered when the event is triggered.
     /// </summary>
-    public List<Activity> Activities { get; } = new();
+    public List<Activity> Activities { get; } = [];
 }
 
 /// <summary>
@@ -267,7 +267,7 @@ internal record ProjectColumn : Webhook
     /// <summary>
     /// List of activities that will be considered when the event is triggered.
     /// </summary>
-    public List<Activity> Activities { get; } = new();
+    public List<Activity> Activities { get; } = [];
 }
 // TODO (GitHub Actions): Made internal until we get to a more complete API
 internal record Public : Webhook { }
@@ -300,7 +300,7 @@ internal record PullRequest : Webhook
     /// <summary>
     /// List of activities that will be considered when the event is triggered.
     /// </summary>
-    public List<Activity> Activities { get; } = new();
+    public List<Activity> Activities { get; } = [];
 }
 
 /// <summary>
@@ -320,7 +320,7 @@ internal record PullRequestReview : Webhook
     /// <summary>
     /// List of activities that will be considered when the event is triggered.
     /// </summary>
-    public List<Activity> Activities { get; } = new();
+    public List<Activity> Activities { get; } = [];
 }
 
 /// <summary>
@@ -340,7 +340,7 @@ internal record PullRequestReviewComment : Webhook
     /// <summary>
     /// List of activities that will be considered when the event is triggered.
     /// </summary>
-    public List<Activity> Activities { get; } = new();
+    public List<Activity> Activities { get; } = [];
 }
 
 /// <summary>
@@ -372,7 +372,7 @@ internal record PullRequestTarget : Webhook
     /// <summary>
     /// List of activities that will be considered when the event is triggered.
     /// </summary>
-    public List<Activity> Activities { get; } = new();
+    public List<Activity> Activities { get; } = [];
 }
 
 /// <summary>
@@ -398,7 +398,7 @@ internal record RegistryPackage : Webhook
     /// <summary>
     /// List of activities that will be considered when the event is triggered.
     /// </summary>
-    public List<Activity> Activities { get; } = new();
+    public List<Activity> Activities { get; } = [];
 }
 
 /// <summary>
@@ -422,7 +422,7 @@ internal record Release : Webhook
     /// <summary>
     /// List of activities that will be considered when the event is triggered.
     /// </summary>
-    public List<Activity> Activities { get; } = new();
+    public List<Activity> Activities { get; } = [];
 }
 // TODO (GitHub Actions): Made internal until we get to a more complete API
 internal record Status : Webhook { }
@@ -442,7 +442,7 @@ internal record Watch : Webhook
     /// <summary>
     /// List of activities that will be considered when the event is triggered.
     /// </summary>
-    public List<Activity> Activities { get; } = new();
+    public List<Activity> Activities { get; } = [];
 }
 
 /// <summary>
@@ -462,16 +462,16 @@ internal record WorkflowRun : Webhook
     /// List with the workflows that will trigger the event.
     /// </summary>
     [Required]
-    public List<string> Workflows { get; } = new();
+    public List<string> Workflows { get; } = [];
 
     /// <summary>
     /// List with the branches that will trigger the event.
     /// </summary>
     [Required]
-    public List<string> Branches { get; } = new();
+    public List<string> Branches { get; } = [];
 
     /// <summary>
     /// List of activities that will be considered when the event is triggered.
     /// </summary>
-    public List<Activity> Activities { get; } = new();
+    public List<Activity> Activities { get; } = [];
 }

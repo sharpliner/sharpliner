@@ -10,7 +10,7 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// </summary>
 public record AzureDevOpsTask : Step
 {
-    private readonly TaskInputs _inputs = new();
+    private readonly TaskInputs _inputs = [];
 
     /// <summary>
     /// Task name in the form 'PublishTestResults@2'.

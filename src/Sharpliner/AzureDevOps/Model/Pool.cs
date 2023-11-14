@@ -47,7 +47,7 @@ public record HostedPool : Pool
 
     [YamlMember(Order = 110)]
     [DisallowNull]
-    public ConditionedList<string> Demands { get; init; } = new();
+    public ConditionedList<string> Demands { get; init; } = [];
 }
 
 /// <summary>

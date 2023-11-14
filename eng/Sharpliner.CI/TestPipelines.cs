@@ -10,21 +10,21 @@ namespace Sharpliner.CI;
 /// </summary>
 class TestPipelines : SingleStagePipelineCollection
 {
-    private static readonly string[] s_platforms = new[]
-    {
+    private static readonly string[] s_platforms =
+    [
         "ubuntu-20.04",
         "windows-2019",
-    };
+    ];
 
     public override IEnumerable<PipelineDefinitionData<SingleStagePipeline>> Pipelines =>
         s_platforms.Select(platform => new PipelineDefinitionData<SingleStagePipeline>(
             TargetFile: $"{CI.Pipelines.Location}test/{platform}.yml",
             Pipeline: Define(platform),
-            Header: new[]
-            {
+            Header:
+            [
                 "This pipeline is not used in CI",
                 "It has been generated from " + nameof(TestPipelines) + ".cs for E2E test purposes",
-            }));
+            ]));
 
     private static SingleStagePipeline Define(string platform) => new()
     {

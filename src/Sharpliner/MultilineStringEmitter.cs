@@ -8,13 +8,8 @@ namespace Sharpliner;
 /// This makes sure that multiline strings get serialized properly.
 /// That means using `|` and not `>` (which glues lines together).
 /// </summary>
-public class MultilineStringEmitter : ChainedEventEmitter
+public class MultilineStringEmitter(IEventEmitter nextEmitter) : ChainedEventEmitter(nextEmitter)
 {
-    public MultilineStringEmitter(IEventEmitter nextEmitter)
-        : base(nextEmitter)
-    {
-    }
-
     public override void Emit(ScalarEventInfo eventInfo, IEmitter emitter)
     {
 
@@ -23,7 +18,7 @@ public class MultilineStringEmitter : ChainedEventEmitter
             string? value = eventInfo.Source.Value as string;
             if (!string.IsNullOrEmpty(value))
             {
-                bool isMultiLine = value.IndexOfAny(new char[] { '\r', '\n' }) >= 0;
+                bool isMultiLine = value.IndexOfAny(['\r', '\n']) >= 0;
                 if (isMultiLine)
                 {
                     eventInfo = new ScalarEventInfo(eventInfo.Source)

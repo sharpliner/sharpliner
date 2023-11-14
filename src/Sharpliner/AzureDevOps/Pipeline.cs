@@ -43,7 +43,7 @@ public abstract record PipelineBase
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/runtime-parameters?view=azure-devops">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     [YamlMember(Order = 150)]
-    public ConditionedList<Parameter> Parameters { get; init; } = new();
+    public ConditionedList<Parameter> Parameters { get; init; } = [];
 
     /// <summary>
     /// Specifies when the pipeline is supposed to run
@@ -67,7 +67,7 @@ public abstract record PipelineBase
     /// </summary>
     [YamlMember(Order = 350)]
     [DisallowNull]
-    public List<ScheduledTrigger> Schedules { get; init; } = new();
+    public List<ScheduledTrigger> Schedules { get; init; } = [];
 
     /// <summary>
     /// A resource is any external service that is consumed as part of your pipeline
@@ -82,7 +82,7 @@ public abstract record PipelineBase
     /// You can add hard-coded values directly, reference variable groups, or insert via variable templates.
     /// </summary>
     [YamlMember(Order = 500)]
-    public ConditionedList<VariableBase> Variables { get; init; } = new();
+    public ConditionedList<VariableBase> Variables { get; init; } = [];
 
     /// <summary>
     /// Specifies which pool to use for a job of the pipeline
@@ -104,7 +104,7 @@ public abstract record PipelineBase
 public record Pipeline : PipelineBase
 {
     [YamlMember(Order = 600)]
-    public ConditionedList<Stage> Stages { get; init; } = new();
+    public ConditionedList<Stage> Stages { get; init; } = [];
 
     internal override IReadOnlyCollection<IDefinitionValidation> Validations
         => Stages.GetStageValidations()
@@ -127,7 +127,7 @@ public record Pipeline : PipelineBase
 public record SingleStagePipeline : PipelineBase
 {
     [YamlMember(Order = 600)]
-    public ConditionedList<JobBase> Jobs { get; init; } = new();
+    public ConditionedList<JobBase> Jobs { get; init; } = [];
 
     internal override IReadOnlyCollection<IDefinitionValidation> Validations
         => Jobs.GetJobValidations()

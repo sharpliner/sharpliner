@@ -50,11 +50,7 @@ public record InlineBashTask : BashTask
 
     public InlineBashTask(params string[] scriptLines)
     {
-        if (scriptLines is null)
-        {
-            throw new ArgumentNullException(nameof(scriptLines));
-        }
-
+        ArgumentNullException.ThrowIfNull(scriptLines);
         Contents = string.Join("\n", scriptLines);
     }
 }

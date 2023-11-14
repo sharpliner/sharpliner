@@ -146,7 +146,7 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
     public virtual TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
 
     [DisallowNull]
-    public virtual List<Parameter> Parameters { get; } = new();
+    public virtual List<Parameter> Parameters { get; } = [];
 
     [DisallowNull]
     public abstract ConditionedList<T> Definition { get; }
@@ -157,7 +157,7 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
     {
         var template = new ConditionedDictionary();
 
-        if (Parameters != null && Parameters.Any())
+        if (Parameters != null && Parameters.Count > 0)
         {
             template.Add("parameters", Parameters);
         }

@@ -35,23 +35,15 @@ public abstract class PipelineDefinitionCollection<TPipeline>
     }
 }
 
-internal class PipelineDefinitionWrapper<T> : ISharplinerDefinition where T : PipelineBase
+internal class PipelineDefinitionWrapper<T>(PipelineDefinitionData<T> data, Type definitionType) : ISharplinerDefinition where T : PipelineBase
 {
-    public PipelineDefinitionWrapper(PipelineDefinitionData<T> data, Type definitionType)
-    {
-        TargetFile = data.TargetFile;
-        Pipeline = data.Pipeline;
-        TargetPathType = data.PathType;
-        Header = data.Header ?? SharplinerPublisher.GetDefaultHeader(definitionType);
-    }
+    public string TargetFile { get; } = data.TargetFile;
 
-    public string TargetFile { get; }
+    public TargetPathType TargetPathType { get; } = data.PathType;
 
-    public TargetPathType TargetPathType { get; }
+    public T Pipeline { get; } = data.Pipeline;
 
-    public T Pipeline { get; }
-
-    public string[]? Header { get; private set; }
+    public string[]? Header { get; private set; } = data.Header ?? SharplinerPublisher.GetDefaultHeader(definitionType);
 
     public IReadOnlyCollection<IDefinitionValidation> Validations => Pipeline.Validations;
 

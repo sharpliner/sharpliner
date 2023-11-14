@@ -283,23 +283,23 @@ public class TaskBuilderTests
                         Download.None,
                         Download.Current with
                         {
-                            Tags = new()
-                            {
+                            Tags =
+                            [
                                 "release",
                                 "nightly",
-                            },
+                            ],
                             Artifact = "Frontend",
-                            Patterns = new()
-                            {
+                            Patterns =
+                            [
                                 "frontend/**/*",
                                 "frontend.config",
-                            }
+                            ]
                         },
                         Download.SpecificBuild("public", 56, 1745, "MyProject.CLI", patterns: new[] { "**/*.dll", "**/*.exe" }) with
                         {
                             AllowPartiallySucceededBuilds = true,
                             RetryDownloadCount = 3,
-                            Tags = new() { "non-release", "preview" },
+                            Tags = ["non-release", "preview"],
                         },
                         Download.LatestFromBranch("internal", 23, "refs/heads/develop", path: variables.Build.ArtifactStagingDirectory) with
                         {

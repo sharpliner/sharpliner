@@ -42,7 +42,7 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
         }
 
         var publisherType = assembly.GetTypes().First(t => t.GUID == typeof(SharplinerPublisher).GUID);
-        var publisher = Activator.CreateInstance(publisherType, new object?[] { Log });
+        var publisher = Activator.CreateInstance(publisherType, [Log]);
 
         var publishMethod = publisherType.GetMethod(nameof(SharplinerPublisher.Publish));
 
@@ -52,7 +52,7 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
             return false;
         }
 
-        if (publishMethod!.Invoke(publisher, new object?[] { Assembly, FailIfChanged }) is not bool result)
+        if (publishMethod!.Invoke(publisher, [Assembly, FailIfChanged]) is not bool result)
         {
             Log.LogError($"Failed to call the Sharpliner publisher. The is one of the 'should never happen' ones. Please report this");
             return false;
