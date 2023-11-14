@@ -192,7 +192,7 @@ public class TaskBuilderTests
                 {
                     Steps =
                     {
-                        Publish("Binary", "bin/Debug/net5.0/", "Publish artifact") with
+                        Publish("Binary", "bin/Debug/net8.0/", "Publish artifact") with
                         {
                             ContinueOnError = false,
                             ArtifactType = ArtifactType.Pipeline,
@@ -215,7 +215,7 @@ public class TaskBuilderTests
         jobs:
         - job: test
           steps:
-          - publish: bin/Debug/net5.0/
+          - publish: bin/Debug/net8.0/
             displayName: Publish artifact
             artifact: Binary
             continueOnError: false

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0;net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
 
     <!-- NuGet details -->
     <RepositoryType>git</RepositoryType>
@@ -56,8 +56,8 @@
       but before NuGet generates a nuspec. See https://github.com/NuGet/Home/issues/4704.
     -->
     <ItemGroup>
-      <_PackageFiles Include="$(OutputPath)\net5.0\YamlDotNet.dll">
-        <PackagePath>lib\net5.0</PackagePath>
+      <_PackageFiles Include="$(OutputPath)\net8.0\YamlDotNet.dll">
+        <PackagePath>lib\net8.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
@@ -76,8 +76,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <_PackageFiles Include="$(OutputPath)\net5.0\OneOf.dll">
-        <PackagePath>lib\net5.0</PackagePath>
+      <_PackageFiles Include="$(OutputPath)\net8.0\OneOf.dll">
+        <PackagePath>lib\net8.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>

@@ -134,8 +134,8 @@ Copyright (C) Microsoft Corporation. All rights reserved.
 
   Determining projects to restore...
   Restored MyProject.Pipelines.csproj (in 135 ms).
-  MyProject.Pipelines -> bin/MyProject.Pipelines/net5.0/MyProject.Pipelines.dll
-  Publishing all pipeline definitions inside bin/MyProject.Pipelines/net5.0/MyProject.Pipelines.dll
+  MyProject.Pipelines -> bin/MyProject.Pipelines/net8.0/MyProject.Pipelines.dll
+  Publishing all pipeline definitions inside bin/MyProject.Pipelines/net8.0/MyProject.Pipelines.dll
   PullRequestPipeline / azure-pipelines.yml:
     Validating pipeline..
     Publishing changes to azure-pipelines.yml..
