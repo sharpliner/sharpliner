@@ -83,21 +83,21 @@ public override SingleStagePipelineDefinition Pipeline => new()
     Pr = new PrTrigger("main"),
 
     Variables =
-    {
+    [
         If.IsBranch("net-6.0")
             .Variable("DotnetVersion", "6.0.100")
             .Group("net6-kv")
         .Else
             .Variable("DotnetVersion", "5.0.202"),
-    },
+    ],
 
     Jobs =
-    {
+    [
         new Job("Build", "Build and test")
         {
             Pool = new HostedPool("Azure Pipelines", "windows-latest"),
             Steps =
-            {
+            [
                 If.IsPullRequest
                     .Step(Powershell.Inline("Write-Host 'Hello-World'").DisplayAs("Hello world")),
 
@@ -112,9 +112,9 @@ public override SingleStagePipelineDefinition Pipeline => new()
                 DotNet
                     .Test("src/MyProject.sln")
                     .DisplayAs("Test"),
-            }
+            ]
         }
-    },
+    ],
 }
 
 ...

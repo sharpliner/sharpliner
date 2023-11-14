@@ -16,11 +16,11 @@ It is much easier to accomodate for these inside C# than in YAML using if's and 
 class TestPipelines : SingleStagePipelineCollection
 {
     // Define your data
-    private readonly string[] Platforms = new[]
-    {
+    private readonly string[] Platforms =
+    [
         "ubuntu-20.04",
         "windows-2019",
-    };
+    ];
 
     // Create a list of definitions, each is published in its own YAML file
     public override IEnumerable<PipelineDefinitionData<SingleStagePipeline>> Pipelines =>
@@ -29,32 +29,32 @@ class TestPipelines : SingleStagePipelineCollection
             TargetFile: platform + ".yml",
 
             // Optional custom YAML file header
-            Header: new[]
-            {
+            Header:
+            [
                 "This pipeline is not used in CI",
                 "It has been generated from " + nameof(TestPipelines) + ".cs for E2E test purposes",
-            }),
+            ],
 
             // Define the pipeline itself
             Pipeline: new()
             {
                 Jobs =
-                {
+                [
                     new Job("Build")
                     {
                         Pool = new HostedPool(name: platform),
 
                         Steps =
-                        {
+                        [
                             DotNet.Build("Sharpliner.sln", includeNuGetOrg: true)
                                 .DisplayAs("Build projects"),
 
                             DotNet.Test("Sharpliner.sln")
                                 .DisplayAs("Run unit tests")
-                        }
+                        ]
                     }
-                }
-            });
+                ]
+            }));
 }
 ```
 
