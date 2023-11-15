@@ -27,7 +27,7 @@ public record MatrixStrategy : Strategy, IYamlConvertible
     /// <summary>
     /// Defines copies of a job, each with different input.
     /// </summary>
-    public Dictionary<string, (string, string)[]> Matrix { get; init; } = new();
+    public Dictionary<string, (string, string)[]> Matrix { get; init; } = [];
 
     public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
     public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)

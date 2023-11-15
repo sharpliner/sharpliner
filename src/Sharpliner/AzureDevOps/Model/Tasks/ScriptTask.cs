@@ -32,11 +32,7 @@ public record ScriptTask : Step
 
     public ScriptTask(params string[] scriptLines)
     {
-        if (scriptLines is null)
-        {
-            throw new ArgumentNullException(nameof(scriptLines));
-        }
-
+        ArgumentNullException.ThrowIfNull(scriptLines);
         Contents = string.Join("\r\n", scriptLines);
     }
 }

@@ -33,7 +33,7 @@ public class BashTaskBuilder : TaskBuilderBase
     /// </summary>
     /// <param name="filePath">Path to the file</param>
     /// <param name="displayName">Name of the build step</param>
-    public BashFileTask File(string filePath, string? displayName = null) => new BashFileTask(filePath)
+    public BashFileTask File(string filePath, string? displayName = null) => new(filePath)
     {
         DisplayName = displayName is null ? null! : new Conditioned<string>(displayName),
     };

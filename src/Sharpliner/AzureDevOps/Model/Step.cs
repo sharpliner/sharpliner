@@ -82,7 +82,7 @@ public abstract record Step
     /// </summary>
     [YamlMember(Order = 220)]
     [DisallowNull]
-    public ConditionedDictionary Env { get; init; } = new();
+    public ConditionedDictionary Env { get; init; } = [];
 
     /// <summary>
     /// Make step only run when a condition is met.

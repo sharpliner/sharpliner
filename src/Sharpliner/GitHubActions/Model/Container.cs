@@ -63,20 +63,20 @@ internal record Container
     /// <summary>
     /// Get/Set the environment variables preset in the image.
     /// </summary>
-    public Dictionary<string, string> Env { get; } = new();
+    public Dictionary<string, string> Env { get; } = [];
 
     /// <summary>
     /// Get/Set the list of available ports in the image.
     /// </summary>
-    public List<int> Ports { get; set; } = new();
+    public List<int> Ports { get; set; } = [];
 
     /// <summary>
     /// Get/Set the array of volumes to be used in the image.
     /// </summary>
-    public List<string> Volumes { get; set; } = new();
+    public List<string> Volumes { get; set; } = [];
 
     /// <summary>
     /// Get/Set additional create options for the docker image.
     /// </summary>
-    public List<DockerOptions> DockerOptions { get; set; } = new();
+    public List<DockerOptions> DockerOptions { get; set; } = [];
 }

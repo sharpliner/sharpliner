@@ -16,15 +16,9 @@ public enum ValidationSeverity
     Error = 4,
 }
 
-public class ValidationError
+public class ValidationError(ValidationSeverity severity, string message)
 {
-    public ValidationSeverity Severity { get; }
+    public ValidationSeverity Severity { get; } = severity;
 
-    public string Message { get; }
-
-    public ValidationError(ValidationSeverity severity, string message)
-    {
-        Severity = severity;
-        Message = message;
-    }
+    public string Message { get; } = message;
 }

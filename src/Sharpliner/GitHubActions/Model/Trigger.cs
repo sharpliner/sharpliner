@@ -11,7 +11,7 @@ internal class Trigger
     /// <summary>
     /// Collection of triggers that execute the workflow based on a schedule.
     /// </summary>
-    public List<Schedule> Schedules { get; } = new();
+    public List<Schedule> Schedules { get; } = [];
 
     /// <summary>
     /// Triggers that required a manual intervention to execute the workflow. The intervention can be done by
@@ -22,5 +22,5 @@ internal class Trigger
     /// <summary>
     /// Collection of triggers that executed the workflow based on a webhook from the GitHup API.
     /// </summary>
-    public List<Webhook> Webhooks { get; } = new();
+    public List<Webhook> Webhooks { get; } = [];
 }

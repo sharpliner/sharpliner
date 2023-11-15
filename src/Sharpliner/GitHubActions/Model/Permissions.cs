@@ -29,8 +29,8 @@ internal enum GitHubPermission
 // TODO (GitHub Actions): Made internal until we get to a more complete API
 internal record Permissions
 {
-    public HashSet<GitHubPermissionScope> Read { get; } = new();
-    public HashSet<GitHubPermissionScope> Write { get; } = new();
+    public HashSet<GitHubPermissionScope> Read { get; } = [];
+    public HashSet<GitHubPermissionScope> Write { get; } = [];
 
     public Permissions All(GitHubPermission permission)
     {

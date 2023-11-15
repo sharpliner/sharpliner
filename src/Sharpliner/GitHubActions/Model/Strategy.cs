@@ -30,17 +30,17 @@ internal record Strategy
     /// <summary>
     /// Defines the default configurations to be included in the matrix.
     /// </summary>
-    public Dictionary<string, List<object>> Configuration { get; set; } = new();
+    public Dictionary<string, List<object>> Configuration { get; set; } = [];
 
     /// <summary>
     /// List of extra configurations that will be included.
     /// </summary>
-    public List<StrategyConfiguration> Include { get; set; } = new();
+    public List<StrategyConfiguration> Include { get; set; } = [];
 
     /// <summary>
     /// List of configurations to be excluded.
     /// </summary>
-    public List<StrategyConfiguration> Exclude { get; set; } = new();
+    public List<StrategyConfiguration> Exclude { get; set; } = [];
 
     /// <summary>
     /// Returns if the max number of jobs is used.

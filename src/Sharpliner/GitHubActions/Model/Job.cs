@@ -16,7 +16,7 @@ internal record Job
 
     public string Id { get; }
     public string? Name { get; set; }
-    public List<string> Needs { get; } = new();
+    public List<string> Needs { get; } = [];
 
     // TODO
     public Container? RunsOn { get; set; }
@@ -43,13 +43,13 @@ internal record Job
     /// <summary>
     /// Represent the outputs of the job that will be available for other jobs.
     /// </summary>
-    public Dictionary<string, string> Outputs { get; } = new();
+    public Dictionary<string, string> Outputs { get; } = [];
 
     /// <summary>
     /// A map of environment variables that are available to all steps of the jobs. When more than one variable
     /// with the same name is used, the latter one will be used.
     /// </summary>
-    public Dictionary<string, string> Env { get; } = new();
+    public Dictionary<string, string> Env { get; } = [];
 
     /// <summary>
     /// Provide the default settings to be used by all jobs in the workflow.
@@ -64,10 +64,10 @@ internal record Job
     /// <summary>
     /// The list of steps to be executed by the job.
     /// </summary>
-    public List<Step> Steps { get; init; } = new();
+    public List<Step> Steps { get; init; } = [];
 
     /// <summary>
     /// The list of services to be used for the job.
     /// </summary>
-    public List<Service> Services { get; init; } = new();
+    public List<Service> Services { get; init; } = [];
 }

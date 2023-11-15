@@ -66,7 +66,7 @@ internal record WorkflowDispatch
     /// <summary>
     /// List of inputs to be used with the workflow when it is manually triggered.
     /// </summary>
-    public List<Input> Inputs { get; } = new();
+    public List<Input> Inputs { get; } = [];
 }
 
 /// <summary>
@@ -79,5 +79,5 @@ internal record RepositoryDispatch
     /// List of activities that will be considered when the event is triggered. This are provided by the
     /// external service and therefore cannot be validated.
     /// </summary>
-    public List<string> Activities { get; } = new();
+    public List<string> Activities { get; } = [];
 }

@@ -44,7 +44,7 @@ internal record Workflow
     /// A map of environment variables that are available to the steps of all jobs. When more than one variable
     /// with the same name is used, the latter one will be used.
     /// </summary>
-    public Dictionary<string, string> Env { get; } = new();
+    public Dictionary<string, string> Env { get; } = [];
 
     /// <summary>
     /// Provide a concurrency context to ensure that just one workflow is executed at a given time.
@@ -59,5 +59,5 @@ internal record Workflow
     /// <summary>
     /// List of jobs to be executed by the workflow.
     /// </summary>
-    public List<Job> Jobs { get; } = new();
+    public List<Job> Jobs { get; } = [];
 }

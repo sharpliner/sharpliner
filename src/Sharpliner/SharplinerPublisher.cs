@@ -13,15 +13,8 @@ namespace Sharpliner;
 /// <summary>
 /// This is the main entrypoint that finds definitions via reflection and publishes YAMLs.
 /// </summary>
-public class SharplinerPublisher
+public class SharplinerPublisher(TaskLoggingHelper logger)
 {
-    private readonly TaskLoggingHelper _logger;
-
-    public SharplinerPublisher(TaskLoggingHelper logger)
-    {
-        _logger = logger;
-    }
-
     /// <summary>
     /// This method finds all pipeline definitions via reflection and publishes them to YAML.
     /// </summary>
@@ -51,7 +44,7 @@ public class SharplinerPublisher
 
         if (!definitionFound)
         {
-            _logger.LogMessage(MessageImportance.High, $"No definitions found in {assemblyPath}");
+            logger.LogMessage(MessageImportance.High, $"No definitions found in {assemblyPath}");
         }
 
         return true;
@@ -72,7 +65,7 @@ public class SharplinerPublisher
 
         var typeName = collection == null ? definition.GetType().Name : collection.Name;
 
-        _logger.LogMessage(MessageImportance.High, $"{typeName} / {Path.GetFileName(path)}:");
+        logger.LogMessage(MessageImportance.High, $"{typeName} / {Path.GetFileName(path)}:");
 
         Validate(definition, typeName);
 
@@ -85,11 +78,11 @@ public class SharplinerPublisher
         {
             if (failIfChanged)
             {
-                _logger.LogError($"  This definition hasn't been published yet!");
+                logger.LogError($"  This definition hasn't been published yet!");
             }
             else
             {
-                _logger.LogMessage(MessageImportance.High, $"  {typeName} created at {path}");
+                logger.LogMessage(MessageImportance.High, $"  {typeName} created at {path}");
             }
         }
         else
@@ -97,17 +90,17 @@ public class SharplinerPublisher
             var newHash = GetFileHash(path);
             if (hash == newHash)
             {
-                _logger.LogMessage(MessageImportance.High, $"  No new changes to publish");
+                logger.LogMessage(MessageImportance.High, $"  No new changes to publish");
             }
             else
             {
                 if (failIfChanged)
                 {
-                    _logger.LogError($"  Changes detected between {typeName} and {path}");
+                    logger.LogError($"  Changes detected between {typeName} and {path}");
                 }
                 else
                 {
-                    _logger.LogMessage(MessageImportance.High, $"  Published new changes to {path}");
+                    logger.LogMessage(MessageImportance.High, $"  Published new changes to {path}");
                 }
             }
         }
@@ -120,13 +113,13 @@ public class SharplinerPublisher
     /// <param name="typeName">Type name, can include parent definition collection</param>
     private void Validate(ISharplinerDefinition definition, string typeName)
     {
-        _logger.LogMessage(MessageImportance.High, $"  Validating definition..");
+        logger.LogMessage(MessageImportance.High, $"  Validating definition..");
 
         foreach (var validation in definition.Validations)
         {
             var errors = validation.Validate();
 
-            if (errors.Any())
+            if (errors.Count > 0)
             {
                 Log(errors.OrderByDescending(e => e.Severity).First().Severity,
                     $"  Validation of definition {typeName} failed!");
@@ -150,11 +143,8 @@ public class SharplinerPublisher
 
         foreach (Type type in assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.IsAssignableTo(typeToFind)))
         {
-            object? pipelineDefinition = Activator.CreateInstance(type);
-            if (pipelineDefinition is null)
-            {
-                throw new Exception($"Failed to instantiate {type.GetType().FullName}");
-            }
+            object? pipelineDefinition = Activator.CreateInstance(type)
+                ?? throw new Exception($"Failed to instantiate {type.GetType().FullName}");
 
             pipelines.Add((T)pipelineDefinition);
         }
@@ -168,13 +158,13 @@ public class SharplinerPublisher
 
         if (configurations.Count > 1)
         {
-            _logger.LogWarning("Detected more than one Sharpliner configurations:"
+            logger.LogWarning("Detected more than one Sharpliner configurations:"
                 + Environment.NewLine + "  -"
                 + string.Join(Environment.NewLine + "  -", configurations));
         }
 
         SharplinerConfiguration configuration = configurations.FirstOrDefault() ?? new DefaultSharplinerConfiguration();
-        _logger.LogMessage(MessageImportance.High, "Using {0} for configuration", configuration.GetType().Name);
+        logger.LogMessage(MessageImportance.High, "Using {0} for configuration", configuration.GetType().Name);
         configuration.ConfigureInternal();
     }
 
@@ -252,16 +242,16 @@ public class SharplinerPublisher
         switch (severity)
         {
             case ValidationSeverity.Trace:
-                _logger.LogMessage(message);
+                logger.LogMessage(message);
                 break;
             case ValidationSeverity.Information:
-                _logger.LogMessage(MessageImportance.High, message);
+                logger.LogMessage(MessageImportance.High, message);
                 break;
             case ValidationSeverity.Warning:
-                _logger.LogWarning(message);
+                logger.LogWarning(message);
                 break;
             case ValidationSeverity.Error:
-                _logger.LogError(message);
+                logger.LogError(message);
                 break;
         }
     }
@@ -269,15 +259,15 @@ public class SharplinerPublisher
     /// <summary>
     /// Default YAML file header if one is not provided
     /// </summary>
-    public static string[] GetDefaultHeader(Type type) => new[]
-    {
+    public static string[] GetDefaultHeader(Type type) =>
+    [
         string.Empty,
         "DO NOT MODIFY THIS FILE!",
         string.Empty,
         $"This YAML was auto-generated from { type.Name }",
         $"To make changes, change the C# definition and rebuild its project",
         string.Empty,
-    };
+    ];
 
     private static string? GetFileHash(string path)
     {

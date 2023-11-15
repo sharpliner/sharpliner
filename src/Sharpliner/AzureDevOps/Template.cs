@@ -14,7 +14,7 @@ namespace Sharpliner.AzureDevOps;
 public record Template<T> : Conditioned<T>
 {
     private readonly string _path;
-    public TemplateParameters Parameters { get; init; } = new();
+    public TemplateParameters Parameters { get; init; } = [];
 
     /// <summary>
     /// We shouldn't allow any type of template as Azure DevOps doesn't accept it.

@@ -50,18 +50,18 @@ public class TemplateTests
     {
         public override string TargetFile => "template.yml";
 
-        public override List<Parameter> Parameters => new()
-        {
+        public override List<Parameter> Parameters =>
+        [
             StringParameter("project"),
-            StringParameter("version", allowedValues: new[] { "5.0.100", "5.0.102" }),
+            StringParameter("version", allowedValues: [ "5.0.100", "5.0.102" ]),
             BooleanParameter("skipBuild"),
             BooleanParameter("useNugetOrg", defaultValue: false),
             BooleanParameter("restore", defaultValue: true),
             StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)")),
-        };
+        ];
 
-        public override ConditionedList<Step> Definition => new()
-        {
+        public override ConditionedList<Step> Definition =>
+        [
             DotNet.Install.Sdk(parameters["version"]),
 
             If.Equal(parameters["restore"], "true")
@@ -70,7 +70,7 @@ public class TemplateTests
             DotNet.Build(parameters["project"]),
 
             StepParameterReference("afterBuild"),
-        };
+        ];
     }
 
     [Fact]
@@ -130,8 +130,8 @@ public class TemplateTests
 
     private class Conditioned_Template_Reference : SimpleStepTestPipeline
     {
-        protected override ConditionedList<Step> Steps => new()
-        {
+        protected override ConditionedList<Step> Steps =>
+        [
             If.Equal("restore", "true")
                 .StepTemplate("template1.yaml"),
 
@@ -139,7 +139,7 @@ public class TemplateTests
                 .StepTemplate("template2.yaml")
                 .If.IsPullRequest
                     .StepTemplate("template3.yaml"),
-        };
+        ];
     }
 
     [Fact]
@@ -165,8 +165,8 @@ public class TemplateTests
 
     private class Conditioned_Parameters : SimpleStepTestPipeline
     {
-        protected override ConditionedList<Step> Steps => new()
-        {
+        protected override ConditionedList<Step> Steps =>
+        [
             StepTemplate("template1.yaml", new()
             {
                 { "some", "value" },
@@ -191,7 +191,7 @@ public class TemplateTests
                         })
                 },
             }),
-        };
+        ];
     }
 
     [Fact]

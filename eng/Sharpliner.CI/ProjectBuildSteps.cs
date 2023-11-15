@@ -4,21 +4,15 @@ using Sharpliner.AzureDevOps.ConditionedExpressions;
 
 namespace Sharpliner.CI;
 
-class ProjectBuildSteps : StepLibrary
+class ProjectBuildSteps(string project) : StepLibrary
 {
     public const string PackagePath = "artifacts/packages";
-    private readonly string _project;
 
-    public ProjectBuildSteps(string project)
-    {
-        _project = project;
-    }
-
-    public override List<Conditioned<Step>> Steps => new()
-    {
+    public override List<Conditioned<Step>> Steps =>
+    [
         StepTemplate(Pipelines.TemplateLocation + "install-dotnet-sdk.yml", new()
         {
-            { "version", "7.0.100" }
+            { "version", "8.0.100" }
         }),
 
         Powershell
@@ -26,7 +20,7 @@ class ProjectBuildSteps : StepLibrary
             .DisplayAs($"Create {PackagePath}"),
 
         DotNet
-            .Build(_project, includeNuGetOrg: true)
+            .Build(project, includeNuGetOrg: true)
             .DisplayAs("Build"),
-    };
+    ];
 }

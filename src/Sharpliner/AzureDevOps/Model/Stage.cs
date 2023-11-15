@@ -29,14 +29,14 @@ public record Stage : IDependsOn
     /// List of names of other jobs this job depends on
     /// </summary>
     [YamlMember(Order = 100)]
-    public ConditionedList<string> DependsOn { get; init; } = new();
+    public ConditionedList<string> DependsOn { get; init; } = [];
 
     /// <summary>
     /// Specifies variables at the job level
     /// You can add hard-coded values directly, reference variable groups, or insert via variable templates.
     /// </summary>
     [YamlMember(Order = 200)]
-    public ConditionedList<VariableBase> Variables { get; init; } = new();
+    public ConditionedList<VariableBase> Variables { get; init; } = [];
 
     /// <summary>
     /// A job is a collection of steps run by an agent or on a server.
@@ -44,7 +44,7 @@ public record Stage : IDependsOn
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/phases?tabs=yaml&amp;view=azure-devops">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     [YamlMember(Order = 300)]
-    public ConditionedList<JobBase> Jobs { get; init; } = new();
+    public ConditionedList<JobBase> Jobs { get; init; } = [];
 
     [YamlMember(Order = 400)]
     [DisallowNull]

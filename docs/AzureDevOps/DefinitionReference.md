@@ -58,7 +58,7 @@ or you can use the shorthand style. For each of the basic commands, a method/pro
 
 ```csharp
 Steps =
-{
+[
     Checkout.Self,
 
     Download.LatestFromBranch("internal", 23, "refs/heads/develop", artifact: "CLI.Package") with
@@ -83,7 +83,7 @@ Steps =
     },
 
     Publish("ArtifactName", "bin/**/*.dll", "Publish build artifacts"),
-}
+]
 ```
 
 Please notice the `with` keyword which is a [new feature in C#](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/record#nondestructive-mutation) that allows modifying of records.
@@ -120,7 +120,7 @@ DotNet.Restore.FromFeed("dotnet-7-preview-feed", includeNuGetOrg: false) with
 DotNet.Build("src/MyProject.csproj") with
 {
     Timeout = TimeSpan.FromMinutes(20)
-},
+}
 ```
 
 Note how we use the `with` keyword to extend the `record` object with new properties.
@@ -135,14 +135,14 @@ If you find one useful, hit us up with a request, or better, with a pull request
 Similarly to Build steps, there's a shorthand style of definition of variables too:
 ```csharp
 Variables =
-{
+[
     Variable("Configuration", "Release"),     // We have shorthand style like we do for build steps
     Group("PR keyvault variables"),
     new Variable("Configuration", "Release"), // We can also create the objects and resue them too
     Variables(                                // You can also save some keystrokes and define multiple variables at once
         ("variable1", "value1"),
         ("variable2", true))
-}
+]
 ```
 
 ## Pipeline parameters
@@ -150,12 +150,12 @@ To define [pipeline runtime parameters](https://docs.microsoft.com/en-us/azure/d
 
 ```csharp
 Parameters =
-{
+[
     StringParameter("project", "AzureDevops project"),
     StringParameter("version", ".NET version", allowedValues: new[] { "5.0.100", "5.0.102" }),
     BooleanParameter("restore", "Restore NuGets", defaultValue: true),
     StepParameter("afterBuild", "After steps", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)")),
-}
+]
 ```
 
 ## Conditioned expressions
@@ -168,7 +168,7 @@ This feature was a little bit problematic to mimic in C# but we've found a nice 
 
 ```csharp
 Variables =
-{
+[
     // You can create one if statement and chain multiple definitions beneath it
     If.Equal("$(Environment.Target)", "Cloud")
         .Variable("target", "Azure")
@@ -188,7 +188,7 @@ Variables =
         // inverted if condition using SharplinerSerializer.UseElseExpression setting
         .Else
             .Group("azure-pr"),
-},
+]
 ```
 
 The resulting YAML will look like this:
@@ -214,8 +214,8 @@ The resulting YAML will look like this:
 You can also specify conditions in places like template parameters (which are improved dictionaries really):
 
 ```csharp
-StepTemplate("template1.yaml", new()
-{
+StepTemplate("template1.yaml",
+[
     { "some", "value" },
     {
         If.IsPullRequest,
@@ -225,7 +225,7 @@ StepTemplate("template1.yaml", new()
         }
     },
     { "other", 123 },
-}),
+]),
 ```
 
 This will produce following YAML:
@@ -295,16 +295,16 @@ class InstallDotNetTemplate : StepTemplateDefinition
     // Where to publish the YAML to
     public override string TargetFile => "templates/build-csproj.yml";
 
-    public override List<TemplateParameter> Parameters => new()
-    {
+    public override List<TemplateParameter> Parameters =>
+    [
         StringParameter("project"),
-        StringParameter("version", allowedValues: new[] { "5.0.100", "5.0.102" }),
+        StringParameter("version", allowedValues: [ "5.0.100", "5.0.102" ]),
         BooleanParameter("restore", defaultValue: true),
         StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)")),
-    };
+    ];
 
-    public override ConditionedList<Step> Definition => new()
-    {
+    public override ConditionedList<Step> Definition =>
+    [
         DotNet.Install.Sdk(parameters["version"]),
 
         If.Equal(parameters["restore"], "true")
@@ -313,7 +313,7 @@ class InstallDotNetTemplate : StepTemplateDefinition
         DotNet.Build(parameters["project"]),
 
         StepParameterReference("afterBuild"),
-    };
+    ];
 }
 ```
 
@@ -364,13 +364,13 @@ To use the template, reference it in the following way:
 
 ```csharp
 Steps =
-{
+[
     StepTemplate("pipelines/install-dotnet.yml", new()
     {
         { "project", "src/MyProject.csproj" },
         { "version", "5.0.100" },
     })
-}
+]
 ```
 
 ## Definition libraries
@@ -381,34 +381,32 @@ Apart from obvious C# code re-use, you can also define sets of C# building block
 ```csharp
 class ProjectBuildSteps : StepLibrary
 {
-    public override List<Conditioned<Step>> Steps => new()
-    {
+    public override List<Conditioned<Step>> Steps =>
+    [
         DotNet.Install.Sdk("6.0.100"),
 
         If.IsBranch("main")
             .Step(DotNet.Restore.Projects("src/MyProject.sln")),
 
         DotNet.Build("src/MyProject.sln"),
-    };
+    ];
 }
 ```
 
 You can then reference this library in between build steps and it will get expanded into the pipeline's YAML:
 
 ```csharp
-...
     new Job("Build")
     {
         Steps =
-        {
+        [
             Script.Inline("echo 'Hello World'"),
 
             StepLibrary<ProjectBuildSteps>(),
 
             Script.Inline("echo 'Goodbye World'"),
-        }
+        ]
     }
-...
 ```
 
 More about this feature can be found [here (DefinitionLibraries.md)](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionLibraries.md).

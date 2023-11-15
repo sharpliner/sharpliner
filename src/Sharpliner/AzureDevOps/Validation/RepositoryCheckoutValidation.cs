@@ -44,7 +44,7 @@ internal class RepositoryCheckoutValidation : IDefinitionValidation
             .Where(repo => repo != "self" && repo != "none")
             .ToList();
 
-        if (!repositories.Any())
+        if (repositories.Count == 0)
         {
             return errors;
         }

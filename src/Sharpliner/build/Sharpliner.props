@@ -1,7 +1,7 @@
 <Project TreatAsLocalProperty="TaskFolder;TaskAssembly">
 
   <PropertyGroup>
-    <TaskAssembly>$(MSBuildThisFileDirectory)..\lib\net5.0\Sharpliner.dll</TaskAssembly>
+    <TaskAssembly>$(MSBuildThisFileDirectory)..\lib\net8.0\Sharpliner.dll</TaskAssembly>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
 

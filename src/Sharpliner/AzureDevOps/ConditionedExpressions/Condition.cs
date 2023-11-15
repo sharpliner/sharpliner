@@ -64,28 +64,14 @@ public abstract class Condition : IYamlConvertible
         emitter.Emit(new Scalar(Serialize()));
 }
 
-public class InlineCustomCondition : InlineCondition
+public class InlineCustomCondition(string condition) : InlineCondition
 {
-    private readonly string _condition;
-
-    public InlineCustomCondition(string condition)
-    {
-        _condition = condition;
-    }
-
-    internal override string Serialize() => _condition;
+    internal override string Serialize() => condition;
 }
 
-public class IfCustomCondition : IfCondition
+public class IfCustomCondition(string condition) : IfCondition
 {
-    private readonly string _condition;
-
-    public IfCustomCondition(string condition)
-    {
-        _condition = condition;
-    }
-
-    internal override string Serialize() => WrapTag(_condition);
+    internal override string Serialize() => WrapTag(condition);
 }
 
 public class InlineNotCondition : InlineCondition
@@ -416,28 +402,14 @@ public class IfLessCondition : IfStringCondition
     }
 }
 
-public class InlineCustomCondition<T> : InlineCondition<T>
+public class InlineCustomCondition<T>(string condition) : InlineCondition<T>
 {
-    private readonly string _condition;
-
-    public InlineCustomCondition(string condition)
-    {
-        _condition = condition;
-    }
-
-    internal override string Serialize() => _condition;
+    internal override string Serialize() => condition;
 }
 
-public class IfCustomCondition<T> : IfCondition<T>
+public class IfCustomCondition<T>(string condition) : IfCondition<T>
 {
-    private readonly string _condition;
-
-    public IfCustomCondition(string condition)
-    {
-        _condition = condition;
-    }
-
-    internal override string Serialize() => WrapTag(_condition);
+    internal override string Serialize() => WrapTag(condition);
 }
 
 public class InlineNotCondition<T> : InlineCondition<T>

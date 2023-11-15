@@ -192,7 +192,7 @@ public class TaskBuilderTests
                 {
                     Steps =
                     {
-                        Publish("Binary", "bin/Debug/net5.0/", "Publish artifact") with
+                        Publish("Binary", "bin/Debug/net8.0/", "Publish artifact") with
                         {
                             ContinueOnError = false,
                             ArtifactType = ArtifactType.Pipeline,
@@ -215,7 +215,7 @@ public class TaskBuilderTests
         jobs:
         - job: test
           steps:
-          - publish: bin/Debug/net5.0/
+          - publish: bin/Debug/net8.0/
             displayName: Publish artifact
             artifact: Binary
             continueOnError: false
@@ -283,23 +283,23 @@ public class TaskBuilderTests
                         Download.None,
                         Download.Current with
                         {
-                            Tags = new()
-                            {
+                            Tags =
+                            [
                                 "release",
                                 "nightly",
-                            },
+                            ],
                             Artifact = "Frontend",
-                            Patterns = new()
-                            {
+                            Patterns =
+                            [
                                 "frontend/**/*",
                                 "frontend.config",
-                            }
+                            ]
                         },
-                        Download.SpecificBuild("public", 56, 1745, "MyProject.CLI", patterns: new[] { "**/*.dll", "**/*.exe" }) with
+                        Download.SpecificBuild("public", 56, 1745, "MyProject.CLI", patterns: [ "**/*.dll", "**/*.exe" ]) with
                         {
                             AllowPartiallySucceededBuilds = true,
                             RetryDownloadCount = 3,
-                            Tags = new() { "non-release", "preview" },
+                            Tags = ["non-release", "preview"],
                         },
                         Download.LatestFromBranch("internal", 23, "refs/heads/develop", path: variables.Build.ArtifactStagingDirectory) with
                         {

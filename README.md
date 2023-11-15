@@ -38,7 +38,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
         Pr = new PrTrigger("main"),
 
         Variables =
-        {
+        [
             // YAML ${{ if }} conditions are available with handy macros that expand into the
             // expressions such as comparing branch names. We also have "else"
             If.IsBranch("net-6.0")
@@ -46,15 +46,15 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                 .Group("net6-keyvault")
             .Else
                 .Variable("DotnetVersion", "5.0.202"),
-        },
+        ],
 
         Jobs =
-        {
+        [
             new Job("Build")
             {
                 Pool = new HostedPool("Azure Pipelines", "windows-latest"),
                 Steps =
-                {
+                [
                     // Many tasks have helper methods for shorter notation
                     DotNet.Install.Sdk(variables["DotnetVersion"]),
 
@@ -73,9 +73,9 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                         // You can load script contents from a .ps1 file and inline them into YAML
                         // This way you can write scripts with syntax highlighting separately
                         .Step(Powershell.FromResourceFile("New-Report.ps1", "Create build report")),
-                }
+                ]
             }
-        },
+        ],
     };
 }
 ```
@@ -190,15 +190,15 @@ Apart from obvious C# code re-use, you can also define sets of C# building block
 ```csharp
 class ProjectBuildSteps : StepLibrary
 {
-    public override List<Conditioned<Step>> Steps => new()
-    {
+    public override List<Conditioned<Step>> Steps =>
+    [
         DotNet.Install.Sdk("6.0.100"),
 
         If.IsBranch("main")
             .Step(DotNet.Restore.Projects("src/MyProject.sln")),
 
         DotNet.Build("src/MyProject.sln"),
-    };
+    ];
 }
 ```
 
@@ -209,13 +209,13 @@ You can then reference this library in between build steps and it will get expan
     new Job("Build")
     {
         Steps =
-        {
+        [
             Script.Inline("echo 'Hello World'"),
 
             StepLibrary<ProjectBuildSteps>(),
 
             Script.Inline("echo 'Goodbye World'"),
-        }
+        ]
     }
 ...
 ```

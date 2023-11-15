@@ -10,8 +10,8 @@ public class LibraryTests
 {
     private class Job_Library : JobLibrary
     {
-        public override List<Conditioned<JobBase>> Jobs => new()
-        {
+        public override List<Conditioned<JobBase>> Jobs =>
+        [
             new Job("Start")
             {
                 Steps =
@@ -27,7 +27,7 @@ public class LibraryTests
                     Script.Inline("echo 'Goodbye World'")
                 }
             }
-        };
+        ];
     }
 
     private class JobReferencingPipeline : SimpleTestPipeline
@@ -67,15 +67,15 @@ public class LibraryTests
 
     private class DotNet_Step_Library : StepLibrary
     {
-        public override List<Conditioned<Step>> Steps => new()
-        {
+        public override List<Conditioned<Step>> Steps =>
+        [
             DotNet.Install.Sdk("6.0.100"),
 
             If.IsBranch("main")
                 .Step(DotNet.Restore.Projects("src/MyProject.sln")),
 
             DotNet.Build("src/MyProject.sln"),
-        };
+        ];
     }
 
     private class SimpleDotNetPipeline : SimpleTestPipeline
@@ -133,22 +133,15 @@ public class LibraryTests
             """);
     }
 
-    private class Variable_Library : VariableLibrary
+    private class Variable_Library(string env) : VariableLibrary
     {
-        private readonly string _env;
+        public override List<Conditioned<VariableBase>> Variables =>
+        [
+            Variable($"connection-string-{env}", $"{env}_123"),
 
-        public Variable_Library(string env)
-        {
-            _env = env;
-        }
-
-        public override List<Conditioned<VariableBase>> Variables => new()
-        {
-            Variable($"connection-string-{_env}", $"{_env}_123"),
-
-            If.IsBranch(_env)
+            If.IsBranch(env)
                 .Group("prod-kv")
-        };
+        ];
     }
 
     private class ConditionalPipeline : SimpleTestPipeline

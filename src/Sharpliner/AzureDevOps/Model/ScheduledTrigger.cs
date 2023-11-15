@@ -39,7 +39,7 @@ public record ScheduledTrigger
 
     public ScheduledTrigger(string cronSchedule, params string[] branches)
     {
-        if (branches.Any())
+        if (branches.Length > 0)
         {
             Branches = new InclusionRule
             {
