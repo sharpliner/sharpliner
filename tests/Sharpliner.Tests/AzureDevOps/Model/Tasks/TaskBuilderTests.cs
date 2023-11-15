@@ -295,7 +295,7 @@ public class TaskBuilderTests
                                 "frontend.config",
                             ]
                         },
-                        Download.SpecificBuild("public", 56, 1745, "MyProject.CLI", patterns: new[] { "**/*.dll", "**/*.exe" }) with
+                        Download.SpecificBuild("public", 56, 1745, "MyProject.CLI", patterns: [ "**/*.dll", "**/*.exe" ]) with
                         {
                             AllowPartiallySucceededBuilds = true,
                             RetryDownloadCount = 3,

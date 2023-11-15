@@ -53,7 +53,7 @@ public class TemplateTests
         public override List<Parameter> Parameters =>
         [
             StringParameter("project"),
-            StringParameter("version", allowedValues: new[] { "5.0.100", "5.0.102" }),
+            StringParameter("version", allowedValues: [ "5.0.100", "5.0.102" ]),
             BooleanParameter("skipBuild"),
             BooleanParameter("useNugetOrg", defaultValue: false),
             BooleanParameter("restore", defaultValue: true),
