@@ -224,7 +224,7 @@ More about this feature can be found [here (DefinitionLibraries.md)](https://git
 
 
 ### Sourcing scripts from files
-When you need to add cmd, PowerShell or bash steps into your pipeline, mainatining these bits inside YAML can be error prone.
+When you need to add cmd, PowerShell or bash steps into your pipeline, maintaining these bits inside YAML can be error prone.
 With Sharpliner you can keep scripts in their own files (`.ps1`, `.sh`..) where you get the natural environment you're used to such as syntax highlighting.
 Sharpliner gives you APIs to load these on build time and include them inline:
 
