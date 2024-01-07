@@ -15,8 +15,9 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 /// </summary>
 public abstract class Condition : IYamlConvertible
 {
-    protected Condition()
+    public Condition()
     {
+        // TODO: Remove
     }
 
     internal abstract string Serialize();
@@ -35,6 +36,13 @@ public abstract class Condition : IYamlConvertible
     internal virtual string TagEnd => ExpressionEnd;
 
     internal Conditioned? Parent { get; set; }
+
+    internal EachExpression? EachExpression
+    {
+        get;
+        set;
+    }
+
 
     public static implicit operator string(Condition value) => value.Serialize();
     public override string ToString() => this;

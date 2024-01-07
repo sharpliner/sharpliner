@@ -478,7 +478,7 @@ public abstract class AzureDevOpsDefinition
 
     #endregion
 
-    #region Conditions
+    #region Conditions, each expressions, ..
 
     /// <summary>
     /// Start an ${{ if () }} section.
@@ -561,6 +561,11 @@ public abstract class AzureDevOpsDefinition
     protected static InlineCondition IsPullRequest => new InlineBuildReasonCondition("PullRequest", true);
 
     protected static InlineCondition IsNotPullRequest => new InlineBuildReasonCondition("PullRequest", false);
+
+    /// <summary>
+    /// Start an ${{ each var in collection }} section.
+    /// </summary>
+    protected static EachExpression Each(string iterator, string collection) => new(iterator, collection);
 
     #endregion
 

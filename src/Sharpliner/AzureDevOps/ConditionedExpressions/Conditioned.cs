@@ -178,7 +178,33 @@ public record Conditioned<T> : Conditioned
             }
 
             return Parent as Conditioned<T>
-                ?? throw new InvalidOperationException("You have called EndIf on a top-level statement, EndIf can only be used to return from a nested definition");
+                ?? throw new InvalidOperationException(
+                    $"You have called {nameof(EndIf)} on a top-level statement, " +
+                    $"{nameof(EndIf)} can only be used to return from a nested definition");
+        }
+    }
+
+    public Conditioned<T> EndEach
+    {
+        get
+        {
+            if (Condition?.EachExpression != null)
+            {
+                Condition.EachExpression = null;
+                return this;
+            }
+
+            // If we're top-level, we create a fake new top with empty definition to collect all the definitions
+            if (Parent == null)
+            {
+                Parent = new Conditioned<T>(Condition);
+                Parent.Definitions.Add(this);
+            }
+
+            return Parent as Conditioned<T>
+                ?? throw new InvalidOperationException(
+                    $"You have called {nameof(EndEach)} on a top-level statement, " +
+                    $"{nameof(EndEach)} must only be used after Each");
         }
     }
 
@@ -252,6 +278,12 @@ public record Conditioned<T> : Conditioned
         }
         else if (Definitions.Count > 0)
         {
+            emitter.Emit(new MappingStart());
+        }
+
+        if (Condition?.EachExpression != null)
+        {
+            emitter.Emit(new Scalar(Condition.EachExpression.ToString()));
             emitter.Emit(new MappingStart());
         }
 
