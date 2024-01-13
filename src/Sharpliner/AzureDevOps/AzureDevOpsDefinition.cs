@@ -565,7 +565,7 @@ public abstract class AzureDevOpsDefinition
     /// <summary>
     /// Start an ${{ each var in collection }} section.
     /// </summary>
-    protected static EachExpression Each(string iterator, string collection) => new(iterator, collection);
+    protected static EachBlock Each(string iterator, string collection) => new(iterator, collection);
 
     #endregion
 

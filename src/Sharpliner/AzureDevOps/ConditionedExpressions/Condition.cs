@@ -15,11 +15,6 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 /// </summary>
 public abstract class Condition : IYamlConvertible
 {
-    public Condition()
-    {
-        // TODO: Remove
-    }
-
     internal abstract string Serialize();
 
     internal const string ExpressionStart = "${{ ";
@@ -42,7 +37,6 @@ public abstract class Condition : IYamlConvertible
         get;
         set;
     }
-
 
     public static implicit operator string(Condition value) => value.Serialize();
     public override string ToString() => this;

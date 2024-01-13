@@ -316,6 +316,13 @@ public record Conditioned<T> : Conditioned
             emitter.Emit(new SequenceStart(AnchorName.Empty, TagName.Empty, true, SequenceStyle.Block));
         }
 
+        if (Condition?.EachExpression != null)
+        {
+            emitter.Emit(new MappingStart());
+            emitter.Emit(new Scalar(Condition.EachExpression.ToString()));
+            emitter.Emit(new SequenceStart(AnchorName.Empty, TagName.Empty, true, SequenceStyle.Block));
+        }
+
         // We are first serializing us. We can be
         //   - a condition-less definition (top level or leaf) => serialize value inside Definition
         //   - a template => serialize the special shape of template + parameters
@@ -325,6 +332,12 @@ public record Conditioned<T> : Conditioned
         foreach (var childDefinition in Definitions)
         {
             nestedObjectSerializer(childDefinition);
+        }
+
+        if (Condition?.EachExpression != null)
+        {
+            emitter.Emit(new SequenceEnd());
+            emitter.Emit(new MappingEnd());
         }
 
         if (Condition != null)

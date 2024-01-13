@@ -13,26 +13,26 @@ public class EachExpressionTests
         {
             Stages =
             {
-                //Each("env", "parameters.environments")
-                //    .StageTemplate("../stages/provision.yml"), //, new()
-                    //{
-                //        { "environment", "${{ env }}" },
-                //        {
-                //            If.Equal("env.deploymentEnvironmentName", "''"), new TemplateParameters()
-                //            {
-                //                { "deploymentEnvironment", parameters["applicationName"] + " - env.name"  }
-                //            }
-                //        },
-                //        {
-                //            "${{ else }}",
-                //            // TODO: Else,
-                //            new TemplateParameters()
-                //            {
-                //                { "deploymentEnvironment", "env.deploymentEnvironmentName" }
-                //            }
-                //        },
-                //        { "regions", parameters["regions"] },
-                    //}),
+                Each("env", "parameters.environments")
+                    .StageTemplate("../stages/provision.yml", new()
+                    {
+                        { "environment", "${{ env }}" },
+                        {
+                            If.Equal("env.deploymentEnvironmentName", "''"), new TemplateParameters()
+                            {
+                                { "deploymentEnvironment", parameters["applicationName"] + " - env.name"  }
+                            }
+                        },
+                        {
+                            "${{ else }}",
+                            // TODO: Else,
+                            new TemplateParameters()
+                            {
+                                { "deploymentEnvironment", "env.deploymentEnvironmentName" }
+                            }
+                        },
+                        { "regions", parameters["regions"] },
+                    }),
 
                 If.IsBranch("main")
                     .Each("env", "parameters.stages")
@@ -52,15 +52,14 @@ public class EachExpressionTests
     public void Each_Expression_Test()
     {
         var pipeline = new Each_Expression_Test_Pipeline();
-        var stageDef = pipeline.Pipeline.Stages.First();
         pipeline.Serialize().Trim().Should().Be(
             """
             stages:
             - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-                - ${{ each env in parameters.stages }}:
-                  - stage: stage-${{ env.name }}
+              - ${{ each env in parameters.stages }}:
+                - stage: stage-${{ env.name }}
             
-                  - stage: stage2-${{ env.name }}
+                - stage: stage2-${{ env.name }}
             """);
     }
 }
