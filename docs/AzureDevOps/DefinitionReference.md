@@ -274,6 +274,47 @@ If.And(IsNotPullRequest, IsBranch("production"))
 If.Condition("containsValue(...)")
 ```
 
+## Each expression
+
+The `${{ each var in collection }}` expression is also supported. Similarly to `If` and `EndIf`, you can use `Each` and `EndEach`:
+
+```csharp
+Stages =
+{
+    If.IsBranch("main")
+        .Each("env", "parameters.stages")
+            .Stage(new Stage("stage-${{ env.name }}"))
+            .Stage(new Stage("stage2-${{ env.name }}")
+            {
+                Jobs =
+                {
+                    Each("foo", "bar")
+                        .Job(new Job("job-${{ foo }}"))
+                    .EndEach
+                    .If.Equal("foo", "bar")
+                        .Job(new Job("job2-${{ foo }}"))
+                }
+            })
+}
+```
+
+generates the following YAML:
+
+```yaml
+stages:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - ${{ each env in parameters.stages }}:
+    - stage: stage-${{ env.name }}
+
+    - stage: stage2-${{ env.name }}
+      jobs:
+      - ${{ each foo in bar }}:
+        - job: job-${{ foo }}
+
+      - ${{ if eq('foo', 'bar') }}:
+        - job: job2-${{ foo }}
+```
+
 ## Templates
 
 Azure pipelines allow you to [define a parametrized template](https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#template-references) for a **stage**, **job**, **step** or **variables** and then insert those templates in your pipeline.
