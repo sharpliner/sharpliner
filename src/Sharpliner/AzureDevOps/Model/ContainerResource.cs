@@ -68,7 +68,6 @@ public record ContainerResource
     public ContainerResource(string identifier)
     {
         Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
-        Pipeline.ValidateName(identifier);
     }
 }
 

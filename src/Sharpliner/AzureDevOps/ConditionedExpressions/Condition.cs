@@ -15,16 +15,11 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 /// </summary>
 public abstract class Condition : IYamlConvertible
 {
-    protected Condition()
-    {
-    }
-
-    internal abstract string Serialize();
-
     internal const string ExpressionStart = "${{ ";
+    internal const string ExpressionEnd = " }}";
+
     protected const string IfTagStart = $"{ExpressionStart}if ";
     protected const string ElseTagStart = $"{ExpressionStart}else";
-    internal const string ExpressionEnd = " }}";
 
     private const string VariableIndexAccessStart = "variables[";
     private const string VariablePropertyAccessStart = "variables.";
@@ -35,6 +30,14 @@ public abstract class Condition : IYamlConvertible
     internal virtual string TagEnd => ExpressionEnd;
 
     internal Conditioned? Parent { get; set; }
+
+    internal EachExpression? EachExpression
+    {
+        get;
+        set;
+    }
+
+    internal abstract string Serialize();
 
     public static implicit operator string(Condition value) => value.Serialize();
     public override string ToString() => this;

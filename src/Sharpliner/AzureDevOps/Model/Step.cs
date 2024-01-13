@@ -33,11 +33,6 @@ public abstract record Step
         get => _name;
         init
         {
-            if (value is not ConditionedParameterReference<string> && value.Definition is not null)
-            {
-                Pipeline.ValidateName(value.Definition);
-            }
-
             _name = value;
         }
     }

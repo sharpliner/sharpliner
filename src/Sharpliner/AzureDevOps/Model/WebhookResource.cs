@@ -32,7 +32,6 @@ public record WebhookResource
     public WebhookResource(string identifier)
     {
         Identifier = identifier ?? throw new System.ArgumentNullException(nameof(identifier));
-        Pipeline.ValidateName(Identifier);
     }
 }
 

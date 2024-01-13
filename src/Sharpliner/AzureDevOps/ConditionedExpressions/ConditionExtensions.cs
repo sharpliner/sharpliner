@@ -316,4 +316,10 @@ public static class ConditionExtensions
 
     public static Conditioned<T> Value<T>(this IfCondition condition, T value)
         => Conditioned.Link(condition, value);
+
+    public static IfCondition Each(this IfCondition condition, string iterator, string collection)
+    {
+        condition.EachExpression = new(iterator, collection);
+        return condition;
+    }
 }

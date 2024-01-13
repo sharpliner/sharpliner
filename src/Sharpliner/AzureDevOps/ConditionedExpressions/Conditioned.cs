@@ -178,7 +178,33 @@ public record Conditioned<T> : Conditioned
             }
 
             return Parent as Conditioned<T>
-                ?? throw new InvalidOperationException("You have called EndIf on a top-level statement, EndIf can only be used to return from a nested definition");
+                ?? throw new InvalidOperationException(
+                    $"You have called {nameof(EndIf)} on a top-level statement, " +
+                    $"{nameof(EndIf)} can only be used to return from a nested definition");
+        }
+    }
+
+    public Conditioned<T> EndEach
+    {
+        get
+        {
+            if (Condition?.EachExpression != null)
+            {
+                Condition.EachExpression = null;
+                return this;
+            }
+
+            // If we're top-level, we create a fake new top with empty definition to collect all the definitions
+            if (Parent == null)
+            {
+                Parent = new Conditioned<T>();
+                Parent.Definitions.Add(this);
+            }
+
+            return Parent as Conditioned<T>
+                ?? throw new InvalidOperationException(
+                    $"You have called {nameof(EndEach)} on a top-level statement, " +
+                    $"{nameof(EndEach)} must only be used after Each");
         }
     }
 
@@ -255,6 +281,12 @@ public record Conditioned<T> : Conditioned
             emitter.Emit(new MappingStart());
         }
 
+        if (Condition?.EachExpression != null)
+        {
+            emitter.Emit(new Scalar(Condition.EachExpression.ToString()));
+            emitter.Emit(new MappingStart());
+        }
+
         // We are first serializing us. We can be
         //   - a condition-less definition (top level or leaf) => serialize value inside Definition
         //   - a template => serialize the special shape of template + parameters
@@ -284,6 +316,13 @@ public record Conditioned<T> : Conditioned
             emitter.Emit(new SequenceStart(AnchorName.Empty, TagName.Empty, true, SequenceStyle.Block));
         }
 
+        if (Condition?.EachExpression != null)
+        {
+            emitter.Emit(new MappingStart());
+            emitter.Emit(new Scalar(Condition.EachExpression.ToString()));
+            emitter.Emit(new SequenceStart(AnchorName.Empty, TagName.Empty, true, SequenceStyle.Block));
+        }
+
         // We are first serializing us. We can be
         //   - a condition-less definition (top level or leaf) => serialize value inside Definition
         //   - a template => serialize the special shape of template + parameters
@@ -293,6 +332,12 @@ public record Conditioned<T> : Conditioned
         foreach (var childDefinition in Definitions)
         {
             nestedObjectSerializer(childDefinition);
+        }
+
+        if (Condition?.EachExpression != null)
+        {
+            emitter.Emit(new SequenceEnd());
+            emitter.Emit(new MappingEnd());
         }
 
         if (Condition != null)

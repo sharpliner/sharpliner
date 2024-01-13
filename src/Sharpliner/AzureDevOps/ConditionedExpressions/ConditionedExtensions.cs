@@ -104,37 +104,37 @@ public static class ConditionedExtensions
     /// <summary>
     /// Creates a new stage.
     /// </summary>
-    public static Conditioned<Stage> Stage(this Conditioned<Stage> condition, Stage stage)
+    public static Conditioned<Stage> Stage(this Conditioned<Stage> conditionedDefinition, Stage stage)
     {
-        condition.Definitions.Add(new Conditioned<Stage>(definition: stage));
-        return condition;
+        conditionedDefinition.Definitions.Add(new Conditioned<Stage>(definition: stage));
+        return conditionedDefinition;
     }
 
     /// <summary>
     /// Creates a new step.
     /// </summary>
-    public static Conditioned<Step> Step(this Conditioned<Step> condition, Step step)
+    public static Conditioned<Step> Step(this Conditioned<Step> conditionedDefinition, Step step)
     {
-        condition.Definitions.Add(new Conditioned<Step>(definition: step));
-        return condition;
+        conditionedDefinition.Definitions.Add(new Conditioned<Step>(definition: step));
+        return conditionedDefinition;
     }
 
     /// <summary>
     /// Creates a new job.
     /// </summary>
-    public static Conditioned<JobBase> Job(this Conditioned<JobBase> condition, JobBase job)
+    public static Conditioned<JobBase> Job(this Conditioned<JobBase> conditionedDefinition, JobBase job)
     {
-        condition.Definitions.Add(new Conditioned<JobBase>(definition: job));
-        return condition;
+        conditionedDefinition.Definitions.Add(new Conditioned<JobBase>(definition: job));
+        return conditionedDefinition;
     }
 
     /// <summary>
     /// Creates a new deployment job.
     /// </summary>
-    public static Conditioned<JobBase> DeploymentJob(this Conditioned<JobBase> condition, JobBase job)
+    public static Conditioned<JobBase> DeploymentJob(this Conditioned<JobBase> conditionedDefinition, JobBase job)
     {
-        condition.Definitions.Add(new Conditioned<JobBase>(definition: job));
-        return condition;
+        conditionedDefinition.Definitions.Add(new Conditioned<JobBase>(definition: job));
+        return conditionedDefinition;
     }
 
     /// <summary>
