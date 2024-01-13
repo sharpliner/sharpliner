@@ -197,7 +197,7 @@ public record Conditioned<T> : Conditioned
             // If we're top-level, we create a fake new top with empty definition to collect all the definitions
             if (Parent == null)
             {
-                Parent = new Conditioned<T>(Condition);
+                Parent = new Conditioned<T>();
                 Parent.Definitions.Add(this);
             }
 

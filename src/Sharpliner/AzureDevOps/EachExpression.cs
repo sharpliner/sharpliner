@@ -8,13 +8,14 @@ public class EachExpression(string iterator, string collection)
     public string Collection { get; } = collection;
 
     public override string ToString()
-        => $"{Condition.ExpressionStart}{GetEachExpression(Iterator, Collection)}{Condition.ExpressionEnd}";
+        => GetEachExpression(Iterator, Collection);
 
     internal static string GetEachExpression(string iterator, string collection)
-        => $"each {iterator} in {collection}";
+        => $"{Condition.ExpressionStart}each {iterator} in {collection}{Condition.ExpressionEnd}";
 }
 
 public class EachBlock(string iterator, string collection) : IfCondition
 {
-    internal override string Serialize() => WrapTag(EachExpression.GetEachExpression(iterator, collection));
+    internal override string Serialize() => EachExpression.GetEachExpression(iterator, collection);
+    internal override string TagStart => ExpressionStart;
 }

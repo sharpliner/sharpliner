@@ -45,7 +45,7 @@ public class EachExpressionTests
                                 Each("foo", "bar")
                                     .Job(new Job("job-${{ foo }}"))
                                 .EndEach
-                                .If.IsBranch("main")
+                                .If.Equal("foo", "bar")
                                     .Job(new Job("job2-${{ foo }}"))
                             }
                         }),
@@ -79,7 +79,7 @@ public class EachExpressionTests
                   - ${{ each foo in bar }}:
                     - job: job-${{ foo }}
 
-                  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+                  - ${{ if eq('foo', 'bar') }}:
                     - job: job2-${{ foo }}
             """);
     }
