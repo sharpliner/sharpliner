@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Xunit;
 
@@ -20,15 +19,14 @@ public class EachExpressionTests
                         {
                             If.Equal("env.deploymentEnvironmentName", "''"), new TemplateParameters()
                             {
-                                { "deploymentEnvironment", parameters["applicationName"] + " - env.name"  }
+                                { "deploymentEnvironment", parameters["applicationName"] + "-${{ env.name }}"  }
                             }
                         },
                         {
                             "${{ else }}",
-                            // TODO: Else,
                             new TemplateParameters()
                             {
-                                { "deploymentEnvironment", "env.deploymentEnvironmentName" }
+                                { "deploymentEnvironment", "${{ env.deploymentEnvironmentName }}" }
                             }
                         },
                         { "regions", parameters["regions"] },
@@ -42,7 +40,14 @@ public class EachExpressionTests
                         })
                         .Stage(new Stage("stage2-${{ env.name }}")
                         {
-
+                            Jobs =
+                            {
+                                Each("foo", "bar")
+                                    .Job(new Job("job-${{ foo }}"))
+                                .EndEach
+                                .If.IsBranch("main")
+                                    .Job(new Job("job2-${{ foo }}"))
+                            }
                         }),
             }
         };
@@ -55,11 +60,27 @@ public class EachExpressionTests
         pipeline.Serialize().Trim().Should().Be(
             """
             stages:
+            - ${{ each env in parameters.environments }}:
+              - template: ../stages/provision.yml
+                parameters:
+                  environment: ${{ env }}
+                  ${{ if eq('env.deploymentEnvironmentName', '') }}:
+                    deploymentEnvironment: ${{ parameters.applicationName }}-${{ env.name }}
+                  ${{ else }}:
+                    deploymentEnvironment: ${{ env.deploymentEnvironmentName }}
+                  regions: ${{ parameters.regions }}
+
             - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
               - ${{ each env in parameters.stages }}:
                 - stage: stage-${{ env.name }}
-            
+
                 - stage: stage2-${{ env.name }}
+                  jobs:
+                  - ${{ each foo in bar }}:
+                    - job: job-${{ foo }}
+
+                  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+                    - job: job2-${{ foo }}
             """);
     }
 }

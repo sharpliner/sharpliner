@@ -95,8 +95,6 @@ public abstract record JobBase : IDependsOn
 
     protected JobBase(string name, string? displayName = null)
     {
-        Pipeline.ValidateName(name);
-
         Name = name ?? throw new ArgumentNullException(nameof(name));
 
         if (displayName != null)

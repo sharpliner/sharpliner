@@ -110,14 +110,6 @@ public record Pipeline : PipelineBase
         => Stages.GetStageValidations()
             .Append(new RepositoryCheckoutValidation(this))
             .ToList();
-
-    internal static void ValidateName(string name)
-    {
-        if (!AzureDevOpsDefinition.NameRegex.IsMatch(name))
-        {
-            throw new FormatException($"Invalid identifier '{name}'! Only A-Z, a-z, 0-9, and underscore are allowed.");
-        }
-    }
 }
 
 /// <summary>
