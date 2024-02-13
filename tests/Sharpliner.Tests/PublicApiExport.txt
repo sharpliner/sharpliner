@@ -384,6 +384,16 @@
         public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference ResourceId { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference ResourceName { get; }
     }
+    public class Extends : System.IEquatable<Sharpliner.AzureDevOps.Extends>
+    {
+        public Extends(string template, Sharpliner.AzureDevOps.TemplateParameters? parameters = null) { }
+        public Sharpliner.AzureDevOps.TemplateParameters? Parameters { get; set; }
+        public string Template { get; }
+    }
+    public abstract class ExtendsPipelineDefinition : Sharpliner.AzureDevOps.PipelineDefinitionBase<Sharpliner.AzureDevOps.PipelineWithExtends>
+    {
+        protected ExtendsPipelineDefinition() { }
+    }
     public class HostedPool : Sharpliner.AzureDevOps.Pool, System.IEquatable<Sharpliner.AzureDevOps.HostedPool>
     {
         public HostedPool(string? name = null, string? vmImage = null) { }
@@ -724,6 +734,17 @@
     {
         protected override string Prefix { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Workspace { get; }
+    }
+    [System.Runtime.CompilerServices.RequiredMember]
+    public class PipelineWithExtends : Sharpliner.AzureDevOps.PipelineBase, System.IEquatable<Sharpliner.AzureDevOps.PipelineWithExtends>
+    {
+        [System.Obsolete("Constructors of types with required members are not supported in this version of " +
+            "your compiler.", true)]
+        [System.Runtime.CompilerServices.CompilerFeatureRequired("RequiredMembers")]
+        public PipelineWithExtends() { }
+        [System.Runtime.CompilerServices.RequiredMember]
+        [YamlDotNet.Serialization.YamlMember(Order=90)]
+        public Sharpliner.AzureDevOps.Extends Extends { get; set; }
     }
     public class Pool : System.IEquatable<Sharpliner.AzureDevOps.Pool>
     {

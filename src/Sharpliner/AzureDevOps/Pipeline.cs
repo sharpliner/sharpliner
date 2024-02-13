@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
@@ -110,6 +109,26 @@ public record Pipeline : PipelineBase
         => Stages.GetStageValidations()
             .Append(new RepositoryCheckoutValidation(this))
             .ToList();
+}
+
+/// <summary>
+/// Model for an Azure DevOps pipeline that extends a template.
+/// This is a model only! To define a pipeline, inherit from one of the *PipelineDefinition classes.
+/// </summary>
+public record PipelineWithExtends : PipelineBase
+{
+    /// <summary>
+    /// Specifies the template that this pipeline extends.
+    /// </summary>
+    [YamlMember(Order = 90)]
+    [DisallowNull]
+#if NET8_0_OR_GREATER
+    public required Extends Extends { get; init; }
+#else
+    public Extends Extends { get; init; } = null!;
+#endif
+
+    internal override IReadOnlyCollection<IDefinitionValidation> Validations => [];
 }
 
 /// <summary>
