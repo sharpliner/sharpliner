@@ -20,10 +20,11 @@ public record Extends
     /// Definition of the extends keyword in Azure DevOps pipelines.
     /// https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/extends?view=azure-pipelines
     /// </summary>
-    /// <param name="temlate">Path to the template that is being extended</param>
-    public Extends(string temlate, TemplateParameters? parameters = null)
+    /// <param name="template">Path to the template that is being extended</param>
+    /// <param name="parameters">Values for template parameters</param>
+    public Extends(string template, TemplateParameters? parameters = null)
     {
-        Template = temlate;
+        Template = template;
         Parameters = parameters;
     }
 }

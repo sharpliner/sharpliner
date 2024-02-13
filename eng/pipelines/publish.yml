@@ -52,7 +52,7 @@ jobs:
     artifact: Sharpliner
 
   - ${{ if and(ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main')) }}:
-    - task: NuGetAuthenticate@1
+    - task: NuGetAuthenticate@0
       displayName: Authenticate NuGet
 
     - task: NuGetCommand@2
