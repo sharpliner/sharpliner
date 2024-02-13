@@ -59,7 +59,8 @@ class PullRequestPipeline : PipelineDefinition
 }
 ```
 
-You can also decide to override `SingleStagePipelineDefinition` in case you have a simpler pipeline with only a single stage.
+You can also decide to override `SingleStagePipelineDefinition` in case you have a simpler pipeline with only a single stage.  
+You can also overried `PipelineWithExtends` to [extend an existing template](https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/extends?view=azure-pipelines).
 
 > **Note:** Sometimes you need to generate a large number of similar YAML files dynamically. In this case, please see [DefinitionCollections.md](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionCollections.md).
 
