@@ -386,7 +386,7 @@
     }
     public class Extends : System.IEquatable<Sharpliner.AzureDevOps.Extends>
     {
-        public Extends(string temlate, Sharpliner.AzureDevOps.TemplateParameters? parameters = null) { }
+        public Extends(string template, Sharpliner.AzureDevOps.TemplateParameters? parameters = null) { }
         public Sharpliner.AzureDevOps.TemplateParameters? Parameters { get; set; }
         public string Template { get; }
     }
