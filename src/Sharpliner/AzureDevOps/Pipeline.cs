@@ -122,7 +122,12 @@ public record PipelineWithExtends : PipelineBase
     /// Specifies the template that this pipeline extends.
     /// </summary>
     [YamlMember(Order = 90)]
-    public /*required TODO*/ Extends Extends { get; init; }
+    [DisallowNull]
+#if NET8_0_OR_GREATER
+    public required Extends Extends { get; init; }
+#else
+    public Extends Extends { get; init; } = null!;
+#endif
 
     internal override IReadOnlyCollection<IDefinitionValidation> Validations => [];
 }
