@@ -12,17 +12,25 @@ namespace Sharpliner.AzureDevOps;
 #region Pipelines - override these to define pipelines
 
 /// <summary>
-/// Inherit from this class to define a full Azure DevOps pipeline
-/// For a pipeline with only a single stage, consider using SingleStagePipelineDefinition
+/// Inherit from this class to define a full Azure DevOps pipeline.
+/// For a pipeline with only a single stage, consider using SingleStagePipelineDefinition.
 /// </summary>
 public abstract class PipelineDefinition : PipelineDefinitionBase<Pipeline>
 {
 }
 
 /// <summary>
-/// Inherit from this class to define a pipeline with a single stage where you only define jobs
+/// Inherit from this class to define a pipeline with a single stage where you only define jobs.
 /// </summary>
 public abstract class SingleStagePipelineDefinition : PipelineDefinitionBase<SingleStagePipeline>
+{
+}
+
+/// <summary>
+/// Inherit from this class to define a pipeline that extends a template.
+/// https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/extends?view=azure-pipelines
+/// </summary>
+public abstract class ExtendsPipelineDefinition : PipelineDefinitionBase<PipelineWithExtends>
 {
 }
 
