@@ -36,7 +36,7 @@ class PublishPipeline : SingleStagePipelineDefinition
                         displayName: "Publish build artifacts"),
 
                     If.And(IsNotPullRequest, IsBranch("main"))
-                        .Step(Task("NuGetAuthenticate@0", "Authenticate NuGet"))
+                        .Step(Task("NuGetAuthenticate@1", "Authenticate NuGet"))
                         .Step(Task("NuGetCommand@2", "Publish to nuget.org") with
                         {
                             Inputs = new()
