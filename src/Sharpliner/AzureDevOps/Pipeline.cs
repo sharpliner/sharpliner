@@ -2,7 +2,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
-using Sharpliner.AzureDevOps.Model;
 using Sharpliner.AzureDevOps.Validation;
 using Sharpliner.Common;
 using YamlDotNet.Serialization;

@@ -384,6 +384,12 @@
         public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference ResourceId { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference ResourceName { get; }
     }
+    public class Extends : System.IEquatable<Sharpliner.AzureDevOps.Extends>
+    {
+        public Extends(string temlate, Sharpliner.AzureDevOps.TemplateParameters? parameters = null) { }
+        public Sharpliner.AzureDevOps.TemplateParameters? Parameters { get; set; }
+        public string Template { get; }
+    }
     public abstract class ExtendsPipelineDefinition : Sharpliner.AzureDevOps.PipelineDefinitionBase<Sharpliner.AzureDevOps.PipelineWithExtends>
     {
         protected ExtendsPipelineDefinition() { }
@@ -729,11 +735,16 @@
         protected override string Prefix { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Workspace { get; }
     }
+    [System.Runtime.CompilerServices.RequiredMember]
     public class PipelineWithExtends : Sharpliner.AzureDevOps.PipelineBase, System.IEquatable<Sharpliner.AzureDevOps.PipelineWithExtends>
     {
+        [System.Obsolete("Constructors of types with required members are not supported in this version of " +
+            "your compiler.", true)]
+        [System.Runtime.CompilerServices.CompilerFeatureRequired("RequiredMembers")]
         public PipelineWithExtends() { }
+        [System.Runtime.CompilerServices.RequiredMember]
         [YamlDotNet.Serialization.YamlMember(Order=90)]
-        public Sharpliner.AzureDevOps.Model.Extends Extends { get; set; }
+        public Sharpliner.AzureDevOps.Extends Extends { get; set; }
     }
     public class Pool : System.IEquatable<Sharpliner.AzureDevOps.Pool>
     {
@@ -1457,15 +1468,6 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces
     public interface IRuntimeExpression
     {
         string RuntimeExpression { get; }
-    }
-}
-namespace Sharpliner.AzureDevOps.Model
-{
-    public class Extends : System.IEquatable<Sharpliner.AzureDevOps.Model.Extends>
-    {
-        public Extends(string temlate, Sharpliner.AzureDevOps.TemplateParameters? parameters = null) { }
-        public Sharpliner.AzureDevOps.TemplateParameters? Parameters { get; set; }
-        public string Template { get; }
     }
 }
 namespace Sharpliner.AzureDevOps.Tasks

@@ -1,4 +1,4 @@
-﻿namespace Sharpliner.AzureDevOps.Model;
+﻿namespace Sharpliner.AzureDevOps;
 
 /// <summary>
 /// Definition of the extends keyword in Azure DevOps pipelines.
