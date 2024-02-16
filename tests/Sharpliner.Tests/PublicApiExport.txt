@@ -26,6 +26,7 @@
         protected static Sharpliner.AzureDevOps.Tasks.CheckoutTaskBuilder Checkout { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder DotNet { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DownloadTaskBuilder Download { get; }
+        protected static Sharpliner.AzureDevOps.ElseCondition Else { get; }
         protected static Sharpliner.AzureDevOps.ConditionedExpressions.IfConditionBuilder If { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsNotPullRequest { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsPullRequest { get; }
@@ -366,6 +367,10 @@
         public string Collection { get; }
         public string Iterator { get; }
         public override string ToString() { }
+    }
+    public class ElseCondition : Sharpliner.AzureDevOps.ConditionedExpressions.Condition
+    {
+        public ElseCondition() { }
     }
     public class Environment : System.IEquatable<Sharpliner.AzureDevOps.Environment>
     {
