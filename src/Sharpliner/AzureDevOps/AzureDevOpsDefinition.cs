@@ -486,6 +486,11 @@ public abstract class AzureDevOpsDefinition
     protected static IfConditionBuilder If => new();
 
     /// <summary>
+    /// Start an ${{ else () }} section.
+    /// </summary>
+    protected static ElseCondition Else => new();
+
+    /// <summary>
     /// Use this to specify any custom condition (in case you miss some operator or expression).
     /// </summary>
     protected static InlineCondition Condition(string condition) => new InlineCustomCondition(condition);

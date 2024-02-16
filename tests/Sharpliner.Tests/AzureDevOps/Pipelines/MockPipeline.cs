@@ -1,4 +1,5 @@
 ﻿using Sharpliner.AzureDevOps;
+using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
@@ -63,30 +64,23 @@ internal class MockPipeline : TestPipeline
 
                             Steps =
                             {
-                                Bash.Inline(
-                                    "curl -L https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh",
-                                    "chmod +x dotnet-install.sh",
-                                    "./dotnet-install.sh --channel $(DotnetVersion) --install-dir ./.dotnet") with
+                                DotNet.Pack("ProjectFile") with
                                 {
-                                    DisplayName = "Restore .NET"
-                                },
-
-                                Bash.Inline("./.dotnet/dotnet build src/MySolution.sln -c $(Configuration)") with
-                                {
-                                    DisplayName = "Build .sln"
-                                },
-
-                                Bash.Inline("./.dotnet/dotnet test src/MySolution.sln") with
-                                {
-                                    DisplayName = "Run unit tests",
-                                    ContinueOnError = true,
-                                    Condition = IsPullRequest,
-                                },
-
-                                Bash.Inline("./upload.sh ./**/TestResult.xml") with
-                                {
-                                    DisplayName = "Upload tests results",
-                                    Condition = IsPullRequest,
+                                    Inputs = new()
+                                    {
+                                        {
+                                            If.Equal(parameters["IncludeSymbols"], "true"), new TaskInputs()
+                                            {
+                                                ["arguments"] = "--configuration $(BuildConfiguration) --no-restore --no-build -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg"
+                                            }
+                                        },
+                                        {
+                                            Else, new TaskInputs()
+                                            {
+                                                ["arguments"] = "--configuration $(BuildConfiguration) --no-restore --no-build"
+                                            }
+                                        }
+                                    },
                                 },
                             }
                         }
