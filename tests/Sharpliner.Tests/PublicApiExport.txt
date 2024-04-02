@@ -1275,6 +1275,7 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> EndEach { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> EndIf { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.IfConditionBuilder<T> If { get; }
+        public System.Collections.Generic.IReadOnlyCollection<T> FlattenDefinitions() { }
         protected virtual void SerializeSelf(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
         public override string ToString() { }
         public override void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
