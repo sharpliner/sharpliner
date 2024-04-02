@@ -355,6 +355,11 @@ public record Conditioned<T> : Conditioned
         }
     }
 
+    /// <summary>
+    /// Pulls all definitions from a definition tree, regardless of conditions (or their evaluation).
+    /// Use cautiously.
+    /// Example: from a simple ${{ if }}/ ${{ else }} statements, returns both elements from each branch.
+    /// </summary>
     public IReadOnlyCollection<T> FlattenDefinitions()
     {
         var definitions = new List<T>();
