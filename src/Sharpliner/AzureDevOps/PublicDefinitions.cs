@@ -26,11 +26,21 @@ public abstract class SingleStagePipelineDefinition : PipelineDefinitionBase<Sin
 {
 }
 
+
 /// <summary>
 /// Inherit from this class to define a pipeline that extends a template.
 /// https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/extends?view=azure-pipelines
 /// </summary>
-public abstract class ExtendsPipelineDefinition : PipelineDefinitionBase<PipelineWithExtends>
+public abstract class ExtendsPipelineDefinition : ExtendsPipelineDefinition<PipelineWithExtends>
+{
+}
+
+/// <summary>
+/// Inherit from this class to define a pipeline that extends a template.
+/// https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/extends?view=azure-pipelines
+/// </summary>
+public abstract class ExtendsPipelineDefinition<TPipeline> : PipelineDefinitionBase<TPipeline>
+    where TPipeline: PipelineWithExtends
 {
 }
 

@@ -6,7 +6,7 @@ namespace Sharpliner.Tests.AzureDevOps;
 
 public class ExtendedPipelineTests
 {
-    private class Extended_Pipeline : ExtendsPipelineDefinition
+    private class Extended_Pipeline : ExtendsPipelineDefinition<PipelineWithExtends>
     {
         public override string TargetFile => "file.yml";
 

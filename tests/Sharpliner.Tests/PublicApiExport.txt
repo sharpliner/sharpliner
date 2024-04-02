@@ -395,7 +395,12 @@
         public Sharpliner.AzureDevOps.TemplateParameters? Parameters { get; set; }
         public string Template { get; }
     }
-    public abstract class ExtendsPipelineDefinition : Sharpliner.AzureDevOps.PipelineDefinitionBase<Sharpliner.AzureDevOps.PipelineWithExtends>
+    public abstract class ExtendsPipelineDefinition : Sharpliner.AzureDevOps.ExtendsPipelineDefinition<Sharpliner.AzureDevOps.PipelineWithExtends>
+    {
+        protected ExtendsPipelineDefinition() { }
+    }
+    public abstract class ExtendsPipelineDefinition<TPipeline> : Sharpliner.AzureDevOps.PipelineDefinitionBase<TPipeline>
+        where TPipeline : Sharpliner.AzureDevOps.PipelineWithExtends
     {
         protected ExtendsPipelineDefinition() { }
     }
