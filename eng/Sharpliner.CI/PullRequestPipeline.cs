@@ -32,7 +32,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                         .Test("tests/Sharpliner.Tests/Sharpliner.Tests.csproj")
                         .DisplayAs("Run unit tests"),
 
-                    DotNet.Pack("tests/NuGet.Tests/NuGetWithBasePipeline/NuGetWithBasePipeline.csproj") with
+                    DotNet.Pack("tests/NuGet.Tests/SharplinerLibrary/SharplinerLibrary.csproj") with
                     {
                         DisplayName = "E2E tests - Pack NuGet.Tests library",
                         ConfigurationToPack = "Release",
