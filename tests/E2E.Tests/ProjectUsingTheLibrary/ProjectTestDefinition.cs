@@ -14,7 +14,7 @@ namespace Tests.ProjectUsingTheLibraryNuGet;
 // This class is the one that uses the library NuGet
 public class ProjectTestDefinition : BasePipelineFromLibrary
 {
-    public override string TargetFile => Path.Combine("tests", "E2E.Tests", "ProjectTestDefinition.yml");
+    public override string TargetFile => Path.Combine("artifacts", "E2E.Tests", "ProjectTestDefinition.yml");
 
     public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 }
