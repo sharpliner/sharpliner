@@ -10,4 +10,8 @@
     <PackageReference Include="Sharpliner" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SharplinerLibrary\E2E.Tests.SharplinerLibrary.csproj" />
+  </ItemGroup>
+
 </Project>
