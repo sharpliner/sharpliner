@@ -1,4 +1,4 @@
-﻿namespace Sharpliner.AzureDevOps
+namespace Sharpliner.AzureDevOps
 {
     public sealed class AgentVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
@@ -662,6 +662,7 @@
         public Pipeline() { }
         [YamlDotNet.Serialization.YamlMember(Order=600)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Stage> Stages { get; set; }
+        public override System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
     }
     public abstract class PipelineBase : System.IEquatable<Sharpliner.AzureDevOps.PipelineBase>
     {
@@ -684,6 +685,8 @@
         public System.Collections.Generic.List<Sharpliner.AzureDevOps.ScheduledTrigger> Schedules { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=200)]
         public Sharpliner.AzureDevOps.Trigger? Trigger { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public abstract System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
         [YamlDotNet.Serialization.YamlMember(Order=500)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.VariableBase> Variables { get; set; }
     }
@@ -755,6 +758,7 @@
         [System.Runtime.CompilerServices.RequiredMember]
         [YamlDotNet.Serialization.YamlMember(Order=90)]
         public Sharpliner.AzureDevOps.Extends Extends { get; set; }
+        public override System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
     }
     public class Pool : System.IEquatable<Sharpliner.AzureDevOps.Pool>
     {
@@ -878,6 +882,7 @@
         public SingleStagePipeline() { }
         [YamlDotNet.Serialization.YamlMember(Order=600)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase> Jobs { get; set; }
+        public override System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
     }
     public abstract class SingleStagePipelineCollection : Sharpliner.AzureDevOps.PipelineDefinitionCollection<Sharpliner.AzureDevOps.SingleStagePipeline>
     {

@@ -93,7 +93,8 @@ public abstract record PipelineBase
     /// <summary>
     /// Returns the list of validations that should be run on the definition (e.g. wrong dependsOn, artifact name typos..).
     /// </summary>
-    internal abstract IReadOnlyCollection<IDefinitionValidation> Validations { get; }
+    [YamlIgnore]
+    public abstract IReadOnlyCollection<IDefinitionValidation> Validations { get; }
 }
 
 /// <summary>
@@ -105,7 +106,7 @@ public record Pipeline : PipelineBase
     [YamlMember(Order = 600)]
     public ConditionedList<Stage> Stages { get; init; } = [];
 
-    internal override IReadOnlyCollection<IDefinitionValidation> Validations
+    public override IReadOnlyCollection<IDefinitionValidation> Validations
         => Stages.GetStageValidations()
             .Append(new RepositoryCheckoutValidation(this))
             .ToList();
@@ -128,7 +129,7 @@ public record PipelineWithExtends : PipelineBase
     public Extends Extends { get; init; } = null!;
 #endif
 
-    internal override IReadOnlyCollection<IDefinitionValidation> Validations => [];
+    public override IReadOnlyCollection<IDefinitionValidation> Validations => [];
 }
 
 /// <summary>
@@ -140,7 +141,7 @@ public record SingleStagePipeline : PipelineBase
     [YamlMember(Order = 600)]
     public ConditionedList<JobBase> Jobs { get; init; } = [];
 
-    internal override IReadOnlyCollection<IDefinitionValidation> Validations
+    public override IReadOnlyCollection<IDefinitionValidation> Validations
         => Jobs.GetJobValidations()
             .Append(new RepositoryCheckoutValidation(this))
             .ToList();
