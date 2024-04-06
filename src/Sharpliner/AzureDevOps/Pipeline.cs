@@ -93,6 +93,7 @@ public abstract record PipelineBase
     /// <summary>
     /// Returns the list of validations that should be run on the definition (e.g. wrong dependsOn, artifact name typos..).
     /// </summary>
+    [YamlIgnore]
     public abstract IReadOnlyCollection<IDefinitionValidation> Validations { get; }
 }
 
