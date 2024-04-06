@@ -685,6 +685,7 @@ namespace Sharpliner.AzureDevOps
         public System.Collections.Generic.List<Sharpliner.AzureDevOps.ScheduledTrigger> Schedules { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=200)]
         public Sharpliner.AzureDevOps.Trigger? Trigger { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
         public abstract System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
         [YamlDotNet.Serialization.YamlMember(Order=500)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.VariableBase> Variables { get; set; }
