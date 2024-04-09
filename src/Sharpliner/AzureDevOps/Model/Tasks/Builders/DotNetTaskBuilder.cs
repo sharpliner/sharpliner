@@ -175,6 +175,7 @@ public class DotNetTaskBuilder
         /// </param>
         public UseDotNetTask FromGlobalJson(string? workingDirectory = null) => new UseDotNetTask() with
         {
+            UseGlobalJson = true,
             WorkingDirectory = workingDirectory,
         };
     }

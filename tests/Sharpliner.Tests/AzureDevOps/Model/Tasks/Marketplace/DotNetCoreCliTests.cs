@@ -112,6 +112,7 @@ public class DotNetCoreCliTests
               steps:
               - task: UseDotNet@2
                 inputs:
+                  useGlobalJson: true
                   workingDirectory: /tmp
                   installationPath: /.dotnet
             """);
