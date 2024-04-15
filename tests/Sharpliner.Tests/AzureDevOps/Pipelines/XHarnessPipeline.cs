@@ -98,17 +98,11 @@ internal class XHarnessPipeline : PipelineDefinition
                                                     .DisplayAs("Build and run tests")
                                                     .WhenSucceeded())
 
-                                                .Step(new AzureDevOpsTask("PublishTestResults@2")
+                                                .Step(new PublishTestResultsTask(TestResultsFormat.XUnit, variables.Build.SourcesDirectory + "/artifacts/TestResults/**/*.xml")
                                                 {
-                                                    DisplayName = "Publish Unit Test Results",
-                                                    Inputs =
-                                                    {
-                                                        { "testResultsFormat", "xUnit" },
-                                                        { "testResultsFiles", variables.Build.SourcesDirectory + "/artifacts/TestResults/**/*.xml" },
-                                                        { "mergeTestResults", true },
-                                                        { "searchFolder", variables.System.DefaultWorkingDirectory },
-                                                        { "testRunTitle", "XHarness unit tests - " + variables.Agent.JobName },
-                                                    }
+                                                    MergeTestResults = true,
+                                                    SearchFolder = variables.System.DefaultWorkingDirectory,
+                                                    TestRunTitle = "XHarness unit tests - " + variables.Agent.JobName
                                                 }.WhenSucceededOrFailed())
 
                                                 .Step(new AzureDevOpsTask("ComponentGovernanceComponentDetection@0")
