@@ -1,7 +1,7 @@
 ﻿using Sharpliner.AzureDevOps.Tasks;
 using YamlDotNet.Serialization;
 
-namespace Sharpliner.AzureDevOps.Model.Tasks;
+namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
 /// More details can be found in <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/copy-files-v2">official Azure DevOps pipelines documentation</see>
@@ -54,7 +54,7 @@ public record CopyFilesTask : AzureDevOpsTask
     public bool CleanTargetFolder
     {
         get => GetBool("CleanTargetFolder", false);
-        init => SetProperty("CleanTargetFolder", value ? "true" : "false");
+        init => SetProperty("CleanTargetFolder", value);
     }
 
     /// <summary>
@@ -65,7 +65,7 @@ public record CopyFilesTask : AzureDevOpsTask
     public bool Overwrite
     {
         get => GetBool("Overwrite", false);
-        init => SetProperty("Overwrite", value ? "true" : "false");
+        init => SetProperty("Overwrite", value);
     }
 
     /// <summary>
@@ -76,7 +76,7 @@ public record CopyFilesTask : AzureDevOpsTask
     public bool FlattenFolders
     {
         get => GetBool("flattenFolders", false);
-        init => SetProperty("flattenFolders", value ? "true" : "false");
+        init => SetProperty("flattenFolders", value);
     }
 
     /// <summary>
@@ -87,7 +87,7 @@ public record CopyFilesTask : AzureDevOpsTask
     public bool PreserveTimestamp
     {
         get => GetBool("preserveTimestamp", false);
-        init => SetProperty("preserveTimestamp", value ? "true" : "false");
+        init => SetProperty("preserveTimestamp", value);
     }
 
     /// <summary>
@@ -98,7 +98,7 @@ public record CopyFilesTask : AzureDevOpsTask
     public int? RetryCount
     {
         get => GetInt("retryCount");
-        init => SetProperty("retryCount", value.ToString());
+        init => SetProperty("retryCount", value);
     }
 
     /// <summary>
@@ -109,7 +109,7 @@ public record CopyFilesTask : AzureDevOpsTask
     public int? DelayBetweenRetries
     {
         get => GetInt("delayBetweenRetries");
-        init => SetProperty("delayBetweenRetries", value.ToString());
+        init => SetProperty("delayBetweenRetries", value);
     }
 
     /// <summary>
@@ -121,7 +121,7 @@ public record CopyFilesTask : AzureDevOpsTask
     public bool IgnoreMakeDirErrors
     {
         get => GetBool("ignoreMakeDirErrors", false);
-        init => SetProperty("ignoreMakeDirErrors", value ? "true" : "false");
+        init => SetProperty("ignoreMakeDirErrors", value);
     }
 
     public CopyFilesTask(string contents, string targetFolder) : base("CopyFiles@2")

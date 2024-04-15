@@ -1486,33 +1486,6 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces
         string RuntimeExpression { get; }
     }
 }
-namespace Sharpliner.AzureDevOps.Model.Tasks
-{
-    public class CopyFilesTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Model.Tasks.CopyFilesTask>
-    {
-        public CopyFilesTask(string contents, string targetFolder) { }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public bool CleanTargetFolder { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? Contents { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public int? DelayBetweenRetries { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public bool FlattenFolders { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public bool IgnoreMakeDirErrors { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public bool Overwrite { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public bool PreserveTimestamp { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public int? RetryCount { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? SourceFolder { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? TargetFolder { get; set; }
-    }
-}
 namespace Sharpliner.AzureDevOps.Tasks
 {
     public enum ActionPreference
@@ -1541,6 +1514,8 @@ namespace Sharpliner.AzureDevOps.Tasks
         protected bool GetBool(string name, bool defaultValue) { }
         protected int? GetInt(string name, int? defaultValue = default) { }
         protected string? GetString(string name, string? defaultValue = null) { }
+        protected void SetProperty(string name, bool? value) { }
+        protected void SetProperty(string name, int? value) { }
         protected void SetProperty(string name, string? value) { }
     }
     public class BashFileTask : Sharpliner.AzureDevOps.Tasks.BashTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.BashFileTask>, YamlDotNet.Serialization.IYamlConvertible
@@ -1604,6 +1579,30 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.NoneCheckoutTask None { get; }
         public Sharpliner.AzureDevOps.Tasks.SelfCheckoutTask Self { get; }
         public Sharpliner.AzureDevOps.Tasks.RepositoryCheckoutTask Repository(string repository) { }
+    }
+    public class CopyFilesTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.CopyFilesTask>
+    {
+        public CopyFilesTask(string contents, string targetFolder) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool CleanTargetFolder { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? Contents { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public int? DelayBetweenRetries { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool FlattenFolders { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool IgnoreMakeDirErrors { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool Overwrite { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool PreserveTimestamp { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public int? RetryCount { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? SourceFolder { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? TargetFolder { get; set; }
     }
     public class CurrentDownloadTask : Sharpliner.AzureDevOps.Tasks.DownloadTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.CurrentDownloadTask>
     {

@@ -81,6 +81,10 @@ public record AzureDevOpsTask : Step
             Inputs[name] = value;
         }
     }
+
+    protected void SetProperty(string name, int? value) => SetProperty(name, value?.ToString());
+
+    protected void SetProperty(string name, bool? value) => SetProperty(name, value?.ToString().ToLowerInvariant());
 }
 
 public class TaskInputs : ConditionedDictionary { }
