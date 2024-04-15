@@ -1486,6 +1486,33 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces
         string RuntimeExpression { get; }
     }
 }
+namespace Sharpliner.AzureDevOps.Model.Tasks
+{
+    public class CopyFilesTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Model.Tasks.CopyFilesTask>
+    {
+        public CopyFilesTask(string contents, string targetFolder) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool CleanTargetFolder { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? Contents { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public int? DelayBetweenRetries { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool FlattenFolders { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool IgnoreMakeDirErrors { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool Overwrite { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool PreserveTimestamp { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public int? RetryCount { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? SourceFolder { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? TargetFolder { get; set; }
+    }
+}
 namespace Sharpliner.AzureDevOps.Tasks
 {
     public enum ActionPreference
