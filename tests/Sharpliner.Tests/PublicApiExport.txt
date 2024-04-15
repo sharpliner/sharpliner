@@ -1486,43 +1486,6 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces
         string RuntimeExpression { get; }
     }
 }
-namespace Sharpliner.AzureDevOps.Model.Tasks
-{
-    public class PublishTestResultsTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Model.Tasks.PublishTestResultsTask>
-    {
-        public PublishTestResultsTask(Sharpliner.AzureDevOps.Model.Tasks.TestResultsFormat testResultsFormat, string testResultsFile) { }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? BuildConfiguration { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? BuildPlatform { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public bool FailTaskOnFailedTests { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public bool FailTaskOnFailureToPublishResults { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public bool FailTaskOnMissingResultsFile { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public bool MergeTestResults { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public bool PublishRunAttachments { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? SearchFolder { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? TestResultsFiles { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Model.Tasks.TestResultsFormat TestResultsFormat { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? TestRunTitle { get; set; }
-    }
-    public enum TestResultsFormat
-    {
-        JUnit = 0,
-        NUnit = 1,
-        VSTest = 2,
-        XUnit = 3,
-        CTest = 4,
-    }
-}
 namespace Sharpliner.AzureDevOps.Tasks
 {
     public enum ActionPreference
@@ -1833,6 +1796,16 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.InlinePowershellTask FromResourceFile(string resourceFileName, string? displayName = null) { }
         public Sharpliner.AzureDevOps.Tasks.InlinePowershellTask Inline(params string[] scriptLines) { }
     }
+    public class PublishCodeCoverageResultsTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PublishCodeCoverageResultsTask>
+    {
+        public PublishCodeCoverageResultsTask(string summaryFileLocation) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool FailIfCoverageEmpty { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? PathToSources { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? SummaryFileLocation { get; set; }
+    }
     public class PublishTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PublishTask>
     {
         public PublishTask(string targetPath, string artifactName = "drop") { }
@@ -1850,6 +1823,32 @@ namespace Sharpliner.AzureDevOps.Tasks
         public uint ParallelCount { get; set; }
         [YamlDotNet.Serialization.YamlMember(Alias="publish", Order=1)]
         public string TargetPath { get; }
+    }
+    public class PublishTestResultsTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PublishTestResultsTask>
+    {
+        public PublishTestResultsTask(Sharpliner.AzureDevOps.Tasks.TestResultsFormat testResultsFormat, string testResultsFile) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? BuildConfiguration { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? BuildPlatform { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool FailTaskOnFailedTests { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool FailTaskOnFailureToPublishResults { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool FailTaskOnMissingResultsFile { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool MergeTestResults { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool PublishRunAttachments { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? SearchFolder { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? TestResultsFiles { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.TestResultsFormat TestResultsFormat { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? TestRunTitle { get; set; }
     }
     public class RepositoryCheckoutTask : Sharpliner.AzureDevOps.Tasks.CheckoutTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.RepositoryCheckoutTask>
     {
@@ -1933,6 +1932,14 @@ namespace Sharpliner.AzureDevOps.Tasks
     public class TaskInputs : Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary
     {
         public TaskInputs() { }
+    }
+    public enum TestResultsFormat
+    {
+        JUnit = 0,
+        NUnit = 1,
+        VSTest = 2,
+        XUnit = 3,
+        CTest = 4,
     }
     public class UseDotNetTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.UseDotNetTask>
     {

@@ -1,8 +1,7 @@
 ﻿using System;
-using Sharpliner.AzureDevOps.Tasks;
 using YamlDotNet.Serialization;
 
-namespace Sharpliner.AzureDevOps.Model.Tasks;
+namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
 /// More details can be found in <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/publish-test-results-v2">official Azure DevOps pipelines documentation</see>
