@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <!-- These will appear in artifacts/packages after you call `dotnet pack` -->
-    <PackageReference Include="Sharpliner" Version="43.43.43" />
+    <PackageReference Include="Sharpliner" />
   </ItemGroup>
 
   <!--
