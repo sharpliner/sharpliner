@@ -35,5 +35,5 @@ public class ConditionedList<T> : List<Conditioned<T>>
     public static implicit operator ConditionedList<T>(List<T> list) => new(list);
     public static implicit operator ConditionedList<T>(T[] values) => new(values);
     public static implicit operator ConditionedList<T>(ReadOnlyCollection<T> values) => new(values);
-    public static implicit operator ConditionedList<T>(T value) => new(new[] { value });
+    public static implicit operator ConditionedList<T>(T value) => new([value]);
 }

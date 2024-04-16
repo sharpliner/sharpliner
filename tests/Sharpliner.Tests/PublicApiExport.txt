@@ -135,13 +135,13 @@ namespace Sharpliner.AzureDevOps
     public class BuildResource : System.IEquatable<Sharpliner.AzureDevOps.BuildResource>
     {
         public BuildResource(string identifier) { }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Connection { get; set; }
         [YamlDotNet.Serialization.YamlMember(Alias="build")]
         public string Identifier { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Source { get; set; }
-        public bool Trigger { get; set; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Type { get; set; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Version { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Connection { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Source { get; init; }
+        public bool Trigger { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Type { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Version { get; init; }
     }
     public sealed class BuildVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
@@ -175,7 +175,7 @@ namespace Sharpliner.AzureDevOps
     {
         public CanaryStrategy() { }
         [YamlDotNet.Serialization.YamlMember(Order=50)]
-        public System.Collections.Generic.List<int> Increments { get; set; }
+        public System.Collections.Generic.List<int> Increments { get; init; }
         protected override void WriteCustomFields(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public sealed class ChecksVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
@@ -289,44 +289,44 @@ namespace Sharpliner.AzureDevOps
     public class ContainerMountSettings : System.IEquatable<Sharpliner.AzureDevOps.ContainerMountSettings>
     {
         public ContainerMountSettings() { }
-        public bool Externals { get; set; }
-        public bool Tasks { get; set; }
-        public bool Tools { get; set; }
-        public bool Work { get; set; }
+        public bool Externals { get; init; }
+        public bool Tasks { get; init; }
+        public bool Tools { get; init; }
+        public bool Work { get; init; }
     }
     public class ContainerReference : System.IEquatable<Sharpliner.AzureDevOps.ContainerReference>
     {
         public ContainerReference() { }
-        public string? Endpoint { get; set; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary Env { get; set; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Image { get; set; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Options { get; set; }
+        public string? Endpoint { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary Env { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Image { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Options { get; init; }
     }
     public class ContainerResource : System.IEquatable<Sharpliner.AzureDevOps.ContainerResource>
     {
         public ContainerResource(string identifier) { }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Endpoint { get; set; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary Env { get; set; }
         [YamlDotNet.Serialization.YamlMember(Alias="container")]
         public string Identifier { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Image { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Endpoint { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary Env { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Image { get; init; }
         [System.ComponentModel.DefaultValue(true)]
-        public bool MapDockerSocket { get; set; }
-        public Sharpliner.AzureDevOps.ContainerMountSettings? MountReadOnly { get; set; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Options { get; set; }
-        public System.Collections.Generic.List<string> Ports { get; set; }
-        public System.Collections.Generic.List<string> Volumes { get; set; }
+        public bool MapDockerSocket { get; init; }
+        public Sharpliner.AzureDevOps.ContainerMountSettings? MountReadOnly { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Options { get; init; }
+        public System.Collections.Generic.List<string> Ports { get; init; }
+        public System.Collections.Generic.List<string> Volumes { get; init; }
     }
     public abstract class DefinitionLibrary<T> : Sharpliner.AzureDevOps.AzureDevOpsDefinition { }
     public class DeploymentJob : Sharpliner.AzureDevOps.JobBase, System.IEquatable<Sharpliner.AzureDevOps.DeploymentJob>
     {
         public DeploymentJob(string name, string? displayName = null) { }
-        [YamlDotNet.Serialization.YamlMember(Order=1201)]
-        public Sharpliner.AzureDevOps.Environment? Environment { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Alias="deployment", DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.Preserve, Order=1)]
+        [YamlDotNet.Serialization.YamlMember(Alias="deployment", DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.value__, Order=1)]
         public string JobName { get; }
+        [YamlDotNet.Serialization.YamlMember(Order=1201)]
+        public Sharpliner.AzureDevOps.Environment? Environment { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=1300)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.DeploymentStrategy>? Strategy { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.DeploymentStrategy>? Strategy { get; init; }
     }
     public sealed class DeploymentListParameter : Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.DeploymentJob>>, System.IEquatable<Sharpliner.AzureDevOps.DeploymentListParameter>
     {
@@ -342,17 +342,17 @@ namespace Sharpliner.AzureDevOps
     {
         protected DeploymentStrategy(string type) { }
         [YamlDotNet.Serialization.YamlMember(Order=200)]
-        public Sharpliner.AzureDevOps.LifeCycleHook Deploy { get; set; }
+        public Sharpliner.AzureDevOps.LifeCycleHook Deploy { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=600)]
-        public Sharpliner.AzureDevOps.LifeCycleHook OnFailure { get; set; }
+        public Sharpliner.AzureDevOps.LifeCycleHook OnFailure { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=500)]
-        public Sharpliner.AzureDevOps.LifeCycleHook OnSuccess { get; set; }
+        public Sharpliner.AzureDevOps.LifeCycleHook OnSuccess { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=400)]
-        public Sharpliner.AzureDevOps.LifeCycleHook PostRouteTraffic { get; set; }
+        public Sharpliner.AzureDevOps.LifeCycleHook PostRouteTraffic { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
-        public Sharpliner.AzureDevOps.LifeCycleHook PreDeploy { get; set; }
+        public Sharpliner.AzureDevOps.LifeCycleHook PreDeploy { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=300)]
-        public Sharpliner.AzureDevOps.LifeCycleHook RouteTraffic { get; set; }
+        public Sharpliner.AzureDevOps.LifeCycleHook RouteTraffic { get; init; }
         public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
         public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
         protected abstract void WriteCustomFields(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer);
@@ -376,10 +376,10 @@ namespace Sharpliner.AzureDevOps
     {
         public Environment(string name, string? resourceName = null) { }
         public string Name { get; }
-        public int? ResourceId { get; set; }
-        public string? ResourceName { get; set; }
-        public Sharpliner.AzureDevOps.ResourceType? ResourceType { get; set; }
-        public System.Collections.Generic.List<string> Tags { get; set; }
+        public int? ResourceId { get; init; }
+        public string? ResourceName { get; init; }
+        public Sharpliner.AzureDevOps.ResourceType? ResourceType { get; init; }
+        public System.Collections.Generic.List<string> Tags { get; init; }
     }
     public sealed class EnvironmentVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
@@ -392,8 +392,8 @@ namespace Sharpliner.AzureDevOps
     public class Extends : System.IEquatable<Sharpliner.AzureDevOps.Extends>
     {
         public Extends(string template, Sharpliner.AzureDevOps.TemplateParameters? parameters = null) { }
-        public Sharpliner.AzureDevOps.TemplateParameters? Parameters { get; set; }
         public string Template { get; }
+        public Sharpliner.AzureDevOps.TemplateParameters? Parameters { get; init; }
     }
     public abstract class ExtendsPipelineDefinition : Sharpliner.AzureDevOps.ExtendsPipelineDefinition<Sharpliner.AzureDevOps.PipelineWithExtends>
     {
@@ -408,9 +408,9 @@ namespace Sharpliner.AzureDevOps
     {
         public HostedPool(string? name = null, string? vmImage = null) { }
         [YamlDotNet.Serialization.YamlMember(Order=110)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> Demands { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> Demands { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=105)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? VmImage { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? VmImage { get; init; }
     }
     public interface IDependsOn
     {
@@ -445,8 +445,8 @@ namespace Sharpliner.AzureDevOps
     public class InclusionRule : System.IEquatable<Sharpliner.AzureDevOps.InclusionRule>
     {
         public InclusionRule() { }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> Exclude { get; set; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> Include { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> Exclude { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> Include { get; init; }
     }
     public abstract class InlineCondition : Sharpliner.AzureDevOps.ConditionedExpressions.Condition
     {
@@ -475,47 +475,47 @@ namespace Sharpliner.AzureDevOps
     public class Job : Sharpliner.AzureDevOps.JobBase, System.IEquatable<Sharpliner.AzureDevOps.Job>
     {
         public Job(string name, string? displayName = null) { }
-        [YamlDotNet.Serialization.YamlMember(Alias="job", DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.Preserve, Order=1)]
+        [YamlDotNet.Serialization.YamlMember(Alias="job", DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.value__, Order=1)]
         public string JobName { get; }
         [YamlDotNet.Serialization.YamlMember(Order=700)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Step> Steps { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Step> Steps { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=400)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Strategy>? Strategy { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Strategy>? Strategy { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=1200)]
-        public Sharpliner.AzureDevOps.Uses? Uses { get; set; }
+        public Sharpliner.AzureDevOps.Uses? Uses { get; init; }
     }
     public abstract class JobBase : Sharpliner.AzureDevOps.IDependsOn, System.IEquatable<Sharpliner.AzureDevOps.JobBase>
     {
         protected JobBase(string name, string? displayName = null) { }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<System.TimeSpan>? CancelTimeout { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=900)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<int>? CancelTimeoutInMinutes { get; }
-        [YamlDotNet.Serialization.YamlMember(Order=1100)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.InlineCondition>? Condition { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=500)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.ContainerReference>? Container { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=1200)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? ContinueOnError { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=200)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> DependsOn { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=100)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? DisplayName { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string Name { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=300)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Pool>? Pool { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=1100)]
-        public System.Collections.Generic.Dictionary<string, string> Services { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<System.TimeSpan>? Timeout { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=800)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<int>? TimeoutInMinutes { get; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<System.TimeSpan>? CancelTimeout { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=1100)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.InlineCondition>? Condition { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=500)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.ContainerReference>? Container { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=1200)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? ContinueOnError { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=200)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> DependsOn { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=100)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? DisplayName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string Name { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=300)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Pool>? Pool { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=1100)]
+        public System.Collections.Generic.Dictionary<string, string> Services { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<System.TimeSpan>? Timeout { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=600)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.VariableBase> Variables { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.VariableBase> Variables { get; init; }
         [System.ComponentModel.DefaultValue(Sharpliner.AzureDevOps.JobWorkspace.Outputs)]
         [YamlDotNet.Serialization.YamlMember(Order=1000)]
-        public Sharpliner.AzureDevOps.JobWorkspace Workspace { get; set; }
+        public Sharpliner.AzureDevOps.JobWorkspace Workspace { get; init; }
     }
     public abstract class JobLibrary : Sharpliner.AzureDevOps.DefinitionLibrary<Sharpliner.AzureDevOps.JobBase>
     {
@@ -551,7 +551,7 @@ namespace Sharpliner.AzureDevOps
     {
         public JsonParameterFilter(string path, string value) { }
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string> Path { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string> Value { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string> Value { get; init; }
     }
     public class LibraryReference<T> : Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>, System.IEquatable<Sharpliner.AzureDevOps.LibraryReference<T>>
     {
@@ -565,7 +565,7 @@ namespace Sharpliner.AzureDevOps
         [YamlDotNet.Serialization.YamlMember(Order=300)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Pool>? Pool { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=700)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Step> Steps { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Step> Steps { get; init; }
     }
     public enum LockBehaviour
     {
@@ -577,7 +577,7 @@ namespace Sharpliner.AzureDevOps
     public class MatrixStrategy : Sharpliner.AzureDevOps.Strategy, System.IEquatable<Sharpliner.AzureDevOps.MatrixStrategy>, YamlDotNet.Serialization.IYamlConvertible
     {
         public MatrixStrategy() { }
-        public System.Collections.Generic.Dictionary<string, System.ValueTuple<string, string>[]> Matrix { get; set; }
+        public System.Collections.Generic.Dictionary<string, System.ValueTuple<string, string>[]> Matrix { get; init; }
         public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
         public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
@@ -625,70 +625,70 @@ namespace Sharpliner.AzureDevOps
     public abstract class PackageResource : System.IEquatable<Sharpliner.AzureDevOps.PackageResource>
     {
         public PackageResource(string packageAlias, string packageName) { }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Connection { get; set; }
-        public string Name { get; set; }
         [YamlDotNet.Serialization.YamlMember(Alias="package")]
         public string PackageAlias { get; }
         public abstract string PackageType { get; }
-        public bool Trigger { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Connection { get; init; }
+        public string Name { get; init; }
+        public bool Trigger { get; init; }
         [System.ComponentModel.DefaultValue("latest")]
-        public string? Version { get; set; }
+        public string? Version { get; init; }
     }
     public class ParallelStrategy : Sharpliner.AzureDevOps.Strategy, System.IEquatable<Sharpliner.AzureDevOps.ParallelStrategy>
     {
         public ParallelStrategy() { }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<int>? Parallel { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<int>? Parallel { get; init; }
     }
     public abstract class Parameter : System.IEquatable<Sharpliner.AzureDevOps.Parameter>
     {
         public Parameter(string name, string? displayName = null) { }
-        [YamlDotNet.Serialization.YamlMember(Order=101)]
-        public string? DisplayName { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=100)]
-        public string Name { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=110)]
         public abstract string Type { get; }
+        [YamlDotNet.Serialization.YamlMember(Order=101)]
+        public string? DisplayName { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=100)]
+        public string Name { get; init; }
     }
     public abstract class Parameter<T> : Sharpliner.AzureDevOps.Parameter, System.IEquatable<Sharpliner.AzureDevOps.Parameter<T>>
     {
         public Parameter(string name, string? displayName = null, T? defaultValue = default, System.Collections.Generic.IEnumerable<T>? allowedValues = null) { }
         [YamlDotNet.Serialization.YamlMember(Alias="values", Order=130)]
-        public System.Collections.Generic.IEnumerable<T>? AllowedValues { get; set; }
-        [YamlDotNet.Serialization.YamlMember(DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.Preserve | YamlDotNet.Serialization.DefaultValuesHandling.OmitNull, Order=120)]
-        public T Default { get; set; }
+        public System.Collections.Generic.IEnumerable<T>? AllowedValues { get; init; }
+        [YamlDotNet.Serialization.YamlMember(DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.OmitNull, Order=120)]
+        public T Default { get; init; }
     }
     public class Pipeline : Sharpliner.AzureDevOps.PipelineBase, System.IEquatable<Sharpliner.AzureDevOps.Pipeline>
     {
         public Pipeline() { }
-        [YamlDotNet.Serialization.YamlMember(Order=600)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Stage> Stages { get; set; }
         public override System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
+        [YamlDotNet.Serialization.YamlMember(Order=600)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Stage> Stages { get; init; }
     }
     public abstract class PipelineBase : System.IEquatable<Sharpliner.AzureDevOps.PipelineBase>
     {
         protected PipelineBase() { }
-        [YamlDotNet.Serialization.YamlMember(Order=110)]
-        public bool? AppendCommitMessageToRunName { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=120)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.LockBehaviour>? LockBehavior { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=100)]
-        public string? Name { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=150)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Parameter> Parameters { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=550)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Pool>? Pool { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=300)]
-        public Sharpliner.AzureDevOps.PrTrigger? Pr { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=400)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Resources>? Resources { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=350)]
-        public System.Collections.Generic.List<Sharpliner.AzureDevOps.ScheduledTrigger> Schedules { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=200)]
-        public Sharpliner.AzureDevOps.Trigger? Trigger { get; set; }
         [YamlDotNet.Serialization.YamlIgnore]
         public abstract System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
+        [YamlDotNet.Serialization.YamlMember(Order=110)]
+        public bool? AppendCommitMessageToRunName { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=120)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.LockBehaviour>? LockBehavior { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=100)]
+        public string? Name { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=150)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Parameter> Parameters { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=550)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Pool>? Pool { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=300)]
+        public Sharpliner.AzureDevOps.PrTrigger? Pr { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=400)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Resources>? Resources { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=350)]
+        public System.Collections.Generic.List<Sharpliner.AzureDevOps.ScheduledTrigger> Schedules { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=200)]
+        public Sharpliner.AzureDevOps.Trigger? Trigger { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=500)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.VariableBase> Variables { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.VariableBase> Variables { get; init; }
     }
     public abstract class PipelineCollection : Sharpliner.AzureDevOps.PipelineDefinitionCollection<Sharpliner.AzureDevOps.Pipeline>
     {
@@ -717,31 +717,31 @@ namespace Sharpliner.AzureDevOps
     public class PipelineDefinitionData<T> : System.IEquatable<Sharpliner.AzureDevOps.PipelineDefinitionData<T>>
     {
         public PipelineDefinitionData(string TargetFile, T Pipeline, Sharpliner.TargetPathType PathType = 0, string[]? Header = null) { }
-        public string[]? Header { get; set; }
-        public Sharpliner.TargetPathType PathType { get; set; }
-        public T Pipeline { get; set; }
-        public string TargetFile { get; set; }
+        public string[]? Header { get; init; }
+        public Sharpliner.TargetPathType PathType { get; init; }
+        public T Pipeline { get; init; }
+        public string TargetFile { get; init; }
     }
     public class PipelineResource : System.IEquatable<Sharpliner.AzureDevOps.PipelineResource>
     {
         public PipelineResource(string identifier) { }
-        public string? Branch { get; set; }
         [YamlDotNet.Serialization.YamlMember(Alias="pipeline")]
         public string Identifier { get; }
-        public string? Project { get; set; }
-        public string? Source { get; set; }
-        public System.Collections.Generic.List<string> Tags { get; set; }
-        public Sharpliner.AzureDevOps.PipelineTrigger? Trigger { get; set; }
-        public string? Version { get; set; }
+        public string? Branch { get; init; }
+        public string? Project { get; init; }
+        public string? Source { get; init; }
+        public System.Collections.Generic.List<string> Tags { get; init; }
+        public Sharpliner.AzureDevOps.PipelineTrigger? Trigger { get; init; }
+        public string? Version { get; init; }
     }
     public class PipelineTrigger : System.IEquatable<Sharpliner.AzureDevOps.PipelineTrigger>
     {
         public PipelineTrigger() { }
         public PipelineTrigger(params string[] branches) { }
-        public bool Batch { get; set; }
-        public Sharpliner.AzureDevOps.InclusionRule? Branches { get; set; }
-        public Sharpliner.AzureDevOps.InclusionRule? Stages { get; set; }
-        public Sharpliner.AzureDevOps.InclusionRule? Tags { get; set; }
+        public bool Batch { get; init; }
+        public Sharpliner.AzureDevOps.InclusionRule? Branches { get; init; }
+        public Sharpliner.AzureDevOps.InclusionRule? Stages { get; init; }
+        public Sharpliner.AzureDevOps.InclusionRule? Tags { get; init; }
     }
     public sealed class PipelineVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
@@ -755,16 +755,16 @@ namespace Sharpliner.AzureDevOps
             "your compiler.", true)]
         [System.Runtime.CompilerServices.CompilerFeatureRequired("RequiredMembers")]
         public PipelineWithExtends() { }
+        public override System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
         [System.Runtime.CompilerServices.RequiredMember]
         [YamlDotNet.Serialization.YamlMember(Order=90)]
-        public Sharpliner.AzureDevOps.Extends Extends { get; set; }
-        public override System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
+        public Sharpliner.AzureDevOps.Extends Extends { get; init; }
     }
     public class Pool : System.IEquatable<Sharpliner.AzureDevOps.Pool>
     {
         public Pool(string? name) { }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Name { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Name { get; init; }
         public static Sharpliner.AzureDevOps.Pool op_Implicit(string vmImage) { }
     }
     public class PrTrigger : System.IEquatable<Sharpliner.AzureDevOps.PrTrigger>
@@ -772,11 +772,11 @@ namespace Sharpliner.AzureDevOps
         public PrTrigger() { }
         public PrTrigger(params string[] branches) { }
         [System.ComponentModel.DefaultValue(true)]
-        public bool AutoCancel { get; set; }
-        public Sharpliner.AzureDevOps.InclusionRule? Branches { get; set; }
+        public bool AutoCancel { get; init; }
+        public Sharpliner.AzureDevOps.InclusionRule? Branches { get; init; }
         [System.ComponentModel.DefaultValue(true)]
-        public bool Drafts { get; set; }
-        public Sharpliner.AzureDevOps.InclusionRule? Paths { get; set; }
+        public bool Drafts { get; init; }
+        public Sharpliner.AzureDevOps.InclusionRule? Paths { get; init; }
         public static Sharpliner.AzureDevOps.NonePrTrigger None { get; }
     }
     public sealed class PullRequestVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
@@ -792,14 +792,14 @@ namespace Sharpliner.AzureDevOps
     public class RepositoryResource : System.IEquatable<Sharpliner.AzureDevOps.RepositoryResource>
     {
         public RepositoryResource(string identifier) { }
-        public string? Endpoint { get; set; }
         [YamlDotNet.Serialization.YamlMember(Alias="repository")]
         public string Identifier { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Name { get; set; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Ref { get; set; }
-        public Sharpliner.AzureDevOps.Trigger? Trigger { get; set; }
-        [YamlDotNet.Serialization.YamlMember(DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.Preserve)]
-        public Sharpliner.AzureDevOps.RepositoryType Type { get; set; }
+        public string? Endpoint { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Name { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Ref { get; init; }
+        public Sharpliner.AzureDevOps.Trigger? Trigger { get; init; }
+        [YamlDotNet.Serialization.YamlMember(DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.value__)]
+        public Sharpliner.AzureDevOps.RepositoryType Type { get; init; }
         public static Sharpliner.AzureDevOps.RepositoryResource AzureDevOps(string identifier, string project, string repoName, string? endpoint = null, string? refName = null) { }
         public static Sharpliner.AzureDevOps.RepositoryResource BitBucket(string identifier, string orgOrUser, string repoName, string endpoint, string? refName = null) { }
         public static Sharpliner.AzureDevOps.RepositoryResource GitHub(string identifier, string orgOrUser, string repoName, string endpoint, string? refName = null) { }
@@ -838,19 +838,19 @@ namespace Sharpliner.AzureDevOps
     public class Resources : System.IEquatable<Sharpliner.AzureDevOps.Resources>
     {
         public Resources() { }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.BuildResource> Builds { get; set; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.ContainerResource> Containers { get; set; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.PackageResource> Packages { get; set; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.PipelineResource> Pipelines { get; set; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.RepositoryResource> Repositories { get; set; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.WebhookResource> Webhooks { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.BuildResource> Builds { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.ContainerResource> Containers { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.PackageResource> Packages { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.PipelineResource> Pipelines { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.RepositoryResource> Repositories { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.WebhookResource> Webhooks { get; init; }
     }
     public class RollingStrategy : Sharpliner.AzureDevOps.DeploymentStrategy, System.IEquatable<Sharpliner.AzureDevOps.RollingStrategy>
     {
         public RollingStrategy() { }
         [System.ComponentModel.DefaultValue(0)]
-        [YamlDotNet.Serialization.YamlMember(DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.Preserve | YamlDotNet.Serialization.DefaultValuesHandling.OmitDefaults, Order=50)]
-        public int MaxParallel { get; set; }
+        [YamlDotNet.Serialization.YamlMember(DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.OmitDefaults, Order=50)]
+        public int MaxParallel { get; init; }
         protected override void WriteCustomFields(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class RunOnceStrategy : Sharpliner.AzureDevOps.DeploymentStrategy, System.IEquatable<Sharpliner.AzureDevOps.RunOnceStrategy>
@@ -863,13 +863,13 @@ namespace Sharpliner.AzureDevOps
         public ScheduledTrigger(string cronSchedule, params string[] branches) { }
         public ScheduledTrigger(string minute, string hour, string dayOfMonth, string month, string dayOfWeek, params string[] branches) { }
         [YamlDotNet.Serialization.YamlMember(Order=300)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Always { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Always { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=200)]
-        public Sharpliner.AzureDevOps.InclusionRule? Branches { get; set; }
+        public Sharpliner.AzureDevOps.InclusionRule? Branches { get; init; }
         [YamlDotNet.Serialization.YamlMember(Alias="cron", Order=1)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? CronSchedule { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? CronSchedule { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? DisplayName { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? DisplayName { get; init; }
     }
     public class ServerPool : Sharpliner.AzureDevOps.Pool, System.IEquatable<Sharpliner.AzureDevOps.ServerPool>, YamlDotNet.Serialization.IYamlConvertible
     {
@@ -880,9 +880,9 @@ namespace Sharpliner.AzureDevOps
     public class SingleStagePipeline : Sharpliner.AzureDevOps.PipelineBase, System.IEquatable<Sharpliner.AzureDevOps.SingleStagePipeline>
     {
         public SingleStagePipeline() { }
-        [YamlDotNet.Serialization.YamlMember(Order=600)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase> Jobs { get; set; }
         public override System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
+        [YamlDotNet.Serialization.YamlMember(Order=600)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase> Jobs { get; init; }
     }
     public abstract class SingleStagePipelineCollection : Sharpliner.AzureDevOps.PipelineDefinitionCollection<Sharpliner.AzureDevOps.SingleStagePipeline>
     {
@@ -895,20 +895,20 @@ namespace Sharpliner.AzureDevOps
     public class Stage : Sharpliner.AzureDevOps.IDependsOn, System.IEquatable<Sharpliner.AzureDevOps.Stage>
     {
         public Stage(string name, string? displayName = null) { }
-        [YamlDotNet.Serialization.YamlMember(Order=400)]
-        public Sharpliner.AzureDevOps.InlineCondition? Condition { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=100)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> DependsOn { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=2)]
-        public string? DisplayName { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=300)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase> Jobs { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=3)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.LockBehaviour>? LockBehavior { get; set; }
         [YamlDotNet.Serialization.YamlMember(Alias="stage", Order=1)]
         public string Name { get; }
+        [YamlDotNet.Serialization.YamlMember(Order=400)]
+        public Sharpliner.AzureDevOps.InlineCondition? Condition { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=100)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> DependsOn { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=2)]
+        public string? DisplayName { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=300)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase> Jobs { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=3)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.LockBehaviour>? LockBehavior { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=200)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.VariableBase> Variables { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.VariableBase> Variables { get; init; }
     }
     public abstract class StageLibrary : Sharpliner.AzureDevOps.DefinitionLibrary<Sharpliner.AzureDevOps.Stage>
     {
@@ -937,23 +937,23 @@ namespace Sharpliner.AzureDevOps
     public abstract class Step : System.IEquatable<Sharpliner.AzureDevOps.Step>
     {
         protected Step() { }
-        [YamlDotNet.Serialization.YamlMember(Order=190)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.InlineCondition>? Condition { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=200)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? ContinueOnError { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=100)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? DisplayName { get; set; }
-        [System.ComponentModel.DefaultValue(true)]
-        [YamlDotNet.Serialization.YamlMember(Order=175)]
-        public bool Enabled { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=220)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary Env { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=150)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Name { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<System.TimeSpan>? Timeout { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=210)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<int>? TimeoutInMinutes { get; }
+        [YamlDotNet.Serialization.YamlMember(Order=190)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.InlineCondition>? Condition { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=200)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? ContinueOnError { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=100)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? DisplayName { get; init; }
+        [System.ComponentModel.DefaultValue(true)]
+        [YamlDotNet.Serialization.YamlMember(Order=175)]
+        public bool Enabled { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=220)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary Env { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=150)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Name { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<System.TimeSpan>? Timeout { get; init; }
         public Sharpliner.AzureDevOps.Step DisplayAs(string displayName) { }
         public Sharpliner.AzureDevOps.Step When(string condition) { }
         public Sharpliner.AzureDevOps.Step WhenSucceeded() { }
@@ -987,7 +987,7 @@ namespace Sharpliner.AzureDevOps
     public abstract class Strategy : System.IEquatable<Sharpliner.AzureDevOps.Strategy>
     {
         protected Strategy() { }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<int>? MaxParallel { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<int>? MaxParallel { get; init; }
     }
     public sealed class StrategyVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
@@ -1057,11 +1057,11 @@ namespace Sharpliner.AzureDevOps
     public class TemplateDefinitionData<T> : System.IEquatable<Sharpliner.AzureDevOps.TemplateDefinitionData<T>>
     {
         public TemplateDefinitionData(string TargetFile, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T> Definition, System.Collections.Generic.List<Sharpliner.AzureDevOps.Parameter>? Parameters = null, Sharpliner.TargetPathType PathType = 0, string[]? Header = null) { }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T> Definition { get; set; }
-        public string[]? Header { get; set; }
-        public System.Collections.Generic.List<Sharpliner.AzureDevOps.Parameter>? Parameters { get; set; }
-        public Sharpliner.TargetPathType PathType { get; set; }
-        public string TargetFile { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T> Definition { get; init; }
+        public string[]? Header { get; init; }
+        public System.Collections.Generic.List<Sharpliner.AzureDevOps.Parameter>? Parameters { get; init; }
+        public Sharpliner.TargetPathType PathType { get; init; }
+        public string TargetFile { get; init; }
     }
     public abstract class TemplateDefinition<T> : Sharpliner.AzureDevOps.TemplateDefinition, Sharpliner.ISharplinerDefinition
     {
@@ -1079,17 +1079,17 @@ namespace Sharpliner.AzureDevOps
     }
     public class Template<T> : Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>, System.IEquatable<Sharpliner.AzureDevOps.Template<T>>
     {
-        public Sharpliner.AzureDevOps.TemplateParameters Parameters { get; set; }
+        public Sharpliner.AzureDevOps.TemplateParameters Parameters { get; init; }
         protected override void SerializeSelf(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class Trigger : System.IEquatable<Sharpliner.AzureDevOps.Trigger>
     {
         public Trigger() { }
         public Trigger(params string[] branches) { }
-        public bool Batch { get; set; }
-        public Sharpliner.AzureDevOps.InclusionRule? Branches { get; set; }
-        public Sharpliner.AzureDevOps.InclusionRule? Paths { get; set; }
-        public Sharpliner.AzureDevOps.InclusionRule? Tags { get; set; }
+        public bool Batch { get; init; }
+        public Sharpliner.AzureDevOps.InclusionRule? Branches { get; init; }
+        public Sharpliner.AzureDevOps.InclusionRule? Paths { get; init; }
+        public Sharpliner.AzureDevOps.InclusionRule? Tags { get; init; }
         public static Sharpliner.AzureDevOps.NoneTrigger None { get; }
     }
     public sealed class TriggeredByVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
@@ -1104,8 +1104,8 @@ namespace Sharpliner.AzureDevOps
     public class Uses : System.IEquatable<Sharpliner.AzureDevOps.Uses>
     {
         public Uses() { }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> Pools { get; set; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> Repositories { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> Pools { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> Repositories { get; init; }
     }
     public class Variable : Sharpliner.AzureDevOps.VariableBase, System.IEquatable<Sharpliner.AzureDevOps.Variable>
     {
@@ -1114,10 +1114,10 @@ namespace Sharpliner.AzureDevOps
         public Variable(string name, string value) { }
         [YamlDotNet.Serialization.YamlMember(Alias="name", Order=1)]
         public string Name { get; }
-        [YamlDotNet.Serialization.YamlMember(Alias="readonly", DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.Preserve | YamlDotNet.Serialization.DefaultValuesHandling.OmitDefaults, Order=3)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Readonly { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Alias="value", DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.Preserve, Order=2)]
+        [YamlDotNet.Serialization.YamlMember(Alias="value", DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.value__, Order=2)]
         public object Value { get; }
+        [YamlDotNet.Serialization.YamlMember(Alias="readonly", DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.OmitDefaults, Order=3)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Readonly { get; init; }
         public Sharpliner.AzureDevOps.Variable ReadOnly() { }
     }
     public abstract class VariableBase : System.IEquatable<Sharpliner.AzureDevOps.VariableBase>
@@ -1173,10 +1173,10 @@ namespace Sharpliner.AzureDevOps
     public class WebhookResource : System.IEquatable<Sharpliner.AzureDevOps.WebhookResource>
     {
         public WebhookResource(string identifier) { }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Connection { get; set; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JsonParameterFilter> Filters { get; set; }
         [YamlDotNet.Serialization.YamlMember(Alias="webhook")]
         public string Identifier { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Connection { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JsonParameterFilter> Filters { get; init; }
     }
 }
 namespace Sharpliner.AzureDevOps.ConditionedExpressions.Arguments
@@ -1502,23 +1502,23 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public ArchiveFilesTask(string rootFolderOrFile, Sharpliner.AzureDevOps.Tasks.ArchiveType archiveType, string archiveFile) { }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? ArchiveFile { get; set; }
+        public string? ArchiveFile { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Tasks.ArchiveType ArchiveType { get; set; }
+        public Sharpliner.AzureDevOps.Tasks.ArchiveType ArchiveType { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool IncludeRootFolder { get; set; }
+        public bool IncludeRootFolder { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool Quiet { get; set; }
+        public bool Quiet { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool ReplaceExistingArchive { get; set; }
+        public bool ReplaceExistingArchive { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? RootFolderOrFile { get; set; }
+        public string? RootFolderOrFile { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Tasks.SevenZipCompressionLevel SevenZipCompression { get; set; }
+        public Sharpliner.AzureDevOps.Tasks.SevenZipCompressionLevel SevenZipCompression { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Tasks.TarCompressionType TarCompression { get; set; }
+        public Sharpliner.AzureDevOps.Tasks.TarCompressionType TarCompression { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool Verbose { get; set; }
+        public bool Verbose { get; init; }
     }
     public enum ArchiveType
     {
@@ -1536,10 +1536,10 @@ namespace Sharpliner.AzureDevOps.Tasks
     public class AzureDevOpsTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask>
     {
         public AzureDevOpsTask(string task) { }
-        [YamlDotNet.Serialization.YamlMember(Order=101)]
-        public Sharpliner.AzureDevOps.Tasks.TaskInputs Inputs { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=1)]
         public string Task { get; }
+        [YamlDotNet.Serialization.YamlMember(Order=101)]
+        public Sharpliner.AzureDevOps.Tasks.TaskInputs Inputs { get; init; }
         protected bool GetBool(string name, bool defaultValue) { }
         protected int? GetInt(string name, int? defaultValue = default) { }
         protected string? GetString(string name, string? defaultValue = null) { }
@@ -1550,9 +1550,9 @@ namespace Sharpliner.AzureDevOps.Tasks
     public class BashFileTask : Sharpliner.AzureDevOps.Tasks.BashTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.BashFileTask>, YamlDotNet.Serialization.IYamlConvertible
     {
         public BashFileTask(string filePath) { }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Arguments { get; set; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? BashEnv { get; set; }
         public string FilePath { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Arguments { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? BashEnv { get; init; }
         public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
         public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
@@ -1560,14 +1560,14 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         protected BashTask() { }
         [YamlDotNet.Serialization.YamlMember(Order=114)]
-        public bool? FailOnStderr { get; set; }
+        public bool? FailOnStderr { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=115)]
-        public bool? NoProfile { get; set; }
+        public bool? NoProfile { get; init; }
         [System.ComponentModel.DefaultValue(true)]
         [YamlDotNet.Serialization.YamlMember(Order=200)]
-        public bool NoRc { get; set; }
+        public bool NoRc { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=113)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? WorkingDirectory { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? WorkingDirectory { get; init; }
     }
     public class BashTaskBuilder : Sharpliner.Common.Model.Tasks.TaskBuilderBase
     {
@@ -1590,18 +1590,18 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlMember(Order=1)]
         public abstract string Checkout { get; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Clean { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Clean { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=101)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<int>? FetchDepth { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<int>? FetchDepth { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=102)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Lfs { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Lfs { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=104)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Path { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Path { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=105)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? PersistCredentials { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? PersistCredentials { get; init; }
         [System.ComponentModel.DefaultValue(Sharpliner.AzureDevOps.Tasks.SubmoduleCheckout.None)]
         [YamlDotNet.Serialization.YamlMember(Order=103)]
-        public Sharpliner.AzureDevOps.Tasks.SubmoduleCheckout Submodules { get; set; }
+        public Sharpliner.AzureDevOps.Tasks.SubmoduleCheckout Submodules { get; init; }
     }
     public class CheckoutTaskBuilder
     {
@@ -1613,25 +1613,25 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public CopyFilesTask(string contents, string targetFolder) { }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool CleanTargetFolder { get; set; }
+        public bool CleanTargetFolder { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? Contents { get; set; }
+        public string? Contents { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public int? DelayBetweenRetries { get; set; }
+        public int? DelayBetweenRetries { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool FlattenFolders { get; set; }
+        public bool FlattenFolders { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool IgnoreMakeDirErrors { get; set; }
+        public bool IgnoreMakeDirErrors { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool Overwrite { get; set; }
+        public bool Overwrite { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool PreserveTimestamp { get; set; }
+        public bool PreserveTimestamp { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public int? RetryCount { get; set; }
+        public int? RetryCount { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? SourceFolder { get; set; }
+        public string? SourceFolder { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? TargetFolder { get; set; }
+        public string? TargetFolder { get; init; }
     }
     public class CurrentDownloadTask : Sharpliner.AzureDevOps.Tasks.DownloadTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.CurrentDownloadTask>
     {
@@ -1643,47 +1643,47 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public DeleteFilesTask(string contents) { }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? Contents { get; set; }
+        public string? Contents { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool RemoveDotFiles { get; set; }
+        public bool RemoveDotFiles { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool RemoveSourceFolder { get; set; }
+        public bool RemoveSourceFolder { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? SourceFolder { get; set; }
+        public string? SourceFolder { get; init; }
     }
     public class DotNetBuildCoreCliTask : Sharpliner.AzureDevOps.Tasks.DotNetCoreCliTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DotNetBuildCoreCliTask>
     {
         public DotNetBuildCoreCliTask() { }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool? IncludeNuGetOrg { get; set; }
+        public bool? IncludeNuGetOrg { get; init; }
     }
     public class DotNetCoreCliTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DotNetCoreCliTask>
     {
         public DotNetCoreCliTask(string command) { }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? Arguments { get; set; }
+        public string? Arguments { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? Projects { get; set; }
+        public string? Projects { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? WorkingDirectory { get; set; }
+        public string? WorkingDirectory { get; init; }
     }
     public class DotNetPackCoreCliTask : Sharpliner.AzureDevOps.Tasks.DotNetCoreCliTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DotNetPackCoreCliTask>
     {
         public DotNetPackCoreCliTask() { }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? BuildProperties { get; set; }
+        public string? BuildProperties { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? ConfigurationToPack { get; set; }
+        public string? ConfigurationToPack { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool IncludeSource { get; set; }
+        public bool IncludeSource { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool IncludeSymbols { get; set; }
+        public bool IncludeSymbols { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool NoBuild { get; set; }
+        public bool NoBuild { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? OutputDir { get; set; }
+        public string? OutputDir { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? PackagesToPack { get; set; }
+        public string? PackagesToPack { get; init; }
         public Sharpliner.AzureDevOps.Tasks.DotNetPackCoreCliTask VersionByBuildNumber() { }
         public Sharpliner.AzureDevOps.Tasks.DotNetPackCoreCliTask VersionByEnvVar(string envVarName) { }
         public Sharpliner.AzureDevOps.Tasks.DotNetPackCoreCliTask VersionManually(string majorVersion, string minorVersion, string patchVersion) { }
@@ -1697,19 +1697,19 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public DotNetPublishCoreCliTask() { }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool ModifyOutputPath { get; set; }
+        public bool ModifyOutputPath { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool PublishWebProjects { get; set; }
+        public bool PublishWebProjects { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool ZipAfterPublish { get; set; }
+        public bool ZipAfterPublish { get; init; }
     }
     public class DotNetPushCoreCliTask : Sharpliner.AzureDevOps.Tasks.DotNetCoreCliTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DotNetPushCoreCliTask>
     {
         public DotNetPushCoreCliTask() { }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? PackagesToPush { get; set; }
+        public string? PackagesToPush { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool PublishPackageMetadata { get; set; }
+        public bool PublishPackageMetadata { get; init; }
         public Sharpliner.AzureDevOps.Tasks.DotNetPushCoreCliTask PublishExternally(string targetFeedCredentials) { }
         public Sharpliner.AzureDevOps.Tasks.DotNetPushCoreCliTask PublishInternally(string targetFeed) { }
     }
@@ -1717,19 +1717,19 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public DotNetRestoreCoreCliTask() { }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? ExternalFeedCredentials { get; set; }
+        public string? ExternalFeedCredentials { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool? IncludeNuGetOrg { get; set; }
+        public bool? IncludeNuGetOrg { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool NoCache { get; set; }
+        public bool NoCache { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? NuGetConfigPath { get; set; }
+        public string? NuGetConfigPath { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? RestoreArguments { get; set; }
+        public string? RestoreArguments { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? RestoreDirectory { get; set; }
+        public string? RestoreDirectory { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Tasks.BuildVerbosity VerbosityRestore { get; set; }
+        public Sharpliner.AzureDevOps.Tasks.BuildVerbosity VerbosityRestore { get; init; }
     }
     public class DotNetTaskBuilder
     {
@@ -1758,9 +1758,9 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public DotNetTestCoreCliTask() { }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool PublishTestResults { get; set; }
+        public bool PublishTestResults { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? TestRunTitle { get; set; }
+        public string? TestRunTitle { get; init; }
     }
     public class DownloadFromPipelineResourceTask : Sharpliner.AzureDevOps.Tasks.DownloadTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DownloadFromPipelineResourceTask>
     {
@@ -1771,20 +1771,20 @@ namespace Sharpliner.AzureDevOps.Tasks
     public abstract class DownloadTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DownloadTask>
     {
         protected DownloadTask() { }
-        [YamlDotNet.Serialization.YamlMember(Order=60)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Artifact { get; set; }
         [YamlDotNet.Serialization.YamlMember(Order=1)]
         public abstract string Download { get; }
+        [YamlDotNet.Serialization.YamlMember(Order=60)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Artifact { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=62)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Path { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public System.Collections.Generic.List<string> Patterns { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public System.Collections.Generic.List<string> Tags { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Path { get; init; }
         [YamlDotNet.Serialization.YamlMember(Alias="patterns", Order=61, ScalarStyle=YamlDotNet.Core.ScalarStyle.Literal)]
         public string _Patterns { get; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public System.Collections.Generic.List<string> Patterns { get; init; }
         [YamlDotNet.Serialization.YamlMember(Alias="tags", Order=104)]
         public string? _Tags { get; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public System.Collections.Generic.List<string> Tags { get; init; }
     }
     public class DownloadTaskBuilder
     {
@@ -1803,11 +1803,11 @@ namespace Sharpliner.AzureDevOps.Tasks
     public class InlinePowershellTask : Sharpliner.AzureDevOps.Tasks.PowershellTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.InlinePowershellTask>
     {
         public InlinePowershellTask(params string[] scriptLines) { }
-        [YamlDotNet.Serialization.YamlMember(Alias="powershell", Order=1, ScalarStyle=YamlDotNet.Core.ScalarStyle.Literal)]
-        public string Contents { get; set; }
         [System.ComponentModel.DefaultValue("inline")]
         [YamlDotNet.Serialization.YamlMember(Order=2)]
         public string TargetType { get; }
+        [YamlDotNet.Serialization.YamlMember(Alias="powershell", Order=1, ScalarStyle=YamlDotNet.Core.ScalarStyle.Literal)]
+        public string Contents { get; init; }
     }
     public class NoneCheckoutTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NoneCheckoutTask>
     {
@@ -1824,8 +1824,8 @@ namespace Sharpliner.AzureDevOps.Tasks
     public class PowershellFileTask : Sharpliner.AzureDevOps.Tasks.PowershellTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PowershellFileTask>, YamlDotNet.Serialization.IYamlConvertible
     {
         public PowershellFileTask(string filePath) { }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Arguments { get; set; }
         public string FilePath { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Arguments { get; init; }
         public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
         public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
@@ -1834,27 +1834,27 @@ namespace Sharpliner.AzureDevOps.Tasks
         protected PowershellTask() { }
         [System.ComponentModel.DefaultValue(Sharpliner.AzureDevOps.Tasks.ActionPreference.Continue)]
         [YamlDotNet.Serialization.YamlMember(Order=114)]
-        public Sharpliner.AzureDevOps.Tasks.ActionPreference DebugPreference { get; set; }
+        public Sharpliner.AzureDevOps.Tasks.ActionPreference DebugPreference { get; init; }
         [System.ComponentModel.DefaultValue(Sharpliner.AzureDevOps.Tasks.ActionPreference.Stop)]
         [YamlDotNet.Serialization.YamlMember(Order=114)]
-        public Sharpliner.AzureDevOps.Tasks.ActionPreference ErrorActionPreference { get; set; }
+        public Sharpliner.AzureDevOps.Tasks.ActionPreference ErrorActionPreference { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=125)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? FailOnStderr { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? FailOnStderr { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=126)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? IgnoreLASTEXITCODE { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? IgnoreLASTEXITCODE { get; init; }
         [System.ComponentModel.DefaultValue(Sharpliner.AzureDevOps.Tasks.ActionPreference.Continue)]
         [YamlDotNet.Serialization.YamlMember(Order=114)]
-        public Sharpliner.AzureDevOps.Tasks.ActionPreference InformationPreference { get; set; }
+        public Sharpliner.AzureDevOps.Tasks.ActionPreference InformationPreference { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=127)]
-        public bool Pwsh { get; set; }
+        public bool Pwsh { get; init; }
         [System.ComponentModel.DefaultValue(Sharpliner.AzureDevOps.Tasks.ActionPreference.Continue)]
         [YamlDotNet.Serialization.YamlMember(Order=114)]
-        public Sharpliner.AzureDevOps.Tasks.ActionPreference VerbosePreference { get; set; }
+        public Sharpliner.AzureDevOps.Tasks.ActionPreference VerbosePreference { get; init; }
         [System.ComponentModel.DefaultValue(Sharpliner.AzureDevOps.Tasks.ActionPreference.Continue)]
         [YamlDotNet.Serialization.YamlMember(Order=114)]
-        public Sharpliner.AzureDevOps.Tasks.ActionPreference WarningPreference { get; set; }
+        public Sharpliner.AzureDevOps.Tasks.ActionPreference WarningPreference { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=113)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? WorkingDirectory { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? WorkingDirectory { get; init; }
     }
     public class PowershellTaskBuilder : Sharpliner.Common.Model.Tasks.TaskBuilderBase
     {
@@ -1867,55 +1867,55 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public PublishCodeCoverageResultsTask(string summaryFileLocation) { }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool FailIfCoverageEmpty { get; set; }
+        public bool FailIfCoverageEmpty { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? PathToSources { get; set; }
+        public string? PathToSources { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? SummaryFileLocation { get; set; }
+        public string? SummaryFileLocation { get; init; }
     }
     public class PublishTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PublishTask>
     {
         public PublishTask(string targetPath, string artifactName = "drop") { }
-        [YamlDotNet.Serialization.YamlMember(Order=101)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Artifact { get; set; }
-        [System.ComponentModel.DefaultValue(Sharpliner.AzureDevOps.Tasks.ArtifactType.Pipeline)]
-        [YamlDotNet.Serialization.YamlMember(Order=102)]
-        public Sharpliner.AzureDevOps.Tasks.ArtifactType ArtifactType { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=211)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? FileSharePath { get; set; }
-        [YamlDotNet.Serialization.YamlMember(Order=212)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Parallel { get; set; }
-        [System.ComponentModel.DefaultValue(1u)]
-        [YamlDotNet.Serialization.YamlMember(Order=213)]
-        public uint ParallelCount { get; set; }
         [YamlDotNet.Serialization.YamlMember(Alias="publish", Order=1)]
         public string TargetPath { get; }
+        [System.ComponentModel.DefaultValue(Sharpliner.AzureDevOps.Tasks.ArtifactType.Pipeline)]
+        [YamlDotNet.Serialization.YamlMember(Order=102)]
+        public Sharpliner.AzureDevOps.Tasks.ArtifactType ArtifactType { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=101)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Artifact { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=211)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? FileSharePath { get; init; }
+        [System.ComponentModel.DefaultValue(1u)]
+        [YamlDotNet.Serialization.YamlMember(Order=213)]
+        public uint ParallelCount { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=212)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Parallel { get; init; }
     }
     public class PublishTestResultsTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PublishTestResultsTask>
     {
         public PublishTestResultsTask(Sharpliner.AzureDevOps.Tasks.TestResultsFormat testResultsFormat, string testResultsFile) { }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? BuildConfiguration { get; set; }
+        public string? BuildConfiguration { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? BuildPlatform { get; set; }
+        public string? BuildPlatform { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool FailTaskOnFailedTests { get; set; }
+        public bool FailTaskOnFailedTests { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool FailTaskOnFailureToPublishResults { get; set; }
+        public bool FailTaskOnFailureToPublishResults { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool FailTaskOnMissingResultsFile { get; set; }
+        public bool FailTaskOnMissingResultsFile { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool MergeTestResults { get; set; }
+        public bool MergeTestResults { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool PublishRunAttachments { get; set; }
+        public bool PublishRunAttachments { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? SearchFolder { get; set; }
+        public string? SearchFolder { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? TestResultsFiles { get; set; }
+        public string? TestResultsFiles { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Tasks.TestResultsFormat TestResultsFormat { get; set; }
+        public Sharpliner.AzureDevOps.Tasks.TestResultsFormat TestResultsFormat { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? TestRunTitle { get; set; }
+        public string? TestRunTitle { get; init; }
     }
     public class RepositoryCheckoutTask : Sharpliner.AzureDevOps.Tasks.CheckoutTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.RepositoryCheckoutTask>
     {
@@ -1934,9 +1934,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlMember(Alias="script", Order=1, ScalarStyle=YamlDotNet.Core.ScalarStyle.Literal)]
         public string Contents { get; }
         [YamlDotNet.Serialization.YamlMember(Order=200)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? FailOnStdErr { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? FailOnStdErr { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=113)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? WorkingDirectory { get; set; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? WorkingDirectory { get; init; }
     }
     public class ScriptTaskBuilder : Sharpliner.Common.Model.Tasks.TaskBuilderBase
     {
@@ -1962,31 +1962,15 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public SpecificDownloadTask(Sharpliner.AzureDevOps.Tasks.RunVersion runVersion, string project, int pipeline) { }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool AllowFailedBuilds { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public bool AllowPartiallySucceededBuilds { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? Artifact { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
         public string? BranchName { get; }
         [YamlDotNet.Serialization.YamlIgnore]
         public int BuildId { get; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public bool CheckDownloadedFiles { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? Path { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public System.Collections.Generic.List<string>? Patterns { get; set; }
         [YamlDotNet.Serialization.YamlIgnore]
         public int Pipeline { get; }
         [YamlDotNet.Serialization.YamlIgnore]
         public int PipelineId { get; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool PreferTriggeringPipeline { get; set; }
-        [YamlDotNet.Serialization.YamlIgnore]
         public string Project { get; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public int RetryDownloadCount { get; set; }
         [YamlDotNet.Serialization.YamlIgnore]
         public string? RunBranch { get; }
         [YamlDotNet.Serialization.YamlIgnore]
@@ -1994,7 +1978,23 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Tasks.RunVersion RunVersion { get; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public System.Collections.Generic.List<string> Tags { get; set; }
+        public bool AllowFailedBuilds { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool AllowPartiallySucceededBuilds { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? Artifact { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool CheckDownloadedFiles { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? Path { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public System.Collections.Generic.List<string>? Patterns { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool PreferTriggeringPipeline { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public int RetryDownloadCount { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public System.Collections.Generic.List<string> Tags { get; init; }
     }
     public enum SubmoduleCheckout
     {
@@ -2029,19 +2029,19 @@ namespace Sharpliner.AzureDevOps.Tasks
         public UseDotNetTask() { }
         public UseDotNetTask(Sharpliner.AzureDevOps.Tasks.DotNetPackageType packageType, string version, bool includePreviewVersions = false) { }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool IncludePreviewVersions { get; set; }
+        public bool IncludePreviewVersions { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? InstallationPath { get; set; }
+        public string? InstallationPath { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Tasks.DotNetPackageType PackageType { get; set; }
+        public Sharpliner.AzureDevOps.Tasks.DotNetPackageType PackageType { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool PerformMultiLevelLookup { get; set; }
+        public bool PerformMultiLevelLookup { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public bool UseGlobalJson { get; set; }
+        public bool UseGlobalJson { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? Version { get; set; }
+        public string? Version { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? WorkingDirectory { get; set; }
+        public string? WorkingDirectory { get; init; }
     }
 }
 namespace Sharpliner.AzureDevOps.Validation

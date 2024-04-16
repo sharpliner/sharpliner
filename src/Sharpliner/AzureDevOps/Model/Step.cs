@@ -14,8 +14,6 @@ namespace Sharpliner.AzureDevOps;
 /// </summary>
 public abstract record Step
 {
-    private Conditioned<string>? _name;
-
     /// <summary>
     /// Friendly name displayed in the UI.
     /// </summary>
@@ -28,14 +26,7 @@ public abstract record Step
     /// </summary>
     [YamlMember(Order = 150)]
     [DisallowNull]
-    public Conditioned<string>? Name
-    {
-        get => _name;
-        init
-        {
-            _name = value;
-        }
-    }
+    public Conditioned<string>? Name { get; init; }
 
     /// <summary>
     /// Whether to run this step; defaults to 'true'.

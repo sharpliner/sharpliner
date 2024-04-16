@@ -16,17 +16,15 @@ public static class ValidationsExtensions
                 .Where(job => job is Job regularJob)
                 .SelectMany(job => ((Job)job).Steps.SelectMany(s => s.FlattenDefinitions())));
 
-    public static IReadOnlyCollection<IDefinitionValidation> GetStageValidations(this ConditionedList<Stage> stages)
-        => new IDefinitionValidation[]
-        {
-            new StageDependsOnValidation(stages),
-            new NameValidation(stages),
-        };
+    public static IReadOnlyCollection<IDefinitionValidation> GetStageValidations(this ConditionedList<Stage> stages) =>
+    [
+        new StageDependsOnValidation(stages),
+        new NameValidation(stages),
+    ];
 
-    public static IReadOnlyCollection<IDefinitionValidation> GetJobValidations(this ConditionedList<JobBase> jobs)
-        => new IDefinitionValidation[]
-        {
-            new JobDependsOnValidation(jobs),
-            new NameValidation(jobs),
-        };
+    public static IReadOnlyCollection<IDefinitionValidation> GetJobValidations(this ConditionedList<JobBase> jobs) =>
+    [
+        new JobDependsOnValidation(jobs),
+        new NameValidation(jobs),
+    ];
 }

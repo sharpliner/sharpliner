@@ -14,14 +14,14 @@ internal class RepositoryCheckoutValidation : IDefinitionValidation
 
     public RepositoryCheckoutValidation(SingleStagePipeline pipeline)
     {
-        _resources = pipeline.Resources?.FlattenDefinitions() ?? Array.Empty<Resources>();
+        _resources = pipeline.Resources?.FlattenDefinitions() ?? [];
         _steps = pipeline.Jobs.GetSteps();
         _severity = SharplinerConfiguration.Current.Validations.RepositoryCheckouts;
     }
 
     public RepositoryCheckoutValidation(Pipeline pipeline)
     {
-        _resources = pipeline.Resources?.FlattenDefinitions() ?? Array.Empty<Resources>();
+        _resources = pipeline.Resources?.FlattenDefinitions() ?? [];
         _steps = pipeline.Stages
             .SelectMany(stage => stage.FlattenDefinitions())
             .SelectMany(stage => stage.Jobs.GetSteps());

@@ -35,7 +35,7 @@ internal abstract class WorkflowDefinition : ISharplinerDefinition
     /// <summary>
     /// Returns the list of validations that should be run on the definition (e.g. wrong dependsOn, artifact name typos..).
     /// </summary>
-    public IReadOnlyCollection<IDefinitionValidation> Validations => Array.Empty<IDefinitionValidation>();
+    public IReadOnlyCollection<IDefinitionValidation> Validations => [];
 
     /// <summary>
     /// Serializes this pipeline into YAML.

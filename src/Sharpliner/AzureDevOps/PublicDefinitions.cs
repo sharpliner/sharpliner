@@ -78,7 +78,7 @@ public abstract class StepTemplateDefinition : TemplateDefinition<Step>
 {
     internal sealed override string YamlProperty => "steps";
 
-    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Array.Empty<IDefinitionValidation>();
+    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => [];
 }
 
 /// <summary>
@@ -89,7 +89,7 @@ public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBa
 {
     internal sealed override string YamlProperty => "variables";
 
-    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Array.Empty<IDefinitionValidation>();
+    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => [];
 }
 
 #endregion
@@ -144,7 +144,7 @@ public abstract class StepTemplateCollection : TemplateDefinitionCollection<Step
     internal sealed override string YamlProperty => "steps";
 
     internal sealed override IReadOnlyCollection<IDefinitionValidation> GetValidations(TemplateDefinitionData<Step> definition)
-        => Array.Empty<IDefinitionValidation>();
+        => [];
 }
 
 /// <summary>
@@ -156,7 +156,7 @@ public abstract class VariableTemplateCollection : TemplateDefinitionCollection<
     internal sealed override string YamlProperty => "variables";
 
     internal sealed override IReadOnlyCollection<IDefinitionValidation> GetValidations(TemplateDefinitionData<VariableBase> definition)
-        => Array.Empty<IDefinitionValidation>();
+        => [];
 }
 
 #endregion

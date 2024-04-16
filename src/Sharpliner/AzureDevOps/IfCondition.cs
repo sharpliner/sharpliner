@@ -4,15 +4,15 @@ namespace Sharpliner.AzureDevOps;
 
 public abstract class IfCondition : Condition
 {
-    private static readonly (string Start, string End)[] s_tagsToRemove = new[]
-    {
+    private static readonly (string Start, string End)[] s_tagsToRemove =
+    [
         (IfTagStart, ExpressionEnd),
         (ElseTagStart, ExpressionEnd),
         ('\'' + IfTagStart, ExpressionEnd + '\''),
         ('\'' + ElseTagStart, ExpressionEnd + '\''),
         (ExpressionStart, ExpressionEnd),
         ('\'' + ExpressionStart, ExpressionEnd + '\''),
-    };
+    ];
 
     internal static string WithoutTags(IfCondition condition)
     {
