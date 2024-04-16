@@ -1,5 +1,4 @@
-﻿using Sharpliner.AzureDevOps.Tasks;
-using YamlDotNet.Serialization;
+﻿using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
