@@ -1498,6 +1498,35 @@ namespace Sharpliner.AzureDevOps.Tasks
         Stop = 5,
         Suspend = 6,
     }
+    public class ArchiveFilesTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.ArchiveFilesTask>
+    {
+        public ArchiveFilesTask(string rootFolderOrFile, Sharpliner.AzureDevOps.Tasks.ArchiveType archiveType, string archiveFile) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? ArchiveFile { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.ArchiveType ArchiveType { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool IncludeRootFolder { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool Quiet { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool ReplaceExistingArchive { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? RootFolderOrFile { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.SevenZipCompressionLevel SevenZipCompression { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.TarCompressionType TarCompression { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool Verbose { get; set; }
+    }
+    public enum ArchiveType
+    {
+        Zip = 0,
+        _7z = 1,
+        Tar = 2,
+        Wim = 3,
+    }
     public enum ArtifactType
     {
         Pipeline = 0,
@@ -1908,6 +1937,15 @@ namespace Sharpliner.AzureDevOps.Tasks
         public SelfCheckoutTask() { }
         public override string Checkout { get; }
     }
+    public enum SevenZipCompressionLevel
+    {
+        None = 0,
+        Fastest = 1,
+        Fast = 2,
+        Normal = 3,
+        Maximum = 4,
+        Ultra = 5,
+    }
     public class SpecificDownloadTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SpecificDownloadTask>
     {
         public SpecificDownloadTask(Sharpliner.AzureDevOps.Tasks.RunVersion runVersion, string project, int pipeline) { }
@@ -1954,6 +1992,13 @@ namespace Sharpliner.AzureDevOps.Tasks
         SingleLevel = 1,
         [YamlDotNet.Serialization.YamlMember(Alias="recursive")]
         Recursive = 2,
+    }
+    public enum TarCompressionType
+    {
+        Gz = 0,
+        Bz2 = 1,
+        Xz = 2,
+        None = 3,
     }
     public class TaskInputs : Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary
     {
