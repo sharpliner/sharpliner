@@ -1639,6 +1639,18 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlMember(Order=1)]
         public override string Download { get; }
     }
+    public class DeleteFilesTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DeleteFilesTask>
+    {
+        public DeleteFilesTask(string contents) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? Contents { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool RemoveDotFiles { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool RemoveSourceFolder { get; set; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? SourceFolder { get; set; }
+    }
     public class DotNetBuildCoreCliTask : Sharpliner.AzureDevOps.Tasks.DotNetCoreCliTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DotNetBuildCoreCliTask>
     {
         public DotNetBuildCoreCliTask() { }
