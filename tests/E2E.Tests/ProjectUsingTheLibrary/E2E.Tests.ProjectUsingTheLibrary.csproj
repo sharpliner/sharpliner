@@ -24,13 +24,13 @@
   -->
 
   <Target Name="CleanDependencies" AfterTargets="Clean">
-    <Exec Condition=" '$(OS)' != 'Windows_NT' " Command="$(MSBuildThisFileDirectory)/../../../eng/Sharpliner.CI/scripts/clean-dependencies.sh" />
-    <Exec Condition=" '$(OS)' == 'Windows_NT' " Command="powershell.exe -NonInteractive -ExecutionPolicy Unrestricted $(MSBuildThisFileDirectory)scripts\clean-dependencies.ps1" />
+    <Exec Condition=" '$(OS)' != 'Windows_NT' " Command="$(MSBuildThisFileDirectory)/../../../eng/scripts/clean-dependencies.sh" />
+    <Exec Condition=" '$(OS)' == 'Windows_NT' " Command="powershell.exe -NonInteractive -ExecutionPolicy Unrestricted $(MSBuildThisFileDirectory)\..\..\..\eng\scripts\clean-dependencies.ps1" />
   </Target>
 
   <Target Name="BuildDependencies" BeforeTargets="_GenerateRestoreProjectSpec">
-    <Exec Condition=" '$(OS)' != 'Windows_NT' " Command="$(MSBuildThisFileDirectory)/../../../eng/Sharpliner.CI/scripts/build-dependencies.sh" />
-    <Exec Condition=" '$(OS)' == 'Windows_NT' " Command="powershell.exe -NonInteractive -ExecutionPolicy Unrestricted $(MSBuildThisFileDirectory)scripts\build-dependencies.ps1" />
+    <Exec Condition=" '$(OS)' != 'Windows_NT' " Command="$(MSBuildThisFileDirectory)/../../../eng/scripts/build-dependencies.sh" />
+    <Exec Condition=" '$(OS)' == 'Windows_NT' " Command="powershell.exe -NonInteractive -ExecutionPolicy Unrestricted $(MSBuildThisFileDirectory)\..\..\..\eng\scripts\build-dependencies.ps1" />
   </Target>
 
 </Project>

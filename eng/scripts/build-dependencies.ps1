@@ -1,6 +1,5 @@
 $repo_root = Join-Path $PSScriptRoot ".."
 $repo_root = Join-Path $repo_root ".."
-$repo_root = Join-Path $repo_root ".."
 
 if (-not(Test-Path "$repo_root/artifacts")) {
     New-Item -Path "$repo_root" -Name "artifacts" -ItemType "directory" | out-null
