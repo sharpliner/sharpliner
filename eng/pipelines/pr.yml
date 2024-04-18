@@ -64,7 +64,7 @@ jobs:
     displayName: Build NuGet reference test
     inputs:
       command: build
-      projects: tests/E2E.Tests/ProjectUsingTheNuGet/E2E.Tests.ProjectUsingTheNuGet.csproj
+      projects: tests/E2E.Tests/ProjectUsingTheLibraryNuGet/E2E.Tests.ProjectUsingTheLibraryNuGet.csproj
       includeNuGetOrg: false
       workingDirectory: tests/E2E.Tests
 

@@ -40,7 +40,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                         WorkingDirectory = "tests/E2E.Tests",
                     },
 
-                    DotNet.Build("tests/E2E.Tests/ProjectUsingTheNuGet/E2E.Tests.ProjectUsingTheNuGet.csproj") with
+                    DotNet.Build("tests/E2E.Tests/ProjectUsingTheLibraryNuGet/E2E.Tests.ProjectUsingTheLibraryNuGet.csproj") with
                     {
                         DisplayName = "Build NuGet reference test",
                         IncludeNuGetOrg = false,
