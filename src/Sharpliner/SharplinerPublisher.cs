@@ -26,7 +26,7 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
     public bool Publish(string assemblyPath, bool failIfChanged)
     {
         var definitionFound = false;
-        var assembly = Assembly.Load(AssemblyName.GetAssemblyName(assemblyPath));
+        var assembly = Assembly.LoadFrom(assemblyPath);
 
         LoadConfiguration(assembly);
 
