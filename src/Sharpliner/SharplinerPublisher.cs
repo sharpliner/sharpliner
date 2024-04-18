@@ -26,7 +26,16 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
     public bool Publish(string assemblyPath, bool failIfChanged)
     {
         var definitionFound = false;
-        var assembly = Assembly.LoadFrom(assemblyPath);
+        Assembly assembly;
+
+        try
+        {
+            assembly = Assembly.Load(AssemblyName.GetAssemblyName(assemblyPath));
+        }
+        catch (FileNotFoundException)
+        {
+            assembly = Assembly.LoadFrom(assemblyPath);
+        }
 
         LoadConfiguration(assembly);
 
