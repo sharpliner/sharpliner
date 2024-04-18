@@ -52,18 +52,26 @@ jobs:
       projects: tests/Sharpliner.Tests/Sharpliner.Tests.csproj
 
   - task: DotNetCoreCLI@2
-    displayName: E2E tests - Pack NuGet.Tests library
+    displayName: E2E tests - Pack E2E.Tests library
     inputs:
       command: pack
-      packagesToPack: tests/NuGet.Tests/NuGetWithBasePipeline/NuGetWithBasePipeline.csproj
+      packagesToPack: tests/E2E.Tests/SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj
       configurationToPack: Release
       outputDir: artifacts/packages
-      workingDirectory: tests/NuGet.Tests
+      workingDirectory: tests/E2E.Tests
 
   - task: DotNetCoreCLI@2
-    displayName: E2E tests - Build NuGet.Tests project
+    displayName: Build NuGet reference test
     inputs:
       command: build
-      projects: tests/NuGet.Tests/ProjectUsingTheNuGet/ProjectUsingTheNuGet.csproj
+      projects: tests/E2E.Tests/ProjectUsingTheLibraryNuGet/E2E.Tests.ProjectUsingTheLibraryNuGet.csproj
       includeNuGetOrg: false
-      workingDirectory: tests/NuGet.Tests
+      workingDirectory: tests/E2E.Tests
+
+  - task: DotNetCoreCLI@2
+    displayName: Build project reference test
+    inputs:
+      command: build
+      projects: tests/E2E.Tests/ProjectUsingTheLibrary/E2E.Tests.ProjectUsingTheLibrary.csproj
+      includeNuGetOrg: false
+      workingDirectory: tests/E2E.Tests

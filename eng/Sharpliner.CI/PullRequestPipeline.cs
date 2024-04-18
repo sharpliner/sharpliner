@@ -32,19 +32,26 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                         .Test("tests/Sharpliner.Tests/Sharpliner.Tests.csproj")
                         .DisplayAs("Run unit tests"),
 
-                    DotNet.Pack("tests/NuGet.Tests/NuGetWithBasePipeline/NuGetWithBasePipeline.csproj") with
+                    DotNet.Pack("tests/E2E.Tests/SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj") with
                     {
-                        DisplayName = "E2E tests - Pack NuGet.Tests library",
+                        DisplayName = "E2E tests - Pack E2E.Tests library",
                         ConfigurationToPack = "Release",
                         OutputDir = "artifacts/packages",
-                        WorkingDirectory = "tests/NuGet.Tests",
+                        WorkingDirectory = "tests/E2E.Tests",
                     },
 
-                    DotNet.Build("tests/NuGet.Tests/ProjectUsingTheNuGet/ProjectUsingTheNuGet.csproj") with
+                    DotNet.Build("tests/E2E.Tests/ProjectUsingTheLibraryNuGet/E2E.Tests.ProjectUsingTheLibraryNuGet.csproj") with
                     {
-                        DisplayName = "E2E tests - Build NuGet.Tests project",
+                        DisplayName = "Build NuGet reference test",
                         IncludeNuGetOrg = false,
-                        WorkingDirectory = "tests/NuGet.Tests",
+                        WorkingDirectory = "tests/E2E.Tests",
+                    },
+
+                    DotNet.Build("tests/E2E.Tests/ProjectUsingTheLibrary/E2E.Tests.ProjectUsingTheLibrary.csproj") with
+                    {
+                        DisplayName = "Build project reference test",
+                        IncludeNuGetOrg = false,
+                        WorkingDirectory = "tests/E2E.Tests",
                     }
                 }
             }

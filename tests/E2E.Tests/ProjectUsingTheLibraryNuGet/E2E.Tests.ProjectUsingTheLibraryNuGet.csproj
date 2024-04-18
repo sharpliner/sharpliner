@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Sharpliner" />
-    <PackageReference Include="NuGetWithBasePipeline" />
+    <PackageReference Include="E2E.Tests.SharplinerLibrary" />
   </ItemGroup>
 
 </Project>

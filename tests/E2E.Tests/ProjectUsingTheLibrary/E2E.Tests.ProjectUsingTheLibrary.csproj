@@ -1,0 +1,36 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Sharpliner" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SharplinerLibrary\E2E.Tests.SharplinerLibrary.csproj" />
+  </ItemGroup>
+
+  <!--
+    This project mimics the direct usage of Sharpliner library.
+
+    To correctly re-build this project so that it consumes the latest code changes, we have to:
+    1. Clean NuGet caches
+    3. Create Sharpliner and Sharpliner.CI nupkgs
+    5. Restore this project from those
+  -->
+
+  <Target Name="CleanDependencies" AfterTargets="Clean">
+    <Exec Condition=" '$(OS)' != 'Windows_NT' " Command="$(MSBuildThisFileDirectory)/../../../eng/scripts/clean-dependencies.sh" />
+    <Exec Condition=" '$(OS)' == 'Windows_NT' " Command="powershell.exe -NonInteractive -ExecutionPolicy Unrestricted $(MSBuildThisFileDirectory)\..\..\..\eng\scripts\clean-dependencies.ps1" />
+  </Target>
+
+  <Target Name="BuildDependencies" BeforeTargets="_GenerateRestoreProjectSpec">
+    <Exec Condition=" '$(OS)' != 'Windows_NT' " Command="$(MSBuildThisFileDirectory)/../../../eng/scripts/build-dependencies.sh" />
+    <Exec Condition=" '$(OS)' == 'Windows_NT' " Command="powershell.exe -NonInteractive -ExecutionPolicy Unrestricted $(MSBuildThisFileDirectory)\..\..\..\eng\scripts\build-dependencies.ps1" />
+  </Target>
+
+</Project>

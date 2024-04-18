@@ -1,9 +1,10 @@
 using System.IO;
+using E2E.Tests.SharplinerLibrary;
 using Sharpliner;
 using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.Tasks;
 
-namespace Tests.NuGetWithBasePipeline;
+namespace Tests.ProjectUsingTheLibraryNuGet;
 
 // These NuGet.Tests are E2E testing following scenario:
 // 1. We create a "library" project with an arbitrary Sharpliner definition
@@ -14,9 +15,9 @@ namespace Tests.NuGetWithBasePipeline;
 // This is testing user scenarios where people want to publish definitions in the form of NuGet and re-use it in other projects.
 
 // This class is the one that uses the library NuGet
-public  class NuGetTestDefinition : BasePipelineFromNuGet
+public class NuGetTestDefinition : BasePipelineFromLibrary
 {
-    public override string TargetFile => Path.Combine("tests", "NuGet.Tests", "NuGetTestDefinition.yml");
+    public override string TargetFile => Path.Combine("artifacts", "E2E.Tests", "NuGetTestDefinition.yml");
 
     public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 }

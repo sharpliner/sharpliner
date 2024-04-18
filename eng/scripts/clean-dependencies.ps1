@@ -6,7 +6,6 @@ Foreach ($cache in $caches) {
 
 $repo_root = Join-Path $PSScriptRoot ".."
 $repo_root = Join-Path $repo_root ".."
-$repo_root = Join-Path $repo_root ".."
 
 # Remove Sharpliner .nupkg packages
 
