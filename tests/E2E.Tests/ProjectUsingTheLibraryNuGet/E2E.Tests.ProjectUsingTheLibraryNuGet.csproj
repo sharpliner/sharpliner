@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Sharpliner" Version="43.43.43" />
-    <PackageReference Include="E2E.Tests.SharplinerLibrary" Version="1.0.0" />
+    <PackageReference Include="Sharpliner" />
+    <PackageReference Include="E2E.Tests.SharplinerLibrary" />
   </ItemGroup>
 
 </Project>
