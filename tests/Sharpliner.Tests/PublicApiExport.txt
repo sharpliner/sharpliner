@@ -513,9 +513,8 @@ namespace Sharpliner.AzureDevOps
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<System.TimeSpan>? Timeout { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=600)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.VariableBase> Variables { get; init; }
-        [System.ComponentModel.DefaultValue(Sharpliner.AzureDevOps.JobWorkspace.Outputs)]
         [YamlDotNet.Serialization.YamlMember(Order=1000)]
-        public Sharpliner.AzureDevOps.JobWorkspace Workspace { get; init; }
+        public Sharpliner.AzureDevOps.JobWorkspace? Workspace { get; init; }
     }
     public abstract class JobLibrary : Sharpliner.AzureDevOps.DefinitionLibrary<Sharpliner.AzureDevOps.JobBase>
     {
@@ -541,11 +540,13 @@ namespace Sharpliner.AzureDevOps
         protected JobTemplateDefinition() { }
         public virtual System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
     }
-    public enum JobWorkspace
+    public class JobWorkspace : YamlDotNet.Serialization.IYamlConvertible
     {
-        Outputs = 0,
-        Resources = 1,
-        All = 2,
+        public static readonly Sharpliner.AzureDevOps.JobWorkspace All;
+        public static readonly Sharpliner.AzureDevOps.JobWorkspace Outputs;
+        public static readonly Sharpliner.AzureDevOps.JobWorkspace Resources;
+        public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
+        public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class JsonParameterFilter : System.IEquatable<Sharpliner.AzureDevOps.JsonParameterFilter>
     {
