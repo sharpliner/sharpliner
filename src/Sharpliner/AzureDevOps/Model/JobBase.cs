@@ -73,8 +73,7 @@ public abstract record JobBase : IDependsOn
     /// What to clean up before the job runs
     /// </summary>
     [YamlMember(Order = 1000)]
-    [DefaultValue(JobWorkspace.Outputs)]
-    public JobWorkspace Workspace { get; init; } = JobWorkspace.Outputs;
+    public JobWorkspace? Workspace { get; init; } = null;
 
     /// <summary>
     /// Container resources to run as a service container.
