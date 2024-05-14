@@ -23,6 +23,18 @@ jobs:
     name: Azure Pipelines
     vmImage: windows-2022
   steps:
+  - powershell: |-
+      Write-Host 'iam not working'
+    pwsh: true
+
+  - task: PowerShell@2
+    displayName: Running docker image
+    inputs:
+      targetType: filePath
+      filePath: tools/scripts/RunDocker.ps1
+      arguments: foo
+      pwsh: true
+
   - template: templates/install-dotnet-sdk.yml
     parameters:
       version: 8.0.204
