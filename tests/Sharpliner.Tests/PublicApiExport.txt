@@ -32,7 +32,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.InlineCondition IsPullRequest { get; }
         protected static Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> NoDependsOn { get; }
         protected static Sharpliner.AzureDevOps.Tasks.PowershellTaskBuilder Powershell { get; }
-        protected static Sharpliner.AzureDevOps.Tasks.PowershellTaskBuilder Pwsh { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.PwshTaskBuilder Pwsh { get; }
         protected static Sharpliner.AzureDevOps.Tasks.ScriptTaskBuilder Script { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition And(params Sharpliner.AzureDevOps.InlineCondition[] expressions) { }
         protected static Sharpliner.AzureDevOps.InlineCondition And(params string[] expressions) { }
@@ -1810,6 +1810,15 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlMember(Alias="powershell", Order=1, ScalarStyle=YamlDotNet.Core.ScalarStyle.Literal)]
         public string Contents { get; init; }
     }
+    public class InlinePwshTask : Sharpliner.AzureDevOps.Tasks.PowershellTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.InlinePwshTask>
+    {
+        public InlinePwshTask(params string[] scriptLines) { }
+        [System.ComponentModel.DefaultValue("inline")]
+        [YamlDotNet.Serialization.YamlMember(Order=2)]
+        public string TargetType { get; }
+        [YamlDotNet.Serialization.YamlMember(Alias="pwsh", Order=1, ScalarStyle=YamlDotNet.Core.ScalarStyle.Literal)]
+        public string Contents { get; init; }
+    }
     public class NoneCheckoutTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NoneCheckoutTask>
     {
         public NoneCheckoutTask() { }
@@ -1824,7 +1833,7 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
     public class PowershellFileTask : Sharpliner.AzureDevOps.Tasks.PowershellTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PowershellFileTask>, YamlDotNet.Serialization.IYamlConvertible
     {
-        public PowershellFileTask(string filePath) { }
+        public PowershellFileTask(string filePath, bool isPwsh) { }
         public string FilePath { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Arguments { get; init; }
         public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
@@ -1846,8 +1855,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         [System.ComponentModel.DefaultValue(Sharpliner.AzureDevOps.Tasks.ActionPreference.Continue)]
         [YamlDotNet.Serialization.YamlMember(Order=114)]
         public Sharpliner.AzureDevOps.Tasks.ActionPreference InformationPreference { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Order=127)]
-        public bool Pwsh { get; init; }
         [System.ComponentModel.DefaultValue(Sharpliner.AzureDevOps.Tasks.ActionPreference.Continue)]
         [YamlDotNet.Serialization.YamlMember(Order=114)]
         public Sharpliner.AzureDevOps.Tasks.ActionPreference VerbosePreference { get; init; }
@@ -1859,6 +1866,7 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
     public class PowershellTaskBuilder : Sharpliner.Common.Model.Tasks.TaskBuilderBase
     {
+        public PowershellTaskBuilder() { }
         public Sharpliner.AzureDevOps.Tasks.PowershellFileTask File(string filePath, string? displayName = null) { }
         public Sharpliner.AzureDevOps.Tasks.InlinePowershellTask FromFile(string path, string? displayName = null) { }
         public Sharpliner.AzureDevOps.Tasks.InlinePowershellTask FromResourceFile(string resourceFileName, string? displayName = null) { }
@@ -1917,6 +1925,14 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.TestResultsFormat TestResultsFormat { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public string? TestRunTitle { get; init; }
+    }
+    public class PwshTaskBuilder : Sharpliner.Common.Model.Tasks.TaskBuilderBase
+    {
+        public PwshTaskBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.PowershellFileTask File(string filePath, string? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.InlinePwshTask FromFile(string path, string? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.InlinePwshTask FromResourceFile(string resourceFileName, string? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.InlinePwshTask Inline(params string[] scriptLines) { }
     }
     public class RepositoryCheckoutTask : Sharpliner.AzureDevOps.Tasks.CheckoutTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.RepositoryCheckoutTask>
     {
