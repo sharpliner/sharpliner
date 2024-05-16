@@ -71,13 +71,6 @@ public abstract record PowershellTask : Step
     /// </summary>
     [YamlMember(Order = 126)]
     public Conditioned<bool>? IgnoreLASTEXITCODE { get; init; }
-
-    /// <summary>
-    /// If this is true, then on Windows the task will use pwsh.exe from your PATH instead of powershell.exe.
-    /// Default value: `false`.
-    /// </summary>
-    [YamlMember(Order = 127)]
-    public bool Pwsh { get; init; }
 }
 
 public record InlinePowershellTask : PowershellTask
@@ -100,6 +93,8 @@ public record InlinePowershellTask : PowershellTask
 
 public record PowershellFileTask : PowershellTask, IYamlConvertible
 {
+    private readonly bool _isPwsh;
+
     /// <summary>
     /// Path of the script to execute.
     /// Must be a fully qualified path or relative to $(System.DefaultWorkingDirectory).
@@ -111,9 +106,10 @@ public record PowershellFileTask : PowershellTask, IYamlConvertible
     /// </summary>
     public Conditioned<string>? Arguments { get; init; }
 
-    public PowershellFileTask(string filePath)
+    public PowershellFileTask(string filePath, bool isPwsh)
     {
         FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
+        _isPwsh = isPwsh;
     }
 
     public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
@@ -137,7 +133,7 @@ public record PowershellFileTask : PowershellTask, IYamlConvertible
             }
         }
 
-        var defaultValue = new PowershellFileTask(string.Empty);
+        var defaultValue = new PowershellFileTask(string.Empty, false);
 
         Add("targetType", "filePath", null);
         Add("filePath", FilePath, null);
@@ -150,12 +146,30 @@ public record PowershellFileTask : PowershellTask, IYamlConvertible
         Add("debugPreference", DebugPreference, defaultValue.DebugPreference);
         Add("failOnStderr", FailOnStderr, defaultValue.FailOnStderr);
         Add("ignoreLASTEXITCODE", IgnoreLASTEXITCODE, defaultValue.IgnoreLASTEXITCODE);
-        Add("pwsh", Pwsh, defaultValue.Pwsh);
+        Add("pwsh", _isPwsh, defaultValue._isPwsh);
 
         nestedObjectSerializer(new AzureDevOpsTask("PowerShell@2", this)
         {
             Inputs = inputs
         });
+    }
+}
+
+public record InlinePwshTask : PowershellTask
+{
+    /// <summary>
+    /// Required if Type is inline, contents of the script.
+    /// </summary>
+    [YamlMember(Alias = "pwsh", Order = 1, ScalarStyle = ScalarStyle.Literal)]
+    public string Contents { get; init; }
+
+    [YamlMember(Order = 2)]
+    [DefaultValue("inline")]
+    public string TargetType => "inline";
+
+    public InlinePwshTask(params string[] scriptLines)
+    {
+        Contents = string.Join(System.Environment.NewLine, scriptLines);
     }
 }
 
