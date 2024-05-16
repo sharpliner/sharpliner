@@ -1,5 +1,4 @@
 ﻿using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.CI;
 
@@ -25,15 +24,6 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                 Pool = new HostedPool("Azure Pipelines", "windows-2022"),
                 Steps =
                 {
-                    Pwsh.Inline("Write-Host 'iam not working'"),
-
-                    new PowershellFileTask("tools/scripts/RunDocker.ps1")
-                    {
-                        Arguments = "foo",
-                        DisplayName = "Running docker image",
-                        Pwsh = true
-                    },
-
                     StepLibrary(new ProjectBuildSteps("src/**/*.csproj")),
 
                     ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj"),
