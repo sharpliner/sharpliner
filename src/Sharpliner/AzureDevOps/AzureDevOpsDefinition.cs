@@ -265,12 +265,12 @@ public abstract class AzureDevOpsDefinition
     /// <summary>
     /// Creates a powershell task.
     /// </summary>
-    protected static PowershellTaskBuilder Powershell { get; } = new(false);
+    protected static PowershellTaskBuilder Powershell { get; } = new();
 
     /// <summary>
     /// Creates a pwsh task.
     /// </summary>
-    protected static PowershellTaskBuilder Pwsh { get; } = new(true);
+    protected static PwshTaskBuilder Pwsh { get; } = new();
 
     /// <summary>
     /// Creates a publish task.

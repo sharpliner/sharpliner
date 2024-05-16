@@ -154,20 +154,17 @@ public class TaskBuilderTests
             jobs:
             - job: test
               steps:
-              - powershell: |+
+              - pwsh: |+
                   Set-ErrorActionPreference Stop
                   Write-Host "Lorem ipsum dolor sit amet"
-                pwsh: true
 
-              - powershell: |+
+              - pwsh: |+
                   Set-ErrorActionPreference Stop
                   Write-Host "Lorem ipsum dolor sit amet"
-                pwsh: true
 
-              - powershell: |-
+              - pwsh: |-
                   Connect-AzContext
                   Set-AzSubscription --id foo-bar-xyz
-                pwsh: true
 
               - task: PowerShell@2
                 inputs:
@@ -175,10 +172,9 @@ public class TaskBuilderTests
                   filePath: foo.ps1
                   pwsh: true
 
-              - powershell: |+
+              - pwsh: |+
                   Set-ErrorActionPreference Stop
                   Write-Host "Lorem ipsum dolor sit amet"
-                pwsh: true
             """);
     }
 

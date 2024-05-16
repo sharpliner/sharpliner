@@ -9,7 +9,7 @@ public class PowerShellFileTaskTests
     [Fact]
     public void Serialize_Powershell_File_Task_Test()
     {
-        var task = new PowershellFileTask("some\\script.ps1")
+        var task = new PowershellFileTask("some\\script.ps1", false)
         {
             Arguments = "foo bar",
             ContinueOnError = true,
@@ -49,7 +49,7 @@ public class PowerShellFileTaskTests
     [Fact]
     public void Serialize_Powershell_File_Task_With_Defaults_Test()
     {
-        var task = new PowershellFileTask("some\\script.ps1").DisplayAs("Test task");
+        var task = new PowershellFileTask("some\\script.ps1", true).DisplayAs("Test task");
 
         string yaml = SharplinerSerializer.Serialize(task);
         yaml.Trim().Should().Be(
@@ -61,6 +61,29 @@ public class PowerShellFileTaskTests
             inputs:
               targetType: filePath
               filePath: some\script.ps1
+              pwsh: true
+            """);
+    }
+
+    [Fact]
+    public void Serialize_Pwsh_Step_Test()
+    {
+        var task = new InlinePwshTask("Write-Output 'Hello'", "Write-Output 'World'")
+        {
+            DisplayName = "Test task",
+            ContinueOnError = true,
+        };
+
+        string yaml = SharplinerSerializer.Serialize(task);
+        yaml.Trim().Should().Be(
+            """
+            pwsh: |-
+              Write-Output 'Hello'
+              Write-Output 'World'
+
+            displayName: Test task
+
+            continueOnError: true
             """);
     }
 }
