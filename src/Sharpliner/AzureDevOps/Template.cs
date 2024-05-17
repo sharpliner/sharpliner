@@ -22,7 +22,7 @@ public record Template<T> : Conditioned<T>
     /// </summary>
     /// <param name="path">Path to the yaml file</param>
     /// <param name="parameters">Parameters to be passed to the template</param>
-    internal Template(string path, TemplateParameters? parameters = null) : this(null, path, parameters)
+    public Template(string path, TemplateParameters? parameters = null) : this(null, path, parameters)
     {
     }
 

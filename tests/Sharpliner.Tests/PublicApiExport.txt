@@ -1080,6 +1080,7 @@ namespace Sharpliner.AzureDevOps
     }
     public class Template<T> : Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>, System.IEquatable<Sharpliner.AzureDevOps.Template<T>>
     {
+        public Template(string path, Sharpliner.AzureDevOps.TemplateParameters? parameters = null) { }
         public Sharpliner.AzureDevOps.TemplateParameters Parameters { get; init; }
         protected override void SerializeSelf(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
