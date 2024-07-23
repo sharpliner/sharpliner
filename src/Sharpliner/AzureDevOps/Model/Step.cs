@@ -75,7 +75,7 @@ public abstract record Step
     /// Default is 0
     /// </summary>
     [YamlMember(Order = 230)]
-    public Conditioned<string>? RetryCountOnTaskFailure { get; init; }
+    public Conditioned<int>? RetryCountOnTaskFailure { get; init; }
 
     /// <summary>
     /// Make step only run when a condition is met.
