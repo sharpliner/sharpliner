@@ -32,30 +32,6 @@ public class ParameterReference : IRuntimeExpression, ICompileTimeExpression, IY
     public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
         => emitter.Emit(new Scalar(ToString()));
 
-    public static implicit operator Conditioned<int>(ParameterReference value) => new ConditionedParameterReference<int>(value);
-
-    public static implicit operator Conditioned<bool>(ParameterReference value) => new ConditionedParameterReference<bool>(value);
-
-    public static implicit operator Conditioned<string>(ParameterReference value) => new ConditionedParameterReference<string>(value);
-
-    public static implicit operator Conditioned<TimeSpan>(ParameterReference value) => new ConditionedParameterReference<TimeSpan>(value);
-
-    public static implicit operator Conditioned<TemplateParameters>(ParameterReference value) => new ConditionedParameterReference<TemplateParameters>(value);
-
-    public static implicit operator Conditioned<ConditionedDictionary>(ParameterReference value) => new ConditionedParameterReference<ConditionedDictionary>(value);
-
-    public static implicit operator Conditioned<InlineCondition>(ParameterReference value) => new ConditionedParameterReference<InlineCondition>(value);
-
-    public static implicit operator Conditioned<VariableBase>(ParameterReference value) => new ConditionedParameterReference<VariableBase>(value);
-
-    public static implicit operator Conditioned<Stage>(ParameterReference value) => new ConditionedParameterReference<Stage>(value);
-
-    public static implicit operator Conditioned<JobBase>(ParameterReference value) => new ConditionedParameterReference<JobBase>(value);
-
-    public static implicit operator Conditioned<Step>(ParameterReference value) => new ConditionedParameterReference<Step>(value);
-
-    public static implicit operator Conditioned<Pool>(ParameterReference value) => new ConditionedParameterReference<Pool>(value);
-
     public override bool Equals(object? obj)
     {
         if (obj is ParameterReference other)
