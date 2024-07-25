@@ -953,6 +953,8 @@ namespace Sharpliner.AzureDevOps
         public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary Env { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=150)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Name { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=230)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<int>? RetryCountOnTaskFailure { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<System.TimeSpan>? Timeout { get; init; }
         public Sharpliner.AzureDevOps.Step DisplayAs(string displayName) { }
@@ -1542,8 +1544,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         public string Task { get; }
         [YamlDotNet.Serialization.YamlMember(Order=101)]
         public Sharpliner.AzureDevOps.Tasks.TaskInputs Inputs { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Order=102)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<int>? RetryCountOnTaskFailure { get; init; }
         protected bool GetBool(string name, bool defaultValue) { }
         protected int? GetInt(string name, int? defaultValue = default) { }
         protected string? GetString(string name, string? defaultValue = null) { }
