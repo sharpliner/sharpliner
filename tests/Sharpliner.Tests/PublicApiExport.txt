@@ -1286,6 +1286,7 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         protected virtual void SerializeSelf(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
         public override string ToString() { }
         public override void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference parameterRef) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> op_Implicit(T value) { }
     }
     public class ElseCondition<T> : Sharpliner.AzureDevOps.IfCondition<T>
@@ -1434,18 +1435,6 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public override string ToString() { }
         public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
         public static string op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference value) { }
-        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<int> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference value) { }
-        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference value) { }
-        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference value) { }
-        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<System.TimeSpan> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference value) { }
-        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.TemplateParameters> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference value) { }
-        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference value) { }
-        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.InlineCondition> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference value) { }
-        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference value) { }
-        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Stage> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference value) { }
-        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference value) { }
-        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference value) { }
-        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Pool> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference value) { }
     }
     public class VariableReference : Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.ICompileTimeExpression, Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.IMacroExpression, Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.IRuntimeExpression, YamlDotNet.Serialization.IYamlConvertible
     {
@@ -1603,9 +1592,8 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Path { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=105)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? PersistCredentials { get; init; }
-        [System.ComponentModel.DefaultValue(Sharpliner.AzureDevOps.Tasks.SubmoduleCheckout.None)]
         [YamlDotNet.Serialization.YamlMember(Order=103)]
-        public Sharpliner.AzureDevOps.Tasks.SubmoduleCheckout Submodules { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Tasks.SubmoduleCheckout>? Submodules { get; init; }
     }
     public class CheckoutTaskBuilder
     {

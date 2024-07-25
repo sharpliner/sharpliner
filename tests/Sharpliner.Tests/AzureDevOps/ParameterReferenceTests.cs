@@ -44,6 +44,11 @@ public class ParameterReferenceTests
                             Bash.Inline("curl -o $(Agent.TempDirectory)/sharpliner.zip") with
                             {
                                 ContinueOnError = parameters["continue"],
+                            },
+
+                            Checkout.Repository(parameters["repository"]) with
+                            {
+                                Submodules = parameters["submodules"]
                             }
                         }
                     },
@@ -94,6 +99,9 @@ public class ParameterReferenceTests
                 - bash: |-
                     curl -o $(Agent.TempDirectory)/sharpliner.zip
                   continueOnError: ${{ parameters.continue }}
+
+                - checkout: ${{ parameters.repository }}
+                  submodules: ${{ parameters.submodules }}
 
               - ${{ parameters.jobs }}
             - ${{ parameters.stages }}

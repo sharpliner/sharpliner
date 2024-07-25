@@ -39,8 +39,7 @@ public abstract record CheckoutTask : Step
     /// Defaults to not checking out submodules.
     /// </summary>
     [YamlMember(Order = 103)]
-    [DefaultValue(SubmoduleCheckout.None)]
-    public SubmoduleCheckout Submodules { get; init; } = SubmoduleCheckout.None;
+    public Conditioned<SubmoduleCheckout>? Submodules { get; init; }
 
     /// <summary>
     /// Path to check out source code, relative to the agent's build directory (e.g. \_work\1).

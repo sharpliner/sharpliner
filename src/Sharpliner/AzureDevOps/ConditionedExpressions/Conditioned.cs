@@ -141,6 +141,9 @@ public record Conditioned<T> : Conditioned
     // Make sure we can for example assign a string into ConditionedDefinition<string>
     public static implicit operator Conditioned<T>(T value) => new(definition: value);
 
+    // Make sure we can assign ${{ parameters.name }} into conditioned
+    public static implicit operator Conditioned<T>(ParameterReference parameterRef) => new ConditionedParameterReference<T>(parameterRef);
+
     /// <summary>
     /// The actual definition (value).
     /// </summary>
