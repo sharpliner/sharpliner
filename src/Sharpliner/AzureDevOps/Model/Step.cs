@@ -71,13 +71,6 @@ public abstract record Step
     public ConditionedDictionary Env { get; init; } = [];
 
     /// <summary>
-    /// Number of retries if the task fails.
-    /// Default is 0
-    /// </summary>
-    [YamlMember(Order = 230)]
-    public Conditioned<int>? RetryCountOnTaskFailure { get; init; }
-
-    /// <summary>
     /// Make step only run when a condition is met.
     /// </summary>
     public Step When(string condition) => this with

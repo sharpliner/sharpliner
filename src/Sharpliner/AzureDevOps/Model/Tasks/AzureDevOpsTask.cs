@@ -39,6 +39,13 @@ public record AzureDevOpsTask : Step
         }
     }
 
+    /// <summary>
+    /// Number of retries if the task fails.
+    /// Default is 0
+    /// </summary>
+    [YamlMember(Order = 230)]
+    public Conditioned<int>? RetryCountOnTaskFailure { get; init; }
+
     public AzureDevOpsTask(string task) : base()
     {
         if (string.IsNullOrEmpty(task))
