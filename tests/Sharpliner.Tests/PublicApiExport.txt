@@ -1587,12 +1587,14 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlMember(Order=101)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<int>? FetchDepth { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=102)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Lfs { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Order=104)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Path { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Order=105)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? PersistCredentials { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? FetchTags { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=103)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Lfs { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=105)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Path { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=106)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? PersistCredentials { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=104)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Tasks.SubmoduleCheckout>? Submodules { get; init; }
     }
     public class CheckoutTaskBuilder
