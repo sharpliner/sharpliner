@@ -7,20 +7,25 @@ public class VariablesReference
     public VariableReference this[string variableName] => new(variableName);
 
     /// <summary>
-    /// The value you've selected for Clean in the source repository settings.
-    /// Variables connected to the agent running the current build (e.g. Agent.HomeDirectory)
+    /// Variables connected to the agent running the current build (e.g. <c>Agent.HomeDirectory</c>)
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&amp;tabs=yaml#agent-variables-devops-services">official Azure DevOps pipelines documentation</see>.
     /// </summary>
+    /// <remarks>
+    /// You can use agent variables as environment variables in your scripts and as parameters in your build tasks. You cannot use them to customize the build number or to apply a version control label or tag.
+    /// </remarks>
     public AgentVariableReference Agent { get; } = new();
 
     /// <summary>
-    /// Variables connected to the current build (e.g. build number)
+    /// Variables connected to the current build (e.g. <c>Build.BuildNumber</c>)
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&amp;tabs=yaml#build-variables-devops-services">official Azure DevOps pipelines documentation</see>.
     /// </summary>
+    /// <remarks>
+    /// When you use a variable in a template that is not marked as available in templates, the variable will not render. The variable won't render because its value is not accessible within the template's scope.
+    /// </remarks>
     public BuildVariableReference Build { get; } = new();
 
     /// <summary>
-    /// System variables (e.g. System.AccessToken or System.Debug)
+    /// System variables (e.g. <c>System.AccessToken</c> or <c>System.Debug</c>)
     /// </summary>
     public SystemVariableReference System { get; } = new();
 
@@ -31,18 +36,18 @@ public class VariablesReference
 
     /// <summary>
     /// Deployment variables
-    /// These variables are scoped to a specific Deployment job and will be resolved only at job execution time
+    /// These variables are scoped to a specific <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/process/deployment-jobs?view=azure-devops">Deployment job</see> and will be resolved only at job execution time
     /// </summary>
     public EnvironmentVariableReference Environment { get; } = new();
 
     /// <summary>
     /// Deployment variables
-    /// These variables are scoped to a specific Deployment job and will be resolved only at job execution time
+    /// These variables are scoped to a specific <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/process/deployment-jobs?view=azure-devops">Deployment job</see> and will be resolved only at job execution time
     /// </summary>
     public StrategyVariableReference Strategy { get; } = new();
 
     /// <summary>
-    /// Set to True if the script is being run by a build task.
+    /// Set to <c>True</c> if the script is being run by a build task.
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public VariableReference TF_BUILD => VariableReferenceBase.GetReference(string.Empty, "TF_BUILD");
