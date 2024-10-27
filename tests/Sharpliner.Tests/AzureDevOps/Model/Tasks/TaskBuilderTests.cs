@@ -238,6 +238,7 @@ public class TaskBuilderTests
                             Submodules = SubmoduleCheckout.Recursive,
                             Clean = true,
                             FetchDepth = 0,
+                            FetchFilter = "tree:0",
                             FetchTags = true,
                         }
                     }
@@ -263,6 +264,7 @@ public class TaskBuilderTests
               - checkout: https://github.com/sharpliner/sharpliner.git
                 clean: true
                 fetchDepth: 0
+                fetchFilter: tree:0
                 fetchTags: true
                 submodules: recursive
             """);

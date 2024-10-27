@@ -28,39 +28,47 @@ public abstract record CheckoutTask : Step
     public Conditioned<int>? FetchDepth { get; init; }
 
     /// <summary>
+    /// The depth of commits to ask Git to fetch.
+    /// Defaults to shallow fetch (= 1).
+    /// Set 0 to no limit (full clone).
+    /// </summary>
+    [YamlMember(Order = 102)]
+    public Conditioned<string>? FetchFilter { get; init; }
+
+    /// <summary>
     /// Set to 'true' to sync tags when fetching the repo, or 'false' to not sync tags.
     /// See remarks for the default behavior in the official documentation:
     /// https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/steps-checkout#remarks
     /// </summary>
-    [YamlMember(Order = 102)]
+    [YamlMember(Order = 103)]
     public Conditioned<bool>? FetchTags { get; init; }
 
     /// <summary>
     /// Whether to download Git-LFS files.
     /// Defaults to false.
     /// </summary>
-    [YamlMember(Order = 103)]
+    [YamlMember(Order = 104)]
     public Conditioned<bool>? Lfs { get; init; }
 
     /// <summary>
     /// Submodules checkout strategy (single level, recursive to get submodules of submodules).
     /// Defaults to not checking out submodules.
     /// </summary>
-    [YamlMember(Order = 104)]
+    [YamlMember(Order = 105)]
     public Conditioned<SubmoduleCheckout>? Submodules { get; init; }
 
     /// <summary>
     /// Path to check out source code, relative to the agent's build directory (e.g. \_work\1).
     /// Defaults to a directory called `s`.
     /// </summary>
-    [YamlMember(Order = 105)]
+    [YamlMember(Order = 106)]
     public Conditioned<string>? Path { get; init; }
 
     /// <summary>
     /// When true, leave the OAuth token in the Git config after the initial fetch.
     /// Defaults to false.
     /// </summary>
-    [YamlMember(Order = 106)]
+    [YamlMember(Order = 107)]
     public Conditioned<bool>? PersistCredentials { get; init; }
 }
 
