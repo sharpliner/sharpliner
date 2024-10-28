@@ -67,9 +67,9 @@ public abstract class Condition : IYamlConvertible
         return $"'{value}'";
     }
 
-    public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
+    void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
 
-    public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer) =>
+    void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer) =>
         emitter.Emit(new Scalar(Serialize()));
 }
 

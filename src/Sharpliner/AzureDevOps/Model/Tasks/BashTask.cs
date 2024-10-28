@@ -82,11 +82,11 @@ public record BashFileTask : BashTask, IYamlConvertible
         FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
     }
 
-    public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+    void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
         => throw new NotImplementedException();
 
     // This is unfortunately needed because when referencing a script file, the "powershell: ..." variant does not work
-    public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
         var inputs = new TaskInputs();
 
