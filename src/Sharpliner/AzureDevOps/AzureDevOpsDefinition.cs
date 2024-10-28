@@ -308,7 +308,7 @@ public abstract class AzureDevOpsDefinition
         {
             task = task with { DisplayName = displayName };
         }
-        
+
         return task;
     }
 
@@ -724,7 +724,6 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     /// <param name="needle">Needle item to search for</param>
     /// <param name="haystack">Haystack of items to search in</param>
-    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
     /// <returns>A <c>containsValue</c> condition with the specified expressions.</returns>
     protected static InlineCondition ContainsValue(InlineExpression needle, params InlineExpression[] haystack) => new InlineContainsValueCondition(needle, haystack);
 
