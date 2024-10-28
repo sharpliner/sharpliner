@@ -9,9 +9,15 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 
 /// <summary>
-/// Represents an ${{ if ... }} statement in the YAML.
+/// <para>
+/// Represents an <c>${{ if ... }}</c> statement in the YAML.
+/// </para>
+/// <para>
 /// When we build trees of definitions with conditions on them, we either start with a definition or a condition.
+/// </para>
+/// <para>
 /// A condition then has to evolve into a conditioned definition (so that we have something inside the "if").
+/// </para>
 /// </summary>
 public abstract class Condition : IYamlConvertible
 {

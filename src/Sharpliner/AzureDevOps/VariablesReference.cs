@@ -389,9 +389,9 @@ public sealed class BuildVariableReference : VariableReferenceBase
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Important note: If you check out only one Git repository, this path will be the exact path to the code. 
+    /// Important note: If you check out only one Git repository, this path will be the exact path to the code.
     /// </para>
-    /// If you check out multiple repositories, it will revert to its default value, which is <c>$(Pipeline.Workspace)/s</c>, 
+    /// If you check out multiple repositories, it will revert to its default value, which is <c>$(Pipeline.Workspace)/s</c>,
     /// even if the self (primary) repository is checked out to a custom path different from its multi-checkout default path <c>$(Pipeline.Workspace)/s/[RepoName]</c> (in this respect, the variable differs from the behavior of the <c>Build.Repository.LocalPath</c> variable).
     /// <para>
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
@@ -413,10 +413,10 @@ public sealed class BuildVariableReference : VariableReferenceBase
     /// The comment of the commit or changeset for the triggering repo. We truncate the message to the first line or 200 characters, whichever is shorter.
     /// </para>
     /// <para>
-    /// The <c>Build.SourceVersionMessage</c> corresponds to the message on <c>Build.SourceVersion</c> commit. 
+    /// The <c>Build.SourceVersionMessage</c> corresponds to the message on <c>Build.SourceVersion</c> commit.
     /// The <c>Build.SourceVersion</c> commit for a PR build is the merge commit (not the commit on the source branch).
     /// </para>
-    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag. 
+    /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// Also, this variable is only available on the step level and is neither available in the job nor stage levels (i.e. the message is not extracted until the job had started and checked out the code).
     /// </summary>
     /// <remarks>
