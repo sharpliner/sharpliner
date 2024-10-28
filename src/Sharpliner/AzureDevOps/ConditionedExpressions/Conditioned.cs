@@ -52,7 +52,9 @@ public abstract record Conditioned : IYamlConvertible
     void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
         => throw new NotImplementedException();
 
-    internal abstract void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer);
+    void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer) => WriteInternal(emitter, nestedObjectSerializer);
+
+    protected abstract void WriteInternal(IEmitter emitter, ObjectSerializer nestedObjectSerializer);
 
     internal virtual void SetIsList(bool isList)
     {
@@ -239,7 +241,7 @@ public record Conditioned<T> : Conditioned
         }
     }
 
-    internal override void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    protected override void WriteInternal(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
         if (IsList)
         {

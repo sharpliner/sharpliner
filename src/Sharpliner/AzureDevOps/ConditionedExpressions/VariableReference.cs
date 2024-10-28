@@ -77,6 +77,6 @@ public record ConditionedVariableReference<T> : Conditioned<T>
         _variable = variable;
     }
 
-    public override void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    protected override void WriteInternal(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
         => emitter.Emit(new Scalar(_variable.CompileTimeExpression));
 }
