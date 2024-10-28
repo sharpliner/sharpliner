@@ -1274,17 +1274,6 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference parameterRef) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> op_Implicit(T value) { }
     }
-    public class ElseCondition<T> : Sharpliner.AzureDevOps.IfCondition<T>
-    {
-        public override string ToString() { }
-        public static string op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ElseCondition<T> value) { }
-    }
-    public class IfAndCondition : Sharpliner.AzureDevOps.ConditionedExpressions.IfConjunctionCondition { }
-    public class IfAndCondition<T> : Sharpliner.AzureDevOps.ConditionedExpressions.IfConjunctionCondition<T> { }
-    public class IfBranchCondition : Sharpliner.AzureDevOps.ConditionedExpressions.IfEqualityCondition { }
-    public class IfBranchCondition<T> : Sharpliner.AzureDevOps.ConditionedExpressions.IfEqualityCondition<T> { }
-    public class IfBuildReasonCondition : Sharpliner.AzureDevOps.ConditionedExpressions.IfEqualityCondition { }
-    public class IfBuildReasonCondition<T> : Sharpliner.AzureDevOps.ConditionedExpressions.IfEqualityCondition<T> { }
     public class IfConditionBuilder
     {
         public Sharpliner.AzureDevOps.IfCondition IsNotPullRequest { get; }
@@ -1335,80 +1324,6 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public Sharpliner.AzureDevOps.IfCondition<T> Xor(Sharpliner.AzureDevOps.IfCondition expression1, Sharpliner.AzureDevOps.IfCondition expression2) { }
         public Sharpliner.AzureDevOps.IfCondition<T> Xor(string expression1, string expression2) { }
     }
-    public class IfConjunctionCondition : Sharpliner.AzureDevOps.IfCondition { }
-    public class IfConjunctionCondition<T> : Sharpliner.AzureDevOps.IfCondition<T> { }
-    public class IfContainsCondition : Sharpliner.AzureDevOps.IfStringCondition { }
-    public class IfContainsCondition<T> : Sharpliner.AzureDevOps.IfStringCondition<T> { }
-    public class IfContainsValueCondition : Sharpliner.AzureDevOps.IfStringCondition { }
-    public class IfContainsValueCondition<T> : Sharpliner.AzureDevOps.IfStringCondition<T> { }
-    public class IfCustomCondition : Sharpliner.AzureDevOps.IfCondition
-    {
-        public IfCustomCondition(string condition) { }
-    }
-    public class IfCustomCondition<T> : Sharpliner.AzureDevOps.IfCondition<T>
-    {
-        public IfCustomCondition(string condition) { }
-    }
-    public class IfEndsWithCondition : Sharpliner.AzureDevOps.IfStringCondition { }
-    public class IfEndsWithCondition<T> : Sharpliner.AzureDevOps.IfStringCondition<T> { }
-    public class IfEqualityCondition : Sharpliner.AzureDevOps.IfStringCondition { }
-    public class IfEqualityCondition<T> : Sharpliner.AzureDevOps.IfStringCondition<T> { }
-    public class IfGreaterCondition : Sharpliner.AzureDevOps.IfStringCondition { }
-    public class IfGreaterCondition<T> : Sharpliner.AzureDevOps.IfStringCondition<T> { }
-    public class IfInCondition : Sharpliner.AzureDevOps.IfStringCondition { }
-    public class IfInCondition<T> : Sharpliner.AzureDevOps.IfStringCondition<T> { }
-    public class IfLessCondition : Sharpliner.AzureDevOps.IfStringCondition { }
-    public class IfLessCondition<T> : Sharpliner.AzureDevOps.IfStringCondition<T> { }
-    public class IfNotCondition : Sharpliner.AzureDevOps.IfCondition { }
-    public class IfNotCondition<T> : Sharpliner.AzureDevOps.IfCondition<T> { }
-    public class IfNotInCondition : Sharpliner.AzureDevOps.IfStringCondition { }
-    public class IfNotInCondition<T> : Sharpliner.AzureDevOps.IfStringCondition<T> { }
-    public class IfOrCondition : Sharpliner.AzureDevOps.ConditionedExpressions.IfConjunctionCondition { }
-    public class IfOrCondition<T> : Sharpliner.AzureDevOps.ConditionedExpressions.IfConjunctionCondition<T> { }
-    public class IfStartsWithCondition : Sharpliner.AzureDevOps.IfStringCondition { }
-    public class IfStartsWithCondition<T> : Sharpliner.AzureDevOps.IfStringCondition<T> { }
-    public class IfXorCondition : Sharpliner.AzureDevOps.ConditionedExpressions.IfConjunctionCondition { }
-    public class IfXorCondition<T> : Sharpliner.AzureDevOps.ConditionedExpressions.IfConjunctionCondition<T> { }
-    public class InlineAndCondition : Sharpliner.AzureDevOps.ConditionedExpressions.InlineConjunctionCondition { }
-    public class InlineAndCondition<T> : Sharpliner.AzureDevOps.ConditionedExpressions.InlineConjunctionCondition<T> { }
-    public class InlineBranchCondition : Sharpliner.AzureDevOps.ConditionedExpressions.InlineEqualityCondition { }
-    public class InlineBranchCondition<T> : Sharpliner.AzureDevOps.ConditionedExpressions.InlineEqualityCondition<T> { }
-    public class InlineBuildReasonCondition : Sharpliner.AzureDevOps.ConditionedExpressions.InlineEqualityCondition { }
-    public class InlineBuildReasonCondition<T> : Sharpliner.AzureDevOps.ConditionedExpressions.InlineEqualityCondition<T> { }
-    public class InlineConjunctionCondition : Sharpliner.AzureDevOps.InlineCondition { }
-    public class InlineConjunctionCondition<T> : Sharpliner.AzureDevOps.InlineCondition<T> { }
-    public class InlineContainsCondition : Sharpliner.AzureDevOps.InlineStringCondition { }
-    public class InlineContainsCondition<T> : Sharpliner.AzureDevOps.InlineStringCondition<T> { }
-    public class InlineContainsValueCondition : Sharpliner.AzureDevOps.InlineStringCondition { }
-    public class InlineContainsValueCondition<T> : Sharpliner.AzureDevOps.InlineStringCondition<T> { }
-    public class InlineCustomCondition : Sharpliner.AzureDevOps.InlineCondition
-    {
-        public InlineCustomCondition(string condition) { }
-    }
-    public class InlineCustomCondition<T> : Sharpliner.AzureDevOps.InlineCondition<T>
-    {
-        public InlineCustomCondition(string condition) { }
-    }
-    public class InlineEndsWithCondition : Sharpliner.AzureDevOps.InlineStringCondition { }
-    public class InlineEndsWithCondition<T> : Sharpliner.AzureDevOps.InlineStringCondition<T> { }
-    public class InlineEqualityCondition : Sharpliner.AzureDevOps.InlineStringCondition { }
-    public class InlineEqualityCondition<T> : Sharpliner.AzureDevOps.InlineStringCondition<T> { }
-    public class InlineGreaterCondition : Sharpliner.AzureDevOps.InlineStringCondition { }
-    public class InlineGreaterCondition<T> : Sharpliner.AzureDevOps.InlineStringCondition<T> { }
-    public class InlineInCondition : Sharpliner.AzureDevOps.InlineStringCondition { }
-    public class InlineInCondition<T> : Sharpliner.AzureDevOps.InlineStringCondition<T> { }
-    public class InlineLessCondition : Sharpliner.AzureDevOps.InlineStringCondition { }
-    public class InlineLessCondition<T> : Sharpliner.AzureDevOps.InlineStringCondition<T> { }
-    public class InlineNotCondition : Sharpliner.AzureDevOps.InlineCondition { }
-    public class InlineNotCondition<T> : Sharpliner.AzureDevOps.InlineCondition<T> { }
-    public class InlineNotInCondition : Sharpliner.AzureDevOps.InlineStringCondition { }
-    public class InlineNotInCondition<T> : Sharpliner.AzureDevOps.InlineStringCondition<T> { }
-    public class InlineOrCondition : Sharpliner.AzureDevOps.ConditionedExpressions.InlineConjunctionCondition { }
-    public class InlineOrCondition<T> : Sharpliner.AzureDevOps.ConditionedExpressions.InlineConjunctionCondition<T> { }
-    public class InlineStartsWithCondition : Sharpliner.AzureDevOps.InlineStringCondition { }
-    public class InlineStartsWithCondition<T> : Sharpliner.AzureDevOps.InlineStringCondition<T> { }
-    public class InlineXorCondition : Sharpliner.AzureDevOps.ConditionedExpressions.InlineConjunctionCondition { }
-    public class InlineXorCondition<T> : Sharpliner.AzureDevOps.ConditionedExpressions.InlineConjunctionCondition<T> { }
     public class ParameterReference : Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.ICompileTimeExpression, Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.IRuntimeExpression, YamlDotNet.Serialization.IYamlConvertible
     {
         public string CompileTimeExpression { get; }
