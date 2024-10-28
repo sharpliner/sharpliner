@@ -1210,8 +1210,6 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
 {
     public abstract class Condition : YamlDotNet.Serialization.IYamlConvertible
     {
-        protected const string ElseTagStart = "${{ else";
-        protected const string IfTagStart = "${{ if ";
         protected Condition() { }
         public override string ToString() { }
         public static string Join(System.Collections.Generic.IEnumerable<string> expressions) { }
