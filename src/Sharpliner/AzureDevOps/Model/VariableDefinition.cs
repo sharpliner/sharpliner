@@ -134,6 +134,7 @@ public record Variable : VariableBase
 
     /// <summary>
     /// Returns a new instance of this variable as read-only.
+    /// </summary>
     public Variable ReadOnly() => this with
     {
         Readonly = true
