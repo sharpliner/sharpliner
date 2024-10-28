@@ -786,8 +786,26 @@ public abstract class AzureDevOpsDefinition
     protected static InlineCondition IsNotPullRequest => new InlineBuildReasonCondition("PullRequest", false);
 
     /// <summary>
-    /// Start an ${{ each var in collection }} section.
+    /// Starts an <c>${{ each var in collection }}</c> section.
+    /// For example:
+    /// <code lang="csharp">
+    /// Each("env", "parameters.environments")
+    ///     .StageTemplate("../stages/provision.yml", new()
+    ///     {
+    ///         { "environment", "${{ env }}" }
+    ///     }),
+    /// </code>
+    /// will generate:
+    /// <code lang="yaml">
+    /// - ${{ each env in parameters.environments }}:
+    ///   - template: ../stages/provision.yml
+    ///     parameters:
+    ///       environment: ${{ env }}
+    /// </code>
     /// </summary>
+    /// <param name="iterator">Name of the iterator variable</param>
+    /// <param name="collection">Collection to iterate over</param>
+    /// <returns>An <c>each</c> block with the specified iterator and collection.</returns>
     protected static EachBlock Each(string iterator, string collection) => new(iterator, collection);
 
     #endregion

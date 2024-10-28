@@ -22,6 +22,7 @@ public record PipelineDefinitionData<T>(
 public abstract class PipelineDefinitionCollection<TPipeline>
     : AzureDevOpsDefinition, ISharplinerDefinitionCollection where TPipeline : PipelineBase
 {
+    /// <inheritdoc/>
     public IEnumerable<ISharplinerDefinition> Definitions => Pipelines.Select(data => new PipelineDefinitionWrapper<TPipeline>(data, GetType()));
 
     /// <summary>
