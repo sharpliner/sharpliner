@@ -2,12 +2,18 @@
 
 namespace Sharpliner.AzureDevOps;
 
+/// <summary>
+/// Lists of items to include or exclude for trigger events. See <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/include-exclude-filters">includeExcludeFilters</see>.
+/// </summary>
 public record InclusionRule
 {
     /// <summary>
-    /// Branch names which will trigger a build
+    /// List of items to include.
     /// </summary>
     public ConditionedList<string> Include { get; init; } = [];
 
+    /// <summary>
+    /// List of items to exclude.
+    /// </summary>
     public ConditionedList<string> Exclude { get; init; } = [];
 }

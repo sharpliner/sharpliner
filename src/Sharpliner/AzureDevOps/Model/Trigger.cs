@@ -22,19 +22,35 @@ public record Trigger
     /// </summary>
     public bool Batch { get; init; } = false;
 
+    /// <summary>
+    /// Branches to include or exclude.
+    /// </summary>
     [DisallowNull]
     public InclusionRule? Branches { get; init; }
 
+    /// <summary>
+    /// Tags to include or exclude.
+    /// </summary>
     [DisallowNull]
     public InclusionRule? Tags { get; init; }
 
+    /// <summary>
+    /// Paths to include or exclude.
+    /// </summary>
     [DisallowNull]
     public InclusionRule? Paths { get; init; }
 
+    /// <summary>
+    /// Created a new instance of the <see cref="Trigger"/> class.
+    /// </summary>
     public Trigger()
     {
     }
 
+    /// <summary>
+    /// Created a new instance of the <see cref="Trigger"/> class with an explicit list of branches. See <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/trigger#trigger-string-list">trigger: string list</see>.
+    /// </summary>
+    /// <param name="branches">The branches to include.</param>
     public Trigger(params string[] branches)
     {
         Branches = new InclusionRule
@@ -44,6 +60,9 @@ public record Trigger
     }
 }
 
+/// <summary>
+/// Represents a trigger that disable CI triggers. See <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/trigger#trigger-none">trigger: none</see>.
+/// </summary>
 public record NoneTrigger : Trigger, IYamlConvertible
 {
     public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
