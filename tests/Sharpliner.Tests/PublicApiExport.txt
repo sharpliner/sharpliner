@@ -544,7 +544,6 @@ namespace Sharpliner.AzureDevOps
     {
         public LibraryReference(Sharpliner.AzureDevOps.DefinitionLibrary<T> library) { }
         public LibraryReference(System.Collections.Generic.IEnumerable<Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>> items) { }
-        protected override void SerializeSelf(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class LifeCycleHook : System.IEquatable<Sharpliner.AzureDevOps.LifeCycleHook>
     {
@@ -1060,7 +1059,6 @@ namespace Sharpliner.AzureDevOps
     {
         public Template(string path, Sharpliner.AzureDevOps.TemplateParameters? parameters = null) { }
         public Sharpliner.AzureDevOps.TemplateParameters Parameters { get; init; }
-        protected override void SerializeSelf(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class Trigger : System.IEquatable<Sharpliner.AzureDevOps.Trigger>
     {
@@ -1253,7 +1251,6 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> EndIf { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.IfConditionBuilder<T> If { get; }
         public System.Collections.Generic.IReadOnlyCollection<T> FlattenDefinitions() { }
-        protected virtual void SerializeSelf(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
         public override string ToString() { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference parameterRef) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> op_Implicit(T value) { }
