@@ -10,7 +10,7 @@ namespace Sharpliner.AzureDevOps;
 
 /// <summary>
 /// Deployment strategy for the deployment job.
-/// 
+///
 /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/deployment-jobs?view=azure-devops">official Azure DevOps pipelines documentation</see>.
 /// </summary>
 public abstract record DeploymentStrategy : IYamlConvertible
@@ -61,8 +61,8 @@ public abstract record DeploymentStrategy : IYamlConvertible
         _type = type;
     }
 
-    public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
-    public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
+    void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
         emitter.Emit(new MappingStart());
         emitter.Emit(new Scalar(_type));

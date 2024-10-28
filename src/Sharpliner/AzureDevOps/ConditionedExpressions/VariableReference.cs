@@ -25,10 +25,10 @@ public class VariableReference : IRuntimeExpression, IMacroExpression, ICompileT
 
     public static implicit operator string(VariableReference value) => value.ToString();
 
-    public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+    void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
         => throw new NotImplementedException();
 
-    public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
         => emitter.Emit(new Scalar(ToString()));
 
     public static implicit operator Conditioned<int>(VariableReference value) => new ConditionedVariableReference<int>(value);

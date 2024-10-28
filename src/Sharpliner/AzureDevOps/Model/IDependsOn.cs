@@ -18,10 +18,10 @@ public interface IDependsOn
 /// </summary>
 internal class EmptyDependsOn : ConditionedList<string>, IYamlConvertible
 {
-    public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
+    void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
 
     // We want to write "dependsOn: " (empty value)
-    public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer) => emitter.Emit(new Scalar(string.Empty));
+    void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer) => emitter.Emit(new Scalar(string.Empty));
 
     public EmptyDependsOn()
     {

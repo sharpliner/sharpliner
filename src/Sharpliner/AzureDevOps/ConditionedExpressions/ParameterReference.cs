@@ -26,10 +26,10 @@ public class ParameterReference : IRuntimeExpression, ICompileTimeExpression, IY
 
     public static implicit operator string(ParameterReference value) => value.ToString();
 
-    public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+    void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
         => throw new NotImplementedException();
 
-    public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
         => emitter.Emit(new Scalar(ToString()));
 
     public override bool Equals(object? obj)
@@ -54,6 +54,6 @@ public record ConditionedParameterReference<T> : Conditioned<T>
         _parameter = parameter;
     }
 
-    public override void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    internal override void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
         => emitter.Emit(new Scalar(_parameter.CompileTimeExpression));
 }
