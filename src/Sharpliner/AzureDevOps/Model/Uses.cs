@@ -8,7 +8,13 @@ namespace Sharpliner.AzureDevOps;
 /// </summary>
 public record Uses
 {
+    /// <summary>
+    /// Repositories required by this job that are not already referenced.
+    /// </summary>
     public ConditionedList<string> Repositories { get; init; } = [];
 
+    /// <summary>
+    /// Pools required by this job that are not already referenced.
+    /// </summary>
     public ConditionedList<string> Pools { get; init; } = [];
 }

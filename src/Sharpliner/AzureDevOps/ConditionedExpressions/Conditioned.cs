@@ -25,7 +25,7 @@ public abstract record Conditioned : IYamlConvertible
     }
 
     /// <summary>
-    /// Evaluated textual representation of the condition, e.g. "ne('foo', 'bar')".
+    /// Evaluated textual representation of the condition, e.g. <c>ne('foo', 'bar')</c>.
     /// </summary>
     internal IfCondition? Condition { get; set; }
 
@@ -35,7 +35,7 @@ public abstract record Conditioned : IYamlConvertible
     internal Conditioned? Parent { get; set; }
 
     /// <summary>
-    /// In case we define multiple items inside one ${{ if }}, they are stored here.
+    /// In case we define multiple items inside one <c>${{ if }}</c>, they are stored here.
     /// </summary>
     internal List<Conditioned> Definitions { get; } = new ValueEqualityList();
 
@@ -131,12 +131,27 @@ public abstract record Conditioned : IYamlConvertible
 }
 
 /// <summary>
-/// Represents an item that might or might have a condition.
+/// Represents an item that might or might not have a condition.
 /// Example of regular definition:
-///     - task: publish
+/// <code lang="csharp">
+/// Task("publish")
+/// </code>
+/// will output:
+/// <code lang="yaml">
+/// - task: publish
+/// </code>
 /// Example of conditioned definition:
-///     - ${{ if eq(variables._RunAsInternal, True) }}:
-///       name: NetCoreInternal-Pool
+/// <code lang="csharp">
+/// If.Equal(variables["_RunAsInternal"], "true")
+///     .Variable("NetCoreInternal-Pool", true)
+/// .EndIf
+/// </code>
+/// will output:
+/// <code lang="yaml">
+/// - ${{ if eq(variables._RunAsInternal, True) }}:
+///   - name: NetCoreInternal-Pool
+///     value: true
+/// </code>
 /// </summary>
 public record Conditioned<T> : Conditioned
 {
@@ -264,16 +279,21 @@ public record Conditioned<T> : Conditioned
     }
 
     /// <summary>
+    /// <para>
     /// This method's responsibility is to serialize a single item which might or might not have conditions underneath.
+    /// </para>
     /// Example #1 (no condition)
+    /// <code lang="yaml">
     ///   name: value1
-    ///
+    /// </code>
     /// Example #2 (conditions)
+    /// <code lang="yaml">
     ///   name:
     ///     ${{ if eq(...) }}
     ///       name2: value1
     ///     ${{ if ne(...) }}
     ///       name2: value2
+    /// </code>
     /// </summary>
     private void WriteValue(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {

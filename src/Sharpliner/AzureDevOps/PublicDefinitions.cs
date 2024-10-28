@@ -56,6 +56,7 @@ public abstract class StageTemplateDefinition : TemplateDefinition<Stage>
 {
     internal sealed override string YamlProperty => "stages";
 
+    /// <inheritdoc/>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetStageValidations();
 }
 
@@ -67,6 +68,7 @@ public abstract class JobTemplateDefinition : TemplateDefinition<JobBase>
 {
     internal sealed override string YamlProperty => "jobs";
 
+    /// <inheritdoc/>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetJobValidations();
 }
 
@@ -78,6 +80,7 @@ public abstract class StepTemplateDefinition : TemplateDefinition<Step>
 {
     internal sealed override string YamlProperty => "steps";
 
+    /// <inheritdoc/>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => [];
 }
 
@@ -89,6 +92,7 @@ public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBa
 {
     internal sealed override string YamlProperty => "variables";
 
+    /// <inheritdoc/>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => [];
 }
 

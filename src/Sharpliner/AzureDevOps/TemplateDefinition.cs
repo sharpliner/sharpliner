@@ -140,20 +140,33 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
     /// <summary>
     /// Path to the YAML file where this template will be exported to.
     /// When you build the project, the template will be saved into a file on this path.
-    /// Example: "pipelines/ci.yaml"
+    /// Example: <c>"pipelines/ci.yaml"</c>
     /// </summary>
     public abstract string TargetFile { get; }
 
+    /// <summary>
+    /// Specifies the type of the target path for the template definition.
+    /// </summary>
     public virtual TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
 
+    /// <summary>
+    /// Returns the list of parameters that can be passed to the template.
+    /// </summary>
     [DisallowNull]
     public virtual List<Parameter> Parameters { get; } = [];
 
+    /// <summary>
+    /// Returns the definition of the template.
+    /// </summary>
     [DisallowNull]
     public abstract ConditionedList<T> Definition { get; }
 
     internal abstract string YamlProperty { get; }
 
+    /// <summary>
+    /// Serializes the template into a YAML string.
+    /// </summary>
+    /// <returns>A YAML string.</returns>
     public string Serialize()
     {
         var template = new ConditionedDictionary();
@@ -168,13 +181,17 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
         return SharplinerSerializer.Serialize(template);
     }
 
+    /// <summary>
+    /// Returns the list of validations that should be run on the template definition (e.g. wrong dependsOn, artifact name typos..).
+    /// </summary>
     public abstract IReadOnlyCollection<IDefinitionValidation> Validations { get; }
 
     /// <summary>
     /// Header that will be shown at the top of the generated YAML file
-    ///
-    /// Leave empty array to omit file header.
     /// </summary>
+    /// <remarks>
+    /// Leave empty array to omit file header.
+    /// </remarks>
     public virtual string[]? Header => SharplinerPublisher.GetDefaultHeader(GetType());
 
     /// <summary>
