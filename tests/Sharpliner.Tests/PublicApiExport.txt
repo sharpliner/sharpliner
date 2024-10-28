@@ -353,8 +353,6 @@ namespace Sharpliner.AzureDevOps
         public Sharpliner.AzureDevOps.LifeCycleHook PreDeploy { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=300)]
         public Sharpliner.AzureDevOps.LifeCycleHook RouteTraffic { get; init; }
-        public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
-        public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
         protected abstract void WriteCustomFields(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer);
     }
     public class EachBlock : Sharpliner.AzureDevOps.IfCondition
@@ -545,8 +543,6 @@ namespace Sharpliner.AzureDevOps
         public static readonly Sharpliner.AzureDevOps.JobWorkspace All;
         public static readonly Sharpliner.AzureDevOps.JobWorkspace Outputs;
         public static readonly Sharpliner.AzureDevOps.JobWorkspace Resources;
-        public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
-        public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class JsonParameterFilter : System.IEquatable<Sharpliner.AzureDevOps.JsonParameterFilter>
     {
@@ -579,20 +575,14 @@ namespace Sharpliner.AzureDevOps
     {
         public MatrixStrategy() { }
         public System.Collections.Generic.Dictionary<string, System.ValueTuple<string, string>[]> Matrix { get; init; }
-        public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
-        public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class NonePrTrigger : Sharpliner.AzureDevOps.PrTrigger, System.IEquatable<Sharpliner.AzureDevOps.NonePrTrigger>, YamlDotNet.Serialization.IYamlConvertible
     {
         public NonePrTrigger() { }
-        public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
-        public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class NoneTrigger : Sharpliner.AzureDevOps.Trigger, System.IEquatable<Sharpliner.AzureDevOps.NoneTrigger>, YamlDotNet.Serialization.IYamlConvertible
     {
         public NoneTrigger() { }
-        public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
-        public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class NoopJob : Sharpliner.AzureDevOps.Job, System.IEquatable<Sharpliner.AzureDevOps.NoopJob>
     {
@@ -875,8 +865,6 @@ namespace Sharpliner.AzureDevOps
     public class ServerPool : Sharpliner.AzureDevOps.Pool, System.IEquatable<Sharpliner.AzureDevOps.ServerPool>, YamlDotNet.Serialization.IYamlConvertible
     {
         public ServerPool() { }
-        public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
-        public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class SingleStagePipeline : Sharpliner.AzureDevOps.PipelineBase, System.IEquatable<Sharpliner.AzureDevOps.SingleStagePipeline>
     {
@@ -1235,9 +1223,7 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         protected const string ElseTagStart = "${{ else";
         protected const string IfTagStart = "${{ if ";
         protected Condition() { }
-        public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
         public override string ToString() { }
-        public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
         public static string Join(System.Collections.Generic.IEnumerable<string> expressions) { }
         public static string WrapQuotes(string value) { }
         public static string op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.Condition value) { }
@@ -1245,8 +1231,7 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
     public abstract class Conditioned : System.IEquatable<Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned>, YamlDotNet.Serialization.IYamlConvertible
     {
         protected Conditioned(Sharpliner.AzureDevOps.IfCondition? condition) { }
-        public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
-        public abstract void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer);
+        protected abstract void WriteInternal(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer);
     }
     public class ConditionedDictionary : System.Collections.Generic.Dictionary<string, object>
     {
@@ -1266,12 +1251,12 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
     public class ConditionedParameterReference<T> : Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>, System.IEquatable<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedParameterReference<T>>
     {
         public ConditionedParameterReference(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference parameter) { }
-        public override void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
+        protected override void WriteInternal(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class ConditionedVariableReference<T> : Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>, System.IEquatable<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedVariableReference<T>>
     {
         public ConditionedVariableReference(Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference variable) { }
-        public override void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
+        protected override void WriteInternal(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class Conditioned<T> : Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned, System.IEquatable<Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>>
     {
@@ -1285,7 +1270,7 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public System.Collections.Generic.IReadOnlyCollection<T> FlattenDefinitions() { }
         protected virtual void SerializeSelf(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
         public override string ToString() { }
-        public override void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
+        protected override void WriteInternal(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference parameterRef) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> op_Implicit(T value) { }
     }
@@ -1431,9 +1416,7 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public string RuntimeExpression { get; }
         public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
-        public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
         public override string ToString() { }
-        public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
         public static string op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference value) { }
     }
     public class VariableReference : Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.ICompileTimeExpression, Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.IMacroExpression, Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.IRuntimeExpression, YamlDotNet.Serialization.IYamlConvertible
@@ -1444,9 +1427,7 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public string VariableName { get; }
         public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
-        public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
         public override string ToString() { }
-        public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
         public static string op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference value) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<int> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference value) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference value) { }
@@ -1546,8 +1527,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         public string FilePath { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Arguments { get; init; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? BashEnv { get; init; }
-        public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
-        public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public abstract class BashTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.BashTask>
     {
@@ -1831,8 +1810,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         public PowershellFileTask(string filePath, bool isPwsh) { }
         public string FilePath { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Arguments { get; init; }
-        public void Read(YamlDotNet.Core.IParser parser, System.Type expectedType, YamlDotNet.Serialization.ObjectDeserializer nestedObjectDeserializer) { }
-        public void Write(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public abstract class PowershellTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PowershellTask>
     {

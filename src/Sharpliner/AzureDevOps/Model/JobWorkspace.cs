@@ -18,9 +18,9 @@ public class JobWorkspace : IYamlConvertible
         _cleanTarget = cleanTarget;
     }
 
-    public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
+    void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
 
-    public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
         emitter.Emit(new MappingStart());
         emitter.Emit(new Scalar("clean"));
