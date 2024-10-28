@@ -112,11 +112,11 @@ public record PowershellFileTask : PowershellTask, IYamlConvertible
         _isPwsh = isPwsh;
     }
 
-    public void Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+    void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
         => throw new NotImplementedException();
 
     // This is unfortunately needed because when referencing a script file, the "powershell: ..." variant does not work
-    public void Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
         var inputs = new TaskInputs();
 
