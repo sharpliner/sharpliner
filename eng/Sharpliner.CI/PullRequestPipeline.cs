@@ -29,7 +29,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                     ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj"),
 
                     DotNet
-                        .Test("tests/Sharpliner.Tests/Sharpliner.Tests.csproj")
+                        .Test("tests/Sharpliner.Tests/Sharpliner.Tests.csproj", "--collect \"Code coverage\"")
                         .DisplayAs("Run unit tests"),
 
                     DotNet.Pack("tests/E2E.Tests/SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj") with
