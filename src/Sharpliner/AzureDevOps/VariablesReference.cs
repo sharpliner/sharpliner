@@ -2,8 +2,17 @@
 
 namespace Sharpliner.AzureDevOps;
 
+/// <summary>
+/// Class that contains references to various Azure DevOps predefined variables.
+/// </summary>
 public class VariablesReference
 {
+    /// <summary>
+    /// Gets a reference to a variable with the specified name.
+    /// This should be used for custom variables.
+    /// </summary>
+    /// <param name="variableName">The variable name.</param>
+    /// <returns>A variable reference to the specified name.</returns>
     public VariableReference this[string variableName] => new(variableName);
 
     /// <summary>
@@ -50,24 +59,44 @@ public class VariablesReference
     /// Set to <c>True</c> if the script is being run by a build task.
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
-    public VariableReference TF_BUILD => VariableReferenceBase.GetReference(string.Empty, "TF_BUILD");
+    public VariableReference TF_BUILD => new("TF_BUILD");
 
-    public VariableReference Configuration => VariableReferenceBase.GetReference(string.Empty, "Configuration");
+    public VariableReference Configuration => new("Configuration");
 }
 
+/// <summary>
+/// Base class for all variable references.
+/// </summary>
 public abstract class VariableReferenceBase
 {
     internal static VariableReference GetReference(string prefix, string variableName) => new($"{prefix}{variableName}");
 
+    /// <summary>
+    /// Gets a reference to a variable with the specified name.
+    /// </summary>
+    /// <param name="variableName">The variable name.</param>
+    /// <returns>A variable reference to the specified name.</returns>
     public VariableReference this[string variableName] => GetReference(Prefix, variableName);
 
+    /// <summary>
+    /// Gets a reference to a variable with the specified name.
+    /// </summary>
+    /// <param name="name">The variable name</param>
+    /// <returns>A variable reference to the specified name.</returns>
     protected VariableReference GetReference(string name) => GetReference(Prefix, name);
 
+    /// <summary>
+    /// The prefix of the variable.
+    /// </summary>
     protected abstract string Prefix { get; }
 }
 
+/// <summary>
+/// Represents the variables that have the prefix <c>Agent.</c>.
+/// </summary>
 public sealed class AgentVariableReference : VariableReferenceBase
 {
+    /// <inheritdoc/>
     protected override string Prefix => "Agent.";
 
     internal AgentVariableReference()
@@ -189,10 +218,14 @@ public sealed class AgentVariableReference : VariableReferenceBase
     public VariableReference WorkFolder => GetReference("WorkFolder");
 }
 
+/// <summary>
+/// Represents the variables that have the prefix <c>Build.</c>.
+/// </summary>
 public sealed class BuildVariableReference : VariableReferenceBase
 {
     internal static readonly BuildVariableReference Instance = new();
 
+    /// <inheritdoc/>
     protected override string Prefix => "Build.";
 
     internal BuildVariableReference()
@@ -450,8 +483,12 @@ public sealed class BuildVariableReference : VariableReferenceBase
     public TriggeredByVariableReference TriggeredBy => new();
 }
 
+/// <summary>
+/// Represents the variables that have the prefix <c>Build.Repository.</c>.
+/// </summary>
 public sealed class RepositoryVariableReference : VariableReferenceBase
 {
+    /// <inheritdoc/>
     protected override string Prefix => "Build.Repository.";
 
     internal RepositoryVariableReference()
@@ -557,8 +594,12 @@ public sealed class RepositoryVariableReference : VariableReferenceBase
     public VariableReference GitSubmoduleCheckout => GetReference("Git.SubmoduleCheckout");
 }
 
+/// <summary>
+/// Represents the variables that have the prefix <c>Build.TriggeredBy.</c>.
+/// </summary>
 public sealed class TriggeredByVariableReference : VariableReferenceBase
 {
+    /// <inheritdoc/>
     protected override string Prefix => "Build.TriggeredBy.";
 
     internal TriggeredByVariableReference()
@@ -631,8 +672,12 @@ public sealed class TriggeredByVariableReference : VariableReferenceBase
     public VariableReference ProjectID => GetReference("ProjectID");
 }
 
+/// <summary>
+/// Represents the variables that have the prefix <c>System.</c>.
+/// </summary>
 public sealed class SystemVariableReference : VariableReferenceBase
 {
+    /// <inheritdoc/>
     protected override string Prefix => "System.";
 
     internal SystemVariableReference()
@@ -768,8 +813,12 @@ public sealed class SystemVariableReference : VariableReferenceBase
     public VariableReference TeamProjectId => GetReference("TeamProjectId");
 }
 
+/// <summary>
+/// Represents the variables that have the prefix <c>System.PullRequest.</c>.
+/// </summary>
 public sealed class PullRequestVariableReference : VariableReferenceBase
 {
+    /// <inheritdoc/>
     protected override string Prefix => "System.PullRequest.";
 
     internal PullRequestVariableReference()
@@ -818,8 +867,12 @@ public sealed class PullRequestVariableReference : VariableReferenceBase
     public VariableReference TargetBranch => GetReference("TargetBranch");
 }
 
+/// <summary>
+/// Represents the variables that have the prefix <c>Pipeline.</c>.
+/// </summary>
 public sealed class PipelineVariableReference : VariableReferenceBase
 {
+    /// <inheritdoc/>
     protected override string Prefix => "Pipeline.";
 
     internal PipelineVariableReference()
@@ -833,8 +886,12 @@ public sealed class PipelineVariableReference : VariableReferenceBase
     public VariableReference Workspace => GetReference("Workspace");
 }
 
+/// <summary>
+/// Represents the variables that have the prefix <c>Environment.</c>.
+/// </summary>
 public sealed class EnvironmentVariableReference : VariableReferenceBase
 {
+    /// <inheritdoc/>
     protected override string Prefix => "Environment.";
 
     internal EnvironmentVariableReference()
@@ -866,8 +923,12 @@ public sealed class EnvironmentVariableReference : VariableReferenceBase
     public VariableReference ResourceId => GetReference("ResourceId");
 }
 
+/// <summary>
+/// Represents the variables that have the prefix <c>Strategy.</c>.
+/// </summary>
 public sealed class StrategyVariableReference : VariableReferenceBase
 {
+    /// <inheritdoc/>
     protected override string Prefix => "Strategy.";
 
     internal StrategyVariableReference()
@@ -885,8 +946,12 @@ public sealed class StrategyVariableReference : VariableReferenceBase
     public VariableReference CycleName => GetReference("CycleName");
 }
 
+/// <summary>
+/// Represents the variables that have the prefix <c>Checks.</c>.
+/// </summary>
 public sealed class ChecksVariableReference : VariableReferenceBase
 {
+    /// <inheritdoc/>
     protected override string Prefix => "Checks.";
 
     internal ChecksVariableReference()

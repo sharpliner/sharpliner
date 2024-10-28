@@ -1,5 +1,8 @@
 ﻿namespace Sharpliner;
 
+/// <summary>
+/// Specifies the type of the target path for the generated template or pipeline.
+/// </summary>
 public enum TargetPathType
 {
     /// <summary>

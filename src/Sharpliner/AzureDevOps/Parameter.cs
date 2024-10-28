@@ -76,7 +76,7 @@ public abstract record Parameter<T> : Parameter
 }
 
 /// <summary>
-/// Base class for defining <see cref="string"/> parameters that can be used in templates and pipelines.
+/// Class for defining <see cref="string"/> parameters that can be used in templates and pipelines.
 /// </summary>
 public sealed record StringParameter : Parameter<string>
 {
@@ -97,7 +97,7 @@ public sealed record StringParameter : Parameter<string>
 }
 
 /// <summary>
-/// Base class for defining <see cref="int"/> parameters that can be used in templates and pipelines.
+/// Class for defining <see cref="int"/> parameters that can be used in templates and pipelines.
 /// </summary>
 public sealed record NumberParameter : Parameter<int?>
 {
@@ -118,7 +118,7 @@ public sealed record NumberParameter : Parameter<int?>
 }
 
 /// <summary>
-/// Base class for defining <see cref="bool"/> parameters that can be used in templates and pipelines.
+/// Class for defining a single <see cref="bool"/> parameters that can be used in templates and pipelines.
 /// </summary>
 public sealed record BooleanParameter : Parameter<bool?>
 {
@@ -138,7 +138,7 @@ public sealed record BooleanParameter : Parameter<bool?>
 }
 
 /// <summary>
-/// Base class for defining parameters with custom structure that can be used in templates and pipelines.
+/// Class for defining parameters with custom structure that can be used in templates and pipelines.
 /// </summary>
 public sealed record ObjectParameter : Parameter<ConditionedDictionary>
 {
@@ -158,7 +158,7 @@ public sealed record ObjectParameter : Parameter<ConditionedDictionary>
 }
 
 /// <summary>
-/// Base class for defining parameters with custom structure based on a strongly-typed collection that can be used in templates and pipelines.
+/// Class for defining parameters with custom structure based on a strongly-typed collection that can be used in templates and pipelines.
 /// </summary>
 public sealed record ObjectParameter<T> : Parameter<ConditionedList<T>>
 {
@@ -178,7 +178,7 @@ public sealed record ObjectParameter<T> : Parameter<ConditionedList<T>>
 }
 
 /// <summary>
-/// Base class for defining parameters of type <c>step</c> that can be used in templates and pipelines.
+/// Class for defining a single <c><see cref="Step"/></c> parameter that can be used in templates and pipelines.
 /// </summary>
 public sealed record StepParameter : Parameter<Step>
 {
@@ -198,7 +198,7 @@ public sealed record StepParameter : Parameter<Step>
 }
 
 /// <summary>
-/// Base class for defining parameters of type <c>stepList</c> that can be used in templates and pipelines.
+/// Class for defining a sequence of <see cref="Step"/> parameters that can be used in templates and pipelines.
 /// </summary>
 public sealed record StepListParameter : Parameter<ConditionedList<Step>>
 {
@@ -218,7 +218,7 @@ public sealed record StepListParameter : Parameter<ConditionedList<Step>>
 }
 
 /// <summary>
-/// Base class for defining parameters of type <c>job</c> that can be used in templates and pipelines.
+/// Class for defining a single <c><see cref="Job"/></c> parameter that can be used in templates and pipelines.
 /// </summary>
 public sealed record JobParameter : Parameter<JobBase>
 {
@@ -238,7 +238,7 @@ public sealed record JobParameter : Parameter<JobBase>
 }
 
 /// <summary>
-/// Base class for defining parameters of type <c>jobList</c> that can be used in templates and pipelines.
+/// Class for defining a sequence of <see cref="Job"/> parameters that can be used in templates and pipelines.
 /// </summary>
 public sealed record JobListParameter : Parameter<ConditionedList<JobBase>>
 {
@@ -257,6 +257,9 @@ public sealed record JobListParameter : Parameter<ConditionedList<JobBase>>
     public override string Type => "jobList";
 }
 
+/// <summary>
+/// Class for defining a single <c><see cref="DeploymentJob"/></c> parameter that can be used in templates and pipelines.
+/// </summary>
 public sealed record DeploymentParameter : Parameter<DeploymentJob>
 {
     /// <summary>
@@ -270,9 +273,13 @@ public sealed record DeploymentParameter : Parameter<DeploymentJob>
     {
     }
 
+    /// <inheritdoc />
     public override string Type => "deployment";
 }
 
+/// <summary>
+/// Class for defining a sequence of <see cref="DeploymentJob"/> parameters that can be used in templates and pipelines.
+/// </summary>
 public sealed record DeploymentListParameter : Parameter<ConditionedList<DeploymentJob>>
 {
     /// <summary>
@@ -286,9 +293,13 @@ public sealed record DeploymentListParameter : Parameter<ConditionedList<Deploym
     {
     }
 
+    /// <inheritdoc />
     public override string Type => "deploymentList";
 }
 
+/// <summary>
+/// Class for defining a single <c><see cref="Stage"/></c> parameter that can be used in templates and pipelines.
+/// </summary>
 public sealed record StageParameter : Parameter<Stage>
 {
     /// <summary>
@@ -302,9 +313,13 @@ public sealed record StageParameter : Parameter<Stage>
     {
     }
 
+    /// <inheritdoc />
     public override string Type => "stage";
 }
 
+/// <summary>
+/// Class for defining of sequence of <see cref="Stage"/> parameters  that can be used in templates and pipelines.
+/// </summary>
 public sealed record StageListParameter : Parameter<ConditionedList<Stage>>
 {
     /// <summary>
@@ -318,6 +333,7 @@ public sealed record StageListParameter : Parameter<ConditionedList<Stage>>
     {
     }
 
+    /// <inheritdoc />
     public override string Type => "stageList";
 }
 
