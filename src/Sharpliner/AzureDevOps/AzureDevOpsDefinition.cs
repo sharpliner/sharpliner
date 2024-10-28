@@ -481,12 +481,59 @@ public abstract class AzureDevOpsDefinition
     #region Conditions, each expressions, ..
 
     /// <summary>
-    /// Start an ${{ if () }} section.
+    /// Start an <c>${{ if () }}</c> section.
+    /// For example:
+    /// <code lang="csharp">
+    /// If.NotIn("'$(Environment)'", "'prod'")
+    ///     .Group("dev")
+    ///     .Group("staging")
+    /// .Else
+    ///     .Group("prod")
+    /// </code>
+    /// will generate:
+    /// <code lang="yaml">
+    /// - ${{ if notIn('$(Environment)', 'prod') }}:
+    ///   - group: dev
+    ///   - group: staging
+    /// - ${{ else }}:
+    ///   - group: prod
+    /// </code>
     /// </summary>
     protected static IfConditionBuilder If => new();
 
-    /// <summary>
-    /// Start an ${{ else () }} section.
+    /// Start an <c>${{ else () }}</c> section.
+    /// For example:
+    /// <code lang="csharp">
+    /// DotNet.Pack("ProjectFile") with
+    /// {
+    ///     Inputs = new()
+    ///     {
+    ///         {
+    ///             If.Equal(parameters["IncludeSymbols"], "true"), new TaskInputs()
+    ///             {
+    ///                 ["arguments"] = "--configuration $(BuildConfiguration) --no-restore --no-build -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg"
+    ///             }
+    ///         },
+    ///         {
+    ///             Else, new TaskInputs()
+    ///             {
+    ///                 ["arguments"] = "--configuration $(BuildConfiguration) --no-restore --no-build"
+    ///             }
+    ///         }
+    ///     },
+    /// },
+    /// </code>
+    /// will generate:
+    /// <code lang="yaml">
+    /// - task: DotNetCoreCLI@2
+    ///   inputs:
+    ///     command: pack
+    ///     packagesToPack: ProjectFile
+    ///     ${{ if eq(parameters.IncludeSymbols, true) }}:
+    ///       arguments: --configuration $(BuildConfiguration) --no-restore --no-build -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+    ///     ${{ else }}:
+    ///       arguments: --configuration $(BuildConfiguration) --no-restore --no-build
+    /// </code>
     /// </summary>
     protected static ElseCondition Else => new();
 
