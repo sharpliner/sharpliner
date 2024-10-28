@@ -588,14 +588,14 @@ namespace Sharpliner.AzureDevOps
     {
         public NoopJob() { }
     }
-    public class NpmPackageResouce : Sharpliner.AzureDevOps.PackageResource, System.IEquatable<Sharpliner.AzureDevOps.NpmPackageResouce>
+    public class NpmPackageResource : Sharpliner.AzureDevOps.PackageResource, System.IEquatable<Sharpliner.AzureDevOps.NpmPackageResource>
     {
-        public NpmPackageResouce(string packageAlias, string packageName) { }
+        public NpmPackageResource(string packageAlias, string packageName) { }
         public override string PackageType { get; }
     }
-    public class NuGetPackageResouce : Sharpliner.AzureDevOps.PackageResource, System.IEquatable<Sharpliner.AzureDevOps.NuGetPackageResouce>
+    public class NuGetPackageResource : Sharpliner.AzureDevOps.PackageResource, System.IEquatable<Sharpliner.AzureDevOps.NuGetPackageResource>
     {
-        public NuGetPackageResouce(string packageAlias, string packageName) { }
+        public NuGetPackageResource(string packageAlias, string packageName) { }
         public override string PackageType { get; }
     }
     public sealed class NumberParameter : Sharpliner.AzureDevOps.Parameter<int?>, System.IEquatable<Sharpliner.AzureDevOps.NumberParameter>

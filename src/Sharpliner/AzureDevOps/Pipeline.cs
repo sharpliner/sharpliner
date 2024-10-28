@@ -103,9 +103,13 @@ public abstract record PipelineBase
 /// </summary>
 public record Pipeline : PipelineBase
 {
+    /// <summary>
+    /// Specifies the stages of the pipeline.
+    /// </summary>
     [YamlMember(Order = 600)]
     public ConditionedList<Stage> Stages { get; init; } = [];
 
+    /// <inheritdoc/>
     public override IReadOnlyCollection<IDefinitionValidation> Validations
         => Stages.GetStageValidations()
             .Append(new RepositoryCheckoutValidation(this))
@@ -129,6 +133,7 @@ public record PipelineWithExtends : PipelineBase
     public Extends Extends { get; init; } = null!;
 #endif
 
+    /// <inheritdoc/>
     public override IReadOnlyCollection<IDefinitionValidation> Validations => [];
 }
 
@@ -138,9 +143,13 @@ public record PipelineWithExtends : PipelineBase
 /// </summary>
 public record SingleStagePipeline : PipelineBase
 {
+    /// <summary>
+    /// Specifies the jobs of the pipeline.
+    /// </summary>
     [YamlMember(Order = 600)]
     public ConditionedList<JobBase> Jobs { get; init; } = [];
 
+    /// <inheritdoc/>
     public override IReadOnlyCollection<IDefinitionValidation> Validations
         => Jobs.GetJobValidations()
             .Append(new RepositoryCheckoutValidation(this))
