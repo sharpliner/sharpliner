@@ -544,7 +544,6 @@ namespace Sharpliner.AzureDevOps
     {
         public LibraryReference(Sharpliner.AzureDevOps.DefinitionLibrary<T> library) { }
         public LibraryReference(System.Collections.Generic.IEnumerable<Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>> items) { }
-        protected override void SerializeSelf(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class LifeCycleHook : System.IEquatable<Sharpliner.AzureDevOps.LifeCycleHook>
     {
@@ -1060,7 +1059,6 @@ namespace Sharpliner.AzureDevOps
     {
         public Template(string path, Sharpliner.AzureDevOps.TemplateParameters? parameters = null) { }
         public Sharpliner.AzureDevOps.TemplateParameters Parameters { get; init; }
-        protected override void SerializeSelf(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class Trigger : System.IEquatable<Sharpliner.AzureDevOps.Trigger>
     {
@@ -1219,7 +1217,6 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
     public abstract class Conditioned : System.IEquatable<Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned>, YamlDotNet.Serialization.IYamlConvertible
     {
         protected Conditioned(Sharpliner.AzureDevOps.IfCondition? condition) { }
-        protected abstract void WriteInternal(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer);
     }
     public class ConditionedDictionary : System.Collections.Generic.Dictionary<string, object>
     {
@@ -1239,12 +1236,10 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
     public class ConditionedParameterReference<T> : Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>, System.IEquatable<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedParameterReference<T>>
     {
         public ConditionedParameterReference(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference parameter) { }
-        protected override void WriteInternal(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class ConditionedVariableReference<T> : Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>, System.IEquatable<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedVariableReference<T>>
     {
         public ConditionedVariableReference(Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference variable) { }
-        protected override void WriteInternal(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class Conditioned<T> : Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned, System.IEquatable<Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>>
     {
@@ -1256,9 +1251,7 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> EndIf { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.IfConditionBuilder<T> If { get; }
         public System.Collections.Generic.IReadOnlyCollection<T> FlattenDefinitions() { }
-        protected virtual void SerializeSelf(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
         public override string ToString() { }
-        protected override void WriteInternal(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference parameterRef) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> op_Implicit(T value) { }
     }
