@@ -317,6 +317,27 @@ public static class ConditionExtensions
     public static Conditioned<T> Value<T>(this IfCondition condition, T value)
         => Conditioned.Link(condition, value);
 
+    /// <summary>
+    /// Starts an <c>${{ each var in collection }}</c> section.
+    /// For example:
+    /// <code lang="csharp">
+    /// If.IsBranch("main")
+    ///     .Each("env", "parameters.environments")
+    ///         .Stage(new Stage("stage-${{ env.name }}")
+    ///         {
+    ///         })
+    /// </code>
+    /// will generate:
+    /// <code lang="yaml">
+    /// - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    ///   - ${{ each env in parameters.stages }}:
+    ///     - stage: stage-${{ env.name }}
+    /// </code>
+    /// </summary>
+    /// <param name="condition">The current condition.</param>
+    /// <param name="iterator">Name of the iterator variable.</param>
+    /// <param name="collection">Collection to iterate over.</param>
+    /// <returns>An if condition with an <c>each</c> expression appended.</returns>
     public static IfCondition Each(this IfCondition condition, string iterator, string collection)
     {
         condition.EachExpression = new(iterator, collection);

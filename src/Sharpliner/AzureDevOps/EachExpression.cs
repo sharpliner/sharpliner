@@ -2,10 +2,10 @@
 
 namespace Sharpliner.AzureDevOps;
 
-public class EachExpression(string iterator, string collection)
+internal class EachExpression(string iterator, string collection)
 {
-    public string Iterator { get; } = iterator;
-    public string Collection { get; } = collection;
+    internal string Iterator { get; } = iterator;
+    internal string Collection { get; } = collection;
 
     public override string ToString()
         => GetEachExpression(Iterator, Collection);
@@ -14,8 +14,20 @@ public class EachExpression(string iterator, string collection)
         => $"{Condition.ExpressionStart}each {iterator} in {collection}{Condition.ExpressionEnd}";
 }
 
-public class EachBlock(string iterator, string collection) : IfCondition
+/// <summary>
+/// Represents an <c>each</c> block in the pipeline.
+/// </summary>
+public class EachBlock : IfCondition
 {
-    internal override string Serialize() => EachExpression.GetEachExpression(iterator, collection);
+    private readonly string _iterator;
+    private readonly string _collection;
+
+    internal EachBlock(string iterator, string collection)
+    {
+        _iterator = iterator;
+        _collection = collection;
+    }
+
+    internal override string Serialize() => EachExpression.GetEachExpression(_iterator, _collection);
     internal override string TagStart => ExpressionStart;
 }

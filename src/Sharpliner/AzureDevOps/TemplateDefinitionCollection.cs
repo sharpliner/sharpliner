@@ -13,7 +13,7 @@ namespace Sharpliner.AzureDevOps;
 /// <param name="TargetFile">Path to the YAML file/folder where this definition/collection will be exported to</param>
 /// <param name="Definition">Definition of the template</param>
 /// <param name="Parameters">List of template parameters</param>
-/// <param name="PathType">Override this to define where the resulting YAML should be stored (together with TargetFile)</param>
+/// <param name="PathType">Override this to define where the resulting YAML should be stored (together with <paramref name="TargetFile"/>)</param>
 /// <param name="Header">Header that will be shown at the top of the generated YAML file. Leave empty array for no header, leave null for a default</param>
 public record TemplateDefinitionData<T>(
     string TargetFile,
@@ -24,12 +24,16 @@ public record TemplateDefinitionData<T>(
 
 public abstract class TemplateDefinitionCollection<T> : TemplateDefinition, ISharplinerDefinitionCollection
 {
+    /// <summary>
+    /// Returns a sequence of templates that will be used to populate <see cref="Definitions"/>.
+    /// </summary>
     public abstract IEnumerable<TemplateDefinitionData<T>> Templates { get; }
 
     internal abstract string YamlProperty { get; }
 
     internal abstract IReadOnlyCollection<IDefinitionValidation> GetValidations(TemplateDefinitionData<T> definition);
 
+    /// <inheritdoc/>
     public IEnumerable<ISharplinerDefinition> Definitions
         => Templates.Select(data => new TemplateDefinitionWrapper<T>(data, YamlProperty, GetType(), GetValidations(data)));
 

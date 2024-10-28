@@ -355,17 +355,7 @@ namespace Sharpliner.AzureDevOps
         public Sharpliner.AzureDevOps.LifeCycleHook RouteTraffic { get; init; }
         protected abstract void WriteCustomFields(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer);
     }
-    public class EachBlock : Sharpliner.AzureDevOps.IfCondition
-    {
-        public EachBlock(string iterator, string collection) { }
-    }
-    public class EachExpression
-    {
-        public EachExpression(string iterator, string collection) { }
-        public string Collection { get; }
-        public string Iterator { get; }
-        public override string ToString() { }
-    }
+    public class EachBlock : Sharpliner.AzureDevOps.IfCondition { }
     public class ElseCondition : Sharpliner.AzureDevOps.ConditionedExpressions.Condition
     {
         public ElseCondition() { }
