@@ -36,7 +36,7 @@ public record LibraryReference<T> : Conditioned<T>
         Items = items;
     }
 
-    protected override void SerializeSelf(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    internal override void SerializeSelf(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
         foreach (var item in Items)
         {

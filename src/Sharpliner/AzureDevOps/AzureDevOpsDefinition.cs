@@ -501,6 +501,7 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static IfConditionBuilder If => new();
 
+    /// <summary>
     /// Start an <c>${{ else () }}</c> section.
     /// For example:
     /// <code lang="csharp">

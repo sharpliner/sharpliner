@@ -7,6 +7,29 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 
+/// <summary>
+/// Represents an item that might or might not have a condition.
+/// Example of regular definition:
+/// <code lang="csharp">
+/// Task("publish")
+/// </code>
+/// will output:
+/// <code lang="yaml">
+/// - task: publish
+/// </code>
+/// Example of conditioned definition:
+/// <code lang="csharp">
+/// If.Equal(variables["_RunAsInternal"], "true")
+///     .Variable("NetCoreInternal-Pool", true)
+/// .EndIf
+/// </code>
+/// will output:
+/// <code lang="yaml">
+/// - ${{ if eq(variables._RunAsInternal, True) }}:
+///   - name: NetCoreInternal-Pool
+///     value: true
+/// </code>
+/// </summary>
 public abstract record Conditioned : IYamlConvertible
 {
     private class ValueEqualityList : List<Conditioned>
@@ -44,6 +67,10 @@ public abstract record Conditioned : IYamlConvertible
     /// </summary>
     internal bool IsList { get; set; } = false;
 
+    /// <summary>
+    /// Creates a new instance of <see cref="Conditioned"/> with the given condition.
+    /// </summary>
+    /// <param name="condition">The condition.</param>
     protected Conditioned(IfCondition? condition)
     {
         Condition = condition;
@@ -54,7 +81,7 @@ public abstract record Conditioned : IYamlConvertible
 
     void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer) => WriteInternal(emitter, nestedObjectSerializer);
 
-    protected abstract void WriteInternal(IEmitter emitter, ObjectSerializer nestedObjectSerializer);
+    internal abstract void WriteInternal(IEmitter emitter, ObjectSerializer nestedObjectSerializer);
 
     internal virtual void SetIsList(bool isList)
     {
@@ -156,9 +183,17 @@ public abstract record Conditioned : IYamlConvertible
 public record Conditioned<T> : Conditioned
 {
     // Make sure we can for example assign a string into ConditionedDefinition<string>
+    /// <summary>
+    /// Implicitly converts a value into a <see cref="Conditioned{T}"/> instance with a definition.
+    /// </summary>
+    /// <param name="value">The definition.</param>
     public static implicit operator Conditioned<T>(T value) => new(definition: value);
 
     // Make sure we can assign ${{ parameters.name }} into conditioned
+    /// <summary>
+    /// Implicitly converts a <see cref="ParameterReference"/> into a <see cref="Conditioned{T}"/> instance with a parameter reference.
+    /// </summary>
+    /// <param name="parameterRef">The parameter reference.</param>
     public static implicit operator Conditioned<T>(ParameterReference parameterRef) => new ConditionedParameterReference<T>(parameterRef);
 
     /// <summary>
@@ -171,21 +206,77 @@ public record Conditioned<T> : Conditioned
         Definition = definition;
     }
 
+    /// <summary>
+    /// Creates a new instance of <see cref="Conditioned{T}"/> with the given definition.
+    /// </summary>
+    /// <param name="definition">The definition.</param>
     public Conditioned(T definition) : this()
     {
         Definition = definition;
     }
 
+    /// <summary>
+    /// Creates a new instance of <see cref="Conditioned{T}"/> with the given condition.
+    /// </summary>
+    /// <param name="condition">The condition.</param>
     protected Conditioned(IfCondition? condition) : base(condition)
     {
     }
 
+    /// <summary>
+    /// Creates a new instance of <see cref="Conditioned{T}"/> with no condition.
+    /// </summary>
     protected Conditioned() : base((IfCondition?)null)
     {
     }
 
+    /// <summary>
+    /// Starts a new <c>${{ if (...) }}</c> section.
+    /// For example:
+    /// <code lang="csharp">
+    /// .If.And(Equal("e", "f"), NotEqual("g", "h"))
+    ///     .Variable("feature", "on")
+    ///     .Variable("feature2", "on")
+    /// </code>
+    /// will generate:
+    /// <code lang="yaml">
+    /// - ${{ if and(eq('e', 'f'), ne('g', 'h')) }}:
+    ///   - name: feature
+    ///     value: on
+    ///   - name: feature2
+    ///     value: on
+    /// </code>
+    /// </summary>
     public IfConditionBuilder<T> If => new(this);
 
+    /// <summary>
+    /// Ends a <c>${{ if (...) }}</c> section.
+    /// For example:
+    /// <code lang="csharp">
+    /// new Job("Job")
+    /// {
+    ///     Pool = If.Equal("A", "B")
+    ///         .Pool(new HostedPool("pool-A")
+    ///         {
+    ///             Demands = { "SomeProperty -equals SomeValue" }
+    ///         })
+    ///     .EndIf
+    ///     .If.Equal("C", "D")
+    ///         .Pool(new HostedPool("pool-B")),
+    /// }
+    /// </code>
+    /// will generate:
+    /// <code lang="yaml">
+    /// - job: Job
+    ///   pool:
+    ///     ${{ if eq('A', 'B') }}:
+    ///       name: pool-A
+    ///       demands:
+    ///       - SomeProperty -equals SomeValue
+    ///     ${{ if eq('C', 'D') }}:
+    ///       name: pool-B
+    /// </code>
+    /// </summary>
     public Conditioned<T> EndIf
     {
         get
@@ -204,6 +295,24 @@ public record Conditioned<T> : Conditioned
         }
     }
 
+    /// <summary>
+    /// Ends an <c>${{ each (...) }}</c> section.
+    /// For example:
+    /// <code lang="csharp">
+    /// Each("foo", "bar")
+    ///    .Job(new Job("job-${{ foo }}"))
+    /// .EndEach
+    /// .If.Equal("foo", "bar")
+    ///     .Job(new Job("job2-${{ foo }}"))
+    /// </code>
+    /// will generate:
+    /// <code lang="yaml">
+    /// - ${{ each foo in bar }}:
+    ///   - job: job-${{ foo }}
+    /// - ${{ if eq('foo', 'bar') }}:
+    ///   - job: job2-${{ foo }}
+    /// </code>
+    /// </summary>
     public Conditioned<T> EndEach
     {
         get
@@ -228,6 +337,31 @@ public record Conditioned<T> : Conditioned
         }
     }
 
+    /// <summary>
+    /// Start an <c>${{ else () }}</c> section.
+    /// For example:
+    /// <code lang="csharp">
+    /// If.Equal("a", "b")
+    ///     .Variable("feature", "on")
+    ///     .Variable("feature2", "on")
+    /// .Else
+    ///     .Variable("feature", "off")
+    ///     .Variable("feature2", "off"),
+    /// </code>
+    /// will generate:
+    /// <code lang="yaml">
+    /// - ${{ if eq('a', 'b') }}:
+    ///   - name: feature
+    ///     value: on
+    ///   - name: feature2
+    ///     value: on
+    /// - ${{ else }}:
+    ///   - name: feature
+    ///     value: off
+    ///   - name: feature2
+    ///     value: off
+    /// </code>
+    /// </summary>
     public IfCondition<T> Else
     {
         get
@@ -256,7 +390,7 @@ public record Conditioned<T> : Conditioned
         }
     }
 
-    protected override void WriteInternal(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    internal override void WriteInternal(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
         if (IsList)
         {
@@ -372,7 +506,7 @@ public record Conditioned<T> : Conditioned
         }
     }
 
-    protected virtual void SerializeSelf(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    internal virtual void SerializeSelf(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
         if (Definition != null)
         {
@@ -402,6 +536,7 @@ public record Conditioned<T> : Conditioned
         return definitions;
     }
 
+    /// <inheritdoc/>
     public override string ToString() =>
         $"{(Condition == null ? "" : Condition + ": ")}{typeof(T).Name} " +
         $"with {(Definition == null ? Definitions.Count : Definitions.Count + 1)} items";
