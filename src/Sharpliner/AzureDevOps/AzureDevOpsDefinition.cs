@@ -495,76 +495,295 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static InlineCondition Condition(string condition) => new InlineCustomCondition(condition);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ and(...expressions) }}</c> section.
+    /// </summary>
+    /// <param name="expressions">Expressions to be combined with AND</param>
+    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
+    /// <returns>An <c>and</c> condition with the specified expressions.</returns>
     protected static InlineCondition<T> And<T>(params string[] expressions) => new InlineAndCondition<T>(expressions);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ or(...expressions) }}</c> section.
+    /// </summary>
+    /// <param name="expressions">Expressions to be combined with OR</param>
+    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
+    /// <returns>An <c>or</c> condition with the specified expressions.</returns>
     protected static InlineCondition Or<T>(params string[] expressions) => new InlineOrCondition<T>(expressions);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ xor(expression1, expression2) }}</c> section.
+    /// </summary>
+    /// <param name="expression1">First expression</param>
+    /// <param name="expression2">Second expression</param>
+    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
+    /// <returns>An <c>xor</c> condition with the specified expressions.</returns>
     protected static InlineCondition Xor<T>(string expression1, string expression2) => new InlineXorCondition<T>(expression1, expression2);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ eq(...expressions) }}</c> section.
+    /// </summary>
+    /// <param name="expressions">Expressions to be combined with AND</param>
+    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
+    /// <returns>An <c>and</c> condition with the specified expressions.</returns>
     protected static InlineCondition And<T>(params InlineCondition[] expressions) => new InlineAndCondition<T>(expressions);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ or(...expressions) }}</c> section.
+    /// </summary>
+    /// <param name="expressions">Expressions to be combined with OR</param>
+    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
+    /// <returns>An <c>or</c> condition with the specified expressions.</returns>
     protected static InlineCondition Or<T>(params InlineCondition[] expressions) => new InlineOrCondition<T>(expressions);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ xor(expression1, expression2) }}</c> section.
+    /// </summary>
+    /// <param name="expression1">First expression</param>
+    /// <param name="expression2">Second expression</param>
+    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
+    /// <returns>An <c>xor</c> condition with the specified expressions.</returns>
     protected static InlineCondition Xor<T>(Condition expression1, Condition expression2) => new InlineXorCondition<T>(expression1, expression2);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ eq(expression1, expression2) }}</c> section.
+    /// </summary>
+    /// <param name="expression1">First expression</param>
+    /// <param name="expression2">Second expression</param>
+    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
+    /// <returns>An <c>eq</c> condition with the specified expressions.</returns>
     protected static InlineCondition Equal<T>(InlineExpression expression1, InlineExpression expression2) => new InlineEqualityCondition<T>(true, expression1, expression2);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ ne(expression1, expression2) }}</c> section.
+    /// </summary>
+    /// <param name="expression1">First expression</param>
+    /// <param name="expression2">Second expression</param>
+    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
+    /// <returns>An <c>ne</c> condition with the specified expressions.</returns>
     protected static InlineCondition NotEqual<T>(InlineExpression expression1, InlineExpression expression2) => new InlineEqualityCondition<T>(false, expression1, expression2);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ contains(haystack, needle) }}</c> section.
+    /// </summary>
+    /// <param name="needle">Needle to search for</param>
+    /// <param name="haystack">Haystack to search in</param>
+    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
+    /// <returns>A <c>contains</c> condition with the specified expressions.</returns>
     protected static InlineCondition Contains<T>(InlineExpression needle, InlineExpression haystack) => new InlineContainsCondition<T>(needle, haystack);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ startsWith(haystack, needle) }}</c> section.
+    /// </summary>
+    /// <param name="needle">Needle to search for at start</param>
+    /// <param name="haystack">Haystack to search in</param>
+    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
+    /// <returns>A <c>startsWith</c> condition with the specified expressions.</returns>
     protected static InlineCondition StartsWith<T>(InlineExpression needle, InlineExpression haystack) => new InlineStartsWithCondition<T>(needle, haystack);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ endsWith(haystack, needle) }}</c> section.
+    /// </summary>
+    /// <param name="needle">Needle to search for at end</param>
+    /// <param name="haystack">Haystack to search in</param>
+    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
+    /// <returns>An <c>endsWith</c> condition with the specified expressions.</returns>
     protected static InlineCondition EndsWith<T>(InlineExpression needle, InlineExpression haystack) => new InlineEndsWithCondition<T>(needle, haystack);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ containsValue(haystack, needle) }}</c> section.
+    /// </summary>
+    /// <param name="needle">Needle item to search for</param>
+    /// <param name="haystack">Haystack of items to search in</param>
+    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
+    /// <returns>A <c>containsValue</c> condition with the specified expressions.</returns>
     protected static InlineCondition ContainsValue<T>(InlineExpression needle, params InlineExpression[] haystack) => new InlineContainsValueCondition<T>(needle, haystack);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ in(needle, ...haystack) }}</c> section.
+    /// </summary>
+    /// <param name="needle">Needle item to search for</param>
+    /// <param name="haystack">Haystack of items to search in</param>
+    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
+    /// <returns>An <c>in</c> condition with the specified expressions.</returns>
     protected static InlineCondition In<T>(InlineExpression needle, params InlineExpression[] haystack) => new InlineInCondition<T>(needle, haystack);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ notIn(needle, ...haystack) }}</c> section.
+    /// </summary>
+    /// <param name="needle">Needle item to search for</param>
+    /// <param name="haystack">Haystack of items to search in</param>
+    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
+    /// <returns>An <c>notIn</c> condition with the specified expressions.</returns>
     protected static InlineCondition NotIn<T>(InlineExpression needle, params InlineExpression[] haystack) => new InlineNotInCondition<T>(needle, haystack);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ gt(expression1, expression2) }}</c> section.
+    /// </summary>
+    /// <param name="expression1">First expression</param>
+    /// <param name="expression2">Second expression</param>
+    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
+    /// <returns>A <c>gt</c> condition with the specified expressions.</returns>
     protected static InlineCondition Greater<T>(InlineExpression expression1, InlineExpression expression2) => new InlineGreaterCondition<T>(expression1, expression2);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ lt(expression1, expression2) }}</c> section.
+    /// </summary>
+    /// <param name="expression1">First expression</param>
+    /// <param name="expression2">Second expression</param>
+    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
+    /// <returns>A <c>lt</c> condition with the specified expressions.</returns>
     protected static InlineCondition Less<T>(InlineExpression expression1, InlineExpression expression2) => new InlineLessCondition<T>(expression1, expression2);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ and(expressions) }}</c> section.
+    /// </summary>
+    /// <param name="expressions">Expressions to be combined with AND</param>
+    /// <returns>An <c>and</c> condition with the specified expressions.</returns>
     protected static InlineCondition And(params string[] expressions) => new InlineAndCondition(expressions);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ or(expressions) }}</c> section.
+    /// </summary>
+    /// <param name="expressions">Expressions to be combined with OR</param>
+    /// <returns>An <c>or</c> condition with the specified expressions.</returns>
     protected static InlineCondition Or(params string[] expressions) => new InlineOrCondition(expressions);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ xor(condition1, condition2) }}</c> section.
+    /// </summary>
+    /// <param name="condition1">First condition</param>
+    /// <param name="condition2">Second condition</param>
+    /// <returns>An <c>xor</c> condition with the specified expressions.</returns>
     protected static InlineCondition Xor(string condition1, string condition2) => new InlineXorCondition(condition1, condition2);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ and(...expressions) }}</c> section.
+    /// </summary>
+    /// <param name="expressions">Expressions to be combined with AND</param>
+    /// <returns>An <c>and</c> condition with the specified expressions.</returns>
     protected static InlineCondition And(params InlineCondition[] expressions) => new InlineAndCondition(expressions);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ or(expressions) }}</c> section.
+    /// </summary>
+    /// <param name="expressions">Expressions to be combined with OR</param>
+    /// <returns>An <c>or</c> condition with the specified expressions.</returns>
     protected static InlineCondition Or(params InlineCondition[] expressions) => new InlineOrCondition(expressions);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ xor(expression1, expression2) }}</c> section.
+    /// </summary>
+    /// <param name="expression1">First expression</param>
+    /// <param name="expression2">Second expression</param>
+    /// <returns>An <c>xor</c> condition with the specified expressions.</returns>
     protected static InlineCondition Xor(InlineCondition expression1, InlineCondition expression2) => new InlineXorCondition(expression1, expression2);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ contains(haystack, needle) }}</c> section.
+    /// </summary>
+    /// <param name="needle">Needle to search for</param>
+    /// <param name="haystack">Haystack to search in</param>
+    /// <returns>A <c>contains</c> condition with the specified expressions.</returns>
     protected static InlineCondition Contains(InlineExpression needle, InlineExpression haystack) => new InlineContainsCondition(needle, haystack);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ startsWith(haystack, needle) }}</c> section.
+    /// </summary>
+    /// <param name="needle">Needle to search for at start</param>
+    /// <param name="haystack">Haystack to search in</param>
+    /// <returns>A <c>startsWith</c> condition with the specified expressions.</returns>
     protected static InlineCondition StartsWith(InlineExpression needle, InlineExpression haystack) => new InlineStartsWithCondition(needle, haystack);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ endsWith(haystack, needle) }}</c> section.
+    /// </summary>
+    /// <param name="needle">Needle to search for at end</param>
+    /// <param name="haystack">Haystack to search in</param>
+    /// <returns>An <c>endsWith</c> condition with the specified expressions.</returns>
     protected static InlineCondition EndsWith(InlineExpression needle, InlineExpression haystack) => new InlineEndsWithCondition(needle, haystack);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ in(needle, ...haystack) }}</c> section.
+    /// </summary>
+    /// <param name="needle">Needle item to search for</param>
+    /// <param name="haystack">Haystack of items to search in</param>
+    /// <returns>An <c>in</c> condition with the specified expressions.</returns>
     protected static InlineCondition In(InlineExpression needle, params InlineExpression[] haystack) => new InlineInCondition(needle, haystack);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ notIn(needle, ...haystack) }}</c> section.
+    /// </summary>
+    /// <param name="needle">Needle item to search for</param>
+    /// <param name="haystack">Haystack of items to search in</param>
+    /// <returns>An <c>notIn</c> condition with the specified expressions.</returns>
     protected static InlineCondition NotIn(InlineExpression needle, params InlineExpression[] haystack) => new InlineNotInCondition(needle, haystack);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ containsValue(haystack, needle) }}</c> section.
+    /// </summary>
+    /// <param name="needle">Needle item to search for</param>
+    /// <param name="haystack">Haystack of items to search in</param>
+    /// <typeparam name="T">Type of the node to use the conditions on</typeparam>
+    /// <returns>A <c>containsValue</c> condition with the specified expressions.</returns>
     protected static InlineCondition ContainsValue(InlineExpression needle, params InlineExpression[] haystack) => new InlineContainsValueCondition(needle, haystack);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ eq(expression1, expression2) }}</c> section.
+    /// </summary>
+    /// <param name="expression1">First expression</param>
+    /// <param name="expression2">Second expression</param>
+    /// <returns>An <c>eq</c> condition with the specified expressions.</returns>
     protected static InlineCondition Equal(InlineExpression expression1, InlineExpression expression2) => new InlineEqualityCondition(true, expression1, expression2);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ ne(expression1, expression2) }}</c> section.
+    /// </summary>
+    /// <param name="expression1">First expression</param>
+    /// <param name="expression2">Second expression</param>
+    /// <returns>An <c>ne</c> condition with the specified expressions.</returns>
     protected static InlineCondition NotEqual(InlineExpression expression1, InlineExpression expression2) => new InlineEqualityCondition(false, expression1, expression2);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ gt(expression1, expression2) }}</c> section.
+    /// </summary>
+    /// <param name="expression1">First expression</param>
+    /// <param name="expression2">Second expression</param>
+    /// <returns>A <c>gt</c> condition with the specified expressions.</returns>
     protected static InlineCondition Greater(InlineExpression expression1, InlineExpression expression2) => new InlineGreaterCondition(expression1, expression2);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ lt(expression1, expression2) }}</c> section.
+    /// </summary>
+    /// <param name="expression1">First expression</param>
+    /// <param name="expression2">Second expression</param>
+    /// <returns>A <c>lt</c> condition with the specified expressions.</returns>
     protected static InlineCondition Less(InlineExpression expression1, InlineExpression expression2) => new InlineLessCondition(expression1, expression2);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ eq(variables['Build.SourceBranch'], branchName) }}</c> section.
+    /// </summary>
+    /// <param name="branchName">Branch name to compare with</param>
+    /// <returns>An <c>eq</c> condition comparing the current branch with the specified branch name.</returns>
     protected static InlineCondition IsBranch(InlineExpression branchName) => new InlineBranchCondition(branchName, true);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ ne(variables['Build.SourceBranch'], branchName) }}</c> section.
+    /// </summary>
+    /// <param name="branchName">Branch name to compare with</param>
+    /// <returns>An <c>ne</c> condition comparing the current branch with the specified branch name.</returns>
     protected static InlineCondition IsNotBranch(InlineExpression branchName) => new InlineBranchCondition(branchName, false);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ eq(variables['Build.Reason'], 'PullRequest') }}</c> section.
+    /// </summary>
+    /// <returns>An <c>eq</c> condition checking if the current build reason is a pull request.</returns>
     protected static InlineCondition IsPullRequest => new InlineBuildReasonCondition("PullRequest", true);
 
+    /// <summary>
+    /// Utility that creates an <c>${{ ne(variables['Build.Reason'], 'PullRequest') }}</c> section.
+    /// </summary>
+    /// <returns>An <c>ne</c> condition checking if the current build reason is not a pull request.</returns>
     protected static InlineCondition IsNotPullRequest => new InlineBuildReasonCondition("PullRequest", false);
 
     /// <summary>
