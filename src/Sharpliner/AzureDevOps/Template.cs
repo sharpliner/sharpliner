@@ -41,7 +41,7 @@ public record Template<T> : Conditioned<T>
         }
     }
 
-    protected override void SerializeSelf(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    internal override void SerializeSelf(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
         emitter.Emit(new MappingStart());
         emitter.Emit(new Scalar("template"));
