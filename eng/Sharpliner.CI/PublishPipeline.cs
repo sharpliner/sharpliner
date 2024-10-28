@@ -24,7 +24,7 @@ class PublishPipeline : SingleStagePipelineDefinition
                     StepLibrary(new ProjectBuildSteps("src/Sharpliner/Sharpliner.csproj")),
 
                     DotNet
-                        .Pack("src/Sharpliner/Sharpliner.csproj", $"-p:PackageVersion=$(packageVersion)") with
+                        .Pack("src/Sharpliner/Sharpliner.csproj", $"-p:PackageVersion={variables["packageVersion"]}") with
                         {
                             DisplayName = "Pack the .nupkg",
                             OutputDir = ProjectBuildSteps.PackagePath,
@@ -32,7 +32,7 @@ class PublishPipeline : SingleStagePipelineDefinition
                         },
 
                     Publish("Sharpliner",
-                        filePath: ProjectBuildSteps.PackagePath + "/Sharpliner.$(packageVersion).nupkg",
+                        filePath:  $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.nupkg",
                         displayName: "Publish build artifacts"),
 
                     If.And(IsNotPullRequest, IsBranch("main"))
@@ -42,7 +42,7 @@ class PublishPipeline : SingleStagePipelineDefinition
                             Inputs = new()
                             {
                                 { "command", "push" },
-                                { "packagesToPush", ProjectBuildSteps.PackagePath + "/Sharpliner.$(packageVersion).nupkg" },
+                                { "packagesToPush", $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.nupkg" },
                                 { "nuGetFeedType", "external" },
                                 { "publishFeedCredentials", "Sharpliner / nuget.org" },
                             }
