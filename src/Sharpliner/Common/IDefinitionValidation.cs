@@ -19,10 +19,29 @@ public interface IDefinitionValidation
 /// </summary>
 public enum ValidationSeverity
 {
+    /// <summary>
+    /// Used to turn off validation errors.
+    /// </summary>
     Off = 0,
+
+    /// <summary>
+    /// Validation errors used for debugging and tracing purposes.
+    /// </summary>
     Trace = 1,
+
+    /// <summary>
+    /// Validation error that should be treated as a information.
+    /// </summary>
     Information = 2,
+
+    /// <summary>
+    /// Validation error that should be treated as a warning.
+    /// </summary>
     Warning = 3,
+
+    /// <summary>
+    /// Validation error that should be treated as an error.
+    /// </summary>
     Error = 4,
 }
 

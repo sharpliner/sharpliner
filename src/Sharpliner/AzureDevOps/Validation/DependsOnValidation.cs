@@ -44,7 +44,7 @@ internal abstract class DependsOnValidation : IDefinitionValidation
 
                 if (!definitions.Any(d => d.Name == dependsOnName))
                 {
-                    // This check can be a false positive since items can be defined inside templates and then we don't have the visiblity in there
+                    // This check can be a false positive since items can be defined inside templates and then we don't have the visibility in there
                     errors.Add(new(ValidationSeverity.Trace, $"{GetTypeName<T>()} `{definition.Name}` depends on {GetTypeName<T>().ToLower()} `{dependsOnName}` which was not found"));
                 }
             }
