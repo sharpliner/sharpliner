@@ -45,12 +45,18 @@ public abstract class Condition : IYamlConvertible
 
     internal abstract string Serialize();
 
+    /// <summary>
+    /// Serializes the condition to a string.
+    /// </summary>
+    /// <param name="value">The condition.</param>
     public static implicit operator string(Condition value) => value.Serialize();
+
+    /// <inheritdoc />
     public override string ToString() => this;
 
-    public static string Join(IEnumerable<string> expressions) => string.Join(", ", expressions);
+    internal static string Join(IEnumerable<string> expressions) => string.Join(", ", expressions);
 
-    public static string WrapQuotes(string value)
+    internal static string WrapQuotes(string value)
     {
         if (value.StartsWith('\'')
             || bool.TryParse(value, out _)
