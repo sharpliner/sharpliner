@@ -23,11 +23,8 @@ jobs:
       - name: Run unit tests
         run: dotnet test tests/Sharpliner.Tests/Sharpliner.Tests.csproj --collect "Code coverage"
       - name: E2E tests - Pack E2E.Tests library
-        run: dotnet pack SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj --configuration Release --output artifacts/packages
-        working-directory: tests/E2E.Tests
+        run: dotnet pack tests/E2E.Tests/SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj --configuration Release --output artifacts/packages
       - name: Build NuGet reference test
-        run: dotnet build SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj
-        working-directory: tests/E2E.Tests
+        run: dotnet build tests/E2E.Tests/SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj
       - name: Build project reference test
-        run: dotnet build ProjectUsingTheLibraryNuGet/E2E.Tests.ProjectUsingTheLibraryNuGet.csproj
-        working-directory: tests/E2E.Tests
+        run: dotnet build tests/E2E.Tests/ProjectUsingTheLibraryNuGet/E2E.Tests.ProjectUsingTheLibraryNuGet.csproj
