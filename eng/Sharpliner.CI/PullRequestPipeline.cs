@@ -24,7 +24,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                 Pool = new HostedPool("Azure Pipelines", "windows-2022"),
                 Steps =
                 {
-                    StepLibrary(new ProjectBuildSteps("src/**/*.csproj")),
+                    StepLibrary(new ProjectBuildSteps("src/Sharpliner.csproj")),
 
                     ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj"),
 

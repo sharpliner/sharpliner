@@ -21,7 +21,7 @@ jobs:
         shell: pwsh
         name: Create artifacts/packages
       - name: Build
-        run: dotnet build src/**/*.csproj
+        run: dotnet build src/Sharpliner.csproj
       - name: Validate YAML has been published
         run: dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj -p:FailIfChanged=true
       - name: Run unit tests
