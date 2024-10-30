@@ -419,16 +419,12 @@ namespace Sharpliner.AzureDevOps
         protected IfStringCondition(string keyword, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfArrayExpression one, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression two) { }
         protected IfStringCondition(string keyword, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression one, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfArrayExpression two) { }
         protected IfStringCondition(string keyword, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression one, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression two) { }
-        protected static string Serialize(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfArrayExpression arrayValue) { }
-        protected static string Serialize(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression stringOrVariableOrParameter) { }
     }
     public abstract class IfStringCondition<T> : Sharpliner.AzureDevOps.IfCondition<T>
     {
         protected IfStringCondition(string keyword, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfArrayExpression one, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression two, Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>? parent = null) { }
         protected IfStringCondition(string keyword, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression one, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfArrayExpression two, Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>? parent = null) { }
         protected IfStringCondition(string keyword, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression one, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression two, Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>? parent = null) { }
-        protected static string Serialize(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfArrayExpression arrayValue) { }
-        protected static string Serialize(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression stringOrVariableOrParameter) { }
     }
     public class InclusionRule : System.IEquatable<Sharpliner.AzureDevOps.InclusionRule>
     {
@@ -1210,8 +1206,6 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
     {
         protected Condition() { }
         public override string ToString() { }
-        public static string Join(System.Collections.Generic.IEnumerable<string> expressions) { }
-        public static string WrapQuotes(string value) { }
         public static string op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.Condition value) { }
     }
     public abstract class Conditioned : System.IEquatable<Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned>, YamlDotNet.Serialization.IYamlConvertible
