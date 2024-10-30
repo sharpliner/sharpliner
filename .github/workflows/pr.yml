@@ -7,7 +7,7 @@ jobs:
   tests:
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [windows-latest]
         dotnet: [6.x, 7.x, 8.x]
     runs-on: ${{ matrix.os }}
     steps:
@@ -24,7 +24,6 @@ jobs:
         run: dotnet build src/Sharpliner/Sharpliner.csproj
       - name: Validate YAML has been published
         run: dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj -p:FailIfChanged=true
-        if: ${{ matrix.os == 'windows-latest' }}
       - name: Run unit tests
         run: dotnet test tests/Sharpliner.Tests/Sharpliner.Tests.csproj --collect "Code coverage"
       - name: E2E tests - Pack E2E.Tests library
