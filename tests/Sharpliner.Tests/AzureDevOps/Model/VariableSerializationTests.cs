@@ -12,8 +12,8 @@ public class VariableSerializationTests
         {
             Variables =
             {
-                new Variable("Configuration", "Release"), // We can create the objects and then resue them for definition too
-                Variable("Configuration", "Release"),     // Or we have this more YAML-like definition
+                new Variable("Configuration", "Release"), // We can create the objects and then reuse them for definition too
+                Variable("Framework", "net8.0"),     // Or we have this more YAML-like definition
                 Group("PR keyvault variables"),
 
                 If.Equal(variables.Build.Reason, "PullRequest")
@@ -44,8 +44,8 @@ public class VariableSerializationTests
             - name: Configuration
               value: Release
 
-            - name: Configuration
-              value: Release
+            - name: Framework
+              value: net8.0
 
             - group: PR keyvault variables
 

@@ -2,6 +2,9 @@
 
 namespace Sharpliner.AzureDevOps;
 
+/// <summary>
+/// Represents a condition that can be used in Azure DevOps YAML.
+/// </summary>
 public abstract class IfCondition : Condition
 {
     private static readonly (string Start, string End)[] s_tagsToRemove =
@@ -19,6 +22,9 @@ public abstract class IfCondition : Condition
         return WithoutTags(condition.Serialize());
     }
 
+    /// <summary>
+    /// Returns the YAML representation of the condition without the tags.
+    /// </summary>
     public string WithoutTags() => WithoutTags(this);
 
     internal static string WithoutTags(string condition)
@@ -39,8 +45,14 @@ public abstract class IfCondition : Condition
         IfTagStart + condition + ExpressionEnd;
 }
 
+/// <summary>
+/// Represents a condition that can be used in Azure DevOps YAML. This type is used for chaining conditions.
+/// </summary>
 public abstract class IfCondition<T> : IfCondition
 {
+    /// <summary>
+    /// Creates a new instance of <see cref="IfCondition{T}"/> with the specified parent.
+    /// </summary>
     protected IfCondition(Conditioned<T>? parent = null)
     {
         Parent = parent;
