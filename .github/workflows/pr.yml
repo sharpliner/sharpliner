@@ -24,6 +24,7 @@ jobs:
         run: dotnet build src/Sharpliner/Sharpliner.csproj
       - name: Validate YAML has been published
         run: dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj -p:FailIfChanged=true
+        if: ${{ matrix.os == 'windows-latest' }}
       - name: Run unit tests
         run: dotnet test tests/Sharpliner.Tests/Sharpliner.Tests.csproj --collect "Code coverage"
       - name: E2E tests - Pack E2E.Tests library
