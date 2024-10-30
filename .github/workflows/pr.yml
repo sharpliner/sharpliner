@@ -5,18 +5,14 @@ on:
 
 jobs:
   tests:
-    strategy:
-      matrix:
-        os: [windows-latest]
-        dotnet: [6.x, 7.x, 8.x]
-    runs-on: ${{ matrix.os }}
+    runs-on: windows-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: ${{ matrix.dotnet }}
+          dotnet-version: 8.0.204
       - run: New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'
         shell: pwsh
         name: Create artifacts/packages
