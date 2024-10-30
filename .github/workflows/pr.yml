@@ -1,0 +1,37 @@
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  tests:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        dotnet: [6.x, 7.x, 8.x]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ matrix.dotnet }}
+      - run: New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'
+        shell: pwsh
+        name: Create artifacts/packages
+      - name: Build
+        run: dotnet build src/**/*.csproj
+      - name: Validate YAML has been published
+        run: dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj -p:FailIfChanged=true
+      - name: Run unit tests
+        run: dotnet test tests/Sharpliner.Tests/Sharpliner.Tests.csproj --collect "Code coverage"
+      - name: E2E tests - Pack E2E.Tests library
+        run: dotnet pack SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj --configuration Release --output artifacts/packages
+        working-directory: tests/E2E.Tests
+      - name: Build NuGet reference test
+        run: dotnet build SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj
+        working-directory: tests/E2E.Tests
+      - name: Build project reference test
+        run: dotnet build ProjectUsingTheLibraryNuGet/E2E.Tests.ProjectUsingTheLibraryNuGet.csproj
+        working-directory: tests/E2E.Tests
