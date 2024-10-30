@@ -40,6 +40,35 @@ public abstract record Parameter
         Name = name;
         DisplayName = displayName;
     }
+
+    /// <summary>
+    /// Gets a reference to the parameter.
+    /// For example:
+    /// <code lang="csharp">
+    /// Parameter myParameter = new StringParameter("myParameter");
+    /// public override Pipeline Pipeline => new()
+    /// {
+    ///    Parameters = { myParameter },
+    ///    Variables =
+    ///    {
+    ///        If.StartsWith("Param", Param1.Reference)
+    ///            .Variable("feature", "on"),
+    ///    },
+    /// };
+    /// </code>
+    /// will generate:
+    /// <code lang="yaml">
+    /// parameters:
+    /// - name: myParameter
+    ///   type: string
+    /// variables:
+    /// - ${{ if startsWith('Param', parameters.myParameter) }}:
+    ///  - name: feature
+    ///    value: on
+    /// </code>
+    /// </summary>
+    [YamlIgnore]
+    public ParameterReference Reference => new(Name);
 }
 
 /// <summary>

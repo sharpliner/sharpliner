@@ -618,6 +618,8 @@ namespace Sharpliner.AzureDevOps
     public abstract class Parameter : System.IEquatable<Sharpliner.AzureDevOps.Parameter>
     {
         public Parameter(string name, string? displayName = null) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference Reference { get; }
         [YamlDotNet.Serialization.YamlMember(Order=110)]
         public abstract string Type { get; }
         [YamlDotNet.Serialization.YamlMember(Order=101)]

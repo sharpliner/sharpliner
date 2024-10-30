@@ -355,12 +355,14 @@ public class ConditionalsTests
 
     private class IfCondition_And_InlineCondition_Test_Pipeline : TestPipeline
     {
+        protected Parameter Param1 = StringParameter("Param1", defaultValue: "ParamValue1");
+
         public override Pipeline Pipeline => new()
         {
-            Parameters = { StringParameter("Param1", defaultValue: "ParamValue1") },
+            Parameters = { Param1 },
             Variables =
             {
-                If.StartsWith("Param", parameters["Param1"])
+                If.StartsWith("Param", Param1.Reference)
                     .Variable("feature", "on"),
             },
             Stages =
@@ -375,13 +377,13 @@ public class ConditionalsTests
                             {
                                 Script.Inline("echo Does this condition work?") with
                                 {
-                                    Condition = StartsWith("Param", parameters["Param1"])
+                                    Condition = StartsWith("Param", Param1.Reference)
                                 }
                             },
-                            Condition = StartsWith("Param", parameters["Param1"])
+                            Condition = StartsWith("Param", Param1.Reference)
                         }
                     },
-                    Condition = StartsWith("Param", parameters["Param1"])
+                    Condition = StartsWith("Param", Param1.Reference)
                 }
             }
         };
