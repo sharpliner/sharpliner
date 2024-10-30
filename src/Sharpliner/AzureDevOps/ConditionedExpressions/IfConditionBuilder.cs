@@ -24,12 +24,6 @@ public class IfConditionBuilder
     public IfCondition Condition(string condition)
         => Link(new IfCustomCondition(condition));
 
-    public IfCondition Equal(IfCondition condition)
-        => Link(condition);
-
-    public IfCondition NotEqual(IfCondition condition)
-        => Link(condition);
-
     /// <summary>
     /// Utility that appends an <c>eq(expression1, expression2)</c> condition to an <c>${{ if() }}</c> section.
     /// For example:
