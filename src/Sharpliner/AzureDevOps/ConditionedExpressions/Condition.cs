@@ -73,6 +73,16 @@ public abstract class Condition : IYamlConvertible
         return $"'{value}'";
     }
 
+    internal static string Serialize(IfArrayExpression arrayValue)
+    {
+        return IfStringConditionHelper.Serialize(arrayValue);
+    }
+
+    internal static string Serialize(IfExpression stringOrVariableOrParameter)
+    {
+        return IfStringConditionHelper.Serialize(stringOrVariableOrParameter);
+    }
+
     void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
 
     void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer) =>
