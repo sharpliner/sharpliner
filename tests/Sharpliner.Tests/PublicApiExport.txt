@@ -1264,14 +1264,12 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public Sharpliner.AzureDevOps.IfCondition Contains(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression needle, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression haystack) { }
         public Sharpliner.AzureDevOps.IfCondition ContainsValue(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression needle, params Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression[] haystack) { }
         public Sharpliner.AzureDevOps.IfCondition EndsWith(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression needle, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression haystack) { }
-        public Sharpliner.AzureDevOps.IfCondition Equal(Sharpliner.AzureDevOps.IfCondition condition) { }
         public Sharpliner.AzureDevOps.IfCondition Equal(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression expression1, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression expression2) { }
         public Sharpliner.AzureDevOps.IfCondition Greater(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression first, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression second) { }
         public Sharpliner.AzureDevOps.IfCondition In(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression needle, params Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression[] haystack) { }
         public Sharpliner.AzureDevOps.IfCondition IsBranch(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression branchName) { }
         public Sharpliner.AzureDevOps.IfCondition IsNotBranch(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression branchName) { }
         public Sharpliner.AzureDevOps.IfCondition Less(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression first, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression second) { }
-        public Sharpliner.AzureDevOps.IfCondition NotEqual(Sharpliner.AzureDevOps.IfCondition condition) { }
         public Sharpliner.AzureDevOps.IfCondition NotEqual(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression expression1, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression expression2) { }
         public Sharpliner.AzureDevOps.IfCondition NotIn(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression needle, params Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression[] haystack) { }
         public Sharpliner.AzureDevOps.IfCondition Or(params Sharpliner.AzureDevOps.IfCondition[] expressions) { }
