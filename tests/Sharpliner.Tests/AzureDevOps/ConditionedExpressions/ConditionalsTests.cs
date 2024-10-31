@@ -362,7 +362,7 @@ public class ConditionalsTests
             Parameters = { Param1 },
             Variables =
             {
-                If.StartsWith("Param", Param1.Reference)
+                If.StartsWith("Param", Param1)
                     .Variable("feature", "on"),
             },
             Stages =
@@ -377,13 +377,13 @@ public class ConditionalsTests
                             {
                                 Script.Inline("echo Does this condition work?") with
                                 {
-                                    Condition = StartsWith("Param", Param1.Reference)
+                                    Condition = StartsWith("Param", Param1)
                                 }
                             },
-                            Condition = StartsWith("Param", Param1.Reference)
+                            Condition = StartsWith("Param", Param1)
                         }
                     },
-                    Condition = StartsWith("Param", Param1.Reference)
+                    Condition = StartsWith("Param", Param1)
                 }
             }
         };

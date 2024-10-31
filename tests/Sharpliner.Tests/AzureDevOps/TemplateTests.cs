@@ -71,7 +71,7 @@ public class TemplateTests
         [
             DotNet.Install.Sdk(version.Reference),
 
-            If.Equal(restore.Reference, "true")
+            If.Equal(restore, "true")
                 .Step(DotNet.Restore.Projects(project.Reference)),
 
             DotNet.Build(project.Reference),

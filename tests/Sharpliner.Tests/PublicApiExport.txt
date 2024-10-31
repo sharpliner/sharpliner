@@ -622,6 +622,8 @@ namespace Sharpliner.AzureDevOps
         public string? DisplayName { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
         public string Name { get; init; }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression op_Implicit(Sharpliner.AzureDevOps.Parameter parameter) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression op_Implicit(Sharpliner.AzureDevOps.Parameter parameter) { }
     }
     public abstract class Parameter<T> : Sharpliner.AzureDevOps.Parameter, System.IEquatable<Sharpliner.AzureDevOps.Parameter<T>>
     {

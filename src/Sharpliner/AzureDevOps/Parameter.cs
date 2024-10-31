@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.ConditionedExpressions.Arguments;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
@@ -69,6 +70,18 @@ public abstract record Parameter
     /// </summary>
     [YamlIgnore]
     public ParameterReference Reference => new(Name);
+
+    /// <summary>
+    /// Converts a <see cref="Parameter"/> to a <see cref="IfExpression"/> by getting the reference to the parameter.
+    /// </summary>
+    /// <param name="parameter">The parameter.</param>
+    public static implicit operator IfExpression(Parameter parameter) => parameter.Reference;
+
+    /// <summary>
+    /// Converts a <see cref="Parameter"/> to a <see cref="InlineExpression"/> by getting the reference to the parameter.
+    /// </summary>
+    /// <param name="parameter">The parameter.</param>
+    public static implicit operator InlineExpression(Parameter parameter) => parameter.Reference;
 }
 
 /// <summary>
