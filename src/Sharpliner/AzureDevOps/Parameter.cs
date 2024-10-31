@@ -9,7 +9,41 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps;
 
 /// <summary>
+/// <para>
 /// Base class for defining parameters that can be used in templates and pipelines.
+/// </para>
+/// <para>
+/// This type can be passed to methods that expect a <see cref="ParameterReference"/> and it will be automatically converted to a reference to the parameter.
+/// </para>
+/// Example:
+/// <code lang="csharp">
+/// Parameter name = StringParameter("name");
+/// public override SingleStagePipeline Pipeline => new SingleStagePipeline
+/// {
+///     Parameters = [name],
+///     Jobs =
+///     [
+///         Job("Build") with
+///         {
+///             Steps =
+///             [
+///                 Bash.Inline($"echo \"Hello, {name}\"")
+///             ]
+///         }
+///     ]
+/// };
+/// </code>
+/// Will generate:
+/// <code lang="yaml">
+/// parameters:
+/// - name: name
+///   type: string
+/// jobs:
+/// - job: Build
+///   steps:
+///   - bash: |-
+///       echo "Hello, ${{ parameters.name }}"
+/// </code>
 /// </summary>
 public abstract record Parameter
 {
