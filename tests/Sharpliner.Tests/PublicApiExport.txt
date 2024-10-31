@@ -1008,15 +1008,18 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Parameter DeploymentListParameter(string name, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.DeploymentJob>? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.Parameter DeploymentParameter(string name, Sharpliner.AzureDevOps.DeploymentJob? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.Parameter JobListParameter(string name, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase>? defaultValue = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter JobParameter(string name, Sharpliner.AzureDevOps.JobBase? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.JobBase> JobParameter(string name, Sharpliner.AzureDevOps.JobBase? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.JobBase JobParameterReference(Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.JobBase> parameter) { }
         protected static Sharpliner.AzureDevOps.JobBase JobParameterReference(string parameterName) { }
         protected static Sharpliner.AzureDevOps.Parameter NumberParameter(string name, int? defaultValue = default, System.Collections.Generic.IEnumerable<int?>? allowedValues = null) { }
         protected static Sharpliner.AzureDevOps.Parameter ObjectParameter(string name, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.Parameter StageListParameter(string name, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Stage>? defaultValue = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter StageParameter(string name, Sharpliner.AzureDevOps.Stage? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.Stage> StageParameter(string name, Sharpliner.AzureDevOps.Stage? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.Stage StageParameterReference(Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.Stage> parameter) { }
         protected static Sharpliner.AzureDevOps.Stage StageParameterReference(string parameterName) { }
         protected static Sharpliner.AzureDevOps.Parameter StepListParameter(string name, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Step>? defaultValue = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter StepParameter(string name, Sharpliner.AzureDevOps.Step? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.Step> StepParameter(string name, Sharpliner.AzureDevOps.Step? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.Step StepParameterReference(Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.Step> parameter) { }
         protected static Sharpliner.AzureDevOps.Step StepParameterReference(string parameterName) { }
         protected static Sharpliner.AzureDevOps.Parameter StringParameter(string name, string? defaultValue = null, System.Collections.Generic.IEnumerable<string>? allowedValues = null) { }
         public sealed class TemplateParameterReference
