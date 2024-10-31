@@ -445,16 +445,12 @@ namespace Sharpliner.AzureDevOps
         protected InlineStringCondition(string keyword, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineArrayExpression one, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression two) { }
         protected InlineStringCondition(string keyword, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression one, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineArrayExpression two) { }
         protected InlineStringCondition(string keyword, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression one, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression two) { }
-        protected static string Serialize(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineArrayExpression arrayValue) { }
-        protected static string Serialize(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression stringOrVariableOrParameter) { }
     }
     public abstract class InlineStringCondition<T> : Sharpliner.AzureDevOps.InlineCondition<T>
     {
         protected InlineStringCondition(string keyword, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineArrayExpression one, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression two, Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>? parent = null) { }
         protected InlineStringCondition(string keyword, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression one, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineArrayExpression two, Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>? parent = null) { }
         protected InlineStringCondition(string keyword, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression one, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression two, Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>? parent = null) { }
-        protected static string Serialize(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineArrayExpression arrayValue) { }
-        protected static string Serialize(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression stringOrVariableOrParameter) { }
     }
     public class Job : Sharpliner.AzureDevOps.JobBase, System.IEquatable<Sharpliner.AzureDevOps.Job>
     {
