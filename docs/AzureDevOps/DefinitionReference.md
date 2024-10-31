@@ -355,7 +355,7 @@ class InstallDotNetTemplate : StepTemplateDefinition
     private Parameter project = StringParameter("project");
     private Parameter version = StringParameter("version", allowedValues: new[] { "5.0.100", "5.0.102" });
     private Parameter restore = BooleanParameter("restore", defaultValue: true);
-    private Parameter afterBuild = StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)"));
+    private Parameter<Step> afterBuild = StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)"));
 
     public override List<TemplateParameter> Parameters =>
     [
