@@ -4,6 +4,9 @@ using Sharpliner.AzureDevOps.ConditionedExpressions;
 
 namespace Sharpliner.AzureDevOps;
 
+/// <summary>
+/// Extension methods for creating conditioned definitions.
+/// </summary>
 public static class ConditionExtensions
 {
     /// <summary>
@@ -267,25 +270,25 @@ public static class ConditionExtensions
     /// Include a set of stages.
     /// </summary>
     public static Conditioned<Stage> Stages(this IfCondition condition, params Stage[] stages)
-        => Conditioned.Link<Stage>(condition, stages.Select(x => new Conditioned<Stage>(x)));
+        => Conditioned.Link(condition, stages.Select(x => new Conditioned<Stage>(x)));
 
     /// <summary>
     /// Include a set of jobs.
     /// </summary>
     public static Conditioned<Job> Jobs(this IfCondition condition, params Job[] jobs)
-        => Conditioned.Link<Job>(condition, jobs.Select(x => new Conditioned<Job>(x)));
+        => Conditioned.Link(condition, jobs.Select(x => new Conditioned<Job>(x)));
 
     /// <summary>
     /// Include a set of steps.
     /// </summary>
     public static Conditioned<Step> Steps(this IfCondition condition, params Step[] steps)
-        => Conditioned.Link<Step>(condition, steps.Select(x => new Conditioned<Step>(x)));
+        => Conditioned.Link(condition, steps.Select(x => new Conditioned<Step>(x)));
 
     /// <summary>
     /// Include a set of variables.
     /// </summary>
     public static Conditioned<VariableBase> Variables(this IfCondition condition, params VariableBase[] variables)
-        => Conditioned.Link<VariableBase>(condition, variables.Select(x => new Conditioned<VariableBase>(x)));
+        => Conditioned.Link(condition, variables.Select(x => new Conditioned<VariableBase>(x)));
 
     /// <summary>
     /// Include a set of stages.
@@ -311,9 +314,15 @@ public static class ConditionExtensions
     public static Conditioned<VariableBase> Variables(this IfCondition condition, IEnumerable<VariableBase> variables)
         => condition.Variables(variables.ToArray());
 
+    /// <summary>
+    /// Includes a strategy.
+    /// </summary>
     public static Conditioned<Strategy> Strategy(this IfCondition condition, Strategy strategy)
         => Conditioned.Link(condition, strategy);
 
+    /// <summary>
+    /// Includes a generic object.
+    /// </summary>
     public static Conditioned<T> Value<T>(this IfCondition condition, T value)
         => Conditioned.Link(condition, value);
 
