@@ -402,9 +402,6 @@ public class IfConditionBuilder<T>
         Parent = parent;
     }
 
-    public IfCondition<T> Equal(string condition)
-        => Link(new IfCustomCondition<T>(condition));
-
     /// <summary>
     /// Utility that appends an <c>eq(expression1, expression2)</c> condition to an <c>${{ if() }}</c> section that's connected to a specific definition type.
     /// For example:
