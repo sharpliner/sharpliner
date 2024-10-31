@@ -614,14 +614,13 @@ namespace Sharpliner.AzureDevOps
     public abstract class Parameter : System.IEquatable<Sharpliner.AzureDevOps.Parameter>
     {
         public Parameter(string name, string? displayName = null) { }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference Reference { get; }
         [YamlDotNet.Serialization.YamlMember(Order=110)]
         public abstract string Type { get; }
         [YamlDotNet.Serialization.YamlMember(Order=101)]
         public string? DisplayName { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
         public string Name { get; init; }
+        public static string op_Implicit(Sharpliner.AzureDevOps.Parameter parameter) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression op_Implicit(Sharpliner.AzureDevOps.Parameter parameter) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression op_Implicit(Sharpliner.AzureDevOps.Parameter parameter) { }
     }

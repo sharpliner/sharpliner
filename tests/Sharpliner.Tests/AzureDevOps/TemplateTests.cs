@@ -69,12 +69,12 @@ public class TemplateTests
 
         public override ConditionedList<Step> Definition =>
         [
-            DotNet.Install.Sdk(version.Reference),
+            DotNet.Install.Sdk(version),
 
             If.Equal(restore, "true")
-                .Step(DotNet.Restore.Projects(project.Reference)),
+                .Step(DotNet.Restore.Projects(project)),
 
-            DotNet.Build(project.Reference),
+            DotNet.Build(project),
 
             StepParameterReference(afterBuild),
         ];

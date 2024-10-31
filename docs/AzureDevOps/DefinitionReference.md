@@ -158,7 +158,7 @@ Parameters =
 ]
 ```
 
-When referencing these parameters, you can use the `Reference` property to refer to the parameter's value:
+When referencing these parameters, you can just refer to the parameter and it will be replaced with a parameter reference expression:
 
 ```csharp
 Parameter version = StringParameter("version", ".NET version", allowedValues: new[] { "5.0.100", "5.0.102" });
@@ -168,7 +168,7 @@ Parameters =
 ];
 Definition =
 [
-    DotNet.Install.Sdk(version.Reference),
+    DotNet.Install.Sdk(version),
 ];
 ```
 
@@ -367,12 +367,12 @@ class InstallDotNetTemplate : StepTemplateDefinition
 
     public override ConditionedList<Step> Definition =>
     [
-        DotNet.Install.Sdk(version.Reference),
+        DotNet.Install.Sdk(version),
 
-        If.Equal(restore.Reference, "true")
-            .Step(DotNet.Restore.Projects(project.Reference)),
+        If.Equal(restore, "true")
+            .Step(DotNet.Restore.Projects(project)),
 
-        DotNet.Build(project.Reference),
+        DotNet.Build(project),
 
         StepParameterReference(afterBuild),
     ];

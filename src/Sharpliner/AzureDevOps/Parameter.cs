@@ -43,45 +43,22 @@ public abstract record Parameter
     }
 
     /// <summary>
-    /// Gets a reference to the parameter.
-    /// For example:
-    /// <code lang="csharp">
-    /// Parameter myParameter = new StringParameter("myParameter");
-    /// public override Pipeline Pipeline => new()
-    /// {
-    ///    Parameters = { myParameter },
-    ///    Variables =
-    ///    {
-    ///        If.StartsWith("Param", Param1.Reference)
-    ///            .Variable("feature", "on"),
-    ///    },
-    /// };
-    /// </code>
-    /// will generate:
-    /// <code lang="yaml">
-    /// parameters:
-    /// - name: myParameter
-    ///   type: string
-    /// variables:
-    /// - ${{ if startsWith('Param', parameters.myParameter) }}:
-    ///  - name: feature
-    ///    value: on
-    /// </code>
+    /// Converts a <see cref="Parameter"/> to a <see cref="string"/> representation of the reference to the parameter.
     /// </summary>
-    [YamlIgnore]
-    public ParameterReference Reference => new(Name);
+    /// <param name="parameter">The parameter.</param>
+    public static implicit operator string(Parameter parameter) => new ParameterReference(parameter.Name);
 
     /// <summary>
     /// Converts a <see cref="Parameter"/> to a <see cref="IfExpression"/> by getting the reference to the parameter.
     /// </summary>
     /// <param name="parameter">The parameter.</param>
-    public static implicit operator IfExpression(Parameter parameter) => parameter.Reference;
+    public static implicit operator IfExpression(Parameter parameter) => new ParameterReference(parameter.Name);
 
     /// <summary>
     /// Converts a <see cref="Parameter"/> to a <see cref="InlineExpression"/> by getting the reference to the parameter.
     /// </summary>
     /// <param name="parameter">The parameter.</param>
-    public static implicit operator InlineExpression(Parameter parameter) => parameter.Reference;
+    public static implicit operator InlineExpression(Parameter parameter) => new ParameterReference(parameter.Name);
 }
 
 /// <summary>
