@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.ConditionedExpressions.Arguments;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
@@ -8,7 +9,41 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps;
 
 /// <summary>
+/// <para>
 /// Base class for defining parameters that can be used in templates and pipelines.
+/// </para>
+/// <para>
+/// This type can be passed to methods that expect a <see cref="ParameterReference"/> and it will be automatically converted to a reference to the parameter.
+/// </para>
+/// Example:
+/// <code lang="csharp">
+/// Parameter name = StringParameter("name");
+/// public override SingleStagePipeline Pipeline => new SingleStagePipeline
+/// {
+///     Parameters = [name],
+///     Jobs =
+///     [
+///         Job("Build") with
+///         {
+///             Steps =
+///             [
+///                 Bash.Inline($"echo \"Hello, {name}\"")
+///             ]
+///         }
+///     ]
+/// };
+/// </code>
+/// Will generate:
+/// <code lang="yaml">
+/// parameters:
+/// - name: name
+///   type: string
+/// jobs:
+/// - job: Build
+///   steps:
+///   - bash: |-
+///       echo "Hello, ${{ parameters.name }}"
+/// </code>
 /// </summary>
 public abstract record Parameter
 {
@@ -40,6 +75,24 @@ public abstract record Parameter
         Name = name;
         DisplayName = displayName;
     }
+
+    /// <summary>
+    /// Converts a <see cref="Parameter"/> to a <see cref="string"/> representation of the reference to the parameter.
+    /// </summary>
+    /// <param name="parameter">The parameter.</param>
+    public static implicit operator string(Parameter parameter) => new ParameterReference(parameter.Name);
+
+    /// <summary>
+    /// Converts a <see cref="Parameter"/> to a <see cref="IfExpression"/> by getting the reference to the parameter.
+    /// </summary>
+    /// <param name="parameter">The parameter.</param>
+    public static implicit operator IfExpression(Parameter parameter) => new ParameterReference(parameter.Name);
+
+    /// <summary>
+    /// Converts a <see cref="Parameter"/> to a <see cref="InlineExpression"/> by getting the reference to the parameter.
+    /// </summary>
+    /// <param name="parameter">The parameter.</param>
+    public static implicit operator InlineExpression(Parameter parameter) => new ParameterReference(parameter.Name);
 }
 
 /// <summary>

@@ -46,37 +46,44 @@ public class TemplateTests
             """);
     }
 
-    private class Template_Definition : StepTemplateDefinition
+    private class Step_Template_Definition : StepTemplateDefinition
     {
         public override string TargetFile => "template.yml";
 
+        protected Parameter project = StringParameter("project");
+        protected Parameter version = StringParameter("version", allowedValues: [ "5.0.100", "5.0.102" ]);
+        protected Parameter skipBuild = BooleanParameter("skipBuild");
+        protected Parameter useNugetOrg = BooleanParameter("useNugetOrg", defaultValue: false);
+        protected Parameter restore = BooleanParameter("restore", defaultValue: true);
+        protected Parameter<Step> afterBuild = StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)"));
+
         public override List<Parameter> Parameters =>
         [
-            StringParameter("project"),
-            StringParameter("version", allowedValues: [ "5.0.100", "5.0.102" ]),
-            BooleanParameter("skipBuild"),
-            BooleanParameter("useNugetOrg", defaultValue: false),
-            BooleanParameter("restore", defaultValue: true),
-            StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)")),
+            project,
+            version,
+            skipBuild,
+            useNugetOrg,
+            restore,
+            afterBuild,
         ];
 
         public override ConditionedList<Step> Definition =>
         [
-            DotNet.Install.Sdk(parameters["version"]),
+            DotNet.Install.Sdk(version),
 
-            If.Equal(parameters["restore"], "true")
-                .Step(DotNet.Restore.Projects(parameters["project"])),
+            If.Equal(restore, "true")
+                .Step(DotNet.Restore.Projects(project)),
 
-            DotNet.Build(parameters["project"]),
+            DotNet.Build(project),
 
-            StepParameterReference("afterBuild"),
+            StepParameterReference(afterBuild),
         ];
     }
 
     [Fact]
-    public void Template_Definition_Serialization_Test()
+    public void Step_Template_Definition_Serialization_Test()
     {
-        var yaml = new Template_Definition().Serialize();
+        var yaml = new Step_Template_Definition().Serialize();
 
         yaml.Trim().Should().Be(
             """
@@ -125,6 +132,100 @@ public class TemplateTests
                 projects: ${{ parameters.project }}
 
             - ${{ parameters.afterBuild }}
+            """);
+    }
+
+    private class Job_Template_Definition : JobTemplateDefinition
+    {
+        public override string TargetFile => "template.yml";
+
+        Parameter<JobBase> mainJob = JobParameter("mainJob");
+
+        public override List<Parameter> Parameters =>
+        [
+            mainJob,
+        ];
+
+        public override ConditionedList<JobBase> Definition =>
+        [
+            Job("initialize") with
+            {
+                DisplayName = "Initialize job",
+            },
+            JobParameterReference(mainJob),
+            Job("finalize") with
+            {
+                DisplayName = "Finalize job",
+            },
+        ];
+    }
+
+    [Fact]
+    public void Job_Template_Definition_Serialization_Test()
+    {
+         var yaml = new Job_Template_Definition().Serialize();
+
+        yaml.Trim().Should().Be(
+            """
+            parameters:
+            - name: mainJob
+              type: job
+
+            jobs:
+            - job: initialize
+              displayName: Initialize job
+
+            - ${{ parameters.mainJob }}
+
+            - job: finalize
+              displayName: Finalize job
+            """);
+    }
+
+    private class Stage_Template_Definition : StageTemplateDefinition
+    {
+        public override string TargetFile => "template.yml";
+
+        Parameter<Stage> mainStage = StageParameter("mainStage");
+
+        public override List<Parameter> Parameters =>
+        [
+            mainStage,
+        ];
+
+        public override ConditionedList<Stage> Definition =>
+        [
+            Stage("initialize") with
+            {
+                DisplayName = "Initialize stage",
+            },
+            StageParameterReference(mainStage),
+            Stage("finalize") with
+            {
+                DisplayName = "Finalize stage",
+            },
+        ];
+    }
+
+    [Fact]
+    public void Stage_Template_Definition_Serialization_Test()
+    {
+        var yaml = new Stage_Template_Definition().Serialize();
+
+        yaml.Trim().Should().Be(
+            """
+            parameters:
+            - name: mainStage
+              type: stage
+
+            stages:
+            - stage: initialize
+              displayName: Initialize stage
+
+            - ${{ parameters.mainStage }}
+
+            - stage: finalize
+              displayName: Finalize stage
             """);
     }
 

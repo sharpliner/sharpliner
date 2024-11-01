@@ -158,6 +158,22 @@ Parameters =
 ]
 ```
 
+When referencing these parameters, you can just refer to the parameter and it will be replaced with a parameter reference expression:
+
+```csharp
+Parameter version = StringParameter("version", ".NET version", allowedValues: new[] { "5.0.100", "5.0.102" });
+Parameters =
+[
+    version,
+];
+Definition =
+[
+    DotNet.Install.Sdk(version),
+];
+```
+
+See more examples in the [test class](../../tests/Sharpliner.Tests/AzureDevOps/TemplateTests.cs#49)
+
 ## Conditioned expressions
 
 The Azure DevOps pipeline YAML allows you to specify conditioned expressions which are evaulated when pipeline is started.
@@ -336,24 +352,29 @@ class InstallDotNetTemplate : StepTemplateDefinition
     // Where to publish the YAML to
     public override string TargetFile => "templates/build-csproj.yml";
 
+    private Parameter project = StringParameter("project");
+    private Parameter version = StringParameter("version", allowedValues: new[] { "5.0.100", "5.0.102" });
+    private Parameter restore = BooleanParameter("restore", defaultValue: true);
+    private Parameter<Step> afterBuild = StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)"));
+
     public override List<TemplateParameter> Parameters =>
     [
-        StringParameter("project"),
-        StringParameter("version", allowedValues: [ "5.0.100", "5.0.102" ]),
-        BooleanParameter("restore", defaultValue: true),
-        StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)")),
+        project,
+        version,
+        restore,
+        afterBuild,
     ];
 
     public override ConditionedList<Step> Definition =>
     [
-        DotNet.Install.Sdk(parameters["version"]),
+        DotNet.Install.Sdk(version),
 
-        If.Equal(parameters["restore"], "true")
-            .Step(DotNet.Restore.Projects(parameters["project"])),
+        If.Equal(restore, "true")
+            .Step(DotNet.Restore.Projects(project)),
 
-        DotNet.Build(parameters["project"]),
+        DotNet.Build(project),
 
-        StepParameterReference("afterBuild"),
+        StepParameterReference(afterBuild),
     ];
 }
 ```

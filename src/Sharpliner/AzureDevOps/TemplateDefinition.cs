@@ -51,7 +51,7 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static Parameter StepParameter(string name, Step? defaultValue = null)
+    protected static Parameter<Step> StepParameter(string name, Step? defaultValue = null)
         => new StepParameter(name, null, defaultValue);
 
     /// <summary>
@@ -67,7 +67,7 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static Parameter JobParameter(string name, JobBase? defaultValue = null)
+    protected static Parameter<JobBase> JobParameter(string name, JobBase? defaultValue = null)
         => new JobParameter(name, null, defaultValue);
 
     /// <summary>
@@ -99,7 +99,7 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static Parameter StageParameter(string name, Stage? defaultValue = null)
+    protected static Parameter<Stage> StageParameter(string name, Stage? defaultValue = null)
         => new StageParameter(name, null, defaultValue);
 
     /// <summary>
@@ -111,19 +111,46 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
         => new StageListParameter(name, null, defaultValue);
 
     /// <summary>
-    /// Allows the ${{ parameters.name }} notation for a stage defined in parameters.
+    /// Allows the <c>${{ parameters.name }}</c> notation for a stage defined in parameters.
     /// </summary>
+    /// <param name="parameterName">The name of the parameter to reference</param>
+    /// <returns>A stage reference</returns>
     protected static Stage StageParameterReference(string parameterName) => new StageReference(parameterName);
 
     /// <summary>
-    /// Allows the ${{ parameters.name }} notation for a job defined in parameters.
+    /// Allows the <c>${{ parameters.name }}</c> notation for a stage defined in parameters.
     /// </summary>
+    /// <param name="parameter">The parameter to reference</param>
+    /// <returns>A stage reference</returns>
+    protected static Stage StageParameterReference(Parameter<Stage> parameter) => new StageReference(parameter.Name);
+
+    /// <summary>
+    /// Allows the <c>${{ parameters.name }}</c> notation for a job defined in parameters.
+    /// </summary>
+    /// <param name="parameterName">The name of the parameter to reference</param>
+    /// <returns>A job reference</returns>
     protected static JobBase JobParameterReference(string parameterName) => new JobReference(parameterName);
 
     /// <summary>
-    /// Allows the ${{ parameters.name }} notation for a step defined in parameters.
+    /// Allows the <c>${{ parameters.name }}</c> notation for a job defined in parameters.
     /// </summary>
+    /// <param name="parameter">The parameter to reference</param>
+    /// <returns>A job reference</returns>
+    protected static JobBase JobParameterReference(Parameter<JobBase> parameter) => new JobReference(parameter.Name);
+
+    /// <summary>
+    /// Allows the <c>${{ parameters.name }}</c> notation for a step defined in parameters.
+    /// </summary>
+    /// <param name="parameterName">The name of the parameter to reference</param>
+    /// <returns>A step reference</returns>
     protected static Step StepParameterReference(string parameterName) => new StepReference(parameterName);
+
+    /// <summary>
+    /// Allows the <c>${{ parameters.name }}</c> notation for a step defined in parameters.
+    /// </summary>
+    /// <param name="parameter">The parameter to reference</param>
+    /// <returns>A step reference</returns>
+    protected static Step StepParameterReference(Parameter<Step> parameter) => new StepReference(parameter.Name);
 
     public sealed class TemplateParameterReference
     {
