@@ -90,6 +90,7 @@ public abstract class SharplinerConfiguration : ISharplinerConfiguration
         /// </summary>
         /// <param name="definition">Definition for which is the hook called (i.e. a pipeline)</param>
         /// <param name="destinationPath">Destination path of where the current definition is serialized to</param>
+        /// <param name="yaml">Serialized YAML of the generated definition</param>
         public delegate void AfterPublishHandler(ISharplinerDefinition definition, string destinationPath, string yaml);
 
         /// <summary>

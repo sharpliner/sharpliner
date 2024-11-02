@@ -22,7 +22,7 @@ internal class NameValidation : IDefinitionValidation
     }
 
     public NameValidation(ConditionedList<JobBase> jobs)
-        : this(new[] { jobs.SelectMany(j => j.FlattenDefinitions()).Select(s => s.Name).ToList() })
+        : this([jobs.SelectMany(j => j.FlattenDefinitions()).Select(s => s.Name).ToList()])
     {
     }
 
