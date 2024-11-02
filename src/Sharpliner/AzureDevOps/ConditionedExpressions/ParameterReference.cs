@@ -45,7 +45,7 @@ public class ParameterReference : IRuntimeExpression, ICompileTimeExpression, IY
     public override int GetHashCode() => ParameterName.GetHashCode();
 }
 
-public record ConditionedParameterReference<T> : Conditioned<T>
+internal record ConditionedParameterReference<T> : Conditioned<T>
 {
     private readonly ParameterReference _parameter;
 
