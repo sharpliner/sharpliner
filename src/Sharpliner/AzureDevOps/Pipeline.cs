@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Validation;
 using Sharpliner.Common;
@@ -13,6 +14,9 @@ namespace Sharpliner.AzureDevOps;
 /// </summary>
 public abstract record PipelineBase
 {
+    private Conditioned<Pool>? _pool;
+    private Conditioned<Resources>? _resources;
+
     /// <summary>
     /// Name of the pipeline in the build numbering format
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/run-number?view=azure-devops&amp;tabs=yaml">official Azure DevOps pipelines documentation</see>.
@@ -70,7 +74,7 @@ public abstract record PipelineBase
     /// </summary>
     [YamlMember(Order = 400)]
     [DisallowNull]
-    public Conditioned<Resources>? Resources { get; init => field = value?.GetRoot(); }
+    public Conditioned<Resources>? Resources { get => _resources; init => _resources = value?.GetRoot(); }
 
     /// <summary>
     /// Specifies variables at the pipeline level
@@ -84,7 +88,7 @@ public abstract record PipelineBase
     /// A pool specification also holds information about the job's strategy for running.
     /// </summary>
     [YamlMember(Order = 550)]
-    public Conditioned<Pool>? Pool { get; init => field = value?.GetRoot(); }
+    public Conditioned<Pool>? Pool { get => _pool; init => _pool = value?.GetRoot(); }
 
     /// <summary>
     /// Returns the list of validations that should be run on the definition (e.g. wrong dependsOn, artifact name typos..).
@@ -106,11 +110,10 @@ public record Pipeline : PipelineBase
     public ConditionedList<Stage> Stages { get; init; } = [];
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<IDefinitionValidation> Validations =>
-    [
-        .. Stages.GetStageValidations(),
-        new RepositoryCheckoutValidation(this)
-    ];
+    public override IReadOnlyCollection<IDefinitionValidation> Validations
+        => Stages.GetStageValidations()
+            .Append(new RepositoryCheckoutValidation(this))
+            .ToList();
 }
 
 /// <summary>
@@ -147,9 +150,8 @@ public record SingleStagePipeline : PipelineBase
     public ConditionedList<JobBase> Jobs { get; init; } = [];
 
     /// <inheritdoc/>
-    public override IReadOnlyCollection<IDefinitionValidation> Validations =>
-    [
-        .. Jobs.GetJobValidations(),
-        new RepositoryCheckoutValidation(this)
-    ];
+    public override IReadOnlyCollection<IDefinitionValidation> Validations
+        => Jobs.GetJobValidations()
+            .Append(new RepositoryCheckoutValidation(this))
+            .ToList();
 }

@@ -10,6 +10,7 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// </summary>
 public record AzureDevOpsTask : Step
 {
+    private readonly TaskInputs _inputs = [];
 
     /// <summary>
     /// Task name in the form 'PublishTestResults@2'.
@@ -20,7 +21,7 @@ public record AzureDevOpsTask : Step
     [YamlMember(Order = 101)]
     public TaskInputs Inputs
     {
-        get;
+        get => _inputs;
         init
         {
             // Add inputs to the existing ones
@@ -28,15 +29,15 @@ public record AzureDevOpsTask : Step
             {
                 if (value == null)
                 {
-                    field.Remove(item.Key);
+                    _inputs.Remove(item.Key);
                 }
                 else
                 {
-                    field[item.Key] = item.Value;
+                    _inputs[item.Key] = item.Value;
                 }
             }
         }
-    } = [];
+    }
 
     /// <summary>
     /// Number of retries if the task fails.

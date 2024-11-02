@@ -20,7 +20,7 @@
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
     <!-- Warnings about missing XML docs for public members -->
-    <NoWarn>$(NoWarn);CA1822;NETSDK1138</NoWarn>
+    <NoWarn>$(NoWarn);CS1591;CA1822;NETSDK1138</NoWarn>
 
     <!-- This makes sure we incluse YamlDotNet.dll in the nuget -->
     <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);IncludeDependenciesInNupkg</GenerateNuspecDependsOn>

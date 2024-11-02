@@ -12,6 +12,8 @@ namespace Sharpliner.AzureDevOps;
 /// </summary>
 public record Job : JobBase
 {
+    private Conditioned<Strategy>? _strategy;
+
     /// <summary>
     /// Name of the job (A-Z, a-z, 0-9, and underscore).
     /// </summary>
@@ -24,7 +26,7 @@ public record Job : JobBase
     /// </summary>
     [YamlMember(Order = 400)]
     [DisallowNull]
-    public Conditioned<Strategy>? Strategy { get; init => field = value?.GetRoot(); }
+    public Conditioned<Strategy>? Strategy { get => _strategy; init => _strategy = value?.GetRoot(); }
 
     /// <summary>
     /// A step is a linear sequence of operations that make up a job
