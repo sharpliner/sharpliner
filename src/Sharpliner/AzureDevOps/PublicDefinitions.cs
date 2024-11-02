@@ -1,11 +1,10 @@
 ﻿// This file contains all definitions that users should override to use Sharpliner.
 // To learn more, see https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/GettingStarted.md
 
+using System.Collections.Generic;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Validation;
 using Sharpliner.Common;
-using System;
-using System.Collections.Generic;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -174,6 +173,10 @@ public abstract class VariableTemplateCollection : TemplateDefinitionCollection<
 public abstract class StageLibrary : DefinitionLibrary<Stage>
 {
     internal override IEnumerable<Conditioned<Stage>> Items => Stages;
+
+    /// <summary>
+    /// The list of stages in this library.
+    /// </summary>
     public abstract List<Conditioned<Stage>> Stages { get; }
 }
 
@@ -184,6 +187,10 @@ public abstract class StageLibrary : DefinitionLibrary<Stage>
 public abstract class JobLibrary : DefinitionLibrary<JobBase>
 {
     internal override IEnumerable<Conditioned<JobBase>> Items => Jobs;
+
+    /// <summary>
+    /// The list of jobs in this library.
+    /// </summary>
     public abstract List<Conditioned<JobBase>> Jobs { get; }
 }
 
@@ -194,6 +201,10 @@ public abstract class JobLibrary : DefinitionLibrary<JobBase>
 public abstract class StepLibrary : DefinitionLibrary<Step>
 {
     internal override IEnumerable<Conditioned<Step>> Items => Steps;
+
+    /// <summary>
+    /// The list of steps in this library.
+    /// </summary>
     public abstract List<Conditioned<Step>> Steps { get; }
 }
 
@@ -204,6 +215,10 @@ public abstract class StepLibrary : DefinitionLibrary<Step>
 public abstract class VariableLibrary : DefinitionLibrary<VariableBase>
 {
     internal override IEnumerable<Conditioned<VariableBase>> Items => Variables;
+
+    /// <summary>
+    /// The list of variables in this library.
+    /// </summary>
     public abstract List<Conditioned<VariableBase>> Variables { get; }
 }
 
