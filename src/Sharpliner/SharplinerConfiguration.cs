@@ -2,7 +2,9 @@
 
 namespace Sharpliner;
 
-// This interface is needed to hide the Current static member from 
+/// <summary>
+/// Interface with all required configuration options for the YAML publishing process.
+/// </summary>
 public interface ISharplinerConfiguration
 {
     /// <summary>
@@ -76,7 +78,18 @@ public abstract class SharplinerConfiguration : ISharplinerConfiguration
     /// </summary>
     public class SerializationHooks
     {
+        /// <summary>
+        /// Hook that gets called right the YAML is published.
+        /// </summary>
+        /// <param name="definition">Definition for which is the hook called (i.e. a pipeline)</param>
+        /// <param name="destinationPath">Destination path of where the current definition is serialized to</param>
         public delegate void BeforePublishHandler(ISharplinerDefinition definition, string destinationPath);
+
+        /// <summary>
+        /// Hook that gets called after the YAML is published.
+        /// </summary>
+        /// <param name="definition">Definition for which is the hook called (i.e. a pipeline)</param>
+        /// <param name="destinationPath">Destination path of where the current definition is serialized to</param>
         public delegate void AfterPublishHandler(ISharplinerDefinition definition, string destinationPath, string yaml);
 
         /// <summary>
