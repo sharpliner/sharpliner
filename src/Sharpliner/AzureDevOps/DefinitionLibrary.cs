@@ -26,11 +26,19 @@ public record LibraryReference<T> : Conditioned<T>
 {
     internal IEnumerable<Conditioned<T>> Items { get; }
 
+    /// <summary>
+    /// Instantiates a new instance of <see cref="LibraryReference{T}"/> with the given <see cref="DefinitionLibrary{T}"/>.
+    /// </summary>
+    /// <param name="library">The library to reference.</param>
     public LibraryReference(DefinitionLibrary<T> library) : base()
     {
         Items = library.Items;
     }
 
+    /// <summary>
+    /// Instantiates a new instance of <see cref="LibraryReference{T}"/> with the given items.
+    /// </summary>
+    /// <param name="items">The items to reference.</param>
     public LibraryReference(IEnumerable<Conditioned<T>> items) : base()
     {
         Items = items;

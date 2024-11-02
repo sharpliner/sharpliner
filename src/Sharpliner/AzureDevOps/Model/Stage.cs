@@ -23,7 +23,7 @@ public record Stage : IDependsOn
     /// The lock behavior of the stage
     /// </summary>
     [YamlMember(Order = 3)]
-    public Conditioned<LockBehaviour>? LockBehavior { get; init; }
+    public Conditioned<LockBehavior>? LockBehavior { get; init; }
 
     /// <summary>
     /// List of names of other jobs this job depends on
@@ -46,10 +46,19 @@ public record Stage : IDependsOn
     [YamlMember(Order = 300)]
     public ConditionedList<JobBase> Jobs { get; init; } = [];
 
+    /// <summary>
+    /// Gets the condition expression to determine whether to run this stage.
+    /// </summary>
     [YamlMember(Order = 400)]
     [DisallowNull]
     public InlineCondition? Condition { get; init; }
 
+    /// <summary>
+    /// Instantiates a new instance of <see cref="Stage"/> with the specified name and optional display name.
+    /// </summary>
+    /// <param name="name">The name of the stage.</param>
+    /// <param name="displayName">The optional friendly name to display in the UI.</param>
+    /// <exception cref="System.ArgumentNullException"></exception>
     public Stage(string name, string? displayName = null)
     {
         Name = name ?? throw new System.ArgumentNullException(nameof(name));

@@ -37,6 +37,11 @@ public record Environment
     /// </summary>
     public List<string> Tags { get; init; } = [];
 
+    /// <summary>
+    /// Instantiates a new <see cref="Environment"/> with the specified name and optional resource name.
+    /// </summary>
+    /// <param name="name">Name of the environment.</param>
+    /// <param name="resourceName">Name of the resource.</param>
     public Environment(string name, string? resourceName = null)
     {
         Name = name;
@@ -44,11 +49,20 @@ public record Environment
     }
 }
 
+/// <summary>
+/// Type of the resource to target.
+/// </summary>
 public enum ResourceType
 {
+    /// <summary>
+    /// A Kubernetes resource. See <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/process/environments-kubernetes?view=azure-devops">Kubernetes resource</see>.
+    /// </summary>
     [YamlMember(Alias = "virtualMachine")]
     VirtualMachine,
 
+    /// <summary>
+    /// A virtual machine resource. See <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/process/environments-virtual-machines?view=azure-devops">Virtual machine resource</see>.
+    /// </summary>
     [YamlMember(Alias = "Kubernetes")]
     Kubernetes,
 }

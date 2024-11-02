@@ -7,10 +7,13 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 
 /// <summary>
-/// Class that makes it possible to put ${{ parameters['foo'] }} everywhere.
+/// Class that makes it possible to put <c>${{ parameters['foo'] }}</c> everywhere.
 /// </summary>
 public class ParameterReference : IRuntimeExpression, ICompileTimeExpression, IYamlConvertible
 {
+    /// <summary>
+    /// Gets the name of the parameter.
+    /// </summary>
     public string ParameterName { get; }
 
     internal ParameterReference(string parameterName)
@@ -18,12 +21,22 @@ public class ParameterReference : IRuntimeExpression, ICompileTimeExpression, IY
         ParameterName = parameterName;
     }
 
+    /// <inheritdoc/>
     public string RuntimeExpression => $"parameters.{ParameterName}";
 
+    /// <inheritdoc/>
     public string CompileTimeExpression => Condition.ExpressionStart + RuntimeExpression + Condition.ExpressionEnd;
 
+    /// <summary>
+    /// Returns string representation of the variable reference as a compile-time expression.
+    /// </summary>
+    /// <returns>The compile-time expression.</returns>
     public override string ToString() => CompileTimeExpression;
 
+    /// <summary>
+    /// Implicitly converts the <see cref="ParameterReference"/> to a string by returning the compile-time expression.
+    /// </summary>
+    /// <param name="value">The parameter reference.</param>
     public static implicit operator string(ParameterReference value) => value.ToString();
 
     void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
@@ -32,6 +45,7 @@ public class ParameterReference : IRuntimeExpression, ICompileTimeExpression, IY
     void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
         => emitter.Emit(new Scalar(ToString()));
 
+    /// <inheritdoc/>
     public override bool Equals(object? obj)
     {
         if (obj is ParameterReference other)
@@ -42,6 +56,7 @@ public class ParameterReference : IRuntimeExpression, ICompileTimeExpression, IY
         return false;
     }
 
+    /// <inheritdoc/>
     public override int GetHashCode() => ParameterName.GetHashCode();
 }
 

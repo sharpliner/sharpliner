@@ -9,7 +9,7 @@ public class PipelineLockBehaviorTests
 {
     private class PipelineLockBehaviorTests_Pipeline : SimpleTestPipeline
     {
-        public PipelineLockBehaviorTests_Pipeline(LockBehaviour? lockBehavior)
+        public PipelineLockBehaviorTests_Pipeline(LockBehavior? lockBehavior)
         {
             Pipeline =  new()
             {
@@ -21,9 +21,9 @@ public class PipelineLockBehaviorTests
     }
 
     [Theory]
-    [InlineData(LockBehaviour.Sequential, "sequential")]
-    [InlineData(LockBehaviour.RunLatest, "runLatest")]
-    public void PipelineLockBehavior_Serialization_TestValues(LockBehaviour lockBehaviour, string expectedSerializedValue)
+    [InlineData(LockBehavior.Sequential, "sequential")]
+    [InlineData(LockBehavior.RunLatest, "runLatest")]
+    public void PipelineLockBehavior_Serialization_TestValues(LockBehavior lockBehaviour, string expectedSerializedValue)
     {
         var yaml = new PipelineLockBehaviorTests_Pipeline(lockBehaviour).Serialize();
 
