@@ -1,8 +1,5 @@
-using System.IO;
 using E2E.Tests.SharplinerLibrary;
 using Sharpliner;
-using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.Tasks;
 
 namespace Tests.ProjectUsingTheLibraryNuGet;
 

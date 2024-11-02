@@ -481,7 +481,7 @@ internal class ElseCondition<T> : IfCondition<T>
     {
     }
 
-    public static implicit operator string(ElseCondition<T> value) => ElseTagStart + ExpressionEnd;
+    public static implicit operator string(ElseCondition<T> _) => ElseTagStart + ExpressionEnd;
 
     public override string ToString() => ElseTagStart + ExpressionEnd;
 }
