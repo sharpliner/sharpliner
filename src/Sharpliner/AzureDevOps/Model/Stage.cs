@@ -4,6 +4,9 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
 
+/// <summary>
+/// Represents a stage in an Azure DevOps pipeline. See <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/stages-stage">stages.stage definition</see> for more details.
+/// </summary>
 public record Stage : IDependsOn
 {
     /// <summary>
