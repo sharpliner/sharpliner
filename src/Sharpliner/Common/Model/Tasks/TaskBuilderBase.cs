@@ -4,6 +4,9 @@ using System.Reflection;
 
 namespace Sharpliner.Common.Model.Tasks;
 
+/// <summary>
+/// Base class for builders that generate pipeline task in a user-friendly way.
+/// </summary>
 public abstract class TaskBuilderBase
 {
     protected static string GetResourceFile(Assembly assembly, string resourceFileName)
