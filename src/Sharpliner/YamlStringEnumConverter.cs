@@ -7,7 +7,7 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner;
 
-public class YamlStringEnumConverter : IYamlTypeConverter
+internal class YamlStringEnumConverter : IYamlTypeConverter
 {
     public bool Accepts(Type type) => type.IsEnum;
 

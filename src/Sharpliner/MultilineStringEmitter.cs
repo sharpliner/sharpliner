@@ -8,7 +8,7 @@ namespace Sharpliner;
 /// This makes sure that multiline strings get serialized properly.
 /// That means using `|` and not `>` (which glues lines together).
 /// </summary>
-public class MultilineStringEmitter(IEventEmitter nextEmitter) : ChainedEventEmitter(nextEmitter)
+internal class MultilineStringEmitter(IEventEmitter nextEmitter) : ChainedEventEmitter(nextEmitter)
 {
     public override void Emit(ScalarEventInfo eventInfo, IEmitter emitter)
     {
