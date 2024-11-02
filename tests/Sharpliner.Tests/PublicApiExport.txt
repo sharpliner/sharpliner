@@ -1017,7 +1017,6 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Parameter StringParameter(string name, string? defaultValue = null, System.Collections.Generic.IEnumerable<string>? allowedValues = null) { }
         public sealed class TemplateParameterReference
         {
-            public TemplateParameterReference() { }
             public Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference this[string parameterName] { get; }
         }
     }
