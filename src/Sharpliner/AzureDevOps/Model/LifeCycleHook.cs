@@ -5,14 +5,12 @@ namespace Sharpliner.AzureDevOps;
 
 public record LifeCycleHook
 {
-    private Conditioned<Pool>? _pool;
-
     /// <summary>
     /// Specifies which pool to use for a job of the pipeline
     /// A pool specification also holds information about the job's strategy for running.
     /// </summary>
     [YamlMember(Order = 300)]
-    public Conditioned<Pool>? Pool { get => _pool; set => _pool = value?.GetRoot(); }
+    public Conditioned<Pool>? Pool { get; set => field = value?.GetRoot(); }
 
     /// <summary>
     /// A step is a linear sequence of operations that make up a job

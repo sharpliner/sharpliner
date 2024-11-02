@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
@@ -9,9 +8,6 @@ namespace Sharpliner.AzureDevOps;
 
 public abstract record JobBase : IDependsOn
 {
-    private Conditioned<Pool>? _pool;
-    private Conditioned<ContainerReference>? _container;
-
     [YamlIgnore]
     public string Name { get; init; }
 
@@ -33,14 +29,14 @@ public abstract record JobBase : IDependsOn
     /// A pool specification also holds information about the job's strategy for running.
     /// </summary>
     [YamlMember(Order = 300)]
-    public Conditioned<Pool>? Pool { get => _pool; init => _pool = value?.GetRoot(); }
+    public Conditioned<Pool>? Pool { get; init => field = value?.GetRoot(); }
 
     /// <summary>
     /// Container to run this job inside of.
     /// </summary>
     [YamlMember(Order = 500)]
     [DisallowNull]
-    public Conditioned<ContainerReference>? Container { get => _container; init => _container = value?.GetRoot(); }
+    public Conditioned<ContainerReference>? Container { get; init => field = value?.GetRoot(); }
 
     /// <summary>
     /// Specifies variables at the job level
