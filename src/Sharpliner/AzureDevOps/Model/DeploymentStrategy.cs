@@ -119,7 +119,12 @@ public abstract record DeploymentStrategy : IYamlConvertible
         emitter.Emit(new MappingEnd());
     }
 
-    internal abstract void WriteCustomFields(IEmitter emitter, ObjectSerializer nestedObjectSerializer);
+    /// <summary>
+    /// Writes the custom fields of the deployment strategy.
+    /// </summary>
+    /// <param name="emitter">The emitter.</param>
+    /// <param name="nestedObjectSerializer">The nested object serializer.</param>
+    protected abstract void WriteCustomFields(IEmitter emitter, ObjectSerializer nestedObjectSerializer);
 }
 
 /// <summary>
@@ -135,7 +140,8 @@ public record RunOnceStrategy : DeploymentStrategy
     {
     }
 
-    internal override void WriteCustomFields(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    /// <inheritdoc/>
+    protected override void WriteCustomFields(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
     }
 }
@@ -171,7 +177,8 @@ public record RollingStrategy : DeploymentStrategy
     {
     }
 
-    internal override void WriteCustomFields(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    /// <inheritdoc/>
+    protected override void WriteCustomFields(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
 
         if (MaxParallel != 0)
@@ -209,7 +216,8 @@ public record CanaryStrategy : DeploymentStrategy
     {
     }
 
-    internal override void WriteCustomFields(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    /// <inheritdoc/>
+    protected override void WriteCustomFields(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
         if (Increments.Count > 0)
         {

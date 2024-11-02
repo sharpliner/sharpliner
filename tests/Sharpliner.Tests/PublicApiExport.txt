@@ -176,6 +176,7 @@ namespace Sharpliner.AzureDevOps
         public CanaryStrategy() { }
         [YamlDotNet.Serialization.YamlMember(Order=50)]
         public System.Collections.Generic.List<int> Increments { get; init; }
+        protected override void WriteCustomFields(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public sealed class ChecksVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
@@ -352,6 +353,7 @@ namespace Sharpliner.AzureDevOps
         public Sharpliner.AzureDevOps.LifeCycleHook PreDeploy { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=300)]
         public Sharpliner.AzureDevOps.LifeCycleHook RouteTraffic { get; init; }
+        protected abstract void WriteCustomFields(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer);
     }
     public class EachBlock : Sharpliner.AzureDevOps.IfCondition { }
     public class ElseCondition : Sharpliner.AzureDevOps.ConditionedExpressions.Condition
@@ -824,10 +826,12 @@ namespace Sharpliner.AzureDevOps
         [System.ComponentModel.DefaultValue(0)]
         [YamlDotNet.Serialization.YamlMember(DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.OmitDefaults, Order=50)]
         public int MaxParallel { get; init; }
+        protected override void WriteCustomFields(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class RunOnceStrategy : Sharpliner.AzureDevOps.DeploymentStrategy, System.IEquatable<Sharpliner.AzureDevOps.RunOnceStrategy>
     {
         public RunOnceStrategy() { }
+        protected override void WriteCustomFields(YamlDotNet.Core.IEmitter emitter, YamlDotNet.Serialization.ObjectSerializer nestedObjectSerializer) { }
     }
     public class ScheduledTrigger : System.IEquatable<Sharpliner.AzureDevOps.ScheduledTrigger>
     {
