@@ -1229,10 +1229,6 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public static Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T> op_Implicit(T value) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T> op_Implicit(T[] values) { }
     }
-    public class ConditionedParameterReference<T> : Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>, System.IEquatable<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedParameterReference<T>>
-    {
-        public ConditionedParameterReference(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference parameter) { }
-    }
     public class ConditionedVariableReference<T> : Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>, System.IEquatable<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedVariableReference<T>>
     {
         public ConditionedVariableReference(Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference variable) { }
@@ -1981,11 +1977,6 @@ namespace Sharpliner
     {
         System.Collections.Generic.IEnumerable<Sharpliner.ISharplinerDefinition> Definitions { get; }
     }
-    public class MultilineStringEmitter : YamlDotNet.Serialization.EventEmitters.ChainedEventEmitter
-    {
-        public MultilineStringEmitter(YamlDotNet.Serialization.IEventEmitter nextEmitter) { }
-        public override void Emit(YamlDotNet.Serialization.ScalarEventInfo eventInfo, YamlDotNet.Core.IEmitter emitter) { }
-    }
     public class PublishDefinitions : Microsoft.Build.Utilities.Task
     {
         public PublishDefinitions() { }
@@ -2030,24 +2021,11 @@ namespace Sharpliner
         public bool Publish(string assemblyPath, bool failIfChanged) { }
         public static string[] GetDefaultHeader(System.Type type) { }
     }
-    public static class SharplinerSerializer
-    {
-        public static YamlDotNet.Serialization.ISerializer Serializer { get; }
-        public static string Prettify(string yaml) { }
-        public static string Serialize(object data) { }
-    }
     public enum TargetPathType
     {
         RelativeToGitRoot = 0,
         RelativeToCurrentDir = 1,
         RelativeToAssembly = 2,
         Absolute = 3,
-    }
-    public class YamlStringEnumConverter : YamlDotNet.Serialization.IYamlTypeConverter
-    {
-        public YamlStringEnumConverter() { }
-        public bool Accepts(System.Type type) { }
-        public object ReadYaml(YamlDotNet.Core.IParser parser, System.Type type) { }
-        public void WriteYaml(YamlDotNet.Core.IEmitter emitter, object? value, System.Type type) { }
     }
 }

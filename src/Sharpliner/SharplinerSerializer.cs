@@ -5,7 +5,7 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace Sharpliner;
 
-public static class SharplinerSerializer
+internal static class SharplinerSerializer
 {
     public static ISerializer Serializer { get; } = InitializeSerializer();
 
