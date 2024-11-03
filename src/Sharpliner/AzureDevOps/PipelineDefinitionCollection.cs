@@ -19,6 +19,14 @@ public record PipelineDefinitionData<T>(
     TargetPathType PathType = TargetPathType.RelativeToGitRoot,
     string[]? Header = null);
 
+/// <summary>
+/// <para>
+/// Base class for defining a collection of pipelines,
+/// e.g. <see cref="PipelineCollection"/>, <see cref="SingleStagePipelineCollection"/>.
+/// </para>
+/// Do not extend this class directly, use one of the more concrete classes instead.
+/// </summary>
+/// <typeparam name="TPipeline">The concrete pipeline type.</typeparam>
 public abstract class PipelineDefinitionCollection<TPipeline>
     : AzureDevOpsDefinition, ISharplinerDefinitionCollection where TPipeline : PipelineBase
 {

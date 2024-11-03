@@ -49,6 +49,11 @@ public record RepositoryResource
     [DisallowNull]
     public Trigger? Trigger { get; init; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RepositoryResource"/> class with the specified identifier.
+    /// </summary>
+    /// <param name="identifier">The identifier for the resource used in pipeline resource.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="identifier"/> is null.</exception>
     public RepositoryResource(string identifier)
     {
         Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
@@ -142,6 +147,9 @@ public record RepositoryResource
         };
 }
 
+/// <summary>
+/// Type of the repository.
+/// </summary>
 public enum RepositoryType
 {
     /// <summary>

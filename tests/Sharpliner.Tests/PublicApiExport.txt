@@ -1137,7 +1137,6 @@ namespace Sharpliner.AzureDevOps
         public VariablesReference() { }
         public Sharpliner.AzureDevOps.AgentVariableReference Agent { get; }
         public Sharpliner.AzureDevOps.BuildVariableReference Build { get; }
-        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Configuration { get; }
         public Sharpliner.AzureDevOps.EnvironmentVariableReference Environment { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference this[string variableName] { get; }
         public Sharpliner.AzureDevOps.PipelineVariableReference Pipeline { get; }

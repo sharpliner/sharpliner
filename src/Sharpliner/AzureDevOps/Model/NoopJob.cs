@@ -5,6 +5,9 @@
 /// </summary>
 public record NoopJob : Job
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="NoopJob"/> class.
+    /// </summary>
     public NoopJob() : base("No_op")
     {
     }

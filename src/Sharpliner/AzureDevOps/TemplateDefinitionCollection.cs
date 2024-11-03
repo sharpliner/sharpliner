@@ -22,6 +22,14 @@ public record TemplateDefinitionData<T>(
     TargetPathType PathType = TargetPathType.RelativeToGitRoot,
     string[]? Header = null);
 
+/// <summary>
+/// <para>
+/// Base class for defining a collection of templates,
+/// e.g. <see cref="StageTemplateCollection"/>, <see cref="JobTemplateCollection"/>, <see cref="StepTemplateCollection"/>, <see cref="VariableTemplateCollection"/>.
+/// </para>
+/// Do not extend this class directly, use one of the more concrete classes instead.
+/// </summary>
+/// <typeparam name="T">The concrete template type.</typeparam>
 public abstract class TemplateDefinitionCollection<T> : TemplateDefinition, ISharplinerDefinitionCollection
 {
     /// <summary>

@@ -60,8 +60,6 @@ public class VariablesReference
     /// This variable is agent-scoped, and can be used as an environment variable in a script and as a parameter in a build task, but not as part of the build number or as a version control tag.
     /// </summary>
     public VariableReference TF_BUILD => new("TF_BUILD");
-
-    public VariableReference Configuration => new("Configuration");
 }
 
 /// <summary>
