@@ -52,6 +52,12 @@ jobs:
       projects: tests/Sharpliner.Tests/Sharpliner.Tests.csproj
       arguments: /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
 
+  - task: PublishCodeCoverageResults@2
+    displayName: Publish code coverage
+    inputs:
+      summaryFileLocation: tests/Sharpliner.Tests/coverage.cobertura.xml
+      pathToSources: $(Build.SourcesDirectory)
+
   - task: DotNetCoreCLI@2
     displayName: E2E tests - Pack E2E.Tests library
     inputs:
