@@ -17,11 +17,16 @@ public abstract class PipelineDefinitionBase<TPipeline>
     /// </summary>
     public abstract string TargetFile { get; }
 
+    /// <summary>
+    /// Specifies the type of the target path for the generated template or pipeline.
+    /// By default, the path is relative to the current directory.
+    /// </summary>
     public virtual TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
 
     /// <summary>
+    /// <para>
     /// Header that will be shown at the top of the generated YAML file
-    /// 
+    /// </para>
     /// Leave empty array to omit file header.
     /// </summary>
     public virtual string[]? Header => SharplinerPublisher.GetDefaultHeader(GetType());

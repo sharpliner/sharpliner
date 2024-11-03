@@ -24,17 +24,25 @@ public record WebhookResource
     public Conditioned<string>? Connection { get; init; }
 
     /// <summary>
-    /// Source definition of the build
+    /// Filters used to customize the triggers for a webhook event.
     /// </summary>
     [DisallowNull]
     public ConditionedList<JsonParameterFilter> Filters { get; init; } = [];
 
+    /// <summary>
+    /// Instantiates a new instance of <see cref="WebhookResource"/> with the specified identifier.
+    /// </summary>
+    /// <param name="identifier">The identifier for the resource.</param>
+    /// <exception cref="System.ArgumentNullException">If the input is null</exception>
     public WebhookResource(string identifier)
     {
         Identifier = identifier ?? throw new System.ArgumentNullException(nameof(identifier));
     }
 }
 
+/// <summary>
+/// Filters used to customize the triggers for a webhook event.
+/// </summary>
 public record JsonParameterFilter
 {
     /// <summary>
@@ -47,6 +55,11 @@ public record JsonParameterFilter
     /// </summary>
     public Conditioned<string> Value { get; init; }
 
+    /// <summary>
+    /// Instantiates a new instance of <see cref="JsonParameterFilter"/> with the specified path and value.
+    /// </summary>
+    /// <param name="path">The JSON path in the payload.</param>
+    /// <param name="value">The expected value in the path provided.</param>
     public JsonParameterFilter(string path, string value)
     {
         Path = path;

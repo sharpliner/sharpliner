@@ -35,7 +35,7 @@ public abstract record PipelineBase
     /// LockBehavior of the pipeline
     /// </summary>
     [YamlMember(Order = 120)]
-    public Conditioned<LockBehaviour>? LockBehavior { get; init; }
+    public Conditioned<LockBehavior>? LockBehavior { get; init; }
 
     /// <summary>
     /// Specifies pipeline parameters

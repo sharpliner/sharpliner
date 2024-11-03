@@ -3,6 +3,9 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
 
+/// <summary>
+/// Use to define a lifecycle hook for a <see cref="DeploymentJob"/>.
+/// </summary>
 public record LifeCycleHook
 {
     private Conditioned<Pool>? _pool;

@@ -47,6 +47,10 @@ public record BuildResource
     [DisallowNull]
     public bool Trigger { get; init; } = false;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BuildResource"/> class with the specified identifier.
+    /// </summary>
+    /// <param name="identifier">The alias or name of build artifact. Acceptable values: [-_A-Za-z0-9]*.</param>
     public BuildResource(string identifier)
     {
         Identifier = identifier ?? throw new System.ArgumentNullException(nameof(identifier));

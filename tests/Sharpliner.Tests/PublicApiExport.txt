@@ -522,9 +522,9 @@ namespace Sharpliner.AzureDevOps
     }
     public class JobWorkspace : YamlDotNet.Serialization.IYamlConvertible
     {
-        public static readonly Sharpliner.AzureDevOps.JobWorkspace All;
-        public static readonly Sharpliner.AzureDevOps.JobWorkspace Outputs;
-        public static readonly Sharpliner.AzureDevOps.JobWorkspace Resources;
+        public static Sharpliner.AzureDevOps.JobWorkspace All { get; }
+        public static Sharpliner.AzureDevOps.JobWorkspace Outputs { get; }
+        public static Sharpliner.AzureDevOps.JobWorkspace Resources { get; }
     }
     public class JsonParameterFilter : System.IEquatable<Sharpliner.AzureDevOps.JsonParameterFilter>
     {
@@ -545,7 +545,7 @@ namespace Sharpliner.AzureDevOps
         [YamlDotNet.Serialization.YamlMember(Order=700)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Step> Steps { get; init; }
     }
-    public enum LockBehaviour
+    public enum LockBehavior
     {
         [YamlDotNet.Serialization.YamlMember(Alias="runLatest")]
         RunLatest = 0,
@@ -647,7 +647,7 @@ namespace Sharpliner.AzureDevOps
         [YamlDotNet.Serialization.YamlMember(Order=110)]
         public bool? AppendCommitMessageToRunName { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=120)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.LockBehaviour>? LockBehavior { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.LockBehavior>? LockBehavior { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
         public string? Name { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=150)]
@@ -879,7 +879,7 @@ namespace Sharpliner.AzureDevOps
         [YamlDotNet.Serialization.YamlMember(Order=300)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase> Jobs { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=3)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.LockBehaviour>? LockBehavior { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.LockBehavior>? LockBehavior { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=200)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.VariableBase> Variables { get; init; }
     }
@@ -1021,7 +1021,6 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Parameter StringParameter(string name, string? defaultValue = null, System.Collections.Generic.IEnumerable<string>? allowedValues = null) { }
         public sealed class TemplateParameterReference
         {
-            public TemplateParameterReference() { }
             public Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference this[string parameterName] { get; }
         }
     }

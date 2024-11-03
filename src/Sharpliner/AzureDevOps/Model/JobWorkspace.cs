@@ -5,11 +5,25 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
 
+/// <summary>
+/// Specifies the workspace to clean before the job runs.
+/// </summary>
 public class JobWorkspace : IYamlConvertible
 {
-    public static readonly JobWorkspace Outputs = new("outputs");
-    public static readonly JobWorkspace Resources = new("resources");
-    public static readonly JobWorkspace All = new("all");
+    /// <summary>
+    /// Clean all outputs in the workspace before the job runs.
+    /// </summary>
+    public static JobWorkspace Outputs { get; } = new("outputs");
+
+    /// <summary>
+    /// Clean all resources in the workspace before the job runs.
+    /// </summary>
+    public static JobWorkspace Resources { get; } = new("resources");
+
+    /// <summary>
+    /// Clean all outputs and resources in the workspace before the job runs.
+    /// </summary>
+    public static JobWorkspace All { get; } = new("all");
 
     private readonly string _cleanTarget;
 

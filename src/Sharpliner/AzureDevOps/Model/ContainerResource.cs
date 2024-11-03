@@ -65,12 +65,19 @@ public record ContainerResource
     [DisallowNull]
     public ContainerMountSettings? MountReadOnly { get; init; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ContainerResource"/> class with the specified identifier.
+    /// </summary>
+    /// <param name="identifier">The alias or name of the container. Acceptable values: [-_A-Za-z0-9]*.</param>
     public ContainerResource(string identifier)
     {
         Identifier = identifier ?? throw new ArgumentNullException(nameof(identifier));
     }
 }
 
+/// <summary>
+/// Volumes to mount read-only, the default is all false.
+/// </summary>
 public record ContainerMountSettings
 {
     /// <summary>
