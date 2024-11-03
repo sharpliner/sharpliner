@@ -1,4 +1,5 @@
 ﻿using Sharpliner.AzureDevOps;
+using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.CI;
 
@@ -29,8 +30,14 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                     ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj"),
 
                     DotNet
-                        .Test("tests/Sharpliner.Tests/Sharpliner.Tests.csproj", "--collect \"Code coverage\"")
+                        .Test("tests/Sharpliner.Tests/Sharpliner.Tests.csproj", "/p:CollectCoverage=true /p:CoverletOutputFormat=cobertura")
                         .DisplayAs("Run unit tests"),
+
+                    new PublishCodeCoverageResultsTask("tests/Sharpliner.Tests/coverage.cobertura.xml")
+                    {
+                        DisplayName = "Publish code coverage",
+                        PathToSources = variables.Build.SourcesDirectory
+                    },
 
                     DotNet.Pack("tests/E2E.Tests/SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj") with
                     {
