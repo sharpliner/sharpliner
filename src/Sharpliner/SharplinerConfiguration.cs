@@ -137,6 +137,9 @@ public abstract class SharplinerConfiguration : ISharplinerConfiguration
         Current = this;
     }
 
+    /// <summary>
+    /// Implement this method to configure the publishing process.
+    /// </summary>
     public abstract void Configure();
 }
 

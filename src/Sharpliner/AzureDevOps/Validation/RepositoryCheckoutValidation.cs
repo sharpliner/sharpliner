@@ -37,8 +37,7 @@ internal class RepositoryCheckoutValidation : IDefinitionValidation
         }
 
         var repositories = _steps
-            .Where(step => step is RepositoryCheckoutTask)
-            .Cast<RepositoryCheckoutTask>()
+            .OfType<RepositoryCheckoutTask>()
             .Select(rct => rct.Checkout)
             .Where(repo => repo != "self" && repo != "none")
             .ToList();

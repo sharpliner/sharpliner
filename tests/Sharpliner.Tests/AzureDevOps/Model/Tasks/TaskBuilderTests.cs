@@ -134,7 +134,7 @@ public class TaskBuilderTests
                         Steps =
                         {
                             Pwsh.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.Test-Script.ps1"),
-                            Pwsh.FromResourceFile("Test-Script.ps1"),
+                            Pwsh.FromResourceFile("Test-Script.ps1", "A display name"),
                             Pwsh.Inline("Connect-AzContext", "Set-AzSubscription --id foo-bar-xyz"),
                             Pwsh.File("foo.ps1"),
                             Pwsh.FromFile("AzureDevops/Resources/Test-Script.ps1"),
@@ -161,6 +161,7 @@ public class TaskBuilderTests
               - pwsh: |+
                   Set-ErrorActionPreference Stop
                   Write-Host "Lorem ipsum dolor sit amet"
+                displayName: A display name
 
               - pwsh: |-
                   Connect-AzContext
@@ -175,6 +176,55 @@ public class TaskBuilderTests
               - pwsh: |+
                   Set-ErrorActionPreference Stop
                   Write-Host "Lorem ipsum dolor sit amet"
+            """);
+    }
+
+    private class ScriptTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        Script.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.test-script"),
+                        Script.FromResourceFile("test-script", "A display name"),
+                        Script.Inline("echo 'Hello, world!'", "echo 'Goodbye, world!'") with { DisplayName = "A display name" },
+                        Script.FromFile("AzureDevOps/Resources/test-script"),
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public void Serialize_Script_Builders_Test()
+    {
+        ScriptTaskPipeline pipeline = new();
+        string yaml = pipeline.Serialize();
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: test
+              steps:
+              - script: |+
+                  dir src
+                  echo "Hello World!"
+
+              - script: |+
+                  dir src
+                  echo "Hello World!"
+                displayName: A display name
+
+              - script: |-
+                  echo 'Hello, world!'
+                  echo 'Goodbye, world!'
+
+              - script: |+
+                  dir src
+                  echo "Hello World!"
             """);
     }
 
