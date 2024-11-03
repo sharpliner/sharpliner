@@ -352,7 +352,17 @@ public abstract class AzureDevOpsDefinition
     #region Pipeline parameter shorthands
 
     /// <summary>
-    /// Allows the ${{ parameters.name }} notation for parameter reference.
+    /// <para>
+    /// Allows the <c>${{ parameters.name }}</c> notation for parameter reference.
+    /// </para>
+    /// For example:
+    /// <code lang="csharp">
+    /// parameters["foo"]
+    /// </code>
+    /// will generate:
+    /// <code lang="yaml">
+    /// ${{ parameters.foo }}
+    /// </code>
     /// </summary>
     [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Should not be capitalized to follow YAML syntax")]
     protected static readonly TemplateParameterReference parameters = new();

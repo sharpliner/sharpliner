@@ -150,9 +150,29 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
     /// <returns>A step reference</returns>
     protected static Step StepParameterReference(Parameter<Step> parameter) => new StepReference(parameter.Name);
 
+    /// <summary>
+    /// Utility class that allows the <c>${{ parameters.name }}</c> notation for a parameter.
+    /// </summary>
     public sealed class TemplateParameterReference
     {
+        /// <summary>
+        /// <para>
+        /// Allows the <c>${{ parameters.name }}</c> notation for a parameter.
+        /// </para>
+        /// For example:
+        /// <code lang="csharp">
+        /// parameters["foo"]
+        /// </code>
+        /// will generate:
+        /// <code lang="yaml">
+        /// ${{ parameters.foo }}
+        /// </code>
+        /// </summary>
         public ParameterReference this[string parameterName] => new(parameterName);
+
+        internal TemplateParameterReference()
+        {
+        }
     }
 }
 

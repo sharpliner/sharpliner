@@ -7,11 +7,17 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
 
+/// <summary>
+/// Base class for all jobs in the pipeline.
+/// </summary>
 public abstract record JobBase : IDependsOn
 {
     private Conditioned<Pool>? _pool;
     private Conditioned<ContainerReference>? _container;
 
+    /// <summary>
+    /// The name of the job.
+    /// </summary>
     [YamlIgnore]
     public string Name { get; init; }
 
@@ -56,6 +62,9 @@ public abstract record JobBase : IDependsOn
     [DisallowNull]
     public Conditioned<TimeSpan>? Timeout { get; init; }
 
+    /// <summary>
+    /// Time to wait for this job to complete before the server kills it.
+    /// </summary>
     [YamlMember(Order = 800)]
     public Conditioned<int>? TimeoutInMinutes => Timeout?.Definition != null ? (int)Timeout.Definition.TotalMinutes : null;
 
@@ -66,6 +75,9 @@ public abstract record JobBase : IDependsOn
     [DisallowNull]
     public Conditioned<TimeSpan>? CancelTimeout { get; init; }
 
+    /// <summary>
+    /// Time to wait for the job to cancel before forcibly terminating it.
+    /// </summary>
     [YamlMember(Order = 900)]
     public Conditioned<int>? CancelTimeoutInMinutes => CancelTimeout?.Definition != null ? (int)CancelTimeout.Definition.TotalMinutes : null;
 
@@ -81,6 +93,9 @@ public abstract record JobBase : IDependsOn
     [YamlMember(Order = 1100)]
     public Dictionary<string, string> Services { get; init; } = [];
 
+    /// <summary>
+    /// Gets the condition expression to determine whether to run this job.
+    /// </summary>
     [YamlMember(Order = 1100)]
     [DisallowNull]
     public Conditioned<InlineCondition>? Condition { get; init; }
@@ -92,6 +107,12 @@ public abstract record JobBase : IDependsOn
     [YamlMember(Order = 1200)]
     public Conditioned<bool>? ContinueOnError { get; init; }
 
+    /// <summary>
+    /// Instantiates a new instance of <see cref="JobBase"/> with the specified name and optional display name.
+    /// </summary>
+    /// <param name="name">The name of the job.</param>
+    /// <param name="displayName">The friendly name to display in the UI.</param>
+    /// <exception cref="ArgumentNullException">If the name is null.</exception>
     protected JobBase(string name, string? displayName = null)
     {
         Name = name ?? throw new ArgumentNullException(nameof(name));
