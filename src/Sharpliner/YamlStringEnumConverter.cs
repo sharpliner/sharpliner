@@ -11,9 +11,9 @@ internal class YamlStringEnumConverter : IYamlTypeConverter
 {
     public bool Accepts(Type type) => type.IsEnum;
 
-    public object ReadYaml(IParser parser, Type type) => throw new NotImplementedException();
+    public object? ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer) => throw new NotImplementedException();
 
-    public void WriteYaml(IEmitter emitter, object? value, Type type)
+    public void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer serializer)
     {
         if (value is null)
         {
@@ -27,7 +27,7 @@ internal class YamlStringEnumConverter : IYamlTypeConverter
                             .Select(ema => ema.Alias)
                             .FirstOrDefault()
                         ?? value.ToString();
-        
+
         emitter.Emit(new Scalar(yamlValue!));
     }
 }
