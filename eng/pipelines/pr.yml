@@ -50,7 +50,7 @@ jobs:
     inputs:
       command: test
       projects: tests/Sharpliner.Tests/Sharpliner.Tests.csproj
-      arguments: --collect "Code coverage"
+      arguments: /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
 
   - task: DotNetCoreCLI@2
     displayName: E2E tests - Pack E2E.Tests library
