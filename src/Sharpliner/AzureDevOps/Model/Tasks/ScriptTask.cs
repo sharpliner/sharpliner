@@ -30,6 +30,10 @@ public record ScriptTask : Step
     [YamlMember(Order = 200)]
     public Conditioned<bool>? FailOnStdErr { get; init; }
 
+    /// <summary>
+    /// Instantiates a new instance of <see cref="ScriptTask"/> with the specified script contents.
+    /// </summary>
+    /// <param name="scriptLines">The contents of the script.</param>
     public ScriptTask(params string[] scriptLines)
     {
         ArgumentNullException.ThrowIfNull(scriptLines);
