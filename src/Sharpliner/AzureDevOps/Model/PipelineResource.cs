@@ -59,6 +59,11 @@ public record PipelineResource
     [DisallowNull]
     public PipelineTrigger? Trigger { get; init; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PipelineResource"/> class with the specified identifier.
+    /// </summary>
+    /// <param name="identifier">The identifier for the resource used in pipeline resource variables.</param>
+    /// <exception cref="System.ArgumentNullException">Thrown when <paramref name="identifier"/> is null.</exception>
     public PipelineResource(string identifier)
     {
         Identifier = identifier ?? throw new System.ArgumentNullException(nameof(identifier));

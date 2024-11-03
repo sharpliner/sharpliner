@@ -33,16 +33,29 @@ public record PrTrigger
     [DefaultValue(true)]
     public bool Drafts { get; init; } = true;
 
+    /// <summary>
+    /// Branches to include or exclude for triggering a run.
+    /// </summary>
     [DisallowNull]
     public InclusionRule? Branches { get; init; }
 
+    /// <summary>
+    /// Paths to include or exclude for triggering a run.
+    /// </summary>
     [DisallowNull]
     public InclusionRule? Paths { get; init; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PrTrigger"/> class.
+    /// </summary>
     public PrTrigger()
     {
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PrTrigger"/> class with the specified branches.
+    /// </summary>
+    /// <param name="branches">The branches to trigger the pipeline on.</param>
     public PrTrigger(params string[] branches)
     {
         Branches = new InclusionRule
@@ -52,6 +65,9 @@ public record PrTrigger
     }
 }
 
+/// <summary>
+/// Use this to explicitly set you want <c>none</c> trigger.
+/// </summary>
 public record NonePrTrigger : PrTrigger, IYamlConvertible
 {
     void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();

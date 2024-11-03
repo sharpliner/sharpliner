@@ -6,9 +6,19 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
 
+/// <summary>
+/// Defining dependencies between stages/jobs.
+/// </summary>
 public interface IDependsOn
 {
+    /// <summary>
+    /// The name of the job / stage.
+    /// </summary>
     string Name { get; }
+
+    /// <summary>
+    /// List of names of other jobs / stages this job / stage depends on.
+    /// </summary>
     ConditionedList<string> DependsOn { get; }
 }
 

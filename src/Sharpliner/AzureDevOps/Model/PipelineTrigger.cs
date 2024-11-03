@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace Sharpliner.AzureDevOps;
 
+/// <summary>
+/// Configure pipeline resource triggers using the full syntax.
+/// </summary>
 public record PipelineTrigger
 {
     /// <summary>
@@ -31,10 +34,17 @@ public record PipelineTrigger
     [DisallowNull]
     public InclusionRule? Stages { get; init; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PipelineTrigger"/> class.
+    /// </summary>
     public PipelineTrigger()
     {
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PipelineTrigger"/> class with the specified branches.
+    /// </summary>
+    /// <param name="branches">The branches to trigger the pipeline on.</param>
     public PipelineTrigger(params string[] branches)
     {
         Branches = new InclusionRule

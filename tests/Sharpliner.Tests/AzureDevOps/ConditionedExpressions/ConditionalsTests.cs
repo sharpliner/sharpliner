@@ -15,7 +15,7 @@ public class ConditionalsTests
             {
                 If.And(
                     NotIn("bar", "foo", "xyz", "'foo'"),
-                    NotEqual(variables.Configuration, "'Debug'"),
+                    NotEqual(variables["Configuration"], "'Debug'"),
                     ContainsValue("10", variables.System.JobId)
                 )
                     .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)"),
@@ -46,7 +46,7 @@ public class ConditionalsTests
                         Less("5", "3"),
                         Equal(variables.Build.SourceBranch, "'refs/heads/production'"),
                         IsBranch("release")),
-                    NotEqual(variables.Configuration, "'Debug'"),
+                    NotEqual(variables["Configuration"], "'Debug'"),
                     IsPullRequest)
                     .Variable("TargetBranch", variables.System.PullRequest.SourceBranch),
             }

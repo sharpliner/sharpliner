@@ -26,6 +26,9 @@ public record ScheduledTrigger
     [DisallowNull]
     public Conditioned<string>? DisplayName { get; init; }
 
+    /// <summary>
+    /// Branches to include or exclude for triggering a run using a pipeline resource.
+    /// </summary>
     [DisallowNull]
     [YamlMember(Order = 200)]
     public InclusionRule? Branches { get; init; }
@@ -37,6 +40,11 @@ public record ScheduledTrigger
     [YamlMember(Order = 300)]
     public Conditioned<bool>? Always { get; init; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ScheduledTrigger"/> class.
+    /// </summary>
+    /// <param name="cronSchedule">The cron syntax defining a schedule</param>
+    /// <param name="branches">The branches to trigger the pipeline on.</param>
     public ScheduledTrigger(string cronSchedule, params string[] branches)
     {
         if (branches.Length > 0)
