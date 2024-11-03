@@ -221,6 +221,7 @@ public class TaskBuilderTests
               - script: |-
                   echo 'Hello, world!'
                   echo 'Goodbye, world!'
+                displayName: A display name
 
               - script: |+
                   dir src
