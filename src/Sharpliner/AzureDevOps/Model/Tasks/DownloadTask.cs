@@ -30,8 +30,11 @@ public abstract record DownloadTask : Step
     [YamlIgnore]
     public List<string> Patterns { get; init; } = [];
 
+    /// <summary>
+    /// Internal property to serialize the patterns as a new line delimited string.
+    /// </summary>
     [YamlMember(Alias = "patterns", Order = 61, ScalarStyle = YamlDotNet.Core.ScalarStyle.Literal)]
-    internal string _Patterns => string.Join("\n", Patterns);
+    public string _Patterns => string.Join("\n", Patterns);
 
     /// <summary>
     /// Directory to download the artifact files. Can be relative to the pipeline workspace directory or absolute.
@@ -48,8 +51,11 @@ public abstract record DownloadTask : Step
     [YamlIgnore]
     public List<string> Tags { get; init; } = [];
 
+    /// <summary>
+    /// Internal property to serialize the tags as a comma-separated string.
+    /// </summary>
     [YamlMember(Alias = "tags", Order = 104)]
-    internal string? _Tags => Tags.Count > 0 ? string.Join(",", Tags) : null;
+    public string? _Tags => Tags.Count > 0 ? string.Join(",", Tags) : null;
 }
 
 /// <summary>
