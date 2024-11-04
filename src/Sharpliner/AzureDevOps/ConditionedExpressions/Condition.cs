@@ -725,14 +725,6 @@ internal class IfBranchCondition : IfEqualityCondition
     }
 }
 
-internal class InlineBranchCondition<T> : InlineEqualityCondition<T>
-{
-    internal InlineBranchCondition(InlineExpression branchName, bool equal)
-        : base(equal, BuildVariableReference.Instance.SourceBranch, BranchNameHelper.FormatBranchName(Serialize(branchName)))
-    {
-    }
-}
-
 internal class IfBranchCondition<T> : IfEqualityCondition<T>
 {
     internal IfBranchCondition(IfExpression branchName, bool equal)
@@ -752,14 +744,6 @@ internal class InlineBuildReasonCondition : InlineEqualityCondition
 internal class IfBuildReasonCondition : IfEqualityCondition
 {
     internal IfBuildReasonCondition(IfExpression reason, bool equal)
-        : base(equal, BuildVariableReference.Instance.Reason, reason)
-    {
-    }
-}
-
-internal class InlineBuildReasonCondition<T> : InlineEqualityCondition<T>
-{
-    internal InlineBuildReasonCondition(InlineExpression reason, bool equal)
         : base(equal, BuildVariableReference.Instance.Reason, reason)
     {
     }

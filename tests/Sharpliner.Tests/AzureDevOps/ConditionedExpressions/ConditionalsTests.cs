@@ -76,7 +76,11 @@ public class ConditionalsTests
             {
                 If.IsBranch("main")
                     .Variable("feature", "on"),
-
+                If.IsBranch("refs/heads/master")
+                    .Variable("legacy", true)
+                .EndIf
+                .If.IsBranch("patch-1")
+                    .Variable("fast", true),
                 If.And(IsPullRequest, IsNotBranch("main"))
                     .Group("pr-group"),
             }
@@ -87,12 +91,24 @@ public class ConditionalsTests
     public void Branch_Condition_Test()
     {
         var pipeline = new Branch_Condition_Test_Pipeline();
+        pipeline.Serialize().Trim().Should().Be(
+            """
+            variables:
+            - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+              - name: feature
+                value: on
 
-        var variable1 = pipeline.Pipeline.Variables.ElementAt(0);
-        var variable2 = pipeline.Pipeline.Variables.ElementAt(1);
+            - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
+              - name: legacy
+                value: true
 
-        variable1.Condition!.WithoutTags().Should().Be("eq(variables['Build.SourceBranch'], 'refs/heads/main')");
-        variable2.Condition!.WithoutTags().Should().Be("and(eq(variables['Build.Reason'], 'PullRequest'), ne(variables['Build.SourceBranch'], 'refs/heads/main'))");
+            - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/patch-1') }}:
+              - name: fast
+                value: true
+
+            - ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), ne(variables['Build.SourceBranch'], 'refs/heads/main')) }}:
+              - group: pr-group
+            """);
     }
 
     private class Else_Test_Pipeline : TestPipeline
