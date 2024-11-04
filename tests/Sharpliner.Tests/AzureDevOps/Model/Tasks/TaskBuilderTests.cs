@@ -28,7 +28,16 @@ public class TaskBuilderTests
                         Bash.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.test-script.sh"),
                         Bash.FromResourceFile("test-script.sh"),
                         Bash.Inline("cat /etc/passwd", "rm -rf tests.xml"),
-                        Bash.File("foo.sh"),
+                        Bash.File("foo.sh")
+                            .DisplayAs("Test task"),
+                        Bash.File("some/script.sh") with
+                        {
+                            Arguments = "foo bar",
+                            ContinueOnError = true,
+                            FailOnStderr = true,
+                            BashEnv = "~/.bash_profile",
+                            DisplayName = "Test task"
+                        },
                         Bash.FromFile( "AzureDevops/Resources/test-script.sh"),
                     }
                 }
@@ -59,9 +68,20 @@ public class TaskBuilderTests
                   rm -rf tests.xml
 
               - task: Bash@3
+                displayName: Test task
                 inputs:
                   targetType: filePath
                   filePath: foo.sh
+
+              - task: Bash@3
+                displayName: Test task
+                inputs:
+                  targetType: filePath
+                  filePath: some/script.sh
+                  arguments: foo bar
+                  failOnStderr: true
+                  bashEnvValue: ~/.bash_profile
+                continueOnError: true
 
               - bash: |
                   echo "foo"
@@ -283,7 +303,19 @@ public class TaskBuilderTests
                     Steps =
                     {
                         Checkout.None,
-                        Checkout.Self,
+                        Checkout.Self with
+                        {
+                            Submodules = SubmoduleCheckout.None,
+                            Path = "$(Build.SourcesDirectory)/local",
+                            PersistCredentials = true,
+                            Lfs = true,
+                        },
+                        Checkout.Self with
+                        {
+                            DisplayName = "Checkout shallow self",
+                            Submodules = SubmoduleCheckout.SingleLevel,
+                            Path = "$(Build.SourcesDirectory)/local-shallow",
+                        },
                         Checkout.Repository("https://github.com/sharpliner/sharpliner.git") with
                         {
                             Submodules = SubmoduleCheckout.Recursive,
@@ -311,6 +343,15 @@ public class TaskBuilderTests
               - checkout: none
 
               - checkout: self
+                lfs: true
+                submodules: false
+                path: $(Build.SourcesDirectory)/local
+                persistCredentials: true
+
+              - checkout: self
+                displayName: Checkout shallow self
+                submodules: true
+                path: $(Build.SourcesDirectory)/local-shallow
 
               - checkout: https://github.com/sharpliner/sharpliner.git
                 clean: true
@@ -428,7 +469,8 @@ public class TaskBuilderTests
                             Inputs = new()
                             {
                                 { "solution", "**/*.sln" }
-                            }
+                            },
+                            RetryCountOnTaskFailure = 2
                         }
                     }
                 }
@@ -451,6 +493,7 @@ public class TaskBuilderTests
             inputs:
               solution: '**/*.sln'
             timeoutInMinutes: 120
+            retryCountOnTaskFailure: 2
         """);
     }
 }
