@@ -1635,12 +1635,8 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Artifact { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=62)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Path { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Alias="patterns", Order=61, ScalarStyle=YamlDotNet.Core.ScalarStyle.Literal)]
-        public string _Patterns { get; }
         [YamlDotNet.Serialization.YamlIgnore]
         public System.Collections.Generic.List<string> Patterns { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Alias="tags", Order=104)]
-        public string? _Tags { get; }
         [YamlDotNet.Serialization.YamlIgnore]
         public System.Collections.Generic.List<string> Tags { get; init; }
     }
