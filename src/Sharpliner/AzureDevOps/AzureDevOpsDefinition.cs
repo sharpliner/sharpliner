@@ -16,6 +16,10 @@ public abstract class AzureDevOpsDefinition
 {
     #region Template references
 
+    protected static Template<VariableBase> VariableTemplate<T>(TemplateParameters? parameters = null)
+        where T : VariableTemplateDefinition, new()
+        => VariableTemplate(new T().TargetFile, parameters);
+
     /// <summary>
     /// Reference a YAML template.
     /// </summary>

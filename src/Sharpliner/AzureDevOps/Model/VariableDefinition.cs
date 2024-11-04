@@ -139,4 +139,6 @@ public record Variable : VariableBase
     {
         Readonly = true
     };
+
+    public override string ToString() => new VariableReference(Name);
 }
