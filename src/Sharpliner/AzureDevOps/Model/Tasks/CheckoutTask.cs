@@ -108,7 +108,11 @@ public record RepositoryCheckoutTask : CheckoutTask
     /// <inheritdoc />
     public override string Checkout => _repository;
 
-    internal RepositoryCheckoutTask(string repository)
+    /// <summary>
+    /// Instantiates a new instance of <see cref="RepositoryCheckoutTask"/> with the specified repository.
+    /// </summary>
+    /// <param name="repository">The repository to check out.</param>
+    public RepositoryCheckoutTask(string repository)
     {
         _repository = repository;
     }

@@ -1791,6 +1791,7 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
     public class RepositoryCheckoutTask : Sharpliner.AzureDevOps.Tasks.CheckoutTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.RepositoryCheckoutTask>
     {
+        public RepositoryCheckoutTask(string repository) { }
         public override string Checkout { get; }
     }
     public enum RunVersion
