@@ -44,6 +44,11 @@ public abstract class AzureDevOpsDefinition
     protected static Template<JobBase> JobTemplate(string path, TemplateParameters? parameters = null)
         => new(path, parameters);
 
+    protected static Template<JobBase> JobTemplate<TTemplate, TParameters>(TParameters parameters)
+        where TTemplate : JobTemplateDefinition<TParameters>, new()
+        where TParameters : ITemplateParametersProvider, new()
+        => JobTemplate(new TTemplate().TargetFile, parameters?.ToTemplateParameters());
+
     /// <summary>
     /// Reference a YAML template.
     /// </summary>

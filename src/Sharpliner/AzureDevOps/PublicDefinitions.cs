@@ -2,6 +2,9 @@
 // To learn more, see https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/GettingStarted.md
 
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Reflection;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Validation;
 using Sharpliner.Common;
@@ -39,7 +42,7 @@ public abstract class ExtendsPipelineDefinition : ExtendsPipelineDefinition<Pipe
 /// https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/extends?view=azure-pipelines
 /// </summary>
 public abstract class ExtendsPipelineDefinition<TPipeline> : PipelineDefinitionBase<TPipeline>
-    where TPipeline: PipelineWithExtends
+    where TPipeline : PipelineWithExtends
 {
 }
 
@@ -69,6 +72,52 @@ public abstract class JobTemplateDefinition : TemplateDefinition<JobBase>
 
     /// <inheritdoc/>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetJobValidations();
+}
+
+public interface ITemplateParametersProvider
+{
+    TemplateParameters ToTemplateParameters();
+}
+
+public abstract class JobTemplateDefinition<TParameters> : JobTemplateDefinition
+    where TParameters : ITemplateParametersProvider, new()
+{
+    public sealed override List<Parameter> Parameters => GetParameters(TemplateParameters);
+
+    [DisallowNull]
+    public TParameters TemplateParameters { get; } = new TParameters();
+
+    private static List<Parameter> GetParameters(TParameters parameters)
+    {
+        var result = new List<Parameter>();
+        foreach (var parameter in typeof(TParameters).GetProperties()
+            .Where(IsParameterProperty))
+        {
+            var paramType = parameter.GetType();
+            if (paramType == typeof(string))
+            {
+                result.Add(new StringParameter(parameter.Name));
+            }
+            else if (paramType == typeof(bool))
+            {
+                result.Add(new BooleanParameter(parameter.Name));
+            }
+            // TODO: Add more types as needed
+        }
+        return result;
+
+        static bool IsParameterProperty(PropertyInfo property)
+        {
+            // TODO: Add more types as needed
+            return
+                property.GetSetMethod()?.IsPublic is true &&
+                property.GetGetMethod()?.IsPublic is true &&
+                (
+                    property.PropertyType == typeof(string)
+                    || property.PropertyType == typeof(bool)
+                );
+        }
+    }
 }
 
 /// <summary>

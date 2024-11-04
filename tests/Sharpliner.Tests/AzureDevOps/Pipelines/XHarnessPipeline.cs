@@ -76,10 +76,10 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
                                 }
                             }
                         }),
-                        JobTemplate("/eng/common/templates-official/post-build/post-build.yml", new TemplateParameters
+                        JobTemplate<PostBuild, PostBuildParameters>(new()
                         {
-                            ["enableSymbolValidation"] = true,
-                            ["enableSourceLinkValidation"] = true
+                            EnableSymbolValidation = true,
+                            EnableSourceLinkValidation = true
                         })
                     }
                 }
@@ -124,5 +124,36 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
                 """)
             ),
         ];
+    }
+
+    private class PostBuild : JobTemplateDefinition<PostBuildParameters>
+    {
+        public override string TargetFile => "eng/common/templates-official/post-build/post-build.yml";
+        public override ConditionedList<JobBase> Definition =>
+        [
+
+        ];
+    }
+
+    private class PostBuildParameters : ITemplateParametersProvider
+    {
+        public bool EnableSymbolValidation { get; init; }
+        public bool EnableSourceLinkValidation { get; init; }
+
+        public TemplateParameters ToTemplateParameters()
+        {
+            var parameters = new TemplateParameters();
+            if (EnableSymbolValidation)
+            {
+                parameters["enableSymbolValidation"] = true;
+            }
+
+            if (EnableSourceLinkValidation)
+            {
+                parameters["enableSourceLinkValidation"] = true;
+            }
+
+            return parameters;
+        }
     }
 }
