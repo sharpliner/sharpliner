@@ -428,7 +428,8 @@ public class TaskBuilderTests
                             Inputs = new()
                             {
                                 { "solution", "**/*.sln" }
-                            }
+                            },
+                            RetryCountOnTaskFailure = 2
                         }
                     }
                 }
@@ -451,6 +452,7 @@ public class TaskBuilderTests
             inputs:
               solution: '**/*.sln'
             timeoutInMinutes: 120
+            retryCountOnTaskFailure: 2
         """);
     }
 }
