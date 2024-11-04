@@ -40,6 +40,9 @@ public abstract record BashTask : Step
     public bool NoRc { get; init; } = true;
 }
 
+/// <summary>
+/// Task that runs an inline Bash script using the <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/steps-bash">steps.bash</see> definition.
+/// </summary>
 public record InlineBashTask : BashTask
 {
     /// <summary>
@@ -48,6 +51,10 @@ public record InlineBashTask : BashTask
     [YamlMember(Alias = "bash", Order = 1, ScalarStyle = ScalarStyle.Literal)]
     public string Contents { get; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InlineBashTask"/> class with the specified script lines.
+    /// </summary>
+    /// <param name="scriptLines">The lines of the script to execute.</param>
     public InlineBashTask(params string[] scriptLines)
     {
         ArgumentNullException.ThrowIfNull(scriptLines);
@@ -55,6 +62,9 @@ public record InlineBashTask : BashTask
     }
 }
 
+/// <summary>
+/// Task that runs a bash script from a file using the <c>Bash</c> task.
+/// </summary>
 public record BashFileTask : BashTask, IYamlConvertible
 {
     /// <summary>
