@@ -303,7 +303,19 @@ public class TaskBuilderTests
                     Steps =
                     {
                         Checkout.None,
-                        Checkout.Self,
+                        Checkout.Self with
+                        {
+                            Submodules = SubmoduleCheckout.None,
+                            Path = "$(Build.SourcesDirectory)/local",
+                            PersistCredentials = true,
+                            Lfs = true,
+                        },
+                        Checkout.Self with
+                        {
+                            DisplayName = "Checkout shallow self",
+                            Submodules = SubmoduleCheckout.SingleLevel,
+                            Path = "$(Build.SourcesDirectory)/local-shallow",
+                        },
                         Checkout.Repository("https://github.com/sharpliner/sharpliner.git") with
                         {
                             Submodules = SubmoduleCheckout.Recursive,
@@ -331,6 +343,15 @@ public class TaskBuilderTests
               - checkout: none
 
               - checkout: self
+                lfs: true
+                submodules: false
+                path: $(Build.SourcesDirectory)/local
+                persistCredentials: true
+
+              - checkout: self
+                displayName: Checkout shallow self
+                submodules: true
+                path: $(Build.SourcesDirectory)/local-shallow
 
               - checkout: https://github.com/sharpliner/sharpliner.git
                 clean: true
