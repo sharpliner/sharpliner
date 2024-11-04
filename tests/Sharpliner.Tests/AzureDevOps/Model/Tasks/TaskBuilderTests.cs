@@ -28,7 +28,16 @@ public class TaskBuilderTests
                         Bash.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.test-script.sh"),
                         Bash.FromResourceFile("test-script.sh"),
                         Bash.Inline("cat /etc/passwd", "rm -rf tests.xml"),
-                        Bash.File("foo.sh"),
+                        Bash.File("foo.sh")
+                            .DisplayAs("Test task"),
+                        Bash.File("some/script.sh") with
+                        {
+                            Arguments = "foo bar",
+                            ContinueOnError = true,
+                            FailOnStderr = true,
+                            BashEnv = "~/.bash_profile",
+                            DisplayName = "Test task"
+                        },
                         Bash.FromFile( "AzureDevops/Resources/test-script.sh"),
                     }
                 }
@@ -59,9 +68,20 @@ public class TaskBuilderTests
                   rm -rf tests.xml
 
               - task: Bash@3
+                displayName: Test task
                 inputs:
                   targetType: filePath
                   filePath: foo.sh
+
+              - task: Bash@3
+                displayName: Test task
+                inputs:
+                  targetType: filePath
+                  filePath: some/script.sh
+                  arguments: foo bar
+                  failOnStderr: true
+                  bashEnvValue: ~/.bash_profile
+                continueOnError: true
 
               - bash: |
                   echo "foo"
