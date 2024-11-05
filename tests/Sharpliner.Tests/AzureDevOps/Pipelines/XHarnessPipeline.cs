@@ -139,17 +139,36 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
         public override bool Is1ESPipeline { get; set; } = false;
     }
 
-    private class CorePostBuild : JobTemplateDefinition<CorePostBuildParameters>
+    private class CorePostBuild : StageTemplateDefinition<CorePostBuildParameters>
     {
         public override string TargetFile => "eng/common/core-templates/post-build/post-build.yml";
-        public override ConditionedList<JobBase> Definition =>
+        public override ConditionedList<Stage> Definition =>
         [
+            If.Or(
+                Equal(TemplateParameters.EnableNugetValidation, "true"),
+                Equal(TemplateParameters.EnableSigningValidation, "true"),
+                Equal(TemplateParameters.EnableSourceLinkValidation, "true"),
+                Equal(TemplateParameters.SDLValidationParameters.Enable, "true")
+            ).Stage(new("Validate", "Validate Build Assets")
+            {
+                DependsOn = TemplateParameters.ValidateDependsOn,
+                Variables =
+                {
+                    Template("/eng/common/core-templates/post-build/common-variables.yml"),
+                    new VariableTemplate("/eng/common/core-templates/variables/pool-providers.yml")
+                    {
+                        Parameters = new()
+                        {
+                            ["is1ESPipeline"] = TemplateParameters.Is1ESPipeline
+                        }
+                    }
+                }
+            })
         ];
     }
 
     private class CorePostBuildParameters : TemplateParametersProviderBase<CorePostBuildParameters>
     {
-
         public virtual int PublishingInfraVersion { get; set; } = 3;
 
         public virtual int BARBuildId { get; set; } = 0;

@@ -55,6 +55,11 @@ public record VariableTemplate : VariableBase
     public Conditioned<string> Name { get; }
 
     /// <summary>
+    /// The
+    /// </summary>
+    public TemplateParameters Parameters { get; init; }
+
+    /// <summary>
     /// Creates a new instance of <see cref="VariableTemplate"/>.
     /// </summary>
     /// <param name="name">The path to the template</param>

@@ -185,42 +185,19 @@ public abstract class TemplateParametersProviderBase<TParameters> : ITemplatePar
 public abstract class JobTemplateDefinition<TParameters> : JobTemplateDefinition
     where TParameters : ITemplateParametersProvider, new()
 {
-    public sealed override List<Parameter> Parameters => GetParameters(TemplateParameters);
+    public sealed override List<Parameter> Parameters => TemplateParameters.ToParameters();
 
     [DisallowNull]
     public TParameters TemplateParameters { get; } = new TParameters();
+}
 
-    private static List<Parameter> GetParameters(TParameters parameters)
-    {
-        var result = new List<Parameter>();
-        foreach (var parameter in typeof(TParameters).GetProperties()
-            .Where(IsParameterProperty))
-        {
-            var paramType = parameter.GetType();
-            if (paramType == typeof(string))
-            {
-                result.Add(new StringParameter(parameter.Name));
-            }
-            else if (paramType == typeof(bool))
-            {
-                result.Add(new BooleanParameter(parameter.Name));
-            }
-            // TODO: Add more types as needed
-        }
-        return result;
+public abstract class StageTemplateDefinition<TParameters> : StageTemplateDefinition
+    where TParameters : ITemplateParametersProvider, new()
+{
+    public sealed override List<Parameter> Parameters => TemplateParameters.ToParameters();
 
-        static bool IsParameterProperty(PropertyInfo property)
-        {
-            // TODO: Add more types as needed
-            return
-                property.GetSetMethod()?.IsPublic is true &&
-                property.GetGetMethod()?.IsPublic is true &&
-                (
-                    property.PropertyType == typeof(string)
-                    || property.PropertyType == typeof(bool)
-                );
-        }
-    }
+    [DisallowNull]
+    public TParameters TemplateParameters { get; } = new TParameters();
 }
 
 /// <summary>
