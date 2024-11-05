@@ -76,7 +76,7 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
                                 }
                             }
                         }),
-                        JobTemplate<PostBuild, PostBuildParameters>(new()
+                        JobTemplate<CommonPostBuild, CommonPostBuildParameters>(new()
                         {
                             EnableSymbolValidation = true,
                             EnableSourceLinkValidation = true
@@ -126,34 +126,70 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
         ];
     }
 
-    private class PostBuild : JobTemplateDefinition<PostBuildParameters>
+    private class CommonPostBuild : JobTemplateDefinition<CommonPostBuildParameters>
     {
         public override string TargetFile => "eng/common/templates-official/post-build/post-build.yml";
         public override ConditionedList<JobBase> Definition =>
         [
-
         ];
     }
 
-    private class PostBuildParameters : ITemplateParametersProvider
+    private class CommonPostBuildParameters : CorePostBuildParameters
     {
-        public bool EnableSymbolValidation { get; init; }
-        public bool EnableSourceLinkValidation { get; init; }
+        public override bool Is1ESPipeline { get; set; } = false;
+    }
 
-        public TemplateParameters ToTemplateParameters()
-        {
-            var parameters = new TemplateParameters();
-            if (EnableSymbolValidation)
-            {
-                parameters["enableSymbolValidation"] = true;
-            }
+    private class CorePostBuild : JobTemplateDefinition<CorePostBuildParameters>
+    {
+        public override string TargetFile => "eng/common/core-templates/post-build/post-build.yml";
+        public override ConditionedList<JobBase> Definition =>
+        [
+        ];
+    }
 
-            if (EnableSourceLinkValidation)
-            {
-                parameters["enableSourceLinkValidation"] = true;
-            }
+    private class CorePostBuildParameters : TemplateParametersProviderBase<CorePostBuildParameters>
+    {
 
-            return parameters;
-        }
+        public virtual int PublishingInfraVersion { get; set; } = 3;
+
+        public virtual int BARBuildId { get; set; } = 0;
+
+        public virtual string PromoteToChannelIds { get; set; } = string.Empty;
+
+        public virtual bool EnableSourceLinkValidation { get; set; } = true;
+
+        public virtual bool EnableSigningValidation { get; set; } = false;
+
+        public virtual bool EnableSymbolValidation { get; set; }
+
+        public virtual bool EnableNugetValidation { get; set; } = true;
+
+        public virtual bool PublishInstallersAndChecksums { get; set; } = true;
+
+        public virtual SDLValidationParameters SDLValidationParameters { get; set; }
+
+        public virtual string SymbolPublishingAdditionalParameters { get; set; } = string.Empty;
+
+        public virtual string ArtifactsPublishingAdditionalParameters { get; set; } = string.Empty;
+
+        public virtual string SigningValidationAdditionalParameters { get; set; } = string.Empty;
+
+        public virtual List<string> ValidateDependsOn { get; set; } = ["build"];
+
+        public virtual List<string> PublishDependsOn { get; set; } = ["Validate"];
+
+        public virtual bool PublishAssetsImmediately { get; set; } = false;
+
+        public virtual bool Is1ESPipeline { get; set; }
+    }
+
+    public class SDLValidationParameters
+    {
+        public bool Enable { get; set; } = false;
+        public bool PublishGdn { get; set; } = false;
+        public bool ContinueOnError { get; set; } = false;
+        public string Params { get; set; } = string.Empty;
+        public string ArtifactNames { get; set; } = string.Empty;
+        public bool DownloadArtifacts { get; set; } = true;
     }
 }
