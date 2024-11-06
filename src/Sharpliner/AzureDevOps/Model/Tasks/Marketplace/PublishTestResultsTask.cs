@@ -8,6 +8,11 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// </summary>
 public record PublishTestResultsTask : AzureDevOpsTask
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PublishTestResultsTask"/> class with required properties.
+    /// </summary>
+    /// <param name="testResultsFormat">The format of the results files you want to publish.</param>
+    /// <param name="testResultsFile">The test results files.</param>
     public PublishTestResultsTask(TestResultsFormat testResultsFormat, string testResultsFile) : base("PublishTestResults@2")
     {
         TestResultsFormat = testResultsFormat;
@@ -150,11 +155,33 @@ public record PublishTestResultsTask : AzureDevOpsTask
     }
 }
 
+/// <summary>
+/// Test result formats supported by the PublishTestResults task.
+/// </summary>
 public enum TestResultsFormat
 {
+    /// <summary>
+    /// The JUnit format, see <see href="https://github.com/windyroad/JUnit-Schema/blob/master/JUnit.xsd/">JUnit.xsd</see> for more details.
+    /// </summary>
     JUnit,
+
+    /// <summary>
+    /// The NUnit format, see <see href="https://docs.nunit.org/articles/nunit/technical-notes/usage/Test-Result-XML-Format.html>">Test Result XML Format</see> for more details.
+    /// </summary>
     NUnit,
+
+    /// <summary>
+    /// This is the XML report format of the Microsoft's unit test framework. A XSD schema of it can be found at your Visual Studio's installation directory - <c>%VSINSTALLDIR%\xml\Schemas\vstst.xsd</c>.
+    /// </summary>
     VSTest,
+
+    /// <summary>
+    /// The xunit format, see <see href="https://xunit.net/docs/format-xml-v2">xUnit.net v2+ XML Format</see> for more details.
+    /// </summary>
     XUnit,
+
+    /// <summary>
+    /// The CTest format, see <see href="https://cmake.org/cmake/help/latest/manual/ctest.1.html#introduction">CTest</see> for more details.
+    /// </summary>
     CTest
 }
