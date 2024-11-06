@@ -123,6 +123,11 @@ public record CopyFilesTask : AzureDevOpsTask
         init => SetProperty("ignoreMakeDirErrors", value);
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CopyFilesTask"/> class with required properties.
+    /// </summary>
+    /// <param name="contents">The file paths to include as part of the copy.</param>
+    /// <param name="targetFolder">The target folder or UNC path that will contain the copied files.</param>
     public CopyFilesTask(string contents, string targetFolder) : base("CopyFiles@2")
     {
         Contents = contents;

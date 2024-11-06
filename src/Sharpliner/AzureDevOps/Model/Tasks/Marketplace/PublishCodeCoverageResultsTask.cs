@@ -39,6 +39,10 @@ public record PublishCodeCoverageResultsTask : AzureDevOpsTask
         init => SetProperty("failIfCoverageEmpty", value ? "true" : "false");
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PublishCodeCoverageResultsTask"/> class with required properties.
+    /// </summary>
+    /// <param name="summaryFileLocation">The path of the summary file containing code coverage statistics.</param>
     public PublishCodeCoverageResultsTask(string summaryFileLocation) : base("PublishCodeCoverageResults@2")
     {
         SummaryFileLocation = summaryFileLocation;

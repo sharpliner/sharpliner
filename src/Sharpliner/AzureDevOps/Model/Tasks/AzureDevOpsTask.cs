@@ -135,4 +135,7 @@ public record AzureDevOpsTask : Step
     protected void SetProperty(string name, bool? value) => SetProperty(name, value?.ToString().ToLowerInvariant());
 }
 
+/// <summary>
+/// Represents a collection of task inputs, supports <see cref="Conditioned{T}"/> values.
+/// </summary>
 public class TaskInputs : ConditionedDictionary { }
