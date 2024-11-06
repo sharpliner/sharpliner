@@ -6,9 +6,12 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.ConditionedExpressions.Arguments;
 using Sharpliner.AzureDevOps.Validation;
 using Sharpliner.Common;
+using YamlDotNet.RepresentationModel;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
 
@@ -198,6 +201,38 @@ public abstract class StageTemplateDefinition<TParameters> : StageTemplateDefini
 
     [DisallowNull]
     public TParameters TemplateParameters { get; } = new TParameters();
+
+
+    // TODO: extract the expression property path correctly
+    protected static InlineCondition Equal(object parameterRef, InlineExpression expression2, [CallerArgumentExpression(nameof(parameterRef))]string parameterExpression = "")
+        => AzureDevOpsDefinition.Equal(new ParameterReference(NormalizeParameterExpression(parameterExpression)), expression2);
+
+    protected static string NormalizeParameterExpression(string parameterExpression)
+    {
+        parameterExpression = parameterExpression.Substring("TemplateParameters.".Length);
+
+        var type = typeof(TParameters);
+        var normalizeExpression = new List<string>();
+
+        var parts = parameterExpression.Split('.');
+        Console.WriteLine($"parts='{parts}', parameterExpression='{parameterExpression}'");
+        foreach (var part in parts)
+        {
+            var property = type.GetProperty(part);
+            if (property is null)
+            {
+                throw new ArgumentNullException($"Cannot get '{part}' property from type '{type.Name}'");
+            }
+
+            var name = property.GetCustomAttribute<YamlMemberAttribute>()?.Alias
+                ?? CamelCaseNamingConvention.Instance.Apply(property.Name);
+            normalizeExpression.Add(name);
+
+            type = property.PropertyType;
+        }
+
+        return string.Join('.', normalizeExpression);
+    }
 }
 
 /// <summary>

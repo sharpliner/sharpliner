@@ -1,8 +1,35 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
+using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Xunit;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.Tests.AzureDevOps;
+
+public class DotnetXHarnessTests
+{
+    [Fact]
+    public void Test()
+    {
+        // Given
+        var azurePipeline = new XHarnessPipeline().Serialize();
+
+        var corePostBuild = new XHarnessPipeline.CorePostBuild().Serialize();
+
+        var commonPostBuild = new XHarnessPipeline.CommonPostBuild().Serialize();
+
+        // When
+        corePostBuild.Should().ContainAll(
+            "${{ if or(eq( parameters.enableNugetValidation, 'true'), eq(parameters.enableSigningValidation, 'true'), eq(parameters.enableSourceLinkValidation, 'true'), eq(parameters.SDLValidationParameters.enable, 'true')) }}:",
+            "dependsOn: ${{ parameters.validateDependsOn }}"
+        );
+
+        // Then
+    }
+}
 
 /// <summary>
 /// Definition of https://github.com/dotnet/xharness/blob/main/azure-pipelines.yml (not 100%)
@@ -13,8 +40,6 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
     public override string TargetFile => "dotnet/xharness/azure-pipelines.yml";
 
     public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
-
-    KeyValuePair<string, object> teamName = new("_TeamName", "DotNetCore");
 
     public override PipelineWithExtends Pipeline => new()
     {
@@ -87,7 +112,7 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
         })
     };
 
-    private class CommonVariables : VariableTemplateDefinition
+    public class CommonVariables : VariableTemplateDefinition
     {
         public static Variable TeamName { get; } = new("_TeamName", "DotNetCore");
         public static Variable HelixApiAccessToken { get; } = new("HelixApiAccessToken", string.Empty);
@@ -126,7 +151,7 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
         ];
     }
 
-    private class CommonPostBuild : JobTemplateDefinition<CommonPostBuildParameters>
+    public class CommonPostBuild : JobTemplateDefinition<CommonPostBuildParameters>
     {
         public override string TargetFile => "eng/common/templates-official/post-build/post-build.yml";
         public override ConditionedList<JobBase> Definition =>
@@ -134,12 +159,12 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
         ];
     }
 
-    private class CommonPostBuildParameters : CorePostBuildParameters
+    public class CommonPostBuildParameters : CorePostBuildParameters
     {
         public override bool Is1ESPipeline { get; set; } = false;
     }
 
-    private class CorePostBuild : StageTemplateDefinition<CorePostBuildParameters>
+    public class CorePostBuild : StageTemplateDefinition<CorePostBuildParameters>
     {
         public override string TargetFile => "eng/common/core-templates/post-build/post-build.yml";
         public override ConditionedList<Stage> Definition =>
@@ -165,9 +190,14 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
                 }
             })
         ];
+
+        void Test()
+        {
+            Expression<Func<object>> parameterRef = () => TemplateParameters.EnableNugetValidation;
+        }
     }
 
-    private class CorePostBuildParameters : TemplateParametersProviderBase<CorePostBuildParameters>
+    public class CorePostBuildParameters : TemplateParametersProviderBase<CorePostBuildParameters>
     {
         public virtual int PublishingInfraVersion { get; set; } = 3;
 
@@ -185,7 +215,16 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
 
         public virtual bool PublishInstallersAndChecksums { get; set; } = true;
 
-        public virtual SDLValidationParameters SDLValidationParameters { get; set; }
+        [YamlMember(Alias = "SDLValidationParameters")]
+        public virtual SDLValidationParameters SDLValidationParameters { get; set; } = new()
+        {
+            Enable = false,
+            PublishGdn = false,
+            ContinueOnError = false,
+            Params = string.Empty,
+            ArtifactNames = string.Empty,
+            DownloadArtifacts = true
+        };
 
         public virtual string SymbolPublishingAdditionalParameters { get; set; } = string.Empty;
 
