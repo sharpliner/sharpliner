@@ -101,7 +101,7 @@ public class TaskBuilderTests
                     {
                         Powershell.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.Test-Script.ps1"),
                         Powershell.FromResourceFile("Test-Script.ps1"),
-                        Powershell.Inline("Connect-AzContext", "Set-AzSubscription --id foo-bar-xyz"),
+                        Powershell.Inline("$Files = Get-ChildItem *.sln", "Remove-Item $Files"),
                         Powershell.File("foo.ps1"),
                         Powershell.FromFile("AzureDevops/Resources/Test-Script.ps1"),
                     }
@@ -129,8 +129,8 @@ public class TaskBuilderTests
                   Write-Host "Lorem ipsum dolor sit amet"
 
               - powershell: |-
-                  Connect-AzContext
-                  Set-AzSubscription --id foo-bar-xyz
+                  $Files = Get-ChildItem *.sln
+                  Remove-Item $Files
 
               - task: PowerShell@2
                 inputs:
@@ -155,7 +155,7 @@ public class TaskBuilderTests
                         {
                             Pwsh.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.Test-Script.ps1"),
                             Pwsh.FromResourceFile("Test-Script.ps1", "A display name"),
-                            Pwsh.Inline("Connect-AzContext", "Set-AzSubscription --id foo-bar-xyz"),
+                            Pwsh.Inline("$Files = Get-ChildItem *.sln", "Remove-Item $Files"),
                             Pwsh.File("foo.ps1"),
                             Pwsh.FromFile("AzureDevops/Resources/Test-Script.ps1"),
                         }
@@ -184,8 +184,8 @@ public class TaskBuilderTests
                 displayName: A display name
 
               - pwsh: |-
-                  Connect-AzContext
-                  Set-AzSubscription --id foo-bar-xyz
+                  $Files = Get-ChildItem *.sln
+                  Remove-Item $Files
 
               - task: PowerShell@2
                 inputs:
