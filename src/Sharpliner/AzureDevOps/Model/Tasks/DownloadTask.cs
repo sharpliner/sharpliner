@@ -10,6 +10,9 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// </summary>
 public abstract record DownloadTask : Step
 {
+    /// <summary>
+    /// Specify current, pipeline resource identifier, or none to disable automatic download.
+    /// </summary>
     [YamlMember(Order = 1)]
     public abstract string Download { get; }
 
@@ -27,6 +30,9 @@ public abstract record DownloadTask : Step
     [YamlIgnore]
     public List<string> Patterns { get; init; } = [];
 
+    /// <summary>
+    /// Internal property to serialize the patterns as a new line delimited string.
+    /// </summary>
     [YamlMember(Alias = "patterns", Order = 61, ScalarStyle = YamlDotNet.Core.ScalarStyle.Literal)]
     public string _Patterns => string.Join("\n", Patterns);
 
@@ -45,33 +51,57 @@ public abstract record DownloadTask : Step
     [YamlIgnore]
     public List<string> Tags { get; init; } = [];
 
+    /// <summary>
+    /// Internal property to serialize the tags as a comma-separated string.
+    /// </summary>
     [YamlMember(Alias = "tags", Order = 104)]
     public string? _Tags => Tags.Count > 0 ? string.Join(",", Tags) : null;
 }
 
+/// <summary>
+/// A download task that downloads artifacts for the current job
+/// </summary>
 public record CurrentDownloadTask : DownloadTask
 {
+    /// <inheritdoc/>
     [YamlMember(Order = 1)]
     public override string Download => "current";
 }
 
+/// <summary>
+/// A download task that skips downloading artifacts for the current job
+/// </summary>
 public record NoneDownloadTask : Step
 {
+    /// <summary>
+    /// Disable automatic download.
+    /// </summary>
     [YamlMember(Order = 1)]
     public string Download => "none";
 }
 
+/// <summary>
+/// A download task that downloads artifacts from a pipeline resource.
+/// </summary>
 public record DownloadFromPipelineResourceTask : DownloadTask
 {
+    /// <inheritdoc/>
     [YamlMember(Order = 1)]
     public override string Download { get; }
 
+    /// <summary>
+    /// Instantiates a new <see cref="DownloadFromPipelineResourceTask"/> with the specified parameters.
+    /// </summary>
+    /// <param name="resourceName">The name of the pipeline resource to download.</param>
     public DownloadFromPipelineResourceTask(string resourceName)
     {
         Download = resourceName;
     }
 }
 
+/// <summary>
+/// A download task that downloads artifacts from a specific pipeline run.
+/// </summary>
 public record SpecificDownloadTask : AzureDevOpsTask
 {
     private const string ArtifactProperty = "artifact";
@@ -89,6 +119,12 @@ public record SpecificDownloadTask : AzureDevOpsTask
     private const string CheckDownloadedFilesProperty = "checkDownloadedFiles";
     private const string RetryDownloadCountProperty = "retryDownloadCount";
 
+    /// <summary>
+    /// Instantiates a new <see cref="SpecificDownloadTask"/> with the specified parameters.
+    /// </summary>
+    /// <param name="runVersion">The build version to download.</param>
+    /// <param name="project">The project GUID from which to download the pipeline artifacts.</param>
+    /// <param name="pipeline">The definition ID of the build pipeline.</param>
     public SpecificDownloadTask(RunVersion runVersion, string project, int pipeline)
         : base("DownloadPipelineArtifact@2")
     {
@@ -108,10 +144,14 @@ public record SpecificDownloadTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Directory to download the artifact files. Can be relative to the pipeline workspace directory or absolute.
-    /// If multi-download option is applied (by leaving an empty artifact name), a sub-directory will be created for each.
-    /// Default value: $(Pipeline.Workspace)
-    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/artifacts/pipeline-artifacts?view=azure-devops">official Azure DevOps pipelines documentation</see>.
+    /// Specifies either a relative or absolute path on the agent machine where the artifacts will download.
+    /// If the multi-download option is applied (by leaving an empty artifact name), a sub-directory will be created for each download
+    /// <para>
+    /// Default value: <c>$(Pipeline.Workspace)</c>
+    /// </para>
+    /// <para>
+    /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/artifacts/pipeline-artifacts?view=azure-devops">Artifacts in Azure Pipelines</see>.
+    /// </para>
     /// </summary>
     [YamlIgnore]
     public string? Path
@@ -152,6 +192,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
         private init => SetProperty(PipelineProperty, value.ToString());
     }
 
+    /// <summary>
+    /// The build version to download.
+    /// </summary>
     [YamlIgnore]
     public RunVersion RunVersion
     {
@@ -171,7 +214,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
 
     /// <summary>
     /// Specify to filter on branch/ref name.
-    /// For example: refs/heads/develop
+    /// For example: <c>refs/heads/develop</c>
     /// Argument aliases: branchName
     /// </summary>
     [YamlIgnore]
@@ -295,9 +338,23 @@ public record SpecificDownloadTask : AzureDevOpsTask
     }
 }
 
+/// <summary>
+/// The version of the build to download.
+/// </summary>
 public enum RunVersion
 {
+    /// <summary>
+    /// Latest run.
+    /// </summary>
     Latest,
+
+    /// <summary>
+    /// Latest run from specific branch and specified Build Tags
+    /// </summary>
     LatestFromBranch,
+
+    /// <summary>
+    /// Specific run.
+    /// </summary>
     Specific,
 }

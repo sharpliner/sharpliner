@@ -87,6 +87,11 @@ public record BashFileTask : BashTask, IYamlConvertible
     /// </summary>
     public Conditioned<string>? BashEnv { get; init; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="BashFileTask"/> class with the specified file path.
+    /// </summary>
+    /// <param name="filePath">The path of the script to execute.</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="filePath"/> is null.</exception>
     public BashFileTask(string filePath)
     {
         FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
