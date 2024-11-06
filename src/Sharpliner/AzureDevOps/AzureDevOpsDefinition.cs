@@ -203,7 +203,7 @@ public abstract class AzureDevOpsDefinition
     /// <typeparam name="TDefinition">Definition type (Stage/Job/Step/Variable)</typeparam>
     internal static LibraryReference<TDefinition> CreateLibraryRef<TLibrary, TDefinition>()
         where TLibrary : DefinitionLibrary<TDefinition>, new()
-        => new(CreateInstance<TLibrary>());
+        => new(new TLibrary());
 
     #endregion
 
@@ -877,11 +877,6 @@ public abstract class AzureDevOpsDefinition
     /// If dependsOn is omitted, stages/jobs run in the order they are defined.
     /// </summary>
     protected static ConditionedList<string> NoDependsOn => new EmptyDependsOn();
-
-    /// <summary>
-    /// Helper method to create instances of T.
-    /// </summary>
-    internal static T CreateInstance<T>() where T : new() => (T)Activator.CreateInstance(typeof(T))!;
 
     #endregion
 }
