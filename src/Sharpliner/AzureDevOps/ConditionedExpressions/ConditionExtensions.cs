@@ -198,25 +198,25 @@ public static class ConditionExtensions
     /// Reference a step library (series of library stages).
     /// </summary>
     public static Conditioned<Stage> StageLibrary<T>(this IfCondition condition) where T : StageLibrary, new()
-        => Conditioned.Link(condition, AzureDevOpsDefinition.CreateInstance<T>().Items);
+        => Conditioned.Link(condition, new T().Items);
 
     /// <summary>
     /// Reference a step library (series of library jobs).
     /// </summary>
     public static Conditioned<JobBase> JobLibrary<T>(this IfCondition condition) where T : JobLibrary, new()
-        => Conditioned.Link(condition, AzureDevOpsDefinition.CreateInstance<T>().Items);
+        => Conditioned.Link(condition, new T().Items);
 
     /// <summary>
     /// Reference a step library (series of library steps).
     /// </summary>
     public static Conditioned<Step> StepLibrary<T>(this IfCondition condition) where T : StepLibrary, new()
-        => Conditioned.Link(condition, AzureDevOpsDefinition.CreateInstance<T>().Items);
+        => Conditioned.Link(condition, new T().Items);
 
     /// <summary>
     /// Reference a step library (series of library Variables).
     /// </summary>
     public static Conditioned<VariableBase> VariableLibrary<T>(this IfCondition condition) where T : VariableLibrary, new()
-        => Conditioned.Link(condition, AzureDevOpsDefinition.CreateInstance<T>().Items);
+        => Conditioned.Link(condition, new T().Items);
 
     /// <summary>
     /// Include a set of stages.
