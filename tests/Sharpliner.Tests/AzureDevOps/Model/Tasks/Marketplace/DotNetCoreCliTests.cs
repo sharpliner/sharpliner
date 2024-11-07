@@ -282,6 +282,7 @@ public class DotNetCoreCliTests
             ExternalFeedCredentials = "feeds/dotnet-7",
             NoCache = true,
             RestoreDirectory = ".packages",
+            VerbosityRestore = BuildVerbosity.Minimal
         };
 
         var yaml = GetYaml(task);
@@ -299,6 +300,7 @@ public class DotNetCoreCliTests
                   externalFeedCredentials: feeds/dotnet-7
                   noCache: true
                   restoreDirectory: .packages
+                  verbosityRestore: minimal
             """);
     }
 

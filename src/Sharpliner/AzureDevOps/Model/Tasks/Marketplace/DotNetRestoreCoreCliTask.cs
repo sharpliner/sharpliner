@@ -5,7 +5,7 @@ using static Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder;
 namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
-/// Task represents the `dotnet restore` command.
+/// Task represents the <c>dotnet restore</c> command.
 /// </summary>
 public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
 {
@@ -22,6 +22,9 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     private const string NoCacheProperty = "noCache";
     private const string IncludeNuGetOrgProperty = "includeNuGetOrg";
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DotNetRestoreCoreCliTask"/> class.
+    /// </summary>
     public DotNetRestoreCoreCliTask() : base("restore")
     {
     }
@@ -86,7 +89,7 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     }
 
     /// <summary>
-    /// Include NuGet.org in the generated NuGet.config000 0. 
+    /// Include NuGet.org in the generated NuGet.config000 0.
     /// </summary>
     [YamlIgnore]
     public bool? IncludeNuGetOrg
@@ -132,11 +135,33 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     }
 }
 
+/// <summary>
+/// The msbuild verbosity level. See <see cref="Microsoft.Build.Framework.LoggerVerbosity"/>.
+/// </summary>
 public enum BuildVerbosity
 {
+    /// <summary>
+    /// The most minimal output
+    /// </summary>
     Quiet,
+
+    /// <summary>
+    /// Relatively little output
+    /// </summary>
     Minimal,
+
+    /// <summary>
+    /// Standard output. This should be the default if verbosity level is not set
+    /// </summary>
     Normal,
+
+    /// <summary>
+    /// Relatively verbose, but not exhaustive
+    /// </summary>
     Detailed,
+
+    /// <summary>
+    /// The most verbose and informative verbosity
+    /// </summary>
     Diagnostic,
 }
