@@ -1,5 +1,8 @@
 ﻿namespace Sharpliner.AzureDevOps.Tasks;
 
+/// <summary>
+/// Builder for creating a dotnet task using the <c>DotNetCoreCLI</c> task & <c>UseDotNet</c>.
+/// </summary>
 public class DotNetTaskBuilder
 {
     internal DotNetTaskBuilder()
@@ -22,6 +25,7 @@ public class DotNetTaskBuilder
     /// <param name="projects">Projects to build</param>
     /// <param name="includeNuGetOrg">Include nuget.org in package sources?</param>
     /// <param name="arguments">Additional arguments</param>
+    /// <returns>A new instance of the <see cref="DotNetBuildCoreCliTask"/> w
     public DotNetBuildCoreCliTask Build(string projects, bool? includeNuGetOrg = null, string? arguments = null) => new()
     {
         Projects = projects,
@@ -69,7 +73,7 @@ public class DotNetTaskBuilder
     /// Creates the push command version of the DotNetCoreCLI task.
     /// </summary>
     /// <param name="packagesToPush">The pattern to match or path to nupkg files to be uploaded
-    /// 
+    ///
     /// Multiple patterns can be separated by a semicolon, and you can make a pattern negative by prefixing it with !.
     /// Example: **/*.nupkg;!**/*.Tests.nupkg.
     ///
@@ -122,6 +126,9 @@ public class DotNetTaskBuilder
         };
     }
 
+    /// <summary>
+    /// Builder for creating a <c>UseDotNet</c> task.
+    /// </summary>
     public class DotNetInstallBuilder
     {
         internal DotNetInstallBuilder()
@@ -129,57 +136,128 @@ public class DotNetTaskBuilder
         }
 
         /// <summary>
-        /// Creates the `dotnet install` task for full .NET SDK
+        /// <para>
+        /// Creates the <c>dotnet install</c> task for full .NET SDK
+        /// </para>
+        /// For example:
+        /// <code lang="csharp">
+        /// Steps =
+        /// {
+        ///     DotNet.Install.Sdk("8.0.x")
+        /// }
+        /// </code>
+        /// Will generate:
+        /// <code lang="yaml">
+        /// steps:
+        /// - task: UseDotNet@2
+        ///   inputs:
+        ///     packageType: sdk
+        ///     version: 8.0.x
+        /// </code>
         /// </summary>
         /// <param name="version">
         /// Specify version of .NET Core SDK or runtime to install.
         /// Versions can be given in the following formats
+        /// <code>
         /// 2.x => Install latest in major version.
         /// 3.1.x => Install latest in major and minor version
         /// 3.1.402 => Install exact version
-        /// Find the value of version for installing SDK/Runtime, from the releases.json.The link to releases.json of that major.minor version can be found in releases-index file.. Like link to releases.json for 3.1 version is https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/3.1/releases.json
+        /// </code>
+        /// Find the value of version for installing SDK, from the <c>releases.json</c> for example <see href="https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/3.1/releases.json">releases.json for 3.1</see>
         /// </param>
         /// <param name="includePreviewVersions">
-        /// Select if you want preview versions to be included while searching for latest versions, such as while searching 3.1.x.
+        /// <para>
+        /// Select if you want preview versions to be included while searching for latest versions, for example <c>3.1.x</c>.
+        /// </para>
+        /// <para>
         /// This setting is ignored if you specify an exact version, such as: 3.0.100-preview3-010431
-        /// Default value: false
+        /// </para>
         /// </param>
         public UseDotNetTask Sdk(string version, bool includePreviewVersions = false) => new(DotNetPackageType.Sdk, version, includePreviewVersions);
 
         /// <summary>
-        /// Creates the `dotnet install` task for .NET runtime only
+        /// <para>
+        /// Creates the <c>dotnet install</c> task for .NET runtime only
+        /// </para>
+        /// For example:
+        /// <code lang="csharp">
+        /// Steps =
+        /// {
+        ///     DotNet.Install.Runtime("8.0.x")
+        /// }
+        /// </code>
+        /// Will generate:
+        /// <code lang="yaml">
+        /// steps:
+        /// - task: UseDotNet@2
+        ///   inputs:
+        ///     packageType: runtime
+        ///     version: 8.0.x
+        /// </code>
         /// </summary>
         /// <param name="version">
         /// Specify version of .NET Core SDK or runtime to install.
         /// Versions can be given in the following formats
+        /// <code>
         /// 2.x => Install latest in major version.
         /// 3.1.x => Install latest in major and minor version
         /// 3.1.402 => Install exact version
-        /// Find the value of version for installing SDK/Runtime, from the releases.json.The link to releases.json of that major.minor version can be found in releases-index file.. Like link to releases.json for 3.1 version is https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/3.1/releases.json
+        /// </code>
+        /// Find the value of version for installing Runtime, from the <c>releases.json</c> for example <see href="https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/3.1/releases.json">releases.json for 3.1</see>
         /// </param>
         /// <param name="includePreviewVersions">
-        /// Select if you want preview versions to be included while searching for latest versions, such as while searching 3.1.x.
+        /// <para>
+        /// Select if you want preview versions to be included while searching for latest versions, for example <c>3.1.x</c>.
+        /// </para>
+        /// <para>
         /// This setting is ignored if you specify an exact version, such as: 3.0.100-preview3-010431
-        /// Default value: false
+        /// </para>
         /// </param>
         public UseDotNetTask Runtime(string version, bool includePreviewVersions = false) => new(DotNetPackageType.Runtime, version, includePreviewVersions);
 
         /// <summary>
+        /// <para>
         /// Select this option to install all SDKs from global.json files.
-        /// These files are searched from system.DefaultWorkingDirectory.
+        /// These files are searched from <c>$(System.DefaultWorkingDirectory)</c>
+        /// </para>
+        /// <para>
         /// You can change the search root path by setting working directory input.
+        /// </para>
+        /// For example:
+        /// <code lang="csharp">
+        /// Steps =
+        /// {
+        ///     Dotnet.Install.FromGlobalJson("/foo/global.json") with
+        ///     {
+        ///         WorkingDirectory = "/tmp",
+        ///         InstallationPath = "/.dotnet",
+        ///     }
+        /// }
+        /// </code>
+        /// Will generate:
+        /// <code lang="yaml">
+        /// steps:
+        /// - task: UseDotNet@2
+        ///   inputs:
+        ///     useGlobalJson: true
+        ///     workingDirectory: /tmp
+        ///     installationPath: /.dotnet
+        /// </code>
         /// </summary>
         /// <param name="workingDirectory">
         /// Current working directory where the script is run.
-        /// Empty is the root of the repo (build) or artifacts (release), which is $(System.DefaultWorkingDirectory)
+        /// Empty is the root of the repo (build) or artifacts (release), which is <c>$(System.DefaultWorkingDirectory)</c>
         /// </param>
-        public UseDotNetTask FromGlobalJson(string? workingDirectory = null) => new UseDotNetTask() with
+        public UseDotNetTask FromGlobalJson(string? workingDirectory = null) => new()
         {
             UseGlobalJson = true,
             WorkingDirectory = workingDirectory,
         };
     }
 
+    /// <summary>
+    /// Builder for creating a <c>dotnet restore</c> command using <c>DotNetCoreCLI</c>.
+    /// </summary>
     public class DotNetRestoreBuilder
     {
         internal DotNetRestoreBuilder()
@@ -187,11 +265,32 @@ public class DotNetTaskBuilder
         }
 
         /// <summary>
+        /// <para>
         /// Restore target .csproj's
+        /// </para>
+        /// For example:
+        /// <code lang="csharp">
+        /// Steps =
+        /// {
+        ///     Dotnet.Restore.Projects("src/*.csproj") with
+        ///     {
+        ///         NoCache = true,
+        ///         IncludeNuGetOrg = true,
+        ///     }
+        /// }
+        /// </code>
+        /// <code lang="yaml">
+        /// steps:
+        /// - task: DotNetCoreCLI@2
+        ///   inputs:
+        ///     command: restore
+        ///     projects: src/*.csproj
+        ///     noCache: true
+        ///     includeNuGetOrg: true
+        /// </code>
         /// </summary>
         /// <param name="projects">
-        /// The path to the csproj file(s) to use
-        /// You can use wildcards (e.g. **/*.csproj for all .csproj files in all subfolders)
+        /// The path to the csproj file(s) to use You can use wildcards (e.g. <c>**/*.csproj</c> for all .csproj files in all subfolders)
         /// </param>
         public DotNetRestoreCoreCliTask Projects(string projects) => new()
         {
@@ -199,15 +298,46 @@ public class DotNetTaskBuilder
         };
 
         /// <summary>
+        /// <para>
         /// Restore from a given feed
+        /// </para>
+        /// For example:
+        /// <code lang="csharp">
+        /// Steps =
+        /// {
+        ///     Dotnet.Restore.FromFeed("dotnet-7-preview-feed", includeNuGetOrg: false) with
+        ///     {
+        ///         ExternalFeedCredentials = "feeds/dotnet-7",
+        ///         NoCache = true,
+        ///         RestoreDirectory = ".packages",
+        ///     }
+        /// }
+        /// </code>
+        /// Will generate:
+        /// <code lang="yaml">
+        /// steps:
+        /// - task: DotNetCoreCLI@2
+        ///   inputs:
+        ///     command: restore
+        ///     includeNuGetOrg: false
+        ///     feedsToUse: select
+        ///     feedRestore: dotnet-7-preview-feed
+        ///     externalFeedCredentials: feeds/dotnet-7
+        ///     noCache: true
+        ///     restoreDirectory: .packages
+        /// </code>
         /// </summary>
         /// <param name="feed">
-        /// projectName/feedName for project-scoped feed. FeedName only for organization-scoped feed.
-        /// 
+        /// <c>projectName/feedName</c> for project-scoped feed.
+        /// <para>
+        /// FeedName only for organization-scoped feed.
+        /// </para>
+        /// <para>
         /// Include the selected feed in the generated NuGet.config.
+        /// </para>
+        /// <para>
         /// You must have Package Management installed and licensed to select a feed here.
-        /// projectName/feedName for project-scoped feed.
-        /// FeedName only for organization-scoped feed. Note that this is not supported for the test command.
+        /// </para>
         /// </param>
         /// <param name="includeNuGetOrg">Include NuGet.org in the generated NuGet.config</param>
         public DotNetRestoreCoreCliTask FromFeed(string feed, bool? includeNuGetOrg = null) => new()
@@ -221,7 +351,25 @@ public class DotNetTaskBuilder
         };
 
         /// <summary>
-        /// Restore using a NuGet.config file
+        /// <para>
+        /// Restore using a <see href="https://learn.microsoft.com/en-us/nuget/reference/nuget-config-file">NuGet.config</see> file.
+        /// </para>
+        /// For example:
+        /// <code lang="csharp">
+        /// Steps =
+        /// {
+        ///     Dotnet.Restore.FromNuGetConfig("src/NuGet.config")
+        /// }
+        /// </code>
+        /// Will generate:
+        /// <code lang="yaml">
+        /// steps:
+        /// - task: DotNetCoreCLI@2
+        ///   inputs:
+        ///     command: restore
+        ///     feedsToUse: config
+        ///     nugetConfigPath: src/NuGet.config
+        /// </code>
         /// </summary>
         /// <param name="nugetConfigPath">The NuGet.config in your repository that specifies the feeds from which to restore packages.</param>
         public DotNetRestoreCoreCliTask FromNuGetConfig(string nugetConfigPath) => new()

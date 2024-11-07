@@ -76,7 +76,7 @@ public class DotNetCoreCliTests
     [Fact]
     public void Install_Runtime_Command_Test()
     {
-        var task = _builder.Install.Sdk("5.0.100") with
+        var task = _builder.Install.Runtime("5.0.100") with
         {
             PerformMultiLevelLookup = true,
         };
@@ -89,7 +89,7 @@ public class DotNetCoreCliTests
               steps:
               - task: UseDotNet@2
                 inputs:
-                  packageType: sdk
+                  packageType: runtime
                   version: 5.0.100
                   performMultiLevelLookup: true
             """);
