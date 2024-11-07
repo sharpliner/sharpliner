@@ -20,7 +20,30 @@ public class DotNetTaskBuilder
     public DotNetRestoreBuilder Restore => new();
 
     /// <summary>
+    /// <para>
     /// Creates the build command version of the DotNetCoreCLI task.
+    /// </para>
+    /// For example
+    /// <code lang="csharp">
+    /// Steps =
+    /// {
+    ///     Dotnet.Build("project.csproj", true, "-c Release") with
+    ///     {
+    ///         WorkingDirectory = "/tmp"
+    ///     }
+    /// }
+    /// </code>
+    /// Will generate:
+    /// <code lang="yaml">
+    /// steps:
+    /// - task: DotNetCoreCLI@2
+    ///   inputs:
+    ///     command: build
+    ///     projects: project.csproj
+    ///     arguments: -c Release
+    ///     includeNuGetOrg: true
+    ///     workingDirectory: /tmp
+    /// </code>
     /// </summary>
     /// <param name="projects">Projects to build</param>
     /// <param name="includeNuGetOrg">Include nuget.org in package sources?</param>
@@ -34,14 +57,47 @@ public class DotNetTaskBuilder
     };
 
     /// <summary>
+    /// <para>
     /// Creates the pack command version of the DotNetCoreCLI task.
+    /// </para>
+    /// For example
+    /// <code lang="csharp">
+    /// Steps =
+    /// {
+    ///     Dotnet.Pack("src/*.csproj", "-c Release") with
+    ///     {
+    ///         NoBuild = true,
+    ///         ConfigurationToPack = "Release",
+    ///         IncludeSource = true,
+    ///         IncludeSymbols = true,
+    ///         OutputDir = "/tmp/staging/",
+    ///     }
+    /// }
+    /// </code>
+    /// Will generate:
+    /// <code lang="yaml">
+    /// steps:
+    /// - task: DotNetCoreCLI@2
+    ///   inputs:
+    ///     command: pack
+    ///     packagesToPack: src/*.csproj
+    ///     arguments: -c Release
+    ///     nobuild: true
+    ///     configurationToPack: Release
+    ///     includesource: true
+    ///     includesymbols: true
+    ///     outputDir: /tmp/staging/
+    /// </code>
     /// </summary>
     /// <param name="packagesToPack">
+    /// <para>
     /// Pattern to search for csproj or nuspec files to pack. You can separate multiple patterns with a semicolon,
+    /// </para>
+    /// <para>
     /// and you can make a pattern negative by prefixing it with !.
-    /// Example: **/*.csproj;!**/*.Tests.csproj
-    ///
-    /// Argument aliases: searchPatternPack
+    /// </para>
+    /// Example: <c>**/*.csproj;!**/*.Tests.csproj</c>
+    /// Argument aliases: <c>searchPatternPack</c>
     /// </param>
     /// <param name="arguments">Additional arguments</param>
     /// <returns>A new instance of <see cref="DotNetPackCoreCliTask"/> with the specified values.</returns>
@@ -103,16 +159,41 @@ public class DotNetTaskBuilder
     };
 
     /// <summary>
+    /// <para>
     /// Creates the push command version of the DotNetCoreCLI task.
+    /// </para>
+    /// For example
+    /// <code lang="csharp">
+    /// Steps =
+    /// {
+    ///     Dotnet.Push(arguments: "-c Release") with
+    ///     {
+    ///         PublishPackageMetadata = true,
+    ///     }
+    /// }
+    /// </code>
+    /// Will generate:
+    /// <code lang="yaml">
+    /// steps:
+    /// - task: DotNetCoreCLI@2
+    ///   inputs:
+    ///     command: push
+    ///     packagesToPush: $(Build.ArtifactStagingDirectory)/*.nupkg
+    ///     arguments: -c Release
+    ///     publishPackageMetadata: true
+    /// </code>
     /// </summary>
     /// <param name="packagesToPush">The pattern to match or path to nupkg files to be uploaded
-    ///
-    /// Multiple patterns can be separated by a semicolon, and you can make a pattern negative by prefixing it with !.
-    /// Example: **/*.nupkg;!**/*.Tests.nupkg.
-    ///
+    /// Multiple patterns can be separated by a semicolon, and you can make a pattern negative by prefixing it with <c>!</c>.
+    /// <para>
+    /// Example: <c>**/*.nupkg;!**/*.Tests.nupkg</c>.
+    /// </para>
+    /// <para>
     /// Argument aliases: <c>searchPatternPush</c>
+    /// </para>
     /// </param>
     /// <param name="arguments">Additional arguments</param>
+    /// <returns>A new instance of <see cref="DotNetPushCoreCliTask"/> with the specified values.</returns>
     public DotNetPushCoreCliTask Push(string packagesToPush = "$(Build.ArtifactStagingDirectory)/*.nupkg", string? arguments = null) => new()
     {
         PackagesToPush = packagesToPush,
@@ -120,10 +201,33 @@ public class DotNetTaskBuilder
     };
 
     /// <summary>
+    /// <para>
     /// Creates the test command version of the DotNetCoreCLI task.
+    /// </para>
+    /// For example
+    /// <code lang="csharp">
+    /// Steps =
+    /// {
+    ///     Dotnet.Test("*.sln", "/p:CollectCoverage=true /p:CoverletOutputFormat=cobertura") with
+    ///     {
+    ///         TestRunTitle = "main-test-results"
+    ///     }
+    /// }
+    /// </code>
+    /// Will generate:
+    /// <code lang="yaml">
+    /// steps:
+    /// - task: DotNetCoreCLI@2
+    ///   inputs:
+    ///     command: test
+    ///     projects: '*.sln'
+    ///     arguments: /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+    ///     testRunTitle: main-test-results
+    /// </code>
     /// </summary>
     /// <param name="projects">Projects to test</param>
     /// <param name="arguments">Additional arguments</param>
+    /// <returns>A new instance of <see cref="DotNetTestCoreCliTask"/> with the specified values.</returns>
     public DotNetTestCoreCliTask Test(string projects, string? arguments = null) => new()
     {
         Projects = projects,
@@ -131,12 +235,33 @@ public class DotNetTaskBuilder
     };
 
     /// <summary>
+    /// <para>
     /// Creates a custom command version of the DotNetCoreCLI task.
+    /// </para>
+    /// For example
+    /// <code lang="csharp">
+    /// Steps =
+    /// {
+    ///     Dotnet.CustomCommand("--list-sdks") with
+    ///     {
+    ///         ContinueOnError = true,
+    ///     }
+    /// }
+    /// </code>
+    /// Will generate:
+    /// <code lang="yaml">
+    /// steps:
+    /// - task: DotNetCoreCLI@2
+    ///   inputs:
+    ///     command: custom
+    ///     custom: --list-sdks
+    ///   continueOnError: true
+    /// </code>
     /// </summary>
     /// <param name="command">.NET command to call</param>
     /// <param name="arguments">Additional arguments for the call</param>
     /// <param name="inputs">Additional arguments defined by the DotNetCoreCLI task</param>
-    // We return Step and not something more specific so that user cannot override Inputs
+    /// <returns>A new instance of <see cref="Step"/> and not something more specific so that user cannot override Inputs</returns>
     public Step CustomCommand(string command, string? arguments = null, TaskInputs? inputs = null)
     {
         var orderedInputs = new TaskInputs()

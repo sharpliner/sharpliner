@@ -201,6 +201,29 @@ public class DotNetCoreCliTests
     }
 
     [Fact]
+    public void Test_Command_Test()
+    {
+        var task = _builder.Test("*.sln", "/p:CollectCoverage=true /p:CoverletOutputFormat=cobertura") with
+        {
+            TestRunTitle = "main-test-results"
+        };
+
+        var yaml = GetYaml(task);
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: job
+              steps:
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: test
+                  projects: '*.sln'
+                  arguments: /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+                  testRunTitle: main-test-results
+            """);
+    }
+
+    [Fact]
     public void Restore_Projects_Command_Test()
     {
         var task = _builder.Restore.Projects("src/*.csproj") with
