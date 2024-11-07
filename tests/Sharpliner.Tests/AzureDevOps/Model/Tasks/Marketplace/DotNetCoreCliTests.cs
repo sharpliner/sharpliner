@@ -76,7 +76,7 @@ public class DotNetCoreCliTests
     [Fact]
     public void Install_Runtime_Command_Test()
     {
-        var task = _builder.Install.Sdk("5.0.100") with
+        var task = _builder.Install.Runtime("5.0.100") with
         {
             PerformMultiLevelLookup = true,
         };
@@ -89,7 +89,7 @@ public class DotNetCoreCliTests
               steps:
               - task: UseDotNet@2
                 inputs:
-                  packageType: sdk
+                  packageType: runtime
                   version: 5.0.100
                   performMultiLevelLookup: true
             """);
@@ -201,6 +201,29 @@ public class DotNetCoreCliTests
     }
 
     [Fact]
+    public void Test_Command_Test()
+    {
+        var task = _builder.Test("*.sln", "/p:CollectCoverage=true /p:CoverletOutputFormat=cobertura") with
+        {
+            TestRunTitle = "main-test-results"
+        };
+
+        var yaml = GetYaml(task);
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: job
+              steps:
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: test
+                  projects: '*.sln'
+                  arguments: /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+                  testRunTitle: main-test-results
+            """);
+    }
+
+    [Fact]
     public void Restore_Projects_Command_Test()
     {
         var task = _builder.Restore.Projects("src/*.csproj") with
@@ -259,6 +282,7 @@ public class DotNetCoreCliTests
             ExternalFeedCredentials = "feeds/dotnet-7",
             NoCache = true,
             RestoreDirectory = ".packages",
+            VerbosityRestore = BuildVerbosity.Minimal
         };
 
         var yaml = GetYaml(task);
@@ -276,6 +300,7 @@ public class DotNetCoreCliTests
                   externalFeedCredentials: feeds/dotnet-7
                   noCache: true
                   restoreDirectory: .packages
+                  verbosityRestore: minimal
             """);
     }
 

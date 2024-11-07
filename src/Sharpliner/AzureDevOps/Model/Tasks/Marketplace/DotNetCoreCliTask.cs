@@ -8,6 +8,10 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// </summary>
 public record DotNetCoreCliTask : AzureDevOpsTask
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DotNetBuildCoreCliTask"/> class with the specified command.
+    /// </summary>
+    /// <param name="command">The dotnet command</param>
     public DotNetCoreCliTask(string command) : base("DotNetCoreCLI@2")
     {
         SetProperty("command", command);
@@ -27,7 +31,7 @@ public record DotNetCoreCliTask : AzureDevOpsTask
     /// <summary>
     /// Arguments to the selected command. For example, build configuration, output folder, runtime
     /// The arguments depend on the command selected.
-    /// 
+    ///
     /// Note: This input only currently accepts arguments for build, publish, run, test, custom.
     /// If you would like to add arguments for a command not listed, use custom.
     /// </summary>
