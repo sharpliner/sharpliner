@@ -112,7 +112,7 @@ public record UseDotNetTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Constructor
+    /// Initializes a new instance of the <see cref="UseDotNetTask"/> class with the specified arguments.
     /// </summary>
     /// <param name="packageType">
     /// Please select whether to install only runtime or SDK
@@ -121,15 +121,20 @@ public record UseDotNetTask : AzureDevOpsTask
     /// <param name="version">
     /// Specify version of .NET Core SDK or runtime to install.
     /// Versions can be given in the following formats
+    /// <code>
     /// 2.x => Install latest in major version.
     /// 3.1.x => Install latest in major and minor version
     /// 3.1.402 => Install exact version
-    /// Find the value of version for installing SDK/Runtime, from the releases.json.The link to releases.json of that major.minor version can be found in releases-index file.. Like link to releases.json for 3.1 version is https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/3.1/releases.json
+    /// </code>
+    /// Find the value of version for installing SDK, from the <c>releases.json</c> for example <see href="https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/3.1/releases.json">releases.json for 3.1</see>
     /// </param>
     /// <param name="includePreviewVersions">
-    /// Select if you want preview versions to be included while searching for latest versions, such as while searching 3.1.x.
+    /// <para>
+    /// Select if you want preview versions to be included while searching for latest versions, for example <c>3.1.x</c>.
+    /// </para>
+    /// <para>
     /// This setting is ignored if you specify an exact version, such as: 3.0.100-preview3-010431
-    /// Default value: false
+    /// </para>
     /// </param>
     public UseDotNetTask(DotNetPackageType packageType, string version, bool includePreviewVersions = false) : this()
     {
@@ -142,13 +147,26 @@ public record UseDotNetTask : AzureDevOpsTask
         }
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="UseDotNetTask"/> class.
+    /// </summary>
     public UseDotNetTask() : base("UseDotNet@2")
     {
     }
 }
 
+/// <summary>
+/// Package type to install
+/// </summary>
 public enum DotNetPackageType
 {
+    /// <summary>
+    /// The dotnet SDK (contains runtime)
+    /// </summary>
     Sdk,
+
+    /// <summary>
+    /// The dotnet runtime.
+    /// </summary>
     Runtime,
 }
