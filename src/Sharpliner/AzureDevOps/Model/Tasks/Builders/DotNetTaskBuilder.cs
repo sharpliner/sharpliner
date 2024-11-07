@@ -1,7 +1,7 @@
 ﻿namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
-/// Builder for creating a dotnet task using the <c>DotNetCoreCLI</c> task & <c>UseDotNet</c>.
+/// Builder for creating a dotnet task using the <c>DotNetCoreCLI</c> task and <c>UseDotNet</c>.
 /// </summary>
 public class DotNetTaskBuilder
 {
@@ -25,7 +25,7 @@ public class DotNetTaskBuilder
     /// <param name="projects">Projects to build</param>
     /// <param name="includeNuGetOrg">Include nuget.org in package sources?</param>
     /// <param name="arguments">Additional arguments</param>
-    /// <returns>A new instance of the <see cref="DotNetBuildCoreCliTask"/> w
+    /// <returns>A new instance of the <see cref="DotNetBuildCoreCliTask"/> with the specified arguments</returns>
     public DotNetBuildCoreCliTask Build(string projects, bool? includeNuGetOrg = null, string? arguments = null) => new()
     {
         Projects = projects,
@@ -44,6 +44,7 @@ public class DotNetTaskBuilder
     /// Argument aliases: searchPatternPack
     /// </param>
     /// <param name="arguments">Additional arguments</param>
+    /// <returns>A new instance of <see cref="DotNetPackCoreCliTask"/> with the specified values.</returns>
     public DotNetPackCoreCliTask Pack(string? packagesToPack = "**/*.csproj", string? arguments = null) => new()
     {
         PackagesToPack = packagesToPack,
@@ -51,17 +52,49 @@ public class DotNetTaskBuilder
     };
 
     /// <summary>
-    /// Creates the publish command version of the DotNetCoreCLI task.
+    /// <para>
+    /// Creates the <c>publish</c> command version of the DotNetCoreCLI task.
+    /// </para>
+    /// For example:
+    /// <code lang="csharp">
+    /// Steps =
+    /// {
+    ///     Dotnet.Publish("src/*.csproj", true, "-c Release") with
+    ///     {
+    ///         ModifyOutputPath = true,
+    ///         ZipAfterPublish = true,
+    ///         Timeout = TimeSpan.FromMinutes(30),
+    ///     };
+    /// }
+    /// </code>
+    /// <code lang="yaml">
+    /// steps:
+    /// - task: DotNetCoreCLI@2
+    ///   inputs:
+    ///     command: publish
+    ///     projects: src/*.csproj
+    ///     arguments: -c Release
+    ///     publishWebProjects: true
+    ///     modifyOutputPath: true
+    ///     zipAfterPublish: true
+    ///   timeoutInMinutes: 30
+    /// </code>
     /// </summary>
     /// <param name="projects">Projects to build</param>
     /// <param name="publishWebProjects">
-    /// If true, the projects property value will be skipped and the task will try to find the web projects in the repository and
-    /// run the publish command on them. Web projects are identified by presence of either a web.config file or wwwroot folder in the directory.
-    /// In the absence of a web.config file or wwwroot folder, projects that use a web SDK, like Microsoft.NET.Sdk.Web, are selected.
-    ///
+    /// <para>
+    /// If true, the projects property value will be skipped and the task will try to find the web projects in the repository and run the publish command on them.
+    /// </para>
+    /// <para>
+    /// Web projects are identified by presence of either a web.config file or wwwroot folder in the directory.
+    /// </para>
+    /// <para>
+    /// In the absence of a web.config file or wwwroot folder, projects that use a web SDK, like <c>Microsoft.NET.Sdk.Web</c>, are selected.
     /// Note that this argument defaults to true if not specified.
+    /// </para>
     /// </param>
     /// <param name="arguments">Additional arguments</param>
+    /// <returns>A new instance of <see cref="DotNetPublishCoreCliTask"/> with the specified values.</returns>
     public DotNetPublishCoreCliTask Publish(string projects, bool publishWebProjects = true, string? arguments = null) => new()
     {
         Projects = projects,
@@ -77,7 +110,7 @@ public class DotNetTaskBuilder
     /// Multiple patterns can be separated by a semicolon, and you can make a pattern negative by prefixing it with !.
     /// Example: **/*.nupkg;!**/*.Tests.nupkg.
     ///
-    /// Argument aliases: searchPatternPush
+    /// Argument aliases: <c>searchPatternPush</c>
     /// </param>
     /// <param name="arguments">Additional arguments</param>
     public DotNetPushCoreCliTask Push(string packagesToPush = "$(Build.ArtifactStagingDirectory)/*.nupkg", string? arguments = null) => new()
