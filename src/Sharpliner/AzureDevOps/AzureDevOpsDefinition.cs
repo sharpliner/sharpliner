@@ -273,7 +273,32 @@ public abstract class AzureDevOpsDefinition
     protected static PwshTaskBuilder Pwsh { get; } = new();
 
     /// <summary>
+    /// <para>
     /// Creates a publish task.
+    /// </para>
+    /// For example:
+    /// <code lang="csharp">
+    /// Steps =
+    /// {
+    ///     Publish("Binary", "bin/Debug/net8.0/", "Publish artifact") with
+    ///     {
+    ///         ContinueOnError = false,
+    ///         ArtifactType = ArtifactType.Pipeline,
+    ///     }
+    /// }
+    /// </code>
+    /// Will generate:
+    /// <code lang="yaml">
+    /// steps:
+    /// - publish: bin/Debug/net8.0/
+    ///   displayName: Publish artifact
+    ///   artifact: Binary
+    ///   continueOnError: false
+    /// </code>
+    /// <param name="artifactName">Artifact name</param>
+    /// <param name="filePath">Path to the folder or file you want to publish</param>
+    /// <param name="displayName">Display name of the task shown in the UI when creating pipeline run</param>
+    /// <returns>A new instance of <see cref="PublishTask"/> with the specified parameters</returns>
     /// </summary>
     protected static PublishTask Publish(string artifactName, string filePath, string? displayName = null)
     {

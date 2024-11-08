@@ -265,6 +265,13 @@ public class TaskBuilderTests
                             ArtifactType = ArtifactType.Pipeline,
                         },
 
+                        Publish("additional-binary", "bin/Debug/netstandard2.0/") with
+                        {
+                            ArtifactType = ArtifactType.Filepath,
+                            FileSharePath = $"{variables.Build.ArtifactStagingDirectory}/additional-binary",
+                            Parallel = true
+                        },
+
                         Publish("artifactName", "some/file/path.txt"),
                     }
                 }
@@ -286,6 +293,12 @@ public class TaskBuilderTests
             displayName: Publish artifact
             artifact: Binary
             continueOnError: false
+
+          - publish: bin/Debug/netstandard2.0/
+            artifact: additional-binary
+            artifactType: filepath
+            fileSharePath: $(Build.ArtifactStagingDirectory)/additional-binary
+            parallel: true
 
           - publish: some/file/path.txt
             artifact: artifactName
