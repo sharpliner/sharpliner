@@ -31,9 +31,9 @@ class PublishPipeline : SingleStagePipelineDefinition
                             ConfigurationToPack = "Release",
                         },
 
-                    Publish("Sharpliner",
-                        filePath:  $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.nupkg",
-                        displayName: "Publish build artifacts"),
+                    Publish
+                        .Pipline("Sharpliner", $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.nupkg")
+                        .DisplayAs("Publish build artifacts"),
 
                     If.And(IsNotPullRequest, IsBranch("main"))
                         .Step(Task("NuGetAuthenticate@1", "Authenticate NuGet"))
