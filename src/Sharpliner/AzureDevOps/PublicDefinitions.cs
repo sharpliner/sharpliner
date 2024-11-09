@@ -172,7 +172,7 @@ public abstract class TemplateParametersProviderBase<TParameters> : ITemplatePar
         foreach (var property in typeof(TParameters).GetProperties())
         {
             var value = property.GetValue(this);
-            if (value is not null && value != property.GetValue(defaultParameters))
+            if (value is not null && !xvalue.Equals(property.GetValue(defaultParameters)))
             {
                 var name = property.GetCustomAttribute<YamlMemberAttribute>()?.Alias;
                 name ??= CamelCaseNamingConvention.Instance.Apply(property.Name);

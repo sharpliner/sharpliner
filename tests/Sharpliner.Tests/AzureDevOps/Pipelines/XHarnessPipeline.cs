@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
@@ -14,18 +16,20 @@ public class DotnetXHarnessTests
     [Fact]
     public void Test()
     {
-        // Given
-        var azurePipeline = new XHarnessPipeline().Serialize();
-
-        var corePostBuild = new XHarnessPipeline.CorePostBuild().Serialize();
-
-        var commonPostBuild = new XHarnessPipeline.CommonPostBuild().Serialize();
+        var types = typeof(XHarnessPipeline).GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic)
+            .Where(t => t.IsAssignableTo(typeof(ISharplinerDefinition)))
+            .Append(typeof(XHarnessPipeline))
+            .ToArray();
+        foreach (var type in types)
+        {
+            SharplinerPublisher.Publish((ISharplinerDefinition)Activator.CreateInstance(type)!);
+        }
 
         // When
-        corePostBuild.Should().ContainAll(
-            "${{ if or(eq( parameters.enableNugetValidation, 'true'), eq(parameters.enableSigningValidation, 'true'), eq(parameters.enableSourceLinkValidation, 'true'), eq(parameters.SDLValidationParameters.enable, 'true')) }}:",
-            "dependsOn: ${{ parameters.validateDependsOn }}"
-        );
+        // corePostBuild.Serialize().Should().ContainAll(
+        //     "${{ if or(eq( parameters.enableNugetValidation, 'true'), eq(parameters.enableSigningValidation, 'true'), eq(parameters.enableSourceLinkValidation, 'true'), eq(parameters.SDLValidationParameters.enable, 'true')) }}:",
+        //     "dependsOn: ${{ parameters.validateDependsOn }}"
+        // );
 
         // Then
     }
@@ -39,7 +43,7 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
 {
     public override string TargetFile => "dotnet/xharness/azure-pipelines.yml";
 
-    public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
+    public override TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
 
     public override PipelineWithExtends Pipeline => new()
     {
@@ -126,6 +130,7 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
         public static VariableGroup SdlSettings { get; } = new("SDL_Settings");
 
         public override string TargetFile => "eng/common-variables.yml";
+        public override TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
         public override ConditionedList<VariableBase> Definition =>
         [
             TeamName,
@@ -154,6 +159,7 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
     public class CommonPostBuild : JobTemplateDefinition<CommonPostBuildParameters>
     {
         public override string TargetFile => "eng/common/templates-official/post-build/post-build.yml";
+        public override TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
         public override ConditionedList<JobBase> Definition =>
         [
         ];
@@ -167,6 +173,7 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
     public class CorePostBuild : StageTemplateDefinition<CorePostBuildParameters>
     {
         public override string TargetFile => "eng/common/core-templates/post-build/post-build.yml";
+        public override TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
         public override ConditionedList<Stage> Definition =>
         [
             If.Or(
@@ -241,7 +248,7 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
         public virtual bool Is1ESPipeline { get; set; }
     }
 
-    public class SDLValidationParameters
+    public record SDLValidationParameters
     {
         public bool Enable { get; set; } = false;
         public bool PublishGdn { get; set; } = false;

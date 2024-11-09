@@ -180,7 +180,7 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
     /// <summary>
     /// Gets the path where YAML of this definition should be published to
     /// </summary>
-    private string GetDestinationPath(ISharplinerDefinition definition)
+    private static string GetDestinationPath(ISharplinerDefinition definition)
     {
         switch (definition.TargetPathType)
         {
@@ -215,7 +215,7 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
     /// <summary>
     /// Publishes the definition into a YAML file
     /// </summary>
-    private void Publish(ISharplinerDefinition definition)
+    public static void Publish(ISharplinerDefinition definition)
     {
         string destinationPath = GetDestinationPath(definition);
 
@@ -225,7 +225,7 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
 
         if (SharplinerConfiguration.Current.Serialization.IncludeHeaders)
         {
-            var header = definition.Header ?? GetDefaultHeader(GetType());
+            var header = definition.Header ?? GetDefaultHeader(definition.GetType());
 
             if (header.Length > 0)
             {
