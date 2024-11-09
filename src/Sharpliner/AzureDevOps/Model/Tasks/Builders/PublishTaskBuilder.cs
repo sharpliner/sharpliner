@@ -30,7 +30,7 @@ public class PublishTaskBuilder
     ///   continueOnError: false
     /// </code>
     /// <param name="artifactName">Artifact name</param>
-    /// <param name="filePath">Path to the folder or file you want to publish</param>
+    /// <param name="targetPath">Path to the folder or file you want to publish</param>
     /// <returns>A new instance of <see cref="PublishTask"/> with the specified parameters</returns>
     /// </summary>
     public PublishTask Pipeline(string artifactName, string targetPath)
@@ -61,11 +61,11 @@ public class PublishTaskBuilder
     ///   fileSharePath: $(Build.ArtifactStagingDirectory)/additional-binary
     ///   parallel: true
     /// </code>
-    /// <param name="artifactName">Artifact name</param>
-    /// <param name="filePath">Path to the folder or file you want to publish</param>
-    /// <param name="fileSharePath"/>Path to the file share.</param>
-    /// <returns>A new instance of <see cref="PublishTask"/> with the specified parameters</returns>
     /// </summary>
+    /// <param name="artifactName">Artifact name</param>
+    /// <param name="targetPath">Path to the folder or file you want to publish</param>
+    /// <param name="fileSharePath">Path to the file share.</param>
+    /// <returns>A new instance of <see cref="PublishTask"/> with the specified parameters</returns>
     public PublishTask FileShare(string artifactName, string targetPath, string fileSharePath)
     {
         return new PublishTask(targetPath, artifactName)
