@@ -26,10 +26,10 @@ public class DotnetXHarnessTests
         }
 
         // When
-        // corePostBuild.Serialize().Should().ContainAll(
-        //     "${{ if or(eq( parameters.enableNugetValidation, 'true'), eq(parameters.enableSigningValidation, 'true'), eq(parameters.enableSourceLinkValidation, 'true'), eq(parameters.SDLValidationParameters.enable, 'true')) }}:",
-        //     "dependsOn: ${{ parameters.validateDependsOn }}"
-        // );
+        new XHarnessPipeline.CorePostBuild().Serialize().Should().ContainAll(
+            "${{ if or(eq(parameters.enableNugetValidation, 'true'), eq(parameters.enableSigningValidation, 'true'), eq(parameters.enableSourceLinkValidation, 'true'), eq(parameters.SDLValidationParameters.enable, 'true')) }}:",
+            "dependsOn: ${{ parameters.validateDependsOn }}"
+        );
 
         // Then
     }
@@ -177,10 +177,10 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
         public override ConditionedList<Stage> Definition =>
         [
             If.Or(
-                Equal(TemplateParameters.EnableNugetValidation, "true"),
-                Equal(TemplateParameters.EnableSigningValidation, "true"),
-                Equal(TemplateParameters.EnableSourceLinkValidation, "true"),
-                Equal(TemplateParameters.SDLValidationParameters.Enable, "true")
+                Equal(TemplateParameters.EnableNugetValidation, "'true'"),
+                Equal(TemplateParameters.EnableSigningValidation, "'true'"),
+                Equal(TemplateParameters.EnableSourceLinkValidation, "'true'"),
+                Equal(TemplateParameters.SDLValidationParameters.Enable, "'true'")
             ).Stage(new("Validate", "Validate Build Assets")
             {
                 DependsOn = TemplateParameters.ValidateDependsOn,

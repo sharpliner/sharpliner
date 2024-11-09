@@ -172,7 +172,7 @@ public abstract class TemplateParametersProviderBase<TParameters> : ITemplatePar
         foreach (var property in typeof(TParameters).GetProperties())
         {
             var value = property.GetValue(this);
-            if (value is not null && !xvalue.Equals(property.GetValue(defaultParameters)))
+            if (value is not null && !value.Equals(property.GetValue(defaultParameters)))
             {
                 var name = property.GetCustomAttribute<YamlMemberAttribute>()?.Alias;
                 name ??= CamelCaseNamingConvention.Instance.Apply(property.Name);
@@ -183,6 +183,8 @@ public abstract class TemplateParametersProviderBase<TParameters> : ITemplatePar
 
         return result;
     }
+
+    public static implicit operator TemplateParameters(TemplateParametersProviderBase<TParameters> parametersProvider) => parametersProvider.ToTemplateParameters();
 }
 
 public abstract class JobTemplateDefinition<TParameters> : JobTemplateDefinition
@@ -205,7 +207,7 @@ public abstract class StageTemplateDefinition<TParameters> : StageTemplateDefini
 
     // TODO: extract the expression property path correctly
     protected static InlineCondition Equal(object parameterRef, InlineExpression expression2, [CallerArgumentExpression(nameof(parameterRef))]string parameterExpression = "")
-        => AzureDevOpsDefinition.Equal(new ParameterReference(NormalizeParameterExpression(parameterExpression)), expression2);
+        => AzureDevOpsDefinition.Equal(new ParameterReference(NormalizeParameterExpression(parameterExpression)).RuntimeExpression, expression2);
 
     protected static string NormalizeParameterExpression(string parameterExpression)
     {
