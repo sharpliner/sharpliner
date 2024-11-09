@@ -32,7 +32,7 @@ class PublishPipeline : SingleStagePipelineDefinition
                         },
 
                     Publish
-                        .Pipline("Sharpliner", $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.nupkg")
+                        .Pipeline("Sharpliner", $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.nupkg")
                         .DisplayAs("Publish build artifacts"),
 
                     If.And(IsNotPullRequest, IsBranch("main"))
