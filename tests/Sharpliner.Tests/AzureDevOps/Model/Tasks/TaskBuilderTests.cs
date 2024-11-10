@@ -259,13 +259,18 @@ public class TaskBuilderTests
                 {
                     Steps =
                     {
-                        Publish("Binary", "bin/Debug/net8.0/", "Publish artifact") with
+                        Publish.Pipeline("Binary", "bin/Debug/net8.0/") with
                         {
-                            ContinueOnError = false,
-                            ArtifactType = ArtifactType.Pipeline,
+                            DisplayName = "Publish artifact",
+                            ContinueOnError = false
                         },
 
-                        Publish("artifactName", "some/file/path.txt"),
+                        Publish.FileShare("additional-binary", "bin/Debug/netstandard2.0/", $"{variables.Build.ArtifactStagingDirectory}/additional-binary") with
+                        {
+                            Parallel = true
+                        },
+
+                        Publish.Pipeline("artifactName", "some/file/path.txt"),
                     }
                 }
             }
@@ -286,6 +291,12 @@ public class TaskBuilderTests
             displayName: Publish artifact
             artifact: Binary
             continueOnError: false
+
+          - publish: bin/Debug/netstandard2.0/
+            artifact: additional-binary
+            artifactType: filepath
+            fileSharePath: $(Build.ArtifactStagingDirectory)/additional-binary
+            parallel: true
 
           - publish: some/file/path.txt
             artifact: artifactName

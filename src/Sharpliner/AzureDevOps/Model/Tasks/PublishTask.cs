@@ -24,8 +24,8 @@ public record PublishTask : Step
     public Conditioned<string>? Artifact { get; init; }
 
     /// <summary>
-    /// Artifacts publish location. Choose whether to store the artifact in Azure Pipelines,
-    /// or to copy it to a file share that must be accessible from the pipeline agent.
+    /// Artifacts publish location.
+    /// Specifies whether to store the artifact in Azure Pipelines or to copy it to a file share that must be accessible from the pipeline agent.
     /// </summary>
     [YamlMember(Order = 102)]
     [DefaultValue(ArtifactType.Pipeline)]
@@ -33,7 +33,7 @@ public record PublishTask : Step
 
     /// <summary>
     /// The file share to which the artifact files will be copied.
-    /// This can include variables. Required when ArtifactType = FilePath.
+    /// This can include variables. Required when <see cref="ArtifactType"/> = <see cref="ArtifactType.Filepath"/>.
     /// </summary>
     [YamlMember(Order = 211)]
     public Conditioned<string>? FileSharePath { get; init; }
@@ -53,6 +53,12 @@ public record PublishTask : Step
     [DefaultValue(1u)]
     public uint ParallelCount { get; init; } = 1u;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PublishTask"/> class with required properties.
+    /// </summary>
+    /// <param name="targetPath">The path to the folder or file you want to publish.</param>
+    /// <param name="artifactName">Your artifact name. You can specify any name you prefer. E.g.: drop</param>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="targetPath"/> or <paramref name="artifactName"/> is null.</exception>
     public PublishTask(string targetPath, string artifactName = "drop")
     {
         TargetPath = targetPath ?? throw new ArgumentNullException(nameof(targetPath));
@@ -60,9 +66,20 @@ public record PublishTask : Step
     }
 }
 
+/// <summary>
+/// Artifact publish location
+/// </summary>
 public enum ArtifactType
 {
+    /// <summary>
+    /// Azure Pipelines
+    /// </summary>
+    [YamlMember(Alias = "pipeline")]
     Pipeline,
+
+    /// <summary>
+    /// A file share
+    /// </summary>
+    [YamlMember(Alias = "filepath")]
     Filepath,
-    Container,
 }
