@@ -1094,6 +1094,9 @@ namespace Sharpliner.AzureDevOps
         [YamlDotNet.Serialization.YamlMember(Alias="readonly", DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.OmitDefaults, Order=3)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Readonly { get; init; }
         public Sharpliner.AzureDevOps.Variable ReadOnly() { }
+        public static string op_Implicit(Sharpliner.AzureDevOps.Variable variable) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression op_Implicit(Sharpliner.AzureDevOps.Variable variable) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression op_Implicit(Sharpliner.AzureDevOps.Variable variable) { }
     }
     public abstract class VariableBase : System.IEquatable<Sharpliner.AzureDevOps.VariableBase>
     {
