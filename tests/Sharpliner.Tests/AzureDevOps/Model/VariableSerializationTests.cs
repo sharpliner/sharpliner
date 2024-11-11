@@ -8,25 +8,27 @@ public class VariableSerializationTests
 {
     private class VariablesPipeline : TestPipeline
     {
+        private static readonly Variable s_ConfigurationVariable = new Variable("Configuration", "Release"); // We can create the objects and then reuse them for definition too
+
         public override Pipeline Pipeline => new()
         {
             Variables =
             {
-                new Variable("Configuration", "Release"), // We can create the objects and then reuse them for definition too
+                s_ConfigurationVariable,
                 Variable("Framework", "net8.0"),     // Or we have this more YAML-like definition
                 Group("PR keyvault variables"),
 
                 If.Equal(variables.Build.Reason, "PullRequest")
-                    .Variable("TargetBranch", "$(System.PullRequest.SourceBranch)")
+                    .Variable("TargetBranch", variables.System.PullRequest.SourceBranch)
                     .Variable("IsPr", true),
 
-                If.And(Equal(variables["Build.SourceBranch"], "refs/heads/production"), NotEqual("Configuration", "Debug"))
+                If.And(IsBranch("production"), NotEqual(s_ConfigurationVariable, "Debug"))
                     .Variables(("PublishProfileFile", "Prod"), ("foo", "bar"))
-                    .If.NotEqual(variables.Build.Reason, "PullRequest")
+                    .If.IsNotPullRequest
                         .Variable("AzureSubscription", "Int")
                         .Group("azure-int")
                     .EndIf
-                    .If.Equal(variables.Build.Reason, "PullRequest")
+                    .If.IsPullRequest
                         .Variable("AzureSubscription", "Prod")
                         .Group("azure-prod"),
             }
@@ -56,7 +58,7 @@ public class VariableSerializationTests
               - name: IsPr
                 value: true
 
-            - ${{ if and(eq(variables['Build.SourceBranch'], 'refs/heads/production'), ne('Configuration', 'Debug')) }}:
+            - ${{ if and(eq(variables['Build.SourceBranch'], 'refs/heads/production'), ne(variables['Configuration'], 'Debug')) }}:
               - name: PublishProfileFile
                 value: Prod
 
