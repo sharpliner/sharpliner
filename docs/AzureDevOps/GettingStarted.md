@@ -59,7 +59,7 @@ class PullRequestPipeline : PipelineDefinition
 }
 ```
 
-You can also decide to override `SingleStagePipelineDefinition` in case you have a simpler pipeline with only a single stage.  
+You can also decide to override `SingleStagePipelineDefinition` in case you have a simpler pipeline with only a single stage.
 You can also overried `PipelineWithExtends` to [extend an existing template](https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/extends?view=azure-pipelines).
 
 > **Note:** Sometimes you need to generate a large number of similar YAML files dynamically. In this case, please see [DefinitionCollections.md](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionCollections.md).
@@ -79,6 +79,8 @@ An example of a pipeline that builds and tests your PR can look like this:
 ```csharp
 ...
 
+private static readonly Variable s_DotnetVersionVariable = new Variable("DotnetVersion", string.Empty);
+
 public override SingleStagePipelineDefinition Pipeline => new()
 {
     Pr = new PrTrigger("main"),
@@ -86,10 +88,10 @@ public override SingleStagePipelineDefinition Pipeline => new()
     Variables =
     [
         If.IsBranch("net-6.0")
-            .Variable("DotnetVersion", "6.0.100")
+            .Variable(s_DotnetVersionVariable with { Value = "6.0.100" })
             .Group("net6-kv")
         .Else
-            .Variable("DotnetVersion", "5.0.202"),
+            .Variable(s_DotnetVersionVariable with { Value = "5.0.202" }),
     ],
 
     Jobs =
@@ -103,7 +105,7 @@ public override SingleStagePipelineDefinition Pipeline => new()
                     .Step(Powershell.Inline("Write-Host 'Hello-World'").DisplayAs("Hello world")),
 
                 DotNet.Install
-                    .Sdk("$(DotnetVersion)")
+                    .Sdk(s_DotnetVersionVariable)
                     .DisplayAs("Install .NET SDK"),
 
                 DotNet

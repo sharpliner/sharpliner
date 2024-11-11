@@ -37,6 +37,15 @@ public static class ConditionExtensions
         => Conditioned.Link<VariableBase>(condition, new Variable(name, value));
 
     /// <summary>
+    /// Defines a variable.
+    /// </summary>
+    /// <param name="condition">Conditioned definition</param>
+    /// <param name="name">Variable name</param>
+    /// <param name="value">Variable value</param>
+    public static Conditioned<VariableBase> Variable(this IfCondition condition, Variable variable)
+        => Conditioned.Link<VariableBase>(condition, variable);
+
+    /// <summary>
     /// Defines multiple variables at once.
     /// </summary>
     /// <param name="condition">Conditioned definition</param>
