@@ -79,7 +79,7 @@ An example of a pipeline that builds and tests your PR can look like this:
 ```csharp
 ...
 
-private static readonly Variable s_DotnetVersionVariable = new Variable("DotnetVersion", string.Empty);
+private static readonly Variable DotnetVersion = new Variable("DotnetVersion", string.Empty);
 
 public override SingleStagePipelineDefinition Pipeline => new()
 {
@@ -88,10 +88,10 @@ public override SingleStagePipelineDefinition Pipeline => new()
     Variables =
     [
         If.IsBranch("net-6.0")
-            .Variable(s_DotnetVersionVariable with { Value = "6.0.100" })
+            .Variable(DotnetVersion with { Value = "6.0.100" })
             .Group("net6-kv")
         .Else
-            .Variable(s_DotnetVersionVariable with { Value = "5.0.202" }),
+            .Variable(DotnetVersion with { Value = "5.0.202" }),
     ],
 
     Jobs =
@@ -105,7 +105,7 @@ public override SingleStagePipelineDefinition Pipeline => new()
                     .Step(Powershell.Inline("Write-Host 'Hello-World'").DisplayAs("Hello world")),
 
                 DotNet.Install
-                    .Sdk(s_DotnetVersionVariable)
+                    .Sdk(DotnetVersion)
                     .DisplayAs("Install .NET SDK"),
 
                 DotNet
