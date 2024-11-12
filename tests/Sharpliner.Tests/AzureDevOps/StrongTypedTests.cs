@@ -8,8 +8,8 @@ public class StrongTypedTests
 {
     private class Pipeline_With_Strong_Variables_And_Parameters : SimpleTestPipeline
     {
-        private static readonly Parameter s_parameter1 = StringParameter("Parameter1", "SomeParameterValue1");
-        private static readonly Parameter s_parameter2 = StringParameter("Parameter2", "SomeParameterValue2");
+        private static readonly Parameter s_parameter1 = StringParameter("Parameter1", defaultValue: "SomeParameterValue1");
+        private static readonly Parameter s_parameter2 = StringParameter("Parameter2", defaultValue: "SomeParameterValue2");
 
         private static readonly Variable s_variable1 = new("Variable1", "SomeVariableValue1");
         private static readonly Variable s_variable2 = new("Variable2", "SomeVariableValue2");

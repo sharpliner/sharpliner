@@ -142,6 +142,11 @@ public record Variable : VariableBase
     };
 
     /// <summary>
+    /// Converts this <see cref="Variable"/> to a <see cref="IfExpression"/> by getting the reference to the variable.
+    /// </summary>
+    public override string ToString() => new VariableReference(Name);
+
+    /// <summary>
     /// Converts a <see cref="Variable"/> to a <see cref="IfExpression"/> by getting the reference to the variable.
     /// </summary>
     /// <param name="variable">The variable.</param>
