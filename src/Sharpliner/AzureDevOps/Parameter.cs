@@ -76,6 +76,9 @@ public abstract record Parameter
         DisplayName = displayName;
     }
 
+    /// <summary>
+    /// Converts this <see cref="Parameter"/> to a <see cref="string"/> representation of the reference to the parameter.
+    /// </summary>
     public sealed override string ToString() => new ParameterReference(Name);
 
     /// <summary>
