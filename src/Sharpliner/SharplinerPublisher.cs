@@ -39,13 +39,13 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
 
         LoadConfiguration(assembly);
 
-        foreach (ISharplinerDefinition definition in FindAllImplementations<ISharplinerDefinition>(assembly))
+        foreach (ISharplinerDefinition definition in SharplinerPublisher.FindAllImplementations<ISharplinerDefinition>(assembly))
         {
             definitionFound = true;
             PublishDefinition(definition, failIfChanged);
         }
 
-        foreach ((ISharplinerDefinition definition, Type collection) in FindDefinitionsInCollections(assembly))
+        foreach ((ISharplinerDefinition definition, Type collection) in SharplinerPublisher.FindDefinitionsInCollections(assembly))
         {
             definitionFound = true;
             PublishDefinition(definition, failIfChanged, collection);
@@ -70,7 +70,7 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
     /// <param name="collection">Type of the collection the definition is coming from (if it is)</param>
     private void PublishDefinition(ISharplinerDefinition definition, bool failIfChanged, Type? collection = null)
     {
-        var path = GetDestinationPath(definition);
+        var path = SharplinerPublisher.GetDestinationPath(definition);
 
         var typeName = collection == null ? definition.GetType().Name : collection.Name;
 
@@ -141,11 +141,11 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
         }
     }
 
-    private IEnumerable<(ISharplinerDefinition Definition, Type Collection)> FindDefinitionsInCollections(Assembly assembly) =>
+    private static IEnumerable<(ISharplinerDefinition Definition, Type Collection)> FindDefinitionsInCollections(Assembly assembly) =>
         FindAllImplementations<ISharplinerDefinitionCollection>(assembly)
             .SelectMany(collection => collection.Definitions.Select(definition => (definition, collection.GetType())));
 
-    private List<T> FindAllImplementations<T>(Assembly assembly)
+    private static List<T> FindAllImplementations<T>(Assembly assembly)
     {
         var pipelines = new List<T>();
         var typeToFind = typeof(T);
@@ -163,7 +163,7 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
 
     private void LoadConfiguration(Assembly assembly)
     {
-        var configurations = FindAllImplementations<SharplinerConfiguration>(assembly);
+        var configurations = SharplinerPublisher.FindAllImplementations<SharplinerConfiguration>(assembly);
 
         if (configurations.Count > 1)
         {
@@ -180,7 +180,7 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
     /// <summary>
     /// Gets the path where YAML of this definition should be published to
     /// </summary>
-    private string GetDestinationPath(ISharplinerDefinition definition)
+    private static string GetDestinationPath(ISharplinerDefinition definition)
     {
         switch (definition.TargetPathType)
         {

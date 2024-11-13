@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
 
     <!-- NuGet details -->
     <RepositoryType>git</RepositoryType>
@@ -71,6 +71,12 @@
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
+
+      <_PackageFiles Include="$(OutputPath)\net9.0\YamlDotNet.dll">
+        <PackagePath>lib\net9.0</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
     </ItemGroup>
 
     <ItemGroup>
@@ -88,6 +94,12 @@
 
       <_PackageFiles Include="$(OutputPath)\net8.0\OneOf.dll">
         <PackagePath>lib\net8.0</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
+
+      <_PackageFiles Include="$(OutputPath)\net9.0\OneOf.dll">
+        <PackagePath>lib\net9.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>

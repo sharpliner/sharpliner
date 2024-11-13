@@ -1,4 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Text.Json;
 using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 
@@ -12,7 +16,7 @@ class ProjectBuildSteps(string project) : StepLibrary
     [
         StepTemplate(Pipelines.TemplateLocation + "install-dotnet-sdk.yml", new()
         {
-            { "version", "8.0.403" }
+            { "version", GetSdkVersionFromGlobalJson() }
         }),
 
         Powershell
@@ -23,4 +27,34 @@ class ProjectBuildSteps(string project) : StepLibrary
             .Build(project, includeNuGetOrg: true)
             .DisplayAs("Build"),
     ];
+
+    private static string GetSdkVersionFromGlobalJson()
+    {
+        var globalJson = File.ReadAllText(GetGlobalJsonPath());
+        using var jsonDoc = JsonDocument.Parse(globalJson);
+        if (jsonDoc.RootElement.TryGetProperty("sdk", out JsonElement sdk) &&
+            sdk.TryGetProperty("version", out JsonElement version))
+        {
+            return version.GetString()
+                ?? throw new Exception("The global.json file does not contain the required 'sdk.version' property.");
+        }
+
+        throw new Exception("The global.json file does not contain the required 'sdk.version' property.");
+    }
+
+    private static string GetGlobalJsonPath()
+    {
+        var currentDir = new DirectoryInfo(Directory.GetCurrentDirectory());
+        while (!Directory.Exists(Path.Combine(currentDir.FullName, ".git")))
+        {
+            currentDir = currentDir.Parent;
+
+            if (currentDir == null)
+            {
+                throw new Exception($"Failed to find git repository in {Directory.GetParent(Assembly.GetExecutingAssembly().Location)?.FullName}");
+            }
+        }
+
+        return Path.Combine(currentDir.FullName, "global.json");
+    }
 }
