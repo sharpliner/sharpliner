@@ -13,8 +13,6 @@ namespace Sharpliner.AzureDevOps;
 /// </summary>
 public record DeploymentJob : JobBase
 {
-    private Conditioned<DeploymentStrategy>? _strategy;
-
     /// <summary>
     /// Name of the job (A-Z, a-z, 0-9, and underscore).
     /// </summary>
@@ -34,7 +32,7 @@ public record DeploymentJob : JobBase
     /// </summary>
     [YamlMember(Order = 1300)]
     [DisallowNull]
-    public Conditioned<DeploymentStrategy>? Strategy { get => _strategy; init => _strategy = value?.GetRoot(); }
+    public Conditioned<DeploymentStrategy>? Strategy { get; init => field = value?.GetRoot(); }
 
     /// <summary>
     /// A deployment job is a special type of job.
