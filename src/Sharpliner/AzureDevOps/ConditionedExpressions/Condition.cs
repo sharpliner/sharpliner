@@ -558,12 +558,12 @@ internal class IfOrCondition<T> : IfConjunctionCondition<T>
 internal class InlineXorCondition<T> : InlineConjunctionCondition<T>
 {
     internal InlineXorCondition(InlineCondition expression1, InlineCondition expression2)
-        : base("xor", new[] { expression1, expression2 })
+        : base("xor", [expression1, expression2])
     {
     }
 
     internal InlineXorCondition(string expression1, string expression2)
-        : base("xor", new[] { expression1, expression2 })
+        : base("xor", [expression1, expression2])
     {
     }
 }
@@ -571,12 +571,12 @@ internal class InlineXorCondition<T> : InlineConjunctionCondition<T>
 internal class IfXorCondition<T> : IfConjunctionCondition<T>
 {
     internal IfXorCondition(IfCondition expression1, IfCondition expression2)
-        : base("xor", new[] { expression1, expression2 })
+        : base("xor", [expression1, expression2])
     {
     }
 
     internal IfXorCondition(string expression1, string expression2)
-        : base("xor", new[] { expression1, expression2 })
+        : base("xor", [expression1, expression2])
     {
     }
 }
