@@ -51,14 +51,11 @@ internal class PlaygroundPipeline : TestPipeline
             {
                 Jobs =
                 [
-                    new JavaTemplate
+                    new JavaTemplate(new()
                     {
-                        TemplateParameters =
-                        {
-                            JavaVersion = "11",
-                            MavenPomFile = "pom.xml",
-                        }
-                    }
+                        JavaVersion = "11",
+                        MavenPomFile = "pom.xml",
+                    })
                 ]
             }
         ]
@@ -68,6 +65,10 @@ internal class PlaygroundPipeline : TestPipeline
 [SharplinerTemplateParameters]
 partial class JavaTemplate : JobTemplateDefinition<JavaTemplateParameters>
 {
+    public JavaTemplate(JavaTemplateParameters parameters) : base(parameters)
+    {
+    }
+
     public override string TargetFile => "java-template.yml";
     public override ConditionedList<JobBase> Definition =>
     [
@@ -110,7 +111,7 @@ partial class JavaTemplate
     protected static StringParameter JavaVersionParameter { get; } = new("JavaVersion", defaultValue: defaultParameters.JavaVersion);
     protected static StringParameter MavenPomFileParameter { get; } = new("MavenPomFile", defaultValue: defaultParameters.MavenPomFile);
 
-    public override List<Parameter> Parameters => [ JavaVersionParameter, MavenPomFileParameter ];
+    public override List<Parameter> Parameters => [JavaVersionParameter, MavenPomFileParameter];
 }
 
 class JavaTemplateParameters : TemplateParametersProviderBase<JavaTemplateParameters>

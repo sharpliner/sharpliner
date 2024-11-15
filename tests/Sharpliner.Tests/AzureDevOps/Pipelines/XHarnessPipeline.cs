@@ -105,14 +105,11 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
                                 }
                             }
                         }),
-                        new CommonPostBuild
+                        new CommonPostBuild(new()
                         {
-                            TemplateParameters =
-                            {
-                                EnableSymbolValidation = true,
-                                EnableSourceLinkValidation = true
-                            }
-                        }
+                            EnableSymbolValidation = true,
+                            EnableSourceLinkValidation = true
+                        })
                     }
                 }
             }
@@ -161,6 +158,10 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
 
     public class CommonPostBuild : JobTemplateDefinition<CommonPostBuildParameters>
     {
+        public CommonPostBuild(CommonPostBuildParameters parameters) : base(parameters)
+        {
+        }
+
         public override string TargetFile => "eng/common/templates-official/post-build/post-build.yml";
         public override TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
         public override ConditionedList<JobBase> Definition =>
