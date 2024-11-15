@@ -89,7 +89,7 @@ public interface ITemplateParametersProvider
 
 public abstract class TemplateParametersProviderBase<TParameters> : ITemplateParametersProvider where TParameters : class, new()
 {
-    public List<Parameter> ToParameters()
+    public virtual List<Parameter> ToParameters()
     {
         var result = new List<Parameter>();
         var defaultParameters = new TParameters();
@@ -190,10 +190,12 @@ public abstract class TemplateParametersProviderBase<TParameters> : ITemplatePar
 public abstract class JobTemplateDefinition<TParameters> : JobTemplateDefinition
     where TParameters : ITemplateParametersProvider, new()
 {
-    public sealed override List<Parameter> Parameters => TemplateParameters.ToParameters();
+    public override List<Parameter> Parameters => TemplateParameters.ToParameters();
 
     [DisallowNull]
     public TParameters TemplateParameters { get; } = new TParameters();
+
+    public static implicit operator Template<JobBase>(JobTemplateDefinition<TParameters> definition) => new (definition.TargetFile, definition.TemplateParameters?.ToTemplateParameters());
 }
 
 public abstract class StageTemplateDefinition<TParameters> : StageTemplateDefinition

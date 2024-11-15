@@ -105,11 +105,14 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
                                 }
                             }
                         }),
-                        JobTemplate<CommonPostBuild, CommonPostBuildParameters>(new()
+                        new CommonPostBuild
                         {
-                            EnableSymbolValidation = true,
-                            EnableSourceLinkValidation = true
-                        })
+                            TemplateParameters =
+                            {
+                                EnableSymbolValidation = true,
+                                EnableSourceLinkValidation = true
+                            }
+                        }
                     }
                 }
             }
@@ -165,7 +168,7 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
         ];
     }
 
-    public class CommonPostBuildParameters : CorePostBuildParameters
+    public class CommonPostBuildParameters : CorePostBuildParametersBase<CommonPostBuildParameters>
     {
         public override bool Is1ESPipeline { get; set; } = false;
     }
@@ -204,7 +207,12 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
         }
     }
 
-    public class CorePostBuildParameters : TemplateParametersProviderBase<CorePostBuildParameters>
+    public class CorePostBuildParameters : CorePostBuildParametersBase<CorePostBuildParameters>
+    {
+
+    }
+
+    public abstract class CorePostBuildParametersBase<TSelf> : TemplateParametersProviderBase<TSelf> where TSelf : CorePostBuildParametersBase<TSelf>, new()
     {
         public virtual int PublishingInfraVersion { get; set; } = 3;
 

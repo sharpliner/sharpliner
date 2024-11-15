@@ -58,7 +58,7 @@ public record VariableTemplate : VariableBase
     /// <summary>
     /// The
     /// </summary>
-    public TemplateParameters Parameters { get; init; }
+    public TemplateParameters? Parameters { get; init; }
 
     /// <summary>
     /// Creates a new instance of <see cref="VariableTemplate"/>.
