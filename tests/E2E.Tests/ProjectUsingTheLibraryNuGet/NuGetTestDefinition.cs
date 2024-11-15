@@ -1,7 +1,7 @@
 using E2E.Tests.SharplinerLibrary;
 using Sharpliner;
 
-namespace Tests.ProjectUsingTheLibraryNuGet;
+namespace E2E.Tests.ProjectUsingTheLibraryNuGet;
 
 // These NuGet.Tests are E2E testing following scenario:
 // 1. We create a "library" project with an arbitrary Sharpliner definition

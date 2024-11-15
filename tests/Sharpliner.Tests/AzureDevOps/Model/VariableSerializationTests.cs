@@ -8,13 +8,13 @@ public class VariableSerializationTests
 {
     private class VariablesPipeline : TestPipeline
     {
-        private static readonly Variable s_ConfigurationVariable = new Variable("Configuration", "Release"); // We can create the objects and then reuse them for definition too
+        private static readonly Variable s_configurationVariable = new("Configuration", "Release"); // We can create the objects and then reuse them for definition too
 
         public override Pipeline Pipeline => new()
         {
             Variables =
             {
-                s_ConfigurationVariable,
+                s_configurationVariable,
                 Variable("Framework", "net8.0"),     // Or we have this more YAML-like definition
                 Group("PR keyvault variables"),
 
@@ -22,7 +22,7 @@ public class VariableSerializationTests
                     .Variable("TargetBranch", variables.System.PullRequest.SourceBranch)
                     .Variable("IsPr", true),
 
-                If.And(IsBranch("production"), NotEqual(s_ConfigurationVariable, "Debug"))
+                If.And(IsBranch("production"), NotEqual(s_configurationVariable, "Debug"))
                     .Variables(("PublishProfileFile", "Prod"), ("foo", "bar"))
                     .If.IsNotPullRequest
                         .Variable("AzureSubscription", "Int")

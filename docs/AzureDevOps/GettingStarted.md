@@ -23,10 +23,10 @@ Your file should look something like this:
 ```xml
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <!-- .NET 5.0/6.0/7.0 are supported at the moment -->
-    <TargetFramework>net6.0</TargetFramework>
+    <!-- .NET 5.0+ are supported at the moment -->
+    <TargetFramework>net9.0</TargetFramework>
     <!-- Use C# 10+ for best experience with some of the definition syntax -->
-    <LangVersion>10.0</LangVersion>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>

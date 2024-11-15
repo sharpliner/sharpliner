@@ -48,26 +48,20 @@ public enum ValidationSeverity
 /// <summary>
 /// Represents a validation error with a severity and message.
 /// </summary>
-public class ValidationError
+/// <remarks>
+/// Initializes a new instance of the <see cref="ValidationError"/> class with the specified severity and message.
+/// </remarks>
+/// <param name="severity">The severity of the validation error.</param>
+/// <param name="message">The message of the validation error.</param>
+public class ValidationError(ValidationSeverity severity, string message)
 {
     /// <summary>
     /// Gets the severity of the validation error.
     /// </summary>
-    public ValidationSeverity Severity { get; }
+    public ValidationSeverity Severity { get; } = severity;
 
     /// <summary>
     /// Gets the message of the validation error.
     /// </summary>
-    public string Message { get; }
-
-    /// <summary>
-    /// Initializes a new instance of the <see cref="ValidationError"/> class with the specified severity and message.
-    /// </summary>
-    /// <param name="severity">The severity of the validation error.</param>
-    /// <param name="message">The message of the validation error.</param>
-    public ValidationError(ValidationSeverity severity, string message)
-    {
-        Severity = severity;
-        Message = message;
-    }
+    public string Message { get; } = message;
 }
