@@ -6,6 +6,9 @@ using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
+/// <summary>
+/// Base class for all PowerShell tasks.
+/// </summary>
 public abstract record PowershellTask : Step
 {
     /// <summary>
@@ -73,6 +76,9 @@ public abstract record PowershellTask : Step
     public Conditioned<bool>? IgnoreLASTEXITCODE { get; init; }
 }
 
+/// <summary>
+/// Task that runs an inline PowerShell script using the <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/steps-powershell">steps.powershell</see> definition.
+/// </summary>
 public record InlinePowershellTask : PowershellTask
 {
     /// <summary>
@@ -81,16 +87,19 @@ public record InlinePowershellTask : PowershellTask
     [YamlMember(Alias = "powershell", Order = 1, ScalarStyle = ScalarStyle.Literal)]
     public string Contents { get; init; }
 
-    [YamlMember(Order = 2)]
-    [DefaultValue("inline")]
-    public string TargetType => "inline";
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InlinePowershellTask"/> class with the specified script lines.
+    /// </summary>
+    /// <param name="scriptLines"></param>
     public InlinePowershellTask(params string[] scriptLines)
     {
         Contents = string.Join(System.Environment.NewLine, scriptLines);
     }
 }
 
+/// <summary>
+/// Task that runs a PowerShell script from a file using the <c>PowerShell</c> task.
+/// </summary>
 public record PowershellFileTask : PowershellTask, IYamlConvertible
 {
     private readonly bool _isPwsh;
@@ -106,6 +115,12 @@ public record PowershellFileTask : PowershellTask, IYamlConvertible
     /// </summary>
     public Conditioned<string>? Arguments { get; init; }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="PowershellFileTask"/> class with the specified file path and whether to use PowerShell Core.
+    /// </summary>
+    /// <param name="filePath">The path to the script file.</param>
+    /// <param name="isPwsh">Whether to use PowerShell Core.</param>
+    /// <exception cref="ArgumentNullException"></exception>
     public PowershellFileTask(string filePath, bool isPwsh)
     {
         FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
@@ -155,6 +170,9 @@ public record PowershellFileTask : PowershellTask, IYamlConvertible
     }
 }
 
+/// <summary>
+/// Task that runs an inline PowerShell Core script using the <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/steps-pwsh">steps.pwsh</see> definition.
+/// </summary>
 public record InlinePwshTask : PowershellTask
 {
     /// <summary>
@@ -163,16 +181,19 @@ public record InlinePwshTask : PowershellTask
     [YamlMember(Alias = "pwsh", Order = 1, ScalarStyle = ScalarStyle.Literal)]
     public string Contents { get; init; }
 
-    [YamlMember(Order = 2)]
-    [DefaultValue("inline")]
-    public string TargetType => "inline";
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="InlinePwshTask"/> class with the specified script lines.
+    /// </summary>
+    /// <param name="scriptLines"></param>
     public InlinePwshTask(params string[] scriptLines)
     {
         Contents = string.Join(System.Environment.NewLine, scriptLines);
     }
 }
 
+/// <summary>
+/// The powershell action preference, see <see href="https://learn.microsoft.com/en-us/dotnet/api/system.management.automation.actionpreference">ActionPreference Enum</see> for more details.
+/// </summary>
 public enum ActionPreference
 {
     /// <summary>

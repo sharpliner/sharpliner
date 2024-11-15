@@ -1,5 +1,6 @@
 ﻿using System;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.ConditionedExpressions.Arguments;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -146,4 +147,22 @@ public record Variable : VariableBase
     };
 
     public override string ToString() => new VariableReference(Name);
+
+    /// <summary>
+    /// Converts a <see cref="Variable"/> to a <see cref="IfExpression"/> by getting the reference to the variable.
+    /// </summary>
+    /// <param name="variable">The variable.</param>
+    public static implicit operator string(Variable variable) => new VariableReference(variable.Name);
+
+    /// <summary>
+    /// Converts a <see cref="Variable"/> to a <see cref="IfExpression"/> by getting the reference to the variable.
+    /// </summary>
+    /// <param name="variable">The variable.</param>
+    public static implicit operator IfExpression(Variable variable) => new VariableReference(variable.Name);
+
+    /// <summary>
+    /// Converts a <see cref="Variable"/> to a <see cref="InlineExpression"/> by getting the reference to the variable.
+    /// </summary>
+    /// <param name="variable">The variable.</param>
+    public static implicit operator InlineExpression(Variable variable) => new VariableReference(variable.Name);
 }

@@ -7,6 +7,10 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// </summary>
 public record DotNetPublishCoreCliTask : DotNetCoreCliTask
 {
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DotNetPublishCoreCliTask"/> class.
+    /// </summary>
     public DotNetPublishCoreCliTask() : base("publish")
     {
     }

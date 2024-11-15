@@ -3,10 +3,13 @@
 namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
-/// Task represents the `dotnet build` command.
+/// Task represents the <c>>dotnet build</c> command.
 /// </summary>
 public record DotNetBuildCoreCliTask : DotNetCoreCliTask
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DotNetBuildCoreCliTask"/> class.
+    /// </summary>
     public DotNetBuildCoreCliTask() : base("build")
     {
     }

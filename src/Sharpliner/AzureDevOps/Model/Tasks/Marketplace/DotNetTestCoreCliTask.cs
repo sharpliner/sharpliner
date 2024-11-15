@@ -7,6 +7,9 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// </summary>
 public record DotNetTestCoreCliTask : DotNetCoreCliTask
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DotNetTestCoreCliTask"/> class.
+    /// </summary>
     public DotNetTestCoreCliTask() : base("test")
     {
     }

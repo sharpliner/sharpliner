@@ -3,21 +3,30 @@
 namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
-/// Task represents the `dotnet nuget push` command.
+/// Task represents the <c>dotnet nuget push</c> command.
 /// </summary>
 public record DotNetPushCoreCliTask : DotNetCoreCliTask
 {
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DotNetPushCoreCliTask"/> class.
+    /// </summary>
     public DotNetPushCoreCliTask() : base("push")
     {
     }
 
     /// <summary>
+    /// <para>
     /// The pattern to match or path to nupkg files to be uploaded
-    /// 
+    /// </para>
+    /// <para>
     /// Multiple patterns can be separated by a semicolon, and you can make a pattern negative by prefixing it with !.
-    /// Example: **/*.nupkg;!**/*.Tests.nupkg.
-    ///
-    /// Argument aliases: searchPatternPush
+    /// </para>
+    /// <para>
+    /// Example: <c>**/*.nupkg;!**/*.Tests.nupkg</c>.
+    /// </para>
+    /// <para>
+    /// Argument aliases: <c>searchPatternPush</c>
+    /// </para>
     /// </summary>
     [YamlIgnore]
     public string? PackagesToPush

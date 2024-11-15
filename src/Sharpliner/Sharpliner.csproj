@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+    <TargetFramework></TargetFramework>
+    <TargetFrameworks>net6.0;net7.0;net8.0;net9.0</TargetFrameworks>
 
     <!-- NuGet details -->
     <RepositoryType>git</RepositoryType>
@@ -15,12 +16,10 @@
     <PackageId>Sharpliner</PackageId>
     <Authors>PremekVysoky</Authors>
     <NeutralLanguage>en</NeutralLanguage>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 
     <!-- Copy dependencies (YamlDotNet.dll) to bin/ so that we can include it in the NuGet later -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-
-    <!-- Warnings about missing XML docs for public members -->
-    <NoWarn>$(NoWarn);CS1591;CA1822;NETSDK1138</NoWarn>
 
     <!-- This makes sure we incluse YamlDotNet.dll in the nuget -->
     <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);IncludeDependenciesInNupkg</GenerateNuspecDependsOn>
@@ -73,6 +72,12 @@
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
+
+      <_PackageFiles Include="$(OutputPath)\net9.0\YamlDotNet.dll">
+        <PackagePath>lib\net9.0</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
     </ItemGroup>
 
     <ItemGroup>
@@ -90,6 +95,12 @@
 
       <_PackageFiles Include="$(OutputPath)\net8.0\OneOf.dll">
         <PackagePath>lib\net8.0</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
+
+      <_PackageFiles Include="$(OutputPath)\net9.0\OneOf.dll">
+        <PackagePath>lib\net9.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>

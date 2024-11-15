@@ -9,7 +9,7 @@ public record DeleteFilesTask : AzureDevOpsTask
 {
     /// <summary>
     /// Specifies the folder to delete files from.
-    /// If the source folder is empty, the task deletes files from the root folder of the repository as though $(Build.SourcesDirectory) was specified. 
+    /// If the source folder is empty, the task deletes files from the root folder of the repository as though $(Build.SourcesDirectory) was specified.
     /// </summary>
     [YamlIgnore]
     public string? SourceFolder
@@ -49,6 +49,10 @@ public record DeleteFilesTask : AzureDevOpsTask
         init => SetProperty("RemoveDotFiles", value);
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DeleteFilesTask"/> class with required properties.
+    /// </summary>
+    /// <param name="contents">The file/folder paths to delete.</param>
     public DeleteFilesTask(string contents) : base("DeleteFiles@1")
     {
         Contents = contents;

@@ -7,6 +7,10 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// </summary>
 public record DotNetPackCoreCliTask : DotNetCoreCliTask
 {
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DotNetPackCoreCliTask"/> class.
+    /// </summary>
     public DotNetPackCoreCliTask() : base("pack")
     {
     }
@@ -84,7 +88,7 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     /// <summary>
     /// Specifies a list of token = value pairs, separated by semicolons, where each occurrence of $token$ in the .nuspec file will be replaced with
     /// the given value.
-    /// 
+    ///
     /// Values can be strings in quotation marks
     /// </summary>
     [YamlIgnore]
@@ -107,7 +111,7 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
 
     /// <summary>
     /// This will use the build number to version your package.
-    /// Note: Under Options set the build number format to be '$(BuildDefinitionName)_$(Year:yyyy).$(Month).$(DayOfMonth)$(Rev:.r)' 
+    /// Note: Under Options set the build number format to be '$(BuildDefinitionName)_$(Year:yyyy).$(Month).$(DayOfMonth)$(Rev:.r)'
     /// </summary>
     public DotNetPackCoreCliTask VersionByBuildNumber()
     {
