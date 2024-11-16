@@ -89,7 +89,7 @@ public record Variable : VariableBase
     /// The value of the variable.
     /// </summary>
     [YamlMember(Alias = "value", Order = 2, DefaultValuesHandling = DefaultValuesHandling.Preserve)]
-    public object Value { get; }
+    public object Value { get; init; }
 
     /// <summary>
     /// Whether the variable is read-only. See <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/security/inputs#variables">Securely use variables</see>.
@@ -140,6 +140,11 @@ public record Variable : VariableBase
     {
         Readonly = true
     };
+
+    /// <summary>
+    /// Converts this <see cref="Variable"/> to a <see cref="IfExpression"/> by getting the reference to the variable.
+    /// </summary>
+    public override string ToString() => new VariableReference(Name);
 
     /// <summary>
     /// Converts a <see cref="Variable"/> to a <see cref="IfExpression"/> by getting the reference to the variable.

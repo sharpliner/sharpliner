@@ -224,6 +224,7 @@ namespace Sharpliner.AzureDevOps
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Strategy> Strategy(this Sharpliner.AzureDevOps.IfCondition condition, Sharpliner.AzureDevOps.Strategy strategy) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Template(this Sharpliner.AzureDevOps.IfCondition condition, string name) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> Value<T>(this Sharpliner.AzureDevOps.IfCondition condition, T value) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.IfCondition condition, Sharpliner.AzureDevOps.Variable variable) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.IfCondition condition, string name, bool value) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.IfCondition condition, string name, int value) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.IfCondition condition, string name, string value) { }
@@ -620,6 +621,7 @@ namespace Sharpliner.AzureDevOps
         public string? DisplayName { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
         public string Name { get; init; }
+        public override sealed string ToString() { }
         public static string op_Implicit(Sharpliner.AzureDevOps.Parameter parameter) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression op_Implicit(Sharpliner.AzureDevOps.Parameter parameter) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression op_Implicit(Sharpliner.AzureDevOps.Parameter parameter) { }
@@ -1089,11 +1091,12 @@ namespace Sharpliner.AzureDevOps
         public Variable(string name, string value) { }
         [YamlDotNet.Serialization.YamlMember(Alias="name", Order=1)]
         public string Name { get; }
-        [YamlDotNet.Serialization.YamlMember(Alias="value", DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.value__, Order=2)]
-        public object Value { get; }
         [YamlDotNet.Serialization.YamlMember(Alias="readonly", DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.OmitDefaults, Order=3)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Readonly { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Alias="value", DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.value__, Order=2)]
+        public object Value { get; init; }
         public Sharpliner.AzureDevOps.Variable ReadOnly() { }
+        public override string ToString() { }
         public static string op_Implicit(Sharpliner.AzureDevOps.Variable variable) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression op_Implicit(Sharpliner.AzureDevOps.Variable variable) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression op_Implicit(Sharpliner.AzureDevOps.Variable variable) { }
