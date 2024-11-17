@@ -3,8 +3,6 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Runtime.Serialization;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -50,9 +48,6 @@ public class SharplinerTemplateParametersSourceGenerator : IIncrementalGenerator
 
     private static TemplateDefinitionDetails GenerateTemplateParameters(GeneratorAttributeSyntaxContext context, CancellationToken cancellationToken)
     {
-        FileInfo file = new FileInfo(@"C:\github\sharpliner\sharpliner\tests\Sharpliner.Tests\demo.g.cs.txt");
-        using var tempWriter = file.CreateText();
-
         var classDeclaration = (ClassDeclarationSyntax)context.TargetNode;
         var className = classDeclaration.Identifier.Text;
 
@@ -63,29 +58,11 @@ public class SharplinerTemplateParametersSourceGenerator : IIncrementalGenerator
         builder.AppendLine();
         var classType = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
         writer.WriteLine($"namespace {classType!.ContainingNamespace};");
-        WriteTemp(classType.ContainingNamespace);
-
-        WriteTemp(classType);
-        WriteTemp(classType.Name);
         writer.WriteLine($"partial class {classType.Name}");
         writer.WriteLine("{");
         writer.Indent++;
-
-        WriteTemp(classDeclaration.BaseList);
-        WriteTemp(classDeclaration.BaseList!.Types[0].Type);
-        WriteTemp(((GenericNameSyntax)classDeclaration.BaseList!.Types[0].Type).TypeArgumentList);
-        WriteTemp(((GenericNameSyntax)classDeclaration.BaseList!.Types[0].Type).TypeArgumentList.Arguments == null);
-        WriteTemp(((GenericNameSyntax)classDeclaration.BaseList!.Types[0].Type).TypeArgumentList.Arguments.Count);
-        WriteTemp(((GenericNameSyntax)classDeclaration.BaseList!.Types[0].Type).TypeArgumentList.Arguments.First());
-        WriteTemp(((GenericNameSyntax)classDeclaration.BaseList!.Types[0].Type).TypeArgumentList.Arguments[0]);
-
-        var parametersClassName = ((GenericNameSyntax)classDeclaration.BaseList!.Types[0].Type).TypeArgumentList.Arguments[0] as SimpleNameSyntax;
-
-        WriteTemp(parametersClassName);
-
-        var parametersClass = context.SemanticModel.GetTypeInfo(parametersClassName).Type;
-
-        WriteTemp(parametersClass);
+        var parametersClassName = (SimpleNameSyntax)((GenericNameSyntax)classDeclaration.BaseList!.Types[0].Type).TypeArgumentList.Arguments[0];
+        var parametersClass = context.SemanticModel.GetTypeInfo(parametersClassName).Type!;
 
         var parameters = new List<string>();
 
@@ -102,18 +79,10 @@ public class SharplinerTemplateParametersSourceGenerator : IIncrementalGenerator
         writer.Indent--;
         writer.WriteLine("}");
 
-        WriteTemp(builder.ToString());
-
         return new(className, builder.ToString());
-
-        void WriteTemp(object obj, [CallerArgumentExpression(nameof(obj))] string caller = "")
-        {
-            tempWriter.WriteLine($"{caller} - {obj}");
-        }
 
         void WriteTypeProperties(ITypeSymbol type, string prefix)
         {
-            WriteTemp($"{type} - {prefix}");
             foreach (var property in type.GetMembers().OfType<IPropertySymbol>()
                 .Where(x => x.Name is not "EqualityContract"))
             {
@@ -134,7 +103,6 @@ public class SharplinerTemplateParametersSourceGenerator : IIncrementalGenerator
 
                 if (!isBuiltInType)
                 {
-                    WriteTemp(property.Type);
                     writer.WriteLine($"public class {parameterReferenceType} : Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference");
                     writer.WriteLine("{");
                     writer.Indent++;
