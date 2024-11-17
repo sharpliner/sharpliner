@@ -8,23 +8,28 @@ public class StrongTypedTests
 {
     private class Pipeline_With_Strong_Variables_And_Parameters : SimpleTestPipeline
     {
+        private static readonly Parameter s_parameter1 = StringParameter("Parameter1", defaultValue: "SomeParameterValue1");
+        private static readonly Parameter s_parameter2 = StringParameter("Parameter2", defaultValue: "SomeParameterValue2");
+
+        private static readonly Variable s_variable1 = new("Variable1", "SomeVariableValue1");
+        private static readonly Variable s_variable2 = new("Variable2", "SomeVariableValue2");
+        private static readonly Variable s_variableBasedUponParameter = new("VariableBasedUponParameter", string.Empty);
+
         public override SingleStagePipeline Pipeline { get; } = new()
         {
             Variables =
             {
-                Variable("Variable1", "SomeVariableValue1"),
-
-                Variable("Variable2", "SomeVariableValue2"),
-
-                If.Equal(parameters["Parameter1"], "SomeParameterValue1")
-                    .Variable("VariableBasedUponParameter", "Parameter1 Equals SomeParameterValue1")
+                s_variable1,
+                s_variable2,
+                If.Equal(s_parameter1, "SomeParameterValue1")
+                    .Variable(s_variableBasedUponParameter with { Value = "Parameter1 Equals SomeParameterValue1" })
                     .Else
-                    .Variable("VariableBasedUponParameter", "Parameter1 Does Not Equal SomeParameterValue1")
+                    .Variable(s_variableBasedUponParameter with { Value =  "Parameter1 Does Not Equal SomeParameterValue1" })
             },
             Parameters =
             {
-                StringParameter("Parameter1", defaultValue: "SomeParameterValue1"),
-                StringParameter("Parameter2", defaultValue: "SomeParameterValue2")
+                s_parameter1,
+                s_parameter2
             },
             Jobs =
             {
@@ -32,15 +37,15 @@ public class StrongTypedTests
                 {
                     Steps =
                     {
-                        If.Equal(parameters["Parameter1"], "SomeParameterValue1")
+                        If.Equal(s_parameter1, "SomeParameterValue1")
                             .Step(Script.Inline("echo Hello")),
 
-                        If.Equal(variables["VariableBasedUponParameter"], "Parameter1 Equals SomeParameterValue1")
+                        If.Equal(s_variableBasedUponParameter, "Parameter1 Equals SomeParameterValue1")
                             .Step(Script.Inline("echo Hello again")),
 
-                        Script.Inline($"echo {variables["VariableBasedUponParameter"]}"),
+                        Script.Inline($"echo {s_variableBasedUponParameter}"),
 
-                        Script.Inline($"echo {parameters["Parameter1"]}"),
+                        Script.Inline($"echo {s_parameter1}"),
                     }
                 },
             }
