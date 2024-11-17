@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
@@ -119,13 +120,16 @@ public class SharplinerTemplateParametersSourceGenerator : IIncrementalGenerator
                 var isBuiltInType = IsBuiltInType(property.Type);
                 var parameterReferenceType = !isBuiltInType ? property.Type.Name + "ParameterReference" : "Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference";
 
-                var dataMember = property.GetAttributes().FirstOrDefault(x => x.AttributeClass?.Name is nameof(DataMemberAttribute));
-                var parameterName = dataMember?.NamedArguments.FirstOrDefault(x => x.Key is nameof(DataMemberAttribute.Name)).Value.Value?.ToString() ?? property.Name;
+                var dataMember = property.GetAttributes().FirstOrDefault(x => x.AttributeClass?.Name is "YamlMemberAttribute");
+                var parameterName = dataMember?.NamedArguments.FirstOrDefault(x => x.Key is "Alias").Value.Value?.ToString() ?? ToCamelCase(property.Name);
                 if (prefix.Length > 0)
                 {
                     parameterName = $"{prefix}.{parameterName}";
                 }
 
+                writer.WriteLine("/// <summary>");
+                writer.WriteLine($"/// A parameter reference for <c>${{{{ parameters.{parameterName} }}}}</c>");
+                writer.WriteLine("/// </summary>");
                 writer.WriteLine($"public {parameterReferenceType} {property.Name} => new(\"{parameterName}\");");
 
                 if (!isBuiltInType)
@@ -135,7 +139,7 @@ public class SharplinerTemplateParametersSourceGenerator : IIncrementalGenerator
                     writer.WriteLine("{");
                     writer.Indent++;
                     writer.WriteLine($"public {parameterReferenceType}(string parameterName) : base(parameterName) {{ }}");
-                    var newPrefix = prefix.Length > 0 ? $"{prefix}.{property.Name}" : property.Name;
+                    var newPrefix = prefix.Length > 0 ? $"{prefix}.{parameterName}" : parameterName;
                     WriteTypeProperties(property.Type, newPrefix);
                     writer.Indent--;
                     writer.WriteLine("}");
@@ -153,6 +157,12 @@ public class SharplinerTemplateParametersSourceGenerator : IIncrementalGenerator
     private static bool IsBuiltInType(ITypeSymbol type)
     {
         return type.ContainingNamespace.ToString().StartsWith("System");
+    }
+
+    private static string ToCamelCase(string str)
+    {
+        var text = Regex.Replace(str, "([_\\-])(?<char>[a-z])", match => match.Groups["char"].Value.ToUpperInvariant(), RegexOptions.IgnoreCase);
+        return char.ToLowerInvariant(text[0]) + text.Substring(1);
     }
 
     private record struct TemplateDefinitionDetails(string ClassName, string Source);

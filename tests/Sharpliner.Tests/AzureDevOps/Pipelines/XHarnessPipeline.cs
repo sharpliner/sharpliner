@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 using FluentAssertions;
 using Sharpliner.AzureDevOps;
@@ -17,10 +16,13 @@ public class DotnetXHarnessTests
     [Fact]
     public void Test()
     {
-        var types = typeof(XHarnessPipeline).GetNestedTypes(BindingFlags.Public | BindingFlags.NonPublic)
-            .Where(t => t.IsAssignableTo(typeof(ISharplinerDefinition)))
-            .Append(typeof(XHarnessPipeline))
-            .ToArray();
+        var types = new[] 
+        {
+            typeof(XHarnessPipeline),
+            typeof(CommonVariables),
+            typeof(CommonPostBuild),
+            typeof(CorePostBuild),
+        };
         foreach (var type in types)
         {
             SharplinerPublisher.Publish((ISharplinerDefinition)Activator.CreateInstance(type)!);
@@ -204,7 +206,7 @@ public partial class CorePostBuild : StageTemplateDefinition<CorePostBuildParame
                     {
                         Parameters = new()
                         {
-                            ["is1ESPipeline"] = TemplateParameters.Is1ESPipeline
+                            ["is1ESPipeline"] = parameters.Is1ESPipeline
                         }
                     }
                 }
@@ -216,31 +218,8 @@ public partial class CorePostBuild : StageTemplateDefinition<CorePostBuildParame
     }
 }
 
-/*
-partial class CorePostBuild
-{
-    protected static new readonly CorePostBuildParametersReference parameters = new();
-
-    public class CorePostBuildParametersReference : TemplateParameterReference
-    {
-        public ParameterReference EnableNugetValidation => new("enableNugetValidation");
-        public ParameterReference EnableSigningValidation => new("enableSigningValidation");
-        public ParameterReference EnableSourceLinkValidation => new("enableSourceLinkValidation");
-        public SDLValidationParametersParameterReference SDLValidationParameters => new("SDLValidationParameters");
-        public class SDLValidationParametersParameterReference(string parameterName) : ParameterReference(parameterName)
-        {
-            public ParameterReference Enable => new($"{parameterName}.enable");
-        }
-
-        public ParameterReference ValidateDependsOn => new("validateDependsOn");
-        public ParameterReference Is1ESPipeline => new("is1ESPipeline");
-    }
-}
-*/
-
 public class CorePostBuildParameters : CorePostBuildParametersBase<CorePostBuildParameters>
 {
-
 }
 
 public abstract class CorePostBuildParametersBase<TSelf> : TemplateParametersProviderBase<TSelf> where TSelf : CorePostBuildParametersBase<TSelf>, new()

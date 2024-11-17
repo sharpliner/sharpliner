@@ -146,8 +146,6 @@ public record Variable : VariableBase
         Readonly = true
     };
 
-    public override string ToString() => new VariableReference(Name);
-
     /// <summary>
     /// Converts this <see cref="Variable"/> to a <see cref="IfExpression"/> by getting the reference to the variable.
     /// </summary>

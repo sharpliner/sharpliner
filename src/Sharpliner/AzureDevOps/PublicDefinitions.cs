@@ -95,13 +95,8 @@ public abstract class TemplateParametersProviderBase<TParameters> : ITemplatePar
         var defaultParameters = new TParameters();
         foreach (var property in typeof(TParameters).GetProperties())
         {
-            var name = property.Name;
-            var yamlMember = property.GetCustomAttribute<YamlMemberAttribute>();
-            if (yamlMember?.Alias is not null)
-            {
-                name = yamlMember.Alias;
-            }
-
+            var name = property.GetCustomAttribute<YamlMemberAttribute>()?.Alias ?? CamelCaseNamingConvention.Instance.Apply(property.Name);
+            
             var defaultValue = property.GetValue(defaultParameters);
             Parameter parameter;
             if (property.PropertyType.IsEnum)
