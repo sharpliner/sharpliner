@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.SourceGenerator;
@@ -80,7 +81,7 @@ partial class JavaTemplate : JobTemplateDefinition<JavaTemplateParameters>
                     {
                         Inputs = new()
                         {
-                            ["versionSpec"] = JavaVersionParameter,
+                            ["versionSpec"] = parameters.JavaVersion,
                             ["jdkArchitecture"] = "x64",
                         }
                     },
@@ -88,14 +89,16 @@ partial class JavaTemplate : JobTemplateDefinition<JavaTemplateParameters>
                     {
                         Inputs = new()
                         {
-                            ["mavenPomFile"] = MavenPomFileParameter,
-                            ["mavenOptions"] = "-Xmx3072m",
+                            ["mavenPomFile"] = parameters.MavenPomFile,
+                            ["mavenOptions"] = parameters.MavenOptions,
                             ["javaHomeOption"] = "JDKVersion",
-                            ["jdkVersionOption"] = JavaVersionParameter,
+                            ["jdkVersionOption"] = parameters.JavaVersion,
                             ["jdkArchitectureOption"] = "x64",
                             ["publishJUnitResults"] = "false",
                             ["testResultsFiles"] = "**/surefire-reports/TEST-*.xml",
                             ["goals"] = "package",
+                            ["spring.profiles.active"] = parameters.Spring.SpringProfile,
+                            ["spring.options"] = parameters.Spring.SpringOptions,
                         }
                     }
                 ]
@@ -104,18 +107,41 @@ partial class JavaTemplate : JobTemplateDefinition<JavaTemplateParameters>
 }
 
 // TODO: This should be generated
+/*
 partial class JavaTemplate
 {
-    private static readonly JavaTemplateParameters defaultParameters = new();
+    protected static new readonly JavaTemplateParametersReference parameters = new();
 
-    protected static StringParameter JavaVersionParameter { get; } = new("JavaVersion", defaultValue: defaultParameters.JavaVersion);
-    protected static StringParameter MavenPomFileParameter { get; } = new("MavenPomFile", defaultValue: defaultParameters.MavenPomFile);
-
-    public override List<Parameter> Parameters => [JavaVersionParameter, MavenPomFileParameter];
+    public class JavaTemplateParametersReference : TemplateParameterReference
+    {
+        public ParameterReference JavaVersion => new("javaVersion");
+        public ParameterReference MavenPomFile => new("mavenPomFile");
+        public ParameterReference MavenOptions => new("maven-options");
+        public SpringParametersParameterReference Spring => new("spring");
+        public class SpringParametersParameterReference(string parameterName) : Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference(parameterName)
+        {
+            public ParameterReference SpringProfile => new("springProfile");
+            public ParameterReference SpringOptions => new("spring-options");
+        }
+    }
 }
+*/
 
 class JavaTemplateParameters : TemplateParametersProviderBase<JavaTemplateParameters>
 {
     public string? JavaVersion { get; set; }
     public string? MavenPomFile { get; set; }
+
+    [DataMember(Name = "maven-options")]
+    public string? MavenOptions { get; set; } = "-Xmx3072m";
+
+    public SpringParameters? Spring { get; set; } = new();
+}
+
+public record SpringParameters
+{
+    public string? SpringProfile { get; set; }
+
+    [DataMember(Name = "spring-options")]
+    public string? SpringOptions { get; set; } = "--server.port=8080";
 }

@@ -153,7 +153,7 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
     /// <summary>
     /// Utility class that allows the <c>${{ parameters.name }}</c> notation for a parameter.
     /// </summary>
-    public sealed class TemplateParameterReference
+    public class TemplateParameterReference
     {
         /// <summary>
         /// <para>

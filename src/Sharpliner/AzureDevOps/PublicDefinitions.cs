@@ -190,10 +190,13 @@ public abstract class TemplateParametersProviderBase<TParameters> : ITemplatePar
 public abstract class JobTemplateDefinition<TParameters> : JobTemplateDefinition
     where TParameters : ITemplateParametersProvider, new()
 {
+    protected JobTemplateDefinition() => TemplateParameters = new();
+    protected JobTemplateDefinition(TParameters parameters) => TemplateParameters = parameters;
+
     public override List<Parameter> Parameters => TemplateParameters.ToParameters();
 
     [DisallowNull]
-    public TParameters TemplateParameters { get; } = new TParameters();
+    public TParameters TemplateParameters { get; }
 
     public static implicit operator Template<JobBase>(JobTemplateDefinition<TParameters> definition) => new (definition.TargetFile, definition.TemplateParameters?.ToTemplateParameters());
 }
@@ -205,38 +208,6 @@ public abstract class StageTemplateDefinition<TParameters> : StageTemplateDefini
 
     [DisallowNull]
     public TParameters TemplateParameters { get; } = new TParameters();
-
-
-    // TODO: extract the expression property path correctly
-    protected static InlineCondition Equal(object parameterRef, InlineExpression expression2, [CallerArgumentExpression(nameof(parameterRef))]string parameterExpression = "")
-        => AzureDevOpsDefinition.Equal(new ParameterReference(NormalizeParameterExpression(parameterExpression)).RuntimeExpression, expression2);
-
-    protected static string NormalizeParameterExpression(string parameterExpression)
-    {
-        parameterExpression = parameterExpression.Substring("TemplateParameters.".Length);
-
-        var type = typeof(TParameters);
-        var normalizeExpression = new List<string>();
-
-        var parts = parameterExpression.Split('.');
-        Console.WriteLine($"parts='{parts}', parameterExpression='{parameterExpression}'");
-        foreach (var part in parts)
-        {
-            var property = type.GetProperty(part);
-            if (property is null)
-            {
-                throw new ArgumentNullException($"Cannot get '{part}' property from type '{type.Name}'");
-            }
-
-            var name = property.GetCustomAttribute<YamlMemberAttribute>()?.Alias
-                ?? CamelCaseNamingConvention.Instance.Apply(property.Name);
-            normalizeExpression.Add(name);
-
-            type = property.PropertyType;
-        }
-
-        return string.Join('.', normalizeExpression);
-    }
 }
 
 /// <summary>

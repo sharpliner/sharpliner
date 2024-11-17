@@ -3,8 +3,12 @@ using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Text;
+using System.Threading;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Sharpliner.SourceGenerator;
@@ -14,26 +18,23 @@ public sealed class SharplinerTemplateParametersAttribute : Attribute
 {
 }
 
-[Generator]
+[Generator(LanguageNames.CSharp)]
 public class SharplinerTemplateParametersSourceGenerator : IIncrementalGenerator
 {
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var templateParametersDeclarations = context.SyntaxProvider.ForAttributeWithMetadataName(
             typeof(SharplinerTemplateParametersAttribute).FullName!,
-            predicate: static (node, ctx) => node is ClassDeclarationSyntax classDeclaration && IsTemplateParametersClass(classDeclaration),
-            transform: static (syntaxContext, ctx) => (ClassDeclarationSyntax)syntaxContext.TargetNode);
+            predicate: static (node, ctx) => node is ClassDeclarationSyntax classDeclaration && IsTemplateDefinitionClass(classDeclaration),
+            transform: static (syntaxContext, ctx) => GenerateTemplateParameters(syntaxContext, ctx));
 
-        context.RegisterSourceOutput(templateParametersDeclarations, static (ctx, classDeclaration) =>
+        context.RegisterSourceOutput(templateParametersDeclarations, static (ctx, templateDefinitionDetails) =>
         {
-            var generatedMembers = GenerateTemplateParameters(classDeclaration);
-            var className = classDeclaration.Identifier.Text;
-
-            ctx.AddSource($"{className}.g.cs", generatedMembers);
+            ctx.AddSource($"{templateDefinitionDetails.ClassName}.g.cs", templateDefinitionDetails.Source);
         });
     }
 
-    private static bool IsTemplateParametersClass(ClassDeclarationSyntax classDeclaration)
+    private static bool IsTemplateDefinitionClass(ClassDeclarationSyntax classDeclaration)
     {
         if (classDeclaration.BaseList?.Types.Count is not 1)
         {
@@ -41,57 +42,119 @@ public class SharplinerTemplateParametersSourceGenerator : IIncrementalGenerator
         }
 
         var baseType = classDeclaration.BaseList.Types[0].Type;
-        return baseType is GenericNameSyntax genericName && genericName.Identifier.Text is "TemplateParametersProviderBase"
-            && genericName.TypeArgumentList.Arguments.Count is 1
-            && genericName.TypeArgumentList.Arguments[0] is IdentifierNameSyntax identifierName && identifierName.Identifier.Text.Equals(classDeclaration.Identifier.Text);
+
+        return baseType is GenericNameSyntax genericName && genericName.Identifier.Text is "JobTemplateDefinition" or "StageTemplateDefinition"
+            && genericName.TypeArgumentList.Arguments.Count is 1;
     }
 
-    private static string GenerateTemplateParameters(ClassDeclarationSyntax classDeclaration)
+    private static TemplateDefinitionDetails GenerateTemplateParameters(GeneratorAttributeSyntaxContext context, CancellationToken cancellationToken)
     {
+        FileInfo file = new FileInfo(@"C:\github\sharpliner\sharpliner\tests\Sharpliner.Tests\demo.g.cs.txt");
+        using var tempWriter = file.CreateText();
+
+        var classDeclaration = (ClassDeclarationSyntax)context.TargetNode;
+        var className = classDeclaration.Identifier.Text;
+
         var builder = new StringBuilder();
         var writer = new IndentedTextWriter(new StringWriter(builder));
 
         writer.WriteLine("using System;");
-        writer.WriteLine();
-        var namespaceName = classDeclaration.Parent?.Ancestors().OfType<NamespaceDeclarationSyntax>().Single().Name.ToString();
-        writer.WriteLine($"namespace {namespaceName};");
+        builder.AppendLine();
+        var classType = context.SemanticModel.GetDeclaredSymbol(classDeclaration);
+        writer.WriteLine($"namespace {classType!.ContainingNamespace};");
+        WriteTemp(classType.ContainingNamespace);
 
-        writer.WriteLine($"partial class {classDeclaration.Identifier.Text}");
+        WriteTemp(classType);
+        WriteTemp(classType.Name);
+        writer.WriteLine($"partial class {classType.Name}");
         writer.WriteLine("{");
         writer.Indent++;
 
+        WriteTemp(classDeclaration.BaseList);
+        WriteTemp(classDeclaration.BaseList!.Types[0].Type);
+        WriteTemp(((GenericNameSyntax)classDeclaration.BaseList!.Types[0].Type).TypeArgumentList);
+        WriteTemp(((GenericNameSyntax)classDeclaration.BaseList!.Types[0].Type).TypeArgumentList.Arguments == null);
+        WriteTemp(((GenericNameSyntax)classDeclaration.BaseList!.Types[0].Type).TypeArgumentList.Arguments.Count);
+        WriteTemp(((GenericNameSyntax)classDeclaration.BaseList!.Types[0].Type).TypeArgumentList.Arguments.First());
+        WriteTemp(((GenericNameSyntax)classDeclaration.BaseList!.Types[0].Type).TypeArgumentList.Arguments[0]);
+
+        var parametersClassName = ((GenericNameSyntax)classDeclaration.BaseList!.Types[0].Type).TypeArgumentList.Arguments[0] as SimpleNameSyntax;
+
+        WriteTemp(parametersClassName);
+
+        var parametersClass = context.SemanticModel.GetTypeInfo(parametersClassName).Type;
+
+        WriteTemp(parametersClass);
+
         var parameters = new List<string>();
-        foreach (var property in classDeclaration.Members.OfType<PropertyDeclarationSyntax>())
+
+        writer.WriteLine($"protected static new readonly {parametersClass.Name}Reference parameters = new();");
+        writer.WriteLine($"protected class {parametersClass.Name}Reference : Sharpliner.AzureDevOps.TemplateDefinition.TemplateParameterReference");
+        writer.WriteLine("{");
+        writer.Indent++;
+
+        WriteTypeProperties(parametersClass, string.Empty);
+
+        // writer.WriteLine($"public override List<Parameter> ToParameters() => [ {string.Join(", ", parameters)} ];");
+        writer.Indent--;
+        writer.WriteLine("}");
+        writer.Indent--;
+        writer.WriteLine("}");
+
+        WriteTemp(builder.ToString());
+
+        return new(className, builder.ToString());
+
+        void WriteTemp(object obj, [CallerArgumentExpression(nameof(obj))] string caller = "")
         {
-            var propertyName = property.Identifier.Text;
-            var defaultValue = property.Initializer?.Value.ToString() ?? "default";
-
-            var rawParameterType = property.Type.ToString();
-            var parameterType = rawParameterType switch
-            {
-                "string" => "StringParameter",
-                "int?" => "NumberParameter",
-                "bool?" => "BooleanParameter",
-                "Step" => "StepParameter",
-                "ConditionedList<Step>" => "StepListParameter",
-                "JobBase" => "JobParameter",
-                "ConditionedList<JobBase>" => "JobListParameter",
-                "DeploymentJob" => "DeploymentParameter",
-                "ConditionedList<DeploymentJob>" => "DeploymentListParameter",
-                "Stage" => "StageParameter",
-                "ConditionedList<Stage>" => "StageListParameter",
-                _ => $"ObjectParameter<{rawParameterType}>"
-            };
-
-            var parameterName = propertyName + "Parameter";
-            writer.WriteLine($"public static {parameterType} {parameterName} {{ get; }} = new(\"{propertyName}\", defaultValue: {defaultValue});");
-
-            parameters.Add(parameterName);
+            tempWriter.WriteLine($"{caller} - {obj}");
         }
 
-        writer.WriteLine($"public override List<Parameter> ToParameters() => [ {string.Join(", ", parameters)} ];");
-        writer.Indent--;
+        void WriteTypeProperties(ITypeSymbol type, string prefix)
+        {
+            WriteTemp($"{type} - {prefix}");
+            foreach (var property in type.GetMembers().OfType<IPropertySymbol>()
+                .Where(x => x.Name is not "EqualityContract"))
+            {
+                var isBuiltInType = IsBuiltInType(property.Type);
+                var parameterReferenceType = !isBuiltInType ? property.Type.Name + "ParameterReference" : "Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference";
 
-        return builder.ToString();
+                var dataMember = property.GetAttributes().FirstOrDefault(x => x.AttributeClass?.Name is nameof(DataMemberAttribute));
+                var parameterName = dataMember?.NamedArguments.FirstOrDefault(x => x.Key is nameof(DataMemberAttribute.Name)).Value.Value?.ToString() ?? property.Name;
+                if (prefix.Length > 0)
+                {
+                    parameterName = $"{prefix}.{parameterName}";
+                }
+
+                writer.WriteLine($"public {parameterReferenceType} {property.Name} => new(\"{parameterName}\");");
+
+                if (!isBuiltInType)
+                {
+                    WriteTemp(property.Type);
+                    writer.WriteLine($"public class {parameterReferenceType} : Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference");
+                    writer.WriteLine("{");
+                    writer.Indent++;
+                    writer.WriteLine($"public {parameterReferenceType}(string parameterName) : base(parameterName) {{ }}");
+                    var newPrefix = prefix.Length > 0 ? $"{prefix}.{property.Name}" : property.Name;
+                    WriteTypeProperties(property.Type, newPrefix);
+                    writer.Indent--;
+                    writer.WriteLine("}");
+                }
+            }
+
+            if (type.BaseType is not null)
+            {
+                WriteTypeProperties(type.BaseType, prefix);
+            }
+        }
     }
+
+
+    private static bool IsBuiltInType(ITypeSymbol type)
+    {
+        return type.ContainingNamespace.ToString().StartsWith("System");
+    }
+
+    private record struct TemplateDefinitionDetails(string ClassName, string Source);
 }
+

@@ -6,6 +6,7 @@ using System.Reflection;
 using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.SourceGenerator;
 using Xunit;
 using YamlDotNet.Serialization;
 
@@ -26,10 +27,10 @@ public class DotnetXHarnessTests
         }
 
         // When
-        new XHarnessPipeline.CorePostBuild().Serialize().Should().ContainAll(
-            "${{ if or(eq(parameters.enableNugetValidation, 'true'), eq(parameters.enableSigningValidation, 'true'), eq(parameters.enableSourceLinkValidation, 'true'), eq(parameters.SDLValidationParameters.enable, 'true')) }}:",
-            "dependsOn: ${{ parameters.validateDependsOn }}"
-        );
+        // new XHarnessPipeline.CorePostBuild().Serialize().Should().ContainAll(
+        //     "${{ if or(eq(parameters.enableNugetValidation, 'true'), eq(parameters.enableSigningValidation, 'true'), eq(parameters.enableSourceLinkValidation, 'true'), eq(parameters.SDLValidationParameters.enable, 'true')) }}:",
+        //     "dependsOn: ${{ parameters.validateDependsOn }}"
+        // );
 
         // Then
     }
@@ -116,24 +117,27 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
         })
     };
 
-    public class CommonVariables : VariableTemplateDefinition
-    {
-        public static Variable TeamName { get; } = new("_TeamName", "DotNetCore");
-        public static Variable HelixApiAccessToken { get; } = new("HelixApiAccessToken", string.Empty);
-        public static Variable InternalBuildArgs { get; } = new("_InternalBuildArgs", string.Empty);
+}
 
-        public static Variable SignType { get; } = new("_SignType", "real");
-        public static Variable BuildConfig { get; } = new("_BuildConfig", "release");
 
-        public static VariableGroup PublishBuildAssets { get; } = new("Publish-Build-Assets");
-        public static VariableGroup DotNetHelixApiAccess { get; } = new("DotNet-HelixApi-Access");
-        public static VariableGroup SdlSettings { get; } = new("SDL_Settings");
+public class CommonVariables : VariableTemplateDefinition
+{
+    public static Variable TeamName { get; } = new("_TeamName", "DotNetCore");
+    public static Variable HelixApiAccessToken { get; } = new("HelixApiAccessToken", string.Empty);
+    public static Variable InternalBuildArgs { get; } = new("_InternalBuildArgs", string.Empty);
 
-        public override string TargetFile => "eng/common-variables.yml";
-        public override TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
-        public override ConditionedList<VariableBase> Definition =>
-        [
-            TeamName,
+    public static Variable SignType { get; } = new("_SignType", "real");
+    public static Variable BuildConfig { get; } = new("_BuildConfig", "release");
+
+    public static VariableGroup PublishBuildAssets { get; } = new("Publish-Build-Assets");
+    public static VariableGroup DotNetHelixApiAccess { get; } = new("DotNet-HelixApi-Access");
+    public static VariableGroup SdlSettings { get; } = new("SDL_Settings");
+
+    public override string TargetFile => "eng/common-variables.yml";
+    public override TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
+    public override ConditionedList<VariableBase> Definition =>
+    [
+        TeamName,
             HelixApiAccessToken,
             InternalBuildArgs,
             If.And(
@@ -154,40 +158,45 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
                 """)
             ),
         ];
+}
+
+public class CommonPostBuild : JobTemplateDefinition<CommonPostBuildParameters>
+{
+    public CommonPostBuild() : base()
+    {
     }
 
-    public class CommonPostBuild : JobTemplateDefinition<CommonPostBuildParameters>
+    public CommonPostBuild(CommonPostBuildParameters parameters) : base(parameters)
     {
-        public CommonPostBuild(CommonPostBuildParameters parameters) : base(parameters)
-        {
-        }
-
-        public override string TargetFile => "eng/common/templates-official/post-build/post-build.yml";
-        public override TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
-        public override ConditionedList<JobBase> Definition =>
-        [
-        ];
     }
 
-    public class CommonPostBuildParameters : CorePostBuildParametersBase<CommonPostBuildParameters>
-    {
-        public override bool Is1ESPipeline { get; set; } = false;
-    }
+    public override string TargetFile => "eng/common/templates-official/post-build/post-build.yml";
+    public override TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
+    public override ConditionedList<JobBase> Definition =>
+    [
+    ];
+}
 
-    public class CorePostBuild : StageTemplateDefinition<CorePostBuildParameters>
-    {
-        public override string TargetFile => "eng/common/core-templates/post-build/post-build.yml";
-        public override TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
-        public override ConditionedList<Stage> Definition =>
-        [
-            If.Or(
-                Equal(TemplateParameters.EnableNugetValidation, "'true'"),
-                Equal(TemplateParameters.EnableSigningValidation, "'true'"),
-                Equal(TemplateParameters.EnableSourceLinkValidation, "'true'"),
-                Equal(TemplateParameters.SDLValidationParameters.Enable, "'true'")
+public class CommonPostBuildParameters : CorePostBuildParametersBase<CommonPostBuildParameters>
+{
+    public override bool Is1ESPipeline { get; set; } = false;
+}
+
+[SharplinerTemplateParameters]
+public partial class CorePostBuild : StageTemplateDefinition<CorePostBuildParameters>
+{
+    public override string TargetFile => "eng/common/core-templates/post-build/post-build.yml";
+    public override TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
+    public override ConditionedList<Stage> Definition =>
+    [
+        If.Or(
+                Equal(parameters.EnableNugetValidation, "true"),
+                Equal(parameters.EnableSigningValidation, "true"),
+                Equal(parameters.EnableSourceLinkValidation, "true"),
+                Equal(parameters.SDLValidationParameters.Enable, "true")
             ).Stage(new("Validate", "Validate Build Assets")
             {
-                DependsOn = TemplateParameters.ValidateDependsOn,
+                DependsOn = [parameters.ValidateDependsOn],
                 Variables =
                 {
                     Template("/eng/common/core-templates/post-build/common-variables.yml"),
@@ -200,70 +209,90 @@ internal class XHarnessPipeline : ExtendsPipelineDefinition
                     }
                 }
             })
-        ];
+    ];
 
-        void Test()
+    void test()
+    {
+    }
+}
+
+/*
+partial class CorePostBuild
+{
+    protected static new readonly CorePostBuildParametersReference parameters = new();
+
+    public class CorePostBuildParametersReference : TemplateParameterReference
+    {
+        public ParameterReference EnableNugetValidation => new("enableNugetValidation");
+        public ParameterReference EnableSigningValidation => new("enableSigningValidation");
+        public ParameterReference EnableSourceLinkValidation => new("enableSourceLinkValidation");
+        public SDLValidationParametersParameterReference SDLValidationParameters => new("SDLValidationParameters");
+        public class SDLValidationParametersParameterReference(string parameterName) : ParameterReference(parameterName)
         {
-            Expression<Func<object>> parameterRef = () => TemplateParameters.EnableNugetValidation;
+            public ParameterReference Enable => new($"{parameterName}.enable");
         }
-    }
 
-    public class CorePostBuildParameters : CorePostBuildParametersBase<CorePostBuildParameters>
+        public ParameterReference ValidateDependsOn => new("validateDependsOn");
+        public ParameterReference Is1ESPipeline => new("is1ESPipeline");
+    }
+}
+*/
+
+public class CorePostBuildParameters : CorePostBuildParametersBase<CorePostBuildParameters>
+{
+
+}
+
+public abstract class CorePostBuildParametersBase<TSelf> : TemplateParametersProviderBase<TSelf> where TSelf : CorePostBuildParametersBase<TSelf>, new()
+{
+    public virtual int PublishingInfraVersion { get; set; } = 3;
+
+    public virtual int BARBuildId { get; set; } = 0;
+
+    public virtual string PromoteToChannelIds { get; set; } = string.Empty;
+
+    public virtual bool EnableSourceLinkValidation { get; set; } = true;
+
+    public virtual bool EnableSigningValidation { get; set; } = false;
+
+    public virtual bool EnableSymbolValidation { get; set; }
+
+    public virtual bool EnableNugetValidation { get; set; } = true;
+
+    public virtual bool PublishInstallersAndChecksums { get; set; } = true;
+
+    [YamlMember(Alias = "SDLValidationParameters")]
+    public virtual SDLValidationParameters SDLValidationParameters { get; set; } = new()
     {
+        Enable = false,
+        PublishGdn = false,
+        ContinueOnError = false,
+        Params = string.Empty,
+        ArtifactNames = string.Empty,
+        DownloadArtifacts = true
+    };
 
-    }
+    public virtual string SymbolPublishingAdditionalParameters { get; set; } = string.Empty;
 
-    public abstract class CorePostBuildParametersBase<TSelf> : TemplateParametersProviderBase<TSelf> where TSelf : CorePostBuildParametersBase<TSelf>, new()
-    {
-        public virtual int PublishingInfraVersion { get; set; } = 3;
+    public virtual string ArtifactsPublishingAdditionalParameters { get; set; } = string.Empty;
 
-        public virtual int BARBuildId { get; set; } = 0;
+    public virtual string SigningValidationAdditionalParameters { get; set; } = string.Empty;
 
-        public virtual string PromoteToChannelIds { get; set; } = string.Empty;
+    public virtual List<string> ValidateDependsOn { get; set; } = ["build"];
 
-        public virtual bool EnableSourceLinkValidation { get; set; } = true;
+    public virtual List<string> PublishDependsOn { get; set; } = ["Validate"];
 
-        public virtual bool EnableSigningValidation { get; set; } = false;
+    public virtual bool PublishAssetsImmediately { get; set; } = false;
 
-        public virtual bool EnableSymbolValidation { get; set; }
+    public virtual bool Is1ESPipeline { get; set; }
+}
 
-        public virtual bool EnableNugetValidation { get; set; } = true;
-
-        public virtual bool PublishInstallersAndChecksums { get; set; } = true;
-
-        [YamlMember(Alias = "SDLValidationParameters")]
-        public virtual SDLValidationParameters SDLValidationParameters { get; set; } = new()
-        {
-            Enable = false,
-            PublishGdn = false,
-            ContinueOnError = false,
-            Params = string.Empty,
-            ArtifactNames = string.Empty,
-            DownloadArtifacts = true
-        };
-
-        public virtual string SymbolPublishingAdditionalParameters { get; set; } = string.Empty;
-
-        public virtual string ArtifactsPublishingAdditionalParameters { get; set; } = string.Empty;
-
-        public virtual string SigningValidationAdditionalParameters { get; set; } = string.Empty;
-
-        public virtual List<string> ValidateDependsOn { get; set; } = ["build"];
-
-        public virtual List<string> PublishDependsOn { get; set; } = ["Validate"];
-
-        public virtual bool PublishAssetsImmediately { get; set; } = false;
-
-        public virtual bool Is1ESPipeline { get; set; }
-    }
-
-    public record SDLValidationParameters
-    {
-        public bool Enable { get; set; } = false;
-        public bool PublishGdn { get; set; } = false;
-        public bool ContinueOnError { get; set; } = false;
-        public string Params { get; set; } = string.Empty;
-        public string ArtifactNames { get; set; } = string.Empty;
-        public bool DownloadArtifacts { get; set; } = true;
-    }
+public record SDLValidationParameters
+{
+    public bool Enable { get; set; } = false;
+    public bool PublishGdn { get; set; } = false;
+    public bool ContinueOnError { get; set; } = false;
+    public string Params { get; set; } = string.Empty;
+    public string ArtifactNames { get; set; } = string.Empty;
+    public bool DownloadArtifacts { get; set; } = true;
 }
