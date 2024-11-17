@@ -13,7 +13,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 namespace Sharpliner.SourceGenerator;
 
 [AttributeUsage(AttributeTargets.Class)]
-public sealed class SharplinerTemplateParametersAttribute : Attribute
+public sealed class GenerateTemplateDefinitionParametersAttribute : Attribute
 {
 }
 
@@ -23,7 +23,7 @@ public class SharplinerTemplateParametersSourceGenerator : IIncrementalGenerator
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
         var templateParametersDeclarations = context.SyntaxProvider.ForAttributeWithMetadataName(
-            typeof(SharplinerTemplateParametersAttribute).FullName!,
+            typeof(GenerateTemplateDefinitionParametersAttribute).FullName!,
             predicate: static (node, ctx) => node is ClassDeclarationSyntax classDeclaration && IsTemplateDefinitionClass(classDeclaration),
             transform: static (syntaxContext, ctx) => GenerateTemplateParameters(syntaxContext, ctx));
 

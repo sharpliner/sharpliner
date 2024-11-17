@@ -184,7 +184,7 @@ public class CommonPostBuildParameters : CorePostBuildParametersBase<CommonPostB
     public override bool Is1ESPipeline { get; set; } = false;
 }
 
-[SharplinerTemplateParameters]
+[GenerateTemplateDefinitionParameters]
 public partial class CorePostBuild : StageTemplateDefinition<CorePostBuildParameters>
 {
     public override string TargetFile => "eng/common/core-templates/post-build/post-build.yml";

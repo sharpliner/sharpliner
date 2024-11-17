@@ -112,7 +112,7 @@ internal class PlaygroundPipeline : TestPipeline
     };
 }
 
-[SharplinerTemplateParameters]
+[GenerateTemplateDefinitionParameters]
 partial class JavaTemplate : JobTemplateDefinition<JavaTemplateParameters>
 {
     public JavaTemplate() : base() {}
