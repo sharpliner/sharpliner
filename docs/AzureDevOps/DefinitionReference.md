@@ -138,11 +138,25 @@ Variables =
 [
     Variable("Configuration", "Release"),     // We have shorthand style like we do for build steps
     Group("PR keyvault variables"),
-    new Variable("Configuration", "Release"), // We can also create the objects and resue them too
+    new Variable("Configuration", "Release"), // We can also create the objects and reuse them too
     Variables(                                // You can also save some keystrokes and define multiple variables at once
         ("variable1", "value1"),
         ("variable2", true))
 ]
+```
+
+You can define variables and pass them to methods to make the code more readable:
+
+```csharp
+static readonly Variable s_version = Variable("version", "5.0.100");
+Variables =
+[
+    s_version,
+];
+Definition =
+[
+    DotNet.Install.Sdk(s_version),
+];
 ```
 
 ## Pipeline parameters

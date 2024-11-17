@@ -33,6 +33,8 @@ class PullRequestPipeline : SingleStagePipelineDefinition
     public override string TargetFile => "eng/pr.yml";
     public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
+    private static readonly Variable DotnetVersion = new Variable("DotnetVersion", string.Empty);
+
     public override SingleStagePipeline Pipeline => new()
     {
         Pr = new PrTrigger("main"),
@@ -42,10 +44,10 @@ class PullRequestPipeline : SingleStagePipelineDefinition
             // YAML ${{ if }} conditions are available with handy macros that expand into the
             // expressions such as comparing branch names. We also have "else"
             If.IsBranch("net-6.0")
-                .Variable("DotnetVersion", "6.0.100")
+                .Variable(DotnetVersion with { Value = "6.0.100" })
                 .Group("net6-keyvault")
             .Else
-                .Variable("DotnetVersion", "5.0.202"),
+                .Variable(DotnetVersion with { Value = "5.0.202" }),
         ],
 
         Jobs =
@@ -56,7 +58,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                 Steps =
                 [
                     // Many tasks have helper methods for shorter notation
-                    DotNet.Install.Sdk(variables["DotnetVersion"]),
+                    DotNet.Install.Sdk(DotnetVersion),
 
                     // You can also specify any pipeline task in full too
                     Task("DotNetCoreCLI@2", "Build and test") with
