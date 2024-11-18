@@ -80,10 +80,18 @@ public class ConditionalsTests
                     .Variable("legacy", true)
                 .EndIf
                 .If.IsBranch("patch-1")
+                    .VariableTemplate("patch-template.yml", new()
+                    {
+                        ["target"] = "patch-branch"
+                    })
                     .Variable("fast", true),
                 If.And(IsPullRequest, IsNotBranch("main"))
-                    .Group("pr-group"),
-            }
+                    .Group("pr-group")
+                    .VariableTemplate("pr-template.yml", new()
+                    {
+                        ["target"] = "pr-branch"
+                    }),
+            },
         };
     }
 
@@ -103,11 +111,19 @@ public class ConditionalsTests
                 value: true
 
             - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/patch-1') }}:
+              - template: patch-template.yml
+                parameters:
+                  target: patch-branch
+
               - name: fast
                 value: true
 
             - ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), ne(variables['Build.SourceBranch'], 'refs/heads/main')) }}:
               - group: pr-group
+
+              - template: pr-template.yml
+                parameters:
+                  target: pr-branch
             """);
     }
 
