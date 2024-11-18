@@ -51,6 +51,8 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.EachBlock Each(string iterator, string collection) { }
         protected static Sharpliner.AzureDevOps.InlineCondition EndsWith(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression needle, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression haystack) { }
         protected static Sharpliner.AzureDevOps.InlineCondition EndsWith<T>(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression needle, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression haystack) { }
+        protected static Sharpliner.AzureDevOps.Parameter EnumParameter<TEnum>(string name, string? displayName = null, TEnum? defaultValue = default)
+            where TEnum :  struct, System.Enum { }
         protected static Sharpliner.AzureDevOps.InlineCondition Equal(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression1, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression2) { }
         protected static Sharpliner.AzureDevOps.InlineCondition Equal<T>(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression1, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression2) { }
         protected static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Job> ExpandJobs(params Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Job>[] jobs) { }
@@ -360,6 +362,12 @@ namespace Sharpliner.AzureDevOps
     public class ElseCondition : Sharpliner.AzureDevOps.ConditionedExpressions.Condition
     {
         public ElseCondition() { }
+    }
+    public sealed class EnumParameter<TEnum> : Sharpliner.AzureDevOps.Parameter<TEnum?>, System.IEquatable<Sharpliner.AzureDevOps.EnumParameter<TEnum>>
+        where TEnum :  struct, System.Enum
+    {
+        public EnumParameter(string name, string? displayName = null, TEnum? defaultValue = default) { }
+        public override string Type { get; }
     }
     public class Environment : System.IEquatable<Sharpliner.AzureDevOps.Environment>
     {
@@ -1006,6 +1014,8 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Parameter BooleanParameter(string name, bool? defaultValue = default) { }
         protected static Sharpliner.AzureDevOps.Parameter DeploymentListParameter(string name, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.DeploymentJob>? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.Parameter DeploymentParameter(string name, Sharpliner.AzureDevOps.DeploymentJob? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.Parameter EnumParameter<TEnum>(string name, TEnum? defaultValue = default)
+            where TEnum :  struct, System.Enum { }
         protected static Sharpliner.AzureDevOps.Parameter JobListParameter(string name, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase>? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.JobBase> JobParameter(string name, Sharpliner.AzureDevOps.JobBase? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.JobBase JobParameterReference(Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.JobBase> parameter) { }

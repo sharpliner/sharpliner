@@ -3,6 +3,7 @@ using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Xunit;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
@@ -50,6 +51,7 @@ public class TemplateTests
     {
         public override string TargetFile => "template.yml";
 
+        protected Parameter configuration = EnumParameter<BuildConfiguration>("configuration", defaultValue: BuildConfiguration.Debug);
         protected Parameter project = StringParameter("project");
         protected Parameter version = StringParameter("version", allowedValues: [ "5.0.100", "5.0.102" ]);
         protected Parameter skipBuild = BooleanParameter("skipBuild");
@@ -59,6 +61,7 @@ public class TemplateTests
 
         public override List<Parameter> Parameters =>
         [
+            configuration,
             project,
             version,
             skipBuild,
@@ -80,6 +83,15 @@ public class TemplateTests
         ];
     }
 
+    private enum BuildConfiguration
+    {
+        [YamlMember(Alias = "debug")]
+        Debug,
+
+        [YamlMember(Alias = "release")]
+        Release,
+    }
+
     [Fact]
     public void Step_Template_Definition_Serialization_Test()
     {
@@ -88,6 +100,13 @@ public class TemplateTests
         yaml.Trim().Should().Be(
             """
             parameters:
+            - name: configuration
+              type: string
+              default: debug
+              values:
+              - debug
+              - release
+
             - name: project
               type: string
 

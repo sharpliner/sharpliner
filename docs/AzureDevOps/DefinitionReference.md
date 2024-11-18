@@ -169,7 +169,18 @@ Parameters =
     StringParameter("version", ".NET version", allowedValues: new[] { "5.0.100", "5.0.102" }),
     BooleanParameter("restore", "Restore NuGets", defaultValue: true),
     StepParameter("afterBuild", "After steps", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)")),
-]
+    EnumParameter<BuildConfiguration>("configuration", defaultValue: BuildConfiguration.Debug),
+],
+
+// and the enum
+public enum BuildConfiguration
+{
+    [YamlMember(Alias = "debug")]
+    Debug,
+
+    [YamlMember(Alias = "release")]
+    Release,
+}
 ```
 
 When referencing these parameters, you can just refer to the parameter and it will be replaced with a parameter reference expression:
@@ -366,6 +377,8 @@ class InstallDotNetTemplate : StepTemplateDefinition
     // Where to publish the YAML to
     public override string TargetFile => "templates/build-csproj.yml";
 
+    private Parameter configuration = EnumParameter<BuildConfiguration>("configuration", defaultValue: BuildConfiguration.Release);
+    private Parameter project = StringParameter("project");
     private Parameter project = StringParameter("project");
     private Parameter version = StringParameter("version", allowedValues: new[] { "5.0.100", "5.0.102" });
     private Parameter restore = BooleanParameter("restore", defaultValue: true);
@@ -373,6 +386,7 @@ class InstallDotNetTemplate : StepTemplateDefinition
 
     public override List<TemplateParameter> Parameters =>
     [
+        configuration,
         project,
         version,
         restore,
@@ -391,12 +405,28 @@ class InstallDotNetTemplate : StepTemplateDefinition
         StepParameterReference(afterBuild),
     ];
 }
+
+public enum BuildConfiguration
+{
+    [YamlMember(Alias = "debug")]
+    Debug,
+
+    [YamlMember(Alias = "release")]
+    Release,
+}
 ```
 
 This produces following YAML template:
 
 ```yaml
 parameters:
+- name: configuration
+  type: string
+  default: debug
+  values:
+  - debug
+  - release
+
 - name: project
   type: string
 
