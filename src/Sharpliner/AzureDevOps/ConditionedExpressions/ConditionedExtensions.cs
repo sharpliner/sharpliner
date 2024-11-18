@@ -91,17 +91,6 @@ public static class ConditionedExtensions
     }
 
     /// <summary>
-    /// References a variable template.
-    /// </summary>
-    public static Conditioned<VariableBase> Template(
-        this Conditioned<VariableBase> conditionedDefinition,
-        string name)
-    {
-        conditionedDefinition.Definitions.Add(new Conditioned<VariableBase>(definition: new VariableTemplate(name)));
-        return conditionedDefinition;
-    }
-
-    /// <summary>
     /// Creates a new stage.
     /// </summary>
     public static Conditioned<Stage> Stage(this Conditioned<Stage> conditionedDefinition, Stage stage)

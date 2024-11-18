@@ -14,8 +14,8 @@ public class PipelineVariableTests
             {
                 Variable("SomeVariable", "Some Value"),
                 Group("SomeGroup"),
-                Template("SomeTemplate")
-            }
+                VariableTemplate("SomeTemplate")
+            },
         };
     }
 

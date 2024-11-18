@@ -115,7 +115,6 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Template<Sharpliner.AzureDevOps.Step> StepTemplate(string path, Sharpliner.AzureDevOps.TemplateParameters? parameters = null) { }
         protected static Sharpliner.AzureDevOps.Parameter StringParameter(string name, string? displayName = null, string? defaultValue = null, System.Collections.Generic.IEnumerable<string>? allowedValues = null) { }
         protected static Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask Task(string taskName, string? displayName = null) { }
-        protected static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Template(string name) { }
         protected static Sharpliner.AzureDevOps.Step ValidateYamlsArePublished(string pipelineProject) { }
         protected static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(string name, bool value) { }
         protected static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(string name, int value) { }
@@ -224,7 +223,6 @@ namespace Sharpliner.AzureDevOps
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step> Steps(this Sharpliner.AzureDevOps.IfCondition condition, System.Collections.Generic.IEnumerable<Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step>> steps) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step> Steps(this Sharpliner.AzureDevOps.IfCondition condition, System.Collections.Generic.IEnumerable<Sharpliner.AzureDevOps.Step> steps) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Strategy> Strategy(this Sharpliner.AzureDevOps.IfCondition condition, Sharpliner.AzureDevOps.Strategy strategy) { }
-        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Template(this Sharpliner.AzureDevOps.IfCondition condition, string name) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> Value<T>(this Sharpliner.AzureDevOps.IfCondition condition, T value) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.IfCondition condition, Sharpliner.AzureDevOps.Variable variable) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.IfCondition condition, string name, bool value) { }
@@ -273,7 +271,6 @@ namespace Sharpliner.AzureDevOps
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step> Steps(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step> conditionedDefinition, params Sharpliner.AzureDevOps.Step[] steps) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step> Steps(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step> conditionedDefinition, System.Collections.Generic.IEnumerable<Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step>> steps) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step> Steps(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step> conditionedDefinition, System.Collections.Generic.IEnumerable<Sharpliner.AzureDevOps.Step> steps) { }
-        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Template(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> conditionedDefinition, string name) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> conditionedDefinition, string name, bool value) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> conditionedDefinition, string name, int value) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> conditionedDefinition, string name, string value) { }
@@ -1132,12 +1129,6 @@ namespace Sharpliner.AzureDevOps
         public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference this[string variableName] { get; }
         protected abstract string Prefix { get; }
         protected Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference GetReference(string name) { }
-    }
-    public class VariableTemplate : Sharpliner.AzureDevOps.VariableBase, System.IEquatable<Sharpliner.AzureDevOps.VariableTemplate>
-    {
-        public VariableTemplate(string name) { }
-        [YamlDotNet.Serialization.YamlMember(Alias="template")]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string> Name { get; }
     }
     public abstract class VariableTemplateCollection : Sharpliner.AzureDevOps.TemplateDefinitionCollection<Sharpliner.AzureDevOps.VariableBase>
     {

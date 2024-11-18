@@ -40,34 +40,6 @@ public record VariableGroup : VariableBase
 
 /// <summary>
 /// <para>
-/// A template for a variable that can be referenced in Azure DevOps pipelines. See <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/variables-template"/>
-/// </para>
-/// For example:
-/// <code>
-/// - template: variables/build.yml
-/// </code>
-/// </summary>
-public record VariableTemplate : VariableBase
-{
-    /// <summary>
-    /// The path to the template file.
-    /// </summary>
-    [YamlMember(Alias = "template")]
-    public Conditioned<string> Name { get; }
-
-    /// <summary>
-    /// Creates a new instance of <see cref="VariableTemplate"/>.
-    /// </summary>
-    /// <param name="name">The path to the template</param>
-    /// <exception cref="ArgumentNullException">If the input is null</exception>
-    public VariableTemplate(string name)
-    {
-        Name = name ?? throw new ArgumentNullException(nameof(name));
-    }
-}
-
-/// <summary>
-/// <para>
 /// Define variables using name/value pairs that can be referenced in Azure DevOps pipelines. See <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/variables"/>
 /// </para>
 /// For example:
