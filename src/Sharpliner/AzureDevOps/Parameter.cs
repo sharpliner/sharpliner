@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.ConditionedExpressions.Arguments;
 using YamlDotNet.Core;
@@ -147,6 +148,27 @@ public sealed record StringParameter : Parameter<string>
     /// <param name="allowedValues">Allowed list of string values.</param>
     public StringParameter(string name, string? displayName = null, string? defaultValue = null, IEnumerable<string>? allowedValues = null)
         : base(name, displayName, defaultValue, allowedValues)
+    {
+    }
+
+    /// <inheritdoc />
+    public override string Type => "string";
+}
+
+/// <summary>
+/// Class for defining <see cref="Enum"/> parameters that can be used in templates and pipelines.
+/// </summary>
+/// <typeparam name="TEnum">The type of the enum.</typeparam>
+public sealed record EnumParameter<TEnum> : Parameter<TEnum?> where TEnum : struct, Enum
+{
+    /// <summary>
+    /// Define a template parameter
+    /// </summary>
+    /// <param name="name">Name of the parameter, can be referenced in the template as <c>${{ parameters.name }}</c></param>
+    /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
+    /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
+    public EnumParameter(string name, string? displayName = null, TEnum? defaultValue = default)
+        : base(name, displayName, defaultValue, Enum.GetValues<TEnum>().Select(x => (TEnum?)x))
     {
     }
 

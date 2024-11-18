@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
@@ -365,6 +366,16 @@ public abstract class AzureDevOpsDefinition
     /// <param name="allowedValues">Allowed list of values (for some data types)</param>
     protected static Parameter StringParameter(string name, string? displayName = null, string? defaultValue = null, IEnumerable<string>? allowedValues = null)
         => new StringParameter(name, displayName, defaultValue, allowedValues);
+
+    /// <summary>
+    /// Defines a string template parameter
+    /// </summary>
+    /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
+    /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
+    protected static Parameter EnumParameter<TEnum>(string name, string? displayName = null, TEnum? defaultValue = null)
+        where TEnum : struct, Enum
+        => new EnumParameter<TEnum>(name, displayName, defaultValue);
 
     /// <summary>
     /// Defines a number template parameter
