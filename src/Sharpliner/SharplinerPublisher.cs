@@ -150,7 +150,7 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
         var pipelines = new List<T>();
         var typeToFind = typeof(T);
 
-        foreach (Type type in assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.IsAssignableTo(typeToFind)))
+        foreach (Type type in assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.IsAssignableTo(typeToFind) && t.GetConstructor([]) is not null))
         {
             object? pipelineDefinition = Activator.CreateInstance(type)
                 ?? throw new Exception($"Failed to instantiate {type.GetType().FullName}");
