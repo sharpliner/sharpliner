@@ -1,10 +1,19 @@
 ﻿// This file contains all definitions that users should override to use Sharpliner.
 // To learn more, see https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/GettingStarted.md
 
+using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.ConditionedExpressions.Arguments;
 using Sharpliner.AzureDevOps.Validation;
 using Sharpliner.Common;
+using YamlDotNet.RepresentationModel;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -39,7 +48,7 @@ public abstract class ExtendsPipelineDefinition : ExtendsPipelineDefinition<Pipe
 /// https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/extends?view=azure-pipelines
 /// </summary>
 public abstract class ExtendsPipelineDefinition<TPipeline> : PipelineDefinitionBase<TPipeline>
-    where TPipeline: PipelineWithExtends
+    where TPipeline : PipelineWithExtends
 {
 }
 
@@ -69,6 +78,131 @@ public abstract class JobTemplateDefinition : TemplateDefinition<JobBase>
 
     /// <inheritdoc/>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetJobValidations();
+}
+
+public interface ITemplateParametersProvider
+{
+    List<Parameter> ToParameters();
+
+    TemplateParameters ToTemplateParameters();
+}
+
+public abstract class TemplateParametersProviderBase<TParameters> : ITemplateParametersProvider where TParameters : class, new()
+{
+    public virtual List<Parameter> ToParameters()
+    {
+        var result = new List<Parameter>();
+        var defaultParameters = new TParameters();
+        foreach (var property in typeof(TParameters).GetProperties())
+        {
+            var name = property.GetCustomAttribute<YamlMemberAttribute>()?.Alias ?? CamelCaseNamingConvention.Instance.Apply(property.Name);
+            
+            var defaultValue = property.GetValue(defaultParameters);
+            Parameter parameter;
+            if (property.PropertyType.IsEnum)
+            {
+                parameter = new StringParameter(name, defaultValue: defaultValue as string, allowedValues: Enum.GetNames(property.PropertyType));
+            }
+            else if (property.PropertyType == typeof(string))
+            {
+                parameter = new StringParameter(name, defaultValue: defaultValue as string);
+            }
+            else if (property.PropertyType == typeof(bool))
+            {
+                parameter = new BooleanParameter(name, defaultValue: defaultValue as bool?);
+            }
+            else if (property.PropertyType == typeof(int))
+            {
+                parameter = new NumberParameter(name, defaultValue: defaultValue as int?);
+            }
+            else if (property.PropertyType == typeof(Step))
+            {
+                parameter = new StepParameter(name, defaultValue: defaultValue as Step);
+            }
+            else if (property.PropertyType == typeof(ConditionedList<Step>))
+            {
+                parameter = new StepListParameter(name, defaultValue: defaultValue as ConditionedList<Step>);
+            }
+            else if (property.PropertyType.IsAssignableFrom(typeof(JobBase)))
+            {
+                parameter = new JobParameter(name, defaultValue: defaultValue as JobBase);
+            }
+            else if (property.PropertyType == typeof(ConditionedList<JobBase>))
+            {
+                parameter = new JobListParameter(name, defaultValue: defaultValue as ConditionedList<JobBase>);
+            }
+            else if (property.PropertyType == typeof(DeploymentJob))
+            {
+                parameter = new DeploymentParameter(name, defaultValue: defaultValue as DeploymentJob);
+            }
+            else if (property.PropertyType == typeof(ConditionedList<DeploymentJob>))
+            {
+                parameter = new DeploymentListParameter(name, defaultValue: defaultValue as ConditionedList<DeploymentJob>);
+            }
+            else if (property.PropertyType == typeof(Stage))
+            {
+                parameter = new StageParameter(name, defaultValue: defaultValue as Stage);
+            }
+            else if (property.PropertyType == typeof(ConditionedList<Stage>))
+            {
+                parameter = new StageListParameter(name, defaultValue: defaultValue as ConditionedList<Stage>);
+            }
+            else
+            {
+                // TODO: use reflection to create an instance of ObjectParameter<T>
+                parameter = new ObjectParameter(name);
+            }
+
+            result.Add(parameter);
+        }
+
+        return result;
+    }
+
+    public TemplateParameters ToTemplateParameters()
+    {
+        var result = new TemplateParameters();
+        var defaultParameters = new TParameters();
+
+        foreach (var property in typeof(TParameters).GetProperties())
+        {
+            var value = property.GetValue(this);
+            if (value is not null && !value.Equals(property.GetValue(defaultParameters)))
+            {
+                var name = property.GetCustomAttribute<YamlMemberAttribute>()?.Alias;
+                name ??= CamelCaseNamingConvention.Instance.Apply(property.Name);
+
+                result.Add(name, value);
+            }
+        }
+
+        return result;
+    }
+
+    public static implicit operator TemplateParameters(TemplateParametersProviderBase<TParameters> parametersProvider) => parametersProvider.ToTemplateParameters();
+}
+
+public abstract class JobTemplateDefinition<TParameters> : JobTemplateDefinition
+    where TParameters : ITemplateParametersProvider, new()
+{
+    protected JobTemplateDefinition() => TemplateParameters = new();
+    protected JobTemplateDefinition(TParameters parameters) => TemplateParameters = parameters;
+
+    public override List<Parameter> Parameters => TemplateParameters.ToParameters();
+
+    [DisallowNull]
+    public TParameters TemplateParameters { get; }
+
+    public static implicit operator Template<JobBase>(JobTemplateDefinition<TParameters> definition) => new (definition.TargetFile, definition.TemplateParameters?.ToTemplateParameters());
+}
+
+public abstract class StageTemplateDefinition<TParameters> : StageTemplateDefinition
+    where TParameters : ITemplateParametersProvider, new()
+{
+    public sealed override List<Parameter> Parameters => TemplateParameters.ToParameters();
+
+    [DisallowNull]
+    public TParameters TemplateParameters { get; } = new TParameters();
 }
 
 /// <summary>

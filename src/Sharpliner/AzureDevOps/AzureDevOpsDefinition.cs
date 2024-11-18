@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.ConditionedExpressions.Arguments;
@@ -15,6 +17,10 @@ namespace Sharpliner.AzureDevOps;
 public abstract class AzureDevOpsDefinition
 {
     #region Template references
+
+    protected static Template<VariableBase> VariableTemplate<T>(TemplateParameters? parameters = null)
+        where T : VariableTemplateDefinition, new()
+        => VariableTemplate(new T().TargetFile, parameters);
 
     /// <summary>
     /// Reference a YAML template.
@@ -39,6 +45,11 @@ public abstract class AzureDevOpsDefinition
     /// <param name="parameters">Values for template parameters</param>
     protected static Template<JobBase> JobTemplate(string path, TemplateParameters? parameters = null)
         => new(path, parameters);
+
+    protected static Template<JobBase> JobTemplate<TTemplate, TParameters>(TTemplate template)
+        where TTemplate : JobTemplateDefinition<TParameters>, new()
+        where TParameters : TemplateParametersProviderBase<TParameters>, new()
+        => JobTemplate(template.TargetFile, template.TemplateParameters);
 
     /// <summary>
     /// Reference a YAML template.

@@ -1,315 +1,277 @@
-﻿using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using FluentAssertions;
+using Sharpliner.AzureDevOps;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.SourceGenerator;
+using Xunit;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.Tests.AzureDevOps;
+
+public class DotnetXHarnessTests
+{
+    [Fact]
+    public void Test()
+    {
+        var types = new[] 
+        {
+            typeof(XHarnessPipeline),
+            typeof(CommonVariables),
+            typeof(CommonPostBuild),
+            typeof(CorePostBuild),
+        };
+        foreach (var type in types)
+        {
+            SharplinerPublisher.Publish((ISharplinerDefinition)Activator.CreateInstance(type)!);
+        }
+
+        // When
+        // new XHarnessPipeline.CorePostBuild().Serialize().Should().ContainAll(
+        //     "${{ if or(eq(parameters.enableNugetValidation, 'true'), eq(parameters.enableSigningValidation, 'true'), eq(parameters.enableSourceLinkValidation, 'true'), eq(parameters.SDLValidationParameters.enable, 'true')) }}:",
+        //     "dependsOn: ${{ parameters.validateDependsOn }}"
+        // );
+
+        // Then
+    }
+}
 
 /// <summary>
 /// Definition of https://github.com/dotnet/xharness/blob/main/azure-pipelines.yml (not 100%)
 /// Used for testing of API inside of this repository
 /// </summary>
-internal class XHarnessPipeline : PipelineDefinition
+internal class XHarnessPipeline : ExtendsPipelineDefinition
 {
-    public override string TargetFile => "xharness.yml";
+    public override string TargetFile => "dotnet/xharness/azure-pipelines.yml";
 
-    public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
+    public override TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
 
-    public override Pipeline Pipeline => new()
+    public override PipelineWithExtends Pipeline => new()
     {
         Variables =
         {
-            VariableTemplate("eng/common-variables.yml"),
-            Variable("Build.Repository.Clean", true),
+            VariableTemplate<CommonVariables>(),
         },
 
-        Trigger = new Trigger("main", "xcode/*")
+        Trigger = new Trigger("main", "release/*", "internal/release/*")
         {
             Batch = true
         },
 
-        Pr = new PrTrigger("main", "xcode/*"),
+        Pr = PrTrigger.None,
 
-        Stages =
+        Resources = new Resources
         {
-            new Stage("Build_Windows_NT", "Build Windows")
-            {
-                Jobs =
+            Repositories =
+            [
+                new RepositoryResource("1ESPipelineTemplates") with
                 {
-                    new Template<JobBase>("/eng/common/templates/jobs/jobs.yml")
+                    Type = RepositoryType.Git,
+                    Name = "1ESPipelineTemplates/1ESPipelineTemplates",
+                    Ref = "refs/tags/release",
+                }
+            ]
+        },
+
+        Extends = new Extends("v1/1ES.Official.PipelineTemplate.yml@1ESPipelineTemplates", new TemplateParameters
+        {
+            // sdl
+            // pool
+            ["stages"] = new ConditionedList<Stage>
+            {
+                new Stage("Build")
+                {
+                    Jobs =
                     {
-                        Parameters =
+                        JobTemplate("/eng/common/templates-official/jobs/jobs.yml", new TemplateParameters
                         {
-                            { "enableTelemetry", true },
-                            { "enablePublishBuildArtifacts", true },
-                            { "enableMicrobuild", true },
-                            { "enablePublishUsingPipelines", true },
-                            { "enablePublishBuildAssets", true },
-                            { "helixRepo", "dotnet/xharness" },
-                            { "jobs", new[]
+                            ["enableTelemetry"] = true,
+                            ["enablePublishBuildArtifacts"] = true,
+                            ["enableMicrobuild"] = true,
+                            ["enablePublishUsingPipelines"] = true,
+                            ["enablePublishBuildAssets"] = true,
+                            ["helixRepo"] = "dotnet/xharness",
+                            ["jobs"] = new ConditionedList<Job>
+                            {
+                                new Job("Windows_NT", "Build Windows")
                                 {
-                                    new Job("Windows_NT")
+                                    Steps =
                                     {
-                                        Pool =
-                                            If.Equal(variables["_RunAsInternal"], "True")
-                                                .Pool(new HostedPool("NetCore1ESPool-Internal")
-                                                {
-                                                    Demands = { "ImageOverride -equals Build.Server.Amd64.VS2019" }
-                                                })
-                                            .EndIf
-                                            .If.Equal(variables["_RunAsPublic"], "True")
-                                                .Pool(new HostedPool(vmImage: "windows-2019")),
-
-                                        Strategy =
-                                            If.Equal(variables["_RunAsPublic"], "True")
-                                                .Strategy(new MatrixStrategy
-                                                {
-                                                    Matrix = new()
-                                                    {
-                                                        { "Release", new[] { ("_BuildConfig", "Release") } },
-                                                        { "Debug", new[] { ("_BuildConfig", "Debug") } },
-                                                    }
-                                                })
-                                            .Else
-                                                .Strategy(new MatrixStrategy
-                                                {
-                                                    Matrix = new()
-                                                    {
-                                                        { "Release", new[] { ("_BuildConfig", "Release") } },
-                                                    }
-                                                }),
-
-                                        Steps =
+                                        (Script.Inline($"eng\\common\\CIBuild.cmd -configuration {CommonVariables.BuildConfig} -prepareMachine {CommonVariables.InternalBuildArgs} /p:Test=false") with
                                         {
-                                            If.Equal(variables["_RunAsPublic"], "False")
-                                                .Step(Script.Inline(
-                                                        "eng\\common\\CIBuild.cmd" +
-                                                        " -configuration $(_BuildConfig)" +
-                                                        " -prepareMachine" +
-                                                        " $(_InternalBuildArgs)" +
-                                                        " /p:Test=false")
-                                                    .DisplayAs("Build")
-                                                    .WhenSucceeded()),
-
-                                            If.Equal(variables["_RunAsPublic"], "True")
-                                                .Step(Script.Inline(
-                                                        "eng\\common\\CIBuild.cmd" +
-                                                        " -configuration $(_BuildConfig)" +
-                                                        " -prepareMachine" +
-                                                        " $(_InternalBuildArgs)")
-                                                    .DisplayAs("Build and run tests")
-                                                    .WhenSucceeded())
-
-                                                .Step(new PublishTestResultsTask(TestResultsFormat.XUnit, variables.Build.SourcesDirectory + "/artifacts/TestResults/**/*.xml")
-                                                {
-                                                    MergeTestResults = true,
-                                                    SearchFolder = variables.System.DefaultWorkingDirectory,
-                                                    TestRunTitle = "XHarness unit tests - " + variables.Agent.JobName
-                                                }.WhenSucceededOrFailed())
-
-                                                .Step(new AzureDevOpsTask("ComponentGovernanceComponentDetection@0")
-                                                {
-                                                    DisplayName = "Component Governance scan",
-                                                    Inputs =
-                                                    {
-                                                        { "ignoreDirectories", variables.Build.SourcesDirectory + "/.packages," +
-                                                                                variables.Build.SourcesDirectory + "/artifacts/obj/Microsoft.DotNet.XHarness.CLI/$(_BuildConfig)/net6.0/android-tools-unzipped" },
-                                                    }
-                                                }),
-                                        }
+                                            Name = "Build",
+                                            DisplayName = "Build"
+                                        }).WhenSucceeded()
                                     }
                                 }
                             }
+                        }),
+                        new CommonPostBuild(new()
+                        {
+                            EnableSymbolValidation = true,
+                            EnableSourceLinkValidation = true
+                        })
+                    }
+                }
+            }
+        })
+    };
+
+}
+
+
+public class CommonVariables : VariableTemplateDefinition
+{
+    public static Variable TeamName { get; } = new("_TeamName", "DotNetCore");
+    public static Variable HelixApiAccessToken { get; } = new("HelixApiAccessToken", string.Empty);
+    public static Variable InternalBuildArgs { get; } = new("_InternalBuildArgs", string.Empty);
+
+    public static Variable SignType { get; } = new("_SignType", "real");
+    public static Variable BuildConfig { get; } = new("_BuildConfig", "release");
+
+    public static VariableGroup PublishBuildAssets { get; } = new("Publish-Build-Assets");
+    public static VariableGroup DotNetHelixApiAccess { get; } = new("DotNet-HelixApi-Access");
+    public static VariableGroup SdlSettings { get; } = new("SDL_Settings");
+
+    public override string TargetFile => "eng/common-variables.yml";
+    public override TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
+    public override ConditionedList<VariableBase> Definition =>
+    [
+        TeamName,
+            HelixApiAccessToken,
+            InternalBuildArgs,
+            If.And(
+                NotEqual(variables.System.TeamProject, "public"),
+                IsNotPullRequest
+            ).Variables(
+                SignType,
+                BuildConfig,
+                PublishBuildAssets,
+                DotNetHelixApiAccess,
+                SdlSettings,
+                Variable(InternalBuildArgs.Name,
+                $"""
+                /p:DotNetSignType={SignType}
+                /p:TeamName={TeamName}
+                /p:DotNetPublishUsingPipelines=true
+                /p:OfficialBuildId={variables.Build.BuildId}
+                """)
+            ),
+        ];
+}
+
+public class CommonPostBuild : JobTemplateDefinition<CommonPostBuildParameters>
+{
+    public CommonPostBuild() : base()
+    {
+    }
+
+    public CommonPostBuild(CommonPostBuildParameters parameters) : base(parameters)
+    {
+    }
+
+    public override string TargetFile => "eng/common/templates-official/post-build/post-build.yml";
+    public override TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
+    public override ConditionedList<JobBase> Definition =>
+    [
+    ];
+}
+
+public class CommonPostBuildParameters : CorePostBuildParametersBase<CommonPostBuildParameters>
+{
+    public override bool Is1ESPipeline { get; set; } = false;
+}
+
+[GenerateTemplateDefinitionParameters]
+public partial class CorePostBuild : StageTemplateDefinition<CorePostBuildParameters>
+{
+    public override string TargetFile => "eng/common/core-templates/post-build/post-build.yml";
+    public override TargetPathType TargetPathType => TargetPathType.RelativeToCurrentDir;
+    public override ConditionedList<Stage> Definition =>
+    [
+        If.Or(
+                Equal(parameters.EnableNugetValidation, "true"),
+                Equal(parameters.EnableSigningValidation, "true"),
+                Equal(parameters.EnableSourceLinkValidation, "true"),
+                Equal(parameters.SDLValidationParameters.Enable, "true")
+            ).Stage(new("Validate", "Validate Build Assets")
+            {
+                DependsOn = [parameters.ValidateDependsOn],
+                Variables =
+                {
+                    Template("/eng/common/core-templates/post-build/common-variables.yml"),
+                    new VariableTemplate("/eng/common/core-templates/variables/pool-providers.yml")
+                    {
+                        Parameters = new()
+                        {
+                            ["is1ESPipeline"] = parameters.Is1ESPipeline
                         }
                     }
                 }
-            },
+            })
+    ];
 
-            If.Equal(variables["_RunAsPublic"], "True")
-                .Stage(new Stage("Build_OSX", "Build OSX")
-                {
-                    DependsOn = NoDependsOn,
-                    Jobs = {
-                        new Template<JobBase>("/eng/common/templates/jobs/jobs.yml")
-                        {
-                            Parameters =
-                            {
-                                { "enableTelemetry", true },
-                                { "enablePublishBuildArtifacts", true },
-                                { "enableMicrobuild", true },
-                                { "enablePublishUsingPipelines", true },
-                                { "enablePublishBuildAssets", true },
-                                { "helixRepo", "dotnet/xharness" },
-                                { "jobs", new[]
-                                    {
-                                        new Job("OSX")
-                                        {
-                                            DisplayName = "Build OSX",
-                                            Pool = new Pool("Hosted macOS"),
-                                            Strategy =
-                                                If.Equal(variables["_RunAsPublic"], "True")
-                                                    .Strategy(new MatrixStrategy
-                                                    {
-                                                        Matrix = new()
-                                                        {
-                                                            { "Release", new[] { ("_BuildConfig", "Release") } },
-                                                            { "Debug", new[] { ("_BuildConfig", "Debug") } },
-                                                        }
-                                                    })
-                                                .Else
-                                                    .Strategy(new MatrixStrategy
-                                                    {
-                                                        Matrix = new()
-                                                        {
-                                                            { "Release", new[] { ("_BuildConfig", "Release") } },
-                                                        }
-                                                    }),
+    void test()
+    {
+    }
+}
 
-                                            Steps =
-                                            {
-                                                If.Equal(variables["_RunAsPublic"], "False")
-                                                    .Step(Script.Inline(
-                                                            "eng/common/cibuild.sh" +
-                                                            " --configuration $(_BuildConfig)" +
-                                                            " --prepareMachine" +
-                                                            " $(_InternalBuildArgs)" +
-                                                            " /p:Test=false")
-                                                        .DisplayAs("Build")
-                                                        .WhenSucceeded()),
+public class CorePostBuildParameters : CorePostBuildParametersBase<CorePostBuildParameters>
+{
+}
 
-                                                If.Equal(variables["_RunAsPublic"], "True")
-                                                    .Step(Script.Inline(
-                                                            "eng/common/cibuild.sh" +
-                                                            " --configuration $(_BuildConfig)" +
-                                                            " --prepareMachine" +
-                                                            " $(_InternalBuildArgs)")
-                                                        .DisplayAs("Build and run tests")
-                                                        .WhenSucceeded())
+public abstract class CorePostBuildParametersBase<TSelf> : TemplateParametersProviderBase<TSelf> where TSelf : CorePostBuildParametersBase<TSelf>, new()
+{
+    public virtual int PublishingInfraVersion { get; set; } = 3;
 
-                                                    .Step(new PublishTask(
-                                                            "$(Build.SourcesDirectory)/artifacts/packages/$(_BuildConfig)/Shipping/Microsoft.DotNet.XHarness.CLI.1.0.0-ci.nupkg",
-                                                            "Microsoft.DotNet.XHarness.CLI.$(_BuildConfig)")
-                                                        .DisplayAs("Publish XHarness CLI for Helix Testing")
-                                                        .When("and(succeeded(), eq(variables['_BuildConfig'], 'Debug'))"))
+    public virtual int BARBuildId { get; set; } = 0;
 
-                                                    .Step(new AzureDevOpsTask("PublishTestResults@2")
-                                                    {
-                                                        DisplayName = "Publish Unit Test Results",
-                                                        Inputs =
-                                                        {
-                                                            { "testResultsFormat", "xUnit" },
-                                                            { "testResultsFiles", "$(Build.SourcesDirectory)/artifacts/TestResults/**/*.xml" },
-                                                            { "mergeTestResults", true },
-                                                            { "searchFolder", "$(system.defaultworkingdirectory)" },
-                                                            { "testRunTitle", "XHarness unit tests - $(Agent.JobName)" },
-                                                        }
-                                                    }.WhenSucceededOrFailed())
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                })
+    public virtual string PromoteToChannelIds { get; set; } = string.Empty;
 
-            // E2E tests
-                .StageTemplate("eng/e2e-test.yml", new()
-                {
-                    { "name", "E2E_Android_Simulators" },
-                    { "displayName", "Android - Simulators" },
-                    { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Android/Simulator.Tests.proj" },
-                })
+    public virtual bool EnableSourceLinkValidation { get; set; } = true;
 
-                .StageTemplate("eng/e2e-test.yml", new()
-                {
-                    { "name", "E2E_Android_Devices" },
-                    { "displayName", "Android - Devices" },
-                    { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Android/Device.Tests.proj" },
-                })
+    public virtual bool EnableSigningValidation { get; set; } = false;
 
-                .StageTemplate("eng/e2e-test.yml", new()
-                {
-                    { "name", "E2E_Android_Manual_Commands" },
-                    { "displayName", "Android - Manual Commands" },
-                    { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Android/Commands.Tests.proj" },
-                })
+    public virtual bool EnableSymbolValidation { get; set; }
 
-                .StageTemplate("eng/e2e-test.yml", new()
-                {
-                    { "name", "E2E_Apple_Simulators" },
-                    { "displayName", "Apple - Simulators" },
-                    { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Simulator.Tests.proj" },
-                })
+    public virtual bool EnableNugetValidation { get; set; } = true;
 
-                .StageTemplate("eng/e2e-test.yml", new()
-                {
-                    { "name", "E2E_iOS_Devices" },
-                    { "displayName", "Apple - iOS devices" },
-                    { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Device.iOS.Tests.proj" },
-                })
+    public virtual bool PublishInstallersAndChecksums { get; set; } = true;
 
-                .StageTemplate("eng/e2e-test.yml", new()
-                {
-                    { "name", "E2E_tvOS_Devices" },
-                    { "displayName", "Apple - tvOS devices" },
-                    { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Device.tvOS.Tests.proj" },
-                })
-
-                .StageTemplate("eng/e2e-test.yml", new()
-                {
-                    { "name", "E2E_Apple_Simulator_Commands" },
-                    { "displayName", "Apple - Simulator Commands" },
-                    { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Simulator.Commands.Tests.proj" },
-                })
-
-                .StageTemplate("eng/e2e-test.yml", new()
-                {
-                    { "name", "E2E_Apple_Device_Commands" },
-                    { "displayName", "Apple - Device Commands" },
-                    { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/Device.Commands.Tests.proj" },
-                })
-
-                .StageTemplate("eng/e2e-test.yml", new()
-                {
-                    { "name", "E2E_Apple_Simulator_Mgmt" },
-                    { "displayName", "Apple - Simulator management" },
-                    { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/Apple/SimulatorInstaller.Tests.proj" },
-                })
-
-                .StageTemplate("eng/e2e-test.yml", new()
-                {
-                    { "name", "E2E_WASM" },
-                    { "displayName", "WASM" },
-                    { "testProject", "$(Build.SourcesDirectory)/tests/integration-tests/WASM/WASM.Helix.SDK.Tests.proj" },
-                }),
-
-            // NuGet publishing
-            If.Equal(variables["_RunAsInternal"], "True")
-                .StageTemplate("eng/common/templates/post-build/post-build.yml", new()
-                {
-                    { "publishingInfraVersion", 3 },
-                    { "enableSymbolValidation", true },
-                    { "enableSourceLinkValidation", true },
-                    { "validateDependsOn", new[] { "Build_Windows_NT" } },
-                    { "publishDependsOn", new[] { "Validate" } },
-
-                    // This is to enable SDL runs part of Post-Build Validation Stage
-                    { "SDLValidationParameters", new TemplateParameters()
-                        {
-                            { "enable", false },
-                            { "continueOnError", false },
-                            { "params", " -SourceToolsList @(\"policheck\",\"credscan\") " +
-                                        "-TsaInstanceURL $(_TsaInstanceURL) " +
-                                        "-TsaProjectName $(_TsaProjectName) " +
-                                        "-TsaNotificationEmail $(_TsaNotificationEmail) " +
-                                        "-TsaCodebaseAdmin $(_TsaCodebaseAdmin) " +
-                                        "-TsaBugAreaPath $(_TsaBugAreaPath) " +
-                                        "-TsaIterationPath $(_TsaIterationPath) " +
-                                        "-TsaRepositoryName \"Arcade\" " +
-                                        "-TsaCodebaseName \"Arcade\" " +
-                                        "-TsaPublish $True" },
-                        }
-                    }
-                }),
-            }
+    [YamlMember(Alias = "SDLValidationParameters")]
+    public virtual SDLValidationParameters SDLValidationParameters { get; set; } = new()
+    {
+        Enable = false,
+        PublishGdn = false,
+        ContinueOnError = false,
+        Params = string.Empty,
+        ArtifactNames = string.Empty,
+        DownloadArtifacts = true
     };
+
+    public virtual string SymbolPublishingAdditionalParameters { get; set; } = string.Empty;
+
+    public virtual string ArtifactsPublishingAdditionalParameters { get; set; } = string.Empty;
+
+    public virtual string SigningValidationAdditionalParameters { get; set; } = string.Empty;
+
+    public virtual List<string> ValidateDependsOn { get; set; } = ["build"];
+
+    public virtual List<string> PublishDependsOn { get; set; } = ["Validate"];
+
+    public virtual bool PublishAssetsImmediately { get; set; } = false;
+
+    public virtual bool Is1ESPipeline { get; set; }
+}
+
+public record SDLValidationParameters
+{
+    public bool Enable { get; set; } = false;
+    public bool PublishGdn { get; set; } = false;
+    public bool ContinueOnError { get; set; } = false;
+    public string Params { get; set; } = string.Empty;
+    public string ArtifactNames { get; set; } = string.Empty;
+    public bool DownloadArtifacts { get; set; } = true;
 }
