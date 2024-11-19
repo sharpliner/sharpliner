@@ -59,11 +59,27 @@ public abstract class StageTemplateDefinition : TemplateDefinition<Stage>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetStageValidations();
 }
 
+public abstract class StageTemplateDefinition<TParameters> : TemplateDefinition<Stage, TParameters> where TParameters : class, new()
+{
+    internal sealed override string YamlProperty => "stages";
+
+    /// <inheritdoc/>
+    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetStageValidations();
+}
+
 /// <summary>
 /// Inherit from this class to define a job template.
 /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
 /// </summary>
 public abstract class JobTemplateDefinition : TemplateDefinition<JobBase>
+{
+    internal sealed override string YamlProperty => "jobs";
+
+    /// <inheritdoc/>
+    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetJobValidations();
+}
+
+public abstract class JobTemplateDefinition<TParameters> : TemplateDefinition<JobBase, TParameters> where TParameters : class, new()
 {
     internal sealed override string YamlProperty => "jobs";
 
@@ -83,11 +99,27 @@ public abstract class StepTemplateDefinition : TemplateDefinition<Step>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => [];
 }
 
+public abstract class StepTemplateDefinition<TParameters> : TemplateDefinition<Step, TParameters> where TParameters : class, new()
+{
+    internal sealed override string YamlProperty => "steps";
+
+    /// <inheritdoc/>
+    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => [];
+}
+
 /// <summary>
 /// Inherit from this class to define a variable template.
 /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
 /// </summary>
 public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBase>
+{
+    internal sealed override string YamlProperty => "variables";
+
+    /// <inheritdoc/>
+    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => [];
+}
+
+public abstract class VariableTemplateDefinition<TParameters> : TemplateDefinition<VariableBase, TParameters> where TParameters : class, new()
 {
     internal sealed override string YamlProperty => "variables";
 

@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.Common;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -255,5 +258,81 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
     /// </summary>
     internal TemplateDefinition()
     {
+    }
+}
+
+public abstract class TemplateDefinition<T, TParameters> : TemplateDefinition<T> where TParameters : class, new()
+{
+    protected TParameters TypedParameters { get; private set; }
+
+    protected TemplateDefinition()
+    {
+        TypedParameters = new();
+    }
+
+    protected TemplateDefinition(TParameters typedParameters)
+    {
+        TypedParameters = typedParameters;
+    }
+
+    public sealed override List<Parameter> Parameters => ToParameters(TypedParameters);
+
+    public TemplateParameters TemplateParameters => ToTemplateParameters(TypedParameters);
+
+    private static List<Parameter> ToParameters(TParameters parameters)
+    {
+        var result = new List<Parameter>();
+        var defaultParameters = new TParameters();
+        foreach (var property in typeof(TParameters).GetProperties())
+        {
+            var name = property.GetCustomAttribute<YamlMemberAttribute>()?.Alias ?? CamelCaseNamingConvention.Instance.Apply(property.Name);
+            
+            var defaultValue = property.GetValue(defaultParameters);
+            Parameter parameter = property.PropertyType switch
+            {
+                { } type when type.IsEnum => new StringParameter(name, defaultValue: defaultValue as string, allowedValues: Enum.GetNames(property.PropertyType)),
+                { } type when type == typeof(string) => new StringParameter(name, defaultValue: defaultValue as string),
+                { } type when type == typeof(bool) => new BooleanParameter(name, defaultValue: defaultValue as bool?),
+                { } type when type == typeof(int) => new NumberParameter(name, defaultValue: defaultValue as int?),
+                { } type when type == typeof(Step) => new StepParameter(name, defaultValue: defaultValue as Step),
+                { } type when type == typeof(ConditionedList<Step>) => new StepListParameter(name, defaultValue: defaultValue as ConditionedList<Step>),
+                { } type when type.IsAssignableFrom(typeof(JobBase)) => new JobParameter(name, defaultValue: defaultValue as JobBase),
+                { } type when type == typeof(ConditionedList<JobBase>) => new JobListParameter(name, defaultValue: defaultValue as ConditionedList<JobBase>),
+                { } type when type == typeof(DeploymentJob) => new DeploymentParameter(name, defaultValue: defaultValue as DeploymentJob),
+                { } type when type == typeof(ConditionedList<DeploymentJob>) => new DeploymentListParameter(name, defaultValue: defaultValue as ConditionedList<DeploymentJob>),
+                { } type when type == typeof(Stage) => new StageParameter(name, defaultValue: defaultValue as Stage),
+                { } type when type == typeof(ConditionedList<Stage>) => new StageListParameter(name, defaultValue: defaultValue as ConditionedList<Stage>),
+                _ => new ObjectParameter(name),
+            };
+
+            result.Add(parameter);
+        }
+
+        return result;
+    }
+
+    private static TemplateParameters ToTemplateParameters(TParameters parameters)
+    {
+        var result = new TemplateParameters();
+        var defaultParameters = new TParameters();
+
+        foreach (var property in typeof(TParameters).GetProperties())
+        {
+            var value = property.GetValue(parameters);
+            if (value is not null && !value.Equals(property.GetValue(defaultParameters)))
+            {
+                var name = property.GetCustomAttribute<YamlMemberAttribute>()?.Alias;
+                name ??= CamelCaseNamingConvention.Instance.Apply(property.Name);
+
+                result.Add(name, value);
+            }
+        }
+
+        return result;
+    }
+
+    public static implicit operator Template<T>(TemplateDefinition<T, TParameters> definition)
+    {
+        return new Template<T>(definition.TargetFile, definition.TemplateParameters);
     }
 }
