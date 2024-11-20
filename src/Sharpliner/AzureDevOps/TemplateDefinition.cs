@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
@@ -341,4 +340,31 @@ public abstract class TemplateDefinition<T, TParameters> : TemplateDefinition<T>
     {
         return new Template<T>(definition.TargetFile, ToTemplateParameters(definition._typedParameters));
     }
+}
+
+/// <summary>
+/// This class is a helper for defining templates with typed parameters.
+/// <para>
+/// We are not using the <c>System.ComponentModel.DataAnnotations.AllowedValuesAttribute</c> because it is not available in .NET 6 and .NET 7.
+/// </para>
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+public class AllowedValuesAttribute : Attribute
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AllowedValuesAttribute"/> class.
+    /// </summary>
+    /// <param name="values">
+    /// A list of values that the validated value should be equal to.
+    /// </param>
+    public AllowedValuesAttribute(params object?[] values)
+    {
+        ArgumentNullException.ThrowIfNull(values);
+        Values = values;
+    }
+
+    /// <summary>
+    /// Gets the list of values allowed by this attribute.
+    /// </summary>
+    public object?[] Values { get; }
 }

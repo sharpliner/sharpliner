@@ -17,6 +17,12 @@ namespace Sharpliner.AzureDevOps
         public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference ToolsDirectory { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference WorkFolder { get; }
     }
+    [System.AttributeUsage(System.AttributeTargets.Property)]
+    public class AllowedValuesAttribute : System.Attribute
+    {
+        public AllowedValuesAttribute(params object?[] values) { }
+        public object?[] Values { get; }
+    }
     public abstract class AzureDevOpsDefinition
     {
         protected static readonly Sharpliner.AzureDevOps.TemplateDefinition.TemplateParameterReference parameters;
