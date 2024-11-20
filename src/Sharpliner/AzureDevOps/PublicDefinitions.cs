@@ -139,6 +139,87 @@ public abstract class JobTemplateDefinition : TemplateDefinition<JobBase>
 
 /// <summary>
 /// Inherit from this class to define a job template with typed parameters.
+/// <para>
+/// For example:
+/// </para>
+/// <code language="csharp">
+/// public class MyJobTemplate(MyJobParameters? parameters = null) : JobTemplateDefinition&lt;MyJobParameters&gt;(parameters)
+/// {
+///   public override ConditionedList&lt;Job&gt; Definition => 
+///   [
+///     ...
+///   ];
+/// }
+/// public class MyJobParameters : AzureDevOpsDefinition
+/// {
+///   public ConditionedList&lt;JobBase&gt; SetupJobs { get; init; } = [];
+///   public JobBase MainJob { get; init; } = null!;
+///   public DeploymentJob Deployment { get; init; } = new("deploy", "Deploy job")
+///   {
+///     Environment = new("production"),
+///     Strategy = new RunOnceStrategy
+///     {
+///       Deploy = new()
+///       {
+///         Steps =
+///         {
+///           Bash.Inline("echo 'Deploying the application'"),
+///         },
+///       },
+///     }
+///   };
+/// }
+/// </code>
+/// Will generate:
+/// <code language="yaml">
+/// parameters:
+/// - name: setupJobs
+///   type: jobList
+///   default: []
+/// - name: mainJob
+///   type: job
+/// - name: deployment
+///   type: deployment
+///   default:
+///     deployment: deploy
+///     displayName: Deploy job
+///     environment:
+///       name: production
+///     strategy:
+///       runOnce:
+///         deploy:
+///           steps:
+///           - bash: |-
+///               echo 'Deploying the application'
+/// </code>
+/// And using in a pipeline:
+/// <code language="csharp">
+/// Jobs = 
+/// [
+///   new MyJobTemplate(new()
+///   {
+///     MainJob = new Job("main", "Main job")
+///     {
+///       Steps = 
+///       [
+///         Bash.Inline("echo 'Main job step'")
+///       ]
+///     }
+///   })
+/// ]
+/// </code>
+/// Will generate:
+/// <code language="yaml">
+/// jobs:
+/// - template: path/to/template.yml
+///   parameters:
+///     mainJob:
+///       job: main
+///       displayName: Main job
+///       steps:
+///       - bash: |-
+///           echo 'Main job step'
+/// </code>
 /// </summary>
 /// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
 public abstract class JobTemplateDefinition<TParameters> : TemplateDefinition<JobBase, TParameters> where TParameters : class, new()
