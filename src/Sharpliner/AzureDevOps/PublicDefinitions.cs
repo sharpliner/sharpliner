@@ -59,6 +59,10 @@ public abstract class StageTemplateDefinition : TemplateDefinition<Stage>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetStageValidations();
 }
 
+/// <summary>
+/// Inherit from this class to define a stage template with typed parameters.
+/// </summary>
+/// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
 public abstract class StageTemplateDefinition<TParameters> : TemplateDefinition<Stage, TParameters> where TParameters : class, new()
 {
     internal sealed override string YamlProperty => "stages";
@@ -79,6 +83,10 @@ public abstract class JobTemplateDefinition : TemplateDefinition<JobBase>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetJobValidations();
 }
 
+/// <summary>
+/// Inherit from this class to define a job template with typed parameters.
+/// </summary>
+/// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
 public abstract class JobTemplateDefinition<TParameters> : TemplateDefinition<JobBase, TParameters> where TParameters : class, new()
 {
     internal sealed override string YamlProperty => "jobs";
@@ -99,6 +107,39 @@ public abstract class StepTemplateDefinition : TemplateDefinition<Step>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => [];
 }
 
+/// <summary>
+/// Inherit from this class to define a step template with typed parameters.
+/// <para>
+/// For example:
+/// </para>
+/// <code language="csharp">
+/// public class MyStepTemplate : StepTemplateDefinition&lt;MyStepParameters&gt;
+/// {
+///   public override ConditionedList&lt;Step&gt; Definition => 
+///   [
+///     Script.Inline("echo 'Hello world'")
+///   ];
+/// }
+/// public record MyStepParameters
+/// {
+///    public string StringParam { get; init; } = "default value";
+///    public int IntParam { get; init; }
+///    public bool? ConditionParam { get; init; }
+/// }
+/// </code>
+/// Will generate:
+/// <code language="yaml">
+/// parameters:
+/// - name: stringParam
+///   type: string
+///   default: default value
+/// - name: intParam
+///   type: int
+/// - name: conditionParam
+///   type: boolean
+/// </code>
+/// </summary>
+/// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
 public abstract class StepTemplateDefinition<TParameters> : TemplateDefinition<Step, TParameters> where TParameters : class, new()
 {
     internal sealed override string YamlProperty => "steps";
@@ -119,6 +160,10 @@ public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBa
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => [];
 }
 
+/// <summary>
+/// Inherit from this class to define a variable template with typed parameters.
+/// </summary>
+/// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
 public abstract class VariableTemplateDefinition<TParameters> : TemplateDefinition<VariableBase, TParameters> where TParameters : class, new()
 {
     internal sealed override string YamlProperty => "variables";
