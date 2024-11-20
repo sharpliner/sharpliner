@@ -390,7 +390,7 @@ public class TemplateTests
 
             - job: with-templates
               steps:
-              - template: template.yml
+              - template: step-template.yml
                 parameters:
                   useNugetOrg: true
                   afterBuild:
@@ -506,7 +506,7 @@ public class TemplateTests
 
             - stage: with-templates
               jobs:
-              - template: template.yml
+              - template: job-template.yml
                 parameters:
                   mainJob:
                     job: main
