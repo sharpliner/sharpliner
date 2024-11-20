@@ -155,7 +155,7 @@ public class TemplateTests
             """);
     }
 
-    private class Step_Typed_Template_Definition : StepTemplateDefinition<StepTypedParameters>
+    private class Step_Typed_Template_Definition(StepTypedParameters? parameters = null) : StepTemplateDefinition<StepTypedParameters>(parameters)
     {
         public override string TargetFile => "template.yml";
 
@@ -170,9 +170,13 @@ public class TemplateTests
         [AllowedValues("5.0.100", "5.0.102")]
         public string? Version { get; init; }
         public bool? SkipBuild { get; init; }
-        public bool? UseNugetOrg { get; init; } = false;
-        public bool? Restore { get; init; } = true;
+        public bool UseNugetOrg { get; init; } = false;
+        public bool Restore { get; init; } = true;
         public Step AfterBuild { get; init; } = Bash.Inline($"cp -R logs {variables.Build.ArtifactStagingDirectory}");
+        [YamlMember(Alias = "theCounter")]
+        public int Counter { get; init; } = 2;
+        [AllowedValues(1, 2, 3, 4)]
+        public int? DefaultCounter { get; init; }
     }
 
     [Fact]
@@ -215,6 +219,18 @@ public class TemplateTests
               default:
                 bash: |-
                   cp -R logs $(Build.ArtifactStagingDirectory)
+            
+            - name: theCounter
+              type: number
+              default: 2
+            
+            - name: defaultCounter
+              type: number
+              values:
+              - 1
+              - 2
+              - 3
+              - 4
 
             steps:
             - task: UseDotNet@2
@@ -284,6 +300,106 @@ public class TemplateTests
             """);
     }
 
+    private class Job_Typed_Template_Definition(JobTypedParameters? parameters = null) : JobTemplateDefinition<JobTypedParameters>(parameters)
+    {
+        public override string TargetFile => "template.yml";
+
+        public override ConditionedList<JobBase> Definition => 
+        [
+          ..new Job_Template_Definition().Definition,
+          Job("with-templates") with
+          {
+            Steps = 
+            [
+              new Step_Typed_Template_Definition(new()
+              {
+                AfterBuild = Bash.Inline("echo 'After build'"),
+                Counter = 3,
+                UseNugetOrg = true
+              })
+            ]
+          }
+        ];
+    }
+
+    class JobTypedParameters : AzureDevOpsDefinition
+    {
+        public ConditionedList<JobBase> SetupJobs { get; init; } = [];
+
+        public JobBase MainJob { get; init; } = null!;
+
+        public DeploymentJob Deployment { get; init; } = new("deploy", "Deploy job")
+        {
+          Environment = new("production"),
+          Strategy = new RunOnceStrategy
+          {
+            Deploy = new()
+            {
+              Steps =
+              {
+                Bash.Inline("echo 'Deploying the application'"),
+              },
+            },
+          }
+        };
+
+        public ConditionedList<DeploymentJob> AdditionalDeployments { get; init; } = [];
+    }
+
+    [Fact]
+    public void Job_Typed_Template_Definition_Serialization_Test()
+    {
+         var yaml = new Job_Typed_Template_Definition().Serialize();
+
+        yaml.Trim().Should().Be(
+            """
+            parameters:
+            - name: setupJobs
+              type: jobList
+              default: []
+
+            - name: mainJob
+              type: job
+
+            - name: deployment
+              type: deployment
+              default:
+                deployment: deploy
+                displayName: Deploy job
+                environment:
+                  name: production
+                strategy:
+                  runOnce:
+                    deploy:
+                      steps:
+                      - bash: |-
+                          echo 'Deploying the application'
+            
+            - name: additionalDeployments
+              type: deploymentList
+              default: []
+
+            jobs:
+            - job: initialize
+              displayName: Initialize job
+
+            - ${{ parameters.mainJob }}
+
+            - job: finalize
+              displayName: Finalize job
+
+            - job: with-templates
+              steps:
+              - template: template.yml
+                parameters:
+                  useNugetOrg: true
+                  afterBuild:
+                    bash: |-
+                      echo 'After build'
+                  theCounter: 3
+            """);
+    }
+
     private class Stage_Template_Definition : StageTemplateDefinition
     {
         public override string TargetFile => "template.yml";
@@ -330,6 +446,78 @@ public class TemplateTests
               displayName: Finalize stage
             """);
     }
+
+    private class Stage_Typed_Template_Definition(StageTypedParameters? parameters = null) : StageTemplateDefinition<StageTypedParameters>(parameters)
+    {
+      public override string TargetFile => "template.yml";
+
+        public override ConditionedList<Stage> Definition => 
+        [
+          ..new Stage_Template_Definition().Definition,
+          Stage("with-templates") with 
+          {
+            Jobs = 
+            [
+              new Job_Typed_Template_Definition(new()
+              {
+                MainJob = new Job("main", "Main job")
+                {
+                  Steps = 
+                  [
+                    Bash.Inline("echo 'Main job step'")
+                  ]
+                }
+              })
+            ]
+          }
+        ];
+    }
+    
+    class StageTypedParameters : AzureDevOpsDefinition
+    {
+      public ConditionedList<Stage> SetupStages { get; init; } = [];
+
+      public Stage MainStage { get; init; } = null!;
+    }
+
+    [Fact]
+    public void Stage_Typed_Template_Definition_Serialization_Test()
+    {
+        var yaml = new Stage_Typed_Template_Definition().Serialize();
+
+        yaml.Trim().Should().Be(
+            """
+            parameters:
+            - name: setupStages
+              type: stageList
+              default: []
+
+            - name: mainStage
+              type: stage
+
+            stages:
+            - stage: initialize
+              displayName: Initialize stage
+
+            - ${{ parameters.mainStage }}
+
+            - stage: finalize
+              displayName: Finalize stage
+
+            - stage: with-templates
+              jobs:
+              - template: template.yml
+                parameters:
+                  mainJob:
+                    job: main
+                    displayName: Main job
+                    steps:
+                    - bash: |-
+                        echo 'Main job step'
+            """);
+    }
+
+
 
     private class Conditioned_Template_Reference : SimpleStepTestPipeline
     {

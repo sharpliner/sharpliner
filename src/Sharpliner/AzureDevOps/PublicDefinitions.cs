@@ -67,6 +67,14 @@ public abstract class StageTemplateDefinition<TParameters> : TemplateDefinition<
 {
     internal sealed override string YamlProperty => "stages";
 
+    /// <summary>
+    /// Instantiates a new <see cref="StageTemplateDefinition{TParameters}"/> with the specified typed parameters.
+    /// </summary>
+    /// <param name="typedParameters">The typed parameters to use in the template</param>
+    protected StageTemplateDefinition(TParameters? typedParameters = null) : base(typedParameters)
+    {
+    }
+
     /// <inheritdoc/>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetStageValidations();
 }
@@ -90,6 +98,14 @@ public abstract class JobTemplateDefinition : TemplateDefinition<JobBase>
 public abstract class JobTemplateDefinition<TParameters> : TemplateDefinition<JobBase, TParameters> where TParameters : class, new()
 {
     internal sealed override string YamlProperty => "jobs";
+
+    /// <summary>
+    /// Instantiates a new <see cref="JobTemplateDefinition{TParameters}"/> with the specified typed parameters.
+    /// </summary>
+    /// <param name="typedParameters">The typed parameters to use in the template</param>
+    protected JobTemplateDefinition(TParameters? typedParameters = null) : base(typedParameters)
+    {
+    }
 
     /// <inheritdoc/>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetJobValidations();
@@ -144,6 +160,14 @@ public abstract class StepTemplateDefinition<TParameters> : TemplateDefinition<S
 {
     internal sealed override string YamlProperty => "steps";
 
+    /// <summary>
+    /// Instantiates a new instance of <see cref="StepTemplateDefinition{TParameters}"/> with the specified typed parameters.
+    /// </summary>
+    /// <param name="typedParameters">The typed parameters to use in the template</param>
+    protected StepTemplateDefinition(TParameters? typedParameters = null) : base(typedParameters)
+    {
+    }
+
     /// <inheritdoc/>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => [];
 }
@@ -167,6 +191,14 @@ public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBa
 public abstract class VariableTemplateDefinition<TParameters> : TemplateDefinition<VariableBase, TParameters> where TParameters : class, new()
 {
     internal sealed override string YamlProperty => "variables";
+
+    /// <summary>
+    /// Instantiates a new instance of <see cref="VariableTemplateDefinition{TParameters}"/> with the specified typed parameters.
+    /// </summary>
+    /// <param name="typedParameters">The typed parameters to use in the template</param>
+    protected VariableTemplateDefinition(TParameters? typedParameters = null) : base(typedParameters)
+    {
+    }
 
     /// <inheritdoc/>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => [];

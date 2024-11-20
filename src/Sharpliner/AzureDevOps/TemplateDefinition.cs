@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
@@ -286,7 +287,6 @@ public abstract class TemplateDefinition<T, TParameters> : TemplateDefinition<T>
         foreach (var property in typeof(TParameters).GetProperties())
         {
             var name = property.GetCustomAttribute<YamlMemberAttribute>()?.Alias ?? CamelCaseNamingConvention.Instance.Apply(property.Name);
-            
             var defaultValue = property.GetValue(defaultParameters);
             var allowedValues = property.GetCustomAttribute<AllowedValuesAttribute>()?.Values;
             Parameter parameter = property.PropertyType switch
@@ -320,7 +320,8 @@ public abstract class TemplateDefinition<T, TParameters> : TemplateDefinition<T>
         foreach (var property in typeof(TParameters).GetProperties())
         {
             var value = property.GetValue(parameters);
-            if (value is not null && !value.Equals(property.GetValue(defaultParameters)))
+            var defaultValue = property.GetValue(defaultParameters);
+            if (value is not null && !SharplinerSerializer.Serialize(value!).Equals(SharplinerSerializer.Serialize(defaultValue!)))
             {
                 var name = property.GetCustomAttribute<YamlMemberAttribute>()?.Alias;
                 name ??= CamelCaseNamingConvention.Instance.Apply(property.Name);

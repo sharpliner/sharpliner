@@ -535,7 +535,7 @@ namespace Sharpliner.AzureDevOps
     public abstract class JobTemplateDefinition<TParameters> : Sharpliner.AzureDevOps.TemplateDefinition<Sharpliner.AzureDevOps.JobBase, TParameters>
         where TParameters :  class, new ()
     {
-        protected JobTemplateDefinition() { }
+        protected JobTemplateDefinition(TParameters? typedParameters = null) { }
         public virtual System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
     }
     public class JobWorkspace : YamlDotNet.Serialization.IYamlConvertible
@@ -929,7 +929,7 @@ namespace Sharpliner.AzureDevOps
     public abstract class StageTemplateDefinition<TParameters> : Sharpliner.AzureDevOps.TemplateDefinition<Sharpliner.AzureDevOps.Stage, TParameters>
         where TParameters :  class, new ()
     {
-        protected StageTemplateDefinition() { }
+        protected StageTemplateDefinition(TParameters? typedParameters = null) { }
         public virtual System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
     }
     public abstract class Step : System.IEquatable<Sharpliner.AzureDevOps.Step>
@@ -985,7 +985,7 @@ namespace Sharpliner.AzureDevOps
     public abstract class StepTemplateDefinition<TParameters> : Sharpliner.AzureDevOps.TemplateDefinition<Sharpliner.AzureDevOps.Step, TParameters>
         where TParameters :  class, new ()
     {
-        protected StepTemplateDefinition() { }
+        protected StepTemplateDefinition(TParameters? typedParameters = null) { }
         public virtual System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
     }
     public abstract class Strategy : System.IEquatable<Sharpliner.AzureDevOps.Strategy>
@@ -1172,7 +1172,7 @@ namespace Sharpliner.AzureDevOps
     public abstract class VariableTemplateDefinition<TParameters> : Sharpliner.AzureDevOps.TemplateDefinition<Sharpliner.AzureDevOps.VariableBase, TParameters>
         where TParameters :  class, new ()
     {
-        protected VariableTemplateDefinition() { }
+        protected VariableTemplateDefinition(TParameters? typedParameters = null) { }
         public virtual System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
     }
     public class VariablesReference
