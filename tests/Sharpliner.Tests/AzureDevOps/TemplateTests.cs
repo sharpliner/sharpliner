@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Tasks;
 using Xunit;
 using YamlDotNet.Serialization;
 
@@ -57,7 +59,7 @@ public class TemplateTests
         protected Parameter skipBuild = BooleanParameter("skipBuild");
         protected Parameter useNugetOrg = BooleanParameter("useNugetOrg", defaultValue: false);
         protected Parameter restore = BooleanParameter("restore", defaultValue: true);
-        protected Parameter<Step> afterBuild = StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)"));
+        protected Parameter<Step> afterBuild = StepParameter("afterBuild", Bash.Inline($"cp -R logs {variables.Build.ArtifactStagingDirectory}"));
 
         public override List<Parameter> Parameters =>
         [
@@ -96,6 +98,88 @@ public class TemplateTests
     public void Step_Template_Definition_Serialization_Test()
     {
         var yaml = new Step_Template_Definition().Serialize();
+
+        yaml.Trim().Should().Be(
+            """
+            parameters:
+            - name: configuration
+              type: string
+              default: debug
+              values:
+              - debug
+              - release
+
+            - name: project
+              type: string
+
+            - name: version
+              type: string
+              values:
+              - 5.0.100
+              - 5.0.102
+
+            - name: skipBuild
+              type: boolean
+
+            - name: useNugetOrg
+              type: boolean
+              default: false
+
+            - name: restore
+              type: boolean
+              default: true
+
+            - name: afterBuild
+              type: step
+              default:
+                bash: |-
+                  cp -R logs $(Build.ArtifactStagingDirectory)
+
+            steps:
+            - task: UseDotNet@2
+              inputs:
+                packageType: sdk
+                version: ${{ parameters.version }}
+
+            - ${{ if eq(parameters.restore, true) }}:
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: restore
+                  projects: ${{ parameters.project }}
+
+            - task: DotNetCoreCLI@2
+              inputs:
+                command: build
+                projects: ${{ parameters.project }}
+
+            - ${{ parameters.afterBuild }}
+            """);
+    }
+
+    private class Step_Typed_Template_Definition : StepTemplateDefinition<StepTypedParameters>
+    {
+        public override string TargetFile => "template.yml";
+
+        public override ConditionedList<Step> Definition => new Step_Template_Definition().Definition;
+    }
+
+    class StepTypedParameters : AzureDevOpsDefinition
+    {
+        public BuildConfiguration Configuration { get; init; }
+        public string? Project { get; init; }
+
+        [AllowedValues("5.0.100", "5.0.102")]
+        public string? Version { get; init; }
+        public bool? SkipBuild { get; init; }
+        public bool? UseNugetOrg { get; init; } = false;
+        public bool? Restore { get; init; } = true;
+        public Step AfterBuild { get; init; } = Bash.Inline($"cp -R logs {variables.Build.ArtifactStagingDirectory}");
+    }
+
+    [Fact]
+    public void Step_Typed_Template_Definition_Serialization_Test()
+    {
+        var yaml = new Step_Typed_Template_Definition().Serialize();
 
         yaml.Trim().Should().Be(
             """

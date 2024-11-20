@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Reflection;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.Common;
@@ -261,25 +263,24 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
     }
 }
 
+/// <summary>
+/// This class is a helper for defining templates with typed parameters.
+/// </summary>
+/// <typeparam name="T">Type of the part of the pipeline that this template is for (one of stages, steps, jobs or variables)</typeparam>
+/// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
 public abstract class TemplateDefinition<T, TParameters> : TemplateDefinition<T> where TParameters : class, new()
 {
-    protected TParameters TypedParameters { get; private set; }
+    private readonly TParameters _typedParameters;
 
-    protected TemplateDefinition()
+    internal TemplateDefinition(TParameters? typedParameters = null)
     {
-        TypedParameters = new();
+        _typedParameters = typedParameters ?? new();
     }
 
-    protected TemplateDefinition(TParameters typedParameters)
-    {
-        TypedParameters = typedParameters;
-    }
+    /// <inheritdoc/>
+    public sealed override List<Parameter> Parameters => ToParameters();
 
-    public sealed override List<Parameter> Parameters => ToParameters(TypedParameters);
-
-    public TemplateParameters TemplateParameters => ToTemplateParameters(TypedParameters);
-
-    private static List<Parameter> ToParameters(TParameters parameters)
+    private static List<Parameter> ToParameters()
     {
         var result = new List<Parameter>();
         var defaultParameters = new TParameters();
@@ -288,12 +289,13 @@ public abstract class TemplateDefinition<T, TParameters> : TemplateDefinition<T>
             var name = property.GetCustomAttribute<YamlMemberAttribute>()?.Alias ?? CamelCaseNamingConvention.Instance.Apply(property.Name);
             
             var defaultValue = property.GetValue(defaultParameters);
+            var allowedValues = property.GetCustomAttribute<AllowedValuesAttribute>()?.Values;
             Parameter parameter = property.PropertyType switch
             {
-                { } type when type.IsEnum => new StringParameter(name, defaultValue: defaultValue as string, allowedValues: Enum.GetNames(property.PropertyType)),
-                { } type when type == typeof(string) => new StringParameter(name, defaultValue: defaultValue as string),
-                { } type when type == typeof(bool) => new BooleanParameter(name, defaultValue: defaultValue as bool?),
-                { } type when type == typeof(int) => new NumberParameter(name, defaultValue: defaultValue as int?),
+                { } type when type.IsEnum => (Parameter)Activator.CreateInstance(typeof(EnumParameter<>).MakeGenericType(type), name, null, defaultValue)!,
+                { } type when type == typeof(string) => new StringParameter(name, defaultValue: defaultValue as string, allowedValues: allowedValues?.Cast<string>()),
+                { } type when type == typeof(bool?) || type == typeof(bool) => new BooleanParameter(name, defaultValue: defaultValue as bool?),
+                { } type when type == typeof(int?) || type == typeof(int) => new NumberParameter(name, defaultValue: defaultValue as int?, allowedValues: allowedValues?.Cast<int?>()),
                 { } type when type == typeof(Step) => new StepParameter(name, defaultValue: defaultValue as Step),
                 { } type when type == typeof(ConditionedList<Step>) => new StepListParameter(name, defaultValue: defaultValue as ConditionedList<Step>),
                 { } type when type.IsAssignableFrom(typeof(JobBase)) => new JobParameter(name, defaultValue: defaultValue as JobBase),
@@ -331,8 +333,12 @@ public abstract class TemplateDefinition<T, TParameters> : TemplateDefinition<T>
         return result;
     }
 
+    /// <summary>
+    /// Implicitly converts a typed template definition to a template.
+    /// </summary>
+    /// <param name="definition">The typed template definition</param>
     public static implicit operator Template<T>(TemplateDefinition<T, TParameters> definition)
     {
-        return new Template<T>(definition.TargetFile, definition.TemplateParameters);
+        return new Template<T>(definition.TargetFile, ToTemplateParameters(definition._typedParameters));
     }
 }
