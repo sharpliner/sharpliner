@@ -45,9 +45,4 @@
     <ProjectReference Include="..\..\src\Sharpliner\Sharpliner.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\gen\Sharpliner.SourceGenerator\Sharpliner.SourceGenerator.csproj" />
-    <Analyzer Include="..\..\artifacts\bin\Sharpliner.SourceGenerator\netstandard2.0\Sharpliner.SourceGenerator.dll" />
-  </ItemGroup>
-
 </Project>
