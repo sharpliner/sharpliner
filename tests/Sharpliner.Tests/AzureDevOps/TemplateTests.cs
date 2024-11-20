@@ -157,7 +157,7 @@ public class TemplateTests
 
     private class Step_Typed_Template_Definition(StepTypedParameters? parameters = null) : StepTemplateDefinition<StepTypedParameters>(parameters)
     {
-        public override string TargetFile => "template.yml";
+        public override string TargetFile => "step-template.yml";
 
         public override ConditionedList<Step> Definition => new Step_Template_Definition().Definition;
     }
@@ -302,7 +302,7 @@ public class TemplateTests
 
     private class Job_Typed_Template_Definition(JobTypedParameters? parameters = null) : JobTemplateDefinition<JobTypedParameters>(parameters)
     {
-        public override string TargetFile => "template.yml";
+        public override string TargetFile => "job-template.yml";
 
         public override ConditionedList<JobBase> Definition => 
         [
@@ -449,7 +449,7 @@ public class TemplateTests
 
     private class Stage_Typed_Template_Definition(StageTypedParameters? parameters = null) : StageTemplateDefinition<StageTypedParameters>(parameters)
     {
-      public override string TargetFile => "template.yml";
+      public override string TargetFile => "stage-template.yml";
 
         public override ConditionedList<Stage> Definition => 
         [
@@ -517,7 +517,166 @@ public class TemplateTests
             """);
     }
 
+    private class Variable_Template_Definition : VariableTemplateDefinition
+    {
+        public override string TargetFile => "variables.yml";
 
+        public override List<Parameter> Parameters => 
+        [
+          StringParameter("s_param"),
+          BooleanParameter("b_param"),
+          NumberParameter("n_param"),
+        ];
+        public override ConditionedList<VariableBase> Definition => 
+        [
+          Variable("s_variable", "value"),
+          Variable("b_variable", true),
+          Variable("n_variable", 42),
+        ];
+    }
+
+    [Fact]
+    public void Variable_Template_Definition_Serialization_Test()
+    {
+        var yaml = new Variable_Template_Definition().Serialize();
+
+        yaml.Trim().Should().Be(
+            """
+            parameters:
+            - name: s_param
+              type: string
+
+            - name: b_param
+              type: boolean
+
+            - name: n_param
+              type: number
+
+            variables:
+            - name: s_variable
+              value: value
+
+            - name: b_variable
+              value: true
+
+            - name: n_variable
+              value: 42
+            """);
+    }
+
+    private class Variable_Typed_Template_Definition(VariableTypedParameters? parameters = null) : VariableTemplateDefinition<VariableTypedParameters>(parameters)
+    {
+        public override string TargetFile => "variables.yml";
+        public override ConditionedList<VariableBase> Definition => new Variable_Template_Definition().Definition;
+    }
+
+    class VariableTypedParameters : AzureDevOpsDefinition
+    {
+        [YamlMember(Alias = "s_param")]
+        public string SParam { get; init; } = "default value";
+        [YamlMember(Alias = "b_param")]
+        public bool BParam { get; init; } = true;
+        [YamlMember(Alias = "n_param")]
+        public int NParam { get; init; } = 42;
+    }
+
+    [Fact]
+    public void Variable_Typed_Template_Definition_Serialization_Test()
+    {
+        var yaml = new Variable_Typed_Template_Definition().Serialize();
+
+        yaml.Trim().Should().Be(
+            """
+            parameters:
+            - name: s_param
+              type: string
+              default: default value
+
+            - name: b_param
+              type: boolean
+              default: true
+
+            - name: n_param
+              type: number
+              default: 42
+
+            variables:
+            - name: s_variable
+              value: value
+
+            - name: b_variable
+              value: true
+
+            - name: n_variable
+              value: 42
+            """);
+    }
+
+    private class CompletePipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new Pipeline
+        {
+          Stages = 
+          [
+            new Stage_Typed_Template_Definition(new()
+            {
+              MainStage = new Stage("main-stage")
+              {
+                Jobs = 
+                [
+                  new Job_Typed_Template_Definition(new()
+                  {
+                    MainJob = new Job("main-job", "Main job")
+                    {
+                      Steps = 
+                      [
+                        Bash.Inline("echo 'Hello world!'"),
+                        new Step_Typed_Template_Definition(new()
+                        {
+                          AfterBuild = Bash.Inline("echo 'After build'"),
+                          Counter = 3,
+                          UseNugetOrg = true
+                        })
+                      ]
+                    }
+                  })
+                ]
+              }
+            }),
+          ]
+        };
+    }
+
+    [Fact]
+    public void CompletePipeline_Serialization_Test()
+    {
+        var yaml = new CompletePipeline().Serialize();
+
+        yaml.Trim().Should().Be(
+            """
+            stages:
+            - template: stage-template.yml
+              parameters:
+                mainStage:
+                  stage: main-stage
+                  jobs:
+                  - template: job-template.yml
+                    parameters:
+                      mainJob:
+                        job: main-job
+                        displayName: Main job
+                        steps:
+                        - bash: |-
+                            echo 'Hello world!'
+                        - template: step-template.yml
+                          parameters:
+                            useNugetOrg: true
+                            afterBuild:
+                              bash: |-
+                                echo 'After build'
+                            theCounter: 3
+            """);
+    }
 
     private class Conditioned_Template_Reference : SimpleStepTestPipeline
     {

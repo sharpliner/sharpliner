@@ -61,6 +61,52 @@ public abstract class StageTemplateDefinition : TemplateDefinition<Stage>
 
 /// <summary>
 /// Inherit from this class to define a stage template with typed parameters.
+/// <para>
+/// For example:
+/// </para>
+/// <code language="csharp">
+/// public class MyStageTemplate(MyStageParameters? parameters = null) : StageTemplateDefinition&lt;MyStageParameters&gt;(MyStageParameters)
+/// {
+///   public override ConditionedList&lt;Stage&gt; Definition => 
+///   [
+///     ...
+///   ];
+/// }
+/// public class MyStageParameters : AzureDevOpsDefinition
+/// {
+///   public ConditionedList&lt;Stage&gt; SetupStages { get; init; } = [];
+///   public Stage MainStage { get; init; } = null!;
+/// }
+/// </code>
+/// Will generate:
+/// <code language="yaml">
+/// parameters:
+/// - name: setupStages
+///   type: stageList
+/// - name: mainStage
+///   type: stage
+/// </code>
+/// And using in a pipeline:
+/// <code language="csharp">
+/// Stages = 
+/// [
+///   new MyStageParameters(new()
+///   {
+///     MainStage = Stage("main") with
+///     {
+///       DisplayName = "Main stage",
+///     }
+///   })
+/// ]
+/// </code>
+/// Will generate:
+/// <code language="yaml">
+/// stages:
+/// - template: path/to/template.yml
+///   parameters:
+///     mainStage:
+///       displayName: Main stage
+/// </code>
 /// </summary>
 /// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
 public abstract class StageTemplateDefinition<TParameters> : TemplateDefinition<Stage, TParameters> where TParameters : class, new()
@@ -129,11 +175,11 @@ public abstract class StepTemplateDefinition : TemplateDefinition<Step>
 /// For example:
 /// </para>
 /// <code language="csharp">
-/// public class MyStepTemplate : StepTemplateDefinition&lt;MyStepParameters&gt;
+/// public class MyStepTemplate(MyStepParameters? parameters = null) : StepTemplateDefinition&lt;MyStepParameters&gt;(parameters)
 /// {
 ///   public override ConditionedList&lt;Step&gt; Definition => 
 ///   [
-///     Script.Inline("echo 'Hello world'")
+///     ...
 ///   ];
 /// }
 /// public record MyStepParameters
@@ -153,6 +199,25 @@ public abstract class StepTemplateDefinition : TemplateDefinition<Step>
 ///   type: int
 /// - name: conditionParam
 ///   type: boolean
+/// </code>
+/// And using in a pipeline:
+/// <code language="csharp">
+/// Steps = 
+/// [
+///   new MyStepTemplate(new()
+///   {
+///     StringParam = "the answer",
+///     IntParam = 42,
+///   })
+/// ]
+/// </code>
+/// Will generate:
+/// <code language="yaml">
+/// steps:
+/// - template: path/to/template.yml
+///   parameters:
+///     stringParam: the answer
+///     intParam: 42
 /// </code>
 /// </summary>
 /// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
@@ -186,6 +251,54 @@ public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBa
 
 /// <summary>
 /// Inherit from this class to define a variable template with typed parameters.
+/// <para>
+/// For example:
+/// </para>
+/// <code language="csharp">
+/// public class MyVariableTemplate(MyVariableParameters? parameters = null) : VariableTemplateDefinition&lt;MyVariableParameters&gt;(parameters)
+/// {
+///   public override ConditionedList&lt;VariableBase&gt; Definition =>
+///   [
+///     ...
+///   ];
+/// }
+/// public record MyVariableParameters
+/// {
+///   public string StringParam { get; init; } = "default value";
+///   public int IntParam { get; init; }
+///   public bool? ConditionParam { get; init; }
+/// }
+/// </code>
+/// Will generate:
+/// <code language="yaml">
+/// parameters:
+/// - name: stringParam
+///   type: string
+///   default: default value
+/// - name: intParam
+///   type: int
+/// - name: conditionParam
+///   type: boolean
+/// </code>
+/// And using in a pipeline:
+/// <code language="csharp">
+/// Variables =
+/// [
+///   new MyVariableTemplate(new()
+///   {
+///     StringParam = "the answer",
+///     IntParam = 42,
+///   }
+/// ]
+/// </code>
+/// Will generate:
+/// <code language="yaml">
+/// variables:
+/// - template: path/to/template.yml
+///   parameters:
+///     stringParam: the answer
+///     intParam: 42
+/// </code>
 /// </summary>
 /// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
 public abstract class VariableTemplateDefinition<TParameters> : TemplateDefinition<VariableBase, TParameters> where TParameters : class, new()
