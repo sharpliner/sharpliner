@@ -96,7 +96,7 @@ public abstract class TemplateParametersProviderBase<TParameters> : ITemplatePar
         foreach (var property in typeof(TParameters).GetProperties())
         {
             var name = property.GetCustomAttribute<YamlMemberAttribute>()?.Alias ?? CamelCaseNamingConvention.Instance.Apply(property.Name);
-            
+
             var defaultValue = property.GetValue(defaultParameters);
             Parameter parameter;
             if (property.PropertyType.IsEnum)
@@ -200,6 +200,8 @@ public abstract class StageTemplateDefinition<TParameters> : StageTemplateDefini
     where TParameters : ITemplateParametersProvider, new()
 {
     public sealed override List<Parameter> Parameters => TemplateParameters.ToParameters();
+
+    protected new static readonly TemplateParameterReference<TParameters> parameters = new();
 
     [DisallowNull]
     public TParameters TemplateParameters { get; } = new TParameters();

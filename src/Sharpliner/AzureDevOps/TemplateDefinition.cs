@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq.Expressions;
+using System.Runtime.CompilerServices;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.Common;
 
@@ -169,6 +172,18 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
         /// </code>
         /// </summary>
         public ParameterReference this[string parameterName] => new(parameterName);
+
+        internal TemplateParameterReference()
+        {
+        }
+    }
+
+    public class TemplateParameterReference<T> : TemplateParameterReference
+    {
+        public ParameterReference For(Expression<Func<T, object>> propertySelector, [CallerArgumentExpression(nameof(propertySelector))] string selector = "")
+        {
+            return new ParameterReference(selector);
+        }
 
         internal TemplateParameterReference()
         {

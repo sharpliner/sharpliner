@@ -16,7 +16,7 @@ public class DotnetXHarnessTests
     [Fact]
     public void Test()
     {
-        var types = new[] 
+        var types = new[]
         {
             typeof(XHarnessPipeline),
             typeof(CommonVariables),
@@ -184,7 +184,6 @@ public class CommonPostBuildParameters : CorePostBuildParametersBase<CommonPostB
     public override bool Is1ESPipeline { get; set; } = false;
 }
 
-[GenerateTemplateDefinitionParameters]
 public partial class CorePostBuild : StageTemplateDefinition<CorePostBuildParameters>
 {
     public override string TargetFile => "eng/common/core-templates/post-build/post-build.yml";
@@ -192,13 +191,13 @@ public partial class CorePostBuild : StageTemplateDefinition<CorePostBuildParame
     public override ConditionedList<Stage> Definition =>
     [
         If.Or(
-                Equal(parameters.EnableNugetValidation, "true"),
-                Equal(parameters.EnableSigningValidation, "true"),
-                Equal(parameters.EnableSourceLinkValidation, "true"),
-                Equal(parameters.SDLValidationParameters.Enable, "true")
+                Equal(parameters.For(x => x.EnableNugetValidation), "true"),
+                Equal(parameters.For(x => x.EnableSigningValidation), "true"),
+                Equal(parameters.For(x => x.EnableSourceLinkValidation), "true"),
+                Equal(parameters.For(x => x.SDLValidationParameters.Enable), "true")
             ).Stage(new("Validate", "Validate Build Assets")
             {
-                DependsOn = [parameters.ValidateDependsOn],
+                DependsOn = [parameters.For(x => x.ValidateDependsOn)],
                 Variables =
                 {
                     Template("/eng/common/core-templates/post-build/common-variables.yml"),
@@ -206,7 +205,7 @@ public partial class CorePostBuild : StageTemplateDefinition<CorePostBuildParame
                     {
                         Parameters = new()
                         {
-                            ["is1ESPipeline"] = parameters.Is1ESPipeline
+                            ["is1ESPipeline"] = parameters.For(x => x.Is1ESPipeline)
                         }
                     }
                 }
