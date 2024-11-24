@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using System.Reflection;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.Common;
+using YamlDotNet.Serialization;
+using YamlDotNet.Serialization.NamingConventions;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -256,4 +261,111 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
     internal TemplateDefinition()
     {
     }
+}
+
+/// <summary>
+/// This class is a helper for defining templates with typed parameters.
+/// </summary>
+/// <typeparam name="T">Type of the part of the pipeline that this template is for (one of stages, steps, jobs or variables)</typeparam>
+/// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
+public abstract class TemplateDefinition<T, TParameters> : TemplateDefinition<T> where TParameters : class, new()
+{
+    private readonly TParameters _typedParameters;
+
+    internal TemplateDefinition(TParameters? typedParameters = null)
+    {
+        _typedParameters = typedParameters ?? new();
+    }
+
+    /// <inheritdoc/>
+    public sealed override List<Parameter> Parameters => ToParameters();
+
+    private static List<Parameter> ToParameters()
+    {
+        var result = new List<Parameter>();
+        var defaultParameters = new TParameters();
+        foreach (var property in typeof(TParameters).GetProperties())
+        {
+            var name = property.GetCustomAttribute<YamlMemberAttribute>()?.Alias ?? CamelCaseNamingConvention.Instance.Apply(property.Name);
+            var defaultValue = property.GetValue(defaultParameters);
+            var allowedValues = property.GetCustomAttribute<AllowedValuesAttribute>()?.Values;
+            Parameter parameter = property.PropertyType switch
+            {
+                { } type when type.IsEnum => (Parameter)Activator.CreateInstance(typeof(EnumParameter<>).MakeGenericType(type), name, null, defaultValue)!,
+                { } type when type == typeof(string) => new StringParameter(name, defaultValue: defaultValue as string, allowedValues: allowedValues?.Cast<string>()),
+                { } type when type == typeof(bool?) || type == typeof(bool) => new BooleanParameter(name, defaultValue: defaultValue as bool?),
+                { } type when type == typeof(int?) || type == typeof(int) => new NumberParameter(name, defaultValue: defaultValue as int?, allowedValues: allowedValues?.Cast<int?>()),
+                { } type when type == typeof(Step) => new StepParameter(name, defaultValue: defaultValue as Step),
+                { } type when type == typeof(ConditionedList<Step>) => new StepListParameter(name, defaultValue: defaultValue as ConditionedList<Step>),
+                { } type when type.IsAssignableFrom(typeof(JobBase)) => new JobParameter(name, defaultValue: defaultValue as JobBase),
+                { } type when type == typeof(ConditionedList<JobBase>) => new JobListParameter(name, defaultValue: defaultValue as ConditionedList<JobBase>),
+                { } type when type == typeof(DeploymentJob) => new DeploymentParameter(name, defaultValue: defaultValue as DeploymentJob),
+                { } type when type == typeof(ConditionedList<DeploymentJob>) => new DeploymentListParameter(name, defaultValue: defaultValue as ConditionedList<DeploymentJob>),
+                { } type when type == typeof(Stage) => new StageParameter(name, defaultValue: defaultValue as Stage),
+                { } type when type == typeof(ConditionedList<Stage>) => new StageListParameter(name, defaultValue: defaultValue as ConditionedList<Stage>),
+                _ => new ObjectParameter(name),
+            };
+
+            result.Add(parameter);
+        }
+
+        return result;
+    }
+
+    private static TemplateParameters ToTemplateParameters(TParameters parameters)
+    {
+        var result = new TemplateParameters();
+        var defaultParameters = new TParameters();
+
+        foreach (var property in typeof(TParameters).GetProperties())
+        {
+            var value = property.GetValue(parameters);
+            var defaultValue = property.GetValue(defaultParameters);
+            if (value is not null && !SharplinerSerializer.Serialize(value!).Equals(SharplinerSerializer.Serialize(defaultValue!)))
+            {
+                var name = property.GetCustomAttribute<YamlMemberAttribute>()?.Alias;
+                name ??= CamelCaseNamingConvention.Instance.Apply(property.Name);
+
+                result.Add(name, value);
+            }
+        }
+
+        return result;
+    }
+
+    /// <summary>
+    /// Implicitly converts a typed template definition to a template.
+    /// </summary>
+    /// <param name="definition">The typed template definition</param>
+    public static implicit operator Template<T>(TemplateDefinition<T, TParameters> definition)
+    {
+        return new Template<T>(definition.TargetFile, ToTemplateParameters(definition._typedParameters));
+    }
+}
+
+/// <summary>
+/// This class is a helper for defining templates with typed parameters.
+/// <para>
+/// We are not using the <c>System.ComponentModel.DataAnnotations.AllowedValuesAttribute</c> because it is not available in .NET 6 and .NET 7.
+/// </para>
+/// </summary>
+[AttributeUsage(AttributeTargets.Property)]
+public class AllowedValuesAttribute : Attribute
+{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AllowedValuesAttribute"/> class.
+    /// </summary>
+    /// <param name="values">
+    /// A list of values that the validated value should be equal to.
+    /// </param>
+    public AllowedValuesAttribute(params object?[] values)
+    {
+        ArgumentNullException.ThrowIfNull(values);
+        Values = values;
+    }
+
+    /// <summary>
+    /// Gets the list of values allowed by this attribute.
+    /// </summary>
+    public object?[] Values { get; }
 }

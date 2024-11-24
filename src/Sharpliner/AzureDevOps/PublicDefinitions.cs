@@ -60,12 +60,179 @@ public abstract class StageTemplateDefinition : TemplateDefinition<Stage>
 }
 
 /// <summary>
+/// Inherit from this class to define a stage template with typed parameters.
+/// <para>
+/// For example:
+/// </para>
+/// <code language="csharp">
+/// public class MyStageTemplate(MyStageParameters? parameters = null) : StageTemplateDefinition&lt;MyStageParameters&gt;(MyStageParameters)
+/// {
+///   public override ConditionedList&lt;Stage&gt; Definition => 
+///   [
+///     ...
+///   ];
+/// }
+/// public class MyStageParameters : AzureDevOpsDefinition
+/// {
+///   public ConditionedList&lt;Stage&gt; SetupStages { get; init; } = [];
+///   public Stage MainStage { get; init; } = null!;
+/// }
+/// </code>
+/// Will generate:
+/// <code language="yaml">
+/// parameters:
+/// - name: setupStages
+///   type: stageList
+/// - name: mainStage
+///   type: stage
+/// </code>
+/// And using in a pipeline:
+/// <code language="csharp">
+/// Stages = 
+/// [
+///   new MyStageParameters(new()
+///   {
+///     MainStage = Stage("main") with
+///     {
+///       DisplayName = "Main stage",
+///     }
+///   })
+/// ]
+/// </code>
+/// Will generate:
+/// <code language="yaml">
+/// stages:
+/// - template: path/to/template.yml
+///   parameters:
+///     mainStage:
+///       displayName: Main stage
+/// </code>
+/// </summary>
+/// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
+public abstract class StageTemplateDefinition<TParameters> : TemplateDefinition<Stage, TParameters> where TParameters : class, new()
+{
+    internal sealed override string YamlProperty => "stages";
+
+    /// <summary>
+    /// Instantiates a new <see cref="StageTemplateDefinition{TParameters}"/> with the specified typed parameters.
+    /// </summary>
+    /// <param name="typedParameters">The typed parameters to use in the template</param>
+    protected StageTemplateDefinition(TParameters? typedParameters = null) : base(typedParameters)
+    {
+    }
+
+    /// <inheritdoc/>
+    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetStageValidations();
+}
+
+/// <summary>
 /// Inherit from this class to define a job template.
 /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
 /// </summary>
 public abstract class JobTemplateDefinition : TemplateDefinition<JobBase>
 {
     internal sealed override string YamlProperty => "jobs";
+
+    /// <inheritdoc/>
+    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetJobValidations();
+}
+
+/// <summary>
+/// Inherit from this class to define a job template with typed parameters.
+/// <para>
+/// For example:
+/// </para>
+/// <code language="csharp">
+/// public class MyJobTemplate(MyJobParameters? parameters = null) : JobTemplateDefinition&lt;MyJobParameters&gt;(parameters)
+/// {
+///   public override ConditionedList&lt;Job&gt; Definition => 
+///   [
+///     ...
+///   ];
+/// }
+/// public class MyJobParameters : AzureDevOpsDefinition
+/// {
+///   public ConditionedList&lt;JobBase&gt; SetupJobs { get; init; } = [];
+///   public JobBase MainJob { get; init; } = null!;
+///   public DeploymentJob Deployment { get; init; } = new("deploy", "Deploy job")
+///   {
+///     Environment = new("production"),
+///     Strategy = new RunOnceStrategy
+///     {
+///       Deploy = new()
+///       {
+///         Steps =
+///         {
+///           Bash.Inline("echo 'Deploying the application'"),
+///         },
+///       },
+///     }
+///   };
+/// }
+/// </code>
+/// Will generate:
+/// <code language="yaml">
+/// parameters:
+/// - name: setupJobs
+///   type: jobList
+///   default: []
+/// - name: mainJob
+///   type: job
+/// - name: deployment
+///   type: deployment
+///   default:
+///     deployment: deploy
+///     displayName: Deploy job
+///     environment:
+///       name: production
+///     strategy:
+///       runOnce:
+///         deploy:
+///           steps:
+///           - bash: |-
+///               echo 'Deploying the application'
+/// </code>
+/// And using in a pipeline:
+/// <code language="csharp">
+/// Jobs = 
+/// [
+///   new MyJobTemplate(new()
+///   {
+///     MainJob = new Job("main", "Main job")
+///     {
+///       Steps = 
+///       [
+///         Bash.Inline("echo 'Main job step'")
+///       ]
+///     }
+///   })
+/// ]
+/// </code>
+/// Will generate:
+/// <code language="yaml">
+/// jobs:
+/// - template: path/to/template.yml
+///   parameters:
+///     mainJob:
+///       job: main
+///       displayName: Main job
+///       steps:
+///       - bash: |-
+///           echo 'Main job step'
+/// </code>
+/// </summary>
+/// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
+public abstract class JobTemplateDefinition<TParameters> : TemplateDefinition<JobBase, TParameters> where TParameters : class, new()
+{
+    internal sealed override string YamlProperty => "jobs";
+
+    /// <summary>
+    /// Instantiates a new <see cref="JobTemplateDefinition{TParameters}"/> with the specified typed parameters.
+    /// </summary>
+    /// <param name="typedParameters">The typed parameters to use in the template</param>
+    protected JobTemplateDefinition(TParameters? typedParameters = null) : base(typedParameters)
+    {
+    }
 
     /// <inheritdoc/>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetJobValidations();
@@ -84,12 +251,148 @@ public abstract class StepTemplateDefinition : TemplateDefinition<Step>
 }
 
 /// <summary>
+/// Inherit from this class to define a step template with typed parameters.
+/// <para>
+/// For example:
+/// </para>
+/// <code language="csharp">
+/// public class MyStepTemplate(MyStepParameters? parameters = null) : StepTemplateDefinition&lt;MyStepParameters&gt;(parameters)
+/// {
+///   public override ConditionedList&lt;Step&gt; Definition => 
+///   [
+///     ...
+///   ];
+/// }
+/// public record MyStepParameters
+/// {
+///    public string StringParam { get; init; } = "default value";
+///    public int IntParam { get; init; }
+///    public bool? ConditionParam { get; init; }
+/// }
+/// </code>
+/// Will generate:
+/// <code language="yaml">
+/// parameters:
+/// - name: stringParam
+///   type: string
+///   default: default value
+/// - name: intParam
+///   type: int
+/// - name: conditionParam
+///   type: boolean
+/// </code>
+/// And using in a pipeline:
+/// <code language="csharp">
+/// Steps = 
+/// [
+///   new MyStepTemplate(new()
+///   {
+///     StringParam = "the answer",
+///     IntParam = 42,
+///   })
+/// ]
+/// </code>
+/// Will generate:
+/// <code language="yaml">
+/// steps:
+/// - template: path/to/template.yml
+///   parameters:
+///     stringParam: the answer
+///     intParam: 42
+/// </code>
+/// </summary>
+/// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
+public abstract class StepTemplateDefinition<TParameters> : TemplateDefinition<Step, TParameters> where TParameters : class, new()
+{
+    internal sealed override string YamlProperty => "steps";
+
+    /// <summary>
+    /// Instantiates a new instance of <see cref="StepTemplateDefinition{TParameters}"/> with the specified typed parameters.
+    /// </summary>
+    /// <param name="typedParameters">The typed parameters to use in the template</param>
+    protected StepTemplateDefinition(TParameters? typedParameters = null) : base(typedParameters)
+    {
+    }
+
+    /// <inheritdoc/>
+    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => [];
+}
+
+/// <summary>
 /// Inherit from this class to define a variable template.
 /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
 /// </summary>
 public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBase>
 {
     internal sealed override string YamlProperty => "variables";
+
+    /// <inheritdoc/>
+    public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => [];
+}
+
+/// <summary>
+/// Inherit from this class to define a variable template with typed parameters.
+/// <para>
+/// For example:
+/// </para>
+/// <code language="csharp">
+/// public class MyVariableTemplate(MyVariableParameters? parameters = null) : VariableTemplateDefinition&lt;MyVariableParameters&gt;(parameters)
+/// {
+///   public override ConditionedList&lt;VariableBase&gt; Definition =>
+///   [
+///     ...
+///   ];
+/// }
+/// public record MyVariableParameters
+/// {
+///   public string StringParam { get; init; } = "default value";
+///   public int IntParam { get; init; }
+///   public bool? ConditionParam { get; init; }
+/// }
+/// </code>
+/// Will generate:
+/// <code language="yaml">
+/// parameters:
+/// - name: stringParam
+///   type: string
+///   default: default value
+/// - name: intParam
+///   type: int
+/// - name: conditionParam
+///   type: boolean
+/// </code>
+/// And using in a pipeline:
+/// <code language="csharp">
+/// Variables =
+/// [
+///   new MyVariableTemplate(new()
+///   {
+///     StringParam = "the answer",
+///     IntParam = 42,
+///   }
+/// ]
+/// </code>
+/// Will generate:
+/// <code language="yaml">
+/// variables:
+/// - template: path/to/template.yml
+///   parameters:
+///     stringParam: the answer
+///     intParam: 42
+/// </code>
+/// </summary>
+/// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
+public abstract class VariableTemplateDefinition<TParameters> : TemplateDefinition<VariableBase, TParameters> where TParameters : class, new()
+{
+    internal sealed override string YamlProperty => "variables";
+
+    /// <summary>
+    /// Instantiates a new instance of <see cref="VariableTemplateDefinition{TParameters}"/> with the specified typed parameters.
+    /// </summary>
+    /// <param name="typedParameters">The typed parameters to use in the template</param>
+    protected VariableTemplateDefinition(TParameters? typedParameters = null) : base(typedParameters)
+    {
+    }
 
     /// <inheritdoc/>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => [];
