@@ -195,8 +195,8 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
 /// <summary>
 /// This is the ancestor of all definitions that produce a Azure pipelines template.
 /// </summary>
-/// <typeparam name="T">Type of the part of the pipeline that this template is for (one of stages, steps, jobs or variables)</typeparam>
-public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDefinition
+/// <typeparam name="T">Type of the part of the pipeline that this template is for (one of extends, stages, steps, jobs or variables)</typeparam>
+public abstract class TemplateDefinitionBase<T> : TemplateDefinition, ISharplinerDefinition
 {
     /// <summary>
     /// Path to the YAML file where this template will be exported to.
@@ -220,7 +220,7 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
     /// Returns the definition of the template.
     /// </summary>
     [DisallowNull]
-    public abstract ConditionedList<T> Definition { get; }
+    public abstract T Definition { get; }
 
     internal abstract string YamlProperty { get; }
 
@@ -237,7 +237,7 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
             template.Add("parameters", Parameters);
         }
 
-        template.Add(YamlProperty, Definition);
+        template.Add(YamlProperty, Definition!);
 
         return SharplinerSerializer.Serialize(template);
     }
@@ -255,6 +255,20 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
     /// </remarks>
     public virtual string[]? Header => SharplinerPublisher.GetDefaultHeader(GetType());
 
+    /// <summary>
+    /// Disallow any other types than what we define here as AzDO only supports these.
+    /// </summary>
+    internal TemplateDefinitionBase()
+    {
+    }
+}
+
+/// <summary>
+/// This is the ancestor of all definitions that produce a Azure pipelines template.
+/// </summary>
+/// <typeparam name="T">Type of the part of the pipeline that this template is for (one of stages, steps, jobs or variables)</typeparam>
+public abstract class TemplateDefinition<T> : TemplateDefinitionBase<ConditionedList<T>>
+{
     /// <summary>
     /// Disallow any other types than what we define here as AzDO only supports these.
     /// </summary>

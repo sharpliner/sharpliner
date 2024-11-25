@@ -48,6 +48,18 @@ public abstract class ExtendsPipelineDefinition<TPipeline> : PipelineDefinitionB
 #region Pipeline templates - override these to define pipeline templates
 
 /// <summary>
+/// Inherit from this class to define an extends template.
+/// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
+/// </summary>
+public abstract class ExtendsTemplateDefinition : TemplateDefinitionBase<Extends>
+{
+    internal override string YamlProperty => "extends";
+
+    /// <inheritdoc/>
+    public override IReadOnlyCollection<IDefinitionValidation> Validations => [];
+}
+
+/// <summary>
 /// Inherit from this class to define a stage template.
 /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&amp;tabs=schema%2Cparameter-schema#template-references">official Azure DevOps pipelines documentation</see>.
 /// </summary>
@@ -67,7 +79,7 @@ public abstract class StageTemplateDefinition : TemplateDefinition<Stage>
 /// <code language="csharp">
 /// public class MyStageTemplate(MyStageParameters? parameters = null) : StageTemplateDefinition&lt;MyStageParameters&gt;(MyStageParameters)
 /// {
-///   public override ConditionedList&lt;Stage&gt; Definition => 
+///   public override ConditionedList&lt;Stage&gt; Definition =>
 ///   [
 ///     ...
 ///   ];
@@ -88,7 +100,7 @@ public abstract class StageTemplateDefinition : TemplateDefinition<Stage>
 /// </code>
 /// And using in a pipeline:
 /// <code language="csharp">
-/// Stages = 
+/// Stages =
 /// [
 ///   new MyStageParameters(new()
 ///   {
@@ -145,7 +157,7 @@ public abstract class JobTemplateDefinition : TemplateDefinition<JobBase>
 /// <code language="csharp">
 /// public class MyJobTemplate(MyJobParameters? parameters = null) : JobTemplateDefinition&lt;MyJobParameters&gt;(parameters)
 /// {
-///   public override ConditionedList&lt;Job&gt; Definition => 
+///   public override ConditionedList&lt;Job&gt; Definition =>
 ///   [
 ///     ...
 ///   ];
@@ -194,13 +206,13 @@ public abstract class JobTemplateDefinition : TemplateDefinition<JobBase>
 /// </code>
 /// And using in a pipeline:
 /// <code language="csharp">
-/// Jobs = 
+/// Jobs =
 /// [
 ///   new MyJobTemplate(new()
 ///   {
 ///     MainJob = new Job("main", "Main job")
 ///     {
-///       Steps = 
+///       Steps =
 ///       [
 ///         Bash.Inline("echo 'Main job step'")
 ///       ]
@@ -258,7 +270,7 @@ public abstract class StepTemplateDefinition : TemplateDefinition<Step>
 /// <code language="csharp">
 /// public class MyStepTemplate(MyStepParameters? parameters = null) : StepTemplateDefinition&lt;MyStepParameters&gt;(parameters)
 /// {
-///   public override ConditionedList&lt;Step&gt; Definition => 
+///   public override ConditionedList&lt;Step&gt; Definition =>
 ///   [
 ///     ...
 ///   ];
@@ -283,7 +295,7 @@ public abstract class StepTemplateDefinition : TemplateDefinition<Step>
 /// </code>
 /// And using in a pipeline:
 /// <code language="csharp">
-/// Steps = 
+/// Steps =
 /// [
 ///   new MyStepTemplate(new()
 ///   {
