@@ -50,11 +50,13 @@ public class TemplateTests
 
     private class Extends_Template_Definition : ExtendsTemplateDefinition
     {
-        public override List<Parameter> Parameters
+        public override string TargetFile => "extends-template.yml";
+        public override List<Parameter> Parameters =>
         [
             StringParameter("some"),
             BooleanParameter("other"),
         ];
+
         public override Extends Definition => new("template.yml", new()
         {
             ["some"] = "value",
@@ -72,12 +74,15 @@ public class TemplateTests
             parameters:
             - name: some
               type: string
+
             - name: other
               type: boolean
-            extends: template.yml
-            parameters:
-              some: value
-              other: ${{ parameters.other }}
+
+            extends:
+              template: template.yml
+              parameters:
+                some: value
+                other: ${{ parameters.other }}
             """);
     }
 
