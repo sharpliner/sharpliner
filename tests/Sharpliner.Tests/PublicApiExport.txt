@@ -1055,6 +1055,7 @@ namespace Sharpliner.AzureDevOps
         public sealed class TemplateParameterReference
         {
             public Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference this[string parameterName] { get; }
+            public Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference this[Sharpliner.AzureDevOps.Parameter parameter] { get; }
         }
     }
     public abstract class TemplateDefinitionCollection<T> : Sharpliner.AzureDevOps.TemplateDefinition, Sharpliner.ISharplinerDefinitionCollection
@@ -1182,6 +1183,7 @@ namespace Sharpliner.AzureDevOps
         public Sharpliner.AzureDevOps.BuildVariableReference Build { get; }
         public Sharpliner.AzureDevOps.EnvironmentVariableReference Environment { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference this[string variableName] { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference this[Sharpliner.AzureDevOps.Variable variable] { get; }
         public Sharpliner.AzureDevOps.PipelineVariableReference Pipeline { get; }
         public Sharpliner.AzureDevOps.StrategyVariableReference Strategy { get; }
         public Sharpliner.AzureDevOps.SystemVariableReference System { get; }

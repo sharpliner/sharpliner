@@ -16,6 +16,14 @@ public class VariablesReference
     public VariableReference this[string variableName] => new(variableName);
 
     /// <summary>
+    /// Gets a reference to a variable with the specified name.
+    /// This should be used for custom variables.
+    /// </summary>
+    /// <param name="variable">The variable.</param>
+    /// <returns>A variable reference to the specified name.</returns>
+    public VariableReference this[Variable variable] => new(variable.Name);
+
+    /// <summary>
     /// Variables connected to the agent running the current build (e.g. <c>Agent.HomeDirectory</c>)
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/build/variables?view=azure-devops&amp;tabs=yaml#agent-variables-devops-services">official Azure DevOps pipelines documentation</see>.
     /// </summary>

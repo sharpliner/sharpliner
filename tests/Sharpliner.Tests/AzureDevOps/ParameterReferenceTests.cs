@@ -10,18 +10,25 @@ public class ParameterReferenceTests
 {
     private class ParameterReferenceTest_Template : StageTemplateDefinition
     {
+        private static readonly Parameter p_pool = ObjectParameter("pool", new()
+        {
+            { "vmImage", "windows-latest" }
+        });
+
+        private static readonly Parameter p_stages = StageListParameter("stages");
+        private static readonly Parameter p_jobs = JobListParameter("jobs");
+        private static readonly Parameter p_steps = StepListParameter("steps");
+        private static readonly Parameter p_variables = ObjectParameter("variables");
+
         public override string TargetFile => "stages.yml";
 
         public override List<Parameter> Parameters =>
         [
-            StageListParameter("stages"),
-            JobListParameter("jobs"),
-            StepListParameter("steps"),
-            ObjectParameter("variables"),
-            ObjectParameter("pool", new()
-            {
-                { "vmImage", "windows-latest" }
-            }),
+            p_stages,
+            p_jobs,
+            p_steps,
+            p_variables,
+            p_pool,
         ];
 
         public override ConditionedList<Stage> Definition =>
@@ -32,16 +39,16 @@ public class ParameterReferenceTests
                 {
                     new Job("Job_1")
                     {
-                        Pool = parameters["pool"],
+                        Pool = parameters[p_pool],
 
                         Steps =
                         {
                             If.Equal(parameters["agentOs"], "Windows_NT")
-                                .Step(parameters["steps"]),
+                                .Step(parameters[p_steps]),
 
-                            parameters["steps"],
+                            parameters[p_steps],
 
-                            Bash.Inline("curl -o $(Agent.TempDirectory)/sharpliner.zip") with
+                            Bash.Inline($"curl -o {variables.Agent.TempDirectory}/sharpliner.zip") with
                             {
                                 ContinueOnError = parameters["continue"],
                             },
@@ -53,11 +60,11 @@ public class ParameterReferenceTests
                         }
                     },
 
-                    parameters["jobs"],
+                    parameters[p_jobs],
                 }
             },
 
-            parameters["stages"],
+            parameters[p_stages],
         ];
     }
 
