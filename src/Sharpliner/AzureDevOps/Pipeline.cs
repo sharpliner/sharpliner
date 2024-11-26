@@ -123,7 +123,7 @@ public record PipelineWithExtends : PipelineBase
     /// <summary>
     /// Specifies the template that this pipeline extends.
     /// </summary>
-    [YamlMember(Order = 90)]
+    [YamlMember(Order = 600)]
     [DisallowNull]
 #if NET8_0_OR_GREATER
     public required Extends Extends { get; init; }

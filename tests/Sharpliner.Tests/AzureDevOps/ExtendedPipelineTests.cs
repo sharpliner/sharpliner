@@ -12,14 +12,16 @@ public class ExtendedPipelineTests
 
         public override PipelineWithExtends Pipeline => new()
         {
-            Extends = new("templates/pipeline-template.yml")
+            Variables = 
+            [
+                Variable("key1", "value1"),
+            ],
+            Extends = new("templates/pipeline-template.yml", new()
             {
-                Parameters = new()
-                {
-                    { "param1", "value1" },
-                    { "param2", false },
-                }
-            },
+                ["param1"] = "value1",
+                ["param2"] = false,
+                ["param3"] = variables["key1"], // TODO: see https://github.com/sharpliner/sharpliner/issues/375
+            }),
 
             Trigger = Trigger.None,
             Pool = new HostedPool(vmImage: "ubuntu-latest"),
@@ -33,16 +35,21 @@ public class ExtendedPipelineTests
 
         yaml.Trim().Should().Be(
             """
+            trigger: none
+
+            variables:
+            - name: key1
+              value: value1
+
+            pool:
+              vmImage: ubuntu-latest
+
             extends:
               template: templates/pipeline-template.yml
               parameters:
                 param1: value1
                 param2: false
-
-            trigger: none
-
-            pool:
-              vmImage: ubuntu-latest
+                param3: $(key1)
             """);
     }
 }

@@ -751,7 +751,7 @@ namespace Sharpliner.AzureDevOps
         public PipelineWithExtends() { }
         public override System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
         [System.Runtime.CompilerServices.RequiredMember]
-        [YamlDotNet.Serialization.YamlMember(Order=90)]
+        [YamlDotNet.Serialization.YamlMember(Order=600)]
         public Sharpliner.AzureDevOps.Extends Extends { get; init; }
     }
     public class Pool : System.IEquatable<Sharpliner.AzureDevOps.Pool>
