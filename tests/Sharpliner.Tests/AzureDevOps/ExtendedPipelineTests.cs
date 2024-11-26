@@ -33,16 +33,16 @@ public class ExtendedPipelineTests
 
         yaml.Trim().Should().Be(
             """
+            trigger: none
+
+            pool:
+              vmImage: ubuntu-latest
+
             extends:
               template: templates/pipeline-template.yml
               parameters:
                 param1: value1
                 param2: false
-
-            trigger: none
-
-            pool:
-              vmImage: ubuntu-latest
             """);
     }
 }
