@@ -53,8 +53,8 @@ public class TemplateTests
         public override string TargetFile => "extends-template.yml";
         public override List<Parameter> Parameters =>
         [
-            StringParameter("some"),
-            BooleanParameter("other"),
+            StringParameter("some", defaultValue: "default value"),
+            BooleanParameter("other", defaultValue: true),
         ];
 
         public override Extends Definition => new("template.yml", new()
@@ -74,9 +74,51 @@ public class TemplateTests
             parameters:
             - name: some
               type: string
+              default: default value
 
             - name: other
               type: boolean
+              default: true
+
+            extends:
+              template: template.yml
+              parameters:
+                some: value
+                other: ${{ parameters.other }}
+            """);
+    }
+
+    private class Extends_Typed_Template_Definition(ExtendsTypedParameters? parameters = null) : ExtendsTemplateDefinition<ExtendsTypedParameters>(parameters)
+    {
+        public override string TargetFile => "extends-typed-template.yml";
+        public override Extends Definition => new("template.yml", new()
+        {
+            ["some"] = "value",
+            ["other"] = parameters["other"],
+        });
+    }
+
+    class ExtendsTypedParameters : AzureDevOpsDefinition
+    {
+        public string Some { get; init; } = "default value";
+        public bool Other { get; init; } = true;
+    }
+
+    [Fact]
+    public void Extends_Typed_Template_Definition_Serialization_Test()
+    {
+        var yaml = new Extends_Typed_Template_Definition().Serialize();
+
+        yaml.Trim().Should().Be(
+            """
+            parameters:
+            - name: some
+              type: string
+              default: default value
+
+            - name: other
+              type: boolean
+              default: true
 
             extends:
               template: template.yml
