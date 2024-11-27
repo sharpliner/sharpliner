@@ -516,3 +516,76 @@ You can then reference this library in between build steps and it will get expan
 ```
 
 More about this feature can be found [here (DefinitionLibraries.md)](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionLibraries.md).
+
+## NuGetTaskBuilder
+
+The `NuGetTaskBuilder` class provides methods to create various NuGet tasks in Azure DevOps pipelines. These tasks include `NuGetAuthenticateTask`, `Restore`, `Push`, `Pack`, and `Custom`.
+
+### NuGetAuthenticateTask
+
+The `NuGetAuthenticateTask` class represents the `NuGetAuthenticate@1` task in Azure DevOps pipelines. It is used to authenticate with NuGet service connections.
+
+Example usage:
+
+```csharp
+NuGet.Authenticate(new[] { "NuGetServiceConnection1", "NuGetServiceConnection2" }, forceReinstallCredentialProvider: true)
+```
+
+### Restore
+
+The `Restore` property of the `NuGetTaskBuilder` class provides methods to create NuGet restore tasks.
+
+Example usage:
+
+```csharp
+NuGet.Restore.FromFeed("dotnet-7-preview-feed", includeNuGetOrg: false) with
+{
+    ExternalFeedCredentials = "feeds/dotnet-7",
+    NoCache = true,
+    RestoreDirectory = ".packages",
+}
+```
+
+### Push
+
+The `Push` property of the `NuGetTaskBuilder` class provides methods to create NuGet push tasks.
+
+Example usage:
+
+```csharp
+NuGet.Push.ToInternalFeed("internal-feed") with
+{
+    TargetFeed = "internal-feed",
+}
+```
+
+### Pack
+
+The `Pack` property of the `NuGetTaskBuilder` class provides methods to create NuGet pack tasks.
+
+Example usage:
+
+```csharp
+NuGet.Pack.Pack("src/*.csproj", arguments: "-c Release") with
+{
+    NoBuild = true,
+    ConfigurationToPack = "Release",
+    IncludeSource = true,
+    IncludeSymbols = true,
+    OutputDir = "/tmp/staging/",
+}
+```
+
+### Custom
+
+The `Custom` property of the `NuGetTaskBuilder` class provides methods to create custom NuGet tasks.
+
+Example usage:
+
+```csharp
+NuGet.Custom.CustomCommand("custom-command", arguments: "--custom-arg") with
+{
+    Command = "custom-command",
+    Arguments = "--custom-arg",
+}
+```

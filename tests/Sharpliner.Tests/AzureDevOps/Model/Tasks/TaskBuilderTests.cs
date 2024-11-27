@@ -507,4 +507,76 @@ public class TaskBuilderTests
             retryCountOnTaskFailure: 2
         """);
     }
+
+    private class NuGetTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        NuGet.Authenticate(new[] { "MyServiceConnection" }, true),
+                        NuGet.Restore.FromFeed("MyFeed", true),
+                        NuGet.Restore.FromNuGetConfig("NuGet.config"),
+                        NuGet.Push.ToInternalFeed("MyInternalFeed"),
+                        NuGet.Push.ToExternalFeed("MyExternalFeedCredentials"),
+                        NuGet.Pack.Pack("**/*.csproj", "-Build"),
+                        NuGet.Custom.CustomCommand("custom", "-arg1 -arg2")
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public void Serialize_NuGet_Builders_Test()
+    {
+        NuGetTaskPipeline pipeline = new();
+        string yaml = pipeline.Serialize();
+        yaml.Trim().Should().Be(
+        """
+        jobs:
+        - job: test
+          steps:
+          - task: NuGetAuthenticate@1
+            inputs:
+              nuGetServiceConnections: MyServiceConnection
+              forceReinstallCredentialProvider: true
+
+          - task: NuGetCommand@2
+            inputs:
+              command: restore
+              feed: MyFeed
+              includeNuGetOrg: true
+
+          - task: NuGetCommand@2
+            inputs:
+              command: restore
+              nuGetConfigPath: NuGet.config
+
+          - task: NuGetCommand@2
+            inputs:
+              command: push
+              targetFeed: MyInternalFeed
+
+          - task: NuGetCommand@2
+            inputs:
+              command: push
+              targetFeedCredentials: MyExternalFeedCredentials
+
+          - task: NuGetCommand@2
+            inputs:
+              command: pack
+              packagesToPack: '**/*.csproj'
+              arguments: -Build
+
+          - task: NuGetCommand@2
+            inputs:
+              command: custom
+              arguments: -arg1 -arg2
+        """);
+    }
 }
