@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Xunit;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
@@ -9,6 +10,7 @@ public class PipelineVariableTests
     private enum Configuration
     {
         Debug,
+        [YamlMember(Alias = "Release1")]
         Release
     }
 
@@ -52,7 +54,7 @@ public class PipelineVariableTests
             - template: SomeTemplate
 
             - name: SomeEnum1
-              value: Release
+              value: Release1
 
             - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
               - name: SomeEnum2
