@@ -242,6 +242,13 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Group name</param>
     protected static Conditioned<VariableBase> Group(string name) => new(new VariableGroup(name));
 
+    /// <summary>
+    /// Defines a variable.
+    /// </summary>
+    /// <param name="name">Variable name</param>
+    /// <param name="value">Variable value</param>
+    protected static Conditioned<VariableBase> Variable(string name, Enum value) => new(new Variable(name, value));
+
     #endregion
 
     #region Pipeline task shorthands
