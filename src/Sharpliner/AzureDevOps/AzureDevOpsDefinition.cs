@@ -309,6 +309,11 @@ public abstract class AzureDevOpsDefinition
     protected static DotNetTaskBuilder DotNet { get; } = new();
 
     /// <summary>
+    /// Creates a NuGetAuthenticate or NuGetCommand task.
+    /// </summary>
+    protected static NuGetTaskBuilder NuGet { get; } = new();
+
+    /// <summary>
     /// This task verifies that you didn't forget to check in your YAML pipeline changes.
     /// </summary>
     /// <param name="pipelineProject">Path to the .csproj where pipelines are defined</param>
@@ -318,11 +323,6 @@ public abstract class AzureDevOpsDefinition
             DisplayName = "Validate YAML has been published",
             Arguments = $"-p:{nameof(PublishDefinitions.FailIfChanged)}=true"
         };
-
-    /// <summary>
-    /// Creates a NuGet task.
-    /// </summary>
-    protected static NuGetTaskBuilder NuGet { get; } = new();
 
     #endregion
 

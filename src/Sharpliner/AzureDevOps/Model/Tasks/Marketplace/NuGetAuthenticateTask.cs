@@ -21,8 +21,8 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlIgnore]
         public string[]? NuGetServiceConnections
         {
-            get => GetStringArray("nuGetServiceConnections");
-            init => SetProperty("nuGetServiceConnections", value);
+            get => GetString("nuGetServiceConnections")?.Split(',');
+            init => SetProperty("nuGetServiceConnections", string.Join(',', value!));
         }
 
         /// <summary>
