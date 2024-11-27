@@ -120,6 +120,29 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
 
     /// <summary>
+    /// Represents the NuGetAuthenticate@1 task in Azure DevOps pipelines.
+    /// </summary>
+    public class NuGetAuthenticateTask : AzureDevOpsTask
+    {
+        /// <summary>
+        /// Gets or sets the NuGet service connections.
+        /// </summary>
+        public string[]? NuGetServiceConnections { get; init; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to force reinstall the credential provider.
+        /// </summary>
+        public bool ForceReinstallCredentialProvider { get; init; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetAuthenticateTask"/> class.
+        /// </summary>
+        public NuGetAuthenticateTask() : base("NuGetAuthenticate@1")
+        {
+        }
+    }
+
+    /// <summary>
     /// Provides methods to create NuGet restore tasks.
     /// </summary>
     public class NuGetRestoreBuilder
@@ -298,6 +321,117 @@ namespace Sharpliner.AzureDevOps.Tasks
                 Command = command,
                 Arguments = arguments
             };
+        }
+    }
+
+    /// <summary>
+    /// Represents a base class for NuGet command tasks in Azure DevOps pipelines.
+    /// </summary>
+    public abstract class NuGetCommandTask : AzureDevOpsTask
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetCommandTask"/> class with the specified task name.
+        /// </summary>
+        /// <param name="taskName">The task name.</param>
+        protected NuGetCommandTask(string taskName) : base(taskName)
+        {
+        }
+    }
+
+    /// <summary>
+    /// Represents the NuGetCommand@2 task for restoring NuGet packages in Azure DevOps pipelines.
+    /// </summary>
+    public class NuGetRestoreCommandTask : NuGetCommandTask
+    {
+        /// <summary>
+        /// Gets or sets the feed to restore packages from.
+        /// </summary>
+        public string? Feed { get; init; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether to include NuGet.org in the generated NuGet.config.
+        /// </summary>
+        public bool? IncludeNuGetOrg { get; init; }
+
+        /// <summary>
+        /// Gets or sets the path to the NuGet.config file.
+        /// </summary>
+        public string? NuGetConfigPath { get; init; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetRestoreCommandTask"/> class.
+        /// </summary>
+        public NuGetRestoreCommandTask() : base("NuGetCommand@2")
+        {
+        }
+    }
+
+    /// <summary>
+    /// Represents the NuGetCommand@2 task for pushing NuGet packages in Azure DevOps pipelines.
+    /// </summary>
+    public class NuGetPushCommandTask : NuGetCommandTask
+    {
+        /// <summary>
+        /// Gets or sets the target feed.
+        /// </summary>
+        public string? TargetFeed { get; init; }
+
+        /// <summary>
+        /// Gets or sets the target feed credentials.
+        /// </summary>
+        public string? TargetFeedCredentials { get; init; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetPushCommandTask"/> class.
+        /// </summary>
+        public NuGetPushCommandTask() : base("NuGetCommand@2")
+        {
+        }
+    }
+
+    /// <summary>
+    /// Represents the NuGetCommand@2 task for packing NuGet packages in Azure DevOps pipelines.
+    /// </summary>
+    public class NuGetPackCommandTask : NuGetCommandTask
+    {
+        /// <summary>
+        /// Gets or sets the pattern to search for csproj or nuspec files to pack.
+        /// </summary>
+        public string? PackagesToPack { get; init; }
+
+        /// <summary>
+        /// Gets or sets the additional arguments for the pack command.
+        /// </summary>
+        public string? Arguments { get; init; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetPackCommandTask"/> class.
+        /// </summary>
+        public NuGetPackCommandTask() : base("NuGetCommand@2")
+        {
+        }
+    }
+
+    /// <summary>
+    /// Represents the NuGetCommand@2 task for custom NuGet commands in Azure DevOps pipelines.
+    /// </summary>
+    public class NuGetCustomCommandTask : NuGetCommandTask
+    {
+        /// <summary>
+        /// Gets or sets the custom command.
+        /// </summary>
+        public string? Command { get; init; }
+
+        /// <summary>
+        /// Gets or sets the additional arguments for the custom command.
+        /// </summary>
+        public string? Arguments { get; init; }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetCustomCommandTask"/> class.
+        /// </summary>
+        public NuGetCustomCommandTask() : base("NuGetCommand@2")
+        {
         }
     }
 }
