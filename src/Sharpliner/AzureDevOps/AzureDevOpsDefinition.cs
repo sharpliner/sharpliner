@@ -237,6 +237,13 @@ public abstract class AzureDevOpsDefinition
     protected static Conditioned<VariableBase> Variable(string name, bool value) => new(new Variable(name, value));
 
     /// <summary>
+    /// Defines a variable.
+    /// </summary>
+    /// <param name="name">Variable name</param>
+    /// <param name="value">Variable value</param>
+    protected static Conditioned<VariableBase> Variable(string name, Enum value) => new(new Variable(name, value));
+
+    /// <summary>
     /// References a variable group.
     /// </summary>
     /// <param name="name">Group name</param>
