@@ -18,7 +18,9 @@ public class PipelineVariableTests
         {
             Variables =
             {
-                Variable("SomeVariable", "Some Value"),
+                Variable("SomeString", "Some Value"),
+                Variable("SomeInt", 32),
+                Variable("SomeBool", true),
                 Group("SomeGroup"),
                 VariableTemplate("SomeTemplate"),
                 Variable("SomeEnum1", Configuration.Release),
@@ -36,8 +38,14 @@ public class PipelineVariableTests
         yaml.Trim().Should().Be(
             """
             variables:
-            - name: SomeVariable
+            - name: SomeString
               value: Some Value
+
+            - name: SomeInt
+              value: 32
+
+            - name: SomeBool
+              value: true
 
             - group: SomeGroup
 
