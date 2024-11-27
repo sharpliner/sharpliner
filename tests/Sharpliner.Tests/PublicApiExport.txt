@@ -232,6 +232,7 @@ namespace Sharpliner.AzureDevOps
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> Value<T>(this Sharpliner.AzureDevOps.IfCondition condition, T value) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.IfCondition condition, Sharpliner.AzureDevOps.Variable variable) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.IfCondition condition, string name, bool value) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.IfCondition condition, string name, System.Enum value) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.IfCondition condition, string name, int value) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.IfCondition condition, string name, string value) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> VariableLibrary(this Sharpliner.AzureDevOps.IfCondition condition, Sharpliner.AzureDevOps.VariableLibrary library) { }
@@ -278,6 +279,7 @@ namespace Sharpliner.AzureDevOps
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step> Steps(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step> conditionedDefinition, System.Collections.Generic.IEnumerable<Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step>> steps) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step> Steps(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step> conditionedDefinition, System.Collections.Generic.IEnumerable<Sharpliner.AzureDevOps.Step> steps) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> conditionedDefinition, string name, bool value) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> conditionedDefinition, string name, System.Enum value) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> conditionedDefinition, string name, int value) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> conditionedDefinition, string name, string value) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> VariableLibrary(this Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> conditionedDefinition, Sharpliner.AzureDevOps.VariableLibrary library) { }
@@ -1124,6 +1126,7 @@ namespace Sharpliner.AzureDevOps
     public class Variable : Sharpliner.AzureDevOps.VariableBase, System.IEquatable<Sharpliner.AzureDevOps.Variable>
     {
         public Variable(string name, bool value) { }
+        public Variable(string name, System.Enum value) { }
         public Variable(string name, int value) { }
         public Variable(string name, string value) { }
         [YamlDotNet.Serialization.YamlMember(Alias="name", Order=1)]

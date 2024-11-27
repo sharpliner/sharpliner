@@ -76,7 +76,7 @@ public record Variable : VariableBase
     }
 
     /// <summary>
-    /// Creates a new instance of <see cref="Variable"/> with s string value.
+    /// Creates a new instance of <see cref="Variable"/> with a string value.
     /// </summary>
     /// <param name="name">The name of the variable</param>
     /// <param name="value">The value of the variable</param>
@@ -101,6 +101,16 @@ public record Variable : VariableBase
     /// <param name="name">The name of the variable</param>
     /// <param name="value">The value of the variable</param>
     public Variable(string name, bool value)
+        : this(name, (object)value)
+    {
+    }
+
+    /// <summary>
+    /// Creates a new instance of <see cref="Variable"/> with an enum value.
+    /// </summary>
+    /// <param name="name">The name of the variable</param>
+    /// <param name="value">The value of the variable</param>
+    public Variable(string name, Enum value)
         : this(name, (object)value)
     {
     }
