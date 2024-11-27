@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 
@@ -34,6 +35,15 @@ public static class ConditionExtensions
     /// <param name="name">Variable name</param>
     /// <param name="value">Variable value</param>
     public static Conditioned<VariableBase> Variable(this IfCondition condition, string name, int value)
+        => Conditioned.Link<VariableBase>(condition, new Variable(name, value));
+
+    /// <summary>
+    /// Defines a variable.
+    /// </summary>
+    /// <param name="condition">Conditioned definition</param>
+    /// <param name="name">Variable name</param>
+    /// <param name="value">Variable value</param>
+    public static Conditioned<VariableBase> Variable(this IfCondition condition, string name, Enum value)
         => Conditioned.Link<VariableBase>(condition, new Variable(name, value));
 
     /// <summary>
