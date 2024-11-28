@@ -33,6 +33,16 @@ namespace Sharpliner.AzureDevOps.Tasks
         }
 
         /// <summary>
+        /// Gets or sets the custom command to execute.
+        /// </summary>
+        [YamlIgnore]
+        public string? Command
+        {
+            get => GetString("command");
+            init => SetProperty("command", value);
+        }
+
+        /// <summary>
         /// Gets or sets the arguments for the custom command.
         /// </summary>
         [YamlIgnore]

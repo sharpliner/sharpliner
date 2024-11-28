@@ -237,13 +237,6 @@ public abstract class AzureDevOpsDefinition
     protected static Conditioned<VariableBase> Variable(string name, bool value) => new(new Variable(name, value));
 
     /// <summary>
-    /// Defines a variable.
-    /// </summary>
-    /// <param name="name">Variable name</param>
-    /// <param name="value">Variable value</param>
-    protected static Conditioned<VariableBase> Variable(string name, Enum value) => new(new Variable(name, value));
-
-    /// <summary>
     /// References a variable group.
     /// </summary>
     /// <param name="name">Group name</param>
@@ -309,11 +302,6 @@ public abstract class AzureDevOpsDefinition
     protected static DotNetTaskBuilder DotNet { get; } = new();
 
     /// <summary>
-    /// Creates a NuGetAuthenticate or NuGetCommand task.
-    /// </summary>
-    protected static NuGetTaskBuilder NuGet { get; } = new();
-
-    /// <summary>
     /// This task verifies that you didn't forget to check in your YAML pipeline changes.
     /// </summary>
     /// <param name="pipelineProject">Path to the .csproj where pipelines are defined</param>
@@ -323,6 +311,11 @@ public abstract class AzureDevOpsDefinition
             DisplayName = "Validate YAML has been published",
             Arguments = $"-p:{nameof(PublishDefinitions.FailIfChanged)}=true"
         };
+
+    /// <summary>
+    /// Creates a NuGet task.
+    /// </summary>
+    protected static NuGetTaskBuilder NuGet { get; } = new();
 
     #endregion
 
@@ -747,7 +740,7 @@ public abstract class AzureDevOpsDefinition
     /// Utility that creates an <c>${{ contains(haystack, needle) }}</c> section.
     /// </summary>
     /// <param name="needle">Needle to search for</param>
-    /// <param name="haystack">Haystack to search in</param>
+    /// <param name="haystack">Haystack to search in</returns>
     /// <returns>A <c>contains</c> condition with the specified expressions.</returns>
     protected static InlineCondition Contains(InlineExpression needle, InlineExpression haystack) => new InlineContainsCondition(needle, haystack);
 

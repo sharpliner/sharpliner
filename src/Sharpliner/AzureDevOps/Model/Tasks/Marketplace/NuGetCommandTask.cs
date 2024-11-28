@@ -22,7 +22,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlIgnore]
         public string Command
         {
-            get => GetString("command")!;
+            get => GetString("command");
             init => SetProperty("command", value);
         }
     }
