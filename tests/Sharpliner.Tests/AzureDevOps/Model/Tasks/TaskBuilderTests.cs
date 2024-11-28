@@ -558,7 +558,7 @@ public class TaskBuilderTests
                         },
                         NuGet.Push.ToInternalFeed("MyInternalFeed"),
                         NuGet.Push.ToExternalFeed("MyExternalFeedCredentials"),
-                        NuGet.Custom.CustomCommand("custom", "-arg1 -arg2")
+                        NuGet.Custom(@"config -Set repositoryPath=c:\packages -configfile c:\my.config")
                     }
                 }
             }
@@ -655,7 +655,7 @@ public class TaskBuilderTests
           - task: NuGetCommand@2
             inputs:
               command: custom
-              arguments: -arg1 -arg2
+              arguments: config -Set repositoryPath=c:\packages -configfile c:\my.config
         """);
     }
 }

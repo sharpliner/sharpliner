@@ -1,32 +1,19 @@
 namespace Sharpliner.AzureDevOps.Tasks
 {
     /// <summary>
-    /// The NuGetTaskBuilder class provides methods to create various NuGet tasks in Azure DevOps pipelines.
-    /// These tasks include NuGetAuthenticateTask, Restore, Push, Pack, and Custom.
+    /// Provides methods to create various NuGet tasks in Azure DevOps pipelines.
     /// </summary>
-    /// <example>
-    /// <code>
-    /// var authenticateTask = NuGet.Authenticate(new[] { "myServiceConnection" }, true);
-    /// </code>
-    /// <para>Generated YAML:</para>
-    /// <code>
-    /// - task: NuGetAuthenticate@1
-    ///   inputs:
-    ///     nuGetServiceConnections: myServiceConnection
-    ///     forceReinstallCredentialProvider: true
-    /// </code>
-    /// </example>
     public class NuGetTaskBuilder
     {
         /// <summary>
-        /// Creates a NuGetAuthenticateTask with the specified NuGet service connections and force reinstall credential provider option.
+        /// Creates a <see cref="NuGetAuthenticateTask"/> with the specified NuGet service connections and force reinstall credential provider option.
         /// </summary>
         /// <param name="nuGetServiceConnections">The NuGet service connections.</param>
         /// <param name="forceReinstallCredentialProvider">A value indicating whether to force reinstall the credential provider.</param>
-        /// <returns>A NuGetAuthenticateTask instance.</returns>
+        /// <returns>A <see cref="NuGetAuthenticateTask"/> instance.</returns>
         /// <example>
-        /// <code>
-        /// var authenticateTask = NuGet.Authenticate(new[] { "myServiceConnection" }, true);
+        /// <code lang="csharp">
+        /// NuGet.Authenticate(new[] { "myServiceConnection" }, true)
         /// </code>
         /// <para>Generated YAML:</para>
         /// <code>
@@ -46,56 +33,59 @@ namespace Sharpliner.AzureDevOps.Tasks
         }
 
         /// <summary>
-        /// Gets a NuGetRestoreBuilder instance to create NuGet restore tasks.
-        /// </summary>
-        /// <example>
-        /// <code>
+        /// <para>
+        /// Gets a <see cref="NuGetRestoreBuilder"/> instance to create NuGet restore tasks.
+        /// </para>
+        /// For example:
+        /// <code lang="csharp">
         /// var restoreTask = NuGet.Restore.FromFeed("myFeed", true);
         /// </code>
         /// <para>Generated YAML:</para>
-        /// <code>
+        /// <code lang="yaml">
         /// - task: NuGetCommand@2
         ///   inputs:
         ///     command: restore
         ///     feedsToUse: myFeed
         ///     includeNuGetOrg: true
         /// </code>
-        /// </example>
+        /// </summary>
         public NuGetRestoreBuilder Restore => new();
 
         /// <summary>
-        /// Gets a NuGetPushBuilder instance to create NuGet push tasks.
-        /// </summary>
-        /// <example>
-        /// <code>
+        /// <para>
+        /// Gets a <see cref="NuGetPushBuilder"/> instance to create NuGet push tasks.
+        /// </para>
+        /// For example:
+        /// <code lang="csharp">
         /// var pushTask = NuGet.Push.ToInternalFeed("myInternalFeed");
         /// </code>
         /// <para>Generated YAML:</para>
-        /// <code>
+        /// <code lang="yaml">
         /// - task: NuGetCommand@2
         ///   inputs:
         ///     command: push
         ///     publishVstsFeed: myInternalFeed
         /// </code>
-        /// </example>
+        /// </summary>
         public NuGetPushBuilder Push => new();
 
         /// <summary>
-        /// Gets a NuGetPackBuilder instance to create NuGet pack tasks.
-        /// </summary>
-        /// <example>
-        /// <code>
-        /// var packTask = NuGet.Pack.Pack("**/*.csproj", "-Properties Configuration=Release");
+        /// <para>
+        /// Gets a <see cref="NuGetPackBuilder"/> instance to create NuGet pack tasks.
+        /// </para>
+        /// For example:
+        /// <code lang="csharp">
+        /// NuGet.Pack.ByEnvVar("VERSION")
         /// </code>
         /// <para>Generated YAML:</para>
-        /// <code>
+        /// <code lang="yaml">
         /// - task: NuGetCommand@2
         ///   inputs:
         ///     command: pack
-        ///     packagesToPack: **/*.csproj
-        ///     arguments: -Properties Configuration=Release
+        ///     versioningScheme: byEnvVar
+        ///     versionEnvVar: VERSION
         /// </code>
-        /// </example>
+        /// </summary>
         public NuGetPackBuilder Pack => new();
 
         /// <summary>
@@ -103,11 +93,11 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// <para>
         /// For example:
         /// </para>
-        /// <code>
+        /// <code lang="csharp">
         /// var customTask = NuGet.Custom(@"config -Set repositoryPath=c:\packages -configfile c:\my.config");
         /// </code>
         /// <para>Generated YAML:</para>
-        /// <code>
+        /// <code lang="yaml">
         /// - task: NuGetCommand@2
         ///   inputs:
         ///     command: custom
@@ -127,20 +117,18 @@ namespace Sharpliner.AzureDevOps.Tasks
     public class NuGetRestoreBuilder
     {
         /// <summary>
+        /// <para>
         /// Creates a NuGetRestoreCommandTask to restore packages from a feed.
-        /// </summary>
-        /// <param name="vstsFeed">The feed to restore packages from.</param>
-        /// <param name="includeNuGetOrg">A value indicating whether to include NuGet.org in the generated NuGet.config.</param>
-        /// <returns>A NuGetRestoreCommandTask instance.</returns>
-        /// <example>
-        /// <code>
+        /// </para>
+        /// For example:
+        /// <code lang="csharp">
         /// NuGet.Restore.FromFeed("myFeed") with
         /// {
         ///   RestoreSolution = "path/to/solution.sln"
         /// }
         /// </code>
-        /// <para>Generated YAML:</para>
-        /// <code>
+        /// Generated YAML:
+        /// <code lang="yaml">
         /// - task: NuGetCommand@2
         ///   inputs:
         ///     command: restore
@@ -148,7 +136,10 @@ namespace Sharpliner.AzureDevOps.Tasks
         ///     restoreSolution: path/to/solution.sln
         ///     feedsToUse: myFeed
         /// </code>
-        /// </example>
+        /// </summary>
+        /// <param name="vstsFeed">The feed to restore packages from.</param>
+        /// <param name="includeNuGetOrg">A value indicating whether to include NuGet.org in the generated NuGet.config.</param>
+        /// <returns>A NuGetRestoreCommandTask instance.</returns>
         public NuGetRestoreFeedCommandTask FromFeed(string vstsFeed)
         {
             return new()
@@ -158,19 +149,17 @@ namespace Sharpliner.AzureDevOps.Tasks
         }
 
         /// <summary>
+        /// <para>
         /// Creates a NuGetRestoreCommandTask to restore packages from a NuGet.config file.
-        /// </summary>
-        /// <param name="nugetConfigPath">The path to the NuGet.config file.</param>
-        /// <returns>A NuGetRestoreCommandTask instance.</returns>
-        /// <example>
-        /// <code>
+        /// </para>
+        /// <code lang="csharp">
         /// NuGet.Restore.FromNuGetConfig("path/to/NuGet.config");
         /// {
         ///   RestoreSolution = "path/to/solution.sln"
         /// }
         /// </code>
-        /// <para>Generated YAML:</para>
-        /// <code>
+        /// Generated YAML:
+        /// <code lang="yaml">
         /// - task: NuGetCommand@2
         ///   inputs:
         ///     command: restore
@@ -178,7 +167,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         ///     restoreSolution: path/to/solution.sln
         ///     nugetConfigPath: path/to/NuGet.config
         /// </code>
-        /// </example>
+        /// </summary>
+        /// <param name="nugetConfigPath">The path to the NuGet.config file.</param>
+        /// <returns>A NuGetRestoreCommandTask instance.</returns>
         public NuGetRestoreConfigCommandTask FromNuGetConfig(string nugetConfigPath)
         {
             return new()
@@ -199,10 +190,10 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// <param name="targetFeed">The target feed.</param>
         /// <returns>A NuGetPushCommandTask instance.</returns>
         /// <example>
-        /// <code>
+        /// <code lang="csharp">
         /// var pushTask = NuGet.Push.ToInternalFeed("myInternalFeed");
         /// </code>
-        /// <para>Generated YAML:</para>
+        /// Generated YAML:
         /// <code>
         /// - task: NuGetCommand@2
         ///   inputs:
@@ -224,10 +215,10 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// <param name="targetFeedCredentials">The target feed credentials.</param>
         /// <returns>A NuGetPushCommandTask instance.</returns>
         /// <example>
-        /// <code>
+        /// <code lang="csharp">
         /// var pushTask = NuGet.Push.ToExternalFeed("myExternalFeedCredentials");
         /// </code>
-        /// <para>Generated YAML:</para>
+        /// Generated YAML:
         /// <code>
         /// - task: NuGetCommand@2
         ///   inputs:

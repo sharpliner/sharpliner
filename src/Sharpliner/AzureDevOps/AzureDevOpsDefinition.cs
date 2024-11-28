@@ -747,7 +747,7 @@ public abstract class AzureDevOpsDefinition
     /// Utility that creates an <c>${{ contains(haystack, needle) }}</c> section.
     /// </summary>
     /// <param name="needle">Needle to search for</param>
-    /// <param name="haystack">Haystack to search in</returns>
+    /// <param name="haystack">Haystack to search in</param>
     /// <returns>A <c>contains</c> condition with the specified expressions.</returns>
     protected static InlineCondition Contains(InlineExpression needle, InlineExpression haystack) => new InlineContainsCondition(needle, haystack);
 
