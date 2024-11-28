@@ -244,33 +244,6 @@ namespace Sharpliner.AzureDevOps.Tasks
     /// </summary>
     public class NuGetPackBuilder
     {
-        /// <summary>
-        /// Creates a NuGetPackCommandTask to pack NuGet packages.
-        /// </summary>
-        /// <param name="packagesToPack">The pattern to search for csproj or nuspec files to pack.</param>
-        /// <param name="arguments">The additional arguments for the pack command.</param>
-        /// <returns>A NuGetPackCommandTask instance.</returns>
-        /// <example>
-        /// <code>
-        /// var packTask = NuGet.Pack.Pack("**/*.csproj", "-Properties Configuration=Release");
-        /// </code>
-        /// <para>Generated YAML:</para>
-        /// <code>
-        /// - task: NuGetCommand@2
-        ///   inputs:
-        ///     command: pack
-        ///     packagesToPack: **/*.csproj
-        ///     arguments: -Properties Configuration=Release
-        /// </code>
-        /// </example>
-        public NuGetPackCommandTask Pack(string packagesToPack = "**/*.csproj", string? arguments = null)
-        {
-            return new NuGetPackCommandTask
-            {
-                PackagesToPack = packagesToPack,
-                Arguments = arguments
-            };
-        }
     }
 
     /// <summary>
