@@ -138,7 +138,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// </code>
         /// </summary>
         /// <param name="vstsFeed">The feed to restore packages from.</param>
-        /// <param name="includeNuGetOrg">A value indicating whether to include NuGet.org in the generated NuGet.config.</param>
         /// <returns>A NuGetRestoreCommandTask instance.</returns>
         public NuGetRestoreFeedCommandTask FromFeed(string vstsFeed)
         {
@@ -185,11 +184,11 @@ namespace Sharpliner.AzureDevOps.Tasks
     public class NuGetPushBuilder
     {
         /// <summary>
+        /// <para>
         /// Creates a NuGetPushCommandTask to push packages to an internal feed.
-        /// </summary>
-        /// <param name="targetFeed">The target feed.</param>
-        /// <returns>A NuGetPushCommandTask instance.</returns>
+        /// </para>
         /// <example>
+        /// For example:
         /// <code lang="csharp">
         /// var pushTask = NuGet.Push.ToInternalFeed("myInternalFeed");
         /// </code>
@@ -202,6 +201,8 @@ namespace Sharpliner.AzureDevOps.Tasks
         ///     publishVstsFeed: myInternalFeed
         /// </code>
         /// </example>
+        /// </summary>
+        /// <returns>A <see cref="NuGetPushInternalCommandTask"/> instance.</returns>
         public NuGetPushInternalCommandTask ToInternalFeed(string publishVstsFeed)
         {
             return new(publishVstsFeed)
@@ -240,6 +241,15 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// </summary>
         public NuGetPackCommandTaskOff WithoutPackageVersioning => new();
 
+        /// <summary>
+        /// <para>
+        /// Creates a task to pack NuGet packages with the version set by a prerelease number.
+        /// </para>
+        /// </summary>
+        /// <param name="majorVersion">The <c>X</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.</param>
+        /// <param name="minorVersion">The <c>Y</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.</param>
+        /// <param name="patchVersion">The <c>Z</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.</param>
+        /// <returns>A new instance of <see cref="NuGetPackCommandTaskByPrereleaseNumber"/>.</returns>
         public NuGetPackCommandTaskByPrereleaseNumber ByPrereleaseNumber(string majorVersion, string minorVersion, string patchVersion) => new(majorVersion, minorVersion, patchVersion);
 
         /// <summary>

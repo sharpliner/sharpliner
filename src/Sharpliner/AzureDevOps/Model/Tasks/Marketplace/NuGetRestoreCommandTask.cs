@@ -43,8 +43,14 @@ namespace Sharpliner.AzureDevOps.Tasks
         }
     }
 
+    /// <summary>
+    /// Represents the NuGetCommand@2 task for restoring NuGet packages with the <c>feedsToUse</c> set to <c>config</c> in Azure DevOps pipelines.
+    /// </summary>
     public record NuGetRestoreFeedCommandTask : NuGetRestoreCommandTask
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetRestoreFeedCommandTask"/> class.
+        /// </summary>
         public NuGetRestoreFeedCommandTask() : base("select")
         {
         }
@@ -70,8 +76,14 @@ namespace Sharpliner.AzureDevOps.Tasks
         }
     }
 
+    /// <summary>
+    /// Represents the NuGetCommand@2 task for restoring NuGet packages with the <c>feedsToUse</c> set to <c>config</c> in Azure DevOps pipelines.
+    /// </summary>
     public record NuGetRestoreConfigCommandTask : NuGetRestoreCommandTask
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetRestoreConfigCommandTask"/> class.
+        /// </summary>
         public NuGetRestoreConfigCommandTask() : base("config")
         {
         }

@@ -107,6 +107,9 @@ namespace Sharpliner.AzureDevOps.Tasks
             init => SetProperty("buildProperties", string.Join(';', value!.Select(x => $"{x.Key}={x.Value}")));
         }
 
+        /// <summary>
+        /// Specifies the amount of detail displayed in the output.
+        /// </summary>
         [YamlIgnore]
         public PackVerbosity? VerbosityPack
         {
@@ -152,8 +155,14 @@ namespace Sharpliner.AzureDevOps.Tasks
         Detailed,
     }
 
+    /// <summary>
+    /// Represents the NuGetCommand@2 task for packing NuGet packages in Azure DevOps pipelines with <c>versioningScheme></c> set to <c>off</c>.
+    /// </summary>
     public record NuGetPackCommandTaskOff : NuGetPackCommandTask
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetPackCommandTaskOff"/> class.
+        /// </summary>
         public NuGetPackCommandTaskOff() : base("off") { }
 
         /// <summary>
@@ -171,8 +180,17 @@ namespace Sharpliner.AzureDevOps.Tasks
         } 
     }
 
+    /// <summary>
+    /// Represents the NuGetCommand@2 task for packing NuGet packages in Azure DevOps pipelines with <c>versioningScheme></c> set to <c>byPrereleaseNumber</c>.
+    /// </summary>
     public record NuGetPackCommandTaskByPrereleaseNumber : NuGetPackCommandTask
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetPackCommandTaskByPrereleaseNumber"/> class.
+        /// </summary>
+        /// <param name="majorVersion">The <c>X</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.</param>
+        /// <param name="minorVersion">The <c>Y</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.</param>
+        /// <param name="patchVersion">The <c>Z</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.</param>
         public NuGetPackCommandTaskByPrereleaseNumber(string majorVersion, string minorVersion, string patchVersion) : base("byPrereleaseNumber")
         {
             MajorVersion = majorVersion;
@@ -242,8 +260,15 @@ namespace Sharpliner.AzureDevOps.Tasks
         Local
     }
 
+    /// <summary>
+    /// Represents the NuGetCommand@2 task for packing NuGet packages in Azure DevOps pipelines with <c>versioningScheme></c> set to <c>byEnvVar</c>.
+    /// </summary>
     public record NuGetPackCommandTaskByEnvVar : NuGetPackCommandTask
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetPackCommandTaskByEnvVar"/> class.
+        /// </summary>
+        /// <param name="versionEnvVar">The variable name without <c>$</c>, <c>$env</c>, or <c>%</c>.</param>
         public NuGetPackCommandTaskByEnvVar(string versionEnvVar) : base("byEnvVar")
         {
             VersionEnvVar = versionEnvVar;
@@ -260,8 +285,14 @@ namespace Sharpliner.AzureDevOps.Tasks
         }
     }
 
+    /// <summary>
+    /// Represents the NuGetCommand@2 task for packing NuGet packages in Azure DevOps pipelines with <c>versioningScheme></c> set to <c>byBuildNumber</c>.
+    /// </summary>
     public record NuGetPackCommandTaskByBuildNumber : NuGetPackCommandTask
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetPackCommandTaskByBuildNumber"/> class.
+        /// </summary>
         public NuGetPackCommandTaskByBuildNumber() : base("byBuildNumber") { }
     }
 }
