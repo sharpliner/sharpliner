@@ -202,14 +202,14 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// - task: NuGetCommand@2
         ///   inputs:
         ///     command: push
+        ///     nuGetFeedType: internal
         ///     publishVstsFeed: myInternalFeed
         /// </code>
         /// </example>
-        public NuGetPushCommandTask ToInternalFeed(string targetFeed)
+        public NuGetPushInternalCommandTask ToInternalFeed(string publishVstsFeed)
         {
-            return new NuGetPushCommandTask
+            return new(publishVstsFeed)
             {
-                TargetFeed = targetFeed
             };
         }
 
@@ -227,16 +227,11 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// - task: NuGetCommand@2
         ///   inputs:
         ///     command: push
+        ///     nuGetFeedType: external
         ///     externalFeedCredentials: myExternalFeedCredentials
         /// </code>
         /// </example>
-        public NuGetPushCommandTask ToExternalFeed(string targetFeedCredentials)
-        {
-            return new NuGetPushCommandTask
-            {
-                TargetFeedCredentials = targetFeedCredentials
-            };
-        }
+        public NuGetPushExternalCommandTask ToExternalFeed(string targetFeedCredentials) => new(targetFeedCredentials);
     }
 
     /// <summary>
@@ -244,6 +239,35 @@ namespace Sharpliner.AzureDevOps.Tasks
     /// </summary>
     public class NuGetPackBuilder
     {
+        /// <summary>
+        /// Creates a task to pack NuGet packages without versioning.
+        /// </summary>
+        public NuGetPackCommandTaskOff WithoutPackageVersioning => new();
+
+        public NuGetPackCommandTaskByPrereleaseNumber ByPrereleaseNumber(string majorVersion, string minorVersion, string patchVersion) => new(majorVersion, minorVersion, patchVersion);
+
+        /// <summary>
+        /// <para>
+        /// Creates a task to pack NuGet packages with the version set by an environment variable.
+        /// </para>
+        /// The version will be set to the value of the environment variable that has the name specified by the versionEnvVar parameter, e.g. <c>MyVersion</c> (no $, just the environment variable name). 
+        /// Make sure the environment variable is set to a proper SemVer, such as <c>1.2.3</c> or <c>1.2.3-beta1</c>.
+        /// </summary>
+        /// <param name="versionEnvVar">The name of the environment variable that contains the version.</param>
+        /// <returns>A new instance of <see cref="NuGetPackCommandTaskByEnvVar"/>.</returns>
+        public NuGetPackCommandTaskByEnvVar ByEnvVar(string versionEnvVar) => new(versionEnvVar);
+
+        /// <summary>
+        /// <para>
+        /// Creates a task to pack NuGet packages with the version set by the pipeline run's build number.
+        /// </para>
+        /// The version will be set using the pipeline run's build number. 
+        /// This is the value specified for the pipeline's name property, which gets saved to the <c>BUILD_BUILDNUMBER</c> environment variable). 
+        /// Ensure that the build number being used contains a proper SemVer, such as <c>1.0.$(Rev:r)</c>. 
+        /// The task will extract the dotted version, <c>1.2.3.4</c>, from the build number string, and use only that portion. 
+        /// The rest of the string will be dropped.
+        /// </summary>
+        public NuGetPackCommandTaskByBuildNumber ByBuildNumber => new();
     }
 
     /// <summary>

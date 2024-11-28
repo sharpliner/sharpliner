@@ -536,10 +536,30 @@ public class TaskBuilderTests
                             ContinueOnError = true
                         },
                         NuGet.Restore.FromNuGetConfig("nuget.config"),
+                        NuGet.Pack.WithoutPackageVersioning with 
+                        { 
+                            PackagesToPack = "**/*.csproj",
+                            IncludeSymbols = true,
+                            ToolPackage = true,
+                            BuildProperties = new()
+                            {
+                                ["prop1"] = "value1",
+                                ["prop2"] = "value2"
+                            }
+
+                        },
+                        NuGet.Pack.ByPrereleaseNumber("3", "1", "4"),
+                        NuGet.Pack.ByEnvVar("VERSION"),
+                        NuGet.Pack.ByBuildNumber with
+                        {
+                            PackagesToPack = "**/*.csproj",
+                            Configuration = "Release",
+                            PackDestination = "artifacts/packages"
+                        },
 
                         NuGet.Push.ToInternalFeed("MyInternalFeed"),
                         NuGet.Push.ToExternalFeed("MyExternalFeedCredentials"),
-                        NuGet.Pack.Pack("**/*.csproj", "-Build"),
+                        
                         NuGet.Custom.CustomCommand("custom", "-arg1 -arg2")
                     }
                 }
@@ -563,35 +583,76 @@ public class TaskBuilderTests
               forceReinstallCredentialProvider: true
 
           - task: NuGetCommand@2
-          inputs:
+            inputs:
               command: restore
               feedsToUse: select
               vstsFeed: my-project/my-project-scoped-feed
+              restoreSolution: '**/*.sln'
               includeNuGetOrg: false
-              restoreSolution: **/*.sln
 
           - task: NuGetCommand@2
             inputs:
               command: restore
               feedsToUse: select
               vstsFeed: my-organization-scoped-feed
-              restoreSolution: **/*.sln
+              restoreSolution: '**/*.sln'
 
           - task: NuGetCommand@2
             inputs:
-              command: push
-              targetFeed: MyInternalFeed
+              command: restore
+              feedsToUse: config
+              nuGetConfigPath: ./nuget.config
+              restoreSolution: '**/*.sln'
+              externalFeedCredentials: MyExternalFeedCredentials
+              noCache: true
+            continueOnError: true
 
           - task: NuGetCommand@2
             inputs:
-              command: push
-              targetFeedCredentials: MyExternalFeedCredentials
+              command: restore
+              feedsToUse: config
+              nuGetConfigPath: nuget.config
 
           - task: NuGetCommand@2
             inputs:
               command: pack
+              versioningScheme: off
               packagesToPack: '**/*.csproj'
-              arguments: -Build
+              includeSymbols: true
+              toolPackage: true
+              buildProperties: prop1=value1;prop2=value2
+
+          - task: NuGetCommand@2
+            inputs:
+              command: pack
+              versioningScheme: byPrereleaseNumber
+              majorVersion: 3
+              minorVersion: 1
+              patchVersion: 4
+
+          - task: NuGetCommand@2
+            inputs:
+              command: pack
+              versioningScheme: byEnvVar
+              versionEnvVar: VERSION
+
+          - task: NuGetCommand@2
+            inputs:
+              command: pack
+              versioningScheme: byBuildNumber
+              packagesToPack: '**/*.csproj'
+              configuration: Release
+              packDestination: artifacts/packages
+
+          - task: NuGetCommand@2
+            inputs:
+              command: push
+              publishVstsFeed: MyInternalFeed
+
+          - task: NuGetCommand@2
+            inputs:
+              command: push
+              publishFeedCredentials: MyExternalFeedCredentials
 
           - task: NuGetCommand@2
             inputs:

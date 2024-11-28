@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks
@@ -78,9 +80,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Specifies that the package contains sources and symbols. When used with a <c>.nuspec</c> file, this creates a regular NuGet package file and the corresponding symbols package.
         /// </summary>
         [YamlIgnore]
-        public string? IncludeSymbols
+        public bool? IncludeSymbols
         {
-            get => GetString("includeSymbols");
+            get => GetBool("includeSymbols", false);
             init => SetProperty("includeSymbols", value);
         }
 
@@ -88,9 +90,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Determines if the output files of the project should be in the tool folder.
         /// </summary>
         [YamlIgnore]
-        public string? ToolPackage
+        public bool? ToolPackage
         {
-            get => GetString("toolPackage");
+            get => GetBool("toolPackage", false);
             init => SetProperty("toolPackage", value);
         }
 
@@ -98,22 +100,24 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Specifies a list of token=value pairs, separated by semicolons, where each occurrence of <c>$token$</c> in the <c>.nuspec</c> file will be replaced with the given value. 
         /// Values can be strings in quotation marks.
         /// </summary>
-        public string? BuildProperties
+        [YamlIgnore]
+        public Dictionary<string, string>? BuildProperties
         {
-            get => GetString("buildProperties");
-            init => SetProperty("buildProperties", value);
+            get => GetString("buildProperties")?.Split(';').ToDictionary(pair => pair.Split('=')[0], pair => pair.Split('=')[1]);
+            init => SetProperty("buildProperties", string.Join(';', value!.Select(x => $"{x.Key}={x.Value}")));
         }
 
-        public PackVerbosity VerbosityPack
+        [YamlIgnore]
+        public PackVerbosity? VerbosityPack
         {
             get => GetString("verbosityPack") switch
             {
                 "Quiet" => PackVerbosity.Quiet,
                 "Normal" => PackVerbosity.Normal,
                 "Detailed" => PackVerbosity.Detailed,
-                _ => throw new ArgumentOutOfRangeException()
+                _ => null
             };
-            init => SetProperty("verbosityPack", SharplinerSerializer.Serialize(value));
+            init => SetProperty("verbosityPack", SharplinerSerializer.Serialize(value!));
         }
 
 
@@ -240,11 +244,15 @@ namespace Sharpliner.AzureDevOps.Tasks
 
     public record NuGetPackCommandTaskByEnvVar : NuGetPackCommandTask
     {
-        public NuGetPackCommandTaskByEnvVar() : base("byEnvVar") { }
+        public NuGetPackCommandTaskByEnvVar(string versionEnvVar) : base("byEnvVar")
+        {
+            VersionEnvVar = versionEnvVar;
+        }
 
         /// <summary>
         /// Specifies the variable name without <c>$</c>, <c>$env</c>, or <c>%</c>.
         /// </summary>
+        [YamlIgnore]
         public string VersionEnvVar
         {
             get => GetString("versionEnvVar")!;
