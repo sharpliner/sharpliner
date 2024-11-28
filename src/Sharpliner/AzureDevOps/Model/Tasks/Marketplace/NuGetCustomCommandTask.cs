@@ -9,7 +9,6 @@ namespace Sharpliner.AzureDevOps.Tasks
     /// <code>
     /// var customCommandTask = new NuGetCustomCommandTask
     /// {
-    ///     Command = "custom",
     ///     Arguments = "-arg1 value1 -arg2 value2"
     /// };
     /// </code>
@@ -30,16 +29,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// </summary>
         public NuGetCustomCommandTask() : base("custom")
         {
-        }
-
-        /// <summary>
-        /// Gets or sets the custom command to execute.
-        /// </summary>
-        [YamlIgnore]
-        public string? Command
-        {
-            get => GetString("command");
-            init => SetProperty("command", value);
         }
 
         /// <summary>

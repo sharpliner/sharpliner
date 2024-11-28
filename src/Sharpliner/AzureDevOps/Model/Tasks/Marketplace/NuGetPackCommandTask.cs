@@ -1,3 +1,4 @@
+using System;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks
@@ -35,10 +36,42 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Gets or sets the pattern to search for csproj or nuspec files to pack.
         /// </summary>
         [YamlIgnore]
-        public string? PackagesToPack
+        public string PackagesToPack
         {
-            get => GetString("packagesToPack");
+            get => GetString("packagesToPack")!;
             init => SetProperty("packagesToPack", value);
+        }
+
+        public VersioningScheme versioningScheme
+        {
+            get => GetString("versioningScheme") switch
+            {
+                "byPrereleaseNumber" => VersioningScheme.ByPrereleaseNumber,
+                "byEnvVar" => VersioningScheme.ByEnvVar,
+                "byBuildNumber" => VersioningScheme.ByBuildNumber,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+            init => SetProperty("versioningScheme", SharplinerSerializer.Serialize(value));
+        }
+
+        /// <summary>
+        /// Specifies the configuration to package when using a csproj file.
+        /// </summary>
+        [YamlIgnore]
+        public string? ConfigurationToPack
+        {
+            get => GetString("configurationToPack");
+            init => SetProperty("configurationToPack", value);
+        }
+
+        /// <summary>
+        /// Specifies the folder where the task creates packages. If the value is empty, the task creates packages at the source root.
+        /// </summary>
+        [YamlIgnore]
+        public string? PackDestination
+        {
+            get => GetString("packDestination");
+            init => SetProperty("packDestination", value);
         }
 
         /// <summary>
@@ -50,5 +83,14 @@ namespace Sharpliner.AzureDevOps.Tasks
             get => GetString("arguments");
             init => SetProperty("arguments", value);
         }
+    }
+
+    public enum VersioningScheme
+    {
+        ByPrereleaseNumber,
+
+        ByEnvVar,
+
+        ByBuildNumber
     }
 }
