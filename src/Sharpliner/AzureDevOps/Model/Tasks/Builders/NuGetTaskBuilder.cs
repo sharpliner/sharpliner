@@ -1,6 +1,3 @@
-using System;
-using Sharpliner.AzureDevOps.Tasks;
-
 namespace Sharpliner.AzureDevOps.Tasks
 {
     /// <summary>
@@ -127,28 +124,31 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// <summary>
         /// Creates a NuGetRestoreCommandTask to restore packages from a feed.
         /// </summary>
-        /// <param name="feed">The feed to restore packages from.</param>
+        /// <param name="vstsFeed">The feed to restore packages from.</param>
         /// <param name="includeNuGetOrg">A value indicating whether to include NuGet.org in the generated NuGet.config.</param>
         /// <returns>A NuGetRestoreCommandTask instance.</returns>
         /// <example>
         /// <code>
-        /// var restoreTask = NuGet.Restore.FromFeed("myFeed", true);
+        /// NuGet.Restore.FromFeed("myFeed") with
+        /// {
+        ///   RestoreSolution = "path/to/solution.sln"
+        /// }
         /// </code>
         /// <para>Generated YAML:</para>
         /// <code>
         /// - task: NuGetCommand@2
         ///   inputs:
         ///     command: restore
+        ///     feedsToUse: select
+        ///     restoreSolution: path/to/solution.sln
         ///     feedsToUse: myFeed
-        ///     includeNuGetOrg: true
         /// </code>
         /// </example>
-        public NuGetRestoreCommandTask FromFeed(string feed, bool? includeNuGetOrg = null)
+        public NuGetRestoreFeedCommandTask FromFeed(string vstsFeed)
         {
-            return new NuGetRestoreCommandTask
+            return new()
             {
-                Feed = feed,
-                IncludeNuGetOrg = includeNuGetOrg
+                VstsFeed = vstsFeed
             };
         }
 
@@ -159,19 +159,24 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// <returns>A NuGetRestoreCommandTask instance.</returns>
         /// <example>
         /// <code>
-        /// var restoreTask = NuGet.Restore.FromNuGetConfig("path/to/NuGet.config");
+        /// NuGet.Restore.FromNuGetConfig("path/to/NuGet.config");
+        /// {
+        ///   RestoreSolution = "path/to/solution.sln"
+        /// }
         /// </code>
         /// <para>Generated YAML:</para>
         /// <code>
         /// - task: NuGetCommand@2
         ///   inputs:
         ///     command: restore
+        ///     feedsToUse: config
+        ///     restoreSolution: path/to/solution.sln
         ///     nugetConfigPath: path/to/NuGet.config
         /// </code>
         /// </example>
-        public NuGetRestoreCommandTask FromNuGetConfig(string nugetConfigPath)
+        public NuGetRestoreConfigCommandTask FromNuGetConfig(string nugetConfigPath)
         {
-            return new NuGetRestoreCommandTask
+            return new()
             {
                 NuGetConfigPath = nugetConfigPath
             };

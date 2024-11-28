@@ -518,9 +518,25 @@ public class TaskBuilderTests
                 {
                     Steps =
                     {
-                        NuGet.Authenticate(new[] { "MyServiceConnection" }, true),
-                        NuGet.Restore.FromFeed("MyFeed", true),
-                        NuGet.Restore.FromNuGetConfig("NuGet.config"),
+                        NuGet.Authenticate(["MyServiceConnection"], true),
+                        NuGet.Restore.FromFeed("my-project/my-project-scoped-feed") with
+                        {
+                            RestoreSolution = "**/*.sln",
+                            IncludeNuGetOrg = false
+                        },
+                        NuGet.Restore.FromFeed("my-organization-scoped-feed") with
+                        {
+                            RestoreSolution = "**/*.sln",
+                        },
+                        NuGet.Restore.FromNuGetConfig("./nuget.config") with
+                        {
+                            RestoreSolution = "**/*.sln",
+                            ExternalFeedCredentials = "MyExternalFeedCredentials",
+                            NoCache = true,
+                            ContinueOnError = true
+                        },
+                        NuGet.Restore.FromNuGetConfig("nuget.config"),
+
                         NuGet.Push.ToInternalFeed("MyInternalFeed"),
                         NuGet.Push.ToExternalFeed("MyExternalFeedCredentials"),
                         NuGet.Pack.Pack("**/*.csproj", "-Build"),
@@ -547,15 +563,19 @@ public class TaskBuilderTests
               forceReinstallCredentialProvider: true
 
           - task: NuGetCommand@2
-            inputs:
+          inputs:
               command: restore
-              feed: MyFeed
-              includeNuGetOrg: true
+              feedsToUse: select
+              vstsFeed: my-project/my-project-scoped-feed
+              includeNuGetOrg: false
+              restoreSolution: **/*.sln
 
           - task: NuGetCommand@2
             inputs:
               command: restore
-              nuGetConfigPath: NuGet.config
+              feedsToUse: select
+              vstsFeed: my-organization-scoped-feed
+              restoreSolution: **/*.sln
 
           - task: NuGetCommand@2
             inputs:
