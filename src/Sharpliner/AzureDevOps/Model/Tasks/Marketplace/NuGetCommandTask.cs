@@ -16,11 +16,8 @@ namespace Sharpliner.AzureDevOps.Tasks
             Command = command;
         }
 
-        /// <summary>
-        /// Gets or sets the command to execute.
-        /// </summary>
         [YamlIgnore]
-        public string Command
+        internal string Command
         {
             get => GetString("command")!;
             init => SetProperty("command", value);

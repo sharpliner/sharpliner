@@ -522,7 +522,7 @@ public class TaskBuilderTests
                         NuGet.Restore.FromFeed("my-project/my-project-scoped-feed") with
                         {
                             RestoreSolution = "**/*.sln",
-                            IncludeNuGetOrg = false
+                            IncludeNuGetOrg = false,
                         },
                         NuGet.Restore.FromFeed("my-organization-scoped-feed") with
                         {
@@ -556,10 +556,8 @@ public class TaskBuilderTests
                             Configuration = "Release",
                             PackDestination = "artifacts/packages"
                         },
-
                         NuGet.Push.ToInternalFeed("MyInternalFeed"),
                         NuGet.Push.ToExternalFeed("MyExternalFeedCredentials"),
-                        
                         NuGet.Custom.CustomCommand("custom", "-arg1 -arg2")
                     }
                 }

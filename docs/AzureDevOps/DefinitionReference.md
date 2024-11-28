@@ -132,43 +132,30 @@ DotNet.Build("src/MyProject.csproj") with
 The [NuGet v2 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/nuget-command-v2?view=azure-pipelines) also has multiple combinations based on the command.
 
 ```csharp
-Steps =
-[
-    NuGet.Authenticate(new[] { "NuGetServiceConnection1", "NuGetServiceConnection2" }, forceReinstallCredentialProvider: true),
+NuGet.Authenticate(new[] { "NuGetServiceConnection1", "NuGetServiceConnection2" }, forceReinstallCredentialProvider: true),
 
-    NuGet.Restore.FromFeed("dotnet-7-preview-feed", includeNuGetOrg: false) with
-    {
-        ExternalFeedCredentials = "feeds/dotnet-7",
-        NoCache = true,
-        RestoreDirectory = ".packages",
-    },
+NuGet.Restore.FromFeed("my-project/my-project-scoped-feed") with
+{
+    RestoreSolution = "**/*.sln",
+    IncludeNuGetOrg = false,
+}
 
-    NuGet.Push.ToInternalFeed("internal-feed") with
-    {
-        TargetFeed = "internal-feed",
-    },
+NuGet.Pack.ByPrereleaseNumber("3", "1", "4"),
+NuGet.Pack.ByEnvVar("VERSION"),
 
-    NuGet.Pack.Pack("src/*.csproj", arguments: "-c Release") with
-    {
-        NoBuild = true,
-        ConfigurationToPack = "Release",
-        IncludeSource = true,
-        IncludeSymbols = true,
-        OutputDir = "/tmp/staging/",
-    },
+NuGet.Push.ToInternalFeed("MyInternalFeed"),
+NuGet.Push.ToExternalFeed("MyExternalFeedCredentials"),
 
-    NuGet.Custom.CustomCommand("custom-command", arguments: "--custom-arg") with
-    {
-        Command = "custom-command",
-        Arguments = "--custom-arg",
-    }
-]
+NuGet.Custom.CustomCommand("custom-command", arguments: "--custom-arg") with
+{
+    Command = "custom-command",
+    Arguments = "--custom-arg",
+}
 ```
 
 Generated YAML:
 
 ```yaml
-steps:
 - task: NuGetAuthenticate@1
   inputs:
     nuGetServiceConnections: NuGetServiceConnection1,NuGetServiceConnection2
@@ -177,11 +164,24 @@ steps:
 - task: NuGetCommand@2
   inputs:
     command: restore
-    feedsToUse: dotnet-7-preview-feed
+    feedsToUse: select
+    vstsFeed: my-project/my-project-scoped-feed
+    restoreSolution: '**/*.sln'
     includeNuGetOrg: false
-    externalFeedCredentials: feeds/dotnet-7
-    noCache: true
-    restoreDirectory: .packages
+
+- task: NuGetCommand@2
+  inputs:
+    command: pack
+    versioningScheme: byPrereleaseNumber
+    majorVersion: 3
+    minorVersion: 1
+    patchVersion: 4
+
+- task: NuGetCommand@2
+  inputs:
+    command: pack
+    versioningScheme: byEnvVar
+    versionEnvVar: VERSION
 
 - task: NuGetCommand@2
   inputs:
@@ -190,14 +190,13 @@ steps:
 
 - task: NuGetCommand@2
   inputs:
-    command: pack
-    packagesToPack: src/*.csproj
-    arguments: -c Release
-    nobuild: true
-    configuration: Release
-    includesource: true
-    includesymbols: true
-    outputdir: /tmp/staging/
+    command: push
+    publishVstsFeed: MyInternalFeed
+
+- task: NuGetCommand@2
+  inputs:
+    command: push
+    publishFeedCredentials: MyExternalFeedCredentials
 
 - task: NuGetCommand@2
   inputs:

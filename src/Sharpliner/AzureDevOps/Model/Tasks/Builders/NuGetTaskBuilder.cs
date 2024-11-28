@@ -99,21 +99,26 @@ namespace Sharpliner.AzureDevOps.Tasks
         public NuGetPackBuilder Pack => new();
 
         /// <summary>
-        /// Gets a NuGetCustomBuilder instance to create custom NuGet tasks.
-        /// </summary>
-        /// <example>
+        /// Gets a <see cref="NuGetCustomCommandTask"/> instance to create custom NuGet tasks.
+        /// <para>
+        /// For example:
+        /// </para>
         /// <code>
-        /// var customTask = NuGet.Custom.CustomCommand("custom", "-CustomArg");
+        /// var customTask = NuGet.Custom(@"config -Set repositoryPath=c:\packages -configfile c:\my.config");
         /// </code>
         /// <para>Generated YAML:</para>
         /// <code>
         /// - task: NuGetCommand@2
         ///   inputs:
         ///     command: custom
-        ///     arguments: -CustomArg
+        ///     arguments: config -Set repositoryPath=c:\packages -configfile c:\my.config
         /// </code>
-        /// </example>
-        public NuGetCustomBuilder Custom => new();
+        /// </summary>
+        /// <returns>A <see cref="NuGetCustomCommandTask"/> instance.</returns>
+        public NuGetCustomCommandTask Custom(string? arguments = null) => new()
+        {
+            Arguments = arguments
+        };
     }
 
     /// <summary>
@@ -268,38 +273,5 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// The rest of the string will be dropped.
         /// </summary>
         public NuGetPackCommandTaskByBuildNumber ByBuildNumber => new();
-    }
-
-    /// <summary>
-    /// Provides methods to create custom NuGet tasks.
-    /// </summary>
-    public class NuGetCustomBuilder
-    {
-        /// <summary>
-        /// Creates a NuGetCustomCommandTask with the specified command and arguments.
-        /// </summary>
-        /// <param name="command">The custom command.</param>
-        /// <param name="arguments">The additional arguments for the custom command.</param>
-        /// <returns>A NuGetCustomCommandTask instance.</returns>
-        /// <example>
-        /// <code>
-        /// var customTask = NuGet.Custom.CustomCommand("custom", "-CustomArg");
-        /// </code>
-        /// <para>Generated YAML:</para>
-        /// <code>
-        /// - task: NuGetCommand@2
-        ///   inputs:
-        ///     command: custom
-        ///     arguments: -CustomArg
-        /// </code>
-        /// </example>
-        public NuGetCustomCommandTask CustomCommand(string command, string? arguments = null)
-        {
-            return new NuGetCustomCommandTask
-            {
-                Command = command,
-                Arguments = arguments
-            };
-        }
     }
 }
