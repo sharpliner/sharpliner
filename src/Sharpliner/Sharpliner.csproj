@@ -40,7 +40,7 @@
 
   <ItemGroup>
     <Content Include="..\..\LICENSE" PackagePath="\" />
-    <Content Include="build\README.md" PackagePath="\" />
+    <Content Include="..\..\README.md" PackagePath="\" />
     <Content Include="build\Sharpliner.props" PackagePath="build\" />
     <Content Include="build\Sharpliner.targets" PackagePath="build\" />
   </ItemGroup>
