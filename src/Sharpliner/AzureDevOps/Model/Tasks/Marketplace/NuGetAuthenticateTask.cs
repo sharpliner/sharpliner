@@ -16,7 +16,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         }
 
         /// <summary>
-        /// Gets or sets the NuGet service connections.
+        /// Gets or sets the NuGet service connection credentials for feeds outside this organization.
         /// </summary>
         [YamlIgnore]
         public string[]? NuGetServiceConnections
