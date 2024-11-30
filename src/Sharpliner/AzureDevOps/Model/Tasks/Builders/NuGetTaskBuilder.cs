@@ -203,12 +203,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// </example>
         /// </summary>
         /// <returns>A <see cref="NuGetPushInternalCommandTask"/> instance.</returns>
-        public NuGetPushInternalCommandTask ToInternalFeed(string publishVstsFeed)
-        {
-            return new(publishVstsFeed)
-            {
-            };
-        }
+        public NuGetPushInternalCommandTask ToInternalFeed(string publishVstsFeed) => new(publishVstsFeed);
 
         /// <summary>
         /// Creates a NuGetPushCommandTask to push packages to an external feed.
