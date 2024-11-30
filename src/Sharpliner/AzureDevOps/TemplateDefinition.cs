@@ -195,8 +195,8 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
 /// <summary>
 /// This is the ancestor of all definitions that produce a Azure pipelines template.
 /// </summary>
-/// <typeparam name="T">Type of the part of the pipeline that this template is for (one of stages, steps, jobs or variables)</typeparam>
-public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDefinition
+/// <typeparam name="T">Type of the part of the pipeline that this template is for (one of extends, stages, steps, jobs or variables)</typeparam>
+public abstract class TemplateDefinitionBase<T> : TemplateDefinition, ISharplinerDefinition
 {
     /// <summary>
     /// Path to the YAML file where this template will be exported to.
@@ -220,7 +220,7 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
     /// Returns the definition of the template.
     /// </summary>
     [DisallowNull]
-    public abstract ConditionedList<T> Definition { get; }
+    public abstract T Definition { get; }
 
     internal abstract string YamlProperty { get; }
 
@@ -237,7 +237,7 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
             template.Add("parameters", Parameters);
         }
 
-        template.Add(YamlProperty, Definition);
+        template.Add(YamlProperty, Definition!);
 
         return SharplinerSerializer.Serialize(template);
     }
@@ -255,6 +255,20 @@ public abstract class TemplateDefinition<T> : TemplateDefinition, ISharplinerDef
     /// </remarks>
     public virtual string[]? Header => SharplinerPublisher.GetDefaultHeader(GetType());
 
+    /// <summary>
+    /// Disallow any other types than what we define here as AzDO only supports these.
+    /// </summary>
+    internal TemplateDefinitionBase()
+    {
+    }
+}
+
+/// <summary>
+/// This is the ancestor of all definitions that produce a Azure pipelines template.
+/// </summary>
+/// <typeparam name="T">Type of the part of the pipeline that this template is for (one of stages, steps, jobs or variables)</typeparam>
+public abstract class TemplateDefinition<T> : TemplateDefinitionBase<ConditionedList<T>>
+{
     /// <summary>
     /// Disallow any other types than what we define here as AzDO only supports these.
     /// </summary>
@@ -278,60 +292,8 @@ public abstract class TemplateDefinition<T, TParameters> : TemplateDefinition<T>
     }
 
     /// <inheritdoc/>
-    public sealed override List<Parameter> Parameters => ToParameters();
+    public sealed override List<Parameter> Parameters => TypedTemplateUtils<TParameters>.ToParameters();
 
-    private static List<Parameter> ToParameters()
-    {
-        var result = new List<Parameter>();
-        var defaultParameters = new TParameters();
-        foreach (var property in typeof(TParameters).GetProperties())
-        {
-            var name = property.GetCustomAttribute<YamlMemberAttribute>()?.Alias ?? CamelCaseNamingConvention.Instance.Apply(property.Name);
-            var defaultValue = property.GetValue(defaultParameters);
-            var allowedValues = property.GetCustomAttribute<AllowedValuesAttribute>()?.Values;
-            Parameter parameter = property.PropertyType switch
-            {
-                { } type when type.IsEnum => (Parameter)Activator.CreateInstance(typeof(EnumParameter<>).MakeGenericType(type), name, null, defaultValue)!,
-                { } type when type == typeof(string) => new StringParameter(name, defaultValue: defaultValue as string, allowedValues: allowedValues?.Cast<string>()),
-                { } type when type == typeof(bool?) || type == typeof(bool) => new BooleanParameter(name, defaultValue: defaultValue as bool?),
-                { } type when type == typeof(int?) || type == typeof(int) => new NumberParameter(name, defaultValue: defaultValue as int?, allowedValues: allowedValues?.Cast<int?>()),
-                { } type when type == typeof(Step) => new StepParameter(name, defaultValue: defaultValue as Step),
-                { } type when type == typeof(ConditionedList<Step>) => new StepListParameter(name, defaultValue: defaultValue as ConditionedList<Step>),
-                { } type when type.IsAssignableFrom(typeof(JobBase)) => new JobParameter(name, defaultValue: defaultValue as JobBase),
-                { } type when type == typeof(ConditionedList<JobBase>) => new JobListParameter(name, defaultValue: defaultValue as ConditionedList<JobBase>),
-                { } type when type == typeof(DeploymentJob) => new DeploymentParameter(name, defaultValue: defaultValue as DeploymentJob),
-                { } type when type == typeof(ConditionedList<DeploymentJob>) => new DeploymentListParameter(name, defaultValue: defaultValue as ConditionedList<DeploymentJob>),
-                { } type when type == typeof(Stage) => new StageParameter(name, defaultValue: defaultValue as Stage),
-                { } type when type == typeof(ConditionedList<Stage>) => new StageListParameter(name, defaultValue: defaultValue as ConditionedList<Stage>),
-                _ => new ObjectParameter(name),
-            };
-
-            result.Add(parameter);
-        }
-
-        return result;
-    }
-
-    private static TemplateParameters ToTemplateParameters(TParameters parameters)
-    {
-        var result = new TemplateParameters();
-        var defaultParameters = new TParameters();
-
-        foreach (var property in typeof(TParameters).GetProperties())
-        {
-            var value = property.GetValue(parameters);
-            var defaultValue = property.GetValue(defaultParameters);
-            if (value is not null && !SharplinerSerializer.Serialize(value!).Equals(SharplinerSerializer.Serialize(defaultValue!)))
-            {
-                var name = property.GetCustomAttribute<YamlMemberAttribute>()?.Alias;
-                name ??= CamelCaseNamingConvention.Instance.Apply(property.Name);
-
-                result.Add(name, value);
-            }
-        }
-
-        return result;
-    }
 
     /// <summary>
     /// Implicitly converts a typed template definition to a template.
@@ -339,7 +301,7 @@ public abstract class TemplateDefinition<T, TParameters> : TemplateDefinition<T>
     /// <param name="definition">The typed template definition</param>
     public static implicit operator Template<T>(TemplateDefinition<T, TParameters> definition)
     {
-        return new Template<T>(definition.TargetFile, ToTemplateParameters(definition._typedParameters));
+        return new Template<T>(definition.TargetFile, TypedTemplateUtils<TParameters>.ToTemplateParameters(definition._typedParameters));
     }
 }
 

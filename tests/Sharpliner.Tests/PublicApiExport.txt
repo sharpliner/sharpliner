@@ -408,6 +408,18 @@ namespace Sharpliner.AzureDevOps
     {
         protected ExtendsPipelineDefinition() { }
     }
+    public abstract class ExtendsTemplateDefinition : Sharpliner.AzureDevOps.TemplateDefinitionBase<Sharpliner.AzureDevOps.Extends>
+    {
+        protected ExtendsTemplateDefinition() { }
+        public override System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
+    }
+    public abstract class ExtendsTemplateDefinition<TParameters> : Sharpliner.AzureDevOps.ExtendsTemplateDefinition
+        where TParameters :  class, new ()
+    {
+        protected ExtendsTemplateDefinition(TParameters? typedParameters = null) { }
+        public virtual System.Collections.Generic.List<Sharpliner.AzureDevOps.Parameter> Parameters { get; }
+        public static Sharpliner.AzureDevOps.Template<Sharpliner.AzureDevOps.Extends> op_Implicit(Sharpliner.AzureDevOps.ExtendsTemplateDefinition<TParameters> definition) { }
+    }
     public class HostedPool : Sharpliner.AzureDevOps.Pool, System.IEquatable<Sharpliner.AzureDevOps.HostedPool>
     {
         public HostedPool(string? name = null, string? vmImage = null) { }
@@ -1061,6 +1073,16 @@ namespace Sharpliner.AzureDevOps
             public Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference this[string parameterName] { get; }
         }
     }
+    public abstract class TemplateDefinitionBase<T> : Sharpliner.AzureDevOps.TemplateDefinition, Sharpliner.ISharplinerDefinition
+    {
+        public abstract T Definition { get; }
+        public virtual string[]? Header { get; }
+        public virtual System.Collections.Generic.List<Sharpliner.AzureDevOps.Parameter> Parameters { get; }
+        public abstract string TargetFile { get; }
+        public virtual Sharpliner.TargetPathType TargetPathType { get; }
+        public abstract System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
+        public string Serialize() { }
+    }
     public abstract class TemplateDefinitionCollection<T> : Sharpliner.AzureDevOps.TemplateDefinition, Sharpliner.ISharplinerDefinitionCollection
     {
         public System.Collections.Generic.IEnumerable<Sharpliner.ISharplinerDefinition> Definitions { get; }
@@ -1075,16 +1097,7 @@ namespace Sharpliner.AzureDevOps
         public Sharpliner.TargetPathType PathType { get; init; }
         public string TargetFile { get; init; }
     }
-    public abstract class TemplateDefinition<T> : Sharpliner.AzureDevOps.TemplateDefinition, Sharpliner.ISharplinerDefinition
-    {
-        public abstract Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T> Definition { get; }
-        public virtual string[]? Header { get; }
-        public virtual System.Collections.Generic.List<Sharpliner.AzureDevOps.Parameter> Parameters { get; }
-        public abstract string TargetFile { get; }
-        public virtual Sharpliner.TargetPathType TargetPathType { get; }
-        public abstract System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
-        public string Serialize() { }
-    }
+    public abstract class TemplateDefinition<T> : Sharpliner.AzureDevOps.TemplateDefinitionBase<Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T>> { }
     public abstract class TemplateDefinition<T, TParameters> : Sharpliner.AzureDevOps.TemplateDefinition<T>
         where TParameters :  class, new ()
     {
