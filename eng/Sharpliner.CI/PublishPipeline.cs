@@ -36,16 +36,14 @@ class PublishPipeline : SingleStagePipelineDefinition
                         .DisplayAs("Publish build artifacts"),
 
                     If.And(IsNotPullRequest, IsBranch("main"))
-                        .Step(Task("NuGetAuthenticate@1", "Authenticate NuGet"))
-                        .Step(Task("NuGetCommand@2", "Publish to nuget.org") with
-                        {
-                            Inputs = new()
-                            {
-                                { "command", "push" },
-                                { "packagesToPush", $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.nupkg" },
-                                { "nuGetFeedType", "external" },
-                                { "publishFeedCredentials", "Sharpliner / nuget.org" },
-                            }
+                        .Step(NuGet.Authenticate() with { DisplayName = "Authenticate NuGet" })
+                        .Step(NuGet.Push.ToExternalFeed("Sharpliner / nuget.org") with 
+                        { 
+                            DisplayName = "Authenticate NuGet",
+                            PackagesToPush = 
+                            [
+                                $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.nupkg"
+                            ]
                         })
                 }
             }

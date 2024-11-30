@@ -208,7 +208,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// <summary>
         /// Creates a NuGetPushCommandTask to push packages to an external feed.
         /// </summary>
-        /// <param name="targetFeedCredentials">The target feed credentials.</param>
+        /// <param name="publishFeedCredentials">The publish feed credentials.</param>
         /// <returns>A NuGetPushCommandTask instance.</returns>
         /// <example>
         /// <code lang="csharp">
@@ -223,7 +223,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         ///     externalFeedCredentials: myExternalFeedCredentials
         /// </code>
         /// </example>
-        public NuGetPushExternalCommandTask ToExternalFeed(string targetFeedCredentials) => new(targetFeedCredentials);
+        public NuGetPushExternalCommandTask ToExternalFeed(string publishFeedCredentials) => new(publishFeedCredentials);
     }
 
     /// <summary>
