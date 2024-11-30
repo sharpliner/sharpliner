@@ -369,20 +369,118 @@ To define a template, you do it similarly as when you define the pipeline - you 
 - `StepTemplateDefinition`
 - `VariableTemplateDefinition`
 
-Example definition:
+Additionally, Sharpliner allows to define a type for the template parameters so that usage of your own template is compile-time type-safe.
+In such case, you inherit from the generic versions of these classes:
+- `StageTemplateDefinition<TParameters>`
+- `JobTemplateDefinition<TParameters>`
+- `StepTemplateDefinition<TParameters>`
+- `VariableTemplateDefinition<TParameters>`
+
+Example usage:
 
 ``` csharp
+// Template parameters
+// The parameters do not need to inherit from AzureDevOpsDefinitio,
+// but it gives you nice abilities such as the Bash.Inline() macro.
+class InstallDotNetParameters : AzureDevOpsDefinition
+{
+    public BuildConfiguration Configuration { get; init; } = BuildConfiguration.Release;
+    public string? Project { get; init; }
+    public string? Version { get; init; }
+    public bool Restore { get; init; }
+    public Step AfterBuild { get; init; } = Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)");
+}
+
+enum BuildConfiguration
+{
+    [YamlMember(Alias = "debug")]
+    Debug,
+
+    [YamlMember(Alias = "release")]
+    Release,
+}
+
+// Template itself - the passed in parameters are the values used when referencing the template
+class InstallDotNetTemplate(InstallDotNetParameters? parameters = null)
+    : StepTemplateDefinition<InstallDotNetParameters>(parameters)
+{
+    // Where to publish the YAML to
+    public override string TargetFile => "templates/install-dotnet.yml";
+
+    public override ConditionedList<Step> Definition =>
+    [
+        DotNet.Install.Sdk(parameters["version"]),
+
+        If.Equal(parameters["restore"], "true")
+            .Step(DotNet.Restore.Projects(parameters["project"])),
+
+        DotNet.Build(parameters["project"]),
+
+        parameters["afterBuild"],
+    ];
+}
+```
+
+Which produces following YAML template:
+
+```yaml
+parameters:
+- name: configuration
+  type: string
+  default: release
+  values:
+  - debug
+  - release
+
+- name: project
+  type: string
+
+- name: version
+  type: string
+
+- name: restore
+  type: boolean
+  default: false
+
+- name: afterBuild
+  type: step
+  default:
+  bash: |-
+    cp -R logs $(Build.ArtifactStagingDirectory)
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: sdk
+    version: ${{ parameters.version }}
+
+- ${{ if eq(parameters.restore, true) }}:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: restore
+      projects: ${{ parameters.project }}
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: build
+    projects: ${{ parameters.project }}
+
+- ${{ parameters.afterBuild }}
+```
+
+You can also define a template without stong-typing the parameters:
+
+```csharp
 class InstallDotNetTemplate : StepTemplateDefinition
 {
     // Where to publish the YAML to
     public override string TargetFile => "templates/build-csproj.yml";
 
-    private Parameter configuration = EnumParameter<BuildConfiguration>("configuration", defaultValue: BuildConfiguration.Release);
-    private Parameter project = StringParameter("project");
-    private Parameter project = StringParameter("project");
-    private Parameter version = StringParameter("version", allowedValues: new[] { "5.0.100", "5.0.102" });
-    private Parameter restore = BooleanParameter("restore", defaultValue: true);
-    private Parameter<Step> afterBuild = StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)"));
+    Parameter configuration = EnumParameter<BuildConfiguration>("configuration", defaultValue: BuildConfiguration.Release);
+    Parameter project = StringParameter("project");
+    Parameter version = StringParameter("version", allowedValues: new[] { "5.0.100", "5.0.102" });
+    Parameter restore = BooleanParameter("restore", defaultValue: true);
+    Parameter<Step> afterBuild = StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)"));
 
     public override List<TemplateParameter> Parameters =>
     [
@@ -405,70 +503,22 @@ class InstallDotNetTemplate : StepTemplateDefinition
         StepParameterReference(afterBuild),
     ];
 }
-
-public enum BuildConfiguration
-{
-    [YamlMember(Alias = "debug")]
-    Debug,
-
-    [YamlMember(Alias = "release")]
-    Release,
-}
-```
-
-This produces following YAML template:
-
-```yaml
-parameters:
-- name: configuration
-  type: string
-  default: debug
-  values:
-  - debug
-  - release
-
-- name: project
-  type: string
-
-- name: version
-  type: string
-  values:
-  - 5.0.100
-  - 5.0.102
-
-- name: restore
-  type: boolean
-  default: true
-
-- name: afterBuild
-  type: step
-  default:
-    bash: |-
-      cp -R logs $(Build.ArtifactStagingDirectory)
-
-steps:
-- task: UseDotNet@2
-  inputs:
-    packageType: sdk
-    version: ${{ parameters.version }}
-
-- ${{ if eq(${{ parameters.restore }}, true) }}:
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: restore
-      projects: ${{ parameters.project }}
-
-- task: DotNetCoreCLI@2
-  inputs:
-    command: build
-    projects: ${{ parameters.project }}
-
-- ${{ parameters.afterBuild }}
 ```
 
 To use the template, reference it in the following way:
 
 ```csharp
+// The strong-typed version
+Steps =
+[
+    new InstallDotNetTemplate(new()
+    {
+        Project = "src/MyProject.csproj",
+        Version = "5.0.100",
+    })
+]
+
+// The non-strong-typed version (second example of the InstallDotNet definition)
 Steps =
 [
     StepTemplate("pipelines/install-dotnet.yml", new()
@@ -502,17 +552,17 @@ class ProjectBuildSteps : StepLibrary
 You can then reference this library in between build steps and it will get expanded into the pipeline's YAML:
 
 ```csharp
-    new Job("Build")
-    {
-        Steps =
-        [
-            Script.Inline("echo 'Hello World'"),
+new Job("Build")
+{
+    Steps =
+    [
+        Script.Inline("echo 'Hello World'"),
 
-            StepLibrary<ProjectBuildSteps>(),
+        StepLibrary<ProjectBuildSteps>(),
 
-            Script.Inline("echo 'Goodbye World'"),
-        ]
-    }
+        Script.Inline("echo 'Goodbye World'"),
+    ]
+}
 ```
 
 More about this feature can be found [here (DefinitionLibraries.md)](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionLibraries.md).
