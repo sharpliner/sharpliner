@@ -111,7 +111,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// </code>
         /// </summary>
         /// <returns>A <see cref="NuGetCustomCommandTask"/> instance.</returns>
-        public NuGetCustomCommandTask Custom(string? arguments = null) => new()
+        public NuGetCustomCommandTask Custom(string arguments) => new()
         {
             Arguments = arguments
         };
