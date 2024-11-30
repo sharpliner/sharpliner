@@ -1820,7 +1820,7 @@ namespace Sharpliner.AzureDevOps.Tasks
     public class NuGetPushBuilder
     {
         public NuGetPushBuilder() { }
-        public Sharpliner.AzureDevOps.Tasks.NuGetPushExternalCommandTask ToExternalFeed(string targetFeedCredentials) { }
+        public Sharpliner.AzureDevOps.Tasks.NuGetPushExternalCommandTask ToExternalFeed(string publishFeedCredentials) { }
         public Sharpliner.AzureDevOps.Tasks.NuGetPushInternalCommandTask ToInternalFeed(string publishVstsFeed) { }
     }
     public abstract class NuGetPushCommandTask : Sharpliner.AzureDevOps.Tasks.NuGetCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetPushCommandTask>
