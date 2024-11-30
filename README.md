@@ -60,6 +60,8 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                     // Many tasks have helper methods for shorter notation
                     DotNet.Install.Sdk(DotnetVersion),
 
+                    NuGet.Authenticate(["myServiceConnection"]),
+
                     // You can also specify any pipeline task in full too
                     Task("DotNetCoreCLI@2", "Build and test") with
                     {
