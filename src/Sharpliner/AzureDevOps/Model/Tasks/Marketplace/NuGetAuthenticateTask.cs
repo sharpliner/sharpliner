@@ -26,7 +26,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to force reinstall the credential provider.
+        /// Gets or sets a value indicating whether to force reinstall of the credential provider even if already installed. Default: false.
         /// </summary>
         [YamlIgnore]
         public bool ForceReinstallCredentialProvider
