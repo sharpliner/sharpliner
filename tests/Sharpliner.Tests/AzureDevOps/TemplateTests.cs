@@ -88,7 +88,8 @@ public class TemplateTests
             """);
     }
 
-    private class Extends_Typed_Template_Definition(ExtendsTypedParameters? parameters = null) : ExtendsTemplateDefinition<ExtendsTypedParameters>(parameters)
+    private class Extends_Typed_Template_Definition(ExtendsTypedParameters? parameters = null)
+        : ExtendsTemplateDefinition<ExtendsTypedParameters>(parameters)
     {
         public override string TargetFile => "extends-typed-template.yml";
         public override Extends Definition => new("template.yml", new()
@@ -98,7 +99,7 @@ public class TemplateTests
         });
     }
 
-    class ExtendsTypedParameters : AzureDevOpsDefinition
+    class ExtendsTypedParameters
     {
         public string Some { get; init; } = "default value";
         public bool Other { get; init; } = true;
@@ -380,25 +381,26 @@ public class TemplateTests
             """);
     }
 
-    private class Job_Typed_Template_Definition(JobTypedParameters? parameters = null) : JobTemplateDefinition<JobTypedParameters>(parameters)
+    private class Job_Typed_Template_Definition(JobTypedParameters? parameters = null)
+        : JobTemplateDefinition<JobTypedParameters>(parameters)
     {
         public override string TargetFile => "job-template.yml";
 
         public override ConditionedList<JobBase> Definition =>
         [
-          ..new Job_Template_Definition().Definition,
-          Job("with-templates") with
-          {
-            Steps =
-            [
-              new Step_Typed_Template_Definition(new()
-              {
-                AfterBuild = Bash.Inline("echo 'After build'"),
-                Counter = 3,
-                UseNugetOrg = true
-              })
-            ]
-          }
+            ..new Job_Template_Definition().Definition,
+            Job("with-templates") with
+            {
+                Steps =
+                [
+                    new Step_Typed_Template_Definition(new()
+                    {
+                        AfterBuild = Bash.Inline("echo 'After build'"),
+                        Counter = 3,
+                        UseNugetOrg = true
+                    })
+                ]
+            }
         ];
     }
 
@@ -410,17 +412,17 @@ public class TemplateTests
 
         public DeploymentJob Deployment { get; init; } = new("deploy", "Deploy job")
         {
-          Environment = new("production"),
-          Strategy = new RunOnceStrategy
-          {
-            Deploy = new()
+            Environment = new("production"),
+            Strategy = new RunOnceStrategy
             {
-              Steps =
-              {
-                Bash.Inline("echo 'Deploying the application'"),
-              },
-            },
-          }
+                Deploy = new()
+                {
+                    Steps =
+                    {
+                        Bash.Inline("echo 'Deploying the application'"),
+                    },
+                },
+            }
         };
 
         public ConditionedList<DeploymentJob> AdditionalDeployments { get; init; } = [];
@@ -527,37 +529,38 @@ public class TemplateTests
             """);
     }
 
-    private class Stage_Typed_Template_Definition(StageTypedParameters? parameters = null) : StageTemplateDefinition<StageTypedParameters>(parameters)
+    private class Stage_Typed_Template_Definition(StageTypedParameters? parameters = null)
+        : StageTemplateDefinition<StageTypedParameters>(parameters)
     {
-      public override string TargetFile => "stage-template.yml";
+        public override string TargetFile => "stage-template.yml";
 
         public override ConditionedList<Stage> Definition =>
         [
-          ..new Stage_Template_Definition().Definition,
-          Stage("with-templates") with
-          {
-            Jobs =
-            [
-              new Job_Typed_Template_Definition(new()
-              {
-                MainJob = new Job("main", "Main job")
-                {
-                  Steps =
-                  [
-                    Bash.Inline("echo 'Main job step'")
-                  ]
-                }
-              })
-            ]
-          }
+            ..new Stage_Template_Definition().Definition,
+            Stage("with-templates") with
+            {
+                Jobs =
+                [
+                    new Job_Typed_Template_Definition(new()
+                    {
+                        MainJob = new Job("main", "Main job")
+                        {
+                            Steps =
+                            [
+                                Bash.Inline("echo 'Main job step'")
+                            ]
+                        }
+                    })
+                ]
+            }
         ];
     }
 
     class StageTypedParameters : AzureDevOpsDefinition
     {
-      public ConditionedList<Stage> SetupStages { get; init; } = [];
+        public ConditionedList<Stage> SetupStages { get; init; } = [];
 
-      public Stage MainStage { get; init; } = null!;
+        public Stage MainStage { get; init; } = null!;
     }
 
     [Fact]
@@ -607,6 +610,7 @@ public class TemplateTests
           BooleanParameter("b_param"),
           NumberParameter("n_param"),
         ];
+
         public override ConditionedList<VariableBase> Definition =>
         [
           Variable("s_variable", "value"),
@@ -644,13 +648,14 @@ public class TemplateTests
             """);
     }
 
-    private class Variable_Typed_Template_Definition(VariableTypedParameters? parameters = null) : VariableTemplateDefinition<VariableTypedParameters>(parameters)
+    private class Variable_Typed_Template_Definition(VariableTypedParameters? parameters = null)
+        : VariableTemplateDefinition<VariableTypedParameters>(parameters)
     {
         public override string TargetFile => "variables.yml";
         public override ConditionedList<VariableBase> Definition => new Variable_Template_Definition().Definition;
     }
 
-    class VariableTypedParameters : AzureDevOpsDefinition
+    class VariableTypedParameters
     {
         [YamlMember(Alias = "s_param")]
         public string SParam { get; init; } = "default value";
@@ -694,36 +699,36 @@ public class TemplateTests
 
     private class CompletePipeline : TestPipeline
     {
-        public override Pipeline Pipeline => new Pipeline
+        public override Pipeline Pipeline => new()
         {
-          Stages =
-          [
-            new Stage_Typed_Template_Definition(new()
-            {
-              MainStage = new Stage("main-stage")
-              {
-                Jobs =
-                [
-                  new Job_Typed_Template_Definition(new()
-                  {
-                    MainJob = new Job("main-job", "Main job")
+            Stages =
+            [
+                new Stage_Typed_Template_Definition(new()
+                {
+                    MainStage = new Stage("main-stage")
                     {
-                      Steps =
-                      [
-                        Bash.Inline("echo 'Hello world!'"),
-                        new Step_Typed_Template_Definition(new()
-                        {
-                          AfterBuild = Bash.Inline("echo 'After build'"),
-                          Counter = 3,
-                          UseNugetOrg = true
-                        })
-                      ]
+                        Jobs =
+                        [
+                            new Job_Typed_Template_Definition(new()
+                            {
+                                MainJob = new Job("main-job", "Main job")
+                                {
+                                    Steps =
+                                    [
+                                        Bash.Inline("echo 'Hello world!'"),
+                                        new Step_Typed_Template_Definition(new()
+                                        {
+                                            AfterBuild = Bash.Inline("echo 'After build'"),
+                                            Counter = 3,
+                                            UseNugetOrg = true
+                                        })
+                                    ]
+                                }
+                            })
+                        ]
                     }
-                  })
-                ]
-              }
-            }),
-          ]
+                }),
+            ]
         };
     }
 
