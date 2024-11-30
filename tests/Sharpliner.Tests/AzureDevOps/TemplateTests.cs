@@ -48,6 +48,86 @@ public class TemplateTests
             """);
     }
 
+    private class Extends_Template_Definition : ExtendsTemplateDefinition
+    {
+        public override string TargetFile => "extends-template.yml";
+        public override List<Parameter> Parameters =>
+        [
+            StringParameter("some", defaultValue: "default value"),
+            BooleanParameter("other", defaultValue: true),
+        ];
+
+        public override Extends Definition => new("template.yml", new()
+        {
+            ["some"] = "value",
+            ["other"] = parameters["other"],
+        });
+    }
+
+    [Fact]
+    public void Extends_Template_Definition_Serialization_Test()
+    {
+        var yaml = new Extends_Template_Definition().Serialize();
+
+        yaml.Trim().Should().Be(
+            """
+            parameters:
+            - name: some
+              type: string
+              default: default value
+
+            - name: other
+              type: boolean
+              default: true
+
+            extends:
+              template: template.yml
+              parameters:
+                some: value
+                other: ${{ parameters.other }}
+            """);
+    }
+
+    private class Extends_Typed_Template_Definition(ExtendsTypedParameters? parameters = null) : ExtendsTemplateDefinition<ExtendsTypedParameters>(parameters)
+    {
+        public override string TargetFile => "extends-typed-template.yml";
+        public override Extends Definition => new("template.yml", new()
+        {
+            ["some"] = "value",
+            ["other"] = parameters["other"],
+        });
+    }
+
+    class ExtendsTypedParameters : AzureDevOpsDefinition
+    {
+        public string Some { get; init; } = "default value";
+        public bool Other { get; init; } = true;
+    }
+
+    [Fact]
+    public void Extends_Typed_Template_Definition_Serialization_Test()
+    {
+        var yaml = new Extends_Typed_Template_Definition().Serialize();
+
+        yaml.Trim().Should().Be(
+            """
+            parameters:
+            - name: some
+              type: string
+              default: default value
+
+            - name: other
+              type: boolean
+              default: true
+
+            extends:
+              template: template.yml
+              parameters:
+                some: value
+                other: ${{ parameters.other }}
+            """);
+    }
+
     private class Step_Template_Definition : StepTemplateDefinition
     {
         public override string TargetFile => "template.yml";
@@ -219,11 +299,11 @@ public class TemplateTests
               default:
                 bash: |-
                   cp -R logs $(Build.ArtifactStagingDirectory)
-            
+
             - name: theCounter
               type: number
               default: 2
-            
+
             - name: defaultCounter
               type: number
               values:
@@ -304,12 +384,12 @@ public class TemplateTests
     {
         public override string TargetFile => "job-template.yml";
 
-        public override ConditionedList<JobBase> Definition => 
+        public override ConditionedList<JobBase> Definition =>
         [
           ..new Job_Template_Definition().Definition,
           Job("with-templates") with
           {
-            Steps = 
+            Steps =
             [
               new Step_Typed_Template_Definition(new()
               {
@@ -374,7 +454,7 @@ public class TemplateTests
                       steps:
                       - bash: |-
                           echo 'Deploying the application'
-            
+
             - name: additionalDeployments
               type: deploymentList
               default: []
@@ -451,18 +531,18 @@ public class TemplateTests
     {
       public override string TargetFile => "stage-template.yml";
 
-        public override ConditionedList<Stage> Definition => 
+        public override ConditionedList<Stage> Definition =>
         [
           ..new Stage_Template_Definition().Definition,
-          Stage("with-templates") with 
+          Stage("with-templates") with
           {
-            Jobs = 
+            Jobs =
             [
               new Job_Typed_Template_Definition(new()
               {
                 MainJob = new Job("main", "Main job")
                 {
-                  Steps = 
+                  Steps =
                   [
                     Bash.Inline("echo 'Main job step'")
                   ]
@@ -472,7 +552,7 @@ public class TemplateTests
           }
         ];
     }
-    
+
     class StageTypedParameters : AzureDevOpsDefinition
     {
       public ConditionedList<Stage> SetupStages { get; init; } = [];
@@ -521,13 +601,13 @@ public class TemplateTests
     {
         public override string TargetFile => "variables.yml";
 
-        public override List<Parameter> Parameters => 
+        public override List<Parameter> Parameters =>
         [
           StringParameter("s_param"),
           BooleanParameter("b_param"),
           NumberParameter("n_param"),
         ];
-        public override ConditionedList<VariableBase> Definition => 
+        public override ConditionedList<VariableBase> Definition =>
         [
           Variable("s_variable", "value"),
           Variable("b_variable", true),
@@ -616,19 +696,19 @@ public class TemplateTests
     {
         public override Pipeline Pipeline => new Pipeline
         {
-          Stages = 
+          Stages =
           [
             new Stage_Typed_Template_Definition(new()
             {
               MainStage = new Stage("main-stage")
               {
-                Jobs = 
+                Jobs =
                 [
                   new Job_Typed_Template_Definition(new()
                   {
                     MainJob = new Job("main-job", "Main job")
                     {
-                      Steps = 
+                      Steps =
                       [
                         Bash.Inline("echo 'Hello world!'"),
                         new Step_Typed_Template_Definition(new()
