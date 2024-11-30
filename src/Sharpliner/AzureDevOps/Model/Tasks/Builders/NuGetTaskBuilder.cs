@@ -32,7 +32,7 @@ namespace Sharpliner.AzureDevOps.Tasks
 
             if (nuGetServiceConnections is not null)
             {
-                task.NuGetServiceConnections = nuGetServiceConnections;
+                task = task with { NuGetServiceConnections = nuGetServiceConnections };
             }
 
             return task;
