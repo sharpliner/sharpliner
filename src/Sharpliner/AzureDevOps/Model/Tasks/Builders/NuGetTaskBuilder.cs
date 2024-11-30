@@ -25,11 +25,17 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// </example>
         public NuGetAuthenticateTask Authenticate(string[]? nuGetServiceConnections = null, bool forceReinstallCredentialProvider = false)
         {
-            return new NuGetAuthenticateTask
+            var task = new NuGetAuthenticateTask
             {
-                NuGetServiceConnections = nuGetServiceConnections,
                 ForceReinstallCredentialProvider = forceReinstallCredentialProvider
             };
+
+            if (nuGetServiceConnections is not null)
+            {
+                task.NuGetServiceConnections = nuGetServiceConnections,
+            }
+
+            return task;
         }
 
         /// <summary>
@@ -105,7 +111,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// </code>
         /// </summary>
         /// <returns>A <see cref="NuGetCustomCommandTask"/> instance.</returns>
-        public NuGetCustomCommandTask Custom(string? arguments = null) => new()
+        public NuGetCustomCommandTask Custom(string arguments) => new()
         {
             Arguments = arguments
         };
