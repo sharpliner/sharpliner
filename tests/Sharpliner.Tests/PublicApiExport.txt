@@ -1886,7 +1886,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.NuGetPushBuilder Push { get; }
         public Sharpliner.AzureDevOps.Tasks.NuGetRestoreBuilder Restore { get; }
         public Sharpliner.AzureDevOps.Tasks.NuGetAuthenticateTask Authenticate(string[]? nuGetServiceConnections = null, bool forceReinstallCredentialProvider = false) { }
-        public Sharpliner.AzureDevOps.Tasks.NuGetCustomCommandTask Custom(string? arguments = null) { }
+        public Sharpliner.AzureDevOps.Tasks.NuGetCustomCommandTask Custom(string arguments) { }
     }
     public enum PackTimezoneType
     {
