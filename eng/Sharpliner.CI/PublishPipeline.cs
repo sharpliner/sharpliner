@@ -37,10 +37,10 @@ class PublishPipeline : SingleStagePipelineDefinition
 
                     If.And(IsNotPullRequest, IsBranch("main"))
                         .Step(NuGet.Authenticate() with { DisplayName = "Authenticate NuGet" })
-                        .Step(NuGet.Push.ToExternalFeed("Sharpliner / nuget.org") with 
-                        { 
-                            DisplayName = "Authenticate NuGet",
-                            PackagesToPush = 
+                        .Step(NuGet.Push.ToExternalFeed("Sharpliner / nuget.org") with
+                        {
+                            DisplayName = "Publish to nuget.org",
+                            PackagesToPush =
                             [
                                 $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.nupkg"
                             ]

@@ -13,9 +13,9 @@ namespace Sharpliner.AzureDevOps.Tasks
     ///     TargetFeedCredentials = "$(System.AccessToken)"
     /// };
     /// </code>
-    /// 
+    ///
     /// The corresponding YAML will be:
-    /// 
+    ///
     /// <code>
     /// - task: NuGetCommand@2
     ///   inputs:
@@ -31,6 +31,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// </summary>
         public NuGetPushCommandTask(string nuGetFeedType) : base("push")
         {
+            NuGetFeedType = nuGetFeedType;
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         {
             get => GetString("packagesToPush")!.Split(';');
             init => SetProperty("packagesToPush", string.Join(";", value));
-        } 
+        }
 
         /// <summary>
         /// Gets or sets the target feed for the push command.
@@ -92,7 +93,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Specifies a feed hosted in this account. You must have Azure Artifacts installed and licensed to select a feed here.
         /// </summary>
         [YamlIgnore]
-        public string PublishVstsFeed 
+        public string PublishVstsFeed
         {
             get => GetString("publishVstsFeed")!;
             init => SetProperty("publishVstsFeed", value);
@@ -112,7 +113,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// <para>
         /// Reports task success even if some of your packages are rejected with 409 Conflict errors.
         /// </para>
-        /// This option is currently only available on Azure Pipelines and Windows agents. 
+        /// This option is currently only available on Azure Pipelines and Windows agents.
         /// If <c>NuGet.exe</c> encounters a conflict, the task will fail. This option will not work and publishing will fail if you are within a proxy environment.
         /// </summary>
         [YamlIgnore]
@@ -120,7 +121,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         {
             get => GetBool("allowPackageConflicts", false);
             init => SetProperty("allowPackageConflicts", value);
-        } 
+        }
     }
 
     /// <summary>
@@ -141,7 +142,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Specifies the NuGet service connection that contains the external NuGet server’s credentials.
         /// </summary>
         [YamlIgnore]
-        public string PublishFeedCredentials 
+        public string PublishFeedCredentials
         {
             get => GetString("publishFeedCredentials")!;
             init => SetProperty("publishFeedCredentials", value);
