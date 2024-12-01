@@ -535,9 +535,8 @@ public class TaskBuilderTests
                             NoCache = true,
                             ContinueOnError = true
                         },
-                        NuGet.Restore.FromNuGetConfig("nuget.config"),
-                        NuGet.Pack.WithoutPackageVersioning with 
-                        { 
+                        NuGet.Pack.WithoutPackageVersioning with
+                        {
                             PackagesToPack = "**/*.csproj",
                             IncludeSymbols = true,
                             ToolPackage = true,
@@ -577,8 +576,8 @@ public class TaskBuilderTests
           steps:
           - task: NuGetAuthenticate@1
             inputs:
-              nuGetServiceConnections: MyServiceConnection
               forceReinstallCredentialProvider: true
+              nuGetServiceConnections: MyServiceConnection
 
           - task: NuGetCommand@2
             inputs:
@@ -604,12 +603,6 @@ public class TaskBuilderTests
               externalFeedCredentials: MyExternalFeedCredentials
               noCache: true
             continueOnError: true
-
-          - task: NuGetCommand@2
-            inputs:
-              command: restore
-              feedsToUse: config
-              nuGetConfigPath: nuget.config
 
           - task: NuGetCommand@2
             inputs:
@@ -645,11 +638,13 @@ public class TaskBuilderTests
           - task: NuGetCommand@2
             inputs:
               command: push
+              nuGetFeedType: internal
               publishVstsFeed: MyInternalFeed
 
           - task: NuGetCommand@2
             inputs:
               command: push
+              nuGetFeedType: external
               publishFeedCredentials: MyExternalFeedCredentials
 
           - task: NuGetCommand@2
