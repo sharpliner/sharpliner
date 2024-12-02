@@ -1758,9 +1758,9 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
     public class NuGetCustomCommandTask : Sharpliner.AzureDevOps.Tasks.NuGetCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetCustomCommandTask>
     {
-        public NuGetCustomCommandTask() { }
+        public NuGetCustomCommandTask(string arguments) { }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? Arguments { get; init; }
+        public string Arguments { get; init; }
     }
     public class NuGetPackBuilder
     {
@@ -1783,7 +1783,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public string? PackDestination { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string PackagesToPack { get; init; }
+        public string? PackagesToPack { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public bool? ToolPackage { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
