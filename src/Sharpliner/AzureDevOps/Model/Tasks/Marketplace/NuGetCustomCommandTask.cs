@@ -27,17 +27,18 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetCustomCommandTask"/> class.
         /// </summary>
-        public NuGetCustomCommandTask() : base("custom")
+        public NuGetCustomCommandTask(string arguments) : base("custom")
         {
+            Arguments = Require.NotNullAndNotEmpty(arguments);
         }
 
         /// <summary>
         /// Gets or sets the arguments for the custom command.
         /// </summary>
         [YamlIgnore]
-        public string? Arguments
+        public string Arguments
         {
-            get => GetString("arguments");
+            get => GetString("arguments")!;
             init => SetProperty("arguments", value);
         }
     }

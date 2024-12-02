@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using YamlDotNet.Serialization;
 
@@ -33,16 +32,16 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// </summary>
         public NuGetPackCommandTask(string versioningScheme) : base("pack")
         {
-            VersioningScheme = versioningScheme;
+            VersioningScheme = Require.NotNullAndNotEmpty(versioningScheme);
         }
 
         /// <summary>
         /// Gets or sets the pattern to search for csproj or nuspec files to pack.
         /// </summary>
         [YamlIgnore]
-        public string PackagesToPack
+        public string? PackagesToPack
         {
-            get => GetString("packagesToPack")!;
+            get => GetString("packagesToPack");
             init => SetProperty("packagesToPack", value);
         }
 
@@ -193,9 +192,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// <param name="patchVersion">The <c>Z</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.</param>
         public NuGetPackCommandTaskByPrereleaseNumber(string majorVersion, string minorVersion, string patchVersion) : base("byPrereleaseNumber")
         {
-            MajorVersion = majorVersion;
-            MinorVersion = minorVersion;
-            PatchVersion = patchVersion;
+            MajorVersion = Require.NotNullAndNotEmpty(majorVersion);
+            MinorVersion = Require.NotNullAndNotEmpty(minorVersion);
+            PatchVersion = Require.NotNullAndNotEmpty(patchVersion);
         }
 
         /// <summary>
@@ -271,7 +270,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// <param name="versionEnvVar">The variable name without <c>$</c>, <c>$env</c>, or <c>%</c>.</param>
         public NuGetPackCommandTaskByEnvVar(string versionEnvVar) : base("byEnvVar")
         {
-            VersionEnvVar = versionEnvVar;
+            VersionEnvVar = Require.NotNullAndNotEmpty(versionEnvVar);
         }
 
         /// <summary>
