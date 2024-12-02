@@ -105,7 +105,11 @@ Task("DotNetCoreCLI@2", "Run unit tests") with
 
 some of the tasks are quite hard to comprehend such as the [.NET Core CLI task](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops) whose specification is quite long since the task can do many different things.
 Notice how some of the properties are only valid in a specific combination with other.
-With Sharpliner, we remove some of this complexity by restricting which properties are available at a time and by using nice fluent APIs:
+With Sharpliner, we remove some of this complexity by restricting which properties are available at a time and by using nice fluent APIs for dotnet and similar complex tasks.
+
+*Note how we use the `with` keyword to extend the `record` object with new properties.*
+
+### Dotnet
 
 ```csharp
 DotNet.Install.Sdk(parameters["version"]),
@@ -123,7 +127,82 @@ DotNet.Build("src/MyProject.csproj") with
 }
 ```
 
-Note how we use the `with` keyword to extend the `record` object with new properties.
+### NuGet
+
+The [NuGet v2 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/nuget-command-v2?view=azure-pipelines) also has multiple combinations based on the command.
+
+```csharp
+NuGet.Authenticate(new[] { "NuGetServiceConnection1", "NuGetServiceConnection2" }, forceReinstallCredentialProvider: true),
+
+NuGet.Restore.FromFeed("my-project/my-project-scoped-feed") with
+{
+    RestoreSolution = "**/*.sln",
+    IncludeNuGetOrg = false,
+}
+
+NuGet.Pack.ByPrereleaseNumber("3", "1", "4"),
+NuGet.Pack.ByEnvVar("VERSION"),
+
+NuGet.Push.ToInternalFeed("MyInternalFeed"),
+NuGet.Push.ToExternalFeed("MyExternalFeedCredentials"),
+
+NuGet.Custom.CustomCommand("custom-command", arguments: "--custom-arg") with
+{
+    Command = "custom-command",
+    Arguments = "--custom-arg",
+}
+```
+
+Generated YAML:
+
+```yaml
+- task: NuGetAuthenticate@1
+  inputs:
+    nuGetServiceConnections: NuGetServiceConnection1,NuGetServiceConnection2
+    forceReinstallCredentialProvider: true
+
+- task: NuGetCommand@2
+  inputs:
+    command: restore
+    feedsToUse: select
+    vstsFeed: my-project/my-project-scoped-feed
+    restoreSolution: '**/*.sln'
+    includeNuGetOrg: false
+
+- task: NuGetCommand@2
+  inputs:
+    command: pack
+    versioningScheme: byPrereleaseNumber
+    majorVersion: 3
+    minorVersion: 1
+    patchVersion: 4
+
+- task: NuGetCommand@2
+  inputs:
+    command: pack
+    versioningScheme: byEnvVar
+    versionEnvVar: VERSION
+
+- task: NuGetCommand@2
+  inputs:
+    command: push
+    publishVstsFeed: internal-feed
+
+- task: NuGetCommand@2
+  inputs:
+    command: push
+    publishVstsFeed: MyInternalFeed
+
+- task: NuGetCommand@2
+  inputs:
+    command: push
+    publishFeedCredentials: MyExternalFeedCredentials
+
+- task: NuGetCommand@2
+  inputs:
+    command: custom-command
+    arguments: --custom-arg
+```
 
 ### Contributions welcome
 

@@ -37,6 +37,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.InlineCondition IsNotPullRequest { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsPullRequest { get; }
         protected static Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> NoDependsOn { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.NuGetTaskBuilder NuGet { get; }
         protected static Sharpliner.AzureDevOps.Tasks.PowershellTaskBuilder Powershell { get; }
         protected static Sharpliner.AzureDevOps.Tasks.PublishTaskBuilder Publish { get; }
         protected static Sharpliner.AzureDevOps.Tasks.PwshTaskBuilder Pwsh { get; }
@@ -1742,6 +1743,161 @@ namespace Sharpliner.AzureDevOps.Tasks
         public NoneDownloadTask() { }
         [YamlDotNet.Serialization.YamlMember(Order=1)]
         public string Download { get; }
+    }
+    public class NuGetAuthenticateTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetAuthenticateTask>
+    {
+        public NuGetAuthenticateTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool ForceReinstallCredentialProvider { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string[]? NuGetServiceConnections { get; init; }
+    }
+    public abstract class NuGetCommandTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetCommandTask>
+    {
+        protected NuGetCommandTask(string command) { }
+    }
+    public class NuGetCustomCommandTask : Sharpliner.AzureDevOps.Tasks.NuGetCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetCustomCommandTask>
+    {
+        public NuGetCustomCommandTask(string arguments) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string Arguments { get; init; }
+    }
+    public class NuGetPackBuilder
+    {
+        public NuGetPackBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.NuGetPackCommandTaskByBuildNumber ByBuildNumber { get; }
+        public Sharpliner.AzureDevOps.Tasks.NuGetPackCommandTaskOff WithoutPackageVersioning { get; }
+        public Sharpliner.AzureDevOps.Tasks.NuGetPackCommandTaskByEnvVar ByEnvVar(string versionEnvVar) { }
+        public Sharpliner.AzureDevOps.Tasks.NuGetPackCommandTaskByPrereleaseNumber ByPrereleaseNumber(string majorVersion, string minorVersion, string patchVersion) { }
+    }
+    public abstract class NuGetPackCommandTask : Sharpliner.AzureDevOps.Tasks.NuGetCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetPackCommandTask>
+    {
+        public NuGetPackCommandTask(string versioningScheme) { }
+        public string? BasePath { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public System.Collections.Generic.Dictionary<string, string>? BuildProperties { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? Configuration { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool? IncludeSymbols { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? PackDestination { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? PackagesToPack { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool? ToolPackage { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.PackVerbosity? VerbosityPack { get; init; }
+    }
+    public class NuGetPackCommandTaskByBuildNumber : Sharpliner.AzureDevOps.Tasks.NuGetPackCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetPackCommandTaskByBuildNumber>
+    {
+        public NuGetPackCommandTaskByBuildNumber() { }
+    }
+    public class NuGetPackCommandTaskByEnvVar : Sharpliner.AzureDevOps.Tasks.NuGetPackCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetPackCommandTaskByEnvVar>
+    {
+        public NuGetPackCommandTaskByEnvVar(string versionEnvVar) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string VersionEnvVar { get; init; }
+    }
+    public class NuGetPackCommandTaskByPrereleaseNumber : Sharpliner.AzureDevOps.Tasks.NuGetPackCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetPackCommandTaskByPrereleaseNumber>
+    {
+        public NuGetPackCommandTaskByPrereleaseNumber(string majorVersion, string minorVersion, string patchVersion) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string MajorVersion { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string MinorVersion { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.PackTimezoneType? PackTimezone { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string PatchVersion { get; init; }
+    }
+    public class NuGetPackCommandTaskOff : Sharpliner.AzureDevOps.Tasks.NuGetPackCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetPackCommandTaskOff>
+    {
+        public NuGetPackCommandTaskOff() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool IncludeReferencedProjects { get; init; }
+    }
+    public class NuGetPushBuilder
+    {
+        public NuGetPushBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.NuGetPushExternalCommandTask ToExternalFeed(string publishFeedCredentials) { }
+        public Sharpliner.AzureDevOps.Tasks.NuGetPushInternalCommandTask ToInternalFeed(string publishVstsFeed) { }
+    }
+    public abstract class NuGetPushCommandTask : Sharpliner.AzureDevOps.Tasks.NuGetCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetPushCommandTask>
+    {
+        public NuGetPushCommandTask(string nuGetFeedType) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string[] PackagesToPush { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? TargetFeedCredentials { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? TargetFeed { get; init; }
+    }
+    public class NuGetPushExternalCommandTask : Sharpliner.AzureDevOps.Tasks.NuGetPushCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetPushExternalCommandTask>
+    {
+        public NuGetPushExternalCommandTask(string publishFeedCredentials) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string PublishFeedCredentials { get; init; }
+    }
+    public class NuGetPushInternalCommandTask : Sharpliner.AzureDevOps.Tasks.NuGetPushCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetPushInternalCommandTask>
+    {
+        public NuGetPushInternalCommandTask(string publishVstsFeed) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool? AllowPackageConflicts { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool? PublishPackageMetadata { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string PublishVstsFeed { get; init; }
+    }
+    public class NuGetRestoreBuilder
+    {
+        public NuGetRestoreBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.NuGetRestoreFeedCommandTask FromFeed(string vstsFeed) { }
+        public Sharpliner.AzureDevOps.Tasks.NuGetRestoreConfigCommandTask FromNuGetConfig(string nugetConfigPath) { }
+    }
+    public abstract class NuGetRestoreCommandTask : Sharpliner.AzureDevOps.Tasks.NuGetCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetRestoreCommandTask>
+    {
+        protected NuGetRestoreCommandTask(string feedsToUse) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool? NoCache { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? RestoreSolution { get; init; }
+    }
+    public class NuGetRestoreConfigCommandTask : Sharpliner.AzureDevOps.Tasks.NuGetRestoreCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetRestoreConfigCommandTask>
+    {
+        public NuGetRestoreConfigCommandTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string ExternalFeedCredentials { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? NuGetConfigPath { get; init; }
+    }
+    public class NuGetRestoreFeedCommandTask : Sharpliner.AzureDevOps.Tasks.NuGetRestoreCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetRestoreFeedCommandTask>
+    {
+        public NuGetRestoreFeedCommandTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public bool? IncludeNuGetOrg { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? VstsFeed { get; init; }
+    }
+    public class NuGetTaskBuilder
+    {
+        public NuGetTaskBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.NuGetPackBuilder Pack { get; }
+        public Sharpliner.AzureDevOps.Tasks.NuGetPushBuilder Push { get; }
+        public Sharpliner.AzureDevOps.Tasks.NuGetRestoreBuilder Restore { get; }
+        public Sharpliner.AzureDevOps.Tasks.NuGetAuthenticateTask Authenticate(string[]? nuGetServiceConnections = null, bool forceReinstallCredentialProvider = false) { }
+        public Sharpliner.AzureDevOps.Tasks.NuGetCustomCommandTask Custom(string arguments) { }
+    }
+    public enum PackTimezoneType
+    {
+        UTC = 0,
+        Local = 1,
+    }
+    public enum PackVerbosity
+    {
+        Quiet = 0,
+        Normal = 1,
+        Detailed = 2,
     }
     public class PowershellFileTask : Sharpliner.AzureDevOps.Tasks.PowershellTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PowershellFileTask>, YamlDotNet.Serialization.IYamlConvertible
     {

@@ -507,4 +507,150 @@ public class TaskBuilderTests
             retryCountOnTaskFailure: 2
         """);
     }
+
+    private class NuGetTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        NuGet.Authenticate(["MyServiceConnection"], true),
+                        NuGet.Restore.FromFeed("my-project/my-project-scoped-feed") with
+                        {
+                            RestoreSolution = "**/*.sln",
+                            IncludeNuGetOrg = false,
+                        },
+                        NuGet.Restore.FromFeed("my-organization-scoped-feed") with
+                        {
+                            RestoreSolution = "**/*.sln",
+                        },
+                        NuGet.Restore.FromNuGetConfig("./nuget.config") with
+                        {
+                            RestoreSolution = "**/*.sln",
+                            ExternalFeedCredentials = "MyExternalFeedCredentials",
+                            NoCache = true,
+                            ContinueOnError = true
+                        },
+                        NuGet.Pack.WithoutPackageVersioning with
+                        {
+                            PackagesToPack = "**/*.csproj",
+                            IncludeSymbols = true,
+                            ToolPackage = true,
+                            BuildProperties = new()
+                            {
+                                ["prop1"] = "value1",
+                                ["prop2"] = "value2"
+                            }
+
+                        },
+                        NuGet.Pack.ByPrereleaseNumber("3", "1", "4"),
+                        NuGet.Pack.ByEnvVar("VERSION"),
+                        NuGet.Pack.ByBuildNumber with
+                        {
+                            PackagesToPack = "**/*.csproj",
+                            Configuration = "Release",
+                            PackDestination = "artifacts/packages"
+                        },
+                        NuGet.Push.ToInternalFeed("MyInternalFeed"),
+                        NuGet.Push.ToExternalFeed("MyExternalFeedCredentials"),
+                        NuGet.Custom(@"config -Set repositoryPath=c:\packages -configfile c:\my.config")
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public void Serialize_NuGet_Builders_Test()
+    {
+        NuGetTaskPipeline pipeline = new();
+        string yaml = pipeline.Serialize();
+        yaml.Trim().Should().Be(
+        """
+        jobs:
+        - job: test
+          steps:
+          - task: NuGetAuthenticate@1
+            inputs:
+              forceReinstallCredentialProvider: true
+              nuGetServiceConnections: MyServiceConnection
+
+          - task: NuGetCommand@2
+            inputs:
+              command: restore
+              feedsToUse: select
+              vstsFeed: my-project/my-project-scoped-feed
+              restoreSolution: '**/*.sln'
+              includeNuGetOrg: false
+
+          - task: NuGetCommand@2
+            inputs:
+              command: restore
+              feedsToUse: select
+              vstsFeed: my-organization-scoped-feed
+              restoreSolution: '**/*.sln'
+
+          - task: NuGetCommand@2
+            inputs:
+              command: restore
+              feedsToUse: config
+              nuGetConfigPath: ./nuget.config
+              restoreSolution: '**/*.sln'
+              externalFeedCredentials: MyExternalFeedCredentials
+              noCache: true
+            continueOnError: true
+
+          - task: NuGetCommand@2
+            inputs:
+              command: pack
+              versioningScheme: off
+              packagesToPack: '**/*.csproj'
+              includeSymbols: true
+              toolPackage: true
+              buildProperties: prop1=value1;prop2=value2
+
+          - task: NuGetCommand@2
+            inputs:
+              command: pack
+              versioningScheme: byPrereleaseNumber
+              majorVersion: 3
+              minorVersion: 1
+              patchVersion: 4
+
+          - task: NuGetCommand@2
+            inputs:
+              command: pack
+              versioningScheme: byEnvVar
+              versionEnvVar: VERSION
+
+          - task: NuGetCommand@2
+            inputs:
+              command: pack
+              versioningScheme: byBuildNumber
+              packagesToPack: '**/*.csproj'
+              configuration: Release
+              packDestination: artifacts/packages
+
+          - task: NuGetCommand@2
+            inputs:
+              command: push
+              nuGetFeedType: internal
+              publishVstsFeed: MyInternalFeed
+
+          - task: NuGetCommand@2
+            inputs:
+              command: push
+              nuGetFeedType: external
+              publishFeedCredentials: MyExternalFeedCredentials
+
+          - task: NuGetCommand@2
+            inputs:
+              command: custom
+              arguments: config -Set repositoryPath=c:\packages -configfile c:\my.config
+        """);
+    }
 }
