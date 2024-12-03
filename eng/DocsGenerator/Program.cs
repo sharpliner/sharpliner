@@ -14,35 +14,31 @@ public class Program
 
         var builder = new StringBuilder();
         using var sr = new StreamReader(templatePath);
-        var line = sr.ReadLine();
-        while (line is not null)
+        while (sr.ReadLine() is string line)
         {
-            if (line.StartsWith("[!code-"))
-            {
-                var start = line.IndexOf('(');
-                var end = line.IndexOf('#');
-                var filepath = line.Substring(start + 1, end - start - 1);
-                var lines = line.Substring(end + 1, line.Length - end - 1 - ")]".Length).Split('-');
-
-                if (lines.Length != 2)
-                {
-                    throw new ArgumentOutOfRangeException($"Invalid line range in {line}");
-                }
-
-                var startLine = int.Parse(lines[0].Substring("L".Length));
-                var endLine = int.Parse(lines[1].Substring("L".Length));
-                var language = line["[!code-".Length..line.IndexOf("[]")];
-
-                var codeSnippet = GetCodeSnippet(filepath, startLine, endLine, language);
-
-                builder.Append(codeSnippet);
-            }
-            else
+            if (!line.StartsWith("[!code-"))
             {
                 builder.AppendLine(line);
+                continue;
             }
 
-            line = sr.ReadLine();
+            var start = line.IndexOf('(');
+            var end = line.IndexOf('#');
+            var filepath = line.Substring(start + 1, end - start - 1);
+            var lines = line.Substring(end + 1, line.Length - end - 1 - ")]".Length).Split('-');
+
+            if (lines.Length != 2)
+            {
+                throw new ArgumentOutOfRangeException($"Invalid line range in {line}");
+            }
+
+            var startLine = int.Parse(lines[0].Substring("L".Length));
+            var endLine = int.Parse(lines[1].Substring("L".Length));
+            var language = line["[!code-".Length..line.IndexOf("[]")];
+
+            var codeSnippet = GetCodeSnippet(filepath, startLine, endLine, language);
+
+            builder.Append(codeSnippet);
         }
 
         var existingReadme = File.ReadAllText(GetRelativeToGitRoot("README.md"));
