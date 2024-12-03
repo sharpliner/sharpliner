@@ -170,11 +170,12 @@ For many of these, we have handy macros so that you get more readable and shorte
 For example this YAML
 
 ```yaml
-${{ if eq(variables['Build.SourceBranch'], 'refs/heads/production') }}:
-    name: rg-suffix
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/production') }}:
+  - name: rg-suffix
     value: -pr
-${{ if ne(variables['Build.SourceBranch'], 'refs/heads/production') }}:
-    name: rg-suffix
+
+- ${{ else }}:
+  - name: rg-suffix
     value: -prod
 ```
 

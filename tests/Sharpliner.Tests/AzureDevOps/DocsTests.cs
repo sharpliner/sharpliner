@@ -109,11 +109,12 @@ public class DocsTests : AzureDevOpsDefinition
         var yaml = SharplinerSerializer.Serialize(variables);
         yaml.Trim().Should().Be(
             """
-            ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/production') }}:
-                name: rg-suffix
+            - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/production') }}:
+              - name: rg-suffix
                 value: -pr
-            ${{ if ne(variables['Build.SourceBranch'], 'refs/heads/production') }}:
-                name: rg-suffix
+
+            - ${{ else }}:
+              - name: rg-suffix
                 value: -prod
             """);
     }

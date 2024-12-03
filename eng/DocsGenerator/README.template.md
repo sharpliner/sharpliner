@@ -94,7 +94,7 @@ For many of these, we have handy macros so that you get more readable and shorte
 
 For example this YAML
 
-[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L112-L117)]
+[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L112-L118)]
 
 can become this C#
 
@@ -104,11 +104,11 @@ can become this C#
 Sharpliner lets you re-use code more easily than YAML templates do.
 Apart from obvious C# code re-use, you can also define sets of C# building blocks and re-use them in your pipelines:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L121-L132)]
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L122-L133)]
 
 You can then reference this library in between build steps and it will get expanded into the pipeline's YAML:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L142-L152)]
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L143-L153)]
 
 More about this feature can be found [here (DefinitionLibraries.md)](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionLibraries.md).
 
@@ -118,7 +118,7 @@ When you need to add cmd, PowerShell or bash steps into your pipeline, maintaini
 With Sharpliner you can keep scripts in their own files (`.ps1`, `.sh`..) where you get the natural environment you're used to such as syntax highlighting.
 Sharpliner gives you APIs to load these on build time and include them inline:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L167-L174)]
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L168-L175)]
 
 ### Correct variable/parameter types
 Frequent struggle people have with Azure pipelines is using the [right type of variable](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#understand-variable-syntax) in the right context.
@@ -131,7 +131,7 @@ This gives you a faster dev loop and greater productivity.
 We are continuously adding new validations as we find new error-prone spots.
 Each validation can be individually configured/silenced in case you don't wish to take advantage of these:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L180-L197)]
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L181-L198)]
 
 ## Something missing?
 
