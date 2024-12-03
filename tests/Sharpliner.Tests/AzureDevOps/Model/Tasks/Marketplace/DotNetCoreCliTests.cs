@@ -345,6 +345,29 @@ public class DotNetCoreCliTests
     }
 
     [Fact]
+    public void Run_Command_Test()
+    {
+        var task = _builder.Run with
+        {
+            Projects = "src/Component/Component.csproj",
+            Arguments = "FailIfChanged=true"
+        };
+
+        var yaml = GetYaml(task);
+        yaml.Trim().Should().Be(
+            """
+            jobs:
+            - job: job
+              steps:
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: run
+                  projects: src/Component/Component.csproj
+                  arguments: FailIfChanged=true
+            """);
+    }
+
+    [Fact]
     public void Custom_Command_Test()
     {
         var task = _builder.CustomCommand("--list-sdks") with
