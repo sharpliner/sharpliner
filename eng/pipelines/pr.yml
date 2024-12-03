@@ -39,6 +39,13 @@ jobs:
       includeNuGetOrg: true
 
   - task: DotNetCoreCLI@2
+    displayName: Validate generated docs
+    inputs:
+      command: run
+      projects: eng/DocsGenerator/DocsGenerator.csproj
+      arguments: FailIfChanged=true
+
+  - task: DotNetCoreCLI@2
     displayName: Validate YAML has been published
     inputs:
       command: build

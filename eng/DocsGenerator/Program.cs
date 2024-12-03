@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -9,7 +8,7 @@ namespace DocsGenerator;
 
 public class Program
 {
-    public static void Main()
+    public static void Main(string[] args)
     {
         var templatePath = GetRelativeToGitRoot("eng/DocsGenerator/README.template.md");
 
@@ -46,7 +45,21 @@ public class Program
             line = sr.ReadLine();
         }
 
-        File.WriteAllText(GetRelativeToGitRoot("README.md"), builder.ToString());
+        var existingReadme = File.ReadAllText(GetRelativeToGitRoot("README.md"));
+        var newReadme = builder.ToString();
+
+        if (args.Contains("FailIfChanged=true"))
+        {
+            if (!existingReadme.Equals(newReadme))
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine("README.md has changed. Please run `dotnet run --project .\\eng\\DocsGenerator\\` to update it.");
+                Console.ResetColor();
+                Environment.Exit(1);
+            }
+        }
+
+        File.WriteAllText(GetRelativeToGitRoot("README.md"), newReadme);
     }
 
     private static string GetCodeSnippet(string filepath, int startLine, int endLine, string language)

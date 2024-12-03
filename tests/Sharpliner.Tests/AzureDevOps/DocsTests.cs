@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.Common;
 using Xunit;
 
 namespace Sharpliner.Tests.AzureDevOps;
@@ -45,6 +47,8 @@ public class DocsTests : AzureDevOpsDefinition
                     [
                         // Many tasks have helper methods for shorter notation
                         DotNet.Install.Sdk(DotnetVersion),
+
+                        NuGet.Authenticate(["myServiceConnection"]),
 
                         // You can also specify any pipeline task in full too
                         Task("DotNetCoreCLI@2", "Build and test") with
@@ -112,5 +116,83 @@ public class DocsTests : AzureDevOpsDefinition
                 name: rg-suffix
                 value: -prod
             """);
+    }
+
+    class ProjectBuildSteps : StepLibrary
+    {
+        public override List<Conditioned<Step>> Steps =>
+        [
+            DotNet.Install.Sdk("6.0.100"),
+
+            If.IsBranch("main")
+                .Step(DotNet.Restore.Projects("src/MyProject.sln")),
+
+            DotNet.Build("src/MyProject.sln"),
+        ];
+    }
+
+    class PipelineUsingLibrary : SingleStagePipelineDefinition
+    {
+        public override string TargetFile => "pipeline-wth-library.yml";
+
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            [
+                new Job("Build")
+                {
+                    Steps =
+                    {
+                        Script.Inline("echo 'Hello World'"),
+
+                        StepLibrary<ProjectBuildSteps>(),
+
+                        Script.Inline("echo 'Goodbye World'"),
+                    }
+                }
+            ]
+        };
+    }
+
+    class SourcingFromFiles : SingleStagePipelineDefinition
+    {
+        public override string TargetFile => "pipeline-from-files.yml";
+
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            [
+                new Job("Build")
+                {
+                    Steps =
+                    {
+                        Bash.FromResourceFile("embedded-script.sh") with
+                        {
+                            DisplayName = "Run post-build clean-up",
+                            Timeout = TimeSpan.FromMinutes(5),
+                        }
+                    }
+                }
+            ]
+        };
+    }
+
+    class YourCustomConfiguration : SharplinerConfiguration
+    {
+        public override void Configure()
+        {
+            // You can set severity for various validations
+            Validations.DependsOnFields = ValidationSeverity.Off;
+            Validations.NameFields = ValidationSeverity.Warning;
+
+            // You can also further customize serialization
+            Serialization.PrettifyYaml = false;
+            Serialization.UseElseExpression = true;
+            Serialization.IncludeHeaders = false;
+
+            // You can add hooks that execute during the publish process
+            Hooks.BeforePublish = (definition, path) => {};
+            Hooks.AfterPublish = (definition, path) => {};
+        }
     }
 }

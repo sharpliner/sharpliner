@@ -27,6 +27,13 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                 {
                     StepLibrary(new ProjectBuildSteps("src/**/*.csproj")),
 
+                    new DotNetCoreCliTask("run")
+                    {
+                        DisplayName = "Validate generated docs",
+                        Projects = "eng/DocsGenerator/DocsGenerator.csproj",
+                        Arguments = "FailIfChanged=true"
+                    },
+
                     ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj"),
 
                     DotNet

@@ -21,7 +21,7 @@ For more detailed steps, check our [documentation](https://github.com/sharpliner
 
 ## Example
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L11-L68)]
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L13-L72)]
 
 ## Sharpliner features
 
@@ -86,7 +86,7 @@ However, this task's specification is quite long since the task does many things
 Notice how some of the properties are only valid in a specific combination with other.
 With Sharpliner, we remove some of this complexity using nice fluent APIs:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L75-L87)]
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L79-L91)]
 
 ### Useful macros
 Some very common pipeline patterns such as comparing the current branch name or detecting pull requests are very cumbersome to do in YAML (long conditions full of complicated `${{ if }}` syntax).
@@ -94,48 +94,21 @@ For many of these, we have handy macros so that you get more readable and shorte
 
 For example this YAML
 
-[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L108-L113)]
+[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L112-L117)]
 
 can become this C#
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L99-L102)]
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L103-L106)]
 
 ### Re-usable pipeline blocks
 Sharpliner lets you re-use code more easily than YAML templates do.
 Apart from obvious C# code re-use, you can also define sets of C# building blocks and re-use them in your pipelines:
 
-```csharp
-class ProjectBuildSteps : StepLibrary
-{
-    public override List<Conditioned<Step>> Steps =>
-    [
-        DotNet.Install.Sdk("6.0.100"),
-
-        If.IsBranch("main")
-            .Step(DotNet.Restore.Projects("src/MyProject.sln")),
-
-        DotNet.Build("src/MyProject.sln"),
-    ];
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L121-L132)]
 
 You can then reference this library in between build steps and it will get expanded into the pipeline's YAML:
 
-```csharp
-...
-    new Job("Build")
-    {
-        Steps =
-        [
-            Script.Inline("echo 'Hello World'"),
-
-            StepLibrary<ProjectBuildSteps>(),
-
-            Script.Inline("echo 'Goodbye World'"),
-        ]
-    }
-...
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L142-L152)]
 
 More about this feature can be found [here (DefinitionLibraries.md)](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionLibraries.md).
 
@@ -145,16 +118,7 @@ When you need to add cmd, PowerShell or bash steps into your pipeline, maintaini
 With Sharpliner you can keep scripts in their own files (`.ps1`, `.sh`..) where you get the natural environment you're used to such as syntax highlighting.
 Sharpliner gives you APIs to load these on build time and include them inline:
 
-```csharp
-Steps =
-{
-    Bash.FromResourceFile("embedded-script.sh") with
-    {
-        DisplayName = "Run post-build clean-up",
-        Timeout = TimeSpan.FromMinutes(5),
-    }
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L167-L174)]
 
 ### Correct variable/parameter types
 Frequent struggle people have with Azure pipelines is using the [right type of variable](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#understand-variable-syntax) in the right context.
@@ -164,29 +128,10 @@ Be it a `${{ compile time parameter }}`, a `variable['used in runtime']` or a `$
 Your pipeline definition can be validated during publishing and you can uncover issues, such as typos inside `dependsOn`, you would only find by trying to run the pipeline in CI.
 This gives you a faster dev loop and greater productivity.
 
-We are continuosly adding new validations as we find new error-prone spots.
+We are continuously adding new validations as we find new error-prone spots.
 Each validation can be individually configured/silenced in case you don't wish to take advantage of these:
 
-```csharp
-class YourCustomConfiguration : SharplinerConfiguration
-{
-    public override void Configure()
-    {
-        // You can set severity for various validations
-        Validations.DependsOn = ValidationSeverity.Off;
-        Validations.Name = ValidationSeverity.Warning;
-
-        // You can also further customize serialization
-        Serialization.PrettifyYaml = false;
-        Serialization.UseElseExpression = true;
-        Serialization.IncludeHeaders = false;
-
-        // You can add hooks that execute during the publish process
-        Hooks.BeforePublish = (definition, path) => {};
-        Hooks.AfterPublish = (definition, path) => {};
-    }
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#L180-L197)]
 
 ## Something missing?
 
