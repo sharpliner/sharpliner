@@ -27,7 +27,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                 {
                     StepLibrary(new ProjectBuildSteps("src/**/*.csproj")),
 
-                    new DotNetCoreCliTask("run")
+                    DotNet.Run with
                     {
                         DisplayName = "Validate generated docs",
                         Projects = "eng/DocsGenerator/DocsGenerator.csproj",
