@@ -48,14 +48,26 @@ public class Program
         {
             if (!existingReadme.Equals(newReadme))
             {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine("README.md has changed. Please run `dotnet run --project .\\eng\\DocsGenerator\\` to update it.");
-                Console.ResetColor();
+                LogError("README.md has changed. Please run `dotnet run --project .\\eng\\DocsGenerator\\` to update it.");
                 Environment.Exit(1);
             }
         }
 
         File.WriteAllText(GetRelativeToGitRoot("README.md"), newReadme);
+    }
+
+    private static void LogError(string message)
+    {
+        if (Environment.GetEnvironmentVariable("TF_BUILD") is "true")
+        {
+            Console.WriteLine($"##vso[task.logissue type=error]{message}");
+        }
+        else
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(message);
+            Console.ResetColor();
+        }
     }
 
     private static string GetCodeSnippet(string filepath, int startLine, int endLine, string language)
