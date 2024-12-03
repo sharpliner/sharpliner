@@ -237,17 +237,17 @@ public abstract class AzureDevOpsDefinition
     protected static Conditioned<VariableBase> Variable(string name, bool value) => new(new Variable(name, value));
 
     /// <summary>
-    /// References a variable group.
-    /// </summary>
-    /// <param name="name">Group name</param>
-    protected static Conditioned<VariableBase> Group(string name) => new(new VariableGroup(name));
-
-    /// <summary>
     /// Defines a variable.
     /// </summary>
     /// <param name="name">Variable name</param>
     /// <param name="value">Variable value</param>
     protected static Conditioned<VariableBase> Variable(string name, Enum value) => new(new Variable(name, value));
+
+    /// <summary>
+    /// References a variable group.
+    /// </summary>
+    /// <param name="name">Group name</param>
+    protected static Conditioned<VariableBase> Group(string name) => new(new VariableGroup(name));
 
     #endregion
 
@@ -318,6 +318,11 @@ public abstract class AzureDevOpsDefinition
             DisplayName = "Validate YAML has been published",
             Arguments = $"-p:{nameof(PublishDefinitions.FailIfChanged)}=true"
         };
+
+    /// <summary>
+    /// Creates a NuGet task.
+    /// </summary>
+    protected static NuGetTaskBuilder NuGet { get; } = new();
 
     #endregion
 
@@ -695,14 +700,14 @@ public abstract class AzureDevOpsDefinition
     protected static InlineCondition Less<T>(InlineExpression expression1, InlineExpression expression2) => new InlineLessCondition<T>(expression1, expression2);
 
     /// <summary>
-    /// Utility that creates an <c>${{ and(expressions) }}</c> section.
+    /// Utility that creates an <c>${{ and(...expressions) }}</c> section.
     /// </summary>
     /// <param name="expressions">Expressions to be combined with AND</param>
     /// <returns>An <c>and</c> condition with the specified expressions.</returns>
     protected static InlineCondition And(params string[] expressions) => new InlineAndCondition(expressions);
 
     /// <summary>
-    /// Utility that creates an <c>${{ or(expressions) }}</c> section.
+    /// Utility that creates an <c>${{ or(...expressions) }}</c> section.
     /// </summary>
     /// <param name="expressions">Expressions to be combined with OR</param>
     /// <returns>An <c>or</c> condition with the specified expressions.</returns>
