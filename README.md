@@ -268,7 +268,7 @@ class YourCustomConfiguration : SharplinerConfiguration
 
         // You can add hooks that execute during the publish process
         Hooks.BeforePublish = (definition, path) => {};
-        Hooks.AfterPublish = (definition, path) => {};
+        Hooks.AfterPublish = (definition, path, yaml) => {};
     }
 }
 ```
