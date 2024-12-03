@@ -209,19 +209,17 @@ class ProjectBuildSteps : StepLibrary
 You can then reference this library in between build steps and it will get expanded into the pipeline's YAML:
 
 ```csharp
-...
-    new Job("Build")
+new Job("Build")
+{
+    Steps =
     {
-        Steps =
-        [
-            Script.Inline("echo 'Hello World'"),
+        Script.Inline("echo 'Hello World'"),
 
-            StepLibrary<ProjectBuildSteps>(),
+        StepLibrary<ProjectBuildSteps>(),
 
-            Script.Inline("echo 'Goodbye World'"),
-        ]
+        Script.Inline("echo 'Goodbye World'"),
     }
-...
+}
 ```
 
 More about this feature can be found [here (DefinitionLibraries.md)](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionLibraries.md).
@@ -251,7 +249,7 @@ Be it a `${{ compile time parameter }}`, a `variable['used in runtime']` or a `$
 Your pipeline definition can be validated during publishing and you can uncover issues, such as typos inside `dependsOn`, you would only find by trying to run the pipeline in CI.
 This gives you a faster dev loop and greater productivity.
 
-We are continuosly adding new validations as we find new error-prone spots.
+We are continuously adding new validations as we find new error-prone spots.
 Each validation can be individually configured/silenced in case you don't wish to take advantage of these:
 
 ```csharp
@@ -260,8 +258,8 @@ class YourCustomConfiguration : SharplinerConfiguration
     public override void Configure()
     {
         // You can set severity for various validations
-        Validations.DependsOn = ValidationSeverity.Off;
-        Validations.Name = ValidationSeverity.Warning;
+        Validations.DependsOnFields = ValidationSeverity.Off;
+        Validations.NameFields = ValidationSeverity.Warning;
 
         // You can also further customize serialization
         Serialization.PrettifyYaml = false;
