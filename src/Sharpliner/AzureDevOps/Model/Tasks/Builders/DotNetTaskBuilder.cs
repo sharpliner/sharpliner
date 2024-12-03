@@ -10,18 +10,44 @@ public class DotNetTaskBuilder
     }
 
     /// <summary>
-    /// Creates the Install command version of the DotNetCoreCLI task.
+    /// Creates the <c>install</c> command version of the DotNetCoreCLI task.
     /// </summary>
     public DotNetInstallBuilder Install => new();
 
     /// <summary>
-    /// Creates the restore command version of the DotNetCoreCLI task.
+    /// Creates the <c>restore</c> command version of the DotNetCoreCLI task.
     /// </summary>
     public DotNetRestoreBuilder Restore => new();
 
     /// <summary>
     /// <para>
-    /// Creates the build command version of the DotNetCoreCLI task.
+    /// Creates the <c>run</c> command version of the DotNetCoreCLI task.
+    /// </para>
+    /// For example:
+    /// <code lang="csharp">
+    /// Steps =
+    /// {
+    ///     Dotnet.Run with
+    ///     {
+    ///         Projects = "src/Component/Component.csproj"
+    ///         Arguments = "FailIfChanged=true"
+    ///     }
+    /// }
+    /// </code>
+    /// Will generate:
+    /// <code lang="yaml">
+    /// - task: DotNetCoreCLI@2
+    ///   inputs:
+    ///     command: run
+    ///     projects: src/Component/Component.csproj
+    ///     arguments: FailIfChanged=true
+    /// </code>
+    /// </summary>
+    public DotNetCoreCliTask Run => new("run");
+
+    /// <summary>
+    /// <para>
+    /// Creates the <c>build</c> command version of the DotNetCoreCLI task.
     /// </para>
     /// For example
     /// <code lang="csharp">
@@ -58,7 +84,7 @@ public class DotNetTaskBuilder
 
     /// <summary>
     /// <para>
-    /// Creates the pack command version of the DotNetCoreCLI task.
+    /// Creates the <c>pack</c> command version of the DotNetCoreCLI task.
     /// </para>
     /// For example
     /// <code lang="csharp">

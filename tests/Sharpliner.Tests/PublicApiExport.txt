@@ -1655,6 +1655,7 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder.DotNetInstallBuilder Install { get; }
         public Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder.DotNetRestoreBuilder Restore { get; }
+        public Sharpliner.AzureDevOps.Tasks.DotNetCoreCliTask Run { get; }
         public Sharpliner.AzureDevOps.Tasks.DotNetBuildCoreCliTask Build(string projects, bool? includeNuGetOrg = default, string? arguments = null) { }
         public Sharpliner.AzureDevOps.Step CustomCommand(string command, string? arguments = null, Sharpliner.AzureDevOps.Tasks.TaskInputs? inputs = null) { }
         public Sharpliner.AzureDevOps.Tasks.DotNetPackCoreCliTask Pack(string? packagesToPack = "**/*.csproj", string? arguments = null) { }
