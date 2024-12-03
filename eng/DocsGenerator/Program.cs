@@ -58,7 +58,7 @@ public class Program
 
     private static void LogError(string message)
     {
-        if (Environment.GetEnvironmentVariable("TF_BUILD") is "true")
+        if (Environment.GetEnvironmentVariable("TF_BUILD") is not null)
         {
             Console.WriteLine($"##vso[task.logissue type=error]{message}");
         }
