@@ -10,6 +10,7 @@ namespace Sharpliner.Tests.AzureDevOps;
 
 public class DocsTests : AzureDevOpsDefinition
 {
+#region main-example
     // Just override prepared abstract classes and `dotnet build` the project, nothing else is needed!
     // For a full list of classes you can override
     //    see https://github.com/sharpliner/sharpliner/blob/main/src/Sharpliner/AzureDevOps/PublicDefinitions.cs
@@ -70,12 +71,14 @@ public class DocsTests : AzureDevOpsDefinition
             ],
         };
     }
+#endregion
 
     [Fact]
     public void TestDotnetFluentApi()
     {
         ConditionedList<Step> steps =
         [
+#region dotnet-fluent-api
             DotNet.Install.Sdk(parameters["version"]),
 
             DotNet.Restore.FromFeed("dotnet-7-preview-feed", includeNuGetOrg: false) with
@@ -89,10 +92,33 @@ public class DocsTests : AzureDevOpsDefinition
             {
                 Timeout = TimeSpan.FromMinutes(20)
             },
+#endregion
         ];
 
         var yaml = SharplinerSerializer.Serialize(steps);
-        // TODO: assert yaml
+        yaml.Trim().Should().Be(
+            """
+            - task: UseDotNet@2
+              inputs:
+                packageType: sdk
+                version: ${{ parameters.version }}
+
+            - task: DotNetCoreCLI@2
+              inputs:
+                command: restore
+                includeNuGetOrg: false
+                feedsToUse: select
+                feedRestore: dotnet-7-preview-feed
+                externalFeedCredentials: feeds/dotnet-7
+                noCache: true
+                restoreDirectory: .packages
+
+            - task: DotNetCoreCLI@2
+              inputs:
+                command: build
+                projects: src/MyProject.csproj
+              timeoutInMinutes: 20
+            """);
     }
 
     [Fact]
@@ -100,14 +126,17 @@ public class DocsTests : AzureDevOpsDefinition
     {
         ConditionedList<VariableBase> variables =
         [
+#region useful-macros-csharp
             If.IsBranch("production")
                 .Variable("rg-suffix", "-pr")
             .Else
                 .Variable("rg-suffix", "-prod")
+#endregion
         ];
 
         var yaml = SharplinerSerializer.Serialize(variables);
         yaml.Trim().Should().Be(
+#region useful-macros-yaml
             """
             - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/production') }}:
               - name: rg-suffix
@@ -116,9 +145,12 @@ public class DocsTests : AzureDevOpsDefinition
             - ${{ else }}:
               - name: rg-suffix
                 value: -prod
-            """);
+            """
+#endregion
+            );
     }
 
+#region pipeline-library
     class ProjectBuildSteps : StepLibrary
     {
         public override List<Conditioned<Step>> Steps =>
@@ -131,6 +163,7 @@ public class DocsTests : AzureDevOpsDefinition
             DotNet.Build("src/MyProject.sln"),
         ];
     }
+#endregion
 
     class PipelineUsingLibrary : SingleStagePipelineDefinition
     {
@@ -140,6 +173,7 @@ public class DocsTests : AzureDevOpsDefinition
         {
             Jobs =
             [
+#region pipeline-library-usage
                 new Job("Build")
                 {
                     Steps =
@@ -151,6 +185,7 @@ public class DocsTests : AzureDevOpsDefinition
                         Script.Inline("echo 'Goodbye World'"),
                     }
                 }
+#endregion
             ]
         };
     }
@@ -165,6 +200,7 @@ public class DocsTests : AzureDevOpsDefinition
             [
                 new Job("Build")
                 {
+#region sourcing-from-files
                     Steps =
                     {
                         Bash.FromResourceFile("embedded-script.sh") with
@@ -173,11 +209,13 @@ public class DocsTests : AzureDevOpsDefinition
                             Timeout = TimeSpan.FromMinutes(5),
                         }
                     }
+#endregion
                 }
             ]
         };
     }
 
+#region configuration
     class YourCustomConfiguration : SharplinerConfiguration
     {
         public override void Configure()
@@ -196,4 +234,5 @@ public class DocsTests : AzureDevOpsDefinition
             Hooks.AfterPublish = (definition, path, yaml) => {};
         }
     }
+#endregion
 }
