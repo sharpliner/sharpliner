@@ -21,68 +21,7 @@ For more detailed steps, check our [documentation](https://github.com/sharpliner
 
 ## Example
 
-```csharp
-// Just override prepared abstract classes and `dotnet build` the project, nothing else is needed!
-// For a full list of classes you can override
-//    see https://github.com/sharpliner/sharpliner/blob/main/src/Sharpliner/AzureDevOps/PublicDefinitions.cs
-// You can also generate collections of definitions dynamically
-//    see https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionCollections.md
-class PullRequestPipeline : SingleStagePipelineDefinition
-{
-    // Say where to publish the YAML to
-    public override string TargetFile => "eng/pr.yml";
-    public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
-
-    private static readonly Variable DotnetVersion = new Variable("DotnetVersion", string.Empty);
-
-    public override SingleStagePipeline Pipeline => new()
-    {
-        Pr = new PrTrigger("main"),
-
-        Variables =
-        [
-            // YAML ${{ if }} conditions are available with handy macros that expand into the
-            // expressions such as comparing branch names. We also have "else"
-            If.IsBranch("net-6.0")
-                .Variable(DotnetVersion with { Value = "6.0.100" })
-                .Group("net6-keyvault")
-            .Else
-                .Variable(DotnetVersion with { Value = "5.0.202" }),
-        ],
-
-        Jobs =
-        [
-            new Job("Build")
-            {
-                Pool = new HostedPool("Azure Pipelines", "windows-latest"),
-                Steps =
-                [
-                    // Many tasks have helper methods for shorter notation
-                    DotNet.Install.Sdk(DotnetVersion),
-
-                    NuGet.Authenticate(["myServiceConnection"]),
-
-                    // You can also specify any pipeline task in full too
-                    Task("DotNetCoreCLI@2", "Build and test") with
-                    {
-                        Inputs = new()
-                        {
-                            { "command", "test" },
-                            { "projects", "src/MyProject.sln" },
-                        }
-                    },
-
-                    // Frequently used ${{ if }} statements have readable macros
-                    If.IsPullRequest
-                        // You can load script contents from a .ps1 file and inline them into YAML
-                        // This way you can write scripts with syntax highlighting separately
-                        .Step(Powershell.FromResourceFile("New-Report.ps1", "Create build report")),
-                ]
-            }
-        ],
-    };
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#main-example)]
 
 ## Sharpliner features
 
@@ -147,21 +86,7 @@ However, this task's specification is quite long since the task does many things
 Notice how some of the properties are only valid in a specific combination with other.
 With Sharpliner, we remove some of this complexity using nice fluent APIs:
 
-```csharp
-DotNet.Install.Sdk(parameters["version"]),
-
-DotNet.Restore.FromFeed("dotnet-7-preview-feed", includeNuGetOrg: false) with
-{
-    ExternalFeedCredentials = "feeds/dotnet-7",
-    NoCache = true,
-    RestoreDirectory = ".packages",
-},
-
-DotNet.Build("src/MyProject.csproj") with
-{
-    Timeout = TimeSpan.FromMinutes(20)
-},
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#dotnet-fluent-api)]
 
 ### Useful macros
 Some very common pipeline patterns such as comparing the current branch name or detecting pull requests are very cumbersome to do in YAML (long conditions full of complicated `${{ if }}` syntax).
@@ -169,59 +94,21 @@ For many of these, we have handy macros so that you get more readable and shorte
 
 For example this YAML
 
-```yaml
-- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/production') }}:
-  - name: rg-suffix
-    value: -pr
-
-- ${{ else }}:
-  - name: rg-suffix
-    value: -prod
-```
+[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#useful-macros-yaml)]
 
 can become this C#
 
-```csharp
-If.IsBranch("production")
-    .Variable("rg-suffix", "-pr")
-.Else
-    .Variable("rg-suffix", "-prod")
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#useful-macros-csharp)]
 
 ### Re-usable pipeline blocks
 Sharpliner lets you re-use code more easily than YAML templates do.
 Apart from obvious C# code re-use, you can also define sets of C# building blocks and re-use them in your pipelines:
 
-```csharp
-class ProjectBuildSteps : StepLibrary
-{
-    public override List<Conditioned<Step>> Steps =>
-    [
-        DotNet.Install.Sdk("6.0.100"),
-
-        If.IsBranch("main")
-            .Step(DotNet.Restore.Projects("src/MyProject.sln")),
-
-        DotNet.Build("src/MyProject.sln"),
-    ];
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#pipeline-library)]
 
 You can then reference this library in between build steps and it will get expanded into the pipeline's YAML:
 
-```csharp
-new Job("Build")
-{
-    Steps =
-    {
-        Script.Inline("echo 'Hello World'"),
-
-        StepLibrary<ProjectBuildSteps>(),
-
-        Script.Inline("echo 'Goodbye World'"),
-    }
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#pipeline-library-usage)]
 
 More about this feature can be found [here (DefinitionLibraries.md)](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionLibraries.md).
 
@@ -231,16 +118,7 @@ When you need to add cmd, PowerShell or bash steps into your pipeline, maintaini
 With Sharpliner you can keep scripts in their own files (`.ps1`, `.sh`..) where you get the natural environment you're used to such as syntax highlighting.
 Sharpliner gives you APIs to load these on build time and include them inline:
 
-```csharp
-Steps =
-{
-    Bash.FromResourceFile("embedded-script.sh") with
-    {
-        DisplayName = "Run post-build clean-up",
-        Timeout = TimeSpan.FromMinutes(5),
-    }
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#sourcing-from-files)]
 
 ### Correct variable/parameter types
 Frequent struggle people have with Azure pipelines is using the [right type of variable](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#understand-variable-syntax) in the right context.
@@ -253,26 +131,7 @@ This gives you a faster dev loop and greater productivity.
 We are continuously adding new validations as we find new error-prone spots.
 Each validation can be individually configured/silenced in case you don't wish to take advantage of these:
 
-```csharp
-class YourCustomConfiguration : SharplinerConfiguration
-{
-    public override void Configure()
-    {
-        // You can set severity for various validations
-        Validations.DependsOnFields = ValidationSeverity.Off;
-        Validations.NameFields = ValidationSeverity.Warning;
-
-        // You can also further customize serialization
-        Serialization.PrettifyYaml = false;
-        Serialization.UseElseExpression = true;
-        Serialization.IncludeHeaders = false;
-
-        // You can add hooks that execute during the publish process
-        Hooks.BeforePublish = (definition, path) => {};
-        Hooks.AfterPublish = (definition, path, yaml) => {};
-    }
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#configuration)]
 
 ## Something missing?
 
