@@ -13,7 +13,15 @@ public class ConditionedDictionary : Dictionary<string, object>
     /// </summary>
     /// <param name="key">The key.</param>
     /// <param name="item">The value.</param>
-    public new void Add(string key, object item)
+    public new void Add(string key, object item) => base.Add(key, NormalizeValue(item));
+
+    public new object this[string key]
+    {
+        get => base[key];
+        set => base[key] = NormalizeValue(value);
+    }
+
+    private static object NormalizeValue(object item)
     {
         if (item is Conditioned conditioned)
         {
@@ -25,9 +33,19 @@ public class ConditionedDictionary : Dictionary<string, object>
             }
 
             conditioned.SetIsList(false);
-            item = conditioned;
+            return conditioned;
         }
 
-        base.Add(key, item);
+        if (item is Variable variable)
+        {
+            return new VariableReference(variable.Name);
+        }
+
+        if (item is Parameter parameter)
+        {
+            return new ParameterReference(parameter.Name);
+        }
+
+        return item;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Sharpliner.AzureDevOps;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Xunit;
 
 namespace Sharpliner.Tests.AzureDevOps;
@@ -8,16 +9,39 @@ public class PipelineParameterTests
 {
     private class PipelineParameterTests_Pipeline : SimpleTestPipeline
     {
+        private static readonly Parameter p_project = StringParameter("project", "AzureDevops project");
+        private static readonly Parameter p_version = StringParameter("version", ".NET version", allowedValues: [ "5.0.100", "5.0.102" ]);
+        private static readonly Parameter p_restore = BooleanParameter("restore", "Restore NuGets", defaultValue: true);
+        private static readonly Parameter p_list = ObjectParameter<string>("list", "List input", ["Azure" , "DevOps"]);
+        private static readonly Parameter p_afterBuild = StepParameter("afterBuild", "After steps", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)"));
+
         public override SingleStagePipeline Pipeline => new()
         {
-            Parameters =
+            Parameters = 
+            { 
+              p_project, 
+              p_version, 
+              p_restore, 
+              p_list, 
+              p_afterBuild
+            },
+            Jobs =
             {
-                StringParameter("project", "AzureDevops project"),
-                StringParameter("version", ".NET version", allowedValues: [ "5.0.100", "5.0.102" ]),
-                BooleanParameter("restore", "Restore NuGets", defaultValue: true),
-                ObjectParameter<string>("list", "List input", ["Azure" , "DevOps"]),
-                StepParameter("afterBuild", "After steps", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)")),
-            }
+                new Job("Job1")
+                {
+                    Steps =
+                    {
+                        StepTemplate("beforeBuild", new()
+                        {
+                          ["project"] = p_project,
+                          ["version"] = p_version,
+                          ["restore"] = p_restore,
+                          ["list"] = p_list,
+                        }),
+                        p_afterBuild,
+                    },
+                }
+            },
         };
     }
 
