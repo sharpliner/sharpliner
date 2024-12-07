@@ -1,10 +1,3 @@
-<!--
-DO NOT MODIFY THIS FILE!
-
-This markdown file was auto-generated from the tool eng/DocsGenerator/Program.cs from the template eng/DocsGenerator/DefinitionReference.template.md.
-To make changes, change the template file rerun the tool
--->
-
 # Azure DevOps pipeline definition reference
 
 Here you can find detailed reference on how to define various parts of the pipeline.
@@ -40,63 +33,11 @@ For each of these, there are two ways how you can define these.
 
 Either you "new" them the regular way though this requires a longer syntax similar to what you would do in YAML:
 
-```csharp
-Steps =
-{
-    new AzureDevOpsTask("DotNetCoreCLI@2")
-    {
-        DisplayName = "Build solution",
-        Inputs = new()
-        {
-            { "command", "build" },
-            { "includeNuGetOrg", true },
-            { "projects", "src/MyProject.sln" },
-        },
-        Timeout = TimeSpan.FromMinutes(20)
-    },
-
-    new InlineBashTask("./.dotnet/dotnet test src/MySolution.sln")
-    {
-        DisplayName = "Run unit tests",
-        ContinueOnError = true,
-    },
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#classic-pipeline-steps)]
 
 or you can use the shorthand style. For each of the basic commands, a method/property is defined on the parent class with the same name as the original task:
 
-```csharp
-Steps =
-{
-    Checkout.Self,
-
-    Download.LatestFromBranch("internal", 23, "refs/heads/develop", artifact: "CLI.Package") with
-    {
-        AllowPartiallySucceededBuilds = true,
-        CheckDownloadedFiles = true,
-        PreferTriggeringPipeline = true,
-    },
-
-    // Tasks are represented as C# records so you can use the `with` keyword to override the properties
-    DotNet.Build("src/MyProject.sln", includeNuGetOrg: true) with
-    {
-        Timeout = TimeSpan.FromMinutes(20)
-    },
-
-    // Some of the shorthand styles define more options and a cleaner way of defining them
-    // E.g. Bash gives you several ways where to get the script from such as Bash.FromResourceFile or Bash.FromFile
-    Bash.Inline("./.dotnet/dotnet test src/MySolution.sln") with
-    {
-        DisplayName = "Run unit tests",
-        ContinueOnError = true,
-    },
-
-    Publish.Pipeline("ArtifactName", "bin/**/*.dll") with
-    {
-        DisplayName = "Publish build artifacts"
-    },
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#shorthand-pipeline-steps)]
 
 Please notice the `with` keyword which is a [new feature in C#](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/record#nondestructive-mutation) that allows modifying of records.
 
@@ -104,16 +45,7 @@ Please notice the `with` keyword which is a [new feature in C#](https://docs.mic
 
 Even though it is possible to use any of the non-default [Azure Pipelines tasks](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/?view=azure-devops) by specifying its name + inputs:
 
-```csharp
-Task("DotNetCoreCLI@2", "Run unit tests") with
-{
-    Inputs = new()
-    {
-        { "command", "test" },
-        { "projects", "src/MyProject.sln" },
-    }
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#azure-pipeline-task)]
 
 some of the tasks are quite hard to comprehend such as the [.NET Core CLI task](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops) whose specification is quite long since the task can do many different things.
 Notice how some of the properties are only valid in a specific combination with other.
@@ -123,91 +55,17 @@ With Sharpliner, we remove some of this complexity by restricting which properti
 
 ### Dotnet
 
-```csharp
-DotNet.Install.Sdk(parameters["version"]),
-
-DotNet.Restore.FromFeed("dotnet-7-preview-feed", includeNuGetOrg: false) with
-{
-    ExternalFeedCredentials = "feeds/dotnet-7",
-    NoCache = true,
-    RestoreDirectory = ".packages",
-},
-
-DotNet.Build("src/MyProject.csproj") with
-{
-    Timeout = TimeSpan.FromMinutes(20)
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#dotnet-tasks)]
 
 ### NuGet
 
 The [NuGet v2 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/nuget-command-v2?view=azure-pipelines) also has multiple combinations based on the command.
 
-```csharp
-NuGet.Authenticate(new[] { "NuGetServiceConnection1", "NuGetServiceConnection2" }, forceReinstallCredentialProvider: true),
-
-NuGet.Restore.FromFeed("my-project/my-project-scoped-feed") with
-{
-    RestoreSolution = "**/*.sln",
-    IncludeNuGetOrg = false,
-},
-
-NuGet.Pack.ByPrereleaseNumber("3", "1", "4"),
-NuGet.Pack.ByEnvVar("VERSION"),
-
-NuGet.Push.ToInternalFeed("MyInternalFeed"),
-NuGet.Push.ToExternalFeed("MyExternalFeedCredentials"),
-
-NuGet.Custom(@"config -Set repositoryPath=c:\packages -configfile c:\my.config")
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#nuget-tasks-code)]
 
 Generated YAML:
 
-```yaml
-- task: NuGetAuthenticate@1
-  inputs:
-    forceReinstallCredentialProvider: true
-    nuGetServiceConnections: NuGetServiceConnection1,NuGetServiceConnection2
-
-- task: NuGetCommand@2
-  inputs:
-    command: restore
-    feedsToUse: select
-    vstsFeed: my-project/my-project-scoped-feed
-    restoreSolution: '**/*.sln'
-    includeNuGetOrg: false
-
-- task: NuGetCommand@2
-  inputs:
-    command: pack
-    versioningScheme: byPrereleaseNumber
-    majorVersion: 3
-    minorVersion: 1
-    patchVersion: 4
-
-- task: NuGetCommand@2
-  inputs:
-    command: pack
-    versioningScheme: byEnvVar
-    versionEnvVar: VERSION
-
-- task: NuGetCommand@2
-  inputs:
-    command: push
-    nuGetFeedType: internal
-    publishVstsFeed: MyInternalFeed
-
-- task: NuGetCommand@2
-  inputs:
-    command: push
-    nuGetFeedType: external
-    publishFeedCredentials: MyExternalFeedCredentials
-
-- task: NuGetCommand@2
-  inputs:
-    command: custom
-    arguments: config -Set repositoryPath=c:\packages -configfile c:\my.config
-```
+[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#nuget-tasks-yaml)]
 
 ### Contributions welcome
 
@@ -217,31 +75,12 @@ If you find one useful, hit us up with a request, or better, with a pull request
 ## Pipeline variables
 
 Similarly to Build steps, there's a shorthand style of definition of variables too:
-```csharp
-Variables =
-[
-    Variable("Configuration", "Release"),     // We have shorthand style like we do for build steps
-    Group("PR keyvault variables"),
-    new Variable("Configuration", "Release"), // We can also create the objects and reuse them too
-    Variables(                                // You can also save some keystrokes and define multiple variables at once
-        ("variable1", "value1"),
-        ("variable2", true))
-]
-```
+
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-variables)]
 
 You can define variables and pass them to methods to make the code more readable:
 
-```csharp
-static readonly Variable s_version = Variable("version", "5.0.100");
-Variables =
-[
-    s_version,
-];
-Definition =
-[
-    DotNet.Install.Sdk(s_version),
-];
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-variables-readable)]
 
 ## Pipeline parameters
 To define [pipeline runtime parameters](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/runtime-parameters?view=azure-devops&tabs=script), utilize the `*Parameter` shorthands:

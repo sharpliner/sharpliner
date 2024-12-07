@@ -17,6 +17,7 @@ public class Program
         {
             ("eng/DocsGenerator/README.template.md", "README.md"),
             ("eng/DocsGenerator/GettingStarted.template.md", "docs/AzureDevOps/GettingStarted.md"),
+            ("eng/DocsGenerator/DefinitionReference.template.md", "docs/AzureDevOps/DefinitionReference.md"),
         };
 
         foreach (var (template, output) in resources)
@@ -96,6 +97,7 @@ public class Program
         }
 
         File.WriteAllText(GetRelativeToGitRoot(output), newReadme);
+        Console.WriteLine($"Generated {output} from {template}");
     }
 
     private static void LogError(string message)
