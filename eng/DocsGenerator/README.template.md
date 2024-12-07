@@ -21,7 +21,7 @@ For more detailed steps, check our [documentation](https://github.com/sharpliner
 
 ## Example
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#main-example)]
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/ReadmeTests.cs#main-example)]
 
 ## Sharpliner features
 
@@ -86,7 +86,7 @@ However, this task's specification is quite long since the task does many things
 Notice how some of the properties are only valid in a specific combination with other.
 With Sharpliner, we remove some of this complexity using nice fluent APIs:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#dotnet-fluent-api)]
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/ReadmeTests.cs#dotnet-fluent-api)]
 
 ### Useful macros
 Some very common pipeline patterns such as comparing the current branch name or detecting pull requests are very cumbersome to do in YAML (long conditions full of complicated `${{ if }}` syntax).
@@ -94,21 +94,21 @@ For many of these, we have handy macros so that you get more readable and shorte
 
 For example this YAML
 
-[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#useful-macros-yaml)]
+[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/ReadmeTests.cs#useful-macros-yaml)]
 
 can become this C#
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#useful-macros-csharp)]
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/ReadmeTests.cs#useful-macros-csharp)]
 
 ### Re-usable pipeline blocks
 Sharpliner lets you re-use code more easily than YAML templates do.
 Apart from obvious C# code re-use, you can also define sets of C# building blocks and re-use them in your pipelines:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#pipeline-library)]
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/ReadmeTests.cs#pipeline-library)]
 
 You can then reference this library in between build steps and it will get expanded into the pipeline's YAML:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#pipeline-library-usage)]
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/ReadmeTests.cs#pipeline-library-usage)]
 
 More about this feature can be found [here (DefinitionLibraries.md)](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionLibraries.md).
 
@@ -118,7 +118,7 @@ When you need to add cmd, PowerShell or bash steps into your pipeline, maintaini
 With Sharpliner you can keep scripts in their own files (`.ps1`, `.sh`..) where you get the natural environment you're used to such as syntax highlighting.
 Sharpliner gives you APIs to load these on build time and include them inline:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#sourcing-from-files)]
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/ReadmeTests.cs#sourcing-from-files)]
 
 ### Correct variable/parameter types
 Frequent struggle people have with Azure pipelines is using the [right type of variable](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#understand-variable-syntax) in the right context.
@@ -131,7 +131,7 @@ This gives you a faster dev loop and greater productivity.
 We are continuously adding new validations as we find new error-prone spots.
 Each validation can be individually configured/silenced in case you don't wish to take advantage of these:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DocsTests.cs#configuration)]
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/ReadmeTests.cs#configuration)]
 
 ## Something missing?
 

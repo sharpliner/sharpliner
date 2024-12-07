@@ -1,3 +1,7 @@
+<!--
+This is a generated file by the tool eng/DocsGenerator/Program.cs, Do not edit it manually.
+-->
+
 [![Build Status](https://dev.azure.com/premun/Sharpliner/_apis/build/status/sharpliner-pr?branchName=main)](https://dev.azure.com/premun/Sharpliner/_build/latest?definitionId=6&branchName=main) [![Nuget](https://img.shields.io/nuget/v/Sharpliner)](https://www.nuget.org/packages/Sharpliner/)
 
 Sharpliner is a .NET library that lets you use C# for Azure DevOps pipeline definition instead of YAML.

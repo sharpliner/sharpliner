@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -10,9 +11,30 @@ public class Program
 {
     public static void Main(string[] args)
     {
-        var templatePath = GetRelativeToGitRoot("eng/DocsGenerator/README.template.md");
+        var failIfChanged = args.Contains("FailIfChanged=true");
 
-        var builder = new StringBuilder();
+        var resources = new (string Template, string Output)[]
+        {
+            ("eng/DocsGenerator/README.template.md", "README.md"),
+            ("eng/DocsGenerator/GettingStarted.template.md", "docs/AzureDevOps/GettingStarted.md"),
+        };
+
+        foreach (var (template, output) in resources)
+        {
+            RenderMarkdownTemplate(template, output, failIfChanged);
+        }
+    }
+
+    private static void RenderMarkdownTemplate(string template, string output, bool failIfChanged)
+    {
+        var templatePath = GetRelativeToGitRoot(template);
+
+        var builder = new StringBuilder()
+            .AppendLine("<!--")
+            .AppendLine(@"This is a generated file by the tool eng/DocsGenerator/Program.cs, Do not edit it manually.")
+            .AppendLine("-->")
+            .AppendLine();
+
         using var sr = new StreamReader(templatePath);
         while (sr.ReadLine() is string line)
         {
@@ -23,10 +45,20 @@ public class Program
             }
 
             var start = line.IndexOf('(');
-            var end = line.IndexOf('#');
+            var partialFileSnippet = line.Contains('#');
+            var end = partialFileSnippet ? line.IndexOf('#') : line.Length - ")]".Length;
+            var language = line["[!code-".Length..line.IndexOf("[]")];
             var filepath = line.Substring(start + 1, end - start - 1);
-            var lineRangesOrRegion = line.Substring(end + 1, line.Length - end - 1 - ")]".Length);
+            var fileLines = File.ReadAllLines(GetRelativeToGitRoot(filepath));
 
+            if (!partialFileSnippet)
+            {
+                var codeSnippet = GetCodeSnippet(fileLines, language);
+                builder.Append(codeSnippet);
+                continue;
+            }
+
+            var lineRangesOrRegion = line.Substring(end + 1, line.Length - end - 1 - ")]".Length);
             if (lineRangesOrRegion.Contains("-L"))
             {
                 var lines = lineRangesOrRegion.Split('-');
@@ -37,31 +69,30 @@ public class Program
 
                 var startLine = int.Parse(lines[0].Substring("L".Length));
                 var endLine = int.Parse(lines[1].Substring("L".Length));
-                var language = line["[!code-".Length..line.IndexOf("[]")];
 
-                var codeSnippet = GetCodeSnippet(filepath, startLine, endLine, language);
+                var codeSnippet = GetCodeSnippet(fileLines, startLine, endLine, language);
                 builder.Append(codeSnippet);
             }
             else
             {
-                var codeSnippet = GetCodeSnippet(filepath, lineRangesOrRegion, line["[!code-".Length..line.IndexOf("[]")]);
+                var codeSnippet = GetCodeSnippet(fileLines, lineRangesOrRegion, language);
                 builder.Append(codeSnippet);
             }
         }
 
-        var existingReadme = File.ReadAllText(GetRelativeToGitRoot("README.md"));
+        var existingReadme = File.ReadAllText(GetRelativeToGitRoot(output));
         var newReadme = builder.ToString();
 
-        if (args.Contains("FailIfChanged=true"))
+        if (failIfChanged)
         {
             if (!existingReadme.Equals(newReadme))
             {
-                LogError("README.md has changed. Please run `dotnet run --project .\\eng\\DocsGenerator\\` to update it.");
+                LogError($"{output} has changed. Please run `dotnet run --project .\\eng\\DocsGenerator\\` to update it.");
                 Environment.Exit(1);
             }
         }
 
-        File.WriteAllText(GetRelativeToGitRoot("README.md"), newReadme);
+        File.WriteAllText(GetRelativeToGitRoot(output), newReadme);
     }
 
     private static void LogError(string message)
@@ -78,52 +109,52 @@ public class Program
         }
     }
 
-    private static string GetCodeSnippet(string filepath, int startLine, int endLine, string language)
+    private static string GetCodeSnippet(string[] lines, int startLine, int endLine, string language)
     {
-        var lines = File.ReadAllLines(GetRelativeToGitRoot(filepath));
-        var snippet = new StringBuilder();
-        snippet.AppendLine($"```{language}");
-        var indentation = lines[startLine - 1].Length - lines[startLine - 1].TrimStart().Length;
-        for (var i = startLine - 1; i < endLine; i++)
-        {
-            var line = lines[i].Length < indentation ? lines[i] : lines[i].Substring(indentation);
-            snippet.AppendLine(line);
-        }
-
-        snippet.AppendLine("```");
-        return snippet.ToString();
+        return GetCodeSnippet(lines[(startLine - 1)..endLine], language);
     }
 
-    private static string GetCodeSnippet(string filepath, string region, string language)
+    private static string GetCodeSnippet(string[] lines, string region, string language)
     {
-        var lines = File.ReadAllLines(GetRelativeToGitRoot(filepath));
-        var snippet = new StringBuilder();
-        snippet.AppendLine($"```{language}");
-
         for (int i = 0; i < lines.Length; i++)
         {
             if (lines[i].Equals($"#region {region}"))
             {
+                var relevantLines = new List<string>();
                 i++;
-                var indentation = lines[i].Length - lines[i].TrimStart().Length;
                 do
                 {
-                    var line = lines[i].Length < indentation ? lines[i] : lines[i].Substring(indentation);
+                    var line = lines[i];
                     ++i;
-                    if (line is "\"\"\"")
+                    if (line.EndsWith("\"\"\""))
                     {
                         continue;
                     }
 
-                    snippet.AppendLine(line);
+                    relevantLines.Add(line);
                 } while (!lines[i].Equals("#endregion"));
-
-                snippet.AppendLine("```");
-                return snippet.ToString();
+                return GetCodeSnippet(relevantLines.ToArray(), language);
             }
         }
 
-        throw new ArgumentOutOfRangeException($"Region {region} not found in {filepath}");
+        throw new ArgumentOutOfRangeException($"Region {region} not found in file");
+    }
+
+    private static string GetCodeSnippet(string[] lines, string language)
+    {
+        var snippet = new StringBuilder();
+        snippet.AppendLine($"```{language}");
+
+        var indentation = lines[0].Length - lines[0].TrimStart().Length;
+
+        foreach (var line in lines)
+        {
+            var normalizedLine = line.Length < indentation ? line : line.Substring(indentation);
+            snippet.AppendLine(normalizedLine);
+        }
+
+        snippet.AppendLine("```");
+        return snippet.ToString();
     }
 
     private static string GetRelativeToGitRoot(string path)
