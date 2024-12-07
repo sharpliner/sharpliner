@@ -1,5 +1,8 @@
 <!--
-This is a generated file by the tool eng/DocsGenerator/Program.cs, Do not edit it manually.
+DO NOT MODIFY THIS FILE!
+
+This markdown file was auto-generated from the tool eng/DocsGenerator/Program.cs from the template eng/DocsGenerator/README.template.md.
+To make changes, change the template file rerun the tool
 -->
 
 [![Build Status](https://dev.azure.com/premun/Sharpliner/_apis/build/status/sharpliner-pr?branchName=main)](https://dev.azure.com/premun/Sharpliner/_build/latest?definitionId=6&branchName=main) [![Nuget](https://img.shields.io/nuget/v/Sharpliner)](https://www.nuget.org/packages/Sharpliner/)

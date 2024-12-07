@@ -1,5 +1,8 @@
 <!--
-This is a generated file by the tool eng/DocsGenerator/Program.cs, Do not edit it manually.
+DO NOT MODIFY THIS FILE!
+
+This markdown file was auto-generated from the tool eng/DocsGenerator/Program.cs from the template eng/DocsGenerator/GettingStarted.template.md.
+To make changes, change the template file rerun the tool
 -->
 
 # Getting started with Sharpliner for AzureDevOps

@@ -31,7 +31,10 @@ public class Program
 
         var builder = new StringBuilder()
             .AppendLine("<!--")
-            .AppendLine(@"This is a generated file by the tool eng/DocsGenerator/Program.cs, Do not edit it manually.")
+            .AppendLine("DO NOT MODIFY THIS FILE!")
+            .AppendLine()
+            .AppendLine($"This markdown file was auto-generated from the tool eng/DocsGenerator/Program.cs from the template {template}.")
+            .AppendLine("To make changes, change the template file rerun the tool")
             .AppendLine("-->")
             .AppendLine();
 
