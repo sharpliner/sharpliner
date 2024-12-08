@@ -270,7 +270,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
     {
         public override string TargetFile => "pipeline-variables-readable.yml";
 
-        #region pipeline-variables-readable
+#region pipeline-variables-readable
         static readonly Variable s_version = new("version", "5.0.100");
         public override SingleStagePipeline Pipeline => new()
         {
@@ -286,6 +286,6 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
                 }
             }
         };
-        #endregion
+#endregion
     }
 }

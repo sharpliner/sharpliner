@@ -217,30 +217,35 @@ If you find one useful, hit us up with a request, or better, with a pull request
 ## Pipeline variables
 
 Similarly to Build steps, there's a shorthand style of definition of variables too:
+
 ```csharp
 Variables =
 [
     Variable("Configuration", "Release"),     // We have shorthand style like we do for build steps
     Group("PR keyvault variables"),
     new Variable("Configuration", "Release"), // We can also create the objects and reuse them too
-    Variables(                                // You can also save some keystrokes and define multiple variables at once
-        ("variable1", "value1"),
-        ("variable2", true))
+
 ]
 ```
 
 You can define variables and pass them to methods to make the code more readable:
 
 ```csharp
-static readonly Variable s_version = Variable("version", "5.0.100");
-Variables =
-[
-    s_version,
-];
-Definition =
-[
-    DotNet.Install.Sdk(s_version),
-];
+static readonly Variable s_version = new("version", "5.0.100");
+public override SingleStagePipeline Pipeline => new()
+{
+    Variables = [s_version],
+    Jobs =
+    {
+        new Job("main")
+        {
+            Steps =
+            {
+                DotNet.Install.Sdk(s_version),
+            }
+        }
+    }
+};
 ```
 
 ## Pipeline parameters
