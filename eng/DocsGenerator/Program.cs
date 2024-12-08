@@ -30,15 +30,7 @@ public class Program
     {
         var templatePath = GetRelativeToGitRoot(template);
 
-        var builder = new StringBuilder()
-            .AppendLine("<!--")
-            .AppendLine("DO NOT MODIFY THIS FILE!")
-            .AppendLine()
-            .AppendLine($"This markdown file was auto-generated from the tool eng/DocsGenerator/Program.cs from the template {template}.")
-            .AppendLine("To make changes, change the template file rerun the tool")
-            .AppendLine("-->")
-            .AppendLine();
-
+        var builder = new StringBuilder();
         using var sr = new StreamReader(templatePath);
         while (sr.ReadLine() is string line)
         {

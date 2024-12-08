@@ -1,10 +1,3 @@
-<!--
-DO NOT MODIFY THIS FILE!
-
-This markdown file was auto-generated from the tool eng/DocsGenerator/Program.cs from the template eng/DocsGenerator/GettingStarted.template.md.
-To make changes, change the template file rerun the tool
--->
-
 # Getting started with Sharpliner for AzureDevOps
 
 This documentation shows how to define and publish YAML for [Azure DevOps pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/?view=azure-devops).

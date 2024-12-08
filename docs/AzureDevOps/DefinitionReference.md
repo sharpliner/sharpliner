@@ -1,10 +1,3 @@
-<!--
-DO NOT MODIFY THIS FILE!
-
-This markdown file was auto-generated from the tool eng/DocsGenerator/Program.cs from the template eng/DocsGenerator/DefinitionReference.template.md.
-To make changes, change the template file rerun the tool
--->
-
 # Azure DevOps pipeline definition reference
 
 Here you can find detailed reference on how to define various parts of the pipeline.
