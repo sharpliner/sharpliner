@@ -5,6 +5,7 @@ Once you start using C#, you can also re-use code more efficiently since templat
 
 It can also be useful to define a set of re-usable items such as build steps rather than defining one step at a time.
 For this purpose, Sharpliner has **libraries**.
+
 Libraries are collections of items that can be referenced in a pipeline.
 
 Same as for template, you can define libraries of stages, jobs, steps and variables.

@@ -33,63 +33,11 @@ For each of these, there are two ways how you can define these.
 
 Either you "new" them the regular way though this requires a longer syntax similar to what you would do in YAML:
 
-```csharp
-Steps =
-{
-    new AzureDevOpsTask("DotNetCoreCLI@2")
-    {
-        DisplayName = "Build solution",
-        Inputs = new()
-        {
-            { "command", "build" },
-            { "includeNuGetOrg", true },
-            { "projects", "src/MyProject.sln" },
-        },
-        Timeout = TimeSpan.FromMinutes(20)
-    },
-
-    new InlineBashTask("./.dotnet/dotnet test src/MySolution.sln")
-    {
-        DisplayName = "Run unit tests",
-        ContinueOnError = true,
-    },
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#classic-pipeline-steps)]
 
 or you can use the shorthand style. For each of the basic commands, a method/property is defined on the parent class with the same name as the original task:
 
-```csharp
-Steps =
-{
-    Checkout.Self,
-
-    Download.LatestFromBranch("internal", 23, "refs/heads/develop", artifact: "CLI.Package") with
-    {
-        AllowPartiallySucceededBuilds = true,
-        CheckDownloadedFiles = true,
-        PreferTriggeringPipeline = true,
-    },
-
-    // Tasks are represented as C# records so you can use the `with` keyword to override the properties
-    DotNet.Build("src/MyProject.sln", includeNuGetOrg: true) with
-    {
-        Timeout = TimeSpan.FromMinutes(20)
-    },
-
-    // Some of the shorthand styles define more options and a cleaner way of defining them
-    // E.g. Bash gives you several ways where to get the script from such as Bash.FromResourceFile or Bash.FromFile
-    Bash.Inline("./.dotnet/dotnet test src/MySolution.sln") with
-    {
-        DisplayName = "Run unit tests",
-        ContinueOnError = true,
-    },
-
-    Publish.Pipeline("ArtifactName", "bin/**/*.dll") with
-    {
-        DisplayName = "Publish build artifacts"
-    },
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#shorthand-pipeline-steps)]
 
 Please notice the `with` keyword which is a [new feature in C#](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/record#nondestructive-mutation) that allows modifying of records.
 
@@ -97,16 +45,7 @@ Please notice the `with` keyword which is a [new feature in C#](https://docs.mic
 
 Even though it is possible to use any of the non-default [Azure Pipelines tasks](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/?view=azure-devops) by specifying its name + inputs:
 
-```csharp
-Task("DotNetCoreCLI@2", "Run unit tests") with
-{
-    Inputs = new()
-    {
-        { "command", "test" },
-        { "projects", "src/MyProject.sln" },
-    }
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#azure-pipeline-task)]
 
 some of the tasks are quite hard to comprehend such as the [.NET Core CLI task](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops) whose specification is quite long since the task can do many different things.
 Notice how some of the properties are only valid in a specific combination with other.
@@ -116,91 +55,17 @@ With Sharpliner, we remove some of this complexity by restricting which properti
 
 ### Dotnet
 
-```csharp
-DotNet.Install.Sdk(parameters["version"]),
-
-DotNet.Restore.FromFeed("dotnet-7-preview-feed", includeNuGetOrg: false) with
-{
-    ExternalFeedCredentials = "feeds/dotnet-7",
-    NoCache = true,
-    RestoreDirectory = ".packages",
-},
-
-DotNet.Build("src/MyProject.csproj") with
-{
-    Timeout = TimeSpan.FromMinutes(20)
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#dotnet-tasks)]
 
 ### NuGet
 
 The [NuGet v2 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/nuget-command-v2?view=azure-pipelines) also has multiple combinations based on the command.
 
-```csharp
-NuGet.Authenticate(new[] { "NuGetServiceConnection1", "NuGetServiceConnection2" }, forceReinstallCredentialProvider: true),
-
-NuGet.Restore.FromFeed("my-project/my-project-scoped-feed") with
-{
-    RestoreSolution = "**/*.sln",
-    IncludeNuGetOrg = false,
-},
-
-NuGet.Pack.ByPrereleaseNumber("3", "1", "4"),
-NuGet.Pack.ByEnvVar("VERSION"),
-
-NuGet.Push.ToInternalFeed("MyInternalFeed"),
-NuGet.Push.ToExternalFeed("MyExternalFeedCredentials"),
-
-NuGet.Custom(@"config -Set repositoryPath=c:\packages -configfile c:\my.config")
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#nuget-tasks-code)]
 
 Generated YAML:
 
-```yaml
-- task: NuGetAuthenticate@1
-  inputs:
-    forceReinstallCredentialProvider: true
-    nuGetServiceConnections: NuGetServiceConnection1,NuGetServiceConnection2
-
-- task: NuGetCommand@2
-  inputs:
-    command: restore
-    feedsToUse: select
-    vstsFeed: my-project/my-project-scoped-feed
-    restoreSolution: '**/*.sln'
-    includeNuGetOrg: false
-
-- task: NuGetCommand@2
-  inputs:
-    command: pack
-    versioningScheme: byPrereleaseNumber
-    majorVersion: 3
-    minorVersion: 1
-    patchVersion: 4
-
-- task: NuGetCommand@2
-  inputs:
-    command: pack
-    versioningScheme: byEnvVar
-    versionEnvVar: VERSION
-
-- task: NuGetCommand@2
-  inputs:
-    command: push
-    nuGetFeedType: internal
-    publishVstsFeed: MyInternalFeed
-
-- task: NuGetCommand@2
-  inputs:
-    command: push
-    nuGetFeedType: external
-    publishFeedCredentials: MyExternalFeedCredentials
-
-- task: NuGetCommand@2
-  inputs:
-    command: custom
-    arguments: config -Set repositoryPath=c:\packages -configfile c:\my.config
-```
+[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#nuget-tasks-yaml)]
 
 ### Contributions welcome
 
@@ -211,81 +76,22 @@ If you find one useful, hit us up with a request, or better, with a pull request
 
 Similarly to Build steps, there's a shorthand style of definition of variables too:
 
-```csharp
-Variables =
-[
-    Variable("Configuration", "Release"),     // We have shorthand style like we do for build steps
-    Group("PR keyvault variables"),
-    new Variable("Configuration", "Release"), // We can also create the objects and reuse them too
-
-]
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-variables)]
 
 You can define variables and pass them to methods to make the code more readable:
 
-```csharp
-static readonly Variable s_version = new("version", "5.0.100");
-public override SingleStagePipeline Pipeline => new()
-{
-    Variables = [s_version],
-    Jobs =
-    {
-        new Job("main")
-        {
-            Steps =
-            {
-                DotNet.Install.Sdk(s_version),
-            }
-        }
-    }
-};
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-variables-readable)]
 
 ## Pipeline parameters
 To define [pipeline runtime parameters](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/runtime-parameters?view=azure-devops&tabs=script), utilize the `*Parameter` shorthands:
 
-```csharp
-Parameters =
-[
-    StringParameter("project", "AzureDevops project"),
-    StringParameter("version", ".NET version", allowedValues: ["5.0.100", "5.0.102"]),
-    BooleanParameter("restore", "Restore NuGets", defaultValue: true),
-    StepParameter("afterBuild", "After steps", Bash.Inline($"cp -R logs {variables.Build.ArtifactStagingDirectory}")),
-    EnumParameter<BuildConfiguration>("configuration", defaultValue: BuildConfiguration.Debug),
-],
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-parameters)]
 
-```csharp
-// and the enum definition
-public enum BuildConfiguration
-{
-    [YamlMember(Alias = "debug")]
-    Debug,
-
-    [YamlMember(Alias = "release")]
-    Release,
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#enum-definition)]
 
 When referencing these parameters, you can just refer to the parameter and it will be replaced with a parameter reference expression:
 
-```csharp
-static readonly Parameter s_version = StringParameter("version", ".NET version", allowedValues: ["5.0.100", "5.0.102"]);
-public override SingleStagePipeline Pipeline => new()
-{
-    Parameters = [s_version],
-    Jobs =
-    {
-        new Job("main")
-        {
-            Steps =
-            {
-                DotNet.Install.Sdk(s_version),
-            }
-        }
-    }
-};
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-parameters-readable)]
 
 See more examples in the [test class](../../tests/Sharpliner.Tests/AzureDevOps/TemplateTests.cs#49)
 
@@ -297,156 +103,44 @@ If you find a place where If cannot be used, raise an issue and we can add it ea
 
 This feature was a little bit problematic to mimic in C# but we've found a nice way to express these:
 
-```csharp
-Variables =
-[
-    // You can create one if statement and chain multiple definitions beneath it
-    If.Equal(variables.Environment["Target"], "Cloud")
-        .Variable("target", "Azure")
-        .Variable("isCloud", true)
-
-        // You can nest another if statement beneath
-        .If.NotEqual(variables.Build.Reason, "'PullRequest'")
-            .Group("azure-int")
-        .EndIf // You can jump out of the nested section too
-
-        // You can use many macros such as IsBranch or IsPullRequest
-        .If.IsBranch("main")
-            .Group("azure-prod")
-
-        // You can also swap the previous condition with an "else"
-        // Azure Pipelines now support ${{ else }} but you can also revert to using an
-        // inverted if condition using SharplinerSerializer.UseElseExpression setting
-        .Else
-            .Group("azure-pr"),
-]
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditioned-expressions-code)]
 
 The resulting YAML will look like this:
 
-```yaml
-variables:
-- ${{ if eq(variables['Environment.Target'], 'Cloud') }}:
-  - name: target
-    value: Azure
-
-  - name: isCloud
-    value: true
-
-  - ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
-    - group: azure-int
-
-  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-    - group: azure-prod
-
-  - ${{ else }}:
-    - group: azure-pr
-```
+[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditioned-expressions-yaml)]
 
 You can also specify conditions in places like template parameters (which are improved dictionaries really):
 
-```csharp
-StepTemplate("template1.yaml", new()
-{
-    { "some", "value" },
-    {
-        If.IsPullRequest,
-        new TemplateParameters()
-        {
-            { "pr", true }
-        }
-    },
-    { "other", 123 },
-})
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#template-conditioned-expressions-code)]
 
 This will produce following YAML:
 
-```yaml
-template: template1.yaml
-
-parameters:
-  some: value
-  ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-    pr: true
-  other: 123
-```
+[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#template-conditioned-expressions-yaml)]
 
 ### Conditions
 
 The conditions themselves are defined similarly to what Azure DevOps requires, so this example YAML condition:
-```yaml
-${{ if or(and(ne(true, true), eq(variables['Build.SourceBranch'], 'refs/heads/production')), ne(variables['Configuration'], 'Debug')) }}
-```
+[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditions-yaml)]
 
 would have this C# definition:
-```csharp
-If.Or(
-    And(NotEqual("true", "true"), Equal(variables["Build.SourceBranch"], "'refs/heads/production'")),
-    NotEqual(variables["Configuration"], "'Debug'"))
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditions-code)]
 
 The logic operators such as `Equal` or `Or` expect either a string or a nested condition.
 Additionally, you can also use `variables["name"]` instead of `"variables[\"name\"]"` as shorthand notation but it has the same effect.
 
 Finally, many of the commonly used conditions have macros prepared for a shorter syntax.
 These are:
-```csharp
-// eq(variables['Build.SourceBranch'], 'refs/heads/production')
-If.IsBranch("production"),
-If.IsNotBranch("production"),
-
-// eq(variables['Build.Reason'], 'PullRequest')
-If.IsPullRequest,
-If.IsNotPullRequest,
-
-// You can mix these too
-If.And(IsNotPullRequest, IsBranch("production")),
-
-// You can specify any custom condition in case we missed an API :)
-If.Condition("containsValue(...)")
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditions-macros)]
 
 ## Each expression
 
 The `${{ each var in collection }}` expression is also supported. Similarly to `If` and `EndIf`, you can use `Each` and `EndEach`:
 
-```csharp
-Stages =
-{
-    If.IsBranch("main")
-        .Each("env", "parameters.stages")
-            .Stage(new Stage("stage-${{ env.name }}"))
-            .Stage(new Stage("stage2-${{ env.name }}")
-            {
-                Jobs =
-                {
-                    Each("foo", "bar")
-                        .Job(new Job("job-${{ foo }}"))
-                    .EndEach
-                    .If.Equal("foo", "bar")
-                        .Job(new Job("job2-${{ foo }}"))
-                }
-            })
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#each-expression-code)]
 
 generates the following YAML:
 
-```yaml
-stages:
-- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-  - ${{ each env in parameters.stages }}:
-    - stage: stage-${{ env.name }}
-
-    - stage: stage2-${{ env.name }}
-      jobs:
-      - ${{ each foo in bar }}:
-        - job: job-${{ foo }}
-
-      - ${{ if eq('foo', 'bar') }}:
-        - job: job2-${{ foo }}
-```
+[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#each-expression-yaml)]
 
 ## Templates
 

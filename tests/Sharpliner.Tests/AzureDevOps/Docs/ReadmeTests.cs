@@ -6,9 +6,9 @@ using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.Common;
 using Xunit;
 
-namespace Sharpliner.Tests.AzureDevOps;
+namespace Sharpliner.Tests.AzureDevOps.Docs;
 
-public class DocsTests : AzureDevOpsDefinition
+public class ReadmeTests : AzureDevOpsDefinition
 {
 #region main-example
     // Just override prepared abstract classes and `dotnet build` the project, nothing else is needed!
