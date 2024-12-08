@@ -255,13 +255,15 @@ To define [pipeline runtime parameters](https://docs.microsoft.com/en-us/azure/d
 Parameters =
 [
     StringParameter("project", "AzureDevops project"),
-    StringParameter("version", ".NET version", allowedValues: new[] { "5.0.100", "5.0.102" }),
+    StringParameter("version", ".NET version", allowedValues: ["5.0.100", "5.0.102"]),
     BooleanParameter("restore", "Restore NuGets", defaultValue: true),
-    StepParameter("afterBuild", "After steps", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)")),
+    StepParameter("afterBuild", "After steps", Bash.Inline($"cp -R logs {variables.Build.ArtifactStagingDirectory}")),
     EnumParameter<BuildConfiguration>("configuration", defaultValue: BuildConfiguration.Debug),
 ],
+```
 
-// and the enum
+```csharp
+// and the enum definition
 public enum BuildConfiguration
 {
     [YamlMember(Alias = "debug")]
@@ -275,15 +277,21 @@ public enum BuildConfiguration
 When referencing these parameters, you can just refer to the parameter and it will be replaced with a parameter reference expression:
 
 ```csharp
-Parameter version = StringParameter("version", ".NET version", allowedValues: new[] { "5.0.100", "5.0.102" });
-Parameters =
-[
-    version,
-];
-Definition =
-[
-    DotNet.Install.Sdk(version),
-];
+static readonly Parameter s_version = StringParameter("version", ".NET version", allowedValues: ["5.0.100", "5.0.102"]);
+public override SingleStagePipeline Pipeline => new()
+{
+    Parameters = [s_version],
+    Jobs =
+    {
+        new Job("main")
+        {
+            Steps =
+            {
+                DotNet.Install.Sdk(s_version),
+            }
+        }
+    }
+};
 ```
 
 See more examples in the [test class](../../tests/Sharpliner.Tests/AzureDevOps/TemplateTests.cs#49)
@@ -300,12 +308,12 @@ This feature was a little bit problematic to mimic in C# but we've found a nice 
 Variables =
 [
     // You can create one if statement and chain multiple definitions beneath it
-    If.Equal("$(Environment.Target)", "Cloud")
+    If.Equal(variables.Environment["Target"], "Cloud")
         .Variable("target", "Azure")
         .Variable("isCloud", true)
 
         // You can nest another if statement beneath
-        .If.NotEqual(variables["Build.Reason"], "PullRequest")
+        .If.NotEqual(variables.Build.Reason, "'PullRequest'")
             .Group("azure-int")
         .EndIf // You can jump out of the nested section too
 
@@ -324,28 +332,29 @@ Variables =
 The resulting YAML will look like this:
 
 ```yaml
-- ${{ if eq($(Environment.Target), Cloud) }}:
+variables:
+- ${{ if eq(variables['Environment.Target'], 'Cloud') }}:
   - name: target
     value: Azure
 
   - name: isCloud
     value: true
 
-  - ${{ if ne(variables['Build.Reason'], PullRequest) }}:
+  - ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
     - group: azure-int
 
-    - ${{ if eq(variables['Build.SourceBranch'], refs/heads/main) }}:
-      - group: azure-prod
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    - group: azure-prod
 
-    - ${{ else }}:
-      - group: azure-pr
+  - ${{ else }}:
+    - group: azure-pr
 ```
 
 You can also specify conditions in places like template parameters (which are improved dictionaries really):
 
 ```csharp
-StepTemplate("template1.yaml",
-[
+StepTemplate("template1.yaml", new()
+{
     { "some", "value" },
     {
         If.IsPullRequest,
@@ -355,13 +364,14 @@ StepTemplate("template1.yaml",
         }
     },
     { "other", 123 },
-]),
+})
 ```
 
 This will produce following YAML:
 
 ```yaml
 template: template1.yaml
+
 parameters:
   some: value
   ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
@@ -390,15 +400,15 @@ Finally, many of the commonly used conditions have macros prepared for a shorter
 These are:
 ```csharp
 // eq(variables['Build.SourceBranch'], 'refs/heads/production')
-If.IsBranch("production")
-If.IsNotBranch("production")
+If.IsBranch("production"),
+If.IsNotBranch("production"),
 
 // eq(variables['Build.Reason'], 'PullRequest')
-If.IsPullRequest
-If.IsNotPullRequest
+If.IsPullRequest,
+If.IsNotPullRequest,
 
 // You can mix these too
-If.And(IsNotPullRequest, IsBranch("production"))
+If.And(IsNotPullRequest, IsBranch("production")),
 
 // You can specify any custom condition in case we missed an API :)
 If.Condition("containsValue(...)")

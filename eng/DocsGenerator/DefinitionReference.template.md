@@ -85,40 +85,13 @@ You can define variables and pass them to methods to make the code more readable
 ## Pipeline parameters
 To define [pipeline runtime parameters](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/runtime-parameters?view=azure-devops&tabs=script), utilize the `*Parameter` shorthands:
 
-```csharp
-Parameters =
-[
-    StringParameter("project", "AzureDevops project"),
-    StringParameter("version", ".NET version", allowedValues: new[] { "5.0.100", "5.0.102" }),
-    BooleanParameter("restore", "Restore NuGets", defaultValue: true),
-    StepParameter("afterBuild", "After steps", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)")),
-    EnumParameter<BuildConfiguration>("configuration", defaultValue: BuildConfiguration.Debug),
-],
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-parameters)]
 
-// and the enum
-public enum BuildConfiguration
-{
-    [YamlMember(Alias = "debug")]
-    Debug,
-
-    [YamlMember(Alias = "release")]
-    Release,
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#enum-definition)]
 
 When referencing these parameters, you can just refer to the parameter and it will be replaced with a parameter reference expression:
 
-```csharp
-Parameter version = StringParameter("version", ".NET version", allowedValues: new[] { "5.0.100", "5.0.102" });
-Parameters =
-[
-    version,
-];
-Definition =
-[
-    DotNet.Install.Sdk(version),
-];
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-parameters-readable)]
 
 See more examples in the [test class](../../tests/Sharpliner.Tests/AzureDevOps/TemplateTests.cs#49)
 
@@ -130,154 +103,44 @@ If you find a place where If cannot be used, raise an issue and we can add it ea
 
 This feature was a little bit problematic to mimic in C# but we've found a nice way to express these:
 
-```csharp
-Variables =
-[
-    // You can create one if statement and chain multiple definitions beneath it
-    If.Equal("$(Environment.Target)", "Cloud")
-        .Variable("target", "Azure")
-        .Variable("isCloud", true)
-
-        // You can nest another if statement beneath
-        .If.NotEqual(variables["Build.Reason"], "PullRequest")
-            .Group("azure-int")
-        .EndIf // You can jump out of the nested section too
-
-        // You can use many macros such as IsBranch or IsPullRequest
-        .If.IsBranch("main")
-            .Group("azure-prod")
-
-        // You can also swap the previous condition with an "else"
-        // Azure Pipelines now support ${{ else }} but you can also revert to using an
-        // inverted if condition using SharplinerSerializer.UseElseExpression setting
-        .Else
-            .Group("azure-pr"),
-]
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditioned-expressions-code)]
 
 The resulting YAML will look like this:
 
-```yaml
-- ${{ if eq($(Environment.Target), Cloud) }}:
-  - name: target
-    value: Azure
-
-  - name: isCloud
-    value: true
-
-  - ${{ if ne(variables['Build.Reason'], PullRequest) }}:
-    - group: azure-int
-
-    - ${{ if eq(variables['Build.SourceBranch'], refs/heads/main) }}:
-      - group: azure-prod
-
-    - ${{ else }}:
-      - group: azure-pr
-```
+[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditioned-expressions-yaml)]
 
 You can also specify conditions in places like template parameters (which are improved dictionaries really):
 
-```csharp
-StepTemplate("template1.yaml",
-[
-    { "some", "value" },
-    {
-        If.IsPullRequest,
-        new TemplateParameters()
-        {
-            { "pr", true }
-        }
-    },
-    { "other", 123 },
-]),
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#template-conditioned-expressions-code)]
 
 This will produce following YAML:
 
-```yaml
-template: template1.yaml
-parameters:
-  some: value
-  ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-    pr: true
-  other: 123
-```
+[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#template-conditioned-expressions-yaml)]
 
 ### Conditions
 
 The conditions themselves are defined similarly to what Azure DevOps requires, so this example YAML condition:
-```yaml
-${{ if or(and(ne(true, true), eq(variables['Build.SourceBranch'], 'refs/heads/production')), ne(variables['Configuration'], 'Debug')) }}
-```
+[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditions-yaml)]
 
 would have this C# definition:
-```csharp
-If.Or(
-    And(NotEqual("true", "true"), Equal(variables["Build.SourceBranch"], "'refs/heads/production'")),
-    NotEqual(variables["Configuration"], "'Debug'"))
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditions-code)]
 
 The logic operators such as `Equal` or `Or` expect either a string or a nested condition.
 Additionally, you can also use `variables["name"]` instead of `"variables[\"name\"]"` as shorthand notation but it has the same effect.
 
 Finally, many of the commonly used conditions have macros prepared for a shorter syntax.
 These are:
-```csharp
-// eq(variables['Build.SourceBranch'], 'refs/heads/production')
-If.IsBranch("production")
-If.IsNotBranch("production")
-
-// eq(variables['Build.Reason'], 'PullRequest')
-If.IsPullRequest
-If.IsNotPullRequest
-
-// You can mix these too
-If.And(IsNotPullRequest, IsBranch("production"))
-
-// You can specify any custom condition in case we missed an API :)
-If.Condition("containsValue(...)")
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditions-macros)]
 
 ## Each expression
 
 The `${{ each var in collection }}` expression is also supported. Similarly to `If` and `EndIf`, you can use `Each` and `EndEach`:
 
-```csharp
-Stages =
-{
-    If.IsBranch("main")
-        .Each("env", "parameters.stages")
-            .Stage(new Stage("stage-${{ env.name }}"))
-            .Stage(new Stage("stage2-${{ env.name }}")
-            {
-                Jobs =
-                {
-                    Each("foo", "bar")
-                        .Job(new Job("job-${{ foo }}"))
-                    .EndEach
-                    .If.Equal("foo", "bar")
-                        .Job(new Job("job2-${{ foo }}"))
-                }
-            })
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#each-expression-code)]
 
 generates the following YAML:
 
-```yaml
-stages:
-- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-  - ${{ each env in parameters.stages }}:
-    - stage: stage-${{ env.name }}
-
-    - stage: stage2-${{ env.name }}
-      jobs:
-      - ${{ each foo in bar }}:
-        - job: job-${{ foo }}
-
-      - ${{ if eq('foo', 'bar') }}:
-        - job: job2-${{ foo }}
-```
+[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#each-expression-yaml)]
 
 ## Templates
 

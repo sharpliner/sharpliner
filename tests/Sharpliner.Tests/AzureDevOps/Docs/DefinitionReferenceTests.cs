@@ -4,6 +4,7 @@ using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Tasks;
 using Xunit;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.Tests.AzureDevOps.Docs;
 
@@ -288,4 +289,256 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
         };
 #endregion
     }
+
+    class Pipelineparameters : SingleStagePipelineDefinition
+    {
+        public override string TargetFile => "pipeline-parameters.yml";
+
+        public override SingleStagePipeline Pipeline => new()
+        {
+#region pipeline-parameters
+            Parameters =
+            [
+                StringParameter("project", "AzureDevops project"),
+                StringParameter("version", ".NET version", allowedValues: ["5.0.100", "5.0.102"]),
+                BooleanParameter("restore", "Restore NuGets", defaultValue: true),
+                StepParameter("afterBuild", "After steps", Bash.Inline($"cp -R logs {variables.Build.ArtifactStagingDirectory}")),
+                EnumParameter<BuildConfiguration>("configuration", defaultValue: BuildConfiguration.Debug),
+            ],
+#endregion
+        };
+    }
+
+#region enum-definition
+    // and the enum definition
+    public enum BuildConfiguration
+    {
+        [YamlMember(Alias = "debug")]
+        Debug,
+
+        [YamlMember(Alias = "release")]
+        Release,
+    }
+#endregion
+
+    class ReadablePipelineParameters : SingleStagePipelineDefinition
+    {
+        public override string TargetFile => "pipeline-parameters-readable.yml";
+
+#region pipeline-parameters-readable
+        static readonly Parameter s_version = StringParameter("version", ".NET version", allowedValues: ["5.0.100", "5.0.102"]);
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Parameters = [s_version],
+            Jobs =
+            {
+                new Job("main")
+                {
+                    Steps =
+                    {
+                        DotNet.Install.Sdk(s_version),
+                    }
+                }
+            }
+        };
+#endregion
+    }
+
+    class ConditionedExpressionsPipeline : SingleStagePipelineDefinition
+    {
+        public override string TargetFile => "pipeline-conditions.yml";
+
+        public override SingleStagePipeline Pipeline => new()
+        {
+#region conditioned-expressions-code
+            Variables =
+            [
+                // You can create one if statement and chain multiple definitions beneath it
+                If.Equal(variables.Environment["Target"], "Cloud")
+                    .Variable("target", "Azure")
+                    .Variable("isCloud", true)
+
+                    // You can nest another if statement beneath
+                    .If.NotEqual(variables.Build.Reason, "'PullRequest'")
+                        .Group("azure-int")
+                    .EndIf // You can jump out of the nested section too
+
+                    // You can use many macros such as IsBranch or IsPullRequest
+                    .If.IsBranch("main")
+                        .Group("azure-prod")
+
+                    // You can also swap the previous condition with an "else"
+                    // Azure Pipelines now support ${{ else }} but you can also revert to using an
+                    // inverted if condition using SharplinerSerializer.UseElseExpression setting
+                    .Else
+                        .Group("azure-pr"),
+            ]
+#endregion
+        };
+    }
+
+    [Fact]
+    public void Serialize_ConditionedExpressionsPipeline_Test()
+    {
+        var pipeline = new ConditionedExpressionsPipeline();
+        var yaml = SharplinerSerializer.Serialize(pipeline.Pipeline);
+
+        yaml.Trim().Should().Be(
+#region conditioned-expressions-yaml
+            """
+            variables:
+            - ${{ if eq(variables['Environment.Target'], 'Cloud') }}:
+              - name: target
+                value: Azure
+
+              - name: isCloud
+                value: true
+
+              - ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
+                - group: azure-int
+
+              - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+                - group: azure-prod
+
+              - ${{ else }}:
+                - group: azure-pr
+            """
+#endregion
+        );
+    }
+
+    [Fact]
+    public void Serialize_TemplateConditionedExpressions_Test()
+    {
+        Conditioned<Step> step =
+#region template-conditioned-expressions-code
+            StepTemplate("template1.yaml", new()
+            {
+                { "some", "value" },
+                {
+                    If.IsPullRequest,
+                    new TemplateParameters()
+                    {
+                        { "pr", true }
+                    }
+                },
+                { "other", 123 },
+            })
+#endregion
+        ;
+
+        var yaml = SharplinerSerializer.Serialize(step);
+        yaml.Trim().Should().Be(
+#region template-conditioned-expressions-yaml
+            """
+            template: template1.yaml
+
+            parameters:
+              some: value
+              ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+                pr: true
+              other: 123
+            """
+#endregion
+        );
+    }
+
+    [Fact]
+    public void Serialize_Conditions_Test()
+    {
+        var condition = 
+#region conditions-code
+        If.Or(
+            And(NotEqual("true", "true"), Equal(variables["Build.SourceBranch"], "'refs/heads/production'")),
+            NotEqual(variables["Configuration"], "'Debug'"))
+#endregion
+        ;
+
+        var yaml = SharplinerSerializer.Serialize(condition);
+        yaml.Trim().Should().Be(
+#region conditions-yaml
+            """
+            ${{ if or(and(ne(true, true), eq(variables['Build.SourceBranch'], 'refs/heads/production')), ne(variables['Configuration'], 'Debug')) }}
+            """
+#endregion
+        );
+    }
+
+    [Fact]
+    public void Serialize_ConditionsMacros_Test()
+    {
+        object[] conditions = 
+        [
+#region conditions-macros
+            // eq(variables['Build.SourceBranch'], 'refs/heads/production')
+            If.IsBranch("production"),
+            If.IsNotBranch("production"),
+
+            // eq(variables['Build.Reason'], 'PullRequest')
+            If.IsPullRequest,
+            If.IsNotPullRequest,
+
+            // You can mix these too
+            If.And(IsNotPullRequest, IsBranch("production")),
+
+            // You can specify any custom condition in case we missed an API :)
+            If.Condition("containsValue(...)")
+#endregion
+        ];
+    }
+
+    class EachExpressionPipeline : PipelineDefinition
+    {
+        public override string TargetFile => "pipeline-each.yml";
+
+        public override Pipeline Pipeline => new()
+        {
+#region each-expression-code
+            Stages =
+            {
+                If.IsBranch("main")
+                    .Each("env", "parameters.stages")
+                        .Stage(new Stage("stage-${{ env.name }}"))
+                        .Stage(new Stage("stage2-${{ env.name }}")
+                        {
+                            Jobs =
+                            {
+                                Each("foo", "bar")
+                                    .Job(new Job("job-${{ foo }}"))
+                                .EndEach
+                                .If.Equal("foo", "bar")
+                                    .Job(new Job("job2-${{ foo }}"))
+                            }
+                        })
+            }
+#endregion
+        };
+    }
+
+    [Fact]
+    public void Serialize_EachExpressionPipeline_Test()
+    {
+        var pipeline = new EachExpressionPipeline();
+        var yaml = SharplinerSerializer.Serialize(pipeline.Pipeline);
+
+        yaml.Trim().Should().Be(
+#region each-expression-yaml
+            """
+            stages:
+            - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+              - ${{ each env in parameters.stages }}:
+                - stage: stage-${{ env.name }}
+
+                - stage: stage2-${{ env.name }}
+                  jobs:
+                  - ${{ each foo in bar }}:
+                    - job: job-${{ foo }}
+
+                  - ${{ if eq('foo', 'bar') }}:
+                    - job: job2-${{ foo }}
+            """
+#endregion
+        );
+    }
+
 }
