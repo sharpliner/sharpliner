@@ -178,62 +178,19 @@ You can also define a template without stong-typing the parameters:
 
 To use the template, reference it in the following way:
 
-```csharp
-// The strong-typed version
-Steps =
-[
-    new InstallDotNetTemplate(new()
-    {
-        Project = "src/MyProject.csproj",
-        Version = "5.0.100",
-    })
-]
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#use-typed-template)]
 
-// The non-strong-typed version (second example of the InstallDotNet definition)
-Steps =
-[
-    StepTemplate("pipelines/install-dotnet.yml", new()
-    {
-        { "project", "src/MyProject.csproj" },
-        { "version", "5.0.100" },
-    })
-]
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#use-untyped-template)]
 
 ## Definition libraries
 
 Sharpliner lets you re-use code more easily than YAML templates do.
 Apart from obvious C# code re-use, you can also define sets of C# building blocks and re-use them in your pipelines:
 
-```csharp
-class ProjectBuildSteps : StepLibrary
-{
-    public override List<Conditioned<Step>> Steps =>
-    [
-        DotNet.Install.Sdk("6.0.100"),
-
-        If.IsBranch("main")
-            .Step(DotNet.Restore.Projects("src/MyProject.sln")),
-
-        DotNet.Build("src/MyProject.sln"),
-    ];
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#definition-library)]
 
 You can then reference this library in between build steps and it will get expanded into the pipeline's YAML:
 
-```csharp
-new Job("Build")
-{
-    Steps =
-    [
-        Script.Inline("echo 'Hello World'"),
-
-        StepLibrary<ProjectBuildSteps>(),
-
-        Script.Inline("echo 'Goodbye World'"),
-    ]
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#definition-library-usage)]
 
 More about this feature can be found [here (DefinitionLibraries.md)](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionLibraries.md).

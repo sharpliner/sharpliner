@@ -610,17 +610,19 @@ To use the template, reference it in the following way:
 // The strong-typed version
 Steps =
 [
-    new InstallDotNetTemplate(new()
+    new StronglyTypedInstallDotNetTemplate(new InstallDotNetParameters
     {
         Project = "src/MyProject.csproj",
         Version = "5.0.100",
     })
 ]
+```
 
+```csharp
 // The non-strong-typed version (second example of the InstallDotNet definition)
 Steps =
 [
-    StepTemplate("pipelines/install-dotnet.yml", new()
+    StepTemplate("templates/install-dotnet.yml", new()
     {
         { "project", "src/MyProject.csproj" },
         { "version", "5.0.100" },
