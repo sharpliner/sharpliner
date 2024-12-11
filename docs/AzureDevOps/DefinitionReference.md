@@ -456,6 +456,7 @@ Anyway, the functionality is useful when for example migrating from large YAML c
 We also found it useful to create both YAML templates + C# representations for calling them and bind their parameters this way.
 
 To define a template, you do it similarly as when you define the pipeline - you inherit from one of these classes:
+
 - `StageTemplateDefinition`
 - `JobTemplateDefinition`
 - `StepTemplateDefinition`
@@ -463,6 +464,7 @@ To define a template, you do it similarly as when you define the pipeline - you 
 
 Additionally, Sharpliner allows to define a type for the template parameters so that usage of your own template is compile-time type-safe.
 In such case, you inherit from the generic versions of these classes:
+
 - `StageTemplateDefinition<TParameters>`
 - `JobTemplateDefinition<TParameters>`
 - `StepTemplateDefinition<TParameters>`
@@ -470,16 +472,18 @@ In such case, you inherit from the generic versions of these classes:
 
 Example usage:
 
-``` csharp
+```csharp
 // Template parameters
-// The parameters do not need to inherit from AzureDevOpsDefinitio,
+// The parameters do not need to inherit from AzureDevOpsDefinition,
 // but it gives you nice abilities such as the Bash.Inline() macro.
 class InstallDotNetParameters : AzureDevOpsDefinition
 {
     public BuildConfiguration Configuration { get; init; } = BuildConfiguration.Release;
     public string? Project { get; init; }
+
+    [AllowedValues("5.0.100", "5.0.102")]
     public string? Version { get; init; }
-    public bool Restore { get; init; }
+    public bool Restore { get; init; } = true;
     public Step AfterBuild { get; init; } = Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)");
 }
 
@@ -493,7 +497,7 @@ enum BuildConfiguration
 }
 
 // Template itself - the passed in parameters are the values used when referencing the template
-class InstallDotNetTemplate(InstallDotNetParameters? parameters = null)
+class StronglyTypedInstallDotNetTemplate(InstallDotNetParameters? parameters = null)
     : StepTemplateDefinition<InstallDotNetParameters>(parameters)
 {
     // Where to publish the YAML to
@@ -529,16 +533,19 @@ parameters:
 
 - name: version
   type: string
+  values:
+  - 5.0.100
+  - 5.0.102
 
 - name: restore
   type: boolean
-  default: false
+  default: true
 
 - name: afterBuild
   type: step
   default:
-  bash: |-
-    cp -R logs $(Build.ArtifactStagingDirectory)
+    bash: |-
+      cp -R logs $(Build.ArtifactStagingDirectory)
 
 steps:
 - task: UseDotNet@2
@@ -568,13 +575,13 @@ class InstallDotNetTemplate : StepTemplateDefinition
     // Where to publish the YAML to
     public override string TargetFile => "templates/build-csproj.yml";
 
-    Parameter configuration = EnumParameter<BuildConfiguration>("configuration", defaultValue: BuildConfiguration.Release);
-    Parameter project = StringParameter("project");
-    Parameter version = StringParameter("version", allowedValues: new[] { "5.0.100", "5.0.102" });
-    Parameter restore = BooleanParameter("restore", defaultValue: true);
-    Parameter<Step> afterBuild = StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)"));
+    private static readonly Parameter configuration = EnumParameter<BuildConfiguration>("configuration", defaultValue: BuildConfiguration.Release);
+    private static readonly Parameter project = StringParameter("project");
+    private static readonly Parameter version = StringParameter("version", allowedValues: ["5.0.100", "5.0.102"]);
+    private static readonly Parameter restore = BooleanParameter("restore", defaultValue: true);
+    private static readonly Parameter<Step> afterBuild = StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)"));
 
-    public override List<TemplateParameter> Parameters =>
+    public override List<Parameter> Parameters =>
     [
         configuration,
         project,

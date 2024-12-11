@@ -150,6 +150,7 @@ Anyway, the functionality is useful when for example migrating from large YAML c
 We also found it useful to create both YAML templates + C# representations for calling them and bind their parameters this way.
 
 To define a template, you do it similarly as when you define the pipeline - you inherit from one of these classes:
+
 - `StageTemplateDefinition`
 - `JobTemplateDefinition`
 - `StepTemplateDefinition`
@@ -157,6 +158,7 @@ To define a template, you do it similarly as when you define the pipeline - you 
 
 Additionally, Sharpliner allows to define a type for the template parameters so that usage of your own template is compile-time type-safe.
 In such case, you inherit from the generic versions of these classes:
+
 - `StageTemplateDefinition<TParameters>`
 - `JobTemplateDefinition<TParameters>`
 - `StepTemplateDefinition<TParameters>`
@@ -164,132 +166,15 @@ In such case, you inherit from the generic versions of these classes:
 
 Example usage:
 
-``` csharp
-// Template parameters
-// The parameters do not need to inherit from AzureDevOpsDefinitio,
-// but it gives you nice abilities such as the Bash.Inline() macro.
-class InstallDotNetParameters : AzureDevOpsDefinition
-{
-    public BuildConfiguration Configuration { get; init; } = BuildConfiguration.Release;
-    public string? Project { get; init; }
-    public string? Version { get; init; }
-    public bool Restore { get; init; }
-    public Step AfterBuild { get; init; } = Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)");
-}
-
-enum BuildConfiguration
-{
-    [YamlMember(Alias = "debug")]
-    Debug,
-
-    [YamlMember(Alias = "release")]
-    Release,
-}
-
-// Template itself - the passed in parameters are the values used when referencing the template
-class InstallDotNetTemplate(InstallDotNetParameters? parameters = null)
-    : StepTemplateDefinition<InstallDotNetParameters>(parameters)
-{
-    // Where to publish the YAML to
-    public override string TargetFile => "templates/install-dotnet.yml";
-
-    public override ConditionedList<Step> Definition =>
-    [
-        DotNet.Install.Sdk(parameters["version"]),
-
-        If.Equal(parameters["restore"], "true")
-            .Step(DotNet.Restore.Projects(parameters["project"])),
-
-        DotNet.Build(parameters["project"]),
-
-        parameters["afterBuild"],
-    ];
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#strongly-typed-parameters-code)]
 
 Which produces following YAML template:
 
-```yaml
-parameters:
-- name: configuration
-  type: string
-  default: release
-  values:
-  - debug
-  - release
-
-- name: project
-  type: string
-
-- name: version
-  type: string
-
-- name: restore
-  type: boolean
-  default: false
-
-- name: afterBuild
-  type: step
-  default:
-  bash: |-
-    cp -R logs $(Build.ArtifactStagingDirectory)
-
-steps:
-- task: UseDotNet@2
-  inputs:
-    packageType: sdk
-    version: ${{ parameters.version }}
-
-- ${{ if eq(parameters.restore, true) }}:
-  - task: DotNetCoreCLI@2
-    inputs:
-      command: restore
-      projects: ${{ parameters.project }}
-
-- task: DotNetCoreCLI@2
-  inputs:
-    command: build
-    projects: ${{ parameters.project }}
-
-- ${{ parameters.afterBuild }}
-```
+[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#strongly-typed-parameters-yaml)]
 
 You can also define a template without stong-typing the parameters:
 
-```csharp
-class InstallDotNetTemplate : StepTemplateDefinition
-{
-    // Where to publish the YAML to
-    public override string TargetFile => "templates/build-csproj.yml";
-
-    Parameter configuration = EnumParameter<BuildConfiguration>("configuration", defaultValue: BuildConfiguration.Release);
-    Parameter project = StringParameter("project");
-    Parameter version = StringParameter("version", allowedValues: new[] { "5.0.100", "5.0.102" });
-    Parameter restore = BooleanParameter("restore", defaultValue: true);
-    Parameter<Step> afterBuild = StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)"));
-
-    public override List<TemplateParameter> Parameters =>
-    [
-        configuration,
-        project,
-        version,
-        restore,
-        afterBuild,
-    ];
-
-    public override ConditionedList<Step> Definition =>
-    [
-        DotNet.Install.Sdk(version),
-
-        If.Equal(restore, "true")
-            .Step(DotNet.Restore.Projects(project)),
-
-        DotNet.Build(project),
-
-        StepParameterReference(afterBuild),
-    ];
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#untyped-parameters-template)]
 
 To use the template, reference it in the following way:
 

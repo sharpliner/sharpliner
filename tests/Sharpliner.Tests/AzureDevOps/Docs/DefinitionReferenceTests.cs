@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
@@ -290,7 +291,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
 #endregion
     }
 
-    class Pipelineparameters : SingleStagePipelineDefinition
+    class PipelineParameters : SingleStagePipelineDefinition
     {
         public override string TargetFile => "pipeline-parameters.yml";
 
@@ -307,19 +308,19 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
             ],
 #endregion
         };
-    }
 
 #region enum-definition
-    // and the enum definition
-    public enum BuildConfiguration
-    {
-        [YamlMember(Alias = "debug")]
-        Debug,
+        // and the enum definition
+        public enum BuildConfiguration
+        {
+            [YamlMember(Alias = "debug")]
+            Debug,
 
-        [YamlMember(Alias = "release")]
-        Release,
-    }
+            [YamlMember(Alias = "release")]
+            Release,
+        }
 #endregion
+    }
 
     class ReadablePipelineParameters : SingleStagePipelineDefinition
     {
@@ -446,7 +447,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
     [Fact]
     public void Serialize_Conditions_Test()
     {
-        var condition = 
+        var condition =
 #region conditions-code
         If.Or(
             And(NotEqual("true", "true"), Equal(variables["Build.SourceBranch"], "'refs/heads/production'")),
@@ -467,7 +468,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
     [Fact]
     public void Serialize_ConditionsMacros_Test()
     {
-        object[] conditions = 
+        object[] conditions =
         [
 #region conditions-macros
             // eq(variables['Build.SourceBranch'], 'refs/heads/production')
@@ -541,4 +542,198 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
         );
     }
 
+#region strongly-typed-parameters-code
+    // Template parameters
+    // The parameters do not need to inherit from AzureDevOpsDefinition,
+    // but it gives you nice abilities such as the Bash.Inline() macro.
+    class InstallDotNetParameters : AzureDevOpsDefinition
+    {
+        public BuildConfiguration Configuration { get; init; } = BuildConfiguration.Release;
+        public string? Project { get; init; }
+
+        [AllowedValues("5.0.100", "5.0.102")]
+        public string? Version { get; init; }
+        public bool Restore { get; init; } = true;
+        public Step AfterBuild { get; init; } = Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)");
+    }
+
+    enum BuildConfiguration
+    {
+        [YamlMember(Alias = "debug")]
+        Debug,
+
+        [YamlMember(Alias = "release")]
+        Release,
+    }
+
+    // Template itself - the passed in parameters are the values used when referencing the template
+    class StronglyTypedInstallDotNetTemplate(InstallDotNetParameters? parameters = null)
+        : StepTemplateDefinition<InstallDotNetParameters>(parameters)
+    {
+        // Where to publish the YAML to
+        public override string TargetFile => "templates/install-dotnet.yml";
+
+        public override ConditionedList<Step> Definition =>
+        [
+            DotNet.Install.Sdk(parameters["version"]),
+
+            If.Equal(parameters["restore"], "true")
+                .Step(DotNet.Restore.Projects(parameters["project"])),
+
+            DotNet.Build(parameters["project"]),
+
+            parameters["afterBuild"],
+        ];
+    }
+#endregion
+
+    [Fact]
+    public void Serialize_StronglyTypedInstallDotNetTemplate_Test()
+    {
+        var template = new StronglyTypedInstallDotNetTemplate();
+        var yaml = template.Serialize();
+
+        yaml.Trim().Should().Be(
+#region strongly-typed-parameters-yaml
+            """
+            parameters:
+            - name: configuration
+              type: string
+              default: release
+              values:
+              - debug
+              - release
+
+            - name: project
+              type: string
+
+            - name: version
+              type: string
+              values:
+              - 5.0.100
+              - 5.0.102
+
+            - name: restore
+              type: boolean
+              default: true
+
+            - name: afterBuild
+              type: step
+              default:
+                bash: |-
+                  cp -R logs $(Build.ArtifactStagingDirectory)
+
+            steps:
+            - task: UseDotNet@2
+              inputs:
+                packageType: sdk
+                version: ${{ parameters.version }}
+
+            - ${{ if eq(parameters.restore, true) }}:
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: restore
+                  projects: ${{ parameters.project }}
+
+            - task: DotNetCoreCLI@2
+              inputs:
+                command: build
+                projects: ${{ parameters.project }}
+
+            - ${{ parameters.afterBuild }}
+            """
+#endregion
+        );
+    }
+
+#region untyped-parameters-template
+    class InstallDotNetTemplate : StepTemplateDefinition
+    {
+        // Where to publish the YAML to
+        public override string TargetFile => "templates/build-csproj.yml";
+
+        private static readonly Parameter configuration = EnumParameter<BuildConfiguration>("configuration", defaultValue: BuildConfiguration.Release);
+        private static readonly Parameter project = StringParameter("project");
+        private static readonly Parameter version = StringParameter("version", allowedValues: ["5.0.100", "5.0.102"]);
+        private static readonly Parameter restore = BooleanParameter("restore", defaultValue: true);
+        private static readonly Parameter<Step> afterBuild = StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)"));
+
+        public override List<Parameter> Parameters =>
+        [
+            configuration,
+            project,
+            version,
+            restore,
+            afterBuild,
+        ];
+
+        public override ConditionedList<Step> Definition =>
+        [
+            DotNet.Install.Sdk(version),
+
+            If.Equal(restore, "true")
+                .Step(DotNet.Restore.Projects(project)),
+
+            DotNet.Build(project),
+
+            StepParameterReference(afterBuild),
+        ];
+    }
+#endregion
+
+    [Fact]
+    public void Serialize_UntypedInstallDotNetTemplate_Test()
+    {
+        var template = new InstallDotNetTemplate();
+        var yaml = template.Serialize();
+
+        yaml.Trim().Should().Be(
+            """
+            parameters:
+            - name: configuration
+              type: string
+              default: release
+              values:
+              - debug
+              - release
+
+            - name: project
+              type: string
+
+            - name: version
+              type: string
+              values:
+              - 5.0.100
+              - 5.0.102
+
+            - name: restore
+              type: boolean
+              default: true
+
+            - name: afterBuild
+              type: step
+              default:
+                bash: |-
+                  cp -R logs $(Build.ArtifactStagingDirectory)
+
+            steps:
+            - task: UseDotNet@2
+              inputs:
+                packageType: sdk
+                version: ${{ parameters.version }}
+
+            - ${{ if eq(parameters.restore, true) }}:
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: restore
+                  projects: ${{ parameters.project }}
+
+            - task: DotNetCoreCLI@2
+              inputs:
+                command: build
+                projects: ${{ parameters.project }}
+
+            - ${{ parameters.afterBuild }}
+            """);
+    }
 }
