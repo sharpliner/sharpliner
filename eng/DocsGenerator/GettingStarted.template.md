@@ -42,24 +42,7 @@ Inside of the `MyProject.Pipelines` pipeline project, create a new class.
 Let's call it `PullRequestPipeline.cs` and make it inherit from `Sharpliner.AzureDevops.PipelineDefinition`.
 Once you do this, you will see that you need to implement some of the abstract members of the pipeline:
 
-```csharp
-using Sharpliner;
-using Sharpliner.AzureDevOps;
-
-namespace MyProject.Pipelines;
-
-class PullRequestPipeline : PipelineDefinition
-{
-    // Name and where to serialize the YAML of this pipeline into
-    public override string TargetFile => "azure-pipelines.yml";
-    public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
-
-    public override Pipeline Pipeline => new()
-    {
-        // This is where your pipeline will go
-    };
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/GettingStartedPipelineDefinitionTests.cs)]
 
 You can also decide to override `SingleStagePipelineDefinition` in case you have a simpler pipeline with only a single stage.
 You can also overried `PipelineWithExtends` to [extend an existing template](https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/extends?view=azure-pipelines).
@@ -78,48 +61,7 @@ Check out the [full reference with tips](./DefinitionReference.md) so that you c
 
 An example of a pipeline that builds and tests your PR can look like this:
 
-```csharp
-private static readonly Variable DotnetVersion = new Variable("DotnetVersion", string.Empty);
-
-public override SingleStagePipeline Pipeline => new()
-{
-    Pr = new PrTrigger("main"),
-
-    Variables =
-    [
-        If.IsBranch("net-6.0")
-            .Variable(DotnetVersion with { Value = "6.0.100" })
-            .Group("net6-kv")
-        .Else
-            .Variable(DotnetVersion with { Value = "5.0.202" }),
-    ],
-
-    Jobs =
-    [
-        new Job("Build", "Build and test")
-        {
-            Pool = new HostedPool("Azure Pipelines", "windows-latest"),
-            Steps =
-            [
-                If.IsPullRequest
-                    .Step(Powershell.Inline("Write-Host 'Hello-World'").DisplayAs("Hello world")),
-
-                DotNet.Install
-                    .Sdk(DotnetVersion)
-                    .DisplayAs("Install .NET SDK"),
-
-                DotNet
-                    .Build("src/MyProject.sln", includeNuGetOrg: true)
-                    .DisplayAs("Build"),
-
-                DotNet
-                    .Test("src/MyProject.sln")
-                    .DisplayAs("Test"),
-            ]
-        }
-    ],
-};
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/GettingStartedTests.cs#single-stage-pipeline-example-csharp)]
 
 ## 4. Export the pipeline
 
@@ -150,54 +92,7 @@ Time Elapsed 00:00:01.23
 
 Your `azure-pipelines.yml` should look something like this:
 
-```yaml
-pr:
-  branches:
-    include:
-    - main
-
-variables:
-- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/net-6.0') }}:
-  - name: DotnetVersion
-    value: 6.0.100
-
-  - group: net6-kv
-
-- ${{ else }}:
-  - name: DotnetVersion
-    value: 5.0.202
-
-jobs:
-- job: Build
-  displayName: Build and test
-  pool:
-    name: Azure Pipelines
-    vmImage: windows-latest
-  steps:
-  - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-    - powershell: |-
-        Write-Host 'Hello-World'
-      displayName: Hello world
-
-  - task: UseDotNet@2
-    displayName: Install .NET SDK
-    inputs:
-      packageType: sdk
-      version: $(DotnetVersion)
-
-  - task: DotNetCoreCLI@2
-    displayName: Build
-    inputs:
-      command: build
-      projects: src/MyProject.sln
-      includeNuGetOrg: true
-
-  - task: DotNetCoreCLI@2
-    displayName: Test
-    inputs:
-      command: test
-      projects: src/MyProject.sln
-```
+[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/GettingStartedTests.cs#single-stage-pipeline-example-yaml)]
 
 ## 5. Customize serialization or configure validations
 
@@ -207,26 +102,7 @@ The validations are additional checks that Sharpliner does around your model to 
 
 To configure serialization/validations, add a class into your project that inherits from a pre-prepared `SharplinerConfiguration` class:
 
-```csharp
-class YourCustomConfiguration : SharplinerConfiguration
-{
-    public override void Configure()
-    {
-        // You can set severity for various validations
-        Validations.DependsOnFields = ValidationSeverity.Off;
-        Validations.NameFields = ValidationSeverity.Warning;
-
-        // You can also further customize serialization
-        Serialization.PrettifyYaml = false;
-        Serialization.UseElseExpression = true;
-        Serialization.IncludeHeaders = false;
-
-        // You can add hooks that execute during the publish process
-        Hooks.BeforePublish = (definition, path) => { };
-        Hooks.AfterPublish = (definition, path, yaml) => { };
-    }
-}
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/GettingStartedTests.cs#configuration)]
 
 ## 6. Make sure you commit your changes
 
@@ -235,8 +111,6 @@ To safeguard against these cases, we have created an AzureDevOps task called `Sh
 
 You can add this step to your pipeline:
 
-```csharp
-ValidateYamlsArePublished("src/MyProject.Pipelines.csproj")
-```
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/GettingStartedTests.cs#validate-yaml-step)]
 
 Please note that this step builds the given project using .NET so the SDK has to be available on the build agent.
