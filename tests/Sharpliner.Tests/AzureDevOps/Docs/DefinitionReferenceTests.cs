@@ -736,4 +736,133 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
             - ${{ parameters.afterBuild }}
             """);
     }
+
+    [Fact]
+    public void UseTypedTemplate()
+    {
+        var job = new Job("main")
+        {
+#region use-typed-template
+            // The strong-typed version
+            Steps =
+            [
+                new StronglyTypedInstallDotNetTemplate(new()
+                {
+                    Project = "src/MyProject.csproj",
+                    Version = "5.0.100",
+                })
+            ]
+#endregion
+        };
+
+        var yaml = SharplinerSerializer.Serialize(job);
+        yaml.Trim().Should().Be(
+            """
+            job: main
+
+            steps:
+            - template: templates/install-dotnet.yml
+              parameters:
+                project: src/MyProject.csproj
+                version: 5.0.100
+            """
+        );
+    }
+
+    [Fact]
+    public void UseUntypedTemplate()
+    {
+        var job = new Job("main")
+        {
+#region use-untyped-template
+            // The non-strong-typed version (second example of the InstallDotNet definition)
+            Steps =
+            [
+                StepTemplate("templates/install-dotnet.yml", new()
+                {
+                    { "project", "src/MyProject.csproj" },
+                    { "version", "5.0.100" },
+                })
+            ]
+#endregion
+        };
+
+        var yaml = SharplinerSerializer.Serialize(job);
+        yaml.Trim().Should().Be(
+            """
+            job: main
+
+            steps:
+            - template: templates/install-dotnet.yml
+              parameters:
+                project: src/MyProject.csproj
+                version: 5.0.100
+            """
+        );
+    }
+
+#region definition-library
+    class ProjectBuildSteps : StepLibrary
+    {
+        public override List<Conditioned<Step>> Steps =>
+        [
+            DotNet.Install.Sdk("6.0.100"),
+
+            If.IsBranch("main")
+                .Step(DotNet.Restore.Projects("src/MyProject.sln")),
+
+            DotNet.Build("src/MyProject.sln"),
+        ];
+    }
+#endregion
+
+    [Fact]
+    public void ReferenceDefinitionLibrary()
+    {
+        var job =
+#region definition-library-usage
+        new Job("Build")
+        {
+            Steps =
+            [
+                Script.Inline("echo 'Hello World'"),
+
+                StepLibrary<ProjectBuildSteps>(),
+
+                Script.Inline("echo 'Goodbye World'"),
+            ]
+        }
+#endregion
+        ;
+
+        var yaml = SharplinerSerializer.Serialize(job);
+        yaml.Trim().Should().Be(
+            """
+            job: Build
+
+            steps:
+            - script: |-
+                echo 'Hello World'
+
+            - task: UseDotNet@2
+              inputs:
+                packageType: sdk
+                version: 6.0.100
+
+            - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+              - task: DotNetCoreCLI@2
+                inputs:
+                  command: restore
+                  projects: src/MyProject.sln
+
+            - task: DotNetCoreCLI@2
+              inputs:
+                command: build
+                projects: src/MyProject.sln
+
+            - script: |-
+                echo 'Goodbye World'
+            """
+        );
+    }
 }
