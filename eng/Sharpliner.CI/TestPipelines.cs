@@ -11,16 +11,19 @@ namespace Sharpliner.CI;
 #region pipeline-collection
 class TestPipelines : SingleStagePipelineCollection
 {
+    // Define your data
     private static readonly string[] s_platforms =
     [
         "ubuntu-20.04",
         "windows-2019",
     ];
 
+    // Create a list of definitions, each is published in its own YAML file
     public override IEnumerable<PipelineDefinitionData<SingleStagePipeline>> Pipelines =>
         s_platforms.Select(platform => new PipelineDefinitionData<SingleStagePipeline>(
             TargetFile: $"{CI.Pipelines.Location}test/{platform}.yml",
             Pipeline: Define(platform),
+            // Optional custom YAML file header
             Header:
             [
                 "This pipeline is not used in CI",
