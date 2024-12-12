@@ -18,6 +18,7 @@ public class Program
             ("eng/DocsGenerator/README.template.md", "README.md"),
             ("eng/DocsGenerator/GettingStarted.template.md", "docs/AzureDevOps/GettingStarted.md"),
             ("eng/DocsGenerator/DefinitionReference.template.md", "docs/AzureDevOps/DefinitionReference.md"),
+            ("eng/DocsGenerator/DefinitionCollections.template.md", "docs/AzureDevOps/DefinitionCollections.md"),
         };
 
         foreach (var (template, output) in resources)
