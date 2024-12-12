@@ -746,7 +746,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
             // The strong-typed version
             Steps =
             [
-                new StronglyTypedInstallDotNetTemplate(new InstallDotNetParameters
+                new StronglyTypedInstallDotNetTemplate(new()
                 {
                     Project = "src/MyProject.csproj",
                     Version = "5.0.100",

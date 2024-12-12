@@ -610,7 +610,7 @@ To use the template, reference it in the following way:
 // The strong-typed version
 Steps =
 [
-    new StronglyTypedInstallDotNetTemplate(new InstallDotNetParameters
+    new StronglyTypedInstallDotNetTemplate(new()
     {
         Project = "src/MyProject.csproj",
         Version = "5.0.100",
