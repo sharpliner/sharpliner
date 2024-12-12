@@ -16,7 +16,7 @@ It is much easier to accomodate for these inside C# than in YAML using if's and 
 class TestPipelines : SingleStagePipelineCollection
 {
     // Define your data
-    private readonly string[] Platforms =
+    private static readonly string[] s_platforms =
     [
         "ubuntu-20.04",
         "windows-2019",
@@ -24,37 +24,35 @@ class TestPipelines : SingleStagePipelineCollection
 
     // Create a list of definitions, each is published in its own YAML file
     public override IEnumerable<PipelineDefinitionData<SingleStagePipeline>> Pipelines =>
-        Platforms.Select(platform => new PipelineDefinitionData<SingleStagePipeline>(
-            // Say where the YAML goes
-            TargetFile: platform + ".yml",
-
+        s_platforms.Select(platform => new PipelineDefinitionData<SingleStagePipeline>(
+            TargetFile: $"{CI.Pipelines.Location}test/{platform}.yml",
+            Pipeline: Define(platform),
             // Optional custom YAML file header
             Header:
             [
                 "This pipeline is not used in CI",
                 "It has been generated from " + nameof(TestPipelines) + ".cs for E2E test purposes",
-            ],
+            ]));
 
-            // Define the pipeline itself
-            Pipeline: new()
+    private static SingleStagePipeline Define(string platform) => new()
+    {
+        Jobs =
+        {
+            new Job("Build")
             {
-                Jobs =
-                [
-                    new Job("Build")
-                    {
-                        Pool = new HostedPool(name: platform),
+                Pool = new HostedPool(name: platform),
 
-                        Steps =
-                        [
-                            DotNet.Build("Sharpliner.sln", includeNuGetOrg: true)
-                                .DisplayAs("Build projects"),
+                Steps =
+                {
+                    DotNet.Build("Sharpliner.sln", includeNuGetOrg: true)
+                          .DisplayAs("Build projects"),
 
-                            DotNet.Test("Sharpliner.sln")
-                                .DisplayAs("Run unit tests")
-                        ]
-                    }
-                ]
-            }));
+                    DotNet.Test("Sharpliner.sln")
+                          .DisplayAs("Run unit tests")
+                }
+            }
+        }
+    };
 }
 ```
 
