@@ -1,7 +1,5 @@
-using System;
 using FluentAssertions;
 using Sharpliner.GitHubActions;
-using Xunit;
 
 namespace Sharpliner.Tests.GitHubActions;
 
@@ -83,66 +81,11 @@ public class WorkflowTests
     }
 
     [Fact]
-    public void Workflow_Serialization_Test()
+    public Task Workflow_Serialization_Test()
     {
-        var yaml = new TestWorkflow().Serialize();
+        var workflow = new TestWorkflow();
 
-        yaml.Trim().Should().Be(
-            """
-            on:
-              schedules:
-              - cron: "'*/30 5,17 * * *'"
-              manuals:
-                workflowDispatch:
-                  inputs:
-                  - name: name
-                    description: Person to greet
-                    default: Mona the Octocat
-                    isRequired: true
-              webhooks:
-              - activities:
-                - Completed
-                - RequestedAction
-
-              - activities:
-                - Assigned
-                - Closed
-
-            permissions:
-              read:
-              - Actions
-              write:
-              - Actions
-              - Checks
-              - Contents
-              - Deployments
-              - Issues
-              - Packages
-              - PullRequests
-              - RepositoryProjects
-              - SecurityEvents
-              - Statuses
-
-            defaults: &o0
-              run: {}
-
-            jobs:
-            - id: configuration
-              name: Configure Build
-              permissions: {}
-              env:
-                Database: production
-                Bot: builder
-              defaults: *o0
-
-            - id: tests
-              name: Run Tests
-              permissions: {}
-              env:
-                Database: production
-                Bot: builder
-              defaults: *o0
-            """);
+        return Verify(workflow.Serialize());
     }
     
     [Fact]

@@ -1,0 +1,20 @@
+﻿variables:
+- name: SomeString
+  value: Some Value
+
+- name: SomeInt
+  value: 32
+
+- name: SomeBool
+  value: true
+
+- group: SomeGroup
+
+- template: SomeTemplate
+
+- name: SomeEnum1
+  value: Release1
+
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - name: SomeEnum2
+    value: Debug

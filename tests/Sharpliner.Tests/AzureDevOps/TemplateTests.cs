@@ -1,9 +1,5 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
-using Sharpliner.AzureDevOps;
+﻿using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
-using Sharpliner.AzureDevOps.Tasks;
-using Xunit;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.Tests.AzureDevOps;

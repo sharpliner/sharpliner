@@ -1,0 +1,35 @@
+﻿variables:
+- ${{ if eq('a', 'b') }}:
+  - name: feature
+    value: on
+
+  - name: feature2
+    value: on
+
+- ${{ else }}:
+  - name: feature
+    value: off
+
+  - name: feature2
+    value: off
+
+- ${{ if containsValue('bar', 'foo', 'xyz', 'foo') }}:
+  - name: feature
+    value: on
+
+  - name: feature2
+    value: on
+
+  - ${{ if and(eq('e', 'f'), ne('g', 'h')) }}:
+    - name: feature
+      value: on
+
+    - name: feature2
+      value: on
+
+  - ${{ else }}:
+    - name: feature
+      value: off
+
+    - name: feature2
+      value: off

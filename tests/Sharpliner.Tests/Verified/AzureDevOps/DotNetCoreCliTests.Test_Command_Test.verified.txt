@@ -1,0 +1,9 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: test
+      projects: '*.sln'
+      arguments: /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
+      testRunTitle: main-test-results

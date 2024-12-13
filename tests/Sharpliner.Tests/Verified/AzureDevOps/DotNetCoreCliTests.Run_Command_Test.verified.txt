@@ -1,0 +1,8 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: run
+      projects: src/Component/Component.csproj
+      arguments: FailIfChanged=true

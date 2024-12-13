@@ -1,7 +1,6 @@
 ﻿using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
-using Xunit;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
@@ -45,27 +44,10 @@ public class VariableReferenceTests
 
     // This tests that we can include variables at any point of the pipeline
     [Fact]
-    public void PipelineVariable_Serialization_Test()
+    public Task PipelineVariable_Serialization_Test()
     {
-        var yaml = new VariableReferenceTest_Template().Serialize();
+        var pipeline = new VariableReferenceTest_Template();
 
-        yaml.Trim().Should().Be(
-            """
-            stages:
-            - stage: Stage_1
-              jobs:
-              - job: Job_1
-                pool: ${{ variables['pool'] }}
-                steps:
-                - ${{ variables['steps'] }}
-                - ${{ variables['steps'] }}
-
-                - bash: |-
-                    curl -o $(Agent.TempDirectory)/sharpliner.zip
-                  continueOnError: ${{ variables['continue'] }}
-
-              - ${{ variables['jobs'] }}
-            - ${{ variables['stages'] }}
-            """);
+        return Verify(pipeline.Serialize());
     }
 }

@@ -1,0 +1,7 @@
+﻿pwsh: |-
+  Write-Output 'Hello'
+  Write-Output 'World'
+
+displayName: Test task
+
+continueOnError: true

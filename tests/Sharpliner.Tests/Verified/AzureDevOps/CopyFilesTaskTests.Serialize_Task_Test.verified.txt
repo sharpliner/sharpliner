@@ -1,0 +1,13 @@
+﻿task: CopyFiles@2
+
+inputs:
+  Contents: '**'
+  TargetFolder: $(Build.ArtifactStagingDirectory)
+  SourceFolder: $(Build.SourcesDirectory)
+  CleanTargetFolder: true
+  Overwrite: true
+  flattenFolders: true
+  preserveTimestamp: true
+  retryCount: 3
+  delayBetweenRetries: 100
+  ignoreMakeDirErrors: true

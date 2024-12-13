@@ -1,0 +1,5 @@
+﻿- task: DotNetCoreCLI@2
+  displayName: Run unit tests
+  inputs:
+    command: test
+    projects: src/MyProject.sln

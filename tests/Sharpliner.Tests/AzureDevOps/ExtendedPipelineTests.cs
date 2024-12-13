@@ -1,6 +1,4 @@
-﻿using FluentAssertions;
-using Sharpliner.AzureDevOps;
-using Xunit;
+﻿using Sharpliner.AzureDevOps;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
@@ -29,27 +27,10 @@ public class ExtendedPipelineTests
     }
 
     [Fact]
-    public void TemplateList_Serialization_Test()
+    public Task TemplateList_Serialization_Test()
     {
-        var yaml = new Extended_Pipeline().Serialize();
+        var pipeline = new Extended_Pipeline().Serialize();
 
-        yaml.Trim().Should().Be(
-            """
-            trigger: none
-
-            variables:
-            - name: key1
-              value: value1
-
-            pool:
-              vmImage: ubuntu-latest
-
-            extends:
-              template: templates/pipeline-template.yml
-              parameters:
-                param1: value1
-                param2: false
-                param3: $(key1)
-            """);
+        return Verify(pipeline);
     }
 }

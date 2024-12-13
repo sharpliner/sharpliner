@@ -1,6 +1,4 @@
-﻿using FluentAssertions;
-using Sharpliner.AzureDevOps;
-using Xunit;
+﻿using Sharpliner.AzureDevOps;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
@@ -37,38 +35,11 @@ public class TriggerSerializationTests
     }
 
     [Fact]
-    public void Serialize_Triggers_Test()
+    public Task Serialize_Triggers_Test()
     {
         TriggerPipeline pipeline = new();
-        string yaml = pipeline.Serialize();
-        yaml.Trim().Should().Be(
-            """
-            trigger:
-              branches:
-                include:
-                - main
-              paths:
-                include:
-                - src/**/*
-                exclude:
-                - docs/*
-                - '*.md'
 
-            pr:
-              branches:
-                include:
-                - main
-                - develop
-
-            schedules:
-            - cron: 0 0 24 * *
-              displayName: Releases
-              branches:
-                include:
-                - staging
-                - production
-              always: true
-            """);
+        return Verify(pipeline.Serialize());
     }
     private class NoneTriggerPipeline : TestPipeline
     {
@@ -80,15 +51,10 @@ public class TriggerSerializationTests
     }
 
     [Fact]
-    public void Serialize_None_Triggers_Test()
+    public Task Serialize_None_Triggers_Test()
     {
         NoneTriggerPipeline pipeline = new();
-        string yaml = pipeline.Serialize();
-        yaml.Trim().Should().Be(
-            """
-            trigger: none
-
-            pr: none
-            """);
+        
+        return Verify(pipeline.Serialize());
     }
 }

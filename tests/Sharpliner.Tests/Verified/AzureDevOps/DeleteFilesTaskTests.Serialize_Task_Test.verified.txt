@@ -1,0 +1,7 @@
+﻿task: DeleteFiles@1
+
+inputs:
+  Contents: '*'
+  SourceFolder: $(Build.ArtifactStagingDirectory)
+  RemoveSourceFolder: true
+  RemoveDotFiles: true

@@ -1,0 +1,17 @@
+﻿task: PowerShell@2
+
+displayName: Test task
+
+inputs:
+  targetType: filePath
+  filePath: some\script.ps1
+  arguments: foo bar
+  errorActionPreference: Inquire
+  warningPreference: Stop
+  informationPreference: Break
+  verbosePreference: Break
+  debugPreference: Suspend
+  failOnStderr: true
+  ignoreLASTEXITCODE: true
+
+continueOnError: true

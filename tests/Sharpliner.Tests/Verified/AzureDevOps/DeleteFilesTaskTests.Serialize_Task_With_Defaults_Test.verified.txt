@@ -1,0 +1,4 @@
+﻿task: DeleteFiles@1
+
+inputs:
+  Contents: '*'

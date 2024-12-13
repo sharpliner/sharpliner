@@ -1,0 +1,4 @@
+﻿variables:
+- ${{ if and(notIn('bar', 'foo', 'xyz', 'foo'), ne(variables['Configuration'], 'Debug'), containsValue(variables['System.JobId'], 10)) }}:
+  - name: TargetBranch
+    value: $(System.PullRequest.SourceBranch)
