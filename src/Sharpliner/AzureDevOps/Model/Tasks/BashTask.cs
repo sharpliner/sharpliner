@@ -57,8 +57,7 @@ public record InlineBashTask : BashTask
     /// <param name="scriptLines">The lines of the script to execute.</param>
     public InlineBashTask(params string[] scriptLines)
     {
-        ArgumentNullException.ThrowIfNull(scriptLines);
-        Contents = string.Join("\n", scriptLines);
+        Contents = string.Join("\n", Require.NotNull(scriptLines));
     }
 }
 
