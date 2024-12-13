@@ -1,0 +1,44 @@
+﻿parameters:
+- name: setupJobs
+  type: jobList
+  default: []
+
+- name: mainJob
+  type: job
+
+- name: deployment
+  type: deployment
+  default:
+    deployment: deploy
+    displayName: Deploy job
+    environment:
+      name: production
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - bash: |-
+              echo 'Deploying the application'
+
+- name: additionalDeployments
+  type: deploymentList
+  default: []
+
+jobs:
+- job: initialize
+  displayName: Initialize job
+
+- ${{ parameters.mainJob }}
+
+- job: finalize
+  displayName: Finalize job
+
+- job: with-templates
+  steps:
+  - template: step-template.yml
+    parameters:
+      useNugetOrg: true
+      afterBuild:
+        bash: |-
+          echo 'After build'
+      theCounter: 3

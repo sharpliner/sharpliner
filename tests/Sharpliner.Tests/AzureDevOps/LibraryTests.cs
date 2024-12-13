@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using FluentAssertions;
-using Sharpliner.AzureDevOps;
+﻿using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
-using Xunit;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
@@ -44,25 +41,11 @@ public class LibraryTests
     }
 
     [Fact]
-    public void Job_Library_Test()
+    public Task Job_Library_Test()
     {
-        var yaml = new JobReferencingPipeline().Serialize();
+        var pipeline = new JobReferencingPipeline();
 
-        yaml.Trim().Should().Be(
-            """
-            jobs:
-            - job: Init
-
-            - job: Start
-              steps:
-              - script: |-
-                  echo 'Hello World'
-
-            - job: End
-              steps:
-              - script: |-
-                  echo 'Goodbye World'
-            """);
+        return Verify(pipeline.Serialize());
     }
 
     private class DotNet_Step_Library : StepLibrary
@@ -100,37 +83,11 @@ public class LibraryTests
     }
 
     [Fact]
-    public void Step_Library_Test()
+    public Task Step_Library_Test()
     {
-        var yaml = new SimpleDotNetPipeline().Serialize();
+        var pipeline = new SimpleDotNetPipeline();
 
-        yaml.Trim().Should().Be(
-            """
-            jobs:
-            - job: Foo
-              steps:
-              - script: |-
-                  echo 'Hello World'
-
-              - task: UseDotNet@2
-                inputs:
-                  packageType: sdk
-                  version: 6.0.100
-
-              - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-                - task: DotNetCoreCLI@2
-                  inputs:
-                    command: restore
-                    projects: src/MyProject.sln
-
-              - task: DotNetCoreCLI@2
-                inputs:
-                  command: build
-                  projects: src/MyProject.sln
-
-              - script: |-
-                  echo 'Goodbye World'
-            """);
+        return Verify(pipeline.Serialize());
     }
 
     private class Variable_Library(string env) : VariableLibrary
@@ -162,35 +119,10 @@ public class LibraryTests
     }
 
     [Fact]
-    public void Conditional_Library_Test()
+    public Task Conditional_Library_Test()
     {
-        var yaml = new ConditionalPipeline().Serialize();
+        var pipeline = new ConditionalPipeline();
 
-        yaml.Trim().Should().Be(
-            """
-            variables:
-            - name: test
-              value: true
-
-            - ${{ if notIn('$(Environment)', 'prod') }}:
-              - name: connection-string-dev
-                value: dev_123
-
-              - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/dev') }}:
-                - group: prod-kv
-
-              - name: connection-string-staging
-                value: staging_123
-
-              - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/staging') }}:
-                - group: prod-kv
-
-            - ${{ else }}:
-              - name: connection-string-prod
-                value: prod_123
-
-              - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/prod') }}:
-                - group: prod-kv
-            """);
+        return Verify(pipeline.Serialize());
     }
 }

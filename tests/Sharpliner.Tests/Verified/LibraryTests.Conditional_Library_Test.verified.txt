@@ -1,0 +1,23 @@
+﻿variables:
+- name: test
+  value: true
+
+- ${{ if notIn('$(Environment)', 'prod') }}:
+  - name: connection-string-dev
+    value: dev_123
+
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/dev') }}:
+    - group: prod-kv
+
+  - name: connection-string-staging
+    value: staging_123
+
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/staging') }}:
+    - group: prod-kv
+
+- ${{ else }}:
+  - name: connection-string-prod
+    value: prod_123
+
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/prod') }}:
+    - group: prod-kv

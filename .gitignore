@@ -360,3 +360,6 @@ MigrationBackup/
 
 # some ide stuff
 .idea
+
+# VerifyTests
+*.received.*

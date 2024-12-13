@@ -30,22 +30,11 @@ public class TemplateTests
     }
 
     [Fact]
-    public void TemplateList_Serialization_Test()
+    public Task TemplateList_Serialization_Test()
     {
-        var yaml = new TemplateList_Pipeline().Serialize();
+        var pipeline = new TemplateList_Pipeline();
 
-        yaml.Trim().Should().Be(
-            """
-            jobs:
-            - ${{ if eq(parameters.restore, 'bar') }}:
-              - template: template1.yml
-                parameters:
-                  enableTelemetry: true
-
-              - template: template2.yml
-                parameters:
-                  enableTelemetry: false
-            """);
+        return Verify(pipeline.Serialize());
     }
 
     private class Extends_Template_Definition : ExtendsTemplateDefinition
@@ -65,27 +54,11 @@ public class TemplateTests
     }
 
     [Fact]
-    public void Extends_Template_Definition_Serialization_Test()
+    public Task Extends_Template_Definition_Serialization_Test()
     {
-        var yaml = new Extends_Template_Definition().Serialize();
+        var pipeline = new Extends_Template_Definition();
 
-        yaml.Trim().Should().Be(
-            """
-            parameters:
-            - name: some
-              type: string
-              default: default value
-
-            - name: other
-              type: boolean
-              default: true
-
-            extends:
-              template: template.yml
-              parameters:
-                some: value
-                other: ${{ parameters.other }}
-            """);
+        return Verify(pipeline.Serialize());
     }
 
     private class Extends_Typed_Template_Definition(ExtendsTypedParameters? parameters = null)
@@ -106,27 +79,11 @@ public class TemplateTests
     }
 
     [Fact]
-    public void Extends_Typed_Template_Definition_Serialization_Test()
+    public Task Extends_Typed_Template_Definition_Serialization_Test()
     {
-        var yaml = new Extends_Typed_Template_Definition().Serialize();
+        var pipeline = new Extends_Typed_Template_Definition();
 
-        yaml.Trim().Should().Be(
-            """
-            parameters:
-            - name: some
-              type: string
-              default: default value
-
-            - name: other
-              type: boolean
-              default: true
-
-            extends:
-              template: template.yml
-              parameters:
-                some: value
-                other: ${{ parameters.other }}
-            """);
+        return Verify(pipeline.Serialize());
     }
 
     private class Step_Template_Definition : StepTemplateDefinition
@@ -175,65 +132,11 @@ public class TemplateTests
     }
 
     [Fact]
-    public void Step_Template_Definition_Serialization_Test()
+    public Task Step_Template_Definition_Serialization_Test()
     {
-        var yaml = new Step_Template_Definition().Serialize();
+        var pipeline = new Step_Template_Definition();
 
-        yaml.Trim().Should().Be(
-            """
-            parameters:
-            - name: configuration
-              type: string
-              default: debug
-              values:
-              - debug
-              - release
-
-            - name: project
-              type: string
-
-            - name: version
-              type: string
-              values:
-              - 5.0.100
-              - 5.0.102
-
-            - name: skipBuild
-              type: boolean
-
-            - name: useNugetOrg
-              type: boolean
-              default: false
-
-            - name: restore
-              type: boolean
-              default: true
-
-            - name: afterBuild
-              type: step
-              default:
-                bash: |-
-                  cp -R logs $(Build.ArtifactStagingDirectory)
-
-            steps:
-            - task: UseDotNet@2
-              inputs:
-                packageType: sdk
-                version: ${{ parameters.version }}
-
-            - ${{ if eq(parameters.restore, true) }}:
-              - task: DotNetCoreCLI@2
-                inputs:
-                  command: restore
-                  projects: ${{ parameters.project }}
-
-            - task: DotNetCoreCLI@2
-              inputs:
-                command: build
-                projects: ${{ parameters.project }}
-
-            - ${{ parameters.afterBuild }}
-            """);
+        return Verify(pipeline.Serialize());
     }
 
     private class Step_Typed_Template_Definition(StepTypedParameters? parameters = null) : StepTemplateDefinition<StepTypedParameters>(parameters)
@@ -261,77 +164,11 @@ public class TemplateTests
     }
 
     [Fact]
-    public void Step_Typed_Template_Definition_Serialization_Test()
+    public Task Step_Typed_Template_Definition_Serialization_Test()
     {
-        var yaml = new Step_Typed_Template_Definition().Serialize();
+        var pipeline = new Step_Typed_Template_Definition();
 
-        yaml.Trim().Should().Be(
-            """
-            parameters:
-            - name: configuration
-              type: string
-              default: debug
-              values:
-              - debug
-              - release
-
-            - name: project
-              type: string
-
-            - name: version
-              type: string
-              values:
-              - 5.0.100
-              - 5.0.102
-
-            - name: skipBuild
-              type: boolean
-
-            - name: useNugetOrg
-              type: boolean
-              default: false
-
-            - name: restore
-              type: boolean
-              default: true
-
-            - name: afterBuild
-              type: step
-              default:
-                bash: |-
-                  cp -R logs $(Build.ArtifactStagingDirectory)
-
-            - name: theCounter
-              type: number
-              default: 2
-
-            - name: defaultCounter
-              type: number
-              values:
-              - 1
-              - 2
-              - 3
-              - 4
-
-            steps:
-            - task: UseDotNet@2
-              inputs:
-                packageType: sdk
-                version: ${{ parameters.version }}
-
-            - ${{ if eq(parameters.restore, true) }}:
-              - task: DotNetCoreCLI@2
-                inputs:
-                  command: restore
-                  projects: ${{ parameters.project }}
-
-            - task: DotNetCoreCLI@2
-              inputs:
-                command: build
-                projects: ${{ parameters.project }}
-
-            - ${{ parameters.afterBuild }}
-            """);
+        return Verify(pipeline.Serialize());
     }
 
     private class Job_Template_Definition : JobTemplateDefinition
@@ -360,25 +197,11 @@ public class TemplateTests
     }
 
     [Fact]
-    public void Job_Template_Definition_Serialization_Test()
+    public Task Job_Template_Definition_Serialization_Test()
     {
-         var yaml = new Job_Template_Definition().Serialize();
+         var pipeline = new Job_Template_Definition();
 
-        yaml.Trim().Should().Be(
-            """
-            parameters:
-            - name: mainJob
-              type: job
-
-            jobs:
-            - job: initialize
-              displayName: Initialize job
-
-            - ${{ parameters.mainJob }}
-
-            - job: finalize
-              displayName: Finalize job
-            """);
+        return Verify(pipeline.Serialize());
     }
 
     private class Job_Typed_Template_Definition(JobTypedParameters? parameters = null)
@@ -429,57 +252,11 @@ public class TemplateTests
     }
 
     [Fact]
-    public void Job_Typed_Template_Definition_Serialization_Test()
+    public Task Job_Typed_Template_Definition_Serialization_Test()
     {
-         var yaml = new Job_Typed_Template_Definition().Serialize();
+         var pipeline = new Job_Typed_Template_Definition();
 
-        yaml.Trim().Should().Be(
-            """
-            parameters:
-            - name: setupJobs
-              type: jobList
-              default: []
-
-            - name: mainJob
-              type: job
-
-            - name: deployment
-              type: deployment
-              default:
-                deployment: deploy
-                displayName: Deploy job
-                environment:
-                  name: production
-                strategy:
-                  runOnce:
-                    deploy:
-                      steps:
-                      - bash: |-
-                          echo 'Deploying the application'
-
-            - name: additionalDeployments
-              type: deploymentList
-              default: []
-
-            jobs:
-            - job: initialize
-              displayName: Initialize job
-
-            - ${{ parameters.mainJob }}
-
-            - job: finalize
-              displayName: Finalize job
-
-            - job: with-templates
-              steps:
-              - template: step-template.yml
-                parameters:
-                  useNugetOrg: true
-                  afterBuild:
-                    bash: |-
-                      echo 'After build'
-                  theCounter: 3
-            """);
+        return Verify(pipeline.Serialize());
     }
 
     private class Stage_Template_Definition : StageTemplateDefinition
@@ -508,25 +285,11 @@ public class TemplateTests
     }
 
     [Fact]
-    public void Stage_Template_Definition_Serialization_Test()
+    public Task Stage_Template_Definition_Serialization_Test()
     {
-        var yaml = new Stage_Template_Definition().Serialize();
+        var pipeline = new Stage_Template_Definition();
 
-        yaml.Trim().Should().Be(
-            """
-            parameters:
-            - name: mainStage
-              type: stage
-
-            stages:
-            - stage: initialize
-              displayName: Initialize stage
-
-            - ${{ parameters.mainStage }}
-
-            - stage: finalize
-              displayName: Finalize stage
-            """);
+        return Verify(pipeline.Serialize());
     }
 
     private class Stage_Typed_Template_Definition(StageTypedParameters? parameters = null)
@@ -564,40 +327,11 @@ public class TemplateTests
     }
 
     [Fact]
-    public void Stage_Typed_Template_Definition_Serialization_Test()
+    public Task Stage_Typed_Template_Definition_Serialization_Test()
     {
-        var yaml = new Stage_Typed_Template_Definition().Serialize();
+        var pipeline = new Stage_Typed_Template_Definition();
 
-        yaml.Trim().Should().Be(
-            """
-            parameters:
-            - name: setupStages
-              type: stageList
-              default: []
-
-            - name: mainStage
-              type: stage
-
-            stages:
-            - stage: initialize
-              displayName: Initialize stage
-
-            - ${{ parameters.mainStage }}
-
-            - stage: finalize
-              displayName: Finalize stage
-
-            - stage: with-templates
-              jobs:
-              - template: job-template.yml
-                parameters:
-                  mainJob:
-                    job: main
-                    displayName: Main job
-                    steps:
-                    - bash: |-
-                        echo 'Main job step'
-            """);
+        return Verify(pipeline.Serialize());
     }
 
     private class Variable_Template_Definition : VariableTemplateDefinition
@@ -620,32 +354,11 @@ public class TemplateTests
     }
 
     [Fact]
-    public void Variable_Template_Definition_Serialization_Test()
+    public Task Variable_Template_Definition_Serialization_Test()
     {
-        var yaml = new Variable_Template_Definition().Serialize();
+        var pipeline = new Variable_Template_Definition();
 
-        yaml.Trim().Should().Be(
-            """
-            parameters:
-            - name: s_param
-              type: string
-
-            - name: b_param
-              type: boolean
-
-            - name: n_param
-              type: number
-
-            variables:
-            - name: s_variable
-              value: value
-
-            - name: b_variable
-              value: true
-
-            - name: n_variable
-              value: 42
-            """);
+        return Verify(pipeline.Serialize());
     }
 
     private class Variable_Typed_Template_Definition(VariableTypedParameters? parameters = null)
@@ -666,35 +379,11 @@ public class TemplateTests
     }
 
     [Fact]
-    public void Variable_Typed_Template_Definition_Serialization_Test()
+    public Task Variable_Typed_Template_Definition_Serialization_Test()
     {
-        var yaml = new Variable_Typed_Template_Definition().Serialize();
+        var pipeline = new Variable_Typed_Template_Definition();
 
-        yaml.Trim().Should().Be(
-            """
-            parameters:
-            - name: s_param
-              type: string
-              default: default value
-
-            - name: b_param
-              type: boolean
-              default: true
-
-            - name: n_param
-              type: number
-              default: 42
-
-            variables:
-            - name: s_variable
-              value: value
-
-            - name: b_variable
-              value: true
-
-            - name: n_variable
-              value: 42
-            """);
+        return Verify(pipeline.Serialize());
     }
 
     private class CompletePipeline : TestPipeline
@@ -733,34 +422,11 @@ public class TemplateTests
     }
 
     [Fact]
-    public void CompletePipeline_Serialization_Test()
+    public Task CompletePipeline_Serialization_Test()
     {
-        var yaml = new CompletePipeline().Serialize();
+        var pipeline = new CompletePipeline();
 
-        yaml.Trim().Should().Be(
-            """
-            stages:
-            - template: stage-template.yml
-              parameters:
-                mainStage:
-                  stage: main-stage
-                  jobs:
-                  - template: job-template.yml
-                    parameters:
-                      mainJob:
-                        job: main-job
-                        displayName: Main job
-                        steps:
-                        - bash: |-
-                            echo 'Hello world!'
-                        - template: step-template.yml
-                          parameters:
-                            useNugetOrg: true
-                            afterBuild:
-                              bash: |-
-                                echo 'After build'
-                            theCounter: 3
-            """);
+        return Verify(pipeline.Serialize());
     }
 
     private class Conditioned_Template_Reference : SimpleStepTestPipeline
@@ -778,24 +444,11 @@ public class TemplateTests
     }
 
     [Fact]
-    public void Conditioned_Template_Reference_Serialization_Test()
+    public Task Conditioned_Template_Reference_Serialization_Test()
     {
-        var yaml = new Conditioned_Template_Reference().Serialize();
+        var pipeline = new Conditioned_Template_Reference();
 
-        yaml.Trim().Should().Be(
-            """
-            jobs:
-            - job: testJob
-              steps:
-              - ${{ if eq('restore', true) }}:
-                - template: template1.yaml
-
-              - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-                - template: template2.yaml
-
-                - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-                  - template: template3.yaml
-            """);
+        return Verify(pipeline.Serialize());
     }
 
     private class Conditioned_Parameters : SimpleStepTestPipeline
@@ -830,26 +483,10 @@ public class TemplateTests
     }
 
     [Fact]
-    public void Conditioned_Parameters_Serialization_Test()
+    public Task Conditioned_Parameters_Serialization_Test()
     {
         var pipeline = new Conditioned_Parameters();
-        var yaml = pipeline.Serialize();
-
-        yaml.Trim().Should().Be(
-            """
-            jobs:
-            - job: testJob
-              steps:
-              - template: template1.yaml
-                parameters:
-                  some: value
-                  ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
-                    pr: true
-                  other:
-                    ${{ if eq(parameters.container, '') }}:
-                      image: ubuntu-16.04-cross-arm64-20210719121212-8a8d3be
-                    ${{ else }}:
-                      image: ${{ parameters.container }}
-            """);
+        
+        return Verify(pipeline.Serialize());
     }
 }

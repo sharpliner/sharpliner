@@ -1,0 +1,21 @@
+﻿stages:
+- template: stage-template.yml
+  parameters:
+    mainStage:
+      stage: main-stage
+      jobs:
+      - template: job-template.yml
+        parameters:
+          mainJob:
+            job: main-job
+            displayName: Main job
+            steps:
+            - bash: |-
+                echo 'Hello world!'
+            - template: step-template.yml
+              parameters:
+                useNugetOrg: true
+                afterBuild:
+                  bash: |-
+                    echo 'After build'
+                theCounter: 3

@@ -1,0 +1,9 @@
+﻿jobs:
+- ${{ if eq(parameters.restore, 'bar') }}:
+  - template: template1.yml
+    parameters:
+      enableTelemetry: true
+
+  - template: template2.yml
+    parameters:
+      enableTelemetry: false
