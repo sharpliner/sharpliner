@@ -168,7 +168,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     [YamlIgnore]
     public List<string>? Patterns
     {
-        get => [.. (GetString(PatternsProperty) ?? string.Empty).Split(System.Environment.NewLine)];
+        get => [.. (GetString(PatternsProperty) ?? string.Empty).Split([System.Environment.NewLine], StringSplitOptions.RemoveEmptyEntries)];
         init => SetProperty(PatternsProperty, value is null || value.Count == 0 ? null : string.Join(System.Environment.NewLine, value));
     }
 
@@ -278,7 +278,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     [YamlIgnore]
     public List<string> Tags
     {
-        get => [.. (GetString(TagsProperty) ?? string.Empty).Split(",")];
+        get => [.. (GetString(TagsProperty) ?? string.Empty).Split(',')];
         init => SetProperty(TagsProperty, string.Join(",", value));
     }
 

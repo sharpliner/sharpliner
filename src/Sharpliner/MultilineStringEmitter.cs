@@ -18,7 +18,7 @@ internal class MultilineStringEmitter(IEventEmitter nextEmitter) : ChainedEventE
             string? value = eventInfo.Source.Value as string;
             if (!string.IsNullOrEmpty(value))
             {
-                bool isMultiLine = value.IndexOfAny(['\r', '\n']) >= 0;
+                bool isMultiLine = value!.IndexOfAny(['\r', '\n']) >= 0;
                 if (isMultiLine)
                 {
                     eventInfo = new ScalarEventInfo(eventInfo.Source)
