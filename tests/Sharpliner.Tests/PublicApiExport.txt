@@ -1958,9 +1958,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Artifact { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=211)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? FileSharePath { get; init; }
-        [System.ComponentModel.DefaultValue(1u)]
+        [System.ComponentModel.DefaultValue(1)]
         [YamlDotNet.Serialization.YamlMember(Order=213)]
-        public uint ParallelCount { get; init; }
+        public int ParallelCount { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=212)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Parallel { get; init; }
     }

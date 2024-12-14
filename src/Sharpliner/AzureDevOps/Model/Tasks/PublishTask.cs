@@ -50,8 +50,8 @@ public record PublishTask : Step
     /// The value must be at least 1 and not greater than 128.
     /// </summary>
     [YamlMember(Order = 213)]
-    [DefaultValue(1u)]
-    public uint ParallelCount { get; init; } = 1u;
+    [DefaultValue(1)]
+    public int ParallelCount { get; init; } = 1;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PublishTask"/> class with required properties.
