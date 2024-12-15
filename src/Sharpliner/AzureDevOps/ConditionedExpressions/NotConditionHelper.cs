@@ -8,22 +8,22 @@ internal static class NotConditionHelper
     {
         if (condition.StartsWith("eq("))
         {
-            return string.Concat("ne", condition.AsSpan(2));
+            return string.Concat("ne", condition.Substring(2));
         }
 
         if (condition.StartsWith("ne("))
         {
-            return string.Concat("eq", condition.AsSpan(2));
+            return string.Concat("eq", condition.Substring(2));
         }
 
         if (condition.StartsWith("in("))
         {
-            return string.Concat("notIn", condition.AsSpan(2));
+            return string.Concat("notIn", condition.Substring(2));
         }
 
         if (condition.StartsWith("notIn("))
         {
-            return string.Concat("in", condition.AsSpan(5));
+            return string.Concat("in", condition.Substring(5));
         }
 
         return $"not({condition})";
