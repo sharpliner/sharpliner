@@ -1313,6 +1313,7 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public Sharpliner.AzureDevOps.IfCondition And(params Sharpliner.AzureDevOps.IfCondition[] expressions) { }
         public Sharpliner.AzureDevOps.IfCondition And(params string[] expressions) { }
         public Sharpliner.AzureDevOps.IfCondition Condition(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference parameter) { }
+        public Sharpliner.AzureDevOps.IfCondition Condition(Sharpliner.AzureDevOps.Parameter<bool?> parameter) { }
         public Sharpliner.AzureDevOps.IfCondition Condition(string condition) { }
         public Sharpliner.AzureDevOps.IfCondition Contains(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression needle, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression haystack) { }
         public Sharpliner.AzureDevOps.IfCondition ContainsValue(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression needle, params Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression[] haystack) { }

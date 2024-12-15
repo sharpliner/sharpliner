@@ -306,13 +306,16 @@ public class ConditionalsTests
 
     private class Parameter_Condition_Test_Pipeline : TestPipeline
     {
+        static Parameter<bool?> param2 = new BooleanParameter("param2");
         public override Pipeline Pipeline => new()
         {
-            Parameters = { BooleanParameter("param1") },
+            Parameters = { BooleanParameter("param1"), param2 },
             Variables =
             {
                 If.Condition(parameters["param1"])
-                    .Variable("feature", "on")
+                    .Variable("feature1", "on"),
+                If.Condition(param2)
+                    .Variable("feature2", "on")
             }
         };
     }
@@ -329,9 +332,16 @@ public class ConditionalsTests
             - name: param1
               type: boolean
 
+            - name: param2
+              type: boolean
+
             variables:
             - ${{ if parameters.param1 }}:
-              - name: feature
+              - name: feature1
+                value: on
+
+            - ${{ if parameters.param2 }}:
+              - name: feature2
                 value: on
             """
         );
