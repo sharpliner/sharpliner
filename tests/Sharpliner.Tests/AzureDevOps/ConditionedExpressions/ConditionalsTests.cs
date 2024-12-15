@@ -304,6 +304,39 @@ public class ConditionalsTests
         variable.Condition!.WithoutTags().Should().Be("xor(True, $(Variable))");
     }
 
+    private class Parameter_Condition_Test_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Parameters = { BooleanParameter("param1") },
+            Variables =
+            {
+                If.Condition(parameters["param1"])
+                    .Variable("feature", "on")
+            }
+        };
+    }
+
+    [Fact]
+    public void Parameter_Condition_Test()
+    {
+        var pipeline = new Parameter_Condition_Test_Pipeline();
+
+        var yaml = pipeline.Serialize();
+        yaml.Trim().Should().Be(
+            """
+            parameters:
+            - name: param1
+              type: boolean
+
+            variables:
+            - ${{ if parameters.param1 }}:
+              - name: feature
+                value: on
+            """
+        );
+    }
+
     private class Contains_Condition_Test_Pipeline : TestPipeline
     {
         public override Pipeline Pipeline => new()
