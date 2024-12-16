@@ -1,6 +1,4 @@
-﻿using FluentAssertions;
-using Sharpliner.AzureDevOps;
-using Xunit;
+﻿using Sharpliner.AzureDevOps;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
@@ -22,42 +20,10 @@ public class PipelineParameterTests
     }
 
     [Fact]
-    public void PipelineParameter_Serialization_Test()
+    public Task PipelineParameter_Serialization_Test()
     {
-        var yaml = new PipelineParameterTests_Pipeline().Serialize();
+        var pipeline = new PipelineParameterTests_Pipeline();
 
-        yaml.Trim().Should().Be(
-            """
-            parameters:
-            - name: project
-              displayName: AzureDevops project
-              type: string
-
-            - name: version
-              displayName: .NET version
-              type: string
-              values:
-              - 5.0.100
-              - 5.0.102
-
-            - name: restore
-              displayName: Restore NuGets
-              type: boolean
-              default: true
-
-            - name: list
-              displayName: List input
-              type: object
-              default:
-              - Azure
-              - DevOps
-
-            - name: afterBuild
-              displayName: After steps
-              type: step
-              default:
-                bash: |-
-                  cp -R logs $(Build.ArtifactStagingDirectory)
-            """);
+        return Verify(pipeline.Serialize());
     }
 }

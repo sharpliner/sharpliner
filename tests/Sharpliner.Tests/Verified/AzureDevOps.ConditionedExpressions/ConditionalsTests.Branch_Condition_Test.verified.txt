@@ -1,0 +1,23 @@
+﻿variables:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - name: feature
+    value: on
+
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/master') }}:
+  - name: legacy
+    value: true
+
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/patch-1') }}:
+  - template: patch-template.yml
+    parameters:
+      target: patch-branch
+
+  - name: fast
+    value: true
+
+- ${{ if and(eq(variables['Build.Reason'], 'PullRequest'), ne(variables['Build.SourceBranch'], 'refs/heads/main')) }}:
+  - group: pr-group
+
+  - template: pr-template.yml
+    parameters:
+      target: pr-branch

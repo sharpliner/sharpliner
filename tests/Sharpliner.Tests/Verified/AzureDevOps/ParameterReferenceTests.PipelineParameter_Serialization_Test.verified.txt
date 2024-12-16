@@ -1,0 +1,36 @@
+﻿parameters:
+- name: stages
+  type: stageList
+
+- name: jobs
+  type: jobList
+
+- name: steps
+  type: stepList
+
+- name: variables
+  type: object
+
+- name: pool
+  type: object
+  default:
+    vmImage: windows-latest
+
+stages:
+- stage: Stage_1
+  jobs:
+  - job: Job_1
+    pool: ${{ parameters.pool }}
+    steps:
+    - ${{ parameters.steps }}
+    - ${{ parameters.steps }}
+
+    - bash: |-
+        curl -o $(Agent.TempDirectory)/sharpliner.zip
+      continueOnError: ${{ parameters.continue }}
+
+    - checkout: ${{ parameters.repository }}
+      submodules: ${{ parameters.submodules }}
+
+  - ${{ parameters.jobs }}
+- ${{ parameters.stages }}

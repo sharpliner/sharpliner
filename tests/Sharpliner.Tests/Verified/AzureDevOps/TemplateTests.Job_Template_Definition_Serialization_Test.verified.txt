@@ -1,0 +1,12 @@
+﻿parameters:
+- name: mainJob
+  type: job
+
+jobs:
+- job: initialize
+  displayName: Initialize job
+
+- ${{ parameters.mainJob }}
+
+- job: finalize
+  displayName: Finalize job

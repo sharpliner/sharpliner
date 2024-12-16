@@ -1,0 +1,12 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: publish
+      projects: src/*.csproj
+      arguments: -c Release
+      publishWebProjects: true
+      modifyOutputPath: true
+      zipAfterPublish: true
+    timeoutInMinutes: 30

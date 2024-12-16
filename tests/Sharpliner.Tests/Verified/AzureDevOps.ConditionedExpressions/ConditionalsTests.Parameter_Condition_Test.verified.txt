@@ -1,0 +1,15 @@
+﻿parameters:
+- name: param1
+  type: boolean
+
+- name: param2
+  type: boolean
+
+variables:
+- ${{ if parameters.param1 }}:
+  - name: feature1
+    value: on
+
+- ${{ if parameters.param2 }}:
+  - name: feature2
+    value: on

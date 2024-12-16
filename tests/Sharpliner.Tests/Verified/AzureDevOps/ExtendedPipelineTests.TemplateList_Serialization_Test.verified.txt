@@ -1,0 +1,15 @@
+﻿trigger: none
+
+variables:
+- name: key1
+  value: value1
+
+pool:
+  vmImage: ubuntu-latest
+
+extends:
+  template: templates/pipeline-template.yml
+  parameters:
+    param1: value1
+    param2: false
+    param3: $(key1)

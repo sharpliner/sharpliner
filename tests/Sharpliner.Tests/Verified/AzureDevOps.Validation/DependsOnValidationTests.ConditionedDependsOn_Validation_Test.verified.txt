@@ -1,0 +1,14 @@
+﻿stages:
+- stage: stage_1
+
+- stage: stage_2
+  dependsOn:
+  - stage_1
+
+- stage: stage_3
+  dependsOn:
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    - stage_1
+
+  - ${{ else }}:
+    - stage_2

@@ -1,0 +1,18 @@
+﻿canary:
+  increments:
+  - 10
+  - 1000
+  - 25000
+  routeTraffic:
+    steps:
+    - download: current
+  postRouteTraffic:
+    pool:
+      name: MacOS-latest
+    steps:
+    - download: current
+  on:
+    failure:
+      steps:
+      - bash: |-
+          echo 'failure!' && exit 1

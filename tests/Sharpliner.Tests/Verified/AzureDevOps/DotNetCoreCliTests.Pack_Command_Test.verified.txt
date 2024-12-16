@@ -1,0 +1,13 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: pack
+      packagesToPack: src/*.csproj
+      arguments: -c Release
+      nobuild: true
+      configurationToPack: Release
+      includesource: true
+      includesymbols: true
+      outputDir: /tmp/staging/

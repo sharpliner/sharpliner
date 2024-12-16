@@ -1,0 +1,37 @@
+﻿jobs:
+- job: test
+  steps:
+  - download: none
+
+  - download: current
+    artifact: Frontend
+    patterns: |-
+      frontend/**/*
+      frontend.config
+    tags: release,nightly
+
+  - task: DownloadPipelineArtifact@2
+    inputs:
+      runVersion: specific
+      project: public
+      pipeline: 56
+      runId: 1745
+      artifact: MyProject.CLI
+      patterns: |-
+        **/*.dll
+        **/*.exe
+      allowPartiallySucceededBuilds: true
+      retryDownloadCount: 3
+      tags: non-release,preview
+
+  - task: DownloadPipelineArtifact@2
+    inputs:
+      runVersion: latestFromBranch
+      project: internal
+      pipeline: 23
+      runBranch: refs/heads/develop
+      path: $(Build.ArtifactStagingDirectory)
+      allowFailedBuilds: true
+      checkDownloadedFiles: true
+      preferTriggeringPipeline: true
+      artifact: Another.CLI

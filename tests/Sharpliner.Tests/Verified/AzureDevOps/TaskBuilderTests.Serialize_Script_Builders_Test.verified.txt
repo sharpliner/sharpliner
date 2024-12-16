@@ -1,0 +1,20 @@
+﻿jobs:
+- job: test
+  steps:
+  - script: |+
+      dir src
+      echo "Hello World!"
+
+  - script: |+
+      dir src
+      echo "Hello World!"
+    displayName: A display name
+
+  - script: |-
+      echo 'Hello, world!'
+      echo 'Goodbye, world!'
+    displayName: A display name
+
+  - script: |+
+      dir src
+      echo "Hello World!"

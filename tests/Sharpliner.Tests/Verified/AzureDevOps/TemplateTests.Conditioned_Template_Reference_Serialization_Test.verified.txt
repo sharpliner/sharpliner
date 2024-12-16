@@ -1,0 +1,11 @@
+﻿jobs:
+- job: testJob
+  steps:
+  - ${{ if eq('restore', true) }}:
+    - template: template1.yaml
+
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    - template: template2.yaml
+
+    - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      - template: template3.yaml

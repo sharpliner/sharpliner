@@ -1,0 +1,4 @@
+﻿variables:
+- ${{ if containsValue('refs/heads/feature/', parameters.allowedTags, variables['foo'], variables['Build.Reason'], variables['Build.SourceBranch']) }}:
+  - name: feature
+    value: on

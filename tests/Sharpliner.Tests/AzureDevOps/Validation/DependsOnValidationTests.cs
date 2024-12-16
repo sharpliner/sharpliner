@@ -1,8 +1,6 @@
-﻿using System.Linq;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Sharpliner.Common;
-using Xunit;
 
 namespace Sharpliner.Tests.AzureDevOps.Validation;
 
@@ -34,27 +32,11 @@ public class DependsOnValidationTests
     }
 
     [Fact]
-    public void ConditionedDependsOn_Validation_Test()
+    public Task ConditionedDependsOn_Validation_Test()
     {
         var pipeline = new ConditionedDependsOnPipeline();
-        var yaml = pipeline.Serialize();
-        yaml.Trim().Should().Be(
-            """
-            stages:
-            - stage: stage_1
 
-            - stage: stage_2
-              dependsOn:
-              - stage_1
-
-            - stage: stage_3
-              dependsOn:
-              - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-                - stage_1
-
-              - ${{ else }}:
-                - stage_2
-            """);
+        return Verify(pipeline.Serialize());
     }
 
     private class MissingStageDependsOnErrorPipeline : TestPipeline

@@ -1,6 +1,4 @@
-﻿using FluentAssertions;
-using Sharpliner.AzureDevOps;
-using Xunit;
+﻿using Sharpliner.AzureDevOps;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
@@ -22,26 +20,19 @@ public class PipelineLockBehaviorTests
     [Theory]
     [InlineData(LockBehavior.Sequential, "sequential")]
     [InlineData(LockBehavior.RunLatest, "runLatest")]
-    public void PipelineLockBehavior_Serialization_TestValues(LockBehavior lockBehaviour, string expectedSerializedValue)
+    public Task PipelineLockBehavior_Serialization_TestValues(LockBehavior lockBehaviour, string expectedSerializedValue)
     {
-        var yaml = new PipelineLockBehaviorTests_Pipeline(lockBehaviour).Serialize();
+        var pipeline = new PipelineLockBehaviorTests_Pipeline(lockBehaviour);
 
-        yaml.Trim().Should().Be(
-            $"""
-            name: LockBehaviorTest
-
-            lockBehavior: {expectedSerializedValue}
-            """);
+        return Verify(pipeline.Serialize())
+            .UseParameters(lockBehaviour, expectedSerializedValue);
     }
 
     [Fact]
-    public void PipelineLockBehavior_Serialization_Test_Null()
+    public Task PipelineLockBehavior_Serialization_Test_Null()
     {
-        var yaml = new PipelineLockBehaviorTests_Pipeline(null).Serialize();
+        var pipeline = new PipelineLockBehaviorTests_Pipeline(null);
 
-        yaml.Trim().Should().Be(
-            """
-            name: LockBehaviorTest
-            """);
+        return Verify(pipeline.Serialize());
     }
 }

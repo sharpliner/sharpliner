@@ -1,7 +1,5 @@
-﻿using FluentAssertions;
-using Sharpliner.AzureDevOps;
+﻿using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.Tasks;
-using Xunit;
 
 namespace Sharpliner.Tests.AzureDevOps.ConditionedExpressions;
 
@@ -48,24 +46,10 @@ public class ElseExpressionTests
     }
 
     [Fact]
-    public void Else_Expression_Test()
+    public Task Else_Expression_Test()
     {
         var pipeline = new Else_Expression_Test_Pipeline();
-        pipeline.Serialize().Trim().Should().Be(
-            """
-            stages:
-            - stage: foo
-              jobs:
-              - job: job1
-                steps:
-                - task: DotNetCoreCLI@2
-                  inputs:
-                    command: pack
-                    packagesToPack: ProjectFile
-                    ${{ if eq(parameters.IncludeSymbols, true) }}:
-                      arguments: --configuration $(BuildConfiguration) --no-restore --no-build -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
-                    ${{ else }}:
-                      arguments: --configuration $(BuildConfiguration) --no-restore --no-build
-            """);
+
+        return Verify(pipeline.Serialize());
     }
 }

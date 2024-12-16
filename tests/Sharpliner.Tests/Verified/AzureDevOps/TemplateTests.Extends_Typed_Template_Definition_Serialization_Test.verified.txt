@@ -1,0 +1,14 @@
+﻿parameters:
+- name: some
+  type: string
+  default: default value
+
+- name: other
+  type: boolean
+  default: true
+
+extends:
+  template: template.yml
+  parameters:
+    some: value
+    other: ${{ parameters.other }}

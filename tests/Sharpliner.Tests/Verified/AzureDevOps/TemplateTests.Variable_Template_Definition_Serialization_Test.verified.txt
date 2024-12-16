@@ -1,0 +1,19 @@
+﻿parameters:
+- name: s_param
+  type: string
+
+- name: b_param
+  type: boolean
+
+- name: n_param
+  type: number
+
+variables:
+- name: s_variable
+  value: value
+
+- name: b_variable
+  value: true
+
+- name: n_variable
+  value: 42

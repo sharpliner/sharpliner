@@ -1,0 +1,8 @@
+﻿task: PowerShell@2
+
+displayName: Test task
+
+inputs:
+  targetType: filePath
+  filePath: some\script.ps1
+  pwsh: true

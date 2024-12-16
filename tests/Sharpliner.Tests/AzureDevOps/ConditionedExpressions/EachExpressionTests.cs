@@ -1,6 +1,4 @@
-﻿using FluentAssertions;
-using Sharpliner.AzureDevOps;
-using Xunit;
+﻿using Sharpliner.AzureDevOps;
 
 namespace Sharpliner.Tests.AzureDevOps.ConditionedExpressions;
 
@@ -54,33 +52,10 @@ public class EachExpressionTests
     }
 
     [Fact]
-    public void Each_Expression_Test()
+    public Task Each_Expression_Test()
     {
         var pipeline = new Each_Expression_Test_Pipeline();
-        pipeline.Serialize().Trim().Should().Be(
-            """
-            stages:
-            - ${{ each env in parameters.environments }}:
-              - template: ../stages/provision.yml
-                parameters:
-                  environment: ${{ env }}
-                  ${{ if eq('env.deploymentEnvironmentName', '') }}:
-                    deploymentEnvironment: ${{ parameters.applicationName }}-${{ env.name }}
-                  ${{ else }}:
-                    deploymentEnvironment: ${{ env.deploymentEnvironmentName }}
-                  regions: ${{ parameters.regions }}
 
-            - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-              - ${{ each env in parameters.stages }}:
-                - stage: stage-${{ env.name }}
-
-                - stage: stage2-${{ env.name }}
-                  jobs:
-                  - ${{ each foo in bar }}:
-                    - job: job-${{ foo }}
-
-                  - ${{ if eq('foo', 'bar') }}:
-                    - job: job2-${{ foo }}
-            """);
+        return Verify(pipeline.Serialize());
     }
 }

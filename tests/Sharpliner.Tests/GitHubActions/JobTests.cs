@@ -1,7 +1,5 @@
-using System;
 using FluentAssertions;
 using Sharpliner.GitHubActions;
-using Xunit;
 
 namespace Sharpliner.Tests.GitHubActions;
 

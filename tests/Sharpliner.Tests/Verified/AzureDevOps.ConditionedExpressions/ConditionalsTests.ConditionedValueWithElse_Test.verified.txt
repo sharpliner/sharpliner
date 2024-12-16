@@ -1,0 +1,9 @@
+﻿jobs:
+- job: Job
+  pool:
+    ${{ if eq('A', 'B') }}:
+      name: pool-A
+      demands:
+      - SomeProperty -equals SomeValue
+    ${{ else }}:
+      name: pool-B

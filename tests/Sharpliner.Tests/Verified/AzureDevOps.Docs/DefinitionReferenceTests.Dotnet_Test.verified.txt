@@ -1,0 +1,20 @@
+﻿- task: UseDotNet@2
+  inputs:
+    packageType: sdk
+    version: ${{ parameters.version }}
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: restore
+    includeNuGetOrg: false
+    feedsToUse: select
+    feedRestore: dotnet-7-preview-feed
+    externalFeedCredentials: feeds/dotnet-7
+    noCache: true
+    restoreDirectory: .packages
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: build
+    projects: src/MyProject.csproj
+  timeoutInMinutes: 20
