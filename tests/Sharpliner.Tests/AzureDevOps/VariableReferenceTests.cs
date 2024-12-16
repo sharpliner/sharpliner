@@ -11,6 +11,9 @@ public class VariableReferenceTests
     {
         public override string TargetFile => "stages.yml";
 
+        private static readonly Variable v_agentOs = new("agentOs", "Windows_NT");
+        private static readonly Variable v_continue = new("continue", "true");
+
         public override ConditionedList<Stage> Definition =>
         [
             new Stage("Stage_1")
@@ -21,16 +24,18 @@ public class VariableReferenceTests
                     {
                         Pool = variables["pool"],
 
+                        Variables = [v_agentOs, v_continue],
+
                         Steps =
                         {
-                            If.Equal(variables["agentOs"], "Windows_NT")
+                            If.Equal(variables[v_agentOs], "Windows_NT")
                                 .Step(variables["steps"]),
 
                             variables["steps"],
 
-                            Bash.Inline("curl -o $(Agent.TempDirectory)/sharpliner.zip") with
+                            Bash.Inline($"curl -o {variables.Agent.TempDirectory}/sharpliner.zip") with
                             {
-                                ContinueOnError = variables["continue"],
+                                ContinueOnError = variables[v_continue],
                             }
                         }
                     },
@@ -56,6 +61,12 @@ public class VariableReferenceTests
               jobs:
               - job: Job_1
                 pool: ${{ variables['pool'] }}
+                variables:
+                - name: agentOs
+                  value: Windows_NT
+
+                - name: continue
+                  value: true
                 steps:
                 - ${{ variables['steps'] }}
                 - ${{ variables['steps'] }}

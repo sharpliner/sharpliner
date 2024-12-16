@@ -186,6 +186,25 @@ public abstract class TemplateDefinition : AzureDevOpsDefinition
         /// </summary>
         public ParameterReference this[string parameterName] => new(parameterName);
 
+        /// <summary>
+        /// <para>
+        /// Allows the <c>${{ parameters.name }}</c> notation for a parameter.
+        /// </para>
+        /// For example:
+        /// <code lang="csharp">
+        /// Paramter foo = StringParameter("foo");
+        /// ...
+        /// parameters[foo]
+        /// </code>
+        /// will generate:
+        /// <code lang="yaml">
+        /// ${{ parameters.foo }}
+        /// </code>
+        /// </summary>
+        /// <param name="parameter"></param>
+        /// <returns></returns>
+        public ParameterReference this[Parameter parameter] => new(parameter.Name);
+
         internal TemplateParameterReference()
         {
         }
