@@ -36,6 +36,7 @@ public record ScriptTask : Step
     /// <param name="scriptLines">The contents of the script.</param>
     public ScriptTask(params string[] scriptLines)
     {
-        Contents = string.Join("\r\n", Require.NotNull(scriptLines));
+        ArgumentNullException.ThrowIfNull(scriptLines);
+        Contents = string.Join("\r\n", scriptLines);
     }
 }
