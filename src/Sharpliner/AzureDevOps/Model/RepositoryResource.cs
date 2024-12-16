@@ -31,8 +31,7 @@ public record RepositoryResource
     public Conditioned<string>? Name { get; init; }
 
     /// <summary>
-    /// Ref name to use
-    /// Defaults to 'refs/heads/main'
+    /// Ref name to checkout; defaults to <c>refs/heads/main</c>
     /// </summary>
     [DisallowNull]
     public Conditioned<string>? Ref { get; init; }
