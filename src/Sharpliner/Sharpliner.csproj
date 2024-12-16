@@ -38,7 +38,7 @@
     <PackageReference Include="Microsoft.Build.Utilities.Core" />
     <PackageReference Include="Polyfill">
       <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers;</IncludeAssets>
     </PackageReference>
   </ItemGroup>
 
