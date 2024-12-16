@@ -109,7 +109,7 @@ public record Pipeline : PipelineBase
     /// <inheritdoc/>
     public override IReadOnlyCollection<IDefinitionValidation> Validations =>
     [
-        .. Stages.GetStageValidations(),
+        .. Stages.GetStageValidations(Parameters),
         new RepositoryCheckoutValidation(this)
     ];
 }
@@ -146,7 +146,7 @@ public record SingleStagePipeline : PipelineBase
     /// <inheritdoc/>
     public override IReadOnlyCollection<IDefinitionValidation> Validations=>
     [
-        .. Jobs.GetJobValidations(),
+        .. Jobs.GetJobValidations(Parameters),
         new RepositoryCheckoutValidation(this)
     ];
 }

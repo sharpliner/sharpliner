@@ -2137,9 +2137,9 @@ namespace Sharpliner.AzureDevOps.Validation
 {
     public static class ValidationsExtensions
     {
-        public static System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> GetJobValidations(this Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase> jobs) { }
+        public static System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> GetJobValidations(this Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase> jobs, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Parameter> parameters) { }
         public static System.Collections.Generic.IEnumerable<Sharpliner.AzureDevOps.JobBase> GetJobs(this Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Stage> stages) { }
-        public static System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> GetStageValidations(this Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Stage> stages) { }
+        public static System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> GetStageValidations(this Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Stage> stages, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Parameter> parameters) { }
         public static System.Collections.Generic.IEnumerable<Sharpliner.AzureDevOps.Step> GetSteps(this Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase> jobs) { }
     }
 }
