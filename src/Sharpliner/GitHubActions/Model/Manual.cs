@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Sharpliner.GitHubActions;
 
@@ -43,6 +44,7 @@ internal record WorkflowDispatch
         /// <summary>
         /// Get the name of the input field.
         /// </summary>
+        [Required]
         public string Name { get; }
 
         /// <summary>
