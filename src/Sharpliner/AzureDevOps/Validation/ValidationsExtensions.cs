@@ -34,10 +34,10 @@ public static class ValidationsExtensions
     /// </summary>
     /// <param name="stages">The input stages.</param>
     /// <returns>A list of validations for the input stages.</returns>
-    public static IReadOnlyCollection<IDefinitionValidation> GetStageValidations(this ConditionedList<Stage> stages) =>
+    public static IReadOnlyCollection<IDefinitionValidation> GetStageValidations(this ConditionedList<Stage> stages, ConditionedList<Parameter> parameters) =>
     [
         new StageDependsOnValidation(stages),
-        new NameValidation(stages),
+        new NameValidation(stages, parameters),
     ];
 
     /// <summary>
@@ -45,9 +45,9 @@ public static class ValidationsExtensions
     /// </summary>
     /// <param name="jobs">The input jobs.</param>
     /// <returns>A list of validations for the input jobs.</returns>
-    public static IReadOnlyCollection<IDefinitionValidation> GetJobValidations(this ConditionedList<JobBase> jobs) =>
+    public static IReadOnlyCollection<IDefinitionValidation> GetJobValidations(this ConditionedList<JobBase> jobs, ConditionedList<Parameter> parameters) =>
     [
         new JobDependsOnValidation(jobs),
-        new NameValidation(jobs),
+        new NameValidation(jobs, parameters),
     ];
 }
