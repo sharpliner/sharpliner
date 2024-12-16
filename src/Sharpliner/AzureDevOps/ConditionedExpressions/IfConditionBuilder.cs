@@ -25,6 +25,44 @@ public class IfConditionBuilder
         => Link(new IfCustomCondition(condition));
 
     /// <summary>
+    /// <para>
+    /// Use this to specify a boolean parameter reference as a condition.
+    /// </para>
+    /// For example:
+    /// <code language="csharp">
+    /// If.Condition(parameters["IsInternal"])
+    /// </code>
+    /// will generate:
+    /// <code language="yaml">
+    /// ${{ if parameters.IsInternal }}:
+    /// </code>
+    /// </summary>
+    /// <param name="parameter">The boolean parameter reference to use as a condition.</param>
+    /// <returns>The new condition.</returns>
+    public IfCondition Condition(ParameterReference parameter) => new IfParameterCondition(parameter);
+
+    /// <summary>
+    /// <para>
+    /// Use this to specify a boolean parameter reference as a condition.
+    /// </para>
+    /// For example:
+    /// <code language="csharp">
+    /// Parameter&lt;bool&gt; isInternal = new BooleanParameter("IsInternal");
+    /// </code>
+    /// And then use the parameter:
+    /// <code language="csharp">
+    /// If.Condition(isInternal)
+    /// </code>
+    /// will generate:
+    /// <code language="yaml">
+    /// ${{ if parameters.IsInternal }}:
+    /// </code>
+    /// </summary>
+    /// <param name="parameter">The boolean parameter reference to use as a condition.</param>
+    /// <returns>The new condition.</returns>
+    public IfCondition Condition(Parameter<bool?> parameter) => new IfParameterCondition(new ParameterReference(parameter.Name));
+
+    /// <summary>
     /// Utility that appends an <c>eq(expression1, expression2)</c> condition to an <c>${{ if() }}</c> section.
     /// For example:
     /// <code language="csharp">
@@ -366,7 +404,7 @@ public class IfConditionBuilder
     /// </code>
     /// </summary>
     public IfCondition IsPullRequest
-        => Link(new IfBuildReasonCondition(new string("PullRequest"), true));
+        => Link(new IfBuildReasonCondition("PullRequest", true));
 
     /// <summary>
     /// Utility that appends an <c>ne(variables['Build.Reason'], 'PullRequest')</c> condition to an <c>${{ if() }}</c> section.
@@ -380,7 +418,7 @@ public class IfConditionBuilder
     /// </code>
     /// </summary>
     public IfCondition IsNotPullRequest
-        => Link(new IfBuildReasonCondition(new string("PullRequest"), false));
+        => Link(new IfBuildReasonCondition("PullRequest", false));
 
     private IfCondition Link(IfCondition condition)
     {

@@ -168,7 +168,7 @@ public sealed record EnumParameter<TEnum> : Parameter<TEnum?> where TEnum : stru
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
     public EnumParameter(string name, string? displayName = null, TEnum? defaultValue = default)
-        : base(name, displayName, defaultValue, Enum.GetValues<TEnum>().Select(x => (TEnum?)x))
+        : base(name, displayName, defaultValue, Enum.GetValues(typeof(TEnum)).Cast<TEnum?>())
     {
     }
 

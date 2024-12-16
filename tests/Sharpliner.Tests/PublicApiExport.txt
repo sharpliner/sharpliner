@@ -758,15 +758,12 @@ namespace Sharpliner.AzureDevOps
         protected override string Prefix { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Workspace { get; }
     }
-    [System.Runtime.CompilerServices.RequiredMember]
     public class PipelineWithExtends : Sharpliner.AzureDevOps.PipelineBase, System.IEquatable<Sharpliner.AzureDevOps.PipelineWithExtends>
     {
         [System.Obsolete("Constructors of types with required members are not supported in this version of " +
             "your compiler.", true)]
-        [System.Runtime.CompilerServices.CompilerFeatureRequired("RequiredMembers")]
         public PipelineWithExtends() { }
         public override System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
-        [System.Runtime.CompilerServices.RequiredMember]
         [YamlDotNet.Serialization.YamlMember(Order=600)]
         public Sharpliner.AzureDevOps.Extends Extends { get; init; }
     }
@@ -1312,6 +1309,8 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public Sharpliner.AzureDevOps.IfCondition IsPullRequest { get; }
         public Sharpliner.AzureDevOps.IfCondition And(params Sharpliner.AzureDevOps.IfCondition[] expressions) { }
         public Sharpliner.AzureDevOps.IfCondition And(params string[] expressions) { }
+        public Sharpliner.AzureDevOps.IfCondition Condition(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference parameter) { }
+        public Sharpliner.AzureDevOps.IfCondition Condition(Sharpliner.AzureDevOps.Parameter<bool?> parameter) { }
         public Sharpliner.AzureDevOps.IfCondition Condition(string condition) { }
         public Sharpliner.AzureDevOps.IfCondition Contains(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression needle, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression haystack) { }
         public Sharpliner.AzureDevOps.IfCondition ContainsValue(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression needle, params Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression[] haystack) { }
@@ -1961,9 +1960,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Artifact { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=211)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? FileSharePath { get; init; }
-        [System.ComponentModel.DefaultValue(1u)]
+        [System.ComponentModel.DefaultValue(1)]
         [YamlDotNet.Serialization.YamlMember(Order=213)]
-        public uint ParallelCount { get; init; }
+        public int ParallelCount { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=212)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Parallel { get; init; }
     }

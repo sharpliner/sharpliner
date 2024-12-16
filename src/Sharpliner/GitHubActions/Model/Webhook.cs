@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Sharpliner.GitHubActions;
 
@@ -461,13 +460,11 @@ internal record WorkflowRun : Webhook
     /// <summary>
     /// List with the workflows that will trigger the event.
     /// </summary>
-    [Required]
     public List<string> Workflows { get; } = [];
 
     /// <summary>
     /// List with the branches that will trigger the event.
     /// </summary>
-    [Required]
     public List<string> Branches { get; } = [];
 
     /// <summary>

@@ -99,6 +99,11 @@ internal class IfCustomCondition(string condition) : IfCondition
     internal override string Serialize() => WrapTag(condition);
 }
 
+internal class IfParameterCondition(ParameterReference parameter) : IfCondition
+{
+    internal override string Serialize() => WrapTag(parameter.RuntimeExpression);
+}
+
 internal class InlineNotCondition : InlineCondition
 {
     private readonly string _condition;
