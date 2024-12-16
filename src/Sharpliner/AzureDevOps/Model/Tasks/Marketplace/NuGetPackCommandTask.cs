@@ -103,7 +103,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Dictionary<string, string>? BuildProperties
         {
             get => GetString("buildProperties")?.Split(';').ToDictionary(pair => pair.Split('=')[0], pair => pair.Split('=')[1]);
-            init => SetProperty("buildProperties", string.Join(";", value!.Select(x => $"{x.Key}={x.Value}")));
+            init => SetProperty("buildProperties", string.Join(';', value!.Select(x => $"{x.Key}={x.Value}")));
         }
 
         /// <summary>

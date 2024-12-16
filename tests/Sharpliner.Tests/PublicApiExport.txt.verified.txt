@@ -762,12 +762,15 @@ namespace Sharpliner.AzureDevOps
         protected override string Prefix { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Workspace { get; }
     }
+    [System.Runtime.CompilerServices.RequiredMember]
     public class PipelineWithExtends : Sharpliner.AzureDevOps.PipelineBase, System.IEquatable<Sharpliner.AzureDevOps.PipelineWithExtends>
     {
         [System.Obsolete("Constructors of types with required members are not supported in this version of " +
             "your compiler.", true)]
+        [System.Runtime.CompilerServices.CompilerFeatureRequired("RequiredMembers")]
         public PipelineWithExtends() { }
         public override System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
+        [System.Runtime.CompilerServices.RequiredMember]
         [YamlDotNet.Serialization.YamlMember(Order=600)]
         public Sharpliner.AzureDevOps.Extends Extends { get; init; }
     }
@@ -1964,9 +1967,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Artifact { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=211)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? FileSharePath { get; init; }
-        [System.ComponentModel.DefaultValue(1)]
+        [System.ComponentModel.DefaultValue(1u)]
         [YamlDotNet.Serialization.YamlMember(Order=213)]
-        public int ParallelCount { get; init; }
+        public uint ParallelCount { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=212)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Parallel { get; init; }
     }

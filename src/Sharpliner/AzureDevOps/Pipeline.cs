@@ -125,7 +125,11 @@ public record PipelineWithExtends : PipelineBase
     /// </summary>
     [YamlMember(Order = 600)]
     [DisallowNull]
+#if NET8_0_OR_GREATER
     public required Extends Extends { get; init; }
+#else
+    public Extends Extends { get; init; } = null!;
+#endif
 
     /// <inheritdoc/>
     public override IReadOnlyCollection<IDefinitionValidation> Validations => [];

@@ -36,7 +36,7 @@ internal record Permissions
     {
         // loop and add, we are not worried because it is a hasset, we add
         // to the correct hashset or remove from both in the case of None
-        foreach (GitHubPermissionScope scope in Enum.GetValues(typeof(GitHubPermissionScope)))
+        foreach (var scope in Enum.GetValues<GitHubPermissionScope>())
         {
             switch (permission)
             {

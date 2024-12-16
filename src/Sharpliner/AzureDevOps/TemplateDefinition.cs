@@ -322,7 +322,8 @@ public class AllowedValuesAttribute : Attribute
     /// </param>
     public AllowedValuesAttribute(params object?[] values)
     {
-        Values = Require.NotNull(values);
+        ArgumentNullException.ThrowIfNull(values);
+        Values = values;
     }
 
     /// <summary>
