@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using Sharpliner.AzureDevOps;
-using Xunit;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
@@ -27,16 +26,10 @@ public class PipelineResourceSerializationTests
     }
 
     [Fact]
-    public void RepositoryResource_Serialization_Test()
+    public Task RepositoryResource_Serialization_Test()
     {
-        string yaml = new ResourcePipeline().Serialize();
-        yaml.Trim().Should().Be(
-            """
-            resources:
-              repositories:
-              - repository: sharpliner
-                type: git
-                endpoint: https://github.com/sharpliner.sharpliner
-            """);
+        var pipeline = new ResourcePipeline();
+
+        return Verify(pipeline.Serialize());
     }
 }

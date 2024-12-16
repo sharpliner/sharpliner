@@ -1,0 +1,8 @@
+﻿variables:
+- ${{ if contains(variables['Build.SourceBranch'], 'refs/heads/feature/') }}:
+  - name: feature
+    value: on
+
+- ${{ if contains(variables['Build.SourceBranch'], 'refs/heads/feature/') }}:
+  - name: feature
+    value: on

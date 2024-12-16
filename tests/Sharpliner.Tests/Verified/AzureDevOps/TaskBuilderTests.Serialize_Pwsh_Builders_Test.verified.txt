@@ -1,0 +1,25 @@
+﻿jobs:
+- job: test
+  steps:
+  - pwsh: |+
+      Set-ErrorActionPreference Stop
+      Write-Host "Lorem ipsum dolor sit amet"
+
+  - pwsh: |+
+      Set-ErrorActionPreference Stop
+      Write-Host "Lorem ipsum dolor sit amet"
+    displayName: A display name
+
+  - pwsh: |-
+      $Files = Get-ChildItem *.sln
+      Remove-Item $Files
+
+  - task: PowerShell@2
+    inputs:
+      targetType: filePath
+      filePath: foo.ps1
+      pwsh: true
+
+  - pwsh: |+
+      Set-ErrorActionPreference Stop
+      Write-Host "Lorem ipsum dolor sit amet"

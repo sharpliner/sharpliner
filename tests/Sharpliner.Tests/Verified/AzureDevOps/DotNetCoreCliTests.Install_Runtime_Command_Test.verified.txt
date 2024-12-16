@@ -1,0 +1,8 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: runtime
+      version: 5.0.100
+      performMultiLevelLookup: true

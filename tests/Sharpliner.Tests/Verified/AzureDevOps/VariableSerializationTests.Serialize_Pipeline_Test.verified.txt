@@ -1,0 +1,34 @@
+﻿variables:
+- name: Configuration
+  value: Release
+
+- name: Framework
+  value: net8.0
+
+- group: PR keyvault variables
+
+- ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+  - name: TargetBranch
+    value: $(System.PullRequest.SourceBranch)
+
+  - name: IsPr
+    value: true
+
+- ${{ if and(eq(variables['Build.SourceBranch'], 'refs/heads/production'), ne(variables['Configuration'], 'Debug')) }}:
+  - name: PublishProfileFile
+    value: Prod
+
+  - name: foo
+    value: bar
+
+  - ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
+    - name: AzureSubscription
+      value: Int
+
+    - group: azure-int
+
+  - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+    - name: AzureSubscription
+      value: Prod
+
+    - group: azure-prod

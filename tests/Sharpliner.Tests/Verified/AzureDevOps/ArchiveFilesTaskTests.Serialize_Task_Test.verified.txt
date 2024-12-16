@@ -1,0 +1,12 @@
+﻿task: ArchiveFiles@2
+
+inputs:
+  rootFolderOrFile: $(Build.SourcesDirectory)
+  archiveType: tar
+  archiveFile: $(Build.ArtifactStagingDirectory)/Archive.tar
+  includeRootFolder: true
+  sevenZipCompression: ultra
+  tarCompression: xz
+  replaceExistingArchive: true
+  verbose: true
+  quiet: false

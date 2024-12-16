@@ -1,0 +1,20 @@
+﻿parameters:
+- name: Param1
+  type: string
+  default: ParamValue1
+
+variables:
+- ${{ if startsWith(parameters.Param1, 'Param') }}:
+  - name: feature
+    value: on
+
+stages:
+- stage: Stage1
+  jobs:
+  - job: Job1
+    steps:
+    - script: |-
+        echo Does this condition work?
+      condition: startsWith('${{ parameters.Param1 }}', 'Param')
+    condition: startsWith('${{ parameters.Param1 }}', 'Param')
+  condition: startsWith('${{ parameters.Param1 }}', 'Param')

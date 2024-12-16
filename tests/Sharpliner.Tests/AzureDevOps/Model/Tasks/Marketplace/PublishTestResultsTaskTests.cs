@@ -1,13 +1,11 @@
-﻿using FluentAssertions;
-using Sharpliner.AzureDevOps.Tasks;
-using Xunit;
+﻿using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
 public class PublishTestResultsTaskTests
 {
     [Fact]
-    public void Serialize_Task_Test()
+    public Task Serialize_Task_Test()
     {
         var task = new PublishTestResultsTask(TestResultsFormat.JUnit, "**/TEST-*.xml")
         {
@@ -22,37 +20,14 @@ public class PublishTestResultsTaskTests
             PublishRunAttachments = true,
         };
 
-        var yaml = SharplinerSerializer.Serialize(task);
-        yaml.Trim().Should().Be("""
-            task: PublishTestResults@2
-
-            inputs:
-              testResultsFormat: JUnit
-              testResultsFiles: '**/TEST-*.xml'
-              searchFolder: $(System.DefaultWorkingDirectory)
-              mergeTestResults: true
-              failTaskOnFailedTests: true
-              failTaskOnFailureToPublishResults: true
-              failTaskOnMissingResultsFile: true
-              testRunTitle: Test run title
-              buildPlatform: x64
-              buildConfiguration: Release
-              publishRunAttachments: true
-            """);
+        return Verify(SharplinerSerializer.Serialize(task));
     }
 
     [Fact]
-    public void Serialize_Task_With_Defaults_Test()
+    public Task Serialize_Task_With_Defaults_Test()
     {
         var task = new PublishTestResultsTask(TestResultsFormat.JUnit, "**/TEST-*.xml");
 
-        var yaml = SharplinerSerializer.Serialize(task);
-        yaml.Trim().Should().Be("""
-            task: PublishTestResults@2
-
-            inputs:
-              testResultsFormat: JUnit
-              testResultsFiles: '**/TEST-*.xml'
-            """);
+        return Verify(SharplinerSerializer.Serialize(task));
     }
 }

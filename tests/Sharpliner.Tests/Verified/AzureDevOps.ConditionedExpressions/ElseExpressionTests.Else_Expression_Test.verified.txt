@@ -1,0 +1,13 @@
+﻿stages:
+- stage: foo
+  jobs:
+  - job: job1
+    steps:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: pack
+        packagesToPack: ProjectFile
+        ${{ if eq(parameters.IncludeSymbols, true) }}:
+          arguments: --configuration $(BuildConfiguration) --no-restore --no-build -p:IncludeSymbols=true -p:SymbolPackageFormat=snupkg
+        ${{ else }}:
+          arguments: --configuration $(BuildConfiguration) --no-restore --no-build

@@ -1,6 +1,4 @@
-﻿using FluentAssertions;
-using Sharpliner.AzureDevOps;
-using Xunit;
+﻿using Sharpliner.AzureDevOps;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.Tests.AzureDevOps;
@@ -33,32 +31,10 @@ public class PipelineVariableTests
     }
 
     [Fact]
-    public void PipelineVariable_Serialization_Test()
+    public Task PipelineVariable_Serialization_Test()
     {
-        var yaml = new PipelineVariableTests_Pipeline().Serialize();
+        var pipeline = new PipelineVariableTests_Pipeline();
 
-        yaml.Trim().Should().Be(
-            """
-            variables:
-            - name: SomeString
-              value: Some Value
-
-            - name: SomeInt
-              value: 32
-
-            - name: SomeBool
-              value: true
-
-            - group: SomeGroup
-
-            - template: SomeTemplate
-
-            - name: SomeEnum1
-              value: Release1
-
-            - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-              - name: SomeEnum2
-                value: Debug
-            """);
+        return Verify(pipeline.Serialize());
     }
 }

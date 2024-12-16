@@ -1,0 +1,9 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: VSBuild@1
+    displayName: Build
+    inputs:
+      solution: '**/*.sln'
+    timeoutInMinutes: 120
+    retryCountOnTaskFailure: 2
