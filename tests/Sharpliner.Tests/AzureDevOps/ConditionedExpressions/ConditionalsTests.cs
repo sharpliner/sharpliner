@@ -223,30 +223,11 @@ public class ConditionalsTests
     }
 
     [Fact]
-    public void Parameter_Condition_Test()
+    public Task Parameter_Condition_Test()
     {
         var pipeline = new Parameter_Condition_Test_Pipeline();
 
-        var yaml = pipeline.Serialize();
-        yaml.Trim().Should().Be(
-            """
-            parameters:
-            - name: param1
-              type: boolean
-
-            - name: param2
-              type: boolean
-
-            variables:
-            - ${{ if parameters.param1 }}:
-              - name: feature1
-                value: on
-
-            - ${{ if parameters.param2 }}:
-              - name: feature2
-                value: on
-            """
-        );
+        return Verify(pipeline.Serialize());
     }
 
     private class Contains_Condition_Test_Pipeline : TestPipeline
