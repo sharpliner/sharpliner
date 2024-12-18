@@ -40,7 +40,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.ConditionedExpressions.IfConditionBuilder If { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsNotPullRequest { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsPullRequest { get; }
-        protected static Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> NoDependsOn { get; }
+        protected static Sharpliner.AzureDevOps.DependsOn NoDependsOn { get; }
         protected static Sharpliner.AzureDevOps.Tasks.NuGetTaskBuilder NuGet { get; }
         protected static Sharpliner.AzureDevOps.Tasks.PowershellTaskBuilder Powershell { get; }
         protected static Sharpliner.AzureDevOps.Tasks.PublishTaskBuilder Publish { get; }
@@ -332,6 +332,12 @@ namespace Sharpliner.AzureDevOps
         public System.Collections.Generic.List<string> Volumes { get; init; }
     }
     public abstract class DefinitionLibrary<T> : Sharpliner.AzureDevOps.AzureDevOpsDefinition { }
+    public class DependsOn : Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string>, YamlDotNet.Serialization.IYamlConvertible
+    {
+        public DependsOn(params string[] values) { }
+        public static Sharpliner.AzureDevOps.DependsOn op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference parameter) { }
+        public static Sharpliner.AzureDevOps.DependsOn op_Implicit(string value) { }
+    }
     public class DeploymentJob : Sharpliner.AzureDevOps.JobBase, System.IEquatable<Sharpliner.AzureDevOps.DeploymentJob>
     {
         public DeploymentJob(string name, string? displayName = null) { }
@@ -434,7 +440,7 @@ namespace Sharpliner.AzureDevOps
     }
     public interface IDependsOn
     {
-        Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> DependsOn { get; }
+        Sharpliner.AzureDevOps.DependsOn DependsOn { get; }
         string Name { get; }
     }
     public abstract class IfCondition : Sharpliner.AzureDevOps.ConditionedExpressions.Condition
@@ -512,7 +518,7 @@ namespace Sharpliner.AzureDevOps
         [YamlDotNet.Serialization.YamlMember(Order=1200)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? ContinueOnError { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=200)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> DependsOn { get; init; }
+        public Sharpliner.AzureDevOps.DependsOn DependsOn { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? DisplayName { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
@@ -912,7 +918,7 @@ namespace Sharpliner.AzureDevOps
         [YamlDotNet.Serialization.YamlMember(Order=400)]
         public Sharpliner.AzureDevOps.InlineCondition? Condition { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> DependsOn { get; init; }
+        public Sharpliner.AzureDevOps.DependsOn DependsOn { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=2)]
         public string? DisplayName { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=300)]

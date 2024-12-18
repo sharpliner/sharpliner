@@ -1,9 +1,13 @@
-﻿stages:
+﻿parameters:
+- name: dependsOn
+  type: string
+  default: ''
+
+stages:
 - stage: stage_1
 
 - stage: stage_2
-  dependsOn:
-  - stage_1
+  dependsOn: stage_1
 
 - stage: stage_3
   dependsOn:
@@ -12,3 +16,6 @@
 
   - ${{ else }}:
     - stage_2
+
+- stage: stage_4
+  dependsOn: ${{ parameters.dependsOn }}
