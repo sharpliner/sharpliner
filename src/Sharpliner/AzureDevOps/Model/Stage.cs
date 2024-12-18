@@ -32,7 +32,7 @@ public record Stage : IDependsOn
     /// List of names of other jobs this job depends on
     /// </summary>
     [YamlMember(Order = 100)]
-    public ConditionedList<string> DependsOn { get; init; } = [];
+    public DependsOn DependsOn { get; init; } = [];
 
     /// <summary>
     /// Specifies variables at the job level

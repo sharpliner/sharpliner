@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using Sharpliner.AzureDevOps;
+﻿using Sharpliner.AzureDevOps;
 using Sharpliner.Common;
 
 namespace Sharpliner.Tests.AzureDevOps.Validation;
@@ -10,12 +9,17 @@ public class DependsOnValidationTests
     {
         public override Pipeline Pipeline => new()
         {
+            Parameters = 
+            {
+                StringParameter("stageDependsOn", defaultValue: string.Empty) ,
+                StringParameter("jobDependsOn", defaultValue: string.Empty)
+            },
             Stages =
             {
                 new Stage("stage_1"),
                 new Stage("stage_2")
                 {
-                    DependsOn = { "stage_1" }
+                    DependsOn = "stage_1"
                 },
                 new Stage("stage_3")
                 {
@@ -27,7 +31,33 @@ public class DependsOnValidationTests
                             .Value("stage_2")
                     }
                 },
-            }
+                new Stage("stage_4")
+                {
+                    DependsOn = parameters["stageDependsOn"],
+                    Jobs = 
+                    {
+                        new Job("job_1"),
+                        new Job("job_2")
+                        {
+                            DependsOn = "job_1"
+                        },
+                        new Job("job_3")
+                        {
+                            DependsOn = 
+                            {
+                                If.IsBranch("main")
+                                    .Value("job_1")
+                                .Else
+                                    .Value("job_2")
+                            }
+                        },
+                        new Job("job_4")
+                        {
+                            DependsOn = parameters["jobDependsOn"]
+                        }
+                    }
+                },
+            },
         };
     }
 
