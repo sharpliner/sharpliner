@@ -1,5 +1,9 @@
 ﻿parameters:
-- name: dependsOn
+- name: stageDependsOn
+  type: string
+  default: ''
+
+- name: jobDependsOn
   type: string
   default: ''
 
@@ -18,4 +22,20 @@ stages:
     - stage_2
 
 - stage: stage_4
-  dependsOn: ${{ parameters.dependsOn }}
+  dependsOn: ${{ parameters.stageDependsOn }}
+  jobs:
+  - job: job_1
+
+  - job: job_2
+    dependsOn: job_1
+
+  - job: job_3
+    dependsOn:
+    - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+      - job_1
+
+    - ${{ else }}:
+      - job_2
+
+  - job: job_4
+    dependsOn: ${{ parameters.jobDependsOn }}
