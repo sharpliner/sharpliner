@@ -4,6 +4,7 @@
   default: default value
 
 - name: other
+  displayName: The other parameter
   type: boolean
   default: true
 

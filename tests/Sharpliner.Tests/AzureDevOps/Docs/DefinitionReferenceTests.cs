@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
@@ -515,6 +516,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
         public BuildConfiguration Configuration { get; init; } = BuildConfiguration.Release;
         public string? Project { get; init; }
 
+        [DisplayName(".NET version")]
         [AllowedValues("5.0.100", "5.0.102")]
         public string? Version { get; init; }
         public bool Restore { get; init; } = true;
@@ -572,6 +574,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
               type: string
 
             - name: version
+              displayName: .NET version
               type: string
               values:
               - 5.0.100

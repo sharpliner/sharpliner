@@ -1,4 +1,5 @@
-﻿using Sharpliner.AzureDevOps;
+﻿using System.ComponentModel;
+using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
@@ -71,6 +72,7 @@ public class TemplateTests
     class ExtendsTypedParameters
     {
         public string Some { get; init; } = "default value";
+        [DisplayName("The other parameter")]
         public bool Other { get; init; } = true;
     }
 
@@ -482,7 +484,7 @@ public class TemplateTests
     public Task Conditioned_Parameters_Serialization_Test()
     {
         var pipeline = new Conditioned_Parameters();
-        
+
         return Verify(pipeline.Serialize());
     }
 }

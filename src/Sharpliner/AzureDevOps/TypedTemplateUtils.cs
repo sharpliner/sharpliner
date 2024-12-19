@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
@@ -36,6 +37,7 @@ internal static class TypedTemplateUtils<TParameters> where TParameters : class,
                 _ => new ObjectParameter(name),
             };
 
+            parameter =  parameter with { DisplayName = property.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName };
             result.Add(parameter);
         }
 
