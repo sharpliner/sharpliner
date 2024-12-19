@@ -51,12 +51,7 @@ public class DependsOn : ConditionedList<string>, IYamlConvertible
 
     void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
-        if (Count is 0)
-        {
-            // We want to write "dependsOn: " (empty value)
-            nestedObjectSerializer(string.Empty);
-        }
-        else if (Count is 1 && this[0].Definition is not null)
+        if (Count is 1 && this[0].Definition is not null)
         {
             nestedObjectSerializer(this[0]);
         }
