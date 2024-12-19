@@ -533,6 +533,7 @@ parameters:
   type: string
 
 - name: version
+  displayName: .NET version
   type: string
   values:
   - 5.0.100
