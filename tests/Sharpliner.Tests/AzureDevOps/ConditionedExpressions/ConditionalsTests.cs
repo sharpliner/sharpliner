@@ -342,4 +342,36 @@ public class ConditionalsTests
 
         return Verify(pipeline.Serialize());
     }
+
+    class NestedConditionedBlocks : SingleStagePipelineDefinition
+    {
+        public override string TargetFile => "nested-conditioned-blocks.yml";
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("job1")
+                {
+                    Steps =
+                    {
+                        If.IsBranch("main")
+                            .Step(Bash.Inline("echo 'Main branch'"))
+                            .If.IsPullRequest
+                                .StepTemplate("template1.yml")
+                            .EndIf
+                            .Step(Bash.Inline("echo 'End of main branch'")),
+                        StepTemplate("template2.yml"),
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task NestedConditionedBlocks_Test()
+    {
+        var pipeline = new NestedConditionedBlocks();
+
+        return Verify(pipeline.Serialize());
+    }
 }

@@ -1,0 +1,14 @@
+﻿jobs:
+- job: job1
+  steps:
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    - bash: |-
+        echo 'Main branch'
+
+    - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      - template: template1.yml
+
+    - bash: |-
+        echo 'End of main branch'
+
+  - template: template2.yml
