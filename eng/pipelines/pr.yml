@@ -89,3 +89,11 @@ jobs:
       projects: tests/E2E.Tests/ProjectUsingTheLibrary/E2E.Tests.ProjectUsingTheLibrary.csproj
       includeNuGetOrg: false
       workingDirectory: tests/E2E.Tests
+
+  - task: DotNetCoreCLI@2
+    displayName: Build project reference test with skipped publishing
+    inputs:
+      command: build
+      projects: tests/E2E.Tests/ProjectUsingTheLibrarySkipPublish/E2E.Tests.ProjectUsingTheLibrarySkipPublish.csproj
+      includeNuGetOrg: false
+      workingDirectory: tests/E2E.Tests
