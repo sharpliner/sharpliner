@@ -9,7 +9,7 @@ public class DependsOnValidationTests
     {
         public override Pipeline Pipeline => new()
         {
-            Parameters = 
+            Parameters =
             {
                 StringParameter("stageDependsOn", defaultValue: string.Empty) ,
                 StringParameter("jobDependsOn", defaultValue: string.Empty)
@@ -34,7 +34,7 @@ public class DependsOnValidationTests
                 new Stage("stage_4")
                 {
                     DependsOn = parameters["stageDependsOn"],
-                    Jobs = 
+                    Jobs =
                     {
                         new Job("job_1"),
                         new Job("job_2")
@@ -43,7 +43,7 @@ public class DependsOnValidationTests
                         },
                         new Job("job_3")
                         {
-                            DependsOn = 
+                            DependsOn =
                             {
                                 If.IsBranch("main")
                                     .Value("job_1")
@@ -54,8 +54,16 @@ public class DependsOnValidationTests
                         new Job("job_4")
                         {
                             DependsOn = parameters["jobDependsOn"]
+                        },
+                        new Job("job_5")
+                        {
+                            DependsOn = NoDependsOn
                         }
                     }
+                },
+                new Stage("stage_5")
+                {
+                    DependsOn = NoDependsOn
                 },
             },
         };
