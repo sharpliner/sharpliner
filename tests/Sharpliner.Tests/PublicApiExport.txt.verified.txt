@@ -2211,6 +2211,7 @@ namespace Sharpliner
         [Microsoft.Build.Framework.Required]
         public string? Assembly { get; set; }
         public bool FailIfChanged { get; set; }
+        public bool Skip { get; set; }
         public override bool Execute() { }
     }
     public abstract class SharplinerConfiguration : Sharpliner.ISharplinerConfiguration
