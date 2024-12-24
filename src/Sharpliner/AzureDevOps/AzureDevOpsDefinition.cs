@@ -878,8 +878,6 @@ public abstract class AzureDevOpsDefinition
 
     internal static readonly Regex NameRegex = new("^[A-Za-z0-9_]+$", RegexOptions.Compiled);
 
-    internal static readonly Regex ParameterReferenceRegex = new(@"\$\{\{ parameters\.[A-Za-z0-9_]+\s*\}\}", RegexOptions.Compiled);
-
     /// <summary>
     /// AzDO allows an empty dependsOn which then forces the stage/job to kick off in parallel.
     /// If dependsOn is omitted, stages/jobs run in the order they are defined.
