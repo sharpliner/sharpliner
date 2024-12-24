@@ -1,10 +1,7 @@
-using System;
-using System.Collections.Generic;
 using FluentAssertions;
 using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Tasks;
-using Xunit;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.Tests.AzureDevOps.Docs;
@@ -97,7 +94,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
     }
 
     [Fact]
-    public void AzurePipelineTask_Test()
+    public Task AzurePipelineTask_Test()
     {
         ConditionedList<Step> tasks =
         [
@@ -113,20 +110,11 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
 #endregion
         ];
 
-        var yaml = SharplinerSerializer.Serialize(tasks);
-        yaml.Trim().Should().Be(
-            """
-            - task: DotNetCoreCLI@2
-              displayName: Run unit tests
-              inputs:
-                command: test
-                projects: src/MyProject.sln
-            """
-        );
+        return Verify(SharplinerSerializer.Serialize(tasks));
     }
 
     [Fact]
-    public void Dotnet_Test()
+    public Task Dotnet_Test()
     {
         ConditionedList<Step> tasks =
         [
@@ -147,31 +135,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
 #endregion
         ];
 
-        var yaml = SharplinerSerializer.Serialize(tasks);
-        yaml.Trim().Should().Be(
-            """
-            - task: UseDotNet@2
-              inputs:
-                packageType: sdk
-                version: ${{ parameters.version }}
-
-            - task: DotNetCoreCLI@2
-              inputs:
-                command: restore
-                includeNuGetOrg: false
-                feedsToUse: select
-                feedRestore: dotnet-7-preview-feed
-                externalFeedCredentials: feeds/dotnet-7
-                noCache: true
-                restoreDirectory: .packages
-
-            - task: DotNetCoreCLI@2
-              inputs:
-                command: build
-                projects: src/MyProject.csproj
-              timeoutInMinutes: 20
-            """
-        );
+        return Verify(SharplinerSerializer.Serialize(tasks));
     }
 
     [Fact]

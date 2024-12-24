@@ -1,0 +1,24 @@
+﻿jobs:
+- job: Foo
+  steps:
+  - script: |-
+      echo 'Hello World'
+
+  - task: UseDotNet@2
+    inputs:
+      packageType: sdk
+      version: 6.0.100
+
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: restore
+        projects: src/MyProject.sln
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: build
+      projects: src/MyProject.sln
+
+  - script: |-
+      echo 'Goodbye World'

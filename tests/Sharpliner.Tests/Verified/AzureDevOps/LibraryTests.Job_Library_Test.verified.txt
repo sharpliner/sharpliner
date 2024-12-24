@@ -1,0 +1,12 @@
+﻿jobs:
+- job: Init
+
+- job: Start
+  steps:
+  - script: |-
+      echo 'Hello World'
+
+- job: End
+  steps:
+  - script: |-
+      echo 'Goodbye World'

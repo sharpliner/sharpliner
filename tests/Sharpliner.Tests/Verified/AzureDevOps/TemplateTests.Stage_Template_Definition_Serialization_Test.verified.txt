@@ -1,0 +1,12 @@
+﻿parameters:
+- name: mainStage
+  type: stage
+
+stages:
+- stage: initialize
+  displayName: Initialize stage
+
+- ${{ parameters.mainStage }}
+
+- stage: finalize
+  displayName: Finalize stage

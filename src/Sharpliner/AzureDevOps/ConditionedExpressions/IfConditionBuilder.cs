@@ -404,7 +404,7 @@ public class IfConditionBuilder
     /// </code>
     /// </summary>
     public IfCondition IsPullRequest
-        => Link(new IfBuildReasonCondition("PullRequest", true));
+        => Link(new IfBuildReasonCondition(new string("PullRequest"), true));
 
     /// <summary>
     /// Utility that appends an <c>ne(variables['Build.Reason'], 'PullRequest')</c> condition to an <c>${{ if() }}</c> section.
@@ -418,7 +418,7 @@ public class IfConditionBuilder
     /// </code>
     /// </summary>
     public IfCondition IsNotPullRequest
-        => Link(new IfBuildReasonCondition("PullRequest", false));
+        => Link(new IfBuildReasonCondition(new string("PullRequest"), false));
 
     private IfCondition Link(IfCondition condition)
     {

@@ -1,0 +1,4 @@
+﻿jobs:
+- job: No_op
+  pool:
+    vmImage: windows-2019

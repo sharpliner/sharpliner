@@ -1,7 +1,5 @@
-﻿using System.Linq;
-using Sharpliner.AzureDevOps;
+﻿using Sharpliner.AzureDevOps;
 using Sharpliner.Common;
-using Xunit;
 
 namespace Sharpliner.Tests.AzureDevOps.Validation;
 

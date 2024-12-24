@@ -1,0 +1,64 @@
+﻿parameters:
+- name: configuration
+  type: string
+  default: debug
+  values:
+  - debug
+  - release
+
+- name: project
+  type: string
+
+- name: version
+  type: string
+  values:
+  - 5.0.100
+  - 5.0.102
+
+- name: skipBuild
+  type: boolean
+
+- name: useNugetOrg
+  type: boolean
+  default: false
+
+- name: restore
+  type: boolean
+  default: true
+
+- name: afterBuild
+  type: step
+  default:
+    bash: |-
+      cp -R logs $(Build.ArtifactStagingDirectory)
+
+- name: theCounter
+  type: number
+  default: 2
+
+- name: defaultCounter
+  type: number
+  values:
+  - 1
+  - 2
+  - 3
+  - 4
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: sdk
+    version: ${{ parameters.version }}
+
+- ${{ if eq(parameters.restore, true) }}:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: restore
+      projects: ${{ parameters.project }}
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: build
+    projects: ${{ parameters.project }}
+
+- ${{ parameters.afterBuild }}

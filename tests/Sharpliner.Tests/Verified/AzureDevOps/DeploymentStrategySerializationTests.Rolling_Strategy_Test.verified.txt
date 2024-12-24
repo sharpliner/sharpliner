@@ -1,0 +1,10 @@
+﻿rolling:
+  maxParallel: 4
+  preDeploy:
+    steps:
+    - download: current
+  deploy:
+    pool:
+      name: MacOS-latest
+    steps:
+    - download: current

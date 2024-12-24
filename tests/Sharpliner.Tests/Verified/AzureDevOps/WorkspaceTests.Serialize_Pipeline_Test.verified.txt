@@ -1,0 +1,4 @@
+﻿jobs:
+- job: job1
+  workspace:
+    clean: resources

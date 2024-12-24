@@ -1,6 +1,4 @@
-﻿using FluentAssertions;
-using Sharpliner.AzureDevOps;
-using Xunit;
+﻿using Sharpliner.AzureDevOps;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
@@ -21,16 +19,10 @@ public class WorkspaceTests
     }
 
     [Fact]
-    public void Serialize_Pipeline_Test()
+    public Task Serialize_Pipeline_Test()
     {
         WorkspacePipeline pipeline = new();
-        string yaml = pipeline.Serialize();
-        yaml.Trim().Should().Be(
-        """
-        jobs:
-        - job: job1
-          workspace:
-            clean: resources
-        """);
+        
+        return Verify(pipeline.Serialize());
     }
 }

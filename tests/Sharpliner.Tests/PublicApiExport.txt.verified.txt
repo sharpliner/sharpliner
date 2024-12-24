@@ -1,3 +1,7 @@
+﻿[assembly: System.Reflection.AssemblyMetadata("RepositoryUrl", "https://github.com/sharpliner/sharpliner")]
+[assembly: System.Resources.NeutralResourcesLanguage("en")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner.Tests")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v9.0", FrameworkDisplayName=".NET 9.0")]
 namespace Sharpliner.AzureDevOps
 {
     public sealed class AgentVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
@@ -36,7 +40,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.ConditionedExpressions.IfConditionBuilder If { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsNotPullRequest { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsPullRequest { get; }
-        protected static Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> NoDependsOn { get; }
+        protected static Sharpliner.AzureDevOps.DependsOn NoDependsOn { get; }
         protected static Sharpliner.AzureDevOps.Tasks.NuGetTaskBuilder NuGet { get; }
         protected static Sharpliner.AzureDevOps.Tasks.PowershellTaskBuilder Powershell { get; }
         protected static Sharpliner.AzureDevOps.Tasks.PublishTaskBuilder Publish { get; }
@@ -328,6 +332,12 @@ namespace Sharpliner.AzureDevOps
         public System.Collections.Generic.List<string> Volumes { get; init; }
     }
     public abstract class DefinitionLibrary<T> : Sharpliner.AzureDevOps.AzureDevOpsDefinition { }
+    public class DependsOn : Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string>, YamlDotNet.Serialization.IYamlConvertible
+    {
+        public DependsOn(params string[] values) { }
+        public static Sharpliner.AzureDevOps.DependsOn op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference parameter) { }
+        public static Sharpliner.AzureDevOps.DependsOn op_Implicit(string value) { }
+    }
     public class DeploymentJob : Sharpliner.AzureDevOps.JobBase, System.IEquatable<Sharpliner.AzureDevOps.DeploymentJob>
     {
         public DeploymentJob(string name, string? displayName = null) { }
@@ -430,7 +440,7 @@ namespace Sharpliner.AzureDevOps
     }
     public interface IDependsOn
     {
-        Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> DependsOn { get; }
+        Sharpliner.AzureDevOps.DependsOn DependsOn { get; }
         string Name { get; }
     }
     public abstract class IfCondition : Sharpliner.AzureDevOps.ConditionedExpressions.Condition
@@ -508,7 +518,7 @@ namespace Sharpliner.AzureDevOps
         [YamlDotNet.Serialization.YamlMember(Order=1200)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? ContinueOnError { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=200)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> DependsOn { get; init; }
+        public Sharpliner.AzureDevOps.DependsOn DependsOn { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? DisplayName { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
@@ -758,12 +768,15 @@ namespace Sharpliner.AzureDevOps
         protected override string Prefix { get; }
         public Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference Workspace { get; }
     }
+    [System.Runtime.CompilerServices.RequiredMember]
     public class PipelineWithExtends : Sharpliner.AzureDevOps.PipelineBase, System.IEquatable<Sharpliner.AzureDevOps.PipelineWithExtends>
     {
         [System.Obsolete("Constructors of types with required members are not supported in this version of " +
             "your compiler.", true)]
+        [System.Runtime.CompilerServices.CompilerFeatureRequired("RequiredMembers")]
         public PipelineWithExtends() { }
         public override System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
+        [System.Runtime.CompilerServices.RequiredMember]
         [YamlDotNet.Serialization.YamlMember(Order=600)]
         public Sharpliner.AzureDevOps.Extends Extends { get; init; }
     }
@@ -905,7 +918,7 @@ namespace Sharpliner.AzureDevOps
         [YamlDotNet.Serialization.YamlMember(Order=400)]
         public Sharpliner.AzureDevOps.InlineCondition? Condition { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string> DependsOn { get; init; }
+        public Sharpliner.AzureDevOps.DependsOn DependsOn { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=2)]
         public string? DisplayName { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=300)]
@@ -1960,9 +1973,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Artifact { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=211)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? FileSharePath { get; init; }
-        [System.ComponentModel.DefaultValue(1)]
+        [System.ComponentModel.DefaultValue(1u)]
         [YamlDotNet.Serialization.YamlMember(Order=213)]
-        public int ParallelCount { get; init; }
+        public uint ParallelCount { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=212)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Parallel { get; init; }
     }

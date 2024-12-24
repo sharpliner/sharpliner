@@ -1,0 +1,4 @@
+﻿variables:
+- ${{ if gt(variables['Build.BuildNumber'], 100) }}:
+  - name: high
+    value: true

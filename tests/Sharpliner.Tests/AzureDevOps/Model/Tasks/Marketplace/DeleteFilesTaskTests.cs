@@ -1,13 +1,11 @@
-﻿using FluentAssertions;
-using Sharpliner.AzureDevOps.Tasks;
-using Xunit;
+﻿using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
 public class DeleteFilesTaskTests
 {
     [Fact]
-    public void Serialize_Task_Test()
+    public Task Serialize_Task_Test()
     {
         var task = new DeleteFilesTask("*")
         {
@@ -16,29 +14,14 @@ public class DeleteFilesTaskTests
             RemoveDotFiles = true,
         };
 
-        var yaml = SharplinerSerializer.Serialize(task);
-        yaml.Trim().Should().Be("""
-            task: DeleteFiles@1
-
-            inputs:
-              Contents: '*'
-              SourceFolder: $(Build.ArtifactStagingDirectory)
-              RemoveSourceFolder: true
-              RemoveDotFiles: true
-            """);
+        return Verify(SharplinerSerializer.Serialize(task));
     }
 
     [Fact]
-    public void Serialize_Task_With_Defaults_Test()
+    public Task Serialize_Task_With_Defaults_Test()
     {
         var task = new DeleteFilesTask("*");
 
-        var yaml = SharplinerSerializer.Serialize(task);
-        yaml.Trim().Should().Be("""
-            task: DeleteFiles@1
-
-            inputs:
-              Contents: '*'
-            """);
+        return Verify(SharplinerSerializer.Serialize(task));
     }
 }

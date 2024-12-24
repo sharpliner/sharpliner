@@ -1,0 +1,8 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: custom
+      custom: --list-sdks
+    continueOnError: true

@@ -1,0 +1,34 @@
+﻿jobs:
+- job: test
+  steps:
+  - bash: |
+      echo "foo"
+      git clone $bar
+
+  - bash: |
+      echo "foo"
+      git clone $bar
+
+  - bash: |-
+      cat /etc/passwd
+      rm -rf tests.xml
+
+  - task: Bash@3
+    displayName: Test task
+    inputs:
+      targetType: filePath
+      filePath: foo.sh
+
+  - task: Bash@3
+    displayName: Test task
+    inputs:
+      targetType: filePath
+      filePath: some/script.sh
+      arguments: foo bar
+      failOnStderr: true
+      bashEnvValue: ~/.bash_profile
+    continueOnError: true
+
+  - bash: |
+      echo "foo"
+      git clone $bar

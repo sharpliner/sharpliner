@@ -1,8 +1,5 @@
-﻿using System.Linq;
-using FluentAssertions;
-using Sharpliner.AzureDevOps;
+﻿using Sharpliner.AzureDevOps;
 using Sharpliner.Common;
-using Xunit;
 
 namespace Sharpliner.Tests.AzureDevOps.Validation;
 
@@ -12,12 +9,17 @@ public class DependsOnValidationTests
     {
         public override Pipeline Pipeline => new()
         {
+            Parameters = 
+            {
+                StringParameter("stageDependsOn", defaultValue: string.Empty) ,
+                StringParameter("jobDependsOn", defaultValue: string.Empty)
+            },
             Stages =
             {
                 new Stage("stage_1"),
                 new Stage("stage_2")
                 {
-                    DependsOn = { "stage_1" }
+                    DependsOn = "stage_1"
                 },
                 new Stage("stage_3")
                 {
@@ -29,32 +31,42 @@ public class DependsOnValidationTests
                             .Value("stage_2")
                     }
                 },
-            }
+                new Stage("stage_4")
+                {
+                    DependsOn = parameters["stageDependsOn"],
+                    Jobs = 
+                    {
+                        new Job("job_1"),
+                        new Job("job_2")
+                        {
+                            DependsOn = "job_1"
+                        },
+                        new Job("job_3")
+                        {
+                            DependsOn = 
+                            {
+                                If.IsBranch("main")
+                                    .Value("job_1")
+                                .Else
+                                    .Value("job_2")
+                            }
+                        },
+                        new Job("job_4")
+                        {
+                            DependsOn = parameters["jobDependsOn"]
+                        }
+                    }
+                },
+            },
         };
     }
 
     [Fact]
-    public void ConditionedDependsOn_Validation_Test()
+    public Task ConditionedDependsOn_Validation_Test()
     {
         var pipeline = new ConditionedDependsOnPipeline();
-        var yaml = pipeline.Serialize();
-        yaml.Trim().Should().Be(
-            """
-            stages:
-            - stage: stage_1
 
-            - stage: stage_2
-              dependsOn:
-              - stage_1
-
-            - stage: stage_3
-              dependsOn:
-              - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-                - stage_1
-
-              - ${{ else }}:
-                - stage_2
-            """);
+        return Verify(pipeline.Serialize());
     }
 
     private class MissingStageDependsOnErrorPipeline : TestPipeline

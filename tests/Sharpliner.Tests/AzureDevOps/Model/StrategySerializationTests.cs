@@ -1,13 +1,11 @@
-﻿using FluentAssertions;
-using Sharpliner.AzureDevOps;
-using Xunit;
+﻿using Sharpliner.AzureDevOps;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
 public class StrategySerializationTests
 {
     [Fact]
-    public void Serialize_MatrixStrategy_Test()
+    public Task Serialize_MatrixStrategy_Test()
     {
         var strategy = new MatrixStrategy
         {
@@ -25,17 +23,7 @@ public class StrategySerializationTests
             },
             MaxParallel = 2,
         };
-        string yaml = SharplinerSerializer.Serialize(strategy);
-        yaml.Trim().Should().Be(
-            """
-            matrix:
-              Release:
-                _BuildConfig: Release
-                _BuildConfig2: Release2
-              Debug:
-                _BuildConfig: Debug
 
-            maxParallel: 2
-            """);
+        return Verify(SharplinerSerializer.Serialize(strategy));
     }
 }

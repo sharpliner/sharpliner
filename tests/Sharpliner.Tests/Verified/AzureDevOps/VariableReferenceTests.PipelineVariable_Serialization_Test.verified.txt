@@ -1,0 +1,15 @@
+﻿stages:
+- stage: Stage_1
+  jobs:
+  - job: Job_1
+    pool: ${{ variables['pool'] }}
+    steps:
+    - ${{ variables['steps'] }}
+    - ${{ variables['steps'] }}
+
+    - bash: |-
+        curl -o $(Agent.TempDirectory)/sharpliner.zip
+      continueOnError: ${{ variables['continue'] }}
+
+  - ${{ variables['jobs'] }}
+- ${{ variables['stages'] }}

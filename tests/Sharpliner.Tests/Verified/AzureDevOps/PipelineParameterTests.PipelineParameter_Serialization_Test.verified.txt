@@ -1,0 +1,30 @@
+﻿parameters:
+- name: project
+  displayName: AzureDevops project
+  type: string
+
+- name: version
+  displayName: .NET version
+  type: string
+  values:
+  - 5.0.100
+  - 5.0.102
+
+- name: restore
+  displayName: Restore NuGets
+  type: boolean
+  default: true
+
+- name: list
+  displayName: List input
+  type: object
+  default:
+  - Azure
+  - DevOps
+
+- name: afterBuild
+  displayName: After steps
+  type: step
+  default:
+    bash: |-
+      cp -R logs $(Build.ArtifactStagingDirectory)

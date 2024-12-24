@@ -1,0 +1,12 @@
+﻿variables:
+- ${{ if containsValue($(System.User), 'azdobot') }}:
+  - name: TargetBranch
+    value: $(System.PullRequest.SourceBranch)
+
+- ${{ if in('foo', 'bar') }}:
+  - name: TargetBranch
+    value: production
+
+- ${{ if xor(True, $(Variable)) }}:
+  - name: TargetBranch
+    value: main

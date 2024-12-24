@@ -1,0 +1,22 @@
+﻿jobs:
+- job: test
+  steps:
+  - checkout: none
+
+  - checkout: self
+    lfs: true
+    submodules: false
+    path: $(Build.SourcesDirectory)/local
+    persistCredentials: true
+
+  - checkout: self
+    displayName: Checkout shallow self
+    submodules: true
+    path: $(Build.SourcesDirectory)/local-shallow
+
+  - checkout: https://github.com/sharpliner/sharpliner.git
+    clean: true
+    fetchDepth: 0
+    fetchFilter: tree:0
+    fetchTags: true
+    submodules: recursive

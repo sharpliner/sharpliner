@@ -1,0 +1,9 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: push
+      packagesToPush: $(Build.ArtifactStagingDirectory)/*.nupkg
+      arguments: -c Release
+      publishPackageMetadata: true

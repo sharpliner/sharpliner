@@ -1,0 +1,25 @@
+﻿trigger:
+  branches:
+    include:
+    - main
+  paths:
+    include:
+    - src/**/*
+    exclude:
+    - docs/*
+    - '*.md'
+
+pr:
+  branches:
+    include:
+    - main
+    - develop
+
+schedules:
+- cron: 0 0 24 * *
+  displayName: Releases
+  branches:
+    include:
+    - staging
+    - production
+  always: true

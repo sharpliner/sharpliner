@@ -1,0 +1,76 @@
+﻿resources:
+  pipelines:
+  - pipeline: source-pipeline
+    source: TriggeringPipeline
+    trigger:
+      branches:
+        include:
+        - main
+        - develop
+        - features/*
+        exclude:
+        - features/experimental/*
+  builds:
+  - build: Spaceworkz
+    type: Jenkins
+    connection: MyJenkinsServer
+    source: SpaceworkzProj
+    trigger: true
+  repositories:
+  - repository: sharpliner
+    type: git
+    endpoint: https://github.com/sharpliner.sharpliner
+
+  - repository: 1ESPipelineTemplates
+    type: git
+    name: 1ESPipelineTemplates/1ESPipelineTemplates
+    ref: refs/tags/release
+
+  - repository: templates
+    type: github
+    name: microsoft/vscode-engineering
+    ref: main
+    endpoint: Monaco
+  containers:
+  - container: linux-artifact-builder
+    image: lightgbm/vsts-agent:manylinux_2_28_x86_64
+    mountReadOnly:
+      externals: true
+      tasks: true
+      tools: true
+
+  - container: ubuntu-latest
+    image: ubuntu:22:04
+    options: --name ci-container -v /usr/bin/docker:/tmp/docker:ro
+    mountReadOnly:
+      externals: true
+      tasks: true
+      tools: true
+
+  - container: $(image)
+    options: --gpus all --shm-size=512m
+    volumes:
+    - /var/run/user/998/docker.sock:/var/run/docker.sock
+    mapDockerSocket: false
+  packages:
+  - packageType: npm
+    package: contoso
+    connection: pat-contoso
+    name: yourname/contoso
+    version: 7.130.88
+    trigger: true
+
+  - packageType: NuGet
+    package: newtonsoftjson
+    connection: pat-new
+    name: newtonsoft.json
+    version: 13.0.3
+  webhooks:
+  - webhook: WebHook
+    connection: IncomingWH
+    filters:
+    - path: repositoryName
+      value: maven-releases
+
+    - path: action
+      value: CREATED

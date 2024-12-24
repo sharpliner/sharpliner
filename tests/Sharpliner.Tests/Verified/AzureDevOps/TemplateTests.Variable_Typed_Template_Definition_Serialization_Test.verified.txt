@@ -1,0 +1,22 @@
+﻿parameters:
+- name: s_param
+  type: string
+  default: default value
+
+- name: b_param
+  type: boolean
+  default: true
+
+- name: n_param
+  type: number
+  default: 42
+
+variables:
+- name: s_variable
+  value: value
+
+- name: b_variable
+  value: true
+
+- name: n_variable
+  value: 42

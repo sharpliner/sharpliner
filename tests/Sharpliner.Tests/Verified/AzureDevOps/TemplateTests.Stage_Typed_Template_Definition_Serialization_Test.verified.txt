@@ -1,0 +1,27 @@
+﻿parameters:
+- name: setupStages
+  type: stageList
+  default: []
+
+- name: mainStage
+  type: stage
+
+stages:
+- stage: initialize
+  displayName: Initialize stage
+
+- ${{ parameters.mainStage }}
+
+- stage: finalize
+  displayName: Finalize stage
+
+- stage: with-templates
+  jobs:
+  - template: job-template.yml
+    parameters:
+      mainJob:
+        job: main
+        displayName: Main job
+        steps:
+        - bash: |-
+            echo 'Main job step'
