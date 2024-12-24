@@ -4,6 +4,8 @@
       <_AssemblyToSearch>$(OutputPath)$(AssemblyName).dll</_AssemblyToSearch>
       <_FailIfChanged>false</_FailIfChanged>
       <_FailIfChanged Condition="$(FailIfChanged) == 'true'">true</_FailIfChanged>
+      <_Skip>false</_Skip>
+      <_Skip Condition="$(SkipSharpliner) == 'true'">true</_Skip>
     </PropertyGroup>
 
     <Message Importance="high" Text="Publishing all definitions inside $(_AssemblyToSearch)" />
@@ -17,6 +19,6 @@
     <Exec Command="dotnet build &quot;$(MSBuildProjectFullPath)&quot; /p:SharplinerVsBuild=true -c $(Configuration)"
           Condition=" '$(MSBuildRuntimeType)' != 'Core' and '$(SharplinerVsBuild)' != 'true' " />
 
-    <PublishDefinitions Assembly="$(_AssemblyToSearch)" FailIfChanged="$(_FailIfChanged)" Condition="'$(MSBuildRuntimeType)' == 'Core'" />
+    <PublishDefinitions Assembly="$(_AssemblyToSearch)" FailIfChanged="$(_FailIfChanged)" Skip="$(_Skip)" Condition="'$(MSBuildRuntimeType)' == 'Core'" />
   </Target>
 </Project>
