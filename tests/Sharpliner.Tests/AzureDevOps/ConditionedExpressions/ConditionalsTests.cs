@@ -362,6 +362,16 @@ public class ConditionalsTests
                             .Step(Bash.Inline("echo 'End of main branch'")),
                         StepTemplate("template2.yml"),
                     }
+                },
+                new Job("job2")
+                {
+                    Steps =
+                    {
+                        If.IsBranch("main")
+                            .If.IsPullRequest // <-- this doesn't compile, yet
+                                .StepTemplate("template1.yml")
+                            .EndIf
+                    }
                 }
             }
         };
