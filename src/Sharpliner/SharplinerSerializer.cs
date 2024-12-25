@@ -5,14 +5,24 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace Sharpliner;
 
-internal static class SharplinerSerializer
+/// <summary>
+/// Serializer for Sharpliner objects.
+/// </summary>
+public static class SharplinerSerializer
 {
-    public static ISerializer Serializer { get; } = InitializeSerializer();
+    internal static ISerializer Serializer { get; } = InitializeSerializer();
 
-    public static string Serialize(object data)
+    /// <summary>
+    /// Serializes the given object to a YAML string. Can be used with <see cref="AzureDevOps.PipelineBase"/>
+    /// </summary>
+    /// <param name="data">The object to serialize</param>
+    /// <param name="configuration">The optional configuration to use for serialization</param>
+    /// <returns>The serialized YAML string</returns>
+    public static string Serialize(object data, ISharplinerConfiguration? configuration = null)
     {
         var yaml = Serializer.Serialize(data);
-        return SharplinerConfiguration.Current.Serialization.PrettifyYaml ? Prettify(yaml) : yaml;
+        configuration ??= SharplinerConfiguration.Current;
+        return configuration.Serialization.PrettifyYaml ? Prettify(yaml) : yaml;
     }
 
     private static ISerializer InitializeSerializer()
@@ -26,7 +36,7 @@ internal static class SharplinerSerializer
         return serializerBuilder.Build();
     }
 
-    public static string Prettify(string yaml)
+    internal static string Prettify(string yaml)
     {
         // Add empty new lines to make text more readable
         var newLineReplace = Environment.NewLine + "$1";
