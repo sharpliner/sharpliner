@@ -119,22 +119,26 @@ public class NameValidationTest
         Assert.Equal("Found duplicate name `job_4`", errors.Single().Message);
     }
 
-    private class SelfDependencyPipeline : SimpleTestPipeline
+    private class NameWithExpressionsPipeline : SimpleTestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
         {
             Jobs =
             {
-                new Job("job_1"),
-                new Job("job_2")
-                {
-                    DependsOn = [ "job_1" ]
-                },
-                new Job("job_3")
-                {
-                    DependsOn = [ "job_2", "job_3" ]
-                },
+                new Job(parameters["p_test"]),
+                new Job($"job_{parameters["p_test"]}"),
+                new Job(variables["v_test"]),
+                new Job($"job_{variables["v_test"]}"),
+                new Job($"job_{variables["v_test"]}_{parameters["p_test"]}"),
             }
         };
+    }
+
+    [Fact]
+    public void NameWithExpressionsPipeline_Validation_Test()
+    {
+        var pipeline = new NameWithExpressionsPipeline();
+        var errors = pipeline.Validations.SelectMany(v => v.Validate());
+        Assert.Empty(errors);
     }
 }
