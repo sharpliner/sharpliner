@@ -2282,6 +2282,10 @@ namespace Sharpliner
         public bool Publish(string assemblyPath, bool failIfChanged) { }
         public static string[] GetDefaultHeader(System.Type type) { }
     }
+    public static class SharplinerSerializer
+    {
+        public static string Serialize(object data, Sharpliner.ISharplinerConfiguration configuration) { }
+    }
     public enum TargetPathType
     {
         RelativeToGitRoot = 0,

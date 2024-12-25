@@ -5,15 +5,17 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace Sharpliner;
 
-internal static class SharplinerSerializer
+public static class SharplinerSerializer
 {
-    public static ISerializer Serializer { get; } = InitializeSerializer();
+    internal static ISerializer Serializer { get; } = InitializeSerializer();
 
-    public static string Serialize(object data)
+    public static string Serialize(object data, ISharplinerConfiguration configuration)
     {
         var yaml = Serializer.Serialize(data);
-        return SharplinerConfiguration.Current.Serialization.PrettifyYaml ? Prettify(yaml) : yaml;
+        return configuration.Serialization.PrettifyYaml ? Prettify(yaml) : yaml;
     }
+
+    internal static string Serialize(object data) => Serialize(data, SharplinerConfiguration.Current);
 
     private static ISerializer InitializeSerializer()
     {
@@ -26,7 +28,7 @@ internal static class SharplinerSerializer
         return serializerBuilder.Build();
     }
 
-    public static string Prettify(string yaml)
+    internal static string Prettify(string yaml)
     {
         // Add empty new lines to make text more readable
         var newLineReplace = Environment.NewLine + "$1";
