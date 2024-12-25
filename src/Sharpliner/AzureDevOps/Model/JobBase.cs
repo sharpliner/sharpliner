@@ -25,10 +25,15 @@ public abstract record JobBase : IDependsOn
     public Conditioned<string>? DisplayName { get; init; }
 
     /// <summary>
+    /// <para>
     /// List of names of other jobs this job depends on
+    /// </para>
+    /// <para>
+    /// To specify this job should run in parallel set this to an empty list or the utility <see cref="AzureDevOpsDefinition.NoDependsOn"/>
+    /// </para>
     /// </summary>
-    [YamlMember(Order = 200)]
-    public DependsOn DependsOn { get; init; } = [];
+    [YamlMember(Order = 200, DefaultValuesHandling = DefaultValuesHandling.OmitNull)]
+    public DependsOn? DependsOn { get; init; }
 
     /// <summary>
     /// Specifies which pool to use for a job of the pipeline

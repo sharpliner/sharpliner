@@ -882,7 +882,7 @@ public abstract class AzureDevOpsDefinition
     /// AzDO allows an empty dependsOn which then forces the stage/job to kick off in parallel.
     /// If dependsOn is omitted, stages/jobs run in the order they are defined.
     /// </summary>
-    protected static DependsOn NoDependsOn => [ string.Empty ];
+    protected static DependsOn NoDependsOn => [];
 
     #endregion
 }
