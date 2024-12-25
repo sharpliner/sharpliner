@@ -60,7 +60,7 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     public bool NoBuild
     {
         get => GetBool("nobuild", false);
-        init => SetProperty("nobuild", value ? "true" : "false");
+        init => SetProperty("nobuild", value);
     }
 
     /// <summary>
@@ -71,7 +71,7 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     public bool IncludeSymbols
     {
         get => GetBool("includesymbols", false);
-        init => SetProperty("includesymbols", value ? "true" : "false");
+        init => SetProperty("includesymbols", value);
     }
 
     /// <summary>
@@ -82,7 +82,7 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     public bool IncludeSource
     {
         get => GetBool("includesource", false);
-        init => SetProperty("includesource", value ? "true" : "false");
+        init => SetProperty("includesource", value);
     }
 
     /// <summary>

@@ -198,18 +198,8 @@ public record SpecificDownloadTask : AzureDevOpsTask
     [YamlIgnore]
     public RunVersion RunVersion
     {
-        get => GetString(RunVersionProperty) switch
-        {
-            "latestFromBranch" => RunVersion.LatestFromBranch,
-            "specific" => RunVersion.Specific,
-            _ => RunVersion.Latest,
-        };
-        internal init => SetProperty(RunVersionProperty, value switch
-        {
-            RunVersion.LatestFromBranch => "latestFromBranch",
-            RunVersion.Specific => "specific",
-            _ => "latest",
-        });
+        get => GetEnum(RunVersionProperty, RunVersion.Latest);
+        internal init => SetProperty(RunVersionProperty, value);
     }
 
     /// <summary>
@@ -245,7 +235,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     public int RunId
     {
         get => GetInt(RunIdProperty) ?? 0;
-        internal init => SetProperty(RunIdProperty, value.ToString());
+        internal init => SetProperty(RunIdProperty, value);
     }
 
     /// <summary>
@@ -257,7 +247,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     public int PipelineId
     {
         get => GetInt(RunIdProperty) ?? 0;
-        internal init => SetProperty(RunIdProperty, value.ToString());
+        internal init => SetProperty(RunIdProperty, value);
     }
 
     /// <summary>
@@ -269,7 +259,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     public int BuildId
     {
         get => GetInt(RunIdProperty) ?? 0;
-        internal init => SetProperty(RunIdProperty, value.ToString());
+        internal init => SetProperty(RunIdProperty, value);
     }
 
     /// <summary>
@@ -290,7 +280,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     public bool PreferTriggeringPipeline
     {
         get => GetBool(PreferTriggeringPipelineProperty, false);
-        init => SetProperty(PreferTriggeringPipelineProperty, value ? "true" : "false");
+        init => SetProperty(PreferTriggeringPipelineProperty, value);
     }
 
     /// <summary>
@@ -301,7 +291,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     public bool AllowPartiallySucceededBuilds
     {
         get => GetBool(AllowPartiallySucceededBuildsProperty, false);
-        init => SetProperty(AllowPartiallySucceededBuildsProperty, value ? "true" : "false");
+        init => SetProperty(AllowPartiallySucceededBuildsProperty, value);
     }
 
     /// <summary>
@@ -312,7 +302,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     public bool AllowFailedBuilds
     {
         get => GetBool(AllowFailedBuildsProperty, false);
-        init => SetProperty(AllowFailedBuildsProperty, value ? "true" : "false");
+        init => SetProperty(AllowFailedBuildsProperty, value);
     }
 
     /// <summary>
@@ -323,7 +313,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     public bool CheckDownloadedFiles
     {
         get => GetBool(CheckDownloadedFilesProperty, false);
-        init => SetProperty(CheckDownloadedFilesProperty, value ? "true" : "false");
+        init => SetProperty(CheckDownloadedFilesProperty, value);
     }
 
     /// <summary>
@@ -334,7 +324,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     public int RetryDownloadCount
     {
         get => GetInt(RetryDownloadCountProperty) ?? 0;
-        init => SetProperty(RetryDownloadCountProperty, value.ToString());
+        init => SetProperty(RetryDownloadCountProperty, value);
     }
 }
 
@@ -346,15 +336,18 @@ public enum RunVersion
     /// <summary>
     /// Latest run.
     /// </summary>
+    [YamlMember(Alias = "latest")]
     Latest,
 
     /// <summary>
     /// Latest run from specific branch and specified Build Tags
     /// </summary>
+    [YamlMember(Alias = "latestFromBranch")]
     LatestFromBranch,
 
     /// <summary>
     /// Specific run.
     /// </summary>
+    [YamlMember(Alias = "specific")]
     Specific,
 }
