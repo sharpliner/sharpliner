@@ -27,22 +27,8 @@ public record PublishTestResultsTask : AzureDevOpsTask
     [YamlIgnore]
     public TestResultsFormat TestResultsFormat
     {
-        get => GetString("testResultsFormat") switch
-        {
-            "JUnit" => TestResultsFormat.JUnit,
-            "NUnit" => TestResultsFormat.NUnit,
-            "VSTest" => TestResultsFormat.VSTest,
-            "XUnit" => TestResultsFormat.XUnit,
-            "CTest" => TestResultsFormat.CTest,
-            _ => throw new NotImplementedException(),
-        };
-        init => SetProperty("testResultsFormat", value switch {
-            TestResultsFormat.JUnit => "JUnit",
-            TestResultsFormat.NUnit => "NUnit",
-            TestResultsFormat.VSTest => "VSTest",
-            TestResultsFormat.XUnit => "XUnit",
-            TestResultsFormat.CTest => "CTest",
-            _ => throw new NotImplementedException() });
+        get => GetEnum("testResultsFormat", TestResultsFormat.JUnit);
+        init => SetProperty("testResultsFormat", value);
     }
 
     /// <summary>
@@ -78,7 +64,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     public bool MergeTestResults
     {
         get => GetBool("mergeTestResults", false);
-        init => SetProperty("mergeTestResults", value ? "true" : "false");
+        init => SetProperty("mergeTestResults", value);
     }
 
     /// <summary>
@@ -88,7 +74,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     public bool FailTaskOnFailedTests
     {
         get => GetBool("failTaskOnFailedTests", false);
-        init => SetProperty("failTaskOnFailedTests", value ? "true" : "false");
+        init => SetProperty("failTaskOnFailedTests", value);
     }
 
     /// <summary>
@@ -98,7 +84,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     public bool FailTaskOnFailureToPublishResults
     {
         get => GetBool("failTaskOnFailureToPublishResults", false);
-        init => SetProperty("failTaskOnFailureToPublishResults", value ? "true" : "false");
+        init => SetProperty("failTaskOnFailureToPublishResults", value);
     }
 
     /// <summary>
@@ -108,7 +94,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     public bool FailTaskOnMissingResultsFile
     {
         get => GetBool("failTaskOnMissingResultsFile", false);
-        init => SetProperty("failTaskOnMissingResultsFile", value ? "true" : "false");
+        init => SetProperty("failTaskOnMissingResultsFile", value);
     }
 
     /// <summary>
@@ -151,7 +137,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     public bool PublishRunAttachments
     {
         get => GetBool("publishRunAttachments", true);
-        init => SetProperty("publishRunAttachments", value ? "true" : "false");
+        init => SetProperty("publishRunAttachments", value);
     }
 }
 
@@ -163,25 +149,30 @@ public enum TestResultsFormat
     /// <summary>
     /// The JUnit format, see <see href="https://github.com/windyroad/JUnit-Schema/blob/master/JUnit.xsd/">JUnit.xsd</see> for more details.
     /// </summary>
+    [YamlMember(Alias = "JUnit")]
     JUnit,
 
     /// <summary>
     /// The NUnit format, see <see href="https://docs.nunit.org/articles/nunit/technical-notes/usage/Test-Result-XML-Format.html>">Test Result XML Format</see> for more details.
     /// </summary>
+    [YamlMember(Alias = "NUnit")]
     NUnit,
 
     /// <summary>
     /// This is the XML report format of the Microsoft's unit test framework. A XSD schema of it can be found at your Visual Studio's installation directory - <c>%VSINSTALLDIR%\xml\Schemas\vstst.xsd</c>.
     /// </summary>
+    [YamlMember(Alias = "VSTest")]
     VSTest,
 
     /// <summary>
     /// The xunit format, see <see href="https://xunit.net/docs/format-xml-v2">xUnit.net v2+ XML Format</see> for more details.
     /// </summary>
+    [YamlMember(Alias = "XUnit")]
     XUnit,
 
     /// <summary>
     /// The CTest format, see <see href="https://cmake.org/cmake/help/latest/manual/ctest.1.html#introduction">CTest</see> for more details.
     /// </summary>
+    [YamlMember(Alias = "CTest")]
     CTest
 }

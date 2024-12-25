@@ -58,24 +58,8 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public BuildVerbosity VerbosityRestore
     {
-        get => GetString(VerbosityRestoreProperty) switch
-        {
-            "quiet" => BuildVerbosity.Quiet,
-            "minimal" => BuildVerbosity.Minimal,
-            "normal" => BuildVerbosity.Normal,
-            "detailed" => BuildVerbosity.Detailed,
-            "diagnostic" => BuildVerbosity.Diagnostic,
-            _ => throw new NotImplementedException(),
-        };
-        init => SetProperty(VerbosityRestoreProperty, value switch
-        {
-            BuildVerbosity.Quiet => "quiet",
-            BuildVerbosity.Minimal => "minimal",
-            BuildVerbosity.Normal => "normal",
-            BuildVerbosity.Detailed => "detailed",
-            BuildVerbosity.Diagnostic => "diagnostic",
-            _ => throw new NotImplementedException(),
-        });
+        get => GetEnum(VerbosityRestoreProperty, BuildVerbosity.Normal);
+        init => SetProperty(VerbosityRestoreProperty, value);
     }
 
     /// <summary>
@@ -85,7 +69,7 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     public bool NoCache
     {
         get => GetBool(NoCacheProperty, false);
-        init => SetProperty(NoCacheProperty, value ? "true" : "false");
+        init => SetProperty(NoCacheProperty, value);
     }
 
     /// <summary>
@@ -95,7 +79,7 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     public bool? IncludeNuGetOrg
     {
         get => GetBool(IncludeNuGetOrgProperty, false);
-        init => SetProperty(IncludeNuGetOrgProperty, value.HasValue ? (value.Value ? "true" : "false") : null);
+        init => SetProperty(IncludeNuGetOrgProperty, value);
     }
 
     /// <summary>
@@ -143,25 +127,30 @@ public enum BuildVerbosity
     /// <summary>
     /// The most minimal output
     /// </summary>
+    [YamlMember(Alias = "quiet")]
     Quiet,
 
     /// <summary>
     /// Relatively little output
     /// </summary>
+    [YamlMember(Alias = "minimal")]
     Minimal,
 
     /// <summary>
     /// Standard output. This should be the default if verbosity level is not set
     /// </summary>
+    [YamlMember(Alias = "normal")]
     Normal,
 
     /// <summary>
     /// Relatively verbose, but not exhaustive
     /// </summary>
+    [YamlMember(Alias = "detailed")]
     Detailed,
 
     /// <summary>
     /// The most verbose and informative verbosity
     /// </summary>
+    [YamlMember(Alias = "diagnostic")]
     Diagnostic,
 }

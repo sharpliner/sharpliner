@@ -101,6 +101,10 @@ public record AzureDevOpsTask : Step
     protected bool GetBool(string name, bool defaultValue)
         => Inputs.TryGetValue(name, out var value) ? value.ToString() == "true" : defaultValue;
 
+    protected TEnum GetEnum<TEnum>(string name, TEnum defaultValue)
+        where TEnum : struct, Enum
+        => Inputs.TryGetValue(name, out var value) ? EnumUtils<TEnum>.Parse(value.ToString()!) : defaultValue;
+
     /// <summary>
     /// Sets the value of a string input parameter.
     /// </summary>
@@ -131,6 +135,9 @@ public record AzureDevOpsTask : Step
     /// <param name="name">The name of the input parameter.</param>
     /// <param name="value">The boolean value to set.</param>
     protected void SetProperty(string name, bool? value) => SetProperty(name, value?.ToString().ToLowerInvariant());
+
+    protected void SetProperty(string name, Enum? value)
+        => SetProperty(name, value is null ? null : YamlStringEnumConverter.GetEnumValue(value.GetType(), value));
 }
 
 /// <summary>

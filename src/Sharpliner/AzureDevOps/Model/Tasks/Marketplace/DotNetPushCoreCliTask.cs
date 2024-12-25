@@ -64,6 +64,6 @@ public record DotNetPushCoreCliTask : DotNetCoreCliTask
     public bool PublishPackageMetadata
     {
         get => GetBool("publishPackageMetadata", true);
-        init => SetProperty("publishPackageMetadata", value ? "true" : "false");
+        init => SetProperty("publishPackageMetadata", value);
     }
 }

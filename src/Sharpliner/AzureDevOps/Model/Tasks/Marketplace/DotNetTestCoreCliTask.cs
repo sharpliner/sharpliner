@@ -35,6 +35,6 @@ public record DotNetTestCoreCliTask : DotNetCoreCliTask
     public bool PublishTestResults
     {
         get => GetBool("publishTestResults", false);
-        init => SetProperty("publishTestResults", value ? "true" : "false");
+        init => SetProperty("publishTestResults", value);
     }
 }

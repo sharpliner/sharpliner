@@ -13,21 +13,20 @@ internal class YamlStringEnumConverter : IYamlTypeConverter
 
     public object? ReadYaml(IParser parser, Type type, ObjectDeserializer rootDeserializer) => throw new NotImplementedException();
 
-    public void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer serializer)
+    public void WriteYaml(IEmitter emitter, object? value, Type type, ObjectSerializer serializer) => emitter.Emit(new Scalar(GetEnumValue(type, value)!));
+
+    internal static string? GetEnumValue(Type type, object? value)
     {
         if (value is null)
         {
-            emitter.Emit(new Scalar(null!));
-            return;
+            return null;
         }
 
         var enumMember = type.GetMember(value.ToString()!).FirstOrDefault();
-        var yamlValue = enumMember?
-                            .GetCustomAttributes<YamlMemberAttribute>(true)
-                            .Select(ema => ema.Alias)
-                            .FirstOrDefault()
-                        ?? value.ToString();
-
-        emitter.Emit(new Scalar(yamlValue!));
+        return enumMember?
+                   .GetCustomAttributes<YamlMemberAttribute>(true)
+                   .Select(ema => ema.Alias)
+                   .FirstOrDefault()
+               ?? value.ToString()!;
     }
 }
