@@ -90,7 +90,7 @@ internal class MockPipeline : TestPipeline
                 If.Equal(variables["IsPr"], "true")
                     .Stage(new("Test", "Run E2E tests")
                     {
-                        DependsOn = { "Build" },
+                        DependsOn = "Build",
                         Jobs =
                         {
                             // ...

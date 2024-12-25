@@ -27,7 +27,7 @@ internal abstract class DependsOnValidation : IDefinitionValidation
 
         foreach (var definition in definitions)
         {
-            if (definition.DependsOn is [])
+            if (definition.DependsOn is [] or null)
             {
                 continue;
             }

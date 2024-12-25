@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -19,7 +20,7 @@ public interface IDependsOn
     /// <summary>
     /// List of names of other jobs / stages this job / stage depends on.
     /// </summary>
-    DependsOn DependsOn { get; }
+    DependsOn? DependsOn { get; }
 }
 
 /// <summary>
@@ -51,12 +52,7 @@ public class DependsOn : ConditionedList<string>, IYamlConvertible
 
     void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
-        if (Count is 0)
-        {
-            // We want to write "dependsOn: " (empty value)
-            nestedObjectSerializer(string.Empty);
-        }
-        else if (Count is 1 && this[0].Definition is not null)
+        if (Count is 1 && this[0].Definition is not null)
         {
             nestedObjectSerializer(this[0]);
         }

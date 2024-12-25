@@ -29,13 +29,18 @@ public record Stage : IDependsOn
     public Conditioned<LockBehavior>? LockBehavior { get; init; }
 
     /// <summary>
-    /// List of names of other jobs this job depends on
+    /// <para>
+    /// List of names of other stages this stage depends on
+    /// </para>
+    /// <para>
+    /// To specify this stage should run in parallel set this to an empty list or the utility <see cref="AzureDevOpsDefinition.NoDependsOn"/>
+    /// </para>
     /// </summary>
-    [YamlMember(Order = 100)]
-    public DependsOn DependsOn { get; init; } = [];
+    [YamlMember(Order = 100, DefaultValuesHandling = DefaultValuesHandling.OmitNull)]
+    public DependsOn? DependsOn { get; init; }
 
     /// <summary>
-    /// Specifies variables at the job level
+    /// Specifies variables at the stage level
     /// You can add hard-coded values directly, reference variable groups, or insert via variable templates.
     /// </summary>
     [YamlMember(Order = 200)]

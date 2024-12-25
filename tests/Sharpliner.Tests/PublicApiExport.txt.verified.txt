@@ -440,7 +440,7 @@ namespace Sharpliner.AzureDevOps
     }
     public interface IDependsOn
     {
-        Sharpliner.AzureDevOps.DependsOn DependsOn { get; }
+        Sharpliner.AzureDevOps.DependsOn? DependsOn { get; }
         string Name { get; }
     }
     public abstract class IfCondition : Sharpliner.AzureDevOps.ConditionedExpressions.Condition
@@ -517,8 +517,8 @@ namespace Sharpliner.AzureDevOps
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.ContainerReference>? Container { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=1200)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? ContinueOnError { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Order=200)]
-        public Sharpliner.AzureDevOps.DependsOn DependsOn { get; init; }
+        [YamlDotNet.Serialization.YamlMember(DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.OmitNull, Order=200)]
+        public Sharpliner.AzureDevOps.DependsOn? DependsOn { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? DisplayName { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
@@ -917,8 +917,8 @@ namespace Sharpliner.AzureDevOps
         public string Name { get; }
         [YamlDotNet.Serialization.YamlMember(Order=400)]
         public Sharpliner.AzureDevOps.InlineCondition? Condition { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Order=100)]
-        public Sharpliner.AzureDevOps.DependsOn DependsOn { get; init; }
+        [YamlDotNet.Serialization.YamlMember(DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.OmitNull, Order=100)]
+        public Sharpliner.AzureDevOps.DependsOn? DependsOn { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=2)]
         public string? DisplayName { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=300)]

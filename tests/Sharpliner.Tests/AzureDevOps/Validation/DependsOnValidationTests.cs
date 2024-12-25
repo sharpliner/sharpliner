@@ -9,7 +9,7 @@ public class DependsOnValidationTests
     {
         public override Pipeline Pipeline => new()
         {
-            Parameters = 
+            Parameters =
             {
                 StringParameter("stageDependsOn", defaultValue: string.Empty) ,
                 StringParameter("jobDependsOn", defaultValue: string.Empty)
@@ -24,17 +24,17 @@ public class DependsOnValidationTests
                 new Stage("stage_3")
                 {
                     DependsOn =
-                    {
+                    [
                         If.IsBranch("main")
                             .Value("stage_1")
                         .Else
                             .Value("stage_2")
-                    }
+                    ]
                 },
                 new Stage("stage_4")
                 {
                     DependsOn = parameters["stageDependsOn"],
-                    Jobs = 
+                    Jobs =
                     {
                         new Job("job_1"),
                         new Job("job_2")
@@ -43,19 +43,27 @@ public class DependsOnValidationTests
                         },
                         new Job("job_3")
                         {
-                            DependsOn = 
-                            {
+                            DependsOn =
+                            [
                                 If.IsBranch("main")
                                     .Value("job_1")
                                 .Else
                                     .Value("job_2")
-                            }
+                            ]
                         },
                         new Job("job_4")
                         {
                             DependsOn = parameters["jobDependsOn"]
+                        },
+                        new Job("job_5")
+                        {
+                            DependsOn = NoDependsOn
                         }
                     }
+                },
+                new Stage("stage_5")
+                {
+                    DependsOn = []
                 },
             },
         };
@@ -65,7 +73,6 @@ public class DependsOnValidationTests
     public Task ConditionedDependsOn_Validation_Test()
     {
         var pipeline = new ConditionedDependsOnPipeline();
-
         return Verify(pipeline.Serialize());
     }
 
@@ -121,13 +128,13 @@ public class DependsOnValidationTests
                         new DeploymentJob("job_2"),
                         new Job("job_4")
                         {
-                            DependsOn = { "job_1", "job_2" }
+                            DependsOn = [ "job_1", "job_2" ]
                         },
 
                         If.IsBranch("main").Job(
                             new Job("job_5")
                             {
-                                DependsOn = { "job_2", "job_3" }
+                                DependsOn = [ "job_2", "job_3" ]
                             }),
                     }
                 },
@@ -268,11 +275,11 @@ public class DependsOnValidationTests
                 new Job("job_1"),
                 new Job("job_2")
                 {
-                    DependsOn = { "job_1" }
+                    DependsOn = [ "job_1" ]
                 },
                 new Job("job_3")
                 {
-                    DependsOn = { "job_2", "job_3" }
+                    DependsOn = [ "job_2", "job_3" ]
                 },
             }
         };

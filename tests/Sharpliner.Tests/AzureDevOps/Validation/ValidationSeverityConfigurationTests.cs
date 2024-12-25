@@ -15,11 +15,11 @@ public class ValidationSeverityConfigurationTests
                 new Job("job_1"),
                 new Job("job_2")
                 {
-                    DependsOn = { "job_1" }
+                    DependsOn = [ "job_1" ]
                 },
                 new Job("job_3")
                 {
-                    DependsOn = { "job_2", "job_3" }
+                    DependsOn = [ "job_2", "job_3" ]
                 },
             }
         };
