@@ -15,18 +15,8 @@ public record UseDotNetTask : AzureDevOpsTask
     [YamlIgnore]
     public DotNetPackageType PackageType
     {
-        get => GetString("packageType", "sdk") switch
-        {
-            "sdk" => DotNetPackageType.Sdk,
-            "runtime" => DotNetPackageType.Runtime,
-            _ => throw new NotImplementedException(),
-        };
-        init => SetProperty("packageType", value switch
-        {
-            DotNetPackageType.Sdk => "sdk",
-            DotNetPackageType.Runtime => "runtime",
-            _ => throw new NotImplementedException()
-        });
+        get => GetEnum("packageType", DotNetPackageType.Sdk);
+        init => SetProperty("packageType", value);
     }
 
     /// <summary>
@@ -38,7 +28,7 @@ public record UseDotNetTask : AzureDevOpsTask
     public bool UseGlobalJson
     {
         get => GetBool("useGlobalJson", false);
-        init => SetProperty("useGlobalJson", value ? "true" : "false");
+        init => SetProperty("useGlobalJson", value);
     }
 
     /// <summary>
@@ -96,7 +86,7 @@ public record UseDotNetTask : AzureDevOpsTask
     public bool PerformMultiLevelLookup
     {
         get => GetBool("performMultiLevelLookup", false);
-        init => SetProperty("performMultiLevelLookup", value ? "true" : "false");
+        init => SetProperty("performMultiLevelLookup", value);
     }
 
     /// <summary>
@@ -108,7 +98,7 @@ public record UseDotNetTask : AzureDevOpsTask
     public bool IncludePreviewVersions
     {
         get => GetBool("includePreviewVersions", false);
-        init => SetProperty("includePreviewVersions", value ? "true" : "false");
+        init => SetProperty("includePreviewVersions", value);
     }
 
     /// <summary>
@@ -163,10 +153,12 @@ public enum DotNetPackageType
     /// <summary>
     /// The dotnet SDK (contains runtime)
     /// </summary>
+    [YamlMember(Alias = "sdk")]
     Sdk,
 
     /// <summary>
     /// The dotnet runtime.
     /// </summary>
+    [YamlMember(Alias = "runtime")]
     Runtime,
 }

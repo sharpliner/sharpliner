@@ -36,7 +36,7 @@ public record PublishCodeCoverageResultsTask : AzureDevOpsTask
     public bool FailIfCoverageEmpty
     {
         get => GetBool("failIfCoverageEmpty", false);
-        init => SetProperty("failIfCoverageEmpty", value ? "true" : "false");
+        init => SetProperty("failIfCoverageEmpty", value);
     }
 
     /// <summary>
