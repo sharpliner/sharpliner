@@ -52,10 +52,6 @@ public class DependsOn : ConditionedList<string>, IYamlConvertible
 
     void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
-        if (Count is 0)
-        {
-            Add(string.Empty);
-        }
         if (Count is 1 && this[0].Definition is not null)
         {
             nestedObjectSerializer(this[0]);
