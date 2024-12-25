@@ -36,7 +36,7 @@ internal class NameValidation : IDefinitionValidation
         }
 
         var invalidNames = _nameGroups.SelectMany(g => g).Where(name => !AzureDevOpsDefinition.NameRegex.IsMatch(name)
-            && !(name.Contains("${{") && name.Contains("}}")) && !(name.Contains("$(") && name.Contains(')')));
+            && !(name.Contains(Condition.ExpressionStart) && name.Contains(Condition.ExpressionEnd)) && !(name.Contains("$(") && name.Contains(')')));
         foreach (var invalidName in invalidNames)
         {
             errors.Add(new ValidationError(_severity, $"Invalid character found in name `{invalidName}`, only A-Z, a-z, 0-9, and underscore are allowed, or a valid expression"));
