@@ -101,6 +101,16 @@ public record AzureDevOpsTask : Step
     protected bool GetBool(string name, bool defaultValue)
         => Inputs.TryGetValue(name, out var value) ? value.ToString() == "true" : defaultValue;
 
+    /// <summary>
+    /// <para>
+    /// Gets the value of the input parameter and parses it as an enum. If the value is not found, returns the default value.
+    /// </para>
+    /// This will use the <see cref="YamlMemberAttribute.Alias"/> if it exists.
+    /// </summary>
+    /// <typeparam name="TEnum">The enum type to parse the value as.</typeparam>
+    /// <param name="name">The name of the input parameter.</param>
+    /// <param name="defaultValue">The default value to return if the input parameter is not found.</param>
+    /// <returns>The value of the input parameter or the default value if the input parameter is not found.</returns>
     protected TEnum GetEnum<TEnum>(string name, TEnum defaultValue)
         where TEnum : struct, Enum
         => Inputs.TryGetValue(name, out var value) ? EnumUtils<TEnum>.Parse(value.ToString()!) : defaultValue;
@@ -136,6 +146,11 @@ public record AzureDevOpsTask : Step
     /// <param name="value">The boolean value to set.</param>
     protected void SetProperty(string name, bool? value) => SetProperty(name, value?.ToString().ToLowerInvariant());
 
+    /// <summary>
+    /// Sets the value of an enum input parameter.
+    /// </summary>
+    /// <param name="name">The name of the input parameter.</param>
+    /// <param name="value">The enum value to set.</param>
     protected void SetProperty(string name, Enum? value)
         => SetProperty(name, value is null ? null : YamlStringEnumConverter.GetEnumValue(value.GetType(), value));
 }
