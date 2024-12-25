@@ -16,7 +16,7 @@ public static class SharplinerSerializer
     /// Serializes the given object to a YAML string. Can be used with <see cref="AzureDevOps.PipelineBase"/>
     /// </summary>
     /// <param name="data">The object to serialize</param>
-    /// <param name="configuration">The configuration to use for serialization</param>
+    /// <param name="configuration">The optional configuration to use for serialization</param>
     /// <returns>The serialized YAML string</returns>
     public static string Serialize(object data, ISharplinerConfiguration? configuration = null)
     {

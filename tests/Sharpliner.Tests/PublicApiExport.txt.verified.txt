@@ -2284,7 +2284,7 @@ namespace Sharpliner
     }
     public static class SharplinerSerializer
     {
-        public static string Serialize(object data, Sharpliner.ISharplinerConfiguration configuration) { }
+        public static string Serialize(object data, Sharpliner.ISharplinerConfiguration? configuration = null) { }
     }
     public enum TargetPathType
     {
