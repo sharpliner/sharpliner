@@ -1450,9 +1450,13 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
     public enum ArchiveType
     {
+        [YamlDotNet.Serialization.YamlMember(Alias="zip")]
         Zip = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="7z")]
         _7z = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="tar")]
         Tar = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="wim")]
         Wim = 3,
     }
     public enum ArtifactType
@@ -1472,8 +1476,11 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlMember(Order=230)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<int>? RetryCountOnTaskFailure { get; init; }
         protected bool GetBool(string name, bool defaultValue) { }
+        protected TEnum GetEnum<TEnum>(string name, TEnum defaultValue)
+            where TEnum :  struct, System.Enum { }
         protected int? GetInt(string name, int? defaultValue = default) { }
         protected string? GetString(string name, string? defaultValue = null) { }
+        protected void SetProperty(string name, System.Enum? value) { }
         protected void SetProperty(string name, bool? value) { }
         protected void SetProperty(string name, int? value) { }
         protected void SetProperty(string name, string? value) { }
@@ -1507,10 +1514,15 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
     public enum BuildVerbosity
     {
+        [YamlDotNet.Serialization.YamlMember(Alias="quiet")]
         Quiet = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="minimal")]
         Minimal = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="normal")]
         Normal = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="detailed")]
         Detailed = 3,
+        [YamlDotNet.Serialization.YamlMember(Alias="diagnostic")]
         Diagnostic = 4,
     }
     public abstract class CheckoutTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.CheckoutTask>
@@ -1622,7 +1634,9 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
     public enum DotNetPackageType
     {
+        [YamlDotNet.Serialization.YamlMember(Alias="sdk")]
         Sdk = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="runtime")]
         Runtime = 1,
     }
     public class DotNetPublishCoreCliTask : Sharpliner.AzureDevOps.Tasks.DotNetCoreCliTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DotNetPublishCoreCliTask>
@@ -2026,8 +2040,11 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
     public enum RunVersion
     {
+        [YamlDotNet.Serialization.YamlMember(Alias="latest")]
         Latest = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="latestFromBranch")]
         LatestFromBranch = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="specific")]
         Specific = 2,
     }
     public class ScriptTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.ScriptTask>
@@ -2053,11 +2070,17 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
     public enum SevenZipCompressionLevel
     {
+        [YamlDotNet.Serialization.YamlMember(Alias="none")]
         None = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="fastest")]
         Fastest = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="fast")]
         Fast = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="normal")]
         Normal = 3,
+        [YamlDotNet.Serialization.YamlMember(Alias="maximum")]
         Maximum = 4,
+        [YamlDotNet.Serialization.YamlMember(Alias="ultra")]
         Ultra = 5,
     }
     public class SpecificDownloadTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SpecificDownloadTask>
@@ -2109,9 +2132,13 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
     public enum TarCompressionType
     {
+        [YamlDotNet.Serialization.YamlMember(Alias="gz")]
         Gz = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="bz2")]
         Bz2 = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="xz")]
         Xz = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="none")]
         None = 3,
     }
     public class TaskInputs : Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary
@@ -2120,10 +2147,15 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
     public enum TestResultsFormat
     {
+        [YamlDotNet.Serialization.YamlMember(Alias="JUnit")]
         JUnit = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="NUnit")]
         NUnit = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="VSTest")]
         VSTest = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="XUnit")]
         XUnit = 3,
+        [YamlDotNet.Serialization.YamlMember(Alias="CTest")]
         CTest = 4,
     }
     public class UseDotNetTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.UseDotNetTask>

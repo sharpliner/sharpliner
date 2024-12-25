@@ -26,7 +26,7 @@ public record DotNetPublishCoreCliTask : DotNetCoreCliTask
     public bool PublishWebProjects
     {
         get => GetBool("publishWebProjects", true);
-        init => SetProperty("publishWebProjects", value ? "true" : "false");
+        init => SetProperty("publishWebProjects", value);
     }
 
     /// <summary>
@@ -36,7 +36,7 @@ public record DotNetPublishCoreCliTask : DotNetCoreCliTask
     public bool ZipAfterPublish
     {
         get => GetBool("zipAfterPublish", false);
-        init => SetProperty("zipAfterPublish", value ? "true" : "false");
+        init => SetProperty("zipAfterPublish", value);
     }
 
     /// <summary>
@@ -48,6 +48,6 @@ public record DotNetPublishCoreCliTask : DotNetCoreCliTask
     public bool ModifyOutputPath
     {
         get => GetBool("modifyOutputPath", false);
-        init => SetProperty("modifyOutputPath", value ? "true" : "false");
+        init => SetProperty("modifyOutputPath", value);
     }
 }

@@ -49,22 +49,8 @@ public record ArchiveFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public ArchiveType ArchiveType
     {
-        get => GetString("archiveType") switch
-        {
-            "zip" => ArchiveType.Zip,
-            "7z" => ArchiveType._7z,
-            "tar" => ArchiveType.Tar,
-            "wim" => ArchiveType.Wim,
-            _ => throw new NotImplementedException()
-        };
-        init => SetProperty("archiveType", value switch
-        {
-            ArchiveType.Zip => "zip",
-            ArchiveType._7z => "7z",
-            ArchiveType.Tar => "tar",
-            ArchiveType.Wim => "wim",
-            _ => throw new NotImplementedException()
-        });
+        get => GetEnum("archiveType", ArchiveType.Zip);
+        init => SetProperty("archiveType", value);
     }
 
     /// <summary>
@@ -76,26 +62,8 @@ public record ArchiveFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public SevenZipCompressionLevel SevenZipCompression
     {
-        get => GetString("sevenZipCompression") switch
-        {
-            "none" => SevenZipCompressionLevel.None,
-            "fastest" => SevenZipCompressionLevel.Fastest,
-            "fast" => SevenZipCompressionLevel.Fast,
-            "normal" => SevenZipCompressionLevel.Normal,
-            "maximum" => SevenZipCompressionLevel.Maximum,
-            "ultra" => SevenZipCompressionLevel.Ultra,
-            _ => throw new NotImplementedException()
-        };
-        init => SetProperty("sevenZipCompression", value switch
-        {
-            SevenZipCompressionLevel.None => "none",
-            SevenZipCompressionLevel.Fastest => "fastest",
-            SevenZipCompressionLevel.Fast => "fast",
-            SevenZipCompressionLevel.Normal => "normal",
-            SevenZipCompressionLevel.Maximum => "maximum",
-            SevenZipCompressionLevel.Ultra => "ultra",
-            _ => throw new NotImplementedException()
-        });
+        get => GetEnum("sevenZipCompression", SevenZipCompressionLevel.Normal);
+        init => SetProperty("sevenZipCompression", value);
     }
 
     /// <summary>
@@ -107,22 +75,8 @@ public record ArchiveFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public TarCompressionType TarCompression
     {
-        get => GetString("tarCompression") switch
-        {
-            "gz" => TarCompressionType.Gz,
-            "bz2" => TarCompressionType.Bz2,
-            "xz" => TarCompressionType.Xz,
-            "none" => TarCompressionType.None,
-            _ => throw new NotImplementedException()
-        };
-        init => SetProperty("tarCompression", value switch
-        {
-            TarCompressionType.Gz => "gz",
-            TarCompressionType.Bz2 => "bz2",
-            TarCompressionType.Xz => "xz",
-            TarCompressionType.None => "none",
-            _ => throw new NotImplementedException()
-        });
+        get => GetEnum("tarCompression", TarCompressionType.Gz);
+        init => SetProperty("tarCompression", value);
     }
 
     /// <summary>
@@ -202,21 +156,25 @@ public enum ArchiveType
     /// <summary>
     /// Default. Choose this format for all zip compatible types such as .zip, .jar, .war, .ear
     /// </summary>
+    [YamlMember(Alias = "zip")]
     Zip,
 
     /// <summary>
     /// 7-Zip format, (.7z)
     /// </summary>
+    [YamlMember(Alias = "7z")]
     _7z,
 
     /// <summary>
     /// tar format, use for compressed tars including .tar.gz, .tar.bz2, .tar.xz
     /// </summary>
+    [YamlMember(Alias = "tar")]
     Tar,
 
     /// <summary>
     /// wim format, .wim
     /// </summary>
+    [YamlMember(Alias = "wim")]
     Wim,
 }
 
@@ -239,31 +197,37 @@ public enum SevenZipCompressionLevel
     /// <summary>
     /// Copy mode - level of compression = 0 (no compression)
     /// </summary>
+    [YamlMember(Alias = "none")]
     None,
 
     /// <summary>
     /// Fastest compressing, level 1
     /// </summary>
+    [YamlMember(Alias = "fastest")]
     Fastest,
 
     /// <summary>
     /// Fast compressing, level 3
     /// </summary>
+    [YamlMember(Alias = "fast")]
     Fast,
 
     /// <summary>
     /// Normal compression, level 5
     /// </summary>
+    [YamlMember(Alias = "normal")]
     Normal,
 
     /// <summary>
     /// Maximum compression, level 7
     /// </summary>
+    [YamlMember(Alias = "maximum")]
     Maximum,
 
     /// <summary>
     /// Ultra compression, level 9
     /// </summary>
+    [YamlMember(Alias = "ultra")]
     Ultra,
 }
 
@@ -275,20 +239,24 @@ public enum TarCompressionType
     /// <summary>
     /// Default format for gzip compression (.tar.gz, .tar.tgz, .taz)
     /// </summary>
+    [YamlMember(Alias = "gz")]
     Gz,
 
     /// <summary>
     /// bzip2 compression (.tar.bz2, .tz2, .tbz2)
     /// </summary>
+    [YamlMember(Alias = "bz2")]
     Bz2,
 
     /// <summary>
     /// xz compression (.tar.xz, .txz)
     /// </summary>
+    [YamlMember(Alias = "xz")]
     Xz,
 
     /// <summary>
     /// Create an uncompressed .tar file.
     /// </summary>
+    [YamlMember(Alias = "none")]
     None,
 }
