@@ -623,7 +623,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
         private static readonly Parameter project = StringParameter("project");
         private static readonly Parameter version = StringParameter("version", allowedValues: ["5.0.100", "5.0.102"]);
         private static readonly Parameter restore = BooleanParameter("restore", defaultValue: true);
-        private static readonly Parameter<Step> afterBuild = StepParameter("afterBuild", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)"));
+        private static readonly Parameter<Step> afterBuild = StepParameter("afterBuild", defaultValue: Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)"));
 
         public override List<Parameter> Parameters =>
         [
