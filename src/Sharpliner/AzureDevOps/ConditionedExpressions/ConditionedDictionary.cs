@@ -13,7 +13,21 @@ public class ConditionedDictionary : Dictionary<string, object>
     /// </summary>
     /// <param name="key">The key.</param>
     /// <param name="item">The value.</param>
-    public new void Add(string key, object item)
+    public new void Add(string key, object item) => base.Add(key, GetRootConditioned(item));
+
+    /// <summary>
+    /// Gets or sets the item with the specified key.
+    /// If the item is a <see cref="Conditioned"/> item, it will be marked as a single item.
+    /// </summary>
+    /// <param name="key">The key.</param>
+    /// <returns>The value</returns>
+    public new object this[string key]
+    {
+        get => base[key];
+        set => base[key] = GetRootConditioned(value);
+    }
+
+    private static object GetRootConditioned(object item)
     {
         if (item is Conditioned conditioned)
         {
@@ -24,10 +38,9 @@ public class ConditionedDictionary : Dictionary<string, object>
                 conditioned = parent;
             }
 
-            conditioned.SetIsList(false);
-            item = conditioned;
+            return conditioned;
         }
 
-        base.Add(key, item);
+        return item;
     }
 }
