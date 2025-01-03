@@ -50,19 +50,19 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.InlineCondition And(params string[] expressions) { }
         protected static Sharpliner.AzureDevOps.InlineCondition And<T>(params Sharpliner.AzureDevOps.InlineCondition[] expressions) { }
         protected static Sharpliner.AzureDevOps.InlineCondition<T> And<T>(params string[] expressions) { }
-        protected static Sharpliner.AzureDevOps.Parameter BooleanParameter(string name, string? displayName = null, bool? defaultValue = default) { }
+        protected static Sharpliner.AzureDevOps.BooleanParameter BooleanParameter(string name, string? displayName = null, bool? defaultValue = default) { }
         protected static Sharpliner.AzureDevOps.InlineCondition Condition(string condition) { }
         protected static Sharpliner.AzureDevOps.InlineCondition Contains(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression needle, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression haystack) { }
         protected static Sharpliner.AzureDevOps.InlineCondition Contains<T>(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression needle, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression haystack) { }
         protected static Sharpliner.AzureDevOps.InlineCondition ContainsValue(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression needle, params Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression[] haystack) { }
         protected static Sharpliner.AzureDevOps.InlineCondition ContainsValue<T>(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression needle, params Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression[] haystack) { }
         protected static Sharpliner.AzureDevOps.DeploymentJob DeploymentJob(string jobName, string? displayName = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter DeploymentListParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.DeploymentJob>? defaultValue = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter DeploymentParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.DeploymentJob? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.DeploymentListParameter DeploymentListParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.DeploymentJob>? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.DeploymentParameter DeploymentParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.DeploymentJob? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.EachBlock Each(string iterator, string collection) { }
         protected static Sharpliner.AzureDevOps.InlineCondition EndsWith(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression needle, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression haystack) { }
         protected static Sharpliner.AzureDevOps.InlineCondition EndsWith<T>(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression needle, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression haystack) { }
-        protected static Sharpliner.AzureDevOps.Parameter EnumParameter<TEnum>(string name, string? displayName = null, TEnum? defaultValue = default)
+        protected static Sharpliner.AzureDevOps.EnumParameter<TEnum> EnumParameter<TEnum>(string name, string? displayName = null, TEnum? defaultValue = default)
             where TEnum :  struct, System.Enum { }
         protected static Sharpliner.AzureDevOps.InlineCondition Equal(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression1, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression2) { }
         protected static Sharpliner.AzureDevOps.InlineCondition Equal<T>(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression1, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression2) { }
@@ -93,8 +93,8 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> JobLibrary(Sharpliner.AzureDevOps.JobLibrary library) { }
         protected static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.JobBase> JobLibrary<T>()
             where T : Sharpliner.AzureDevOps.JobLibrary, new () { }
-        protected static Sharpliner.AzureDevOps.Parameter JobListParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase>? defaultValue = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter JobParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.JobBase? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.JobListParameter JobListParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase>? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.JobParameter JobParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.JobBase? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.Template<Sharpliner.AzureDevOps.JobBase> JobTemplate(string path, Sharpliner.AzureDevOps.TemplateParameters? parameters = null) { }
         protected static Sharpliner.AzureDevOps.InlineCondition Less(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression1, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression2) { }
         protected static Sharpliner.AzureDevOps.InlineCondition Less<T>(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression1, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression2) { }
@@ -102,9 +102,9 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.InlineCondition NotEqual<T>(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression1, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression expression2) { }
         protected static Sharpliner.AzureDevOps.InlineCondition NotIn(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression needle, params Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression[] haystack) { }
         protected static Sharpliner.AzureDevOps.InlineCondition NotIn<T>(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression needle, params Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression[] haystack) { }
-        protected static Sharpliner.AzureDevOps.Parameter NumberParameter(string name, string? displayName = null, int defaultValue = 0, System.Collections.Generic.IEnumerable<int?>? allowedValues = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter ObjectParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary? defaultValue = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter ObjectParameter<T>(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T>? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.NumberParameter NumberParameter(string name, string? displayName = null, int? defaultValue = default, System.Collections.Generic.IEnumerable<int?>? allowedValues = null) { }
+        protected static Sharpliner.AzureDevOps.ObjectParameter ObjectParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.ObjectParameter<T> ObjectParameter<T>(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T>? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.InlineCondition Or(params Sharpliner.AzureDevOps.InlineCondition[] expressions) { }
         protected static Sharpliner.AzureDevOps.InlineCondition Or(params string[] expressions) { }
         protected static Sharpliner.AzureDevOps.InlineCondition Or<T>(params Sharpliner.AzureDevOps.InlineCondition[] expressions) { }
@@ -113,18 +113,18 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Stage> StageLibrary(Sharpliner.AzureDevOps.StageLibrary library) { }
         protected static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Stage> StageLibrary<T>()
             where T : Sharpliner.AzureDevOps.StageLibrary, new () { }
-        protected static Sharpliner.AzureDevOps.Parameter StageListParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Stage>? defaultValue = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter StageParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.Stage? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.StageListParameter StageListParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Stage>? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.StageParameter StageParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.Stage? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.Template<Sharpliner.AzureDevOps.Stage> StageTemplate(string path, Sharpliner.AzureDevOps.TemplateParameters? parameters = null) { }
         protected static Sharpliner.AzureDevOps.InlineCondition StartsWith(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression needle, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression haystack) { }
         protected static Sharpliner.AzureDevOps.InlineCondition StartsWith<T>(Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression needle, Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression haystack) { }
         protected static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step> StepLibrary(Sharpliner.AzureDevOps.StepLibrary library) { }
         protected static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Step> StepLibrary<T>()
             where T : Sharpliner.AzureDevOps.StepLibrary, new () { }
-        protected static Sharpliner.AzureDevOps.Parameter StepListParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Step>? defaultValue = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter StepParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.Step? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.StepListParameter StepListParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Step>? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.StepParameter StepParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.Step? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.Template<Sharpliner.AzureDevOps.Step> StepTemplate(string path, Sharpliner.AzureDevOps.TemplateParameters? parameters = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter StringParameter(string name, string? displayName = null, string? defaultValue = null, System.Collections.Generic.IEnumerable<string>? allowedValues = null) { }
+        protected static Sharpliner.AzureDevOps.StringParameter StringParameter(string name, string? displayName = null, string? defaultValue = null, System.Collections.Generic.IEnumerable<string>? allowedValues = null) { }
         protected static Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask Task(string taskName, string? displayName = null) { }
         protected static Sharpliner.AzureDevOps.Step ValidateYamlsArePublished(string pipelineProject) { }
         protected static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.VariableBase> Variable(string name, bool value) { }
@@ -1058,26 +1058,12 @@ namespace Sharpliner.AzureDevOps
     public abstract class TemplateDefinition : Sharpliner.AzureDevOps.AzureDevOpsDefinition
     {
         protected TemplateDefinition() { }
-        protected static Sharpliner.AzureDevOps.Parameter BooleanParameter(string name, bool? defaultValue = default) { }
-        protected static Sharpliner.AzureDevOps.Parameter DeploymentListParameter(string name, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.DeploymentJob>? defaultValue = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter DeploymentParameter(string name, Sharpliner.AzureDevOps.DeploymentJob? defaultValue = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter EnumParameter<TEnum>(string name, TEnum? defaultValue = default)
-            where TEnum :  struct, System.Enum { }
-        protected static Sharpliner.AzureDevOps.Parameter JobListParameter(string name, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase>? defaultValue = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.JobBase> JobParameter(string name, Sharpliner.AzureDevOps.JobBase? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.JobBase JobParameterReference(Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.JobBase> parameter) { }
         protected static Sharpliner.AzureDevOps.JobBase JobParameterReference(string parameterName) { }
-        protected static Sharpliner.AzureDevOps.Parameter NumberParameter(string name, int? defaultValue = default, System.Collections.Generic.IEnumerable<int?>? allowedValues = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter ObjectParameter(string name, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary? defaultValue = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter StageListParameter(string name, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Stage>? defaultValue = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.Stage> StageParameter(string name, Sharpliner.AzureDevOps.Stage? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.Stage StageParameterReference(Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.Stage> parameter) { }
         protected static Sharpliner.AzureDevOps.Stage StageParameterReference(string parameterName) { }
-        protected static Sharpliner.AzureDevOps.Parameter StepListParameter(string name, Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Step>? defaultValue = null) { }
-        protected static Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.Step> StepParameter(string name, Sharpliner.AzureDevOps.Step? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.Step StepParameterReference(Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.Step> parameter) { }
         protected static Sharpliner.AzureDevOps.Step StepParameterReference(string parameterName) { }
-        protected static Sharpliner.AzureDevOps.Parameter StringParameter(string name, string? defaultValue = null, System.Collections.Generic.IEnumerable<string>? allowedValues = null) { }
         public sealed class TemplateParameterReference
         {
             public Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference this[string parameterName] { get; }

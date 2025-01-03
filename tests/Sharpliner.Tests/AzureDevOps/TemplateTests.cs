@@ -94,7 +94,7 @@ public class TemplateTests
         protected Parameter skipBuild = BooleanParameter("skipBuild");
         protected Parameter useNugetOrg = BooleanParameter("useNugetOrg", defaultValue: false);
         protected Parameter restore = BooleanParameter("restore", defaultValue: true);
-        protected Parameter<Step> afterBuild = StepParameter("afterBuild", Bash.Inline($"cp -R logs {variables.Build.ArtifactStagingDirectory}"));
+        protected Parameter<Step> afterBuild = StepParameter("afterBuild", defaultValue: Bash.Inline($"cp -R logs {variables.Build.ArtifactStagingDirectory}"));
 
         public override List<Parameter> Parameters =>
         [
@@ -173,7 +173,7 @@ public class TemplateTests
     {
         public override string TargetFile => "template.yml";
 
-        Parameter<JobBase> mainJob = JobParameter("mainJob");
+        JobParameter mainJob = JobParameter("mainJob");
 
         public override List<Parameter> Parameters =>
         [

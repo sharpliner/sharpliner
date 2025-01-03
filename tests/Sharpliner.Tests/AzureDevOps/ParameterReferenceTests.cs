@@ -15,7 +15,7 @@ public class ParameterReferenceTests
             JobListParameter("jobs"),
             StepListParameter("steps"),
             ObjectParameter("variables"),
-            ObjectParameter("pool", new()
+            ObjectParameter("pool", defaultValue: new()
             {
                 { "vmImage", "windows-latest" }
             }),
