@@ -33,6 +33,10 @@ public class ConditionedList<T> : List<Conditioned<T>>
         base.Add(GetRootConditioned(item));
     }
 
+    /// <summary>
+    /// Gets or sets the item at the specified index.
+    /// If the item is a <see cref="Conditioned{T}"/> item, it will be marked as a list.
+    /// </summary>
     public new Conditioned<T> this[int index]
     {
         get => base[index];

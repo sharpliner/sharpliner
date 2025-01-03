@@ -15,6 +15,12 @@ public class ConditionedDictionary : Dictionary<string, object>
     /// <param name="item">The value.</param>
     public new void Add(string key, object item) => base.Add(key, GetRootConditioned(item));
 
+    /// <summary>
+    /// Gets or sets the item with the specified key.
+    /// If the item is a <see cref="Conditioned"/> item, it will be marked as a single item.
+    /// </summary>
+    /// <param name="key">The key.</param>
+    /// <returns>The value</returns>
     public new object this[string key]
     {
         get => base[key];
