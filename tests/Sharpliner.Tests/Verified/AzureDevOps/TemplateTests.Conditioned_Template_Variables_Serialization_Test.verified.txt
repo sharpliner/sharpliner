@@ -1,0 +1,11 @@
+﻿variables:
+- name: some
+  value: value
+
+- ${{ if eq(parameters.container, '') }}:
+  - name: image
+    value: ubuntu-16.04-cross-arm64-20210719121212-8a8d3be
+
+- ${{ else }}:
+  - name: image
+    value: ${{ parameters.container }}

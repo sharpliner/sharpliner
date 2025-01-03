@@ -1286,12 +1286,14 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
     public class ConditionedDictionary : System.Collections.Generic.Dictionary<string, object>
     {
         public ConditionedDictionary() { }
+        public object this[string key] { get; set; }
         public void Add(string key, object item) { }
     }
     public class ConditionedList<T> : System.Collections.Generic.List<Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T>>
     {
         public ConditionedList() { }
         protected ConditionedList(System.Collections.Generic.IEnumerable<T> values) { }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> this[int index] { get; set; }
         public void Add(Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> item) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T> op_Implicit(System.Collections.Generic.List<T> list) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<T> op_Implicit(System.Collections.ObjectModel.ReadOnlyCollection<T> values) { }

@@ -487,4 +487,69 @@ public class TemplateTests
 
         return Verify(pipeline.Serialize());
     }
+
+    private class Conditioned_Indexers_Parameters : SimpleStepTestPipeline
+    {
+        protected override ConditionedList<Step> Steps =>
+        [
+            StepTemplate("template1.yaml", new()
+            {
+                ["some"] = "value",
+                [If.IsPullRequest] = new TemplateParameters()
+                {
+                    ["pr"] = true
+                },
+                ["other"] =
+                    If.Equal(parameters["container"], "")
+                        .Value(new TemplateParameters
+                        {
+                            ["image"] = "ubuntu-16.04-cross-arm64-20210719121212-8a8d3be"
+                        })
+                    .Else
+                        .Value(new TemplateParameters
+                        {
+                            ["image"] = parameters["container"]
+                        })
+            }),
+        ];
+    }
+
+    [Fact]
+    public Task Conditioned_Indexers_Parameters_Serialization_Test()
+    {
+        var pipeline = new Conditioned_Indexers_Parameters();
+
+        return Verify(pipeline.Serialize());
+    }
+
+    private class Conditioned_Template_Variables : SimpleTestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Variables = CreateVariables(),
+        };
+
+        private static ConditionedList<VariableBase> CreateVariables()
+        {
+            var items = new ConditionedList<VariableBase>
+            {
+                new Variable("some", "value"),
+                If.IsPullRequest.Variable("pr", true).Else.Variable("pr", false),
+            };
+            items[1] =
+                If.Equal(parameters["container"], "")
+                    .Variable("image", "ubuntu-16.04-cross-arm64-20210719121212-8a8d3be")
+                .Else
+                    .Variable("image", parameters["container"]);
+            return items;
+        }
+    }
+
+    [Fact]
+    public Task Conditioned_Template_Variables_Serialization_Test()
+    {
+        var pipeline = new Conditioned_Template_Variables();
+
+        return Verify(pipeline.Serialize());
+    }
 }
