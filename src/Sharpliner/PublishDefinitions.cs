@@ -23,21 +23,10 @@ public class PublishDefinitions : Microsoft.Build.Utilities.Task
     public bool FailIfChanged { get; set; }
 
     /// <summary>
-    /// Skip the publishing of YAMLs.
-    /// </summary>
-    public bool Skip { get; set; }
-
-    /// <summary>
     /// This method finds all pipeline definitions via reflection and publishes them to YAML.
     /// </summary>
     public override bool Execute()
     {
-        if (Skip)
-        {
-            Log.LogMessage(MessageImportance.High, "Skipping the publishing of YAMLs");
-            return true;
-        }
-
         // PLEASE READ
         // This method loads and executes the Sharpliner publisher class BUT in the LoadFrom context.
         // We are unable to load the user's assembly into the main binding context because we are running from the NuGet location.
