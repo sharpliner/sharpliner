@@ -10,7 +10,7 @@ Say you want to generate many pipelines for your repository, each targeting a di
 By inheriting from [one of the `*Collection` classes](https://github.com/sharpliner/sharpliner/blob/main/src/Sharpliner/AzureDevOps/PublicDefinitions.cs), you can define many YAML pipelines at once.
 
 Below we show a very minimal example but you can imagine that pipeline definitions will differ between OSes in more details than pool name.
-It is much easier to accomodate for these inside C# than in YAML using if's and pipeline variables.
+It is much easier to accommodate for these inside C# than in YAML using if's and pipeline variables.
 
 [!code-csharp[](eng/Sharpliner.CI/TestPipelines.cs#pipeline-collection)]
 

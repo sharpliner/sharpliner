@@ -1,7 +1,7 @@
 # Getting started with Sharpliner for AzureDevOps
 
 This documentation shows how to define and publish YAML for [Azure DevOps pipelines](https://docs.microsoft.com/en-us/azure/devops/pipelines/?view=azure-devops).
-For more detailed reference of various parts of the pipeline, see [Azure DevOps definition reference](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionReference.md).
+For a more detailed reference of various parts of the pipeline, see [Azure DevOps definition reference](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionReference.md).
 
 ## Table of Contents
 
@@ -14,7 +14,7 @@ For more detailed reference of various parts of the pipeline, see [Azure DevOps 
 
 ## 1. Create a new project
 
-For best experience, we recommend creating a dedicated project that will contain your pipeline definitions.
+For the best experience, we recommend creating a dedicated project that will contain your pipeline definitions.
 It is possible to add Sharpliner into any other kind of project and have pipelines there but it is better to separate concerns this way.
 You can have as many pipeline definitions in one project as you want.
 
@@ -62,7 +62,7 @@ class PullRequestPipeline : PipelineDefinition
 ```
 
 You can also decide to override `SingleStagePipelineDefinition` in case you have a simpler pipeline with only a single stage.
-You can also overried `PipelineWithExtends` to [extend an existing template](https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/extends?view=azure-pipelines).
+You can also override `PipelineWithExtends` to [extend an existing template](https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/extends?view=azure-pipelines).
 
 > **Note:** Sometimes you need to generate a large number of similar YAML files dynamically. In this case, please see [DefinitionCollections.md](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionCollections.md).
 
@@ -124,7 +124,7 @@ public override SingleStagePipeline Pipeline => new()
 ## 4. Export the pipeline
 
 Save the changes and build the project.
-Based on the settings provided in the overriden members, Sharpliner will determine where you want your YAML file created.
+Based on the settings provided in the overridden members, Sharpliner will determine where you want your YAML file created.
 The output should look something like this:
 
 ```cmd
@@ -239,4 +239,4 @@ You can add this step to your pipeline:
 ValidateYamlsArePublished("src/MyProject.Pipelines.csproj")
 ```
 
-Please note that this step builds the given project using .NET so the SDK has to be available on the build agent.
+Please note that this step builds the given project using .NET, so the SDK has to be available on the build agent.
