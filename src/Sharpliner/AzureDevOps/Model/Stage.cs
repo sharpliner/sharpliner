@@ -20,7 +20,7 @@ public record Stage : IDependsOn
     /// </summary>
     [YamlMember(Order = 2)]
     [DisallowNull]
-    public string? DisplayName { get; init; }
+    public Conditioned<string>? DisplayName { get; init; }
 
     /// <summary>
     /// The lock behavior of the stage
@@ -76,4 +76,9 @@ public record Stage : IDependsOn
             DisplayName = displayName;
         }
     }
+
+    /// <summary>
+    /// Sets the displayName property.
+    /// </summary>
+    public Stage DisplayAs(string displayName) => this with { DisplayName = displayName };
 }
