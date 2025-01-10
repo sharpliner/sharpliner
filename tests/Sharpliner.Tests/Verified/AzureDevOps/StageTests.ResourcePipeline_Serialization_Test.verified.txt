@@ -1,0 +1,3 @@
+﻿stages:
+- stage: Stage1
+  displayName: DisplayName
