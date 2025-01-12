@@ -104,40 +104,6 @@ internal class IfParameterCondition(ParameterReference parameter) : IfCondition
     internal override string Serialize() => WrapTag(parameter.RuntimeExpression);
 }
 
-internal class InlineNotCondition : InlineCondition
-{
-    private readonly string _condition;
-
-    internal InlineNotCondition(InlineCondition condition)
-        : this(condition.Serialize())
-    {
-    }
-
-    internal InlineNotCondition(string condition)
-    {
-        _condition = NotConditionHelper.NegateCondition(condition);
-    }
-
-    internal override string Serialize() => _condition;
-}
-
-internal class IfNotCondition : IfCondition
-{
-    private readonly string _condition;
-
-    internal IfNotCondition(IfCondition condition)
-        : this(condition.WithoutTags())
-    {
-    }
-
-    internal IfNotCondition(string condition)
-    {
-        _condition = NotConditionHelper.NegateCondition(WithoutTags(condition));
-    }
-
-    internal override string Serialize() => WrapTag(_condition);
-}
-
 internal class IfEqualityCondition : IfStringCondition
 {
     internal IfEqualityCondition(bool equal, IfExpression expression1, IfExpression expression2)
@@ -430,33 +396,6 @@ internal class IfLessCondition : IfStringCondition
         : base("lt", first, second)
     {
     }
-}
-
-internal class InlineCustomCondition<T>(string condition) : InlineCondition<T>
-{
-    internal override string Serialize() => condition;
-}
-
-internal class IfCustomCondition<T>(string condition) : IfCondition<T>
-{
-    internal override string Serialize() => WrapTag(condition);
-}
-
-internal class InlineNotCondition<T> : InlineCondition<T>
-{
-    private readonly string _condition;
-
-    internal InlineNotCondition(Condition condition)
-        : this(condition.Serialize())
-    {
-    }
-
-    internal InlineNotCondition(string condition)
-    {
-        _condition = NotConditionHelper.NegateCondition(condition);
-    }
-
-    internal override string Serialize() => _condition;
 }
 
 internal class IfNotCondition<T> : IfCondition<T>
