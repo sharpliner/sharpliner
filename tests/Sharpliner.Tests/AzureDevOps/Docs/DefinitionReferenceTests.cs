@@ -455,6 +455,11 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
 
     class EachExpressionPipeline : PipelineDefinition
     {
+        ObjectParameter Stages = ObjectParameter("stages", "Environment names", new ConditionedDictionary()
+        {
+            { "Dev", string.Empty }
+        });
+
         public override string TargetFile => "pipeline-each.yml";
 
         public override Pipeline Pipeline => new()
@@ -463,7 +468,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
             Stages =
             {
                 If.IsBranch("main")
-                    .Each("env", "parameters.stages")
+                    .Each("env", parameters[Stages.Name])
                         .Stage(new Stage("stage-${{ env.name }}"))
                         .Stage(new Stage("stage2-${{ env.name }}")
                         {
