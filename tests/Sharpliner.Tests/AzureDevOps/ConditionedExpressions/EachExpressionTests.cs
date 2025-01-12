@@ -6,11 +6,13 @@ public class EachExpressionTests
 {
     private class Each_Expression_Test_Pipeline : TestPipeline
     {
+        StringParameter Environment = new("environment", "Environment", "Dev", ["Dev", "Int", "Prod"]);
+
         public override Pipeline Pipeline => new()
         {
             Stages =
             {
-                Each("env", "parameters.environments")
+                Each("env", Environment)
                     .StageTemplate("../stages/provision.yml", new()
                     {
                         { "environment", "${{ env }}" },

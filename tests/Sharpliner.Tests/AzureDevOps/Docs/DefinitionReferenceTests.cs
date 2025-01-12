@@ -463,7 +463,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
             Stages =
             {
                 If.IsBranch("main")
-                    .Each("env", "parameters.stages")
+                    .Each("env", parameters["stages"])
                         .Stage(new Stage("stage-${{ env.name }}"))
                         .Stage(new Stage("stage2-${{ env.name }}")
                         {

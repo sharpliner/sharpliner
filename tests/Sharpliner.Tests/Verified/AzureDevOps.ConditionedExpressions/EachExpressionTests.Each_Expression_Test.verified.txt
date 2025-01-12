@@ -1,5 +1,5 @@
 ﻿stages:
-- ${{ each env in parameters.environments }}:
+- ${{ each env in parameters.environment }}:
   - template: ../stages/provision.yml
     parameters:
       environment: ${{ env }}

@@ -11,7 +11,7 @@ internal class EachExpression(string iterator, string collection)
         => GetEachExpression(Iterator, Collection);
 
     internal static string GetEachExpression(string iterator, string collection)
-        => $"{Condition.ExpressionStart}each {iterator} in {collection}{Condition.ExpressionEnd}";
+        => $"{Condition.ExpressionStart}each {IfCondition.WithoutTags(iterator)} in {IfCondition.WithoutTags(collection)}{Condition.ExpressionEnd}";
 }
 
 /// <summary>
