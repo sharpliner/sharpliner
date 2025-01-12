@@ -920,13 +920,14 @@ namespace Sharpliner.AzureDevOps
         [YamlDotNet.Serialization.YamlMember(DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.OmitNull, Order=100)]
         public Sharpliner.AzureDevOps.DependsOn? DependsOn { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=2)]
-        public string? DisplayName { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? DisplayName { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=300)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase> Jobs { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=3)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.LockBehavior>? LockBehavior { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=200)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.VariableBase> Variables { get; init; }
+        public Sharpliner.AzureDevOps.Stage DisplayAs(string displayName) { }
     }
     public abstract class StageLibrary : Sharpliner.AzureDevOps.DefinitionLibrary<Sharpliner.AzureDevOps.Stage>
     {
