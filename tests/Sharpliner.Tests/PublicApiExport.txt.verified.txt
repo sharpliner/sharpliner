@@ -2226,6 +2226,7 @@ namespace Sharpliner
     {
         System.Collections.Generic.IEnumerable<Sharpliner.ISharplinerDefinition> Definitions { get; }
     }
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class PublishDefinitions : Microsoft.Build.Utilities.Task
     {
         public PublishDefinitions() { }
@@ -2264,6 +2265,7 @@ namespace Sharpliner
             public Sharpliner.Common.ValidationSeverity RepositoryCheckouts { get; set; }
         }
     }
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class SharplinerPublisher
     {
         public SharplinerPublisher(Microsoft.Build.Utilities.TaskLoggingHelper logger) { }
