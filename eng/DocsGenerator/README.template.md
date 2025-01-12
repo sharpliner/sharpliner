@@ -1,7 +1,7 @@
 [![Build Status](https://dev.azure.com/premun/Sharpliner/_apis/build/status/sharpliner-pr?branchName=main)](https://dev.azure.com/premun/Sharpliner/_build/latest?definitionId=6&branchName=main) [![Nuget](https://img.shields.io/nuget/v/Sharpliner)](https://www.nuget.org/packages/Sharpliner/)
 
-Sharpliner is a .NET library that lets you use C# for Azure DevOps pipeline definition instead of YAML.
-Exchange YAML indentation problems for the type-safe environment of C# and let the intellisense speed up your work!
+Sharpliner is a .NET library that lets you use C# for Azure DevOps pipeline definitions instead of YAML.
+Exchange YAML indentation problems for the type-safe environment of C# and let IntelliSense speed up your work!
 
 - [Getting started](#getting-started)
 - [Example](#example)
@@ -19,6 +19,7 @@ All you have to do is reference our [NuGet package](https://www.nuget.org/packag
 
 To skip the yaml generation during build - just add a `<SkipSharpliner>true</SkipSharpliner>` element to your csproj file.
 For example:
+
 [!code-xml[](tests/E2E.Tests/ProjectUsingTheLibrarySkipPublish/E2E.Tests.ProjectUsingTheLibrarySkipPublish.csproj#L8-L10)]
 
 For more detailed steps, check our [documentation](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/GettingStarted.md).
@@ -29,11 +30,12 @@ For more detailed steps, check our [documentation](https://github.com/sharpliner
 
 ## Sharpliner features
 
-Apart from the obvious benefits of using static type language with IDE support, not having to have to deal with indentation problems ever again, being able to split the code easily or the ability to generate YAML programatically, there are several other benefits of using Sharpliner.
+Apart from the obvious benefits of using a static type language with IDE support, not having to have to deal with indentation problems ever again, being able to split the code easily or the ability to generate YAML programmatically, there are several other benefits of using Sharpliner.
 
 ### Intellisense
-One of the best things when using Sharpliner is that you won't have to go the YAML reference every time you're adding a new piece of your pipeline.
-Having everything strongly typed will make your IDE give you hints all the way!
+
+One of the best things when using Sharpliner is that you won't have to go to the YAML reference every time you're adding a new piece of your pipeline.
+Having everything strongly typed will allow your IDE to give you hints all the way!
 
 ![Example intellisense for pipeline variables](https://raw.githubusercontent.com/sharpliner/sharpliner/main/docs/images/variables-intellisense.png)
 
@@ -87,12 +89,13 @@ However, this task's specification is quite long since the task does many things
     workingDirectory:
 ```
 
-Notice how some of the properties are only valid in a specific combination with other.
+Notice how some of the properties are only valid in a specific combination with another.
 With Sharpliner, we remove some of this complexity using nice fluent APIs:
 
 [!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/ReadmeTests.cs#dotnet-fluent-api)]
 
 ### Useful macros
+
 Some very common pipeline patterns such as comparing the current branch name or detecting pull requests are very cumbersome to do in YAML (long conditions full of complicated `${{ if }}` syntax).
 For many of these, we have handy macros so that you get more readable and shorter code.
 
@@ -105,8 +108,9 @@ can become this C#
 [!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/ReadmeTests.cs#useful-macros-csharp)]
 
 ### Re-usable pipeline blocks
-Sharpliner lets you re-use code more easily than YAML templates do.
-Apart from obvious C# code re-use, you can also define sets of C# building blocks and re-use them in your pipelines:
+
+Sharpliner lets you reuse code more easily than YAML templates do.
+Apart from obvious C# code reuse, you can also define sets of C# building blocks and reuse them in your pipelines:
 
 [!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/ReadmeTests.cs#pipeline-library)]
 
@@ -116,19 +120,21 @@ You can then reference this library in between build steps and it will get expan
 
 More about this feature can be found [here (DefinitionLibraries.md)](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionLibraries.md).
 
-
 ### Sourcing scripts from files
+
 When you need to add cmd, PowerShell or bash steps into your pipeline, maintaining these bits inside YAML can be error prone.
 With Sharpliner you can keep scripts in their own files (`.ps1`, `.sh`..) where you get the natural environment you're used to such as syntax highlighting.
-Sharpliner gives you APIs to load these on build time and include them inline:
+Sharpliner gives you APIs to load these at build time and include them inline:
 
 [!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/ReadmeTests.cs#sourcing-from-files)]
 
 ### Correct variable/parameter types
-Frequent struggle people have with Azure pipelines is using the [right type of variable](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#understand-variable-syntax) in the right context.
+
+A frequent struggle people have with Azure pipelines is using the [right type of variable](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&tabs=yaml%2Cbatch#understand-variable-syntax) in the right context.
 Be it a `${{ compile time parameter }}`, a `variable['used in runtime']` or a `$(macro)` syntax, with Sharpliner you won't have to worry about which one to pick as it understands the context and selects the right one for you.
 
 ### Pipeline validation
+
 Your pipeline definition can be validated during publishing and you can uncover issues, such as typos inside `dependsOn`, you would only find by trying to run the pipeline in CI.
 This gives you a faster dev loop and greater productivity.
 
@@ -139,7 +145,7 @@ Each validation can be individually configured/silenced in case you don't wish t
 
 ## Something missing?
 
-If you find a missing feature / API / property / use case, file an issue in project's repository.
+If you find a missing feature / API / property / use case, file an issue in the project's repository.
 We try to be very responsive and for small asks can deliver you a new version very fast.
 
 If you want to start contributing, either you already know about something missing or you can choose from some of the open issues.
@@ -179,12 +185,14 @@ The `Sharpliner.CI` project expects that a package `Sharpliner.43.43.43.nupkg` i
 
 To build all of the solution 100%, **you have to build `Sharpliner.CI` from console** as building inside VS won't work on cold checkout.
 This will package `Sharpliner.csproj` first and produce the `43.43.43` package:
-```
+
+```text
 > dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj
 ```
 
 If you make changes to the main library and want to test it using `Sharpliner.CI`, clean and then build the CI project from console:
-```
+
+```text
 > dotnet clean eng/Sharpliner.CI/Sharpliner.CI.csproj
 > dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj
 ```

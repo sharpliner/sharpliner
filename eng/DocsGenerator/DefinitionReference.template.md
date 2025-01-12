@@ -1,16 +1,17 @@
 # Azure DevOps pipeline definition reference
 
-Here you can find detailed reference on how to define various parts of the pipeline.
+Here you can find a detailed reference on how to define various parts of the pipeline.
 
 For a full list of classes you can override to create a YAML file, see [PublicDefinitions.cs](https://github.com/sharpliner/sharpliner/blob/main/src/Sharpliner/AzureDevOps/PublicDefinitions.cs).
 
 ## Table of Contents
+
 - [Build steps](#build-steps)
 - [Azure Pipelines tasks](#azure-pipelines-tasks)
   - [Contributions welcome](#contributions-welcome)
 - [Pipeline variables](#pipeline-variables)
 - [Pipeline parameters](#pipeline-parameters)
-- [Conditioned expressions](#conditioned-expressions)
+- [Conditional expressions](#conditional-expressions)
   - [Conditions](#conditions)
 - [Templates](#templates)
 - [Definition libraries](#definition-libraries)
@@ -48,7 +49,7 @@ Even though it is possible to use any of the non-default [Azure Pipelines tasks]
 [!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#azure-pipeline-task)]
 
 some of the tasks are quite hard to comprehend such as the [.NET Core CLI task](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops) whose specification is quite long since the task can do many different things.
-Notice how some of the properties are only valid in a specific combination with other.
+Notice how some of the properties are only valid in a specific combination with another.
 With Sharpliner, we remove some of this complexity by restricting which properties are available at a time and by using nice fluent APIs for dotnet and similar complex tasks.
 
 *Note how we use the `with` keyword to extend the `record` object with new properties.*
@@ -83,6 +84,7 @@ You can define variables and pass them to methods to make the code more readable
 [!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-variables-readable)]
 
 ## Pipeline parameters
+
 To define [pipeline runtime parameters](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/runtime-parameters?view=azure-devops&tabs=script), utilize the `*Parameter` shorthands:
 
 [!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-parameters)]
@@ -95,11 +97,11 @@ When referencing these parameters, you can just refer to the parameter and it wi
 
 See more examples in the [test class](../../tests/Sharpliner.Tests/AzureDevOps/TemplateTests.cs#49)
 
-## Conditioned expressions
+## Conditional expressions
 
-The Azure DevOps pipeline YAML allows you to specify conditioned expressions which are evaulated when pipeline is started.
-Sharpliner allows to define conditioned blocks as well in almost any part of the definition.
-If you find a place where If cannot be used, raise an issue and we can add it easily.
+The Azure DevOps pipeline YAML allows you to specify conditional expressions which are evaluated when the pipeline is started.
+Sharpliner allows you to define conditional blocks as well in almost any part of the definition.
+If you find a place where `If` cannot be used, raise an issue and we can add it easily.
 
 This feature was a little bit problematic to mimic in C# but we've found a nice way to express these:
 
@@ -120,16 +122,19 @@ This will produce following YAML:
 ### Conditions
 
 The conditions themselves are defined similarly to what Azure DevOps requires, so this example YAML condition:
+
 [!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditions-yaml)]
 
 would have this C# definition:
+
 [!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditions-code)]
 
 The logic operators such as `Equal` or `Or` expect either a string or a nested condition.
 Additionally, you can also use `variables["name"]` instead of `"variables[\"name\"]"` as shorthand notation but it has the same effect.
 
-Finally, many of the commonly used conditions have macros prepared for a shorter syntax.
+Finally, many of the commonly used conditions have macros available for a shorter syntax.
 These are:
+
 [!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditions-macros)]
 
 ## Each expression
@@ -144,8 +149,8 @@ generates the following YAML:
 
 ## Templates
 
-Azure pipelines allow you to [define a parametrized template](https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#template-references) for a **stage**, **job**, **step** or **variables** and then insert those templates in your pipeline.
-Sharpliner also supports definition and refercing of templates, however with C# it's easier to define these entities directly in code.
+Azure pipelines allow you to [define a parameterized template](https://docs.microsoft.com/en-us/azure/devops/pipelines/yaml-schema?view=azure-devops&tabs=schema%2Cparameter-schema#template-references) for a **stage**, **job**, **step** or **variables** and then insert those templates in your pipeline.
+Sharpliner also supports the definition and referencing of templates, however with C# it's easier to define these entities directly in code.
 Anyway, the functionality is useful when for example migrating from large YAML code base step by step.
 We also found it useful to create both YAML templates + C# representations for calling them and bind their parameters this way.
 
@@ -156,7 +161,7 @@ To define a template, you do it similarly as when you define the pipeline - you 
 - `StepTemplateDefinition`
 - `VariableTemplateDefinition`
 
-Additionally, Sharpliner allows to define a type for the template parameters so that usage of your own template is compile-time type-safe.
+Additionally, Sharpliner allows you to define a type for the template parameters so that usage of your own template is compile-time type-safe.
 In such case, you inherit from the generic versions of these classes:
 
 - `StageTemplateDefinition<TParameters>`
@@ -172,7 +177,7 @@ Which produces following YAML template:
 
 [!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#strongly-typed-parameters-yaml)]
 
-You can also define a template without stong-typing the parameters:
+You can also define a template without strong-typing the parameters:
 
 [!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#untyped-parameters-template)]
 
