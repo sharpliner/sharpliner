@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using Microsoft.Build.Framework;
@@ -8,6 +9,7 @@ namespace Sharpliner;
 /// <summary>
 /// This is an MSBuild task that is run in user projects to publish YAMLs after build.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class PublishDefinitions : Microsoft.Build.Utilities.Task
 {
     /// <summary>

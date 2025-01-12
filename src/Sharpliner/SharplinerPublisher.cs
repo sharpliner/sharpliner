@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -13,6 +14,7 @@ namespace Sharpliner;
 /// <summary>
 /// This is the main entrypoint that finds definitions via reflection and publishes YAMLs.
 /// </summary>
+[ExcludeFromCodeCoverage]
 public class SharplinerPublisher(TaskLoggingHelper logger)
 {
     /// <summary>
