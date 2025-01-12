@@ -240,3 +240,13 @@ ValidateYamlsArePublished("src/MyProject.Pipelines.csproj")
 ```
 
 Please note that this step builds the given project using .NET, so the SDK has to be available on the build agent.
+
+## 7. Skip YAML publishing when necessary
+
+In case you need to build your project/solutions in scenarios, where you're not interesting in publishing new YAML, you can skip the YAML generation during the build process by adding a `<SkipSharpliner>true</SkipSharpliner>` element to your csproj file:
+
+```xml
+<PropertyGroup>
+  <SkipSharpliner>true</SkipSharpliner>
+</PropertyGroup>
+```

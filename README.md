@@ -17,15 +17,6 @@ Exchange YAML indentation problems for the type-safe environment of C# and let I
 
 All you have to do is reference our [NuGet package](https://www.nuget.org/packages/Sharpliner/) in your project, override a class with your definition and `dotnet build` the project! Dead simple!
 
-To skip the yaml generation during build - just add a `<SkipSharpliner>true</SkipSharpliner>` element to your csproj file.
-For example:
-
-```xml
-<PropertyGroup>
-  <SkipSharpliner>true</SkipSharpliner>
-</PropertyGroup>
-```
-
 For more detailed steps, check our [documentation](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/GettingStarted.md).
 
 ## Example
