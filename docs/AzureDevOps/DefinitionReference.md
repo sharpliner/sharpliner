@@ -53,6 +53,7 @@ Steps =
     {
         DisplayName = "Run unit tests",
         ContinueOnError = true,
+        TimeoutInMinutes = parameters["timeout_in_minutes"]
     },
 }
 ```

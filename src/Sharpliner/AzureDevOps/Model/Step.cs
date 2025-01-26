@@ -54,13 +54,22 @@ public abstract record Step
     /// </summary>
     [YamlIgnore]
     [DisallowNull]
-    public Conditioned<TimeSpan>? Timeout { get; init; }
+    // public Conditioned<TimeSpan>? Timeout { get; init; }
+    public Conditioned<TimeSpan>? Timeout
+    {
+        get;
+        init {
+            field = value;
+            TimeoutInMinutes = value?.Definition != null ? (int)value.Definition.TotalMinutes : null;
+        }
+    }
 
     /// <summary>
     /// Timeout after which the step will be stopped.
     /// </summary>
     [YamlMember(Order = 210)]
-    public Conditioned<int>? TimeoutInMinutes => Timeout?.Definition != null ? (int)Timeout.Definition.TotalMinutes : null;
+    public Conditioned<int>? TimeoutInMinutes { get; init; }
+    // public Conditioned<int>? TimeoutInMinutes => Timeout?.Definition != null ? (int)Timeout.Definition.TotalMinutes : null;
 
     /// <summary>
     /// A list of additional items to map into the process's environment.

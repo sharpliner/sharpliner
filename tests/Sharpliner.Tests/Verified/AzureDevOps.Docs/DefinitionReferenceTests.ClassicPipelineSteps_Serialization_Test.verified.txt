@@ -1,0 +1,21 @@
+﻿parameters:
+- name: timeout_in_minutes
+  type: number
+  default: 20
+
+jobs:
+- job: main
+  steps:
+  - task: DotNetCoreCLI@2
+    displayName: Build solution
+    inputs:
+      command: build
+      includeNuGetOrg: true
+      projects: src/MyProject.sln
+    timeoutInMinutes: 20
+
+  - bash: |-
+      ./.dotnet/dotnet test src/MySolution.sln
+    displayName: Run unit tests
+    continueOnError: true
+    timeoutInMinutes: ${{ parameters.timeout_in_minutes }}

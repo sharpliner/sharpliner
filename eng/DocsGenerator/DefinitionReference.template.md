@@ -66,7 +66,7 @@ The [NuGet v2 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tas
 
 Generated YAML:
 
-[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#nuget-tasks-yaml)]
+[!code-yaml[](tests/Sharpliner.Tests/Verified/AzureDevOps.Docs/DefinitionReferenceTests.NuGet_Test.verified.txt)]
 
 ### Contributions welcome
 
@@ -109,7 +109,7 @@ This feature was a little bit problematic to mimic in C# but we've found a nice 
 
 The resulting YAML will look like this:
 
-[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditioned-expressions-yaml)]
+[!code-yaml[](tests/Sharpliner.Tests/Verified/AzureDevOps.Docs/DefinitionReferenceTests.Serialize_ConditionedExpressionsPipeline_Test.verified.txt)]
 
 You can also specify conditions in places like template parameters (which are improved dictionaries really):
 

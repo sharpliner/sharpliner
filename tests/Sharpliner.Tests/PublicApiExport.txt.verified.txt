@@ -962,8 +962,6 @@ namespace Sharpliner.AzureDevOps
     public abstract class Step : System.IEquatable<Sharpliner.AzureDevOps.Step>
     {
         protected Step() { }
-        [YamlDotNet.Serialization.YamlMember(Order=210)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<int>? TimeoutInMinutes { get; }
         [YamlDotNet.Serialization.YamlMember(Order=190)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.InlineCondition>? Condition { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=200)]
@@ -977,6 +975,8 @@ namespace Sharpliner.AzureDevOps
         public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedDictionary Env { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=150)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Name { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=210)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<int>? TimeoutInMinutes { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<System.TimeSpan>? Timeout { get; init; }
         public Sharpliner.AzureDevOps.Step DisplayAs(string displayName) { }

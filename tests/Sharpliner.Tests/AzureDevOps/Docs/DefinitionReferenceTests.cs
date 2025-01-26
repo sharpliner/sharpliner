@@ -16,6 +16,10 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
 
         public override SingleStagePipeline Pipeline => new()
         {
+            Parameters =
+            {
+                NumberParameter("timeout_in_minutes", defaultValue: 20),
+            },
             Jobs =
             {
                 new Job("main")
@@ -39,12 +43,20 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
                         {
                             DisplayName = "Run unit tests",
                             ContinueOnError = true,
+                            TimeoutInMinutes = parameters["timeout_in_minutes"]
                         },
                     }
 #endregion
                 }
             }
         };
+    }
+
+    [Fact]
+    public Task ClassicPipelineSteps_Serialization_Test()
+    {
+        var yaml = new ClassicPipelineSteps().Serialize();
+        return Verify(yaml);
     }
 
     class ShorthandPipelineSteps : SingleStagePipelineDefinition
@@ -95,6 +107,13 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
     }
 
     [Fact]
+    public Task ShorthandPipelineSteps_Serialization_Test()
+    {
+        var yaml = new ShorthandPipelineSteps().Serialize();
+        return Verify(yaml);
+    }
+
+    [Fact]
     public Task AzurePipelineTask_Test()
     {
         ConditionedList<Step> tasks =
@@ -140,7 +159,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
     }
 
     [Fact]
-    public void NuGet_Test()
+    public Task NuGet_Test()
     {
         ConditionedList<Step> tasks =
         [
@@ -164,55 +183,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
         ];
 
         var yaml = SharplinerSerializer.Serialize(tasks);
-        yaml.Trim().Should().Be(
-#region nuget-tasks-yaml
-            """
-            - task: NuGetAuthenticate@1
-              inputs:
-                forceReinstallCredentialProvider: true
-                nuGetServiceConnections: NuGetServiceConnection1,NuGetServiceConnection2
-
-            - task: NuGetCommand@2
-              inputs:
-                command: restore
-                feedsToUse: select
-                vstsFeed: my-project/my-project-scoped-feed
-                restoreSolution: '**/*.sln'
-                includeNuGetOrg: false
-
-            - task: NuGetCommand@2
-              inputs:
-                command: pack
-                versioningScheme: byPrereleaseNumber
-                majorVersion: 3
-                minorVersion: 1
-                patchVersion: 4
-
-            - task: NuGetCommand@2
-              inputs:
-                command: pack
-                versioningScheme: byEnvVar
-                versionEnvVar: VERSION
-
-            - task: NuGetCommand@2
-              inputs:
-                command: push
-                nuGetFeedType: internal
-                publishVstsFeed: MyInternalFeed
-
-            - task: NuGetCommand@2
-              inputs:
-                command: push
-                nuGetFeedType: external
-                publishFeedCredentials: MyExternalFeedCredentials
-
-            - task: NuGetCommand@2
-              inputs:
-                command: custom
-                arguments: config -Set repositoryPath=c:\packages -configfile c:\my.config
-            """
-#endregion
-        );
+        return Verify(yaml);
     }
 
     class PipelineVariables : SingleStagePipelineDefinition
@@ -344,33 +315,12 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
     }
 
     [Fact]
-    public void Serialize_ConditionedExpressionsPipeline_Test()
+    public Task Serialize_ConditionedExpressionsPipeline_Test()
     {
         var pipeline = new ConditionedExpressionsPipeline();
-        var yaml = SharplinerSerializer.Serialize(pipeline.Pipeline);
+        var yaml = pipeline.Serialize();
 
-        yaml.Trim().Should().Be(
-#region conditioned-expressions-yaml
-            """
-            variables:
-            - ${{ if eq(variables['Environment.Target'], 'Cloud') }}:
-              - name: target
-                value: Azure
-
-              - name: isCloud
-                value: true
-
-              - ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
-                - group: azure-int
-
-              - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-                - group: azure-prod
-
-              - ${{ else }}:
-                - group: azure-pr
-            """
-#endregion
-        );
+        return Verify(yaml);
     }
 
     [Fact]

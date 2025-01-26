@@ -1,0 +1,31 @@
+﻿jobs:
+- job: main
+  steps:
+  - checkout: self
+
+  - task: DownloadPipelineArtifact@2
+    inputs:
+      runVersion: latestFromBranch
+      project: internal
+      pipeline: 23
+      runBranch: refs/heads/develop
+      artifact: CLI.Package
+      allowPartiallySucceededBuilds: true
+      checkDownloadedFiles: true
+      preferTriggeringPipeline: true
+
+  - task: DotNetCoreCLI@2
+    inputs:
+      command: build
+      projects: src/MyProject.sln
+      includeNuGetOrg: true
+    timeoutInMinutes: 20
+
+  - bash: |-
+      ./.dotnet/dotnet test src/MySolution.sln
+    displayName: Run unit tests
+    continueOnError: true
+
+  - publish: bin/**/*.dll
+    displayName: Publish build artifacts
+    artifact: ArtifactName
