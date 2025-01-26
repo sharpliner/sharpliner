@@ -162,12 +162,14 @@ The repository layout is quite simple:
 ├── docs                 # Documentation
 ├── eng                  # CI/CD for the repo
 │   ├── Sharpliner.CI    # C# definitions for pipelines of this repo
+│   ├── DocsGenerator    # C# tool to generate the documentation markdown files
+│   ├── scripts          # scripts used by the CI & e2e tests
 │   └── pipelines        # YAML pipelines of the repository
 ├── src
 │   └── Sharpliner       # Main Sharpliner project
 │       └── build        # Targets/props for the Sharpliner .nupkg
 ├── tests
-│   ├── NuGet.Tests      # E2E tests using the Sharpliner  .nupkg
+│   ├── E2E.Tests        # E2E tests using the Sharpliner  .nupkg
 │   └── Sharpliner.Tests # Unit tests for the main Sharpliner project
 └── Sharpliner.sln       # Main solution of the project
 ```
