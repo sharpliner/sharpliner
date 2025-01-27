@@ -57,7 +57,8 @@ public abstract record Step
     public Conditioned<TimeSpan>? Timeout
     {
         get;
-        init {
+        init
+        {
             field = value;
             if (value?.Definition is not null)
             {
