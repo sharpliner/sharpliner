@@ -1,0 +1,43 @@
+﻿- task: NuGetAuthenticate@1
+  inputs:
+    forceReinstallCredentialProvider: true
+    nuGetServiceConnections: NuGetServiceConnection1,NuGetServiceConnection2
+
+- task: NuGetCommand@2
+  inputs:
+    command: restore
+    feedsToUse: select
+    vstsFeed: my-project/my-project-scoped-feed
+    restoreSolution: '**/*.sln'
+    includeNuGetOrg: false
+
+- task: NuGetCommand@2
+  inputs:
+    command: pack
+    versioningScheme: byPrereleaseNumber
+    majorVersion: 3
+    minorVersion: 1
+    patchVersion: 4
+
+- task: NuGetCommand@2
+  inputs:
+    command: pack
+    versioningScheme: byEnvVar
+    versionEnvVar: VERSION
+
+- task: NuGetCommand@2
+  inputs:
+    command: push
+    nuGetFeedType: internal
+    publishVstsFeed: MyInternalFeed
+
+- task: NuGetCommand@2
+  inputs:
+    command: push
+    nuGetFeedType: external
+    publishFeedCredentials: MyExternalFeedCredentials
+
+- task: NuGetCommand@2
+  inputs:
+    command: custom
+    arguments: config -Set repositoryPath=c:\packages -configfile c:\my.config
