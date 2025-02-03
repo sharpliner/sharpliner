@@ -41,7 +41,7 @@ jobs:
 
     - uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 9.0.100
+        dotnet-version: 9.0.102
 
     - name: Build
       run: dotnet build src/Sharpliner/Sharpliner.csproj
