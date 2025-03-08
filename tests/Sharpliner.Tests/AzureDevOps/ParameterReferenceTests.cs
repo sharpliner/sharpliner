@@ -36,6 +36,9 @@ public class ParameterReferenceTests
                             If.Equal(parameters["agentOs"], "Windows_NT")
                                 .Step(parameters["steps"]),
 
+                            If.Or(parameters["extraCondition"], parameters["extraCondition2"])
+                                .Step(Checkout.Self),
+
                             parameters["steps"],
 
                             Bash.Inline("curl -o $(Agent.TempDirectory)/sharpliner.zip") with

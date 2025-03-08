@@ -69,6 +69,6 @@ internal record ConditionedParameterReference<T> : Conditioned<T>
         _parameter = parameter;
     }
 
-    internal override void WriteInternal(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    internal override void SerializeSelf(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
         => emitter.Emit(new Scalar(_parameter.CompileTimeExpression));
 }

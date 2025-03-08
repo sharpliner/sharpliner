@@ -22,7 +22,12 @@ stages:
   - job: Job_1
     pool: ${{ parameters.pool }}
     steps:
-    - ${{ parameters.steps }}
+    - ${{ if eq(parameters.agentOs, 'Windows_NT') }}:
+      - ${{ parameters.steps }}
+
+    - ${{ if or(${{ parameters.extraCondition }}, ${{ parameters.extraCondition2 }}) }}:
+      - checkout: self
+
     - ${{ parameters.steps }}
 
     - bash: |-
