@@ -115,6 +115,7 @@ public abstract record Conditioned : IYamlConvertible
     /// <returns>The conditioned definition coming out of the inputs</returns>
     internal static Conditioned<T> Link<T>(IfCondition condition, Conditioned<T> conditionedDefinition)
     {
+        conditionedDefinition.Condition = condition;
         condition.Parent?.Definitions.Add(conditionedDefinition);
         conditionedDefinition.Parent = condition.Parent;
         return conditionedDefinition;
