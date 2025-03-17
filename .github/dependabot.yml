@@ -4,6 +4,6 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
-      ignore:
-        - dependency-name: "Sharpliner"
-        - dependency-name: "E2E.Tests.SharplinerLibrary"
+    ignore:
+      - dependency-name: "Sharpliner"
+      - dependency-name: "E2E.Tests.SharplinerLibrary"
