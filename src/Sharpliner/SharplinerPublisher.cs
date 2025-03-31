@@ -188,7 +188,8 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
         {
             case TargetPathType.RelativeToGitRoot:
                 var currentDir = new DirectoryInfo(Directory.GetCurrentDirectory());
-                while (!Directory.Exists(Path.Combine(currentDir.FullName, ".git")))
+
+                while (!Directory.Exists(Path.Combine(currentDir.FullName, ".git")) && !File.Exists(Path.Combine(currentDir.FullName, ".git")))
                 {
                     currentDir = currentDir.Parent;
 

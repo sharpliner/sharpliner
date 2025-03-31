@@ -158,7 +158,7 @@ public class Program
     private static string GetRelativeToGitRoot(string path)
     {
         var currentDir = new DirectoryInfo(Directory.GetCurrentDirectory());
-        while (!Directory.Exists(Path.Combine(currentDir.FullName, ".git")))
+        while (!Directory.Exists(Path.Combine(currentDir.FullName, ".git")) && !File.Exists(Path.Combine(currentDir.FullName, ".git")))
         {
             currentDir = currentDir.Parent;
 

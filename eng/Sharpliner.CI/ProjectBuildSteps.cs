@@ -45,7 +45,7 @@ class ProjectBuildSteps(string project) : StepLibrary
     private static string GetGlobalJsonPath()
     {
         var currentDir = new DirectoryInfo(Directory.GetCurrentDirectory());
-        while (!Directory.Exists(Path.Combine(currentDir.FullName, ".git")))
+        while (!Directory.Exists(Path.Combine(currentDir.FullName, ".git")) && !File.Exists(Path.Combine(currentDir.FullName, ".git")))
         {
             currentDir = currentDir.Parent;
 
