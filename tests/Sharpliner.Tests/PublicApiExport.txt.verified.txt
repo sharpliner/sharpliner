@@ -534,6 +534,17 @@ namespace Sharpliner.AzureDevOps
         [YamlDotNet.Serialization.YamlMember(Order=1000)]
         public Sharpliner.AzureDevOps.JobWorkspace? Workspace { get; init; }
     }
+    public class JobDependencyVariable : Sharpliner.AzureDevOps.VariableBase, System.IEquatable<Sharpliner.AzureDevOps.JobDependencyVariable>
+    {
+        public JobDependencyVariable(string variableName, string taskName, string jobName) { }
+        public string JobName { get; }
+        public string Name { get; }
+        public string TaskName { get; }
+        public override string ToString() { }
+        public static string op_Implicit(Sharpliner.AzureDevOps.JobDependencyVariable variable) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression op_Implicit(Sharpliner.AzureDevOps.JobDependencyVariable variable) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression op_Implicit(Sharpliner.AzureDevOps.JobDependencyVariable variable) { }
+    }
     public abstract class JobLibrary : Sharpliner.AzureDevOps.DefinitionLibrary<Sharpliner.AzureDevOps.JobBase>
     {
         protected JobLibrary() { }
@@ -1353,6 +1364,15 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public Sharpliner.AzureDevOps.IfCondition<T> Xor(Sharpliner.AzureDevOps.IfCondition expression1, Sharpliner.AzureDevOps.IfCondition expression2) { }
         public Sharpliner.AzureDevOps.IfCondition<T> Xor(string expression1, string expression2) { }
     }
+    public class JobDependencyVariableReference : Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference
+    {
+        public string JobName { get; }
+        public override string MacroExpression { get; }
+        public override string RuntimeExpression { get; }
+        public string TaskName { get; }
+        public override bool Equals(object? obj) { }
+        public override int GetHashCode() { }
+    }
     public class ParameterReference : Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.ICompileTimeExpression, Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.IRuntimeExpression, YamlDotNet.Serialization.IYamlConvertible
     {
         public string CompileTimeExpression { get; }
@@ -1365,9 +1385,9 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
     }
     public class VariableReference : Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.ICompileTimeExpression, Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.IMacroExpression, Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.IRuntimeExpression, YamlDotNet.Serialization.IYamlConvertible
     {
-        public string CompileTimeExpression { get; }
-        public string MacroExpression { get; }
-        public string RuntimeExpression { get; }
+        public virtual string CompileTimeExpression { get; }
+        public virtual string MacroExpression { get; }
+        public virtual string RuntimeExpression { get; }
         public string VariableName { get; }
         public override bool Equals(object? obj) { }
         public override int GetHashCode() { }

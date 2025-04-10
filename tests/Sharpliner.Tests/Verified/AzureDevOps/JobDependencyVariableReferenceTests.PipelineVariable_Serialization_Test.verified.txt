@@ -1,0 +1,16 @@
+﻿stages:
+- stage: Stage_1
+  jobs:
+  - job: Setter_Job
+    pool: ${{ variables['pool'] }}
+    steps:
+    - bash: |-
+        echo ##vso[task.setvariable variable=MyVar;isOutput=true]true
+      name: VarSetter
+
+  - job: Getter_Job
+    pool: ${{ variables['pool'] }}
+    steps:
+    - bash: |-
+        echo This should be run!
+    condition: eq(dependencies.Setter_Job.outputs['VarSetter.MyVar'], true)
