@@ -146,3 +146,60 @@ public record Variable : VariableBase
     /// <param name="variable">The variable.</param>
     public static implicit operator InlineExpression(Variable variable) => new VariableReference(variable.Name);
 }
+
+/// <summary>
+/// Define an output variable created by a job, which can be referenced in other jobs in Azure DevOps pipelines. See <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/process/variables?view=azure-devops&amp;tabs=yaml%2Cbatch#use-outputs-in-a-different-job"/>
+/// </summary>
+public record JobDependencyVariable : VariableBase
+{
+    /// <summary>
+    /// The name of the variable
+    /// </summary>
+    public string Name { get; }
+
+    /// <summary>
+    /// The name of the task that created this variable
+    /// </summary>
+    public string TaskName { get; }
+
+    /// <summary>
+    /// The name of the job that created this variable
+    /// </summary>
+    public string JobName { get; }
+
+    /// <summary>
+    /// Creates a new instance of <see cref="JobDependencyVariable"/> with a string value.
+    /// </summary>
+    /// <param name="variableName">The name of the variable</param>
+    /// <param name="taskName">The name of the task that created this variable</param>
+    /// <param name="jobName">The name of the job that created this variable</param>
+    public JobDependencyVariable(string variableName, string taskName, string jobName)
+    {
+        Name = variableName;
+        TaskName = taskName;
+        JobName = jobName;
+    }
+
+    /// <summary>
+    /// Converts this <see cref="JobDependencyVariable"/> to a <see cref="IfExpression"/> by getting the reference to the variable.
+    /// </summary>
+    public override string ToString() => new JobDependencyVariableReference(Name, TaskName, JobName);
+
+    /// <summary>
+    /// Converts a <see cref="JobDependencyVariable"/> to a <see cref="IfExpression"/> by getting the reference to the variable.
+    /// </summary>
+    /// <param name="variable">The variable.</param>
+    public static implicit operator string(JobDependencyVariable variable) => new JobDependencyVariableReference(variable.Name, variable.TaskName, variable.JobName);
+
+    /// <summary>
+    /// Converts a <see cref="JobDependencyVariable"/> to a <see cref="IfExpression"/> by getting the reference to the variable.
+    /// </summary>
+    /// <param name="variable">The variable.</param>
+    public static implicit operator IfExpression(JobDependencyVariable variable) => new JobDependencyVariableReference(variable.Name, variable.TaskName, variable.JobName);
+
+    /// <summary>
+    /// Converts a <see cref="JobDependencyVariable"/> to a <see cref="InlineExpression"/> by getting the reference to the variable.
+    /// </summary>
+    /// <param name="variable">The variable.</param>
+    public static implicit operator InlineExpression(JobDependencyVariable variable) => new JobDependencyVariableReference(variable.Name, variable.TaskName, variable.JobName);
+}

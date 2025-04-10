@@ -31,6 +31,7 @@ public abstract class Condition : IYamlConvertible
     private const string VariablePropertyAccessStart = "variables.";
     private const string ParametersIndexAccessStart = "parameters[";
     private const string ParametersPropertyAccessStart = "parameters.";
+    private const string OutputVariablePropertyAccessStart = "dependencies.";
 
     internal virtual string TagStart => IfTagStart;
     internal virtual string TagEnd => ExpressionEnd;
@@ -65,7 +66,8 @@ public abstract class Condition : IYamlConvertible
             || value.StartsWith(VariableIndexAccessStart)
             || value.StartsWith(VariablePropertyAccessStart)
             || value.StartsWith(ParametersIndexAccessStart)
-            || value.StartsWith(ParametersPropertyAccessStart))
+            || value.StartsWith(ParametersPropertyAccessStart)
+            || value.StartsWith(OutputVariablePropertyAccessStart))
         {
             return value;
         }
