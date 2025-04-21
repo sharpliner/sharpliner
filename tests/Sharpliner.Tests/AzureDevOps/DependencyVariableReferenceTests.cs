@@ -340,7 +340,6 @@ public class DependencyVariableReferenceTests
         ];
     }
 
-    // This test should create a variable in one job and reference it in the condition for another stage.
     [Fact]
     public Task StageToStageDependencyVariable_Serialization_Test()
     {
@@ -348,7 +347,6 @@ public class DependencyVariableReferenceTests
         return Verify(pipeline.Serialize());
     }
 
-    // This test should create a variable in one job and reference it in another job within the same stage.
     [Fact]
     public Task JobToJobSameStageDependencyVariable_Serialization_Test()
     {
@@ -356,7 +354,6 @@ public class DependencyVariableReferenceTests
         return Verify(pipeline.Serialize());
     }
 
-    // This test should create a variable in one job and reference it in another job within the different stage.
     [Fact]
     public Task JobToJobDifferentStageDependencyVariable_Serialization_Test()
     {
@@ -364,7 +361,6 @@ public class DependencyVariableReferenceTests
         return Verify(pipeline.Serialize());
     }
 
-    // This test should create a variable in a deploy job and reference it in the condtion for another job within a different stage.
     [Fact]
     public Task JobToJobDeployDependencyVariable_Serialization_Test()
     {
@@ -372,7 +368,6 @@ public class DependencyVariableReferenceTests
         return Verify(pipeline.Serialize());
     }
 
-    // This test should create a variable in a deploy job and reference it in the condtion for another stage.
     [Fact]
     public Task StageToStageDeployDependencyVariable_Serialization_Test()
     {
@@ -380,7 +375,6 @@ public class DependencyVariableReferenceTests
         return Verify(pipeline.Serialize());
     }
 
-    // This test should create a variable in a deploy job containing a build resource, and reference it in the condtion for another stage.
     [Fact]
     public Task StageToStageDeployResourceDependencyVariable_Serialization_Test()
     {

@@ -37,15 +37,10 @@ public class DependencyVariableReference : VariableReference
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {
-        if (obj is DependencyVariableReference other)
-        {
-            return (
-                VariableName == other.VariableName &&
-                JobName == other.JobName &&
-                StepName == other.StepName);
-        }
-
-        return false;
+        return obj is DependencyVariableReference other &&
+            VariableName == other.VariableName &&
+            JobName == other.JobName &&
+            StepName == other.StepName;
     }
 
     /// <inheritdoc/>
@@ -114,16 +109,11 @@ public class JobToJobDifferentStageDependencyVariableReference : DependencyVaria
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {
-        if (obj is JobToJobDifferentStageDependencyVariableReference other)
-        {
-            return (
-                VariableName == other.VariableName &&
-                JobName == other.JobName &&
-                StepName == other.StepName &&
-                StageName == other.StageName);
-        }
-
-        return false;
+        return obj is JobToJobDifferentStageDependencyVariableReference other &&
+            VariableName == other.VariableName &&
+            JobName == other.JobName &&
+            StepName == other.StepName &&
+            StageName == other.StageName;
     }
 
     /// <inheritdoc/>
@@ -154,16 +144,11 @@ public class JobToJobDeployDependencyVariableReference : DependencyVariableRefer
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {
-        if (obj is JobToJobDeployDependencyVariableReference other)
-        {
-            return (
-                VariableName == other.VariableName &&
-                JobName == other.JobName &&
-                StepName == other.StepName &&
-                StageName == other.StageName);
-        }
-
-        return false;
+        return obj is JobToJobDeployDependencyVariableReference other &&
+            VariableName == other.VariableName &&
+            JobName == other.JobName &&
+            StepName == other.StepName &&
+            StageName == other.StageName;
     }
 
     /// <inheritdoc/>
@@ -194,16 +179,11 @@ public class StageToStageDeployDependencyVariableReference : DependencyVariableR
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {
-        if (obj is StageToStageDeployDependencyVariableReference other)
-        {
-            return (
-                VariableName == other.VariableName &&
-                JobName == other.JobName &&
-                StepName == other.StepName &&
-                StageName == other.StageName);
-        }
-
-        return false;
+        return obj is StageToStageDeployDependencyVariableReference other &&
+            VariableName == other.VariableName &&
+            JobName == other.JobName &&
+            StepName == other.StepName &&
+            StageName == other.StageName;
     }
 
     /// <inheritdoc/>
@@ -234,17 +214,12 @@ public class StageToStageDeployResourceDependencyVariableReference : StageToStag
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {
-        if (obj is StageToStageDeployResourceDependencyVariableReference other)
-        {
-            return (
-                VariableName == other.VariableName &&
-                JobName == other.JobName &&
-                StepName == other.StepName &&
-                StageName == other.StageName &&
-                ResourceName == other.ResourceName);
-        }
-
-        return false;
+        return obj is StageToStageDeployResourceDependencyVariableReference other &&
+            VariableName == other.VariableName &&
+            JobName == other.JobName &&
+            StepName == other.StepName &&
+            StageName == other.StageName &&
+            ResourceName == other.ResourceName;
     }
 
     /// <inheritdoc/>
