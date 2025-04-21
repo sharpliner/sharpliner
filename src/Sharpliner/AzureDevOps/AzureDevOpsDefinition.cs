@@ -494,6 +494,28 @@ public abstract class AzureDevOpsDefinition
 
     #endregion
 
+    #region Dependency output variables shorthands
+
+    /// <summary>
+    /// <para>
+    /// Generates the yaml notation to reference dependency output variables within pipelines.  Can be used to generate yaml for dependency variables for use in either stage
+    /// entries or job entries.  Note that if the reference was declared within a Deploy job, you must also specify that using <c>.deploy</c>.
+    /// </para>
+    /// For example:
+    /// <code lang="csharp">
+    /// dependencies.job.deploy["stage"]["job"]["step"]["variable"]
+    /// </code>
+    /// will generate:
+    /// <code lang="yaml">
+    /// ${{ dependencies.stage.outputs['job.job.step.variable'] }}
+    /// </code>
+    /// Which can be used in a pipeline job to reference the variable.
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Should not be capitalized to follow YAML syntax")]
+    protected static readonly VariableReferences.DependencyVariable dependencies = new();
+
+    #endregion
+
     #region Conditions, each expressions, ..
 
     /// <summary>

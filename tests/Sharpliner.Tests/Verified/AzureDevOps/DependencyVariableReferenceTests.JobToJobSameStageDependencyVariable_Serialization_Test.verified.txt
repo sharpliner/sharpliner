@@ -1,0 +1,13 @@
+﻿jobs:
+- job: A
+  steps:
+  - bash: |-
+      echo "##vso[task.setvariable variable=shouldrun;isOutput=true]true"
+    name: printvar
+
+- job: B
+  dependsOn: A
+  steps:
+  - script: |-
+      echo hello from B
+  condition: and(succeeded(), eq(dependencies.A.outputs['printvar.shouldrun'], true))
