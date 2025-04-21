@@ -14,7 +14,7 @@ public class StageLevelDependencyVariable
     /// </para>
     /// For example:
     /// <code lang="csharp">
-    /// dependencies.stage.deploy["resource"]["stage"]["job"]["step"]["variable"]
+    /// dependencies.stage.deploy["resource", "stage", "job", "step", "variable"]
     /// </code>
     /// will generate:
     /// <code lang="yaml">

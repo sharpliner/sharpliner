@@ -503,7 +503,7 @@ public abstract class AzureDevOpsDefinition
     /// </para>
     /// For example:
     /// <code lang="csharp">
-    /// dependencies.job.deploy["stage"]["job"]["step"]["variable"]
+    /// dependencies.job.deploy["stage", "job", "step", "variable"]
     /// </code>
     /// will generate:
     /// <code lang="yaml">

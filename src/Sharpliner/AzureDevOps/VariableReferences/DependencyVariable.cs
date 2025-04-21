@@ -21,7 +21,7 @@ public class DependencyVariable
     /// </para>
     /// For example:
     /// <code lang="csharp">
-    /// stageDependencies["stage"]["job"]["step"]["variable"]
+    /// stageDependencies["stage", "job", "step", "variable"]
     /// </code>
     /// will generate:
     /// <code lang="yaml">
@@ -38,7 +38,7 @@ public class DependencyVariable
     /// </para>
     /// For example:
     /// <code lang="csharp">
-    /// dependencies["stage"]["job"]["step"]["variable"]
+    /// dependencies["stage", "job", "step", "variable"]
     /// </code>
     /// will generate:
     /// <code lang="yaml">
