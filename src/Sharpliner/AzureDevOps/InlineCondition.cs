@@ -20,6 +20,11 @@ public abstract class InlineCondition : Condition
     {
         return InlineStringConditionHelper.Serialize(stringOrVariableOrParameter);
     }
+
+    /// <summary>
+    /// Returns InlineCondition "succeeded()".
+    /// </summary>
+    public static string Succeeded => new InlineCustomCondition("succeeded()");
 }
 
 /// <summary>

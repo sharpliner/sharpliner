@@ -10,6 +10,7 @@ For a full list of classes you can override to create a YAML file, see [PublicDe
 - [Azure Pipelines tasks](#azure-pipelines-tasks)
   - [Contributions welcome](#contributions-welcome)
 - [Pipeline variables](#pipeline-variables)
+  - [Dependency variables](#dependency-variables)
 - [Pipeline parameters](#pipeline-parameters)
 - [Conditional expressions](#conditional-expressions)
   - [Conditions](#conditions)
@@ -82,6 +83,25 @@ Similarly to Build steps, there's a shorthand style of definition of variables t
 You can define variables and pass them to methods to make the code more readable:
 
 [!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-variables-readable)]
+
+### Dependency Variables
+
+If your variable is defined in another job, you can use the dependencies shorthand to refrence them.  Azure DevOps has [many different possible yaml outputs](https://learn.microsoft.com/en-us/azure/devops/pipelines/process/expressions?view=azure-devops#dependency-syntax-overview) for referencing dependency variables, which is simplified by our shorthand syntax: `dependencies.<job|stage>.<deploy?>[]`.  Simply specify whether your reference is meant to live inside a `job` entry or a `stage` entry, then if the reference was instantiated within a deploy job, you simply add `.deploy` to the chain.
+
+For example, if you wanted to reference a variable created in a deployment job inside another stage's job entry, you'd do so like this.
+
+[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/DependencyVariableReferenceTests.cs#dependency-variables)]
+
+This chart explains what shorthand to use to get the expected yaml output, as well as when you'd want to use that specific syntax.
+
+| Variable Transfer Type                                   | YAML Output                                                                                                            | Sharpliner Syntax                                                           | Required Variables                                            | Set In         | Referenced By |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------------------------------------------- | -------------- | ------------- |
+| Stage to stage dependency (different stages)             | `stageDependencies.<stage-name>.outputs['<job-name>.<step-name>.<variable-name>']`                                     | `dependencies.stage["stage"]["job"]["step"]["variable"]`                    | StageName<br>JobName<br>StepName<br>VariableName              | job            | stage         |
+| Job to job dependency (same stage)                       | `dependencies.<job-name>.outputs['<step-name>.<variable-name>']`                                                       | `dependencies.job["job"]["step"]["variable"]`                               | JobName<br>StepName<br>VariableName                           | job            | job           |
+| Job to job dependency (different stages)                 | `stageDependencies.<stage-name>.<job-name>.outputs['<step-name>.<variable-name>']`                                     | `dependencies.job["stage"]["job"]["step"]["variable"]`                      | StageName<br>JobName<br>StepName<br>VariableName              | job            | job           |
+| Stage to stage dependency (deployment job)               | `dependencies.<stage-name>.outputs['<deployment-job-name>.<deployment-job-name>.<step-name>.<variable-name>']`         | `dependencies.stage.deploy["stage"]["job"]["step"]["variable"]`             | StageName<br>JobName<br>StepName<br>VariableName              | deployment job | stage         |
+| Stage to stage dependency (deployment job with resource) | `dependencies.<stage-name>.outputs['<deployment-job-name>.Deploy_<Deploy_resource-name>.<step-name>.<variable-name>']` | `dependencies.stage.deploy["stage"]["job"]["step"]["variable"]["resource"]` | StageName<br>JobName<br>StepName<br>VariableName ResourceName | deployment job | stage         |
+| Job to job dependency (different stages, deployment)     | `stageDependencies.<stage-name>.<job-name>.outputs['<job-name>.<step-name>.<variable-name>]`                           | `dependencies.job.deploy["stage"]["job"]["step"]["variable"]`               | StageName<br>JobName<br>StepName<br>VariableName              | deployment job | job           |
 
 ## Pipeline parameters
 

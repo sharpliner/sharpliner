@@ -29,6 +29,7 @@ namespace Sharpliner.AzureDevOps
     }
     public abstract class AzureDevOpsDefinition
     {
+        protected static readonly Sharpliner.AzureDevOps.VariableReferences.DependencyVariable dependencies;
         protected static readonly Sharpliner.AzureDevOps.TemplateDefinition.TemplateParameterReference parameters;
         protected static readonly Sharpliner.AzureDevOps.VariablesReference variables;
         protected AzureDevOpsDefinition() { }
@@ -332,6 +333,17 @@ namespace Sharpliner.AzureDevOps
         public System.Collections.Generic.List<string> Volumes { get; init; }
     }
     public abstract class DefinitionLibrary<T> : Sharpliner.AzureDevOps.AzureDevOpsDefinition { }
+    public class DependencyVariable : Sharpliner.AzureDevOps.VariableBase, System.IEquatable<Sharpliner.AzureDevOps.DependencyVariable>
+    {
+        public DependencyVariable(string variableName, string stepName, string jobName) { }
+        public string JobName { get; }
+        public string StepName { get; }
+        public string VariableName { get; }
+        public override string ToString() { }
+        public static string op_Implicit(Sharpliner.AzureDevOps.DependencyVariable variable) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.IfExpression op_Implicit(Sharpliner.AzureDevOps.DependencyVariable variable) { }
+        public static Sharpliner.AzureDevOps.ConditionedExpressions.Arguments.InlineExpression op_Implicit(Sharpliner.AzureDevOps.DependencyVariable variable) { }
+    }
     public class DependsOn : Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<string>, YamlDotNet.Serialization.IYamlConvertible
     {
         public DependsOn(params string[] values) { }
@@ -473,6 +485,7 @@ namespace Sharpliner.AzureDevOps
     public abstract class InlineCondition : Sharpliner.AzureDevOps.ConditionedExpressions.Condition
     {
         protected InlineCondition() { }
+        public static string Succeeded { get; }
     }
     public abstract class InlineCondition<T> : Sharpliner.AzureDevOps.InlineCondition
     {
@@ -1304,6 +1317,15 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference parameterRef) { }
         public static Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<T> op_Implicit(T value) { }
     }
+    public class DependencyVariableReference : Sharpliner.AzureDevOps.ConditionedExpressions.VariableReference
+    {
+        public string JobName { get; }
+        public override string MacroExpression { get; }
+        public override string RuntimeExpression { get; }
+        public string StepName { get; }
+        public override bool Equals(object? obj) { }
+        public override int GetHashCode() { }
+    }
     public class IfConditionBuilder
     {
         public Sharpliner.AzureDevOps.IfCondition IsNotPullRequest { get; }
@@ -1353,6 +1375,27 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public Sharpliner.AzureDevOps.IfCondition<T> Xor(Sharpliner.AzureDevOps.IfCondition expression1, Sharpliner.AzureDevOps.IfCondition expression2) { }
         public Sharpliner.AzureDevOps.IfCondition<T> Xor(string expression1, string expression2) { }
     }
+    public class JobToJobDeployDependencyVariableReference : Sharpliner.AzureDevOps.ConditionedExpressions.DependencyVariableReference
+    {
+        public override string MacroExpression { get; }
+        public override string RuntimeExpression { get; }
+        public string StageName { get; }
+        public override bool Equals(object? obj) { }
+        public override int GetHashCode() { }
+    }
+    public class JobToJobDifferentStageDependencyVariableReference : Sharpliner.AzureDevOps.ConditionedExpressions.DependencyVariableReference
+    {
+        public override string MacroExpression { get; }
+        public override string RuntimeExpression { get; }
+        public string StageName { get; }
+        public override bool Equals(object? obj) { }
+        public override int GetHashCode() { }
+    }
+    public class JobToJobSameStageDependencyVariableReference : Sharpliner.AzureDevOps.ConditionedExpressions.DependencyVariableReference
+    {
+        public override string MacroExpression { get; }
+        public override string RuntimeExpression { get; }
+    }
     public class ParameterReference : Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.ICompileTimeExpression, Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.IRuntimeExpression, YamlDotNet.Serialization.IYamlConvertible
     {
         public string CompileTimeExpression { get; }
@@ -1363,11 +1406,33 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions
         public override string ToString() { }
         public static string op_Implicit(Sharpliner.AzureDevOps.ConditionedExpressions.ParameterReference value) { }
     }
+    public class StageToStageDependencyVariableReference : Sharpliner.AzureDevOps.ConditionedExpressions.DependencyVariableReference
+    {
+        public override string MacroExpression { get; }
+        public override string RuntimeExpression { get; }
+        public string StageName { get; }
+    }
+    public class StageToStageDeployDependencyVariableReference : Sharpliner.AzureDevOps.ConditionedExpressions.DependencyVariableReference
+    {
+        public override string MacroExpression { get; }
+        public override string RuntimeExpression { get; }
+        public string StageName { get; }
+        public override bool Equals(object? obj) { }
+        public override int GetHashCode() { }
+    }
+    public class StageToStageDeployResourceDependencyVariableReference : Sharpliner.AzureDevOps.ConditionedExpressions.StageToStageDeployDependencyVariableReference
+    {
+        public override string MacroExpression { get; }
+        public string ResourceName { get; }
+        public override string RuntimeExpression { get; }
+        public override bool Equals(object? obj) { }
+        public override int GetHashCode() { }
+    }
     public class VariableReference : Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.ICompileTimeExpression, Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.IMacroExpression, Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces.IRuntimeExpression, YamlDotNet.Serialization.IYamlConvertible
     {
-        public string CompileTimeExpression { get; }
-        public string MacroExpression { get; }
-        public string RuntimeExpression { get; }
+        public virtual string CompileTimeExpression { get; }
+        public virtual string MacroExpression { get; }
+        public virtual string RuntimeExpression { get; }
         public string VariableName { get; }
         public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
@@ -2174,6 +2239,39 @@ namespace Sharpliner.AzureDevOps.Validation
         public static System.Collections.Generic.IEnumerable<Sharpliner.AzureDevOps.JobBase> GetJobs(this Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Stage> stages) { }
         public static System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> GetStageValidations(this Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.Stage> stages) { }
         public static System.Collections.Generic.IEnumerable<Sharpliner.AzureDevOps.Step> GetSteps(this Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.JobBase> jobs) { }
+    }
+}
+namespace Sharpliner.AzureDevOps.VariableReferences
+{
+    public class DependencyVariable
+    {
+        public readonly Sharpliner.AzureDevOps.VariableReferences.JobLevelDependencyVariable job;
+        public readonly Sharpliner.AzureDevOps.VariableReferences.StageLevelDependencyVariable stage;
+        public DependencyVariable() { }
+    }
+    public class JobLevelDependencyVariable
+    {
+        public readonly Sharpliner.AzureDevOps.VariableReferences.JobLevelDeploymentDependencyVariable deploy;
+        public JobLevelDependencyVariable() { }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.JobToJobSameStageDependencyVariableReference this[string jobName, string stepName, string variableName] { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.JobToJobDifferentStageDependencyVariableReference this[string stageName, string jobName, string stepName, string variableName] { get; }
+    }
+    public class JobLevelDeploymentDependencyVariable
+    {
+        public JobLevelDeploymentDependencyVariable() { }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.JobToJobDeployDependencyVariableReference this[string stageName, string jobName, string stepName, string variableName] { get; }
+    }
+    public class StageLevelDependencyVariable
+    {
+        public readonly Sharpliner.AzureDevOps.VariableReferences.StageLevelDeploymentDependencyVariable deploy;
+        public StageLevelDependencyVariable() { }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.StageToStageDependencyVariableReference this[string stageName, string jobName, string stepName, string variableName] { get; }
+    }
+    public class StageLevelDeploymentDependencyVariable
+    {
+        public StageLevelDeploymentDependencyVariable() { }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.StageToStageDeployDependencyVariableReference this[string stageName, string jobName, string stepName, string variableName] { get; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.StageToStageDeployResourceDependencyVariableReference this[string stageName, string jobName, string stepName, string variableName, string resourceName] { get; }
     }
 }
 namespace Sharpliner.Common

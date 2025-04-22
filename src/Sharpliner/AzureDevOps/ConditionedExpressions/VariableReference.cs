@@ -22,13 +22,13 @@ public class VariableReference : IRuntimeExpression, IMacroExpression, ICompileT
     }
 
     /// <inheritdoc/>
-    public string RuntimeExpression => $"variables['{VariableName}']";
+    public virtual string RuntimeExpression => $"variables['{VariableName}']";
 
     /// <inheritdoc/>
-    public string MacroExpression => $"$({VariableName})";
+    public virtual string MacroExpression => $"$({VariableName})";
 
     /// <inheritdoc/>
-    public string CompileTimeExpression => Condition.ExpressionStart + RuntimeExpression + Condition.ExpressionEnd;
+    public virtual string CompileTimeExpression => Condition.ExpressionStart + RuntimeExpression + Condition.ExpressionEnd;
 
     /// <summary>
     /// Returns string representation of the variable reference as a macro expression.

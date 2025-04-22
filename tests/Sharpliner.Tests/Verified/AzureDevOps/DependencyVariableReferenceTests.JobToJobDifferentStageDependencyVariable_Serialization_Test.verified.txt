@@ -1,0 +1,17 @@
+﻿stages:
+- stage: A
+  jobs:
+  - job: A1
+    steps:
+    - bash: |-
+        echo "##vso[task.setvariable variable=shouldrun;isOutput=true]true"
+      name: printvar
+
+- stage: B
+  dependsOn: A
+  jobs:
+  - job: B1
+    steps:
+    - script: |-
+        echo hello from Job B1
+    condition: eq(stageDependencies.A.A1.outputs['printvar.shouldrun'], true)

@@ -1,0 +1,26 @@
+﻿stages:
+- stage: build
+  jobs:
+  - deployment: build_job
+    environment:
+      name: vmtest
+      resourceName: winVM2
+      resourceType: virtualMachine
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - pwsh: |-
+              $runTests = "true"
+              echo "setting runTests: $runTests"
+              echo "##vso[task.setvariable variable=runTests;isOutput=true]$runTests"
+            name: setRunTests
+
+- stage: test
+  dependsOn: build
+  jobs:
+  - job: A
+    steps:
+    - script: |-
+        echo hello from Job A
+  condition: eq(dependencies.build.outputs['build_job.Deploy_winVM2.setRunTests.runTests'], true)
