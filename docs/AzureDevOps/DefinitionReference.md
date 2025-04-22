@@ -251,7 +251,8 @@ If your variable is defined in another job, you can use the dependencies shortha
 For example, if you wanted to reference a variable created in a deployment job inside another stage's job entry, you'd do so like this.
 
 ```csharp
-new Stage(getterStageName) {
+new Stage(getterStageName)
+{
     DependsOn = setterStageName,
     Jobs =
     {
