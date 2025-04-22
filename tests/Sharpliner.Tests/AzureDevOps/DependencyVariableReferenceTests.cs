@@ -193,6 +193,7 @@ public class DependencyVariableReferenceTests
                     },
                 }
             },
+#region dependency-variables
             new Stage(getterStageName) {
                 DependsOn = setterStageName,
                 Jobs =
@@ -207,6 +208,7 @@ public class DependencyVariableReferenceTests
                     },
                 }
             }
+#endregion
         ];
     }
 
