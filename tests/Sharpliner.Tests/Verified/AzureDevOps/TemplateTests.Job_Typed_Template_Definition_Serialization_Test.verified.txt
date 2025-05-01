@@ -13,6 +13,7 @@
     displayName: Deploy job
     environment:
       name: production
+      tags: group-a,group-b
     strategy:
       runOnce:
         deploy:
