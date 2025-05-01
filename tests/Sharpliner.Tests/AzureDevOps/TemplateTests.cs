@@ -225,6 +225,29 @@ public class TemplateTests
         ];
     }
 
+    private class Job_Typed_Template_Relative_To_Git_Definition(JobTypedParameters? parameters = null) : Job_Typed_Template_Definition(parameters)
+    {
+        public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
+        public override string TargetFile => "job-template.yml";
+
+        public override ConditionedList<JobBase> Definition =>
+        [
+            ..new Job_Template_Definition().Definition,
+            Job("with-templates") with
+            {
+                Steps =
+                [
+                    new Step_Typed_Template_Definition(new()
+                    {
+                        AfterBuild = Bash.Inline("echo 'After build'"),
+                        Counter = 3,
+                        UseNugetOrg = true
+                    })
+                ]
+            }
+        ];
+    }
+
     class JobTypedParameters : AzureDevOpsDefinition
     {
         public ConditionedList<JobBase> SetupJobs { get; init; } = [];
@@ -317,6 +340,38 @@ public class TemplateTests
         ];
     }
 
+    private class Stage_Typed_Template_With_Job_Template_Relative_To_Git_Definition(StageTypedParameters? parameters = null)
+        : StageTemplateDefinition<StageTypedParameters>(parameters)
+    {
+        public override string TargetFile => "stage-template.yml";
+
+        public override ConditionedList<Stage> Definition =>
+        [
+            ..new Stage_Template_Definition().Definition,
+            Stage("with-templates") with
+            {
+                Jobs =
+                [
+                    new Job_Typed_Template_Relative_To_Git_Definition(new()
+                    {
+                        MainJob = new Job("main", "Main job")
+                        {
+                            Steps =
+                            [
+                                Bash.Inline("echo 'Main job step'")
+                            ]
+                        }
+                    })
+                ]
+            }
+        ];
+    }
+
+    private class Stage_Typed_Template_Relative_To_Git_Definition(StageTypedParameters? parameters = null) : Stage_Typed_Template_Definition(parameters)
+    {
+        public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
+    }
+
     class StageTypedParameters : AzureDevOpsDefinition
     {
         public ConditionedList<Stage> SetupStages { get; init; } = [];
@@ -328,6 +383,14 @@ public class TemplateTests
     public Task Stage_Typed_Template_Definition_Serialization_Test()
     {
         var pipeline = new Stage_Typed_Template_Definition();
+
+        return Verify(pipeline.Serialize());
+    }
+
+    [Fact]
+    public Task Stage_Typed_Template_Definition_Relative_To_Git_Serialization_Test()
+    {
+        var pipeline = new Stage_Typed_Template_With_Job_Template_Relative_To_Git_Definition();
 
         return Verify(pipeline.Serialize());
     }

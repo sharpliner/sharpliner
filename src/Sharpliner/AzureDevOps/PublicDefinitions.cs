@@ -131,7 +131,14 @@ public abstract class ExtendsTemplateDefinition<TParameters> : ExtendsTemplateDe
     /// <param name="definition">The typed template definition</param>
     public static implicit operator Template<Extends>(ExtendsTemplateDefinition<TParameters> definition)
     {
-        return new Template<Extends>(definition.TargetFile, TypedTemplateUtils<TParameters>.ToTemplateParameters(definition._typedParameters));
+        string path = definition.TargetFile;
+
+        if (definition.TargetPathType == TargetPathType.RelativeToGitRoot)
+        {
+            path = "/" + path;
+        }
+
+        return new Template<Extends>(path, TypedTemplateUtils<TParameters>.ToTemplateParameters(definition._typedParameters));
     }
 }
 

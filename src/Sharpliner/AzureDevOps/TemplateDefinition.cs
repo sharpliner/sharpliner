@@ -195,7 +195,14 @@ public abstract class TemplateDefinition<T, TParameters> : TemplateDefinition<T>
     /// <param name="definition">The typed template definition</param>
     public static implicit operator Template<T>(TemplateDefinition<T, TParameters> definition)
     {
-        return new Template<T>(definition.TargetFile, TypedTemplateUtils<TParameters>.ToTemplateParameters(definition._typedParameters));
+        string path = definition.TargetFile;
+
+        if (definition.TargetPathType == TargetPathType.RelativeToGitRoot)
+        {
+            path = "/" + path;
+        }
+
+        return new Template<T>(path, TypedTemplateUtils<TParameters>.ToTemplateParameters(definition._typedParameters));
     }
 }
 
