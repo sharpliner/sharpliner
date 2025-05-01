@@ -35,7 +35,14 @@ public record Environment
     /// <summary>
     /// Tag names to filter the resources in the environment
     /// </summary>
+    [YamlIgnore]
     public List<string> Tags { get; init; } = [];
+
+    /// <summary>
+    /// Internal property to serialize the tags as a comma-separated string.
+    /// </summary>
+    [YamlMember(Alias = "tags")]
+    public string? _Tags => Tags.Count > 0 ? string.Join(",", Tags) : null;
 
     /// <summary>
     /// Instantiates a new <see cref="Environment"/> with the specified name and optional resource name.
