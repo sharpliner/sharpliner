@@ -405,7 +405,10 @@ namespace Sharpliner.AzureDevOps
         public int? ResourceId { get; init; }
         public string? ResourceName { get; init; }
         public Sharpliner.AzureDevOps.ResourceType? ResourceType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
         public System.Collections.Generic.List<string> Tags { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Alias="tags")]
+        public string? _Tags { get; }
     }
     public sealed class EnvironmentVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {

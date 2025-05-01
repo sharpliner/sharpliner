@@ -233,7 +233,10 @@ public class TemplateTests
 
         public DeploymentJob Deployment { get; init; } = new("deploy", "Deploy job")
         {
-            Environment = new("production"),
+            Environment = new("production")
+            {
+                Tags = ["group-a", "group-b"]
+            },
             Strategy = new RunOnceStrategy
             {
                 Deploy = new()
