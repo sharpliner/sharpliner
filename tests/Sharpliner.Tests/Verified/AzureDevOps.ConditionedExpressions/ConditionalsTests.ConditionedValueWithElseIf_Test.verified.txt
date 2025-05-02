@@ -5,5 +5,5 @@
       name: pool-A
       demands:
       - SomeProperty -equals SomeValue
-    ${{ if eq('C', 'D') }}:
+    ${{ elseif eq('C', 'D') }}:
       name: pool-B

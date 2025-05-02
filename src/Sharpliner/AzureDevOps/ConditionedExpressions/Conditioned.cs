@@ -251,6 +251,43 @@ public record Conditioned<T> : Conditioned
     public IfConditionBuilder<T> If => new(this);
 
     /// <summary>
+    /// Starts a new <c>${{ elseif (...) }}</c> section.
+    /// For example:
+    /// <code lang="csharp">
+    /// If.IsBranch("dev")
+    ///     .Group("Development")
+    /// ElseIf.IsBranch("prod")
+    ///     .Group("Production")
+    /// </code>
+    /// will generate:
+    /// <code lang="yaml">
+    /// - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/dev') }}:
+    ///   - group: Development
+    /// - ${{ elseif eq(variables['Build.SourceBranch'], 'refs/heads/prod') }}:
+    ///   - group: Production
+    /// </code>
+    /// </summary>
+    public IfConditionBuilder ElseIf
+    {
+        get
+        {
+            // If we're top-level, we create a fake new top with empty definition to collect all the definitions
+            if (Parent == null)
+            {
+                Parent = new Conditioned<T>();
+                Parent.Definitions.Add(this);
+            }
+
+            if (Condition == null)
+            {
+                throw new InvalidOperationException("No condition to match ElseIf against");
+            }
+
+            return new IfConditionBuilder(Parent, true);
+        }
+    }
+
+    /// <summary>
     /// Ends a <c>${{ if (...) }}</c> section.
     /// For example:
     /// <code lang="csharp">
