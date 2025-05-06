@@ -1,0 +1,5 @@
+﻿task: DownloadPipelineArtifact@2
+
+inputs:
+  artifactName: docker_image
+  targetPath: $(System.ArtifactsDirectory)/docker_build_image
