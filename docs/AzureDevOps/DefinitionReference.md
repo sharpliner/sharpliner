@@ -8,7 +8,10 @@ For a full list of classes you can override to create a YAML file, see [PublicDe
 
 - [Build steps](#build-steps)
 - [Azure Pipelines tasks](#azure-pipelines-tasks)
+  - [Dotnet](#dotnet)
+  - [NuGet](#nuget)
   - [Contributions welcome](#contributions-welcome)
+  - [Marketplace tasks](#marketplace-tasks)
 - [Pipeline variables](#pipeline-variables)
   - [Dependency variables](#dependency-variables)
 - [Pipeline parameters](#pipeline-parameters)
@@ -209,6 +212,13 @@ Generated YAML:
 
 Currently, we don't support many marketplace tasks in C# as the project is still growing.
 If you find one useful, hit us up with a request, or better, with a pull request and we can add it to our library.
+
+Marketplace tasks can be supported and can be added to the organization if requested.
+
+Supported marketplace tasks:
+| Azure DevOps Extension | Repository | Nuget | Author |
+|------------------------|------------|---------|--------|
+| [JFrog Azure DevOps Extension](https://marketplace.visualstudio.com/items?itemName=JFrog.jfrog-azure-devops-extension) | [sharpliner/jfrog-extensions](https://github.com/sharpliner/jfrog-extensions) | | @flcdrg
 
 ## Pipeline variables
 
