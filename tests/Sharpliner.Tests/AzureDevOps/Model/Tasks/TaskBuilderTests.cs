@@ -270,6 +270,36 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class AzureCliTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        AzureCli.File("connectedServiceNameARM", ScriptType.Ps, "foo.ps1"),
+                        AzureCli.FromFile("connectedServiceNameARM", ScriptType.Ps, "AzureDevops/Resources/Test-Script.ps1"),
+                        AzureCli.FromResourceFile("connectedServiceNameARM", ScriptType.Ps, "Test-Script.ps1"),
+                        AzureCli.FromResourceFile("connectedServiceNameARM", ScriptType.Ps, "Sharpliner.Tests.AzureDevOps.Resources.Test-Script.ps1"),
+                        AzureCli.Inline("connectedServiceNameARM", ScriptType.Ps, "Write-Host \"test\"")
+      
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_AzureCli_Builder_Test()
+    {
+        AzureCliTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class TaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()

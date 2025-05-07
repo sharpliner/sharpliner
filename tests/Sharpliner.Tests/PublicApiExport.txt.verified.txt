@@ -33,6 +33,7 @@ namespace Sharpliner.AzureDevOps
         protected static readonly Sharpliner.AzureDevOps.TemplateDefinition.TemplateParameterReference parameters;
         protected static readonly Sharpliner.AzureDevOps.VariablesReference variables;
         protected AzureDevOpsDefinition() { }
+        protected static Sharpliner.AzureDevOps.Tasks.AzureCliTaskBuilder AzureCli { get; }
         protected static Sharpliner.AzureDevOps.Tasks.BashTaskBuilder Bash { get; }
         protected static Sharpliner.AzureDevOps.Tasks.CheckoutTaskBuilder Checkout { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder DotNet { get; }
@@ -1522,7 +1523,13 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlMember(Alias="filepath")]
         Filepath = 1,
     }
-    public class AzureCliTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureCliTask>
+    public class AzureCliFileTask : Sharpliner.AzureDevOps.Tasks.AzureCliTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureCliFileTask>
+    {
+        public AzureCliFileTask(string azureSubscription, Sharpliner.AzureDevOps.Tasks.ScriptType scriptType, string scriptPath) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? ScriptPath { get; init; }
+    }
+    public abstract class AzureCliTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureCliTask>
     {
         public AzureCliTask(string azureSubscription, Sharpliner.AzureDevOps.Tasks.ScriptType scriptType, Sharpliner.AzureDevOps.Tasks.ScriptLocation scriptLocation) { }
         [YamlDotNet.Serialization.YamlIgnore]
@@ -1534,15 +1541,11 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public bool FailOnStandardError { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string? InlineScript { get; init; }
-        [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Tasks.PowerShellErrorActionPreference PowerShellErrorActionPreference { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public bool PowerShellIgnoreLASTEXITCODE { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Tasks.ScriptLocation ScriptLocation { get; init; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? ScriptPath { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Tasks.ScriptType ScriptType { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
@@ -1551,6 +1554,13 @@ namespace Sharpliner.AzureDevOps.Tasks
         public bool VisibleAzLogin { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public string? WorkingDirectory { get; init; }
+    }
+    public class AzureCliTaskBuilder : Sharpliner.Common.Model.Tasks.TaskBuilderBase
+    {
+        public Sharpliner.AzureDevOps.Tasks.AzureCliFileTask File(string azureSubscription, Sharpliner.AzureDevOps.Tasks.ScriptType scriptType, string scriptPath, string? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.InlineAzureCliTask FromFile(string azureSubscription, Sharpliner.AzureDevOps.Tasks.ScriptType scriptType, string path, string? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.InlineAzureCliTask FromResourceFile(string azureSubscription, Sharpliner.AzureDevOps.Tasks.ScriptType scriptType, string resourceFileName, string? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.InlineAzureCliTask Inline(string azureSubscription, Sharpliner.AzureDevOps.Tasks.ScriptType scriptType, string? displayName = null, params string[] scriptLines) { }
     }
     public class AzureDevOpsTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask>
     {
@@ -1598,13 +1608,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.InlineBashTask FromResourceFile(string resourceFileName, string? displayName = null) { }
         public Sharpliner.AzureDevOps.Tasks.InlineBashTask Inline(params string[] scriptLines) { }
     }
-    public enum BuildType
-    {
-        [YamlDotNet.Serialization.YamlMember(Alias="current")]
-        Current = 0,
-        [YamlDotNet.Serialization.YamlMember(Alias="specific")]
-        Specific = 1,
-    }
     public enum BuildVerbosity
     {
         [YamlDotNet.Serialization.YamlMember(Alias="quiet")]
@@ -1617,15 +1620,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         Detailed = 3,
         [YamlDotNet.Serialization.YamlMember(Alias="diagnostic")]
         Diagnostic = 4,
-    }
-    public enum BuildVersionToDownload
-    {
-        [YamlDotNet.Serialization.YamlMember(Alias="latest")]
-        Latest = 0,
-        [YamlDotNet.Serialization.YamlMember(Alias="latestFromBranch")]
-        LatestFromBranch = 1,
-        [YamlDotNet.Serialization.YamlMember(Alias="specific")]
-        Specific = 2,
     }
     public abstract class CheckoutTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.CheckoutTask>
     {
@@ -1817,36 +1811,6 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlMember(Order=1)]
         public override string Download { get; }
     }
-    public class DownloadPipelineArtifactTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DownloadPipelineArtifactTask>
-    {
-        public DownloadPipelineArtifactTask() { }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public bool AllowFailedBuilds { get; init; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public bool AllowPartiallySucceededBuilds { get; init; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? ArtifactName { get; init; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? BranchName { get; init; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Tasks.BuildType BuildType { get; init; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Tasks.BuildVersionToDownload BuildVersionToDownload { get; init; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? Definition { get; init; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? ItemPattern { get; init; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? PipelineId { get; init; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? Project { get; init; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public bool SpecificBuildWithTriggering { get; init; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? Tags { get; init; }
-        [YamlDotNet.Serialization.YamlIgnore]
-        public string? TargetPath { get; init; }
-    }
     public abstract class DownloadTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DownloadTask>
     {
         protected DownloadTask() { }
@@ -1886,6 +1850,12 @@ namespace Sharpliner.AzureDevOps.Tasks
         public bool OverwriteExistingFiles { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public string? PathToSevenZipTool { get; init; }
+    }
+    public class InlineAzureCliTask : Sharpliner.AzureDevOps.Tasks.AzureCliTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.InlineAzureCliTask>
+    {
+        public InlineAzureCliTask(string azureSubscription, Sharpliner.AzureDevOps.Tasks.ScriptType scriptType, string inlineScript) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? InlineScript { get; init; }
     }
     public class InlineBashTask : Sharpliner.AzureDevOps.Tasks.BashTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.InlineBashTask>
     {

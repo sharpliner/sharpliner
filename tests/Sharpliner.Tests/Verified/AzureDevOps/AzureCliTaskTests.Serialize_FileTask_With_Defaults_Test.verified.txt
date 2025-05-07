@@ -1,0 +1,7 @@
+﻿task: AzureCLI@2
+
+inputs:
+  azureSubscription: connectedServiceNameARM
+  scriptType: ps
+  scriptLocation: scriptPath
+  scriptPath: foo.ps1

@@ -6,7 +6,7 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// <summary>
 /// More details can be found in <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/azure-cli-v2?view=azure-pipelines">official Azure DevOps pipelines documentation</see>
 /// </summary>
-public record AzureCliTask : AzureDevOpsTask
+public abstract record AzureCliTask : AzureDevOpsTask
 {
     /// <summary>
     /// Alias: connectedServiceNameARM. Required. Azure Resource Manager connection.
@@ -36,30 +36,6 @@ public record AzureCliTask : AzureDevOpsTask
     {
         get => GetEnum("scriptLocation", ScriptLocation.ScriptPath);
         init => SetProperty("scriptLocation", value);
-    }
-
-    /// <summary>
-    /// Required when scriptLocation = scriptPath. Fully qualified path of the script. Use .ps1, .bat, or .cmd when using Windows-based agent.
-    /// Use .ps1 or .sh when using Linux-based agent or a path relative to the the default working directory.
-    /// </summary>
-    [YamlIgnore]
-    public string? ScriptPath
-    {
-        get => GetString("scriptPath");
-        init => SetProperty("scriptPath", value);
-    }
-
-    /// <summary>
-    /// Required when scriptLocation = inlineScript.
-    /// You can write your scripts inline here. When using Windows agent, use PowerShell, PowerShell Core, or batch scripting.
-    /// Use PowerShell Core or shell scripting when using Linux-based agents. For batch files, use the prefix call before every Azure command.
-    /// You can also pass predefined and custom variables to this script by using arguments.
-    /// </summary>
-    [YamlIgnore]
-    public string? InlineScript
-    {
-        get => GetString("inlineScript");
-        init => SetProperty("inlineScript", value);
     }
 
     /// <summary>
@@ -163,11 +139,66 @@ public record AzureCliTask : AzureDevOpsTask
         AzureSubscription = azureSubscription;
         ScriptType = scriptType;
         ScriptLocation = scriptLocation;
+    }
+}
 
-        if (ScriptLocation == ScriptLocation.ScriptPath && ScriptPath == null)
-        {
-            throw new ArgumentException($"'{nameof(ScriptPath)}' Required when ScriptLocation = scriptPath.", nameof(AzureCliTask));
-        }
+/// <summary>
+/// Azure CLI Task with inline script
+/// </summary>
+public record InlineAzureCliTask : AzureCliTask
+{
+    /// <summary>
+    /// Required when scriptLocation = inlineScript.
+    /// You can write your scripts inline here. When using Windows agent, use PowerShell, PowerShell Core, or batch scripting.
+    /// Use PowerShell Core or shell scripting when using Linux-based agents. For batch files, use the prefix call before every Azure command.
+    /// You can also pass predefined and custom variables to this script by using arguments.
+    /// </summary>
+    [YamlIgnore]
+    public string? InlineScript
+    {
+        get => GetString("inlineScript");
+        init => SetProperty("inlineScript", value);
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CopyFilesTask"/> class with required properties.
+    /// </summary>
+    /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
+    /// <param name="scriptType">Type of script.</param>
+    /// <param name="scriptLocation">Path to the script.</param>
+    public InlineAzureCliTask(string azureSubscription, ScriptType scriptType, string inlineScript)
+    : base(azureSubscription, scriptType, ScriptLocation.InlineScript)
+    {
+        InlineScript = inlineScript;
+    }
+}
+
+/// <summary>
+/// Azure CLI Task with file
+/// </summary>
+public record AzureCliFileTask : AzureCliTask
+{
+    /// <summary>
+    /// Required when scriptLocation = scriptPath. Fully qualified path of the script. Use .ps1, .bat, or .cmd when using Windows-based agent.
+    /// Use .ps1 or .sh when using Linux-based agent or a path relative to the the default working directory.
+    /// </summary>
+    [YamlIgnore]
+    public string? ScriptPath
+    {
+        get => GetString("scriptPath");
+        init => SetProperty("scriptPath", value);
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CopyFilesTask"/> class with required properties.
+    /// </summary>
+    /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
+    /// <param name="scriptType">Type of script.</param>
+    /// <param name="scriptLocation">Path to the script.</param>
+    public AzureCliFileTask(string azureSubscription, ScriptType scriptType, string scriptPath)
+    : base(azureSubscription, scriptType, ScriptLocation.ScriptPath)
+    {
+        ScriptPath = scriptPath;
     }
 }
 
