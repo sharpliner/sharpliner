@@ -22,7 +22,7 @@ public class AzureCliTaskBuilder : TaskBuilderBase
         };
 
     /// <summary>
-    /// Creates an AzureCli task where the contents come from a file.
+    /// Creates an Azure CLI task where the contents come from a file.
     /// The contents are inlined in the YAML as contrary to File method where the file name is just referenced.
     /// </summary>
     /// <param name="path">Path to the file</param>
@@ -34,7 +34,7 @@ public class AzureCliTaskBuilder : TaskBuilderBase
     };
 
     /// <summary>
-    /// Creates an AzureCli task referencing a file (contents are not inlined in the YAML).
+    /// Creates an Azure CLI task referencing a file (contents are not inlined in the YAML).
     /// </summary>
     /// <param name="scriptPath">Path to the script</param>
     /// <param name="displayName">Name of the build step</param>
@@ -46,7 +46,7 @@ public class AzureCliTaskBuilder : TaskBuilderBase
     };
 
     /// <summary>
-    /// Creates an AzureCli task with given contents.
+    /// Creates an Azure CLI task with given contents.
     /// </summary>
     /// <param name="scriptLines">Contents of the script</param>
     /// <returns>A new instance of <see cref="InlineAzureCliTask"/> with the script lines</returns>
