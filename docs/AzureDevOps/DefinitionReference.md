@@ -216,7 +216,7 @@ If you find one useful, hit us up with a request, or better, with a pull request
 Marketplace tasks can be supported and can be added to the organization if requested.
 
 Supported marketplace tasks:
-| Azure DevOps Extension | Repository | Nuget | Author |
+| Azure DevOps Extension | Repository | NuGet | Author |
 |------------------------|------------|---------|--------|
 | [JFrog Azure DevOps Extension](https://marketplace.visualstudio.com/items?itemName=JFrog.jfrog-azure-devops-extension) | [sharpliner/jfrog-extensions](https://github.com/sharpliner/jfrog-extensions) | | @flcdrg
 
