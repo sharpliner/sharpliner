@@ -28,7 +28,8 @@ public class AzureCliTaskBuilder : TaskBuilderBase
     /// <param name="path">Path to the file</param>
     /// <param name="displayName">Display name of the build step</param>
     /// <returns>A new instance of <see cref="InlineAzureCliTask"/> with the contents of the file</returns>
-    public InlineAzureCliTask FromFile(string azureSubscription, ScriptType scriptType, string path, string? displayName = null!) => new InlineAzureCliTask(azureSubscription, scriptType, System.IO.File.ReadAllText(path)) with
+    public InlineAzureCliTask FromFile(string azureSubscription, ScriptType scriptType, string path, string? displayName = null!)
+        => new InlineAzureCliTask(azureSubscription, scriptType, System.IO.File.ReadAllText(path)) with
     {
         DisplayName = displayName is null ? null! : new Conditioned<string>(displayName),
     };
