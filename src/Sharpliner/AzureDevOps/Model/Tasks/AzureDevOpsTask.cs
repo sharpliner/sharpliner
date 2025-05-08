@@ -141,7 +141,7 @@ public record AzureDevOpsTask : Step
         }
     }
 
-    protected void SetProperty(string name, Conditioned<string>? value)
+    protected void SetProperty<T>(string name, Conditioned<T>? value)
     {
         if (value == null)
         {
