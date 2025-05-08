@@ -1,4 +1,5 @@
-﻿using YamlDotNet.Serialization;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
@@ -14,9 +15,9 @@ public record CopyFilesTask : AzureDevOpsTask
     /// <remarks>If your build produces artifacts outside of the sources directory, specify $(Agent.BuildDirectory) to copy files from the directory created for the pipeline.</remarks>
     /// </summary>
     [YamlIgnore]
-    public string? SourceFolder
+    public Conditioned<string>? SourceFolder
     {
-        get => GetString("SourceFolder");
+        get => GetConditioned<string>("SourceFolder");
         init => SetProperty("SourceFolder", value);
     }
 

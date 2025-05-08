@@ -3,7 +3,7 @@
 inputs:
   Contents: '**'
   TargetFolder: $(Build.ArtifactStagingDirectory)
-  SourceFolder: $(Build.SourcesDirectory)
+  SourceFolder: ${{ parameters.sourceDir }}
   CleanTargetFolder: true
   Overwrite: true
   flattenFolders: true
