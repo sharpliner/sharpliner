@@ -128,7 +128,7 @@ public abstract record AzureCliTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="CopyFilesTask"/> class with required properties.
+    /// Initializes a new instance of the <see cref="AzureCliTask/> class with required properties.
     /// </summary>
     /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
     /// <param name="scriptType">Type of script.</param>
@@ -161,7 +161,7 @@ public record InlineAzureCliTask : AzureCliTask
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="CopyFilesTask"/> class with required properties.
+    /// Initializes a new instance of the <see cref="InlineAzureCliTask"/> class with required properties.
     /// </summary>
     /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
     /// <param name="scriptType">Type of script.</param>
@@ -190,7 +190,7 @@ public record AzureCliFileTask : AzureCliTask
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="CopyFilesTask"/> class with required properties.
+    /// Initializes a new instance of the <see cref="AzureCliFileTask"/> class with required properties.
     /// </summary>
     /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
     /// <param name="scriptType">Type of script.</param>

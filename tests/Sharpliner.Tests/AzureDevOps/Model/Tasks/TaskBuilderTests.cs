@@ -284,8 +284,7 @@ public class TaskBuilderTests
                         AzureCli.FromFile("connectedServiceNameARM", ScriptType.Ps, "AzureDevops/Resources/Test-Script.ps1"),
                         AzureCli.FromResourceFile("connectedServiceNameARM", ScriptType.Ps, "Test-Script.ps1"),
                         AzureCli.FromResourceFile("connectedServiceNameARM", ScriptType.Ps, "Sharpliner.Tests.AzureDevOps.Resources.Test-Script.ps1"),
-                        AzureCli.Inline("connectedServiceNameARM", ScriptType.Ps, "Write-Host \"test\"")
-      
+                        AzureCli.Inline("connectedServiceNameARM", ScriptType.Ps, displayName: null, "Write-Host \"test\"")
                     }
                 }
             }

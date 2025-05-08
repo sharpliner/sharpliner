@@ -36,9 +36,8 @@
         Write-Host "Lorem ipsum dolor sit amet"
 
   - task: AzureCLI@2
-    displayName: Write-Host "test"
     inputs:
       azureSubscription: connectedServiceNameARM
       scriptType: ps
       scriptLocation: inlineScript
-      inlineScript: ''
+      inlineScript: Write-Host "test"

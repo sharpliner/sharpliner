@@ -12,6 +12,8 @@ public class AzureCliTaskBuilder : TaskBuilderBase
     /// <summary>
     /// Creates an Azure CLI task where the contents come from an embedded resource.
     /// </summary>
+    /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
+    /// <param name="scriptType">Type of script.</param>
     /// <param name="resourceFileName">Name of the resource file</param>
     /// <param name="displayName">Display name of the build step</param>
     /// <returns>A new instance of <see cref="InlineAzureCliTask"/> with the contents of the resource file</returns>
@@ -25,6 +27,8 @@ public class AzureCliTaskBuilder : TaskBuilderBase
     /// Creates an Azure CLI task where the contents come from a file.
     /// The contents are inlined in the YAML as contrary to File method where the file name is just referenced.
     /// </summary>
+    /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
+    /// <param name="scriptType">Type of script.</param>
     /// <param name="path">Path to the file</param>
     /// <param name="displayName">Display name of the build step</param>
     /// <returns>A new instance of <see cref="InlineAzureCliTask"/> with the contents of the file</returns>
@@ -37,6 +41,8 @@ public class AzureCliTaskBuilder : TaskBuilderBase
     /// <summary>
     /// Creates an Azure CLI task referencing a file (contents are not inlined in the YAML).
     /// </summary>
+    /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
+    /// <param name="scriptType">Type of script.</param>
     /// <param name="scriptPath">Path to the script</param>
     /// <param name="displayName">Name of the build step</param>
     /// <returns>A new instance of <see cref="AzureCliFileTask"/> with the file path</returns>
@@ -49,7 +55,10 @@ public class AzureCliTaskBuilder : TaskBuilderBase
     /// <summary>
     /// Creates an Azure CLI task with given contents.
     /// </summary>
+    /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
+    /// <param name="scriptType">Type of script.</param>
     /// <param name="scriptLines">Contents of the script</param>
+    /// <param name="displayName">Name of the build step</param>
     /// <returns>A new instance of <see cref="InlineAzureCliTask"/> with the script lines</returns>
     public InlineAzureCliTask Inline(string azureSubscription, ScriptType scriptType, string? displayName = null, params string[] scriptLines)
         => new(azureSubscription, scriptType, string.Join("\n", scriptLines))
