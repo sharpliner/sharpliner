@@ -165,7 +165,7 @@ public record InlineAzureCliTask : AzureCliTask
     /// </summary>
     /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
     /// <param name="scriptType">Type of script.</param>
-    /// <param name="scriptLocation">Path to the script.</param>
+    /// <param name="inlineScript">Lines of the script as a string.</param>
     public InlineAzureCliTask(string azureSubscription, ScriptType scriptType, string inlineScript)
     : base(azureSubscription, scriptType, ScriptLocation.InlineScript)
     {
@@ -194,7 +194,7 @@ public record AzureCliFileTask : AzureCliTask
     /// </summary>
     /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
     /// <param name="scriptType">Type of script.</param>
-    /// <param name="scriptLocation">Path to the script.</param>
+    /// <param name="scriptPath">Path to the script.</param>
     public AzureCliFileTask(string azureSubscription, ScriptType scriptType, string scriptPath)
     : base(azureSubscription, scriptType, ScriptLocation.ScriptPath)
     {
