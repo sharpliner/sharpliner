@@ -1,3 +1,4 @@
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks
@@ -21,9 +22,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         }
 
         [YamlIgnore]
-        internal string Command
+        internal Conditioned<string>? Command
         {
-            get => GetString("command")!;
+            get => GetConditioned<string>("command");
             init => SetProperty("command", value);
         }
     }

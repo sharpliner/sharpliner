@@ -1,3 +1,4 @@
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks
@@ -36,9 +37,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Gets or sets the arguments for the custom command.
         /// </summary>
         [YamlIgnore]
-        public string Arguments
+        public Conditioned<string>? Arguments
         {
-            get => GetString("arguments")!;
+            get => GetConditioned<string>("arguments");
             init => SetProperty("arguments", value);
         }
     }

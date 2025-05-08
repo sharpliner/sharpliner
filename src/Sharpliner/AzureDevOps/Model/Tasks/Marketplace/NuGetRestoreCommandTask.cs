@@ -1,3 +1,4 @@
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks
@@ -19,9 +20,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Specifies the path to the solution, <c>packages.config</c>, or <c>project.json</c> file that references the packages to be restored.
         /// </summary>
         [YamlIgnore]
-        public string? RestoreSolution
+        public Conditioned<string>? RestoreSolution
         {
-            get => GetString("restoreSolution")!;
+            get => GetConditioned<string>("restoreSolution");
             init => SetProperty("restoreSolution", value);
         }
 
@@ -29,16 +30,16 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Prevents NuGet from using packages from local machine caches when set to <c>true</c>.
         /// </summary>
         [YamlIgnore]
-        public bool? NoCache
+        public Conditioned<bool>? NoCache
         {
-            get => GetBool("noCache", false);
+            get => GetConditioned<bool>("noCache");
             init => SetProperty("noCache", value);
         }
 
         [YamlIgnore]
-        internal string FeedsToUse
+        internal Conditioned<string>? FeedsToUse
         {
-            get => GetString("feedsToUse")!;
+            get => GetConditioned<string>("feedsToUse");
             init => SetProperty("feedsToUse", value);
         }
     }
@@ -59,9 +60,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Gets or sets the vstsFeed to restore packages from.
         /// </summary>
         [YamlIgnore]
-        public string? VstsFeed
+        public Conditioned<string>? VstsFeed
         {
-            get => GetString("vstsFeed");
+            get => GetConditioned<string>("vstsFeed");
             init => SetProperty("vstsFeed", value);
         }
 
@@ -69,9 +70,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Includes NuGet.org in the generated <c>NuGet.config</c>.
         /// </summary>
         [YamlIgnore]
-        public bool? IncludeNuGetOrg
+        public Conditioned<bool>? IncludeNuGetOrg
         {
-            get => GetBool("includeNuGetOrg", false);
+            get => GetConditioned<bool>("includeNuGetOrg");
             init => SetProperty("includeNuGetOrg", value);
         }
     }
@@ -92,9 +93,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Gets or sets the path to the NuGet.config file.
         /// </summary>
         [YamlIgnore]
-        public string? NuGetConfigPath
+        public Conditioned<string>? NuGetConfigPath
         {
-            get => GetString("nuGetConfigPath");
+            get => GetConditioned<string>("nuGetConfigPath");
             init => SetProperty("nuGetConfigPath", value);
         }
 
@@ -104,9 +105,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// For feeds in this organization or collection, leave this blank; the build's credentials are used automatically.
         /// </summary>
         [YamlIgnore]
-        public string ExternalFeedCredentials
+        public Conditioned<string>? ExternalFeedCredentials
         {
-            get => GetString("externalFeedCredentials")!;
+            get => GetConditioned<string>("externalFeedCredentials");
             init => SetProperty("externalFeedCredentials", value);
         } 
     }

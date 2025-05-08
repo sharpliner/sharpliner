@@ -1,4 +1,5 @@
-﻿using YamlDotNet.Serialization;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
@@ -22,9 +23,9 @@ public record DotNetCoreCliTask : AzureDevOpsTask
     /// You can use wildcards (e.g. **/*.csproj for all .csproj files in all subfolders)
     /// </summary>
     [YamlIgnore]
-    public string? Projects
+    public Conditioned<string>? Projects
     {
-        get => GetString("projects");
+        get => GetConditioned<string>("projects");
         init => SetProperty("projects", value);
     }
 
@@ -36,9 +37,9 @@ public record DotNetCoreCliTask : AzureDevOpsTask
     /// If you would like to add arguments for a command not listed, use custom.
     /// </summary>
     [YamlIgnore]
-    public string? Arguments
+    public Conditioned<string>? Arguments
     {
-        get => GetString("arguments");
+        get => GetConditioned<string>("arguments");
         init => SetProperty("arguments", value);
     }
 
@@ -47,9 +48,9 @@ public record DotNetCoreCliTask : AzureDevOpsTask
     /// Empty is the root of the repo (build) or artifacts (release), which is $(System.DefaultWorkingDirectory)
     /// </summary>
     [YamlIgnore]
-    public string? WorkingDirectory
+    public Conditioned<string>? WorkingDirectory
     {
-        get => GetString("workingDirectory");
+        get => GetConditioned<string>("workingDirectory");
         init => SetProperty("workingDirectory", value);
     }
 }

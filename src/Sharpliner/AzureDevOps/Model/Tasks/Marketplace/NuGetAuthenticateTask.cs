@@ -1,4 +1,5 @@
 using System;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks
@@ -29,9 +30,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Gets or sets a value indicating whether to force reinstall of the credential provider even if already installed. Default: false.
         /// </summary>
         [YamlIgnore]
-        public bool ForceReinstallCredentialProvider
+        public Conditioned<bool>? ForceReinstallCredentialProvider
         {
-            get => GetBool("forceReinstallCredentialProvider", false);
+            get => GetConditioned<bool>("forceReinstallCredentialProvider");
             init => SetProperty("forceReinstallCredentialProvider", value);
         }
     }

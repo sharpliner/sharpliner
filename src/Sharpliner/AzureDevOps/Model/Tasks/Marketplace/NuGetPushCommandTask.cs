@@ -1,3 +1,4 @@
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks
@@ -51,9 +52,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Gets or sets the target feed for the push command.
         /// </summary>
         [YamlIgnore]
-        public string? TargetFeed
+        public Conditioned<string>? TargetFeed
         {
-            get => GetString("targetFeed");
+            get => GetConditioned<string>("targetFeed");
             init => SetProperty("targetFeed", value);
         }
 
@@ -61,16 +62,16 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Gets or sets the target feed credentials for the push command.
         /// </summary>
         [YamlIgnore]
-        public string? TargetFeedCredentials
+        public Conditioned<string>? TargetFeedCredentials
         {
-            get => GetString("targetFeedCredentials");
+            get => GetConditioned<string>("targetFeedCredentials");
             init => SetProperty("targetFeedCredentials", value);
         }
 
         [YamlIgnore]
-        internal string NuGetFeedType
+        internal Conditioned<string>? NuGetFeedType
         {
-            get => GetString("nuGetFeedType")!;
+            get => GetConditioned<string>("nuGetFeedType");
             init => SetProperty("nuGetFeedType", value);
         }
     }
@@ -93,9 +94,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Specifies a feed hosted in this account. You must have Azure Artifacts installed and licensed to select a feed here.
         /// </summary>
         [YamlIgnore]
-        public string PublishVstsFeed
+        public Conditioned<string>? PublishVstsFeed
         {
-            get => GetString("publishVstsFeed")!;
+            get => GetConditioned<string>("publishVstsFeed");
             init => SetProperty("publishVstsFeed", value);
         }
 
@@ -103,9 +104,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Changes the version number of the subset of changed packages within a set of continually published packages.
         /// </summary>
         [YamlIgnore]
-        public bool? PublishPackageMetadata
+        public Conditioned<bool>? PublishPackageMetadata
         {
-            get => GetBool("publishPackageMetadata", false);
+            get => GetConditioned<bool>("publishPackageMetadata");
             init => SetProperty("publishPackageMetadata", value);
         }
 
@@ -117,9 +118,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// If <c>NuGet.exe</c> encounters a conflict, the task will fail. This option will not work and publishing will fail if you are within a proxy environment.
         /// </summary>
         [YamlIgnore]
-        public bool? AllowPackageConflicts
+        public Conditioned<bool>? AllowPackageConflicts
         {
-            get => GetBool("allowPackageConflicts", false);
+            get => GetConditioned<bool>("allowPackageConflicts");
             init => SetProperty("allowPackageConflicts", value);
         }
     }
@@ -132,19 +133,19 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// <summary>
         /// Initializes a new instance of the <see cref="NuGetPushExternalCommandTask"/> class.
         /// </summary>
-        /// <param name="publishFeedCredentials">Specifies the NuGet service connection that contains the external NuGet server’s credentials.</param>
+        /// <param name="publishFeedCredentials">Specifies the NuGet service connection that contains the external NuGet server's credentials.</param>
         public NuGetPushExternalCommandTask(string publishFeedCredentials) : base("external")
         {
             PublishFeedCredentials = publishFeedCredentials;
         }
 
         /// <summary>
-        /// Specifies the NuGet service connection that contains the external NuGet server’s credentials.
+        /// Specifies the NuGet service connection that contains the external NuGet server's credentials.
         /// </summary>
         [YamlIgnore]
-        public string PublishFeedCredentials
+        public Conditioned<string>? PublishFeedCredentials
         {
-            get => GetString("publishFeedCredentials")!;
+            get => GetConditioned<string>("publishFeedCredentials");
             init => SetProperty("publishFeedCredentials", value);
         }
     }

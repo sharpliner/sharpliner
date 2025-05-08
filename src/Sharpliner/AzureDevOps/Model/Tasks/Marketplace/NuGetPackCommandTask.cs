@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks
@@ -39,9 +40,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Gets or sets the pattern to search for csproj or nuspec files to pack.
         /// </summary>
         [YamlIgnore]
-        public string? PackagesToPack
+        public Conditioned<string>? PackagesToPack
         {
-            get => GetString("packagesToPack");
+            get => GetConditioned<string>("packagesToPack");
             init => SetProperty("packagesToPack", value);
         }
 
@@ -49,9 +50,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Gets or sets the versioning scheme to use for the package version.
         /// </summary>
         [YamlIgnore]
-        internal string VersioningScheme
+        internal Conditioned<string>? VersioningScheme
         {
-            get => GetString("versioningScheme")!;
+            get => GetConditioned<string>("versioningScheme");
             init => SetProperty("versioningScheme", value);
         }
 
@@ -59,9 +60,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Specifies the configuration to package when using a csproj file.
         /// </summary>
         [YamlIgnore]
-        public string? Configuration
+        public Conditioned<string>? Configuration
         {
-            get => GetString("configuration");
+            get => GetConditioned<string>("configuration");
             init => SetProperty("configuration", value);
         }
 
@@ -69,9 +70,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Specifies the folder where the task creates packages. If the value is empty, the task creates packages at the source root.
         /// </summary>
         [YamlIgnore]
-        public string? PackDestination
+        public Conditioned<string>? PackDestination
         {
-            get => GetString("packDestination");
+            get => GetConditioned<string>("packDestination");
             init => SetProperty("packDestination", value);
         }
 
@@ -79,9 +80,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Specifies that the package contains sources and symbols. When used with a <c>.nuspec</c> file, this creates a regular NuGet package file and the corresponding symbols package.
         /// </summary>
         [YamlIgnore]
-        public bool? IncludeSymbols
+        public Conditioned<bool>? IncludeSymbols
         {
-            get => GetBool("includeSymbols", false);
+            get => GetConditioned<bool>("includeSymbols");
             init => SetProperty("includeSymbols", value);
         }
 
@@ -89,9 +90,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Determines if the output files of the project should be in the tool folder.
         /// </summary>
         [YamlIgnore]
-        public bool? ToolPackage
+        public Conditioned<bool>? ToolPackage
         {
-            get => GetBool("toolPackage", false);
+            get => GetConditioned<bool>("toolPackage");
             init => SetProperty("toolPackage", value);
         }
 
@@ -110,25 +111,19 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Specifies the amount of detail displayed in the output.
         /// </summary>
         [YamlIgnore]
-        public PackVerbosity? VerbosityPack
+        public Conditioned<PackVerbosity>? VerbosityPack
         {
-            get => GetString("verbosityPack") switch
-            {
-                "Quiet" => PackVerbosity.Quiet,
-                "Normal" => PackVerbosity.Normal,
-                "Detailed" => PackVerbosity.Detailed,
-                _ => null
-            };
-            init => SetProperty("verbosityPack", SharplinerSerializer.Serialize(value!));
+            get => GetConditioned<PackVerbosity>("verbosityPack");
+            init => SetProperty("verbosityPack", value);
         }
 
 
         /// <summary>
         /// Specifies the base path of the files defined in the <c>nuspec</c> file.
         /// </summary>
-        public string? BasePath
+        public Conditioned<string>? BasePath
         {
-            get => GetString("basePath");
+            get => GetConditioned<string>("basePath");
             init => SetProperty("basePath", value);
         }
     }
@@ -172,9 +167,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Learn more about <see href="https://learn.microsoft.com/en-us/nuget/tools/cli-ref-pack">using the pack command for NuGet CLI to create NuGet packages</see>.
         /// </summary>
         [YamlIgnore]
-        public bool IncludeReferencedProjects
+        public Conditioned<bool>? IncludeReferencedProjects
         {
-            get => GetBool("includeReferencedProjects", false);
+            get => GetConditioned<bool>("includeReferencedProjects");
             init => SetProperty("includeReferencedProjects", value);
         } 
     }
@@ -201,9 +196,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// The <c>X</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.
         /// </summary>
         [YamlIgnore]
-        public string MajorVersion
+        public Conditioned<string>? MajorVersion
         {
-            get => GetString("majorVersion")!;
+            get => GetConditioned<string>("majorVersion");
             init => SetProperty("majorVersion", value);
         }
 
@@ -211,9 +206,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// The <c>Y</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.
         /// </summary>
         [YamlIgnore]
-        public string MinorVersion
+        public Conditioned<string>? MinorVersion
         {
-            get => GetString("minorVersion")!;
+            get => GetConditioned<string>("minorVersion");
             init => SetProperty("minorVersion", value);
         }
 
@@ -221,9 +216,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// The <c>Z</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.
         /// </summary>
         [YamlIgnore]
-        public string PatchVersion
+        public Conditioned<string>? PatchVersion
         {
-            get => GetString("patchVersion")!;
+            get => GetConditioned<string>("patchVersion");
             init => SetProperty("patchVersion", value);
         }
 
@@ -231,15 +226,10 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Specifies the desired time zone used to produce the version of the package. Selecting <see cref="PackTimezoneType.UTC"/> is recommended if you're using hosted build agents, as their date and time might differ.
         /// </summary>
         [YamlIgnore]
-        public PackTimezoneType? PackTimezone 
+        public Conditioned<PackTimezoneType>? PackTimezone 
         {
-            get => GetString("packTimezone") switch
-            {
-                "UTC" => PackTimezoneType.UTC,
-                "Local" => PackTimezoneType.Local,
-                _ => throw new ArgumentOutOfRangeException()
-            };
-            init => SetProperty("packTimezone", SharplinerSerializer.Serialize(value!));
+            get => GetConditioned<PackTimezoneType>("packTimezone");
+            init => SetProperty("packTimezone", value);
         }
     }
 
@@ -277,9 +267,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         /// Specifies the variable name without <c>$</c>, <c>$env</c>, or <c>%</c>.
         /// </summary>
         [YamlIgnore]
-        public string VersionEnvVar
+        public Conditioned<string>? VersionEnvVar
         {
-            get => GetString("versionEnvVar")!;
+            get => GetConditioned<string>("versionEnvVar");
             init => SetProperty("versionEnvVar", value);
         }
     }

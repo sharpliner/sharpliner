@@ -1,4 +1,5 @@
-﻿using YamlDotNet.Serialization;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
@@ -23,9 +24,9 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     /// Argument aliases: searchPatternPack
     /// </summary>
     [YamlIgnore]
-    public string? PackagesToPack
+    public Conditioned<string>? PackagesToPack
     {
-        get => GetString("packagesToPack");
+        get => GetConditioned<string>("packagesToPack");
         init => SetProperty("packagesToPack", value);
     }
 
@@ -34,9 +35,9 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     /// Argument aliases: configuration
     /// </summary>
     [YamlIgnore]
-    public string? ConfigurationToPack
+    public Conditioned<string>? ConfigurationToPack
     {
-        get => GetString("configurationToPack");
+        get => GetConditioned<string>("configurationToPack");
         init => SetProperty("configurationToPack", value);
     }
 
@@ -46,9 +47,9 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     /// Argument aliases: packDirectory
     /// </summary>
     [YamlIgnore]
-    public string? OutputDir
+    public Conditioned<string>? OutputDir
     {
-        get => GetString("outputDir");
+        get => GetConditioned<string>("outputDir");
         init => SetProperty("outputDir", value);
     }
 
@@ -57,9 +58,9 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     /// Corresponds to the --no-build parameter of the `build` command.
     /// </summary>
     [YamlIgnore]
-    public bool NoBuild
+    public Conditioned<bool>? NoBuild
     {
-        get => GetBool("nobuild", false);
+        get => GetConditioned<bool>("nobuild");
         init => SetProperty("nobuild", value);
     }
 
@@ -68,9 +69,9 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     /// Corresponds to the --include-symbols command line parameter.
     /// </summary>
     [YamlIgnore]
-    public bool IncludeSymbols
+    public Conditioned<bool>? IncludeSymbols
     {
-        get => GetBool("includesymbols", false);
+        get => GetConditioned<bool>("includesymbols");
         init => SetProperty("includesymbols", value);
     }
 
@@ -79,9 +80,9 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     /// Corresponds to the --include-source command line parameter.
     /// </summary>
     [YamlIgnore]
-    public bool IncludeSource
+    public Conditioned<bool>? IncludeSource
     {
-        get => GetBool("includesource", false);
+        get => GetConditioned<bool>("includesource");
         init => SetProperty("includesource", value);
     }
 
@@ -92,9 +93,9 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     /// Values can be strings in quotation marks
     /// </summary>
     [YamlIgnore]
-    public string? BuildProperties
+    public Conditioned<string>? BuildProperties
     {
-        get => GetString("buildProperties");
+        get => GetConditioned<string>("buildProperties");
         init => SetProperty("buildProperties", value);
     }
 
