@@ -9,11 +9,15 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 /// </summary>
 public class IfConditionBuilder
 {
+    internal bool IsElseIf { get; } = false;
     internal Conditioned? Parent { get; }
 
-    internal IfConditionBuilder(Conditioned? parent = null)
+    internal IfConditionBuilder(Conditioned? parent = null) : this(parent, false) { }
+
+    internal IfConditionBuilder(Conditioned? parent = null, bool isElseIf = false)
     {
         Parent = parent;
+        IsElseIf = isElseIf;
     }
 
     /// <summary>
@@ -423,6 +427,7 @@ public class IfConditionBuilder
     private IfCondition Link(IfCondition condition)
     {
         condition.Parent = Parent;
+        condition.IsElseIf = IsElseIf;
         return condition;
     }
 }
@@ -433,11 +438,15 @@ public class IfConditionBuilder
 /// </summary>
 public class IfConditionBuilder<T>
 {
+    internal bool IsElseIf { get; } = false;
     internal Conditioned<T>? Parent { get; }
 
-    internal IfConditionBuilder(Conditioned<T>? parent = null)
+    internal IfConditionBuilder(Conditioned<T>? parent = null) : this(parent, false) { }
+
+    internal IfConditionBuilder(Conditioned<T>? parent = null, bool isElseIf = false)
     {
         Parent = parent;
+        IsElseIf = isElseIf;
     }
 
     /// <summary>
@@ -961,6 +970,7 @@ public class IfConditionBuilder<T>
     private IfCondition<T> Link(IfCondition<T> condition)
     {
         condition.Parent = Parent;
+        condition.IsElseIf = IsElseIf;
         return condition;
     }
 }

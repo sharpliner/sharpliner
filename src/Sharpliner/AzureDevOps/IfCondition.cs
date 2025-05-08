@@ -7,11 +7,17 @@ namespace Sharpliner.AzureDevOps;
 /// </summary>
 public abstract class IfCondition : Condition
 {
+    internal bool IsElseIf = false;
+
+    internal override string TagStart => IsElseIf ? ElseIfTagStart : IfTagStart;
+
     private static readonly (string Start, string End)[] s_tagsToRemove =
     [
         (IfTagStart, ExpressionEnd),
+        (ElseIfTagStart, ExpressionEnd),
         (ElseTagStart, ExpressionEnd),
         ('\'' + IfTagStart, ExpressionEnd + '\''),
+        ('\'' + ElseIfTagStart, ExpressionEnd + '\''),
         ('\'' + ElseTagStart, ExpressionEnd + '\''),
         (ExpressionStart, ExpressionEnd),
         ('\'' + ExpressionStart, ExpressionEnd + '\''),
@@ -41,8 +47,8 @@ public abstract class IfCondition : Condition
         return condition;
     }
 
-    internal static string WrapTag(string condition) =>
-        IfTagStart + condition + ExpressionEnd;
+    internal string WrapTag(string condition) =>
+        TagStart + condition + ExpressionEnd;
 }
 
 /// <summary>

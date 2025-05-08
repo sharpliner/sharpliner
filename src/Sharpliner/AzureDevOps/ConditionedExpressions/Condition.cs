@@ -25,6 +25,7 @@ public abstract class Condition : IYamlConvertible
     internal const string ExpressionEnd = " }}";
 
     internal const string IfTagStart = $"{ExpressionStart}if ";
+    internal const string ElseIfTagStart = $"{ExpressionStart}elseif ";
     internal const string ElseTagStart = $"{ExpressionStart}else";
 
     private const string VariableIndexAccessStart = "variables[";
