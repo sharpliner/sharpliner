@@ -33,7 +33,7 @@ public abstract record Step
     /// </summary>
     [YamlMember(Order = 175)]
     [DefaultValue(true)]
-    public bool Enabled { get; init; } = true;
+    public Conditioned<bool>? Enabled { get; init; } = true;
 
     /// <summary>
     /// Condition that must be met to run this step.

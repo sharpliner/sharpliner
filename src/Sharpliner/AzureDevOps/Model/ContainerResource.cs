@@ -57,7 +57,7 @@ public record ContainerResource
     /// </summary>
     [DisallowNull]
     [DefaultValue(true)]
-    public bool MapDockerSocket { get; init; } = true;
+    public Conditioned<bool>? MapDockerSocket { get; init; } = true;
 
     /// <summary>
     /// Volumes to mount read-only - all default to false
@@ -83,20 +83,20 @@ public record ContainerMountSettings
     /// <summary>
     /// Components required to talk to the agent
     /// </summary>
-    public bool Externals { get; init; }
+    public Conditioned<bool>? Externals { get; init; }
 
     /// <summary>
     ///  tasks required by the job
     /// </summary>
-    public bool Tasks { get; init; }
+    public Conditioned<bool>? Tasks { get; init; }
 
     /// <summary>
     /// Installable tools like Python and Ruby
     /// </summary>
-    public bool Tools { get; init; }
+    public Conditioned<bool>? Tools { get; init; }
 
     /// <summary>
     /// The work directory
     /// </summary>
-    public bool Work { get; init; }
+    public Conditioned<bool>? Work { get; init; }
 }

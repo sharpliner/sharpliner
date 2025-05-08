@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
@@ -24,14 +25,14 @@ public record PrTrigger
     /// Defaults to true
     /// </summary>
     [DefaultValue(true)]
-    public bool AutoCancel { get; init; } = true;
+    public Conditioned<bool>? AutoCancel { get; init; } = true;
 
     /// <summary>
     /// For GitHub only, whether to build draft PRs
     /// Defaults to true
     /// </summary>
     [DefaultValue(true)]
-    public bool Drafts { get; init; } = true;
+    public Conditioned<bool>? Drafts { get; init; } = true;
 
     /// <summary>
     /// Branches to include or exclude for triggering a run.

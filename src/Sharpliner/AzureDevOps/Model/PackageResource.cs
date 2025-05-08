@@ -48,7 +48,7 @@ public abstract record PackageResource
     /// To enable automated triggers (true/false)
     /// Optional, defaults to no triggers
     /// </summary>
-    public bool Trigger { get; init; }
+    public Conditioned<bool>? Trigger { get; init; }
 
     /// <summary>
     /// Creates a new instance of the <see cref="PackageResource"/> class.

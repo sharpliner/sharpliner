@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -11,7 +12,7 @@ public record PipelineTrigger
     /// <summary>
     /// Batch changes if true; start a new build for every push if false (default)
     /// </summary>
-    public bool Batch { get; init; } = false;
+    public Conditioned<bool>? Batch { get; init; } = false;
 
     /// <summary>
     /// Branch conditions to filter the events
