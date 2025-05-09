@@ -542,7 +542,7 @@ public abstract class AzureDevOpsDefinition
     ///   - group: prod
     /// </code>
     /// </summary>
-    protected static IfConditionBuilder If => new();
+    protected static IfConditionBuilder If => new(null, false);
 
     /// <summary>
     /// Start an <c>${{ else () }}</c> section.

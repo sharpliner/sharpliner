@@ -164,8 +164,7 @@ public class ConditionalsTests
                                 {
                                     Demands = { "SomeProperty -equals SomeValue" }
                                 })
-                            .EndIf
-                            .If.Equal("C", "D")
+                            .ElseIf.Equal("C", "D")
                                 .Pool(new HostedPool("pool-B")),
                 }
             }
