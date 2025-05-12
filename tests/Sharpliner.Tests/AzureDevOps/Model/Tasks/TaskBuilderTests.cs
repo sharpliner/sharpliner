@@ -196,6 +196,13 @@ public class TaskBuilderTests
                             Submodules = SubmoduleCheckout.SingleLevel,
                             Path = "$(Build.SourcesDirectory)/local-shallow",
                         },
+                        Checkout.Self with
+                        {
+                            DisplayName = "Checkout sparse self",
+                            Path = "$(Build.SourcesDirectory)/local-sparse",
+                            SparseCheckoutDirectories = "src/Sharpliner",
+                            WorkspaceRepo = true
+                        },
                         Checkout.Repository("https://github.com/sharpliner/sharpliner.git") with
                         {
                             Submodules = SubmoduleCheckout.Recursive,

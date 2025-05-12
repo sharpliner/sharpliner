@@ -1637,12 +1637,18 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? FetchTags { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=104)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? Lfs { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Order=106)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Path { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=107)]
-        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? PersistCredentials { get; init; }
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? Path { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=105)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? PersistCredentials { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=108)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? SparseCheckoutDirectories { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=109)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<string>? SparseCheckoutPatterns { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=106)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Tasks.SubmoduleCheckout>? Submodules { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=110)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<bool>? WorkspaceRepo { get; init; }
     }
     public class CheckoutTaskBuilder
     {
