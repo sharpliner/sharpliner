@@ -58,25 +58,49 @@ public abstract record CheckoutTask : Step
     public Conditioned<bool>? Lfs { get; init; }
 
     /// <summary>
+    /// When true, leave the OAuth token in the Git config after the initial fetch.
+    /// Defaults to false.
+    /// </summary>
+    [YamlMember(Order = 105)]
+    public Conditioned<bool>? PersistCredentials { get; init; }
+
+    /// <summary>
     /// Submodules checkout strategy (single level, recursive to get submodules of submodules).
     /// Defaults to not checking out submodules.
     /// </summary>
-    [YamlMember(Order = 105)]
+    [YamlMember(Order = 106)]
     public Conditioned<SubmoduleCheckout>? Submodules { get; init; }
 
     /// <summary>
     /// Path to check out source code, relative to the agent's build directory (e.g. \_work\1).
     /// Defaults to a directory called `s`.
     /// </summary>
-    [YamlMember(Order = 106)]
+    [YamlMember(Order = 107)]
     public Conditioned<string>? Path { get; init; }
 
     /// <summary>
-    /// When true, leave the OAuth token in the Git config after the initial fetch.
-    /// Defaults to false.
+    /// Specify a directory to enable sparse checkout in cone mode using directory matching.
+    /// Separate multiple directories using a space.
+    /// Supported on agent version 3.253.0/4.253.0 and higher with Git 2.25 or higher.
+    /// If both sparseCheckoutDirectories and sparseCheckoutPatterns are set, sparseCheckoutDirectories is used and the setting for sparseCheckoutPatterns is disregarded.
     /// </summary>
-    [YamlMember(Order = 107)]
-    public Conditioned<bool>? PersistCredentials { get; init; }
+    [YamlMember(Order = 108)]
+    public Conditioned<string>? SparseCheckoutDirectories { get; init; }
+
+    /// <summary>
+    /// Specify a pattern to enable sparse checkout in non-cone mode using pattern matching.
+    /// Separate multiple patterns using a space.
+    /// Supported on agent version 3.253.0/4.253.0 and higher with Git 2.25 or higher.
+    /// If both sparseCheckoutDirectories and sparseCheckoutPatterns are set, sparseCheckoutDirectories is used and the setting for sparseCheckoutPatterns is disregarded.
+    /// </summary>
+    [YamlMember(Order = 109)]
+    public Conditioned<string>? SparseCheckoutPatterns { get; init; }
+
+    /// <summary>
+    /// When true, use the repository root directory as the default working directory for the pipeline. The default is false.
+    /// </summary>
+    [YamlMember(Order = 110)]
+    public Conditioned<bool>? WorkspaceRepo { get; init; }
 }
 
 /// <summary>
