@@ -213,12 +213,15 @@ Generated YAML:
 Currently, we don't support many marketplace tasks in C# as the project is still growing.
 If you find one useful, hit us up with a request, or better, with a pull request and we can add it to our library.
 
+### Marketplace tasks
+
 Marketplace tasks can be supported and can be added to the organization if requested.
 
 Supported marketplace tasks:
 | Azure DevOps Extension | Repository | NuGet | Author |
 |------------------------|------------|---------|--------|
-| [JFrog Azure DevOps Extension](https://marketplace.visualstudio.com/items?itemName=JFrog.jfrog-azure-devops-extension) | [sharpliner/jfrog-extensions](https://github.com/sharpliner/jfrog-extensions) | | @flcdrg
+| [![JFrog Azure DevOps Extension](https://img.shields.io/badge/JFrog%20Azure%20DevOps%20Extension-0078D7?style=flat&logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=JFrog.jfrog-azure-devops-extension) | [![Repo](https://img.shields.io/badge/sharpliner/jfrog--extensions-181717?style=flat&logo=github&logoColor=white)](https://github.com/sharpliner/jfrog-extensions) | [![NuGet version](https://img.shields.io/nuget/v/Sharpliner.Extensions.JFrog.svg?style=flat-square)](https://www.nuget.org/packages/Sharpliner.Extensions.JFrog/) | [![GitHub followers](https://img.shields.io/github/followers/flcdrg?label=flcdrg&style=social)](https://github.com/flcdrg) |
+
 
 ## Pipeline variables
 
