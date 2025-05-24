@@ -1,5 +1,4 @@
-﻿using System;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;

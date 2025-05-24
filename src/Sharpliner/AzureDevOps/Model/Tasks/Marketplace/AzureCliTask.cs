@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -12,9 +12,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Alias: connectedServiceNameARM. Required. Azure Resource Manager connection.
     /// </summary>
     [YamlIgnore]
-    public string? AzureSubscription
+    public Conditioned<string>? AzureSubscription
     {
-        get => GetString("azureSubscription");
+        get => GetConditioned<string>("azureSubscription");
         init => SetProperty("azureSubscription", value);
     }
 
@@ -42,9 +42,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Input alias: scriptArguments. Arguments passed to the script.
     /// </summary>
     [YamlIgnore]
-    public string? Arguments
+    public Conditioned<string>? Arguments
     {
-        get => GetString("arguments");
+        get => GetConditioned<string>("arguments");
         init => SetProperty("arguments", value);
     }
 
@@ -64,9 +64,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// You can use the servicePrincipalId, servicePrincipalKey or idToken, and tenantId variables in your script.
     /// </summary>
     [YamlIgnore]
-    public bool AddSpnToEnvironment
+    public Conditioned<bool>?  AddSpnToEnvironment
     {
-        get => GetBool("addSpnToEnvironment", false);
+        get => GetConditioned<bool>("addSpnToEnvironment", false);
         init => SetProperty("addSpnToEnvironment", value);
     }
 
@@ -75,9 +75,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Use this task to run Azure CLI tasks in parallel releases.
     /// </summary>
     [YamlIgnore]
-    public bool UseGlobalConfig
+    public Conditioned<bool>? UseGlobalConfig
     {
-        get => GetBool("useGlobalConfig", false);
+        get => GetConditioned<bool>("useGlobalConfig", false);
         init => SetProperty("useGlobalConfig", value);
     }
 
@@ -86,9 +86,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// If left blank, this input is the root of the repo (build) or artifacts (release), which is $(System.DefaultWorkingDirectory).
     /// </summary>
     [YamlIgnore]
-    public string? WorkingDirectory
+    public Conditioned<string>? WorkingDirectory
     {
-        get => GetString("workingDirectory");
+        get => GetConditioned<string>("workingDirectory");
         init => SetProperty("workingDirectory", value);
     }
 
@@ -97,9 +97,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Clear the checkbox to ignore standard errors and instead rely on exit codes to determine the status.
     /// </summary>
     [YamlIgnore]
-    public bool FailOnStandardError
+    public Conditioned<bool>? FailOnStandardError
     {
-        get => GetBool("failOnStandardError", false);
+        get => GetConditioned<bool>("failOnStandardError", false);
         init => SetProperty("failOnStandardError", value);
     }
 
@@ -110,9 +110,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Otherwise, the line is not appended to the end of your script.
     /// </summary>
     [YamlIgnore]
-    public bool PowerShellIgnoreLASTEXITCODE
+    public Conditioned<bool>? PowerShellIgnoreLASTEXITCODE
     {
-        get => GetBool("powerShellIgnoreLASTEXITCODE", false);
+        get => GetConditioned<bool>("powerShellIgnoreLASTEXITCODE", false);
         init => SetProperty("powerShellIgnoreLASTEXITCODE", value);
     }
 
@@ -121,9 +121,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Setting it to false will suppress the az login output.
     /// </summary>
     [YamlIgnore]
-    public bool VisibleAzLogin
+    public Conditioned<bool>? VisibleAzLogin
     {
-        get => GetBool("visibleAzLogin", true);
+        get => GetConditioned<bool>("visibleAzLogin", true);
         init => SetProperty("visibleAzLogin", value);
     }
 
@@ -154,9 +154,9 @@ public record InlineAzureCliTask : AzureCliTask
     /// You can also pass predefined and custom variables to this script by using arguments.
     /// </summary>
     [YamlIgnore]
-    public string? InlineScript
+    public Conditioned<string>? InlineScript
     {
-        get => GetString("inlineScript");
+        get => GetConditioned<string>("inlineScript");
         init => SetProperty("inlineScript", value);
     }
 
@@ -183,9 +183,9 @@ public record AzureCliFileTask : AzureCliTask
     /// Use .ps1 or .sh when using Linux-based agent or a path relative to the the default working directory.
     /// </summary>
     [YamlIgnore]
-    public string? ScriptPath
+    public Conditioned<string>? ScriptPath
     {
-        get => GetString("scriptPath");
+        get => GetConditioned<string>("scriptPath");
         init => SetProperty("scriptPath", value);
     }
 

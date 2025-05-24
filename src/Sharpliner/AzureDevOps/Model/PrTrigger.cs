@@ -35,13 +35,13 @@ public record PrTrigger
     /// Branches to include or exclude for triggering a run.
     /// </summary>
     [DisallowNull]
-    public Conditioned<InclusionRule>? Branches { get; init; }
+    public InclusionRule? Branches { get; init; }
 
     /// <summary>
     /// Paths to include or exclude for triggering a run.
     /// </summary>
     [DisallowNull]
-    public Conditioned<InclusionRule>? Paths { get; init; }
+    public InclusionRule? Paths { get; init; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PrTrigger"/> class.
