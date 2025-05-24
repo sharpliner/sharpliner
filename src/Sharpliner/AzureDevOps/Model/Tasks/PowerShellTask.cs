@@ -23,40 +23,35 @@ public abstract record PowershellTask : Step
     /// Default value: `stop`.
     /// </summary>
     [YamlMember(Order = 114)]
-    [DefaultValue(ActionPreference.Stop)]
-    public ActionPreference ErrorActionPreference { get; init; } = ActionPreference.Stop;
+    public Conditioned<ActionPreference>? ErrorActionPreference { get; init; }
 
     /// <summary>
     /// Prepends the line $WarningPreference = 'VALUE' at the top of your script.
     /// Default value: `continue`.
     /// </summary>
     [YamlMember(Order = 114)]
-    [DefaultValue(ActionPreference.Continue)]
-    public ActionPreference WarningPreference { get; init; } = ActionPreference.Continue;
+    public Conditioned<ActionPreference>? WarningPreference { get; init; }
 
     /// <summary>
     /// Prepends the line $InformationPreference = 'VALUE' at the top of your script.
     /// Default value: `continue`.
     /// </summary>
     [YamlMember(Order = 114)]
-    [DefaultValue(ActionPreference.Continue)]
-    public ActionPreference InformationPreference { get; init; } = ActionPreference.Continue;
+    public Conditioned<ActionPreference>? InformationPreference { get; init; }
 
     /// <summary>
     /// Prepends the line $VerbosePreference = 'VALUE' at the top of your script.
     /// Default value: `continue`.
     /// </summary>
     [YamlMember(Order = 114)]
-    [DefaultValue(ActionPreference.Continue)]
-    public ActionPreference VerbosePreference { get; init; } = ActionPreference.Continue;
+    public Conditioned<ActionPreference>? VerbosePreference { get; init; }
 
     /// <summary>
     /// Prepends the line $DebugPreference = 'VALUE' at the top of your script.
     /// Default value: `continue`.
     /// </summary>
     [YamlMember(Order = 114)]
-    [DefaultValue(ActionPreference.Continue)]
-    public ActionPreference DebugPreference { get; init; } = ActionPreference.Continue;
+    public Conditioned<ActionPreference>? DebugPreference { get; init; }
 
     /// <summary>
     /// If this is true, this task will fail if any errors are written to the error pipeline, or if any data is written to the Standard Error stream.
@@ -85,12 +80,12 @@ public record InlinePowershellTask : PowershellTask
     /// Required if Type is inline, contents of the script.
     /// </summary>
     [YamlMember(Alias = "powershell", Order = 1, ScalarStyle = ScalarStyle.Literal)]
-    public string Contents { get; init; }
+    public Conditioned<string>? Contents { get; init; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InlinePowershellTask"/> class with the specified script lines.
     /// </summary>
-    /// <param name="scriptLines"></param>
+    /// <param name="scriptLines">Contents of the script (line by line)</param>
     public InlinePowershellTask(params string[] scriptLines)
     {
         Contents = string.Join(System.Environment.NewLine, scriptLines);
@@ -108,7 +103,7 @@ public record PowershellFileTask : PowershellTask, IYamlConvertible
     /// Path of the script to execute.
     /// Must be a fully qualified path or relative to $(System.DefaultWorkingDirectory).
     /// </summary>
-    public string FilePath { get; }
+    public Conditioned<string>? FilePath { get; }
 
     /// <summary>
     /// Arguments passed to the Bash script.
@@ -179,7 +174,7 @@ public record InlinePwshTask : PowershellTask
     /// Required if Type is inline, contents of the script.
     /// </summary>
     [YamlMember(Alias = "pwsh", Order = 1, ScalarStyle = ScalarStyle.Literal)]
-    public string Contents { get; init; }
+    public Conditioned<string>? Contents { get; init; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InlinePwshTask"/> class with the specified script lines.

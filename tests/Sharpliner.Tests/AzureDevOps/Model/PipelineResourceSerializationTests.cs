@@ -88,7 +88,7 @@ public class PipelineResourceSerializationTests
                         Options = "--name ci-container -v /usr/bin/docker:/tmp/docker:ro",
                         MountReadOnly = new()
                         {
-                            Work = false,
+                            Work = true,
                             Externals = true,
                             Tools = true,
                             Tasks = true

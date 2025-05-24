@@ -16,7 +16,7 @@ public record ContainerResource
     /// Identifier (A-Z, a-z, 0-9, and underscore)
     /// </summary>
     [YamlMember(Alias = "container")]
-    public string Identifier { get; }
+    public Conditioned<string>? Identifier { get; }
 
     /// <summary>
     /// Container image name
@@ -45,19 +45,18 @@ public record ContainerResource
     /// <summary>
     /// Ports to expose on the container
     /// </summary>
-    public List<string> Ports { get; init; } = [];
+    public ConditionedList<string> Ports { get; init; } = [];
 
     /// <summary>
     /// Volumes to mount on the container
     /// </summary>
-    public List<string> Volumes { get; init; } = [];
+    public ConditionedList<string> Volumes { get; init; } = [];
 
     /// <summary>
     /// Whether to map in the Docker daemon socket; defaults to true
     /// </summary>
     [DisallowNull]
-    [DefaultValue(true)]
-    public Conditioned<bool>? MapDockerSocket { get; init; } = true;
+    public Conditioned<bool>? MapDockerSocket { get; init; }
 
     /// <summary>
     /// Volumes to mount read-only - all default to false

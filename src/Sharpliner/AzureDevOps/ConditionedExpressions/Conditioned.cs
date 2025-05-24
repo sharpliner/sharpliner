@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
@@ -188,7 +189,8 @@ public record Conditioned<T> : Conditioned
     /// Implicitly converts a value into a <see cref="Conditioned{T}"/> instance with a definition.
     /// </summary>
     /// <param name="value">The definition.</param>
-    public static implicit operator Conditioned<T>(T value) => new(definition: value);
+    public static implicit operator Conditioned<T>([NotNullIfNotNull(nameof(value))]T? value) =>
+        value == null ? null! : new(definition: value);
 
     // Make sure we can assign ${{ parameters.name }} into conditioned
     /// <summary>

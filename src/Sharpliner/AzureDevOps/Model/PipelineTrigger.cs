@@ -12,7 +12,7 @@ public record PipelineTrigger
     /// <summary>
     /// Batch changes if true; start a new build for every push if false (default)
     /// </summary>
-    public Conditioned<bool>? Batch { get; init; } = false;
+    public Conditioned<bool>? Batch { get; init; }
 
     /// <summary>
     /// Branch conditions to filter the events

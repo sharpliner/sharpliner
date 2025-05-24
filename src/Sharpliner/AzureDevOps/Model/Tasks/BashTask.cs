@@ -36,8 +36,7 @@ public abstract record BashTask : Step
     /// Default value: `true`.
     /// </summary>
     [YamlMember(Order = 200)]
-    [DefaultValue(true)]
-    public Conditioned<bool>? NoRc { get; init; } = true;
+    public Conditioned<bool>? NoRc { get; init; }
 }
 
 /// <summary>

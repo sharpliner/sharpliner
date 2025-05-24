@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
@@ -24,27 +23,25 @@ public record PrTrigger
     /// Indicates whether additional pushes to a PR should cancel in-progress runs for the same PR
     /// Defaults to true
     /// </summary>
-    [DefaultValue(true)]
-    public Conditioned<bool>? AutoCancel { get; init; } = true;
+    public Conditioned<bool>? AutoCancel { get; init; }
 
     /// <summary>
     /// For GitHub only, whether to build draft PRs
     /// Defaults to true
     /// </summary>
-    [DefaultValue(true)]
-    public Conditioned<bool>? Drafts { get; init; } = true;
+    public Conditioned<bool>? Drafts { get; init; }
 
     /// <summary>
     /// Branches to include or exclude for triggering a run.
     /// </summary>
     [DisallowNull]
-    public InclusionRule? Branches { get; init; }
+    public Conditioned<InclusionRule>? Branches { get; init; }
 
     /// <summary>
     /// Paths to include or exclude for triggering a run.
     /// </summary>
     [DisallowNull]
-    public InclusionRule? Paths { get; init; }
+    public Conditioned<InclusionRule>? Paths { get; init; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PrTrigger"/> class.

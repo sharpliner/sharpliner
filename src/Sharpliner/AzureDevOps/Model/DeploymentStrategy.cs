@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
@@ -167,8 +168,7 @@ public record RollingStrategy : DeploymentStrategy
     /// This ensures that the app is running on these machines and is capable of handling requests while the deployment is taking place on the rest of the machines, which reduces overall downtime.
     /// </summary>
     [YamlMember(Order = 50, DefaultValuesHandling = DefaultValuesHandling.OmitDefaults)]
-    [DefaultValue(0)]
-    public int MaxParallel { get; init; } = 0;
+    public Conditioned<int>? MaxParallel { get; init; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RollingStrategy"/> class.
@@ -180,11 +180,10 @@ public record RollingStrategy : DeploymentStrategy
     /// <inheritdoc/>
     protected override void WriteCustomFields(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
-
-        if (MaxParallel != 0)
+        if (MaxParallel != null)
         {
             emitter.Emit(new Scalar("maxParallel"));
-            emitter.Emit(new Scalar(MaxParallel.ToString()));
+            MaxParallel.SerializeSelf(emitter, nestedObjectSerializer);
         }
     }
 }
@@ -207,7 +206,7 @@ public record CanaryStrategy : DeploymentStrategy
     /// This variable is available only in deploy, routeTraffic, and postRouteTraffic lifecycle hooks.
     /// </summary>
     [YamlMember(Order = 50)]
-    public List<int> Increments { get; init; } = [];
+    public ConditionedList<int> Increments { get; init; } = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CanaryStrategy"/> class.

@@ -35,7 +35,10 @@ public class GettingStartedTests : AzureDevOpsDefinition
                     Steps =
                     [
                         If.IsPullRequest
-                            .Step(Powershell.Inline("Write-Host 'Hello-World'").DisplayAs("Hello world")),
+                            .Step(Powershell.Inline(
+                                    "Write-Host 'Hello'",
+                                    "Write-Host 'World'")
+                                .DisplayAs("Hello world")),
 
                         DotNet.Install
                             .Sdk(DotnetVersion)
@@ -61,7 +64,7 @@ public class GettingStartedTests : AzureDevOpsDefinition
         var pipeline = new TestPipeline();
         var yaml = pipeline.Serialize();
         yaml.Trim().Should().Be(
-#region single-stage-pipeline-example-yaml
+        #region single-stage-pipeline-example-yaml
             """
             pr:
               branches:
@@ -88,7 +91,8 @@ public class GettingStartedTests : AzureDevOpsDefinition
               steps:
               - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
                 - powershell: |-
-                    Write-Host 'Hello-World'
+                    Write-Host 'Hello'
+                    Write-Host 'World'
                   displayName: Hello world
 
               - task: UseDotNet@2
@@ -110,7 +114,7 @@ public class GettingStartedTests : AzureDevOpsDefinition
                   command: test
                   projects: src/MyProject.sln
             """
-#endregion
+        #endregion
         );
     }
 
