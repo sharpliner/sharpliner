@@ -40,13 +40,13 @@ public record RepositoryResource
     /// Name of the service connection to use (for types that aren't Azure Repos)
     /// </summary>
     [DisallowNull]
-    public string? Endpoint { get; init; }
+    public Conditioned<string>? Endpoint { get; init; }
 
     /// <summary>
     /// Triggers are not enabled by default unless you add trigger section to the resource
     /// </summary>
     [DisallowNull]
-    public Trigger? Trigger { get; init; }
+    public Conditioned<Trigger>? Trigger { get; init; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RepositoryResource"/> class with the specified identifier.

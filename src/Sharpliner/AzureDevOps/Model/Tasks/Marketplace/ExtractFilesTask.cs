@@ -1,4 +1,5 @@
-﻿using YamlDotNet.Serialization;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
@@ -11,9 +12,9 @@ public record ExtractFilesTask : AzureDevOpsTask
     /// Specifies the file paths or patterns of the archive files to extract. Supports multiple lines of minimatch patterns.
     /// </summary>
     [YamlIgnore]
-    public string? ArchiveFilePatterns
+    public Conditioned<string>? ArchiveFilePatterns
     {
-        get => GetString("archiveFilePatterns");
+        get => GetConditioned<string>("archiveFilePatterns");
         init => SetProperty("archiveFilePatterns", value);
     }
 
@@ -21,9 +22,9 @@ public record ExtractFilesTask : AzureDevOpsTask
     /// Specifies the destination folder into which archive files should be extracted.
     /// </summary>
     [YamlIgnore]
-    public string? DestinationFolder
+    public Conditioned<string>? DestinationFolder
     {
-        get => GetString("destinationFolder");
+        get => GetConditioned<string>("destinationFolder");
         init => SetProperty("destinationFolder", value);
     }
 
@@ -32,9 +33,9 @@ public record ExtractFilesTask : AzureDevOpsTask
     /// Defaults to <code>true</code>
     /// </summary>
     [YamlIgnore]
-    public bool CleanDestinationFolder
+    public Conditioned<bool>? CleanDestinationFolder
     {
-        get => GetBool("cleanDestinationFolder", true);
+        get => GetConditioned<bool>("cleanDestinationFolder", true);
         init => SetProperty("cleanDestinationFolder", value);
     }
 
@@ -44,9 +45,9 @@ public record ExtractFilesTask : AzureDevOpsTask
     /// Defaults to <code>false</code>
     /// </summary>
     [YamlIgnore]
-    public bool OverwriteExistingFiles
+    public Conditioned<bool>? OverwriteExistingFiles
     {
-        get => GetBool("overwriteExistingFiles", false);
+        get => GetConditioned<bool>("overwriteExistingFiles", false);
         init => SetProperty("overwriteExistingFiles", value);
     }
 
@@ -55,9 +56,9 @@ public record ExtractFilesTask : AzureDevOpsTask
     /// If it's not specified on Windows, the default 7zip version supplied with a task will be used.
     /// </summary>
     [YamlIgnore]
-    public string? PathToSevenZipTool
+    public Conditioned<string>? PathToSevenZipTool
     {
-        get => GetString("pathToSevenZipTool");
+        get => GetConditioned<string>("pathToSevenZipTool");
         init => SetProperty("pathToSevenZipTool", value);
     }
 

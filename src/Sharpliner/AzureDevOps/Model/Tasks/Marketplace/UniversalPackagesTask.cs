@@ -1,4 +1,5 @@
-﻿using YamlDotNet.Serialization;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
@@ -13,9 +14,9 @@ public abstract record UniversalPackagesTask : AzureDevOpsTask
     /// Default value: download.
     /// </summary>
     [YamlIgnore]
-    public string? Command
+    public Conditioned<string>? Command
     {
-        get => GetString("command");
+        get => GetConditioned<string>("command");
         init => SetProperty("command", value);
     }
 
@@ -25,9 +26,9 @@ public abstract record UniversalPackagesTask : AzureDevOpsTask
     /// Default value: None.
     /// </summary>
     [YamlIgnore]
-    public string? Verbosity
+    public Conditioned<string>? Verbosity
     {
-        get => GetString("verbosity");
+        get => GetConditioned<string>("verbosity");
         init => SetProperty("verbosity", value);
     }
 

@@ -1,4 +1,5 @@
-﻿using YamlDotNet.Serialization;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
@@ -18,9 +19,9 @@ public record DotNetBuildCoreCliTask : DotNetCoreCliTask
     /// Include NuGet.org in the generated NuGet.config
     /// </summary>
     [YamlIgnore]
-    public bool? IncludeNuGetOrg
+    public Conditioned<bool>? IncludeNuGetOrg
     {
-        get => GetBool("includeNuGetOrg", false);
-        init => SetProperty("includeNuGetOrg", value.HasValue ? (value.Value ? "true" : "false") : null);
+        get => GetConditioned<bool>("includeNuGetOrg");
+        init => SetProperty("includeNuGetOrg", value);
     }
 }

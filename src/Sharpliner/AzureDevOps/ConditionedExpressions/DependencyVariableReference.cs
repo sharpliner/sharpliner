@@ -1,10 +1,3 @@
-using System;
-using System.Security.Cryptography.X509Certificates;
-using Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces;
-using YamlDotNet.Core;
-using YamlDotNet.Core.Events;
-using YamlDotNet.Serialization;
-
 namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 
 /// <summary>

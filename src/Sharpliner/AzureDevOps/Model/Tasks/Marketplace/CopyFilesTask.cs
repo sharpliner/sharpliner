@@ -1,4 +1,5 @@
-﻿using YamlDotNet.Serialization;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
@@ -14,9 +15,9 @@ public record CopyFilesTask : AzureDevOpsTask
     /// <remarks>If your build produces artifacts outside of the sources directory, specify $(Agent.BuildDirectory) to copy files from the directory created for the pipeline.</remarks>
     /// </summary>
     [YamlIgnore]
-    public string? SourceFolder
+    public Conditioned<string>? SourceFolder
     {
-        get => GetString("SourceFolder");
+        get => GetConditioned<string>("SourceFolder");
         init => SetProperty("SourceFolder", value);
     }
 
@@ -27,9 +28,9 @@ public record CopyFilesTask : AzureDevOpsTask
     /// <remarks>The pattern is used to match only file paths, not folder paths. Specify patterns, such as **\bin\** instead of **\bin.</remarks>
     /// </summary>
     [YamlIgnore]
-    public string? Contents
+    public Conditioned<string>? Contents
     {
-        get => GetString("Contents");
+        get => GetConditioned<string>("Contents");
         init => SetProperty("Contents", value);
     }
 
@@ -39,9 +40,9 @@ public record CopyFilesTask : AzureDevOpsTask
     /// <example>$(Build.ArtifactStagingDirectory)</example>
     /// </summary>
     [YamlIgnore]
-    public string? TargetFolder
+    public Conditioned<string>? TargetFolder
     {
-        get => GetString("TargetFolder");
+        get => GetConditioned<string>("TargetFolder");
         init => SetProperty("TargetFolder", value);
     }
 
@@ -50,9 +51,9 @@ public record CopyFilesTask : AzureDevOpsTask
     /// Defaults to <code>false</code>
     /// </summary>
     [YamlIgnore]
-    public bool CleanTargetFolder
+    public Conditioned<bool>? CleanTargetFolder
     {
-        get => GetBool("CleanTargetFolder", false);
+        get => GetConditioned<bool>("CleanTargetFolder");
         init => SetProperty("CleanTargetFolder", value);
     }
 
@@ -61,9 +62,9 @@ public record CopyFilesTask : AzureDevOpsTask
     /// Defaults to <code>false</code>.
     /// </summary>
     [YamlIgnore]
-    public bool Overwrite
+    public Conditioned<bool>? Overwrite
     {
-        get => GetBool("Overwrite", false);
+        get => GetConditioned<bool>("Overwrite");
         init => SetProperty("Overwrite", value);
     }
 
@@ -72,9 +73,9 @@ public record CopyFilesTask : AzureDevOpsTask
     /// Defaults to <code>false</code>.
     /// </summary>
     [YamlIgnore]
-    public bool FlattenFolders
+    public Conditioned<bool>? FlattenFolders
     {
-        get => GetBool("flattenFolders", false);
+        get => GetConditioned<bool>("flattenFolders");
         init => SetProperty("flattenFolders", value);
     }
 
@@ -83,9 +84,9 @@ public record CopyFilesTask : AzureDevOpsTask
     /// Defaults to <code>false</code>.
     /// </summary>
     [YamlIgnore]
-    public bool PreserveTimestamp
+    public Conditioned<bool>? PreserveTimestamp
     {
-        get => GetBool("preserveTimestamp", false);
+        get => GetConditioned<bool>("preserveTimestamp");
         init => SetProperty("preserveTimestamp", value);
     }
 
@@ -94,9 +95,9 @@ public record CopyFilesTask : AzureDevOpsTask
     /// Defaults to <code>0</code>.
     /// </summary>
     [YamlIgnore]
-    public int? RetryCount
+    public Conditioned<int>? RetryCount
     {
-        get => GetInt("retryCount");
+        get => GetConditioned<int>("retryCount");
         init => SetProperty("retryCount", value);
     }
 
@@ -105,9 +106,9 @@ public record CopyFilesTask : AzureDevOpsTask
     /// Defaults to <code>1000</code>.
     /// </summary>
     [YamlIgnore]
-    public int? DelayBetweenRetries
+    public Conditioned<int>? DelayBetweenRetries
     {
-        get => GetInt("delayBetweenRetries");
+        get => GetConditioned<int>("delayBetweenRetries");
         init => SetProperty("delayBetweenRetries", value);
     }
 
@@ -117,9 +118,9 @@ public record CopyFilesTask : AzureDevOpsTask
     /// Defaults to <code>false</code>.
     /// </summary>
     [YamlIgnore]
-    public bool IgnoreMakeDirErrors
+    public Conditioned<bool>? IgnoreMakeDirErrors
     {
-        get => GetBool("ignoreMakeDirErrors", false);
+        get => GetConditioned<bool>("ignoreMakeDirErrors");
         init => SetProperty("ignoreMakeDirErrors", value);
     }
 

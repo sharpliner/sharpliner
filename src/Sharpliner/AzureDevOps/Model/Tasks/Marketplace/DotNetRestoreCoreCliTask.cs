@@ -1,4 +1,5 @@
 ﻿using System;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 using static Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder;
 
@@ -35,9 +36,9 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     /// Argument aliases: packagesDirectory
     /// </summary>
     [YamlIgnore]
-    public string? RestoreDirectory
+    public Conditioned<string>? RestoreDirectory
     {
-        get => GetString(RestoreDirectoryProperty);
+        get => GetConditioned<string>(RestoreDirectoryProperty);
         init => SetProperty(RestoreDirectoryProperty, value);
     }
 
@@ -45,9 +46,9 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     /// Write the additional arguments to be passed to the restore command.
     /// </summary>
     [YamlIgnore]
-    public string? RestoreArguments
+    public Conditioned<string>? RestoreArguments
     {
-        get => GetString(RestoreArgumentsProperty);
+        get => GetConditioned<string>(RestoreArgumentsProperty);
         init => SetProperty(RestoreArgumentsProperty, value);
     }
 
@@ -56,9 +57,9 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     /// quiet, minimal, normal, detailed, diagnostic
     /// </summary>
     [YamlIgnore]
-    public BuildVerbosity VerbosityRestore
+    public Conditioned<BuildVerbosity>? VerbosityRestore
     {
-        get => GetEnum(VerbosityRestoreProperty, BuildVerbosity.Normal);
+        get => GetConditioned<BuildVerbosity>(VerbosityRestoreProperty);
         init => SetProperty(VerbosityRestoreProperty, value);
     }
 
@@ -66,9 +67,9 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     /// Prevents NuGet from using packages from local machine caches
     /// </summary>
     [YamlIgnore]
-    public bool NoCache
+    public Conditioned<bool>? NoCache
     {
-        get => GetBool(NoCacheProperty, false);
+        get => GetConditioned<bool>(NoCacheProperty);
         init => SetProperty(NoCacheProperty, value);
     }
 
@@ -76,9 +77,9 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     /// Include NuGet.org in the generated NuGet.config000 0.
     /// </summary>
     [YamlIgnore]
-    public bool? IncludeNuGetOrg
+    public Conditioned<bool>? IncludeNuGetOrg
     {
-        get => GetBool(IncludeNuGetOrgProperty, false);
+        get => GetConditioned<bool>(IncludeNuGetOrgProperty);
         init => SetProperty(IncludeNuGetOrgProperty, value);
     }
 
@@ -86,9 +87,9 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     /// The NuGet.config in your repository that specifies the feeds from which to restore packages.
     /// </summary>
     [YamlIgnore]
-    public string? NuGetConfigPath
+    public Conditioned<string>? NuGetConfigPath
     {
-        get => GetString(NugetConfigPathProperty);
+        get => GetConditioned<string>(NugetConfigPathProperty);
         init
         {
             var feedsToUse = GetString(FeedsToUseProperty);
@@ -107,14 +108,14 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
 
     /// <summary>
     /// Credentials to use for external registries located in the selected NuGet.config.
-    /// For feeds in this organization/collection, leave this blank; the build’s credentials are used automatically
+    /// For feeds in this organization/collection, leave this blank; the build's credentials are used automatically
     ///
     /// Argument aliases: externalEndpoints
     /// </summary>
     [YamlIgnore]
-    public string? ExternalFeedCredentials
+    public Conditioned<string>? ExternalFeedCredentials
     {
-        get => GetString(ExternalFeedCredentialsProperty);
+        get => GetConditioned<string>(ExternalFeedCredentialsProperty);
         init => SetProperty(ExternalFeedCredentialsProperty, value);
     }
 }

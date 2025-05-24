@@ -35,7 +35,10 @@ public class GettingStartedTests : AzureDevOpsDefinition
                     Steps =
                     [
                         If.IsPullRequest
-                            .Step(Powershell.Inline("Write-Host 'Hello-World'").DisplayAs("Hello world")),
+                            .Step(Powershell.Inline(
+                                    "Write-Host 'Hello'",
+                                    "Write-Host 'World'")
+                                .DisplayAs("Hello world")),
 
                         DotNet.Install
                             .Sdk(DotnetVersion)
@@ -88,7 +91,8 @@ public class GettingStartedTests : AzureDevOpsDefinition
               steps:
               - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
                 - powershell: |-
-                    Write-Host 'Hello-World'
+                    Write-Host 'Hello'
+                    Write-Host 'World'
                   displayName: Hello world
 
               - task: UseDotNet@2

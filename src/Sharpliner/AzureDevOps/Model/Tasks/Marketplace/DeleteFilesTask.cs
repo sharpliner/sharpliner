@@ -1,4 +1,5 @@
-﻿using YamlDotNet.Serialization;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
@@ -12,9 +13,9 @@ public record DeleteFilesTask : AzureDevOpsTask
     /// If the source folder is empty, the task deletes files from the root folder of the repository as though $(Build.SourcesDirectory) was specified.
     /// </summary>
     [YamlIgnore]
-    public string? SourceFolder
+    public Conditioned<string>? SourceFolder
     {
-        get => GetString("SourceFolder");
+        get => GetConditioned<string>("SourceFolder");
         init => SetProperty("SourceFolder", value);
     }
 
@@ -23,9 +24,9 @@ public record DeleteFilesTask : AzureDevOpsTask
     /// Defaults to <code>myFileShare</code>.
     /// </summary>
     [YamlIgnore]
-    public string? Contents
+    public Conditioned<string>? Contents
     {
-        get => GetString("Contents");
+        get => GetConditioned<string>("Contents");
         init => SetProperty("Contents", value);
     }
 
@@ -33,9 +34,9 @@ public record DeleteFilesTask : AzureDevOpsTask
     /// Attempts to remove the source folder after attempting to remove Contents. If you want to remove the whole folder, set this to true and set Contents to *.
     /// </summary>
     [YamlIgnore]
-    public bool RemoveSourceFolder
+    public Conditioned<bool>? RemoveSourceFolder
     {
-        get => GetBool("RemoveSourceFolder", false);
+        get => GetConditioned<bool>("RemoveSourceFolder");
         init => SetProperty("RemoveSourceFolder", value);
     }
 
@@ -43,9 +44,9 @@ public record DeleteFilesTask : AzureDevOpsTask
     /// Deletes files starting with a dot.
     /// </summary>
     [YamlIgnore]
-    public bool RemoveDotFiles
+    public Conditioned<bool>? RemoveDotFiles
     {
-        get => GetBool("RemoveDotFiles", false);
+        get => GetConditioned<bool>("RemoveDotFiles");
         init => SetProperty("RemoveDotFiles", value);
     }
 

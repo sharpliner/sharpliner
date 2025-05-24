@@ -277,9 +277,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Defaults to false.
     /// </summary>
     [YamlIgnore]
-    public bool PreferTriggeringPipeline
+    public Conditioned<bool>? PreferTriggeringPipeline
     {
-        get => GetBool(PreferTriggeringPipelineProperty, false);
+        get => GetConditioned<bool>(PreferTriggeringPipelineProperty);
         init => SetProperty(PreferTriggeringPipelineProperty, value);
     }
 
@@ -288,9 +288,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Defaults to false.
     /// </summary>
     [YamlIgnore]
-    public bool AllowPartiallySucceededBuilds
+    public Conditioned<bool>? AllowPartiallySucceededBuilds
     {
-        get => GetBool(AllowPartiallySucceededBuildsProperty, false);
+        get => GetConditioned<bool>(AllowPartiallySucceededBuildsProperty);
         init => SetProperty(AllowPartiallySucceededBuildsProperty, value);
     }
 
@@ -299,9 +299,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Defaults to false.
     /// </summary>
     [YamlIgnore]
-    public bool AllowFailedBuilds
+    public Conditioned<bool>? AllowFailedBuilds
     {
-        get => GetBool(AllowFailedBuildsProperty, false);
+        get => GetConditioned<bool>(AllowFailedBuildsProperty);
         init => SetProperty(AllowFailedBuildsProperty, value);
     }
 
@@ -310,9 +310,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Defaults to false.
     /// </summary>
     [YamlIgnore]
-    public bool CheckDownloadedFiles
+    public Conditioned<bool>? CheckDownloadedFiles
     {
-        get => GetBool(CheckDownloadedFilesProperty, false);
+        get => GetConditioned<bool>(CheckDownloadedFilesProperty);
         init => SetProperty(CheckDownloadedFilesProperty, value);
     }
 

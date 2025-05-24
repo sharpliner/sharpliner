@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
@@ -32,8 +31,7 @@ public abstract record Step
     /// Whether to run this step; defaults to 'true'.
     /// </summary>
     [YamlMember(Order = 175)]
-    [DefaultValue(true)]
-    public bool Enabled { get; init; } = true;
+    public Conditioned<bool>? Enabled { get; init; }
 
     /// <summary>
     /// Condition that must be met to run this step.

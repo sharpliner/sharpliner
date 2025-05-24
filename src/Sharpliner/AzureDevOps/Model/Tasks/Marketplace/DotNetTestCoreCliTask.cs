@@ -1,4 +1,5 @@
-﻿using YamlDotNet.Serialization;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
@@ -18,9 +19,9 @@ public record DotNetTestCoreCliTask : DotNetCoreCliTask
     /// Provides a name for the test run
     /// </summary>
     [YamlIgnore]
-    public string? TestRunTitle
+    public Conditioned<string>? TestRunTitle
     {
-        get => GetString("testRunTitle");
+        get => GetConditioned<string>("testRunTitle");
         init => SetProperty("testRunTitle", value);
     }
 
@@ -32,9 +33,9 @@ public record DotNetTestCoreCliTask : DotNetCoreCliTask
     /// This is currently only available on the Windows platform.
     /// </summary>
     [YamlIgnore]
-    public bool PublishTestResults
+    public Conditioned<bool>? PublishTestResults
     {
-        get => GetBool("publishTestResults", false);
+        get => GetConditioned<bool>("publishTestResults");
         init => SetProperty("publishTestResults", value);
     }
 }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Core;
-using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -26,21 +25,14 @@ public interface IDependsOn
 /// <summary>
 /// Represents dependencies between stages/jobs.
 /// </summary>
-public class DependsOn : ConditionedList<string>, IYamlConvertible
+/// <param name="values">The values to initialize the instance with.</param>
+public class DependsOn(params string[] values) : ConditionedList<string>(values), IYamlConvertible
 {
-    /// <summary>
-    /// Initializes a new instance of the <see cref="DependsOn"/> class.
-    /// </summary>
-    /// <param name="values">The values to initialize the instance with.</param>
-    public DependsOn(params string[] values) : base(values)
-    {
-    }
-
     /// <summary>
     /// Implicitly converts a string to a single dependency.
     /// </summary>
     /// <param name="value">The dependency name.</param>
-    public static implicit operator DependsOn(string value) => new DependsOn { value };
+    public static implicit operator DependsOn(string value) => [value];
 
     /// <summary>
     /// Implicitly converts a <see cref="ParameterReference"/> to a dependencies list.

@@ -1,4 +1,5 @@
-﻿using YamlDotNet.Serialization;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
@@ -14,9 +15,9 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Default value: $(System.DefaultWorkingDirectory).
     /// </summary>
     [YamlIgnore]
-    public string? DownloadDirectory
+    public Conditioned<string>? DownloadDirectory
     {
-        get => GetString("downloadDirectory");
+        get => GetConditioned<string>("downloadDirectory");
         init => SetProperty("downloadDirectory", value);
     }
 
@@ -27,9 +28,9 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Default value: internal.
     /// </summary>
     [YamlIgnore]
-    public string? FeedsToUse
+    public Conditioned<string>? FeedsToUse
     {
-        get => GetString("feedsToUse");
+        get => GetConditioned<string>("feedsToUse");
         init => SetProperty("feedsToUse", value);
     }
 
@@ -38,9 +39,9 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Optional. Use when feedsToUse = external and command = download
     /// </summary>
     [YamlIgnore]
-    public string? ExternalFeedCredentials
+    public Conditioned<string>? ExternalFeedCredentials
     {
-        get => GetString("externalFeedCredentials");
+        get => GetConditioned<string>("externalFeedCredentials");
         init => SetProperty("externalFeedCredentials", value);
     }
 
@@ -50,9 +51,9 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Required when feedsToUse = internal and command = download
     /// </summary>
     [YamlIgnore]
-    public string? VstsFeed
+    public Conditioned<string>? VstsFeed
     {
-        get => GetString("vstsFeed");
+        get => GetConditioned<string>("vstsFeed");
         init => SetProperty("vstsFeed", value);
     }
 
@@ -61,9 +62,9 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Required when feedsToUse = internal and command = download.
     /// </summary>
     [YamlIgnore]
-    public string? VstsFeedPackage
+    public Conditioned<string>? VstsFeedPackage
     {
-        get => GetString("vstsFeedPackage");
+        get => GetConditioned<string>("vstsFeedPackage");
         init => SetProperty("vstsFeedPackage", value);
     }
 
@@ -73,9 +74,9 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Required when feedsToUse = internal and command = download.
     /// </summary>
     [YamlIgnore]
-    public string? VstsPackageVersion
+    public Conditioned<string>? VstsPackageVersion
     {
-        get => GetString("vstsPackageVersion");
+        get => GetConditioned<string>("vstsPackageVersion");
         init => SetProperty("vstsPackageVersion", value);
     }
 
@@ -85,9 +86,9 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Required when feedsToUse = external and command = download.
     /// </summary>
     [YamlIgnore]
-    public string? FeedDownloadExternal
+    public Conditioned<string>? FeedDownloadExternal
     {
-        get => GetString("feedDownloadExternal");
+        get => GetConditioned<string>("feedDownloadExternal");
         init => SetProperty("feedDownloadExternal", value);
     }
 
@@ -96,9 +97,9 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Required when feedsToUse = external and command = download.
     /// </summary>
     [YamlIgnore]
-    public string? PackageDownloadExternal
+    public Conditioned<string>? PackageDownloadExternal
     {
-        get => GetString("packageDownloadExternal");
+        get => GetConditioned<string>("packageDownloadExternal");
         init => SetProperty("packageDownloadExternal", value);
     }
 
@@ -109,9 +110,9 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Required when feedsToUse = external and command = download.
     /// </summary>
     [YamlIgnore]
-    public string? VersionDownloadExternal
+    public Conditioned<string>? VersionDownloadExternal
     {
-        get => GetString("versionDownloadExternal");
+        get => GetConditioned<string>("versionDownloadExternal");
         init => SetProperty("versionDownloadExternal", value);
     }
 

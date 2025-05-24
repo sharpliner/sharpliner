@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
@@ -34,21 +33,20 @@ public abstract record PackageResource
     /// &lt;Repository&gt;/&lt;Name of the package&gt;
     /// </summary>
     [DisallowNull]
-    public string Name { get; init; }
+    public Conditioned<string> Name { get; init; }
 
     /// <summary>
     /// Version of the packge to consume
     /// Optional, defaults to latest
     /// </summary>
     [DisallowNull]
-    [DefaultValue("latest")]
-    public string? Version { get; init; } = "latest";
+    public Conditioned<string>? Version { get; init; }
 
     /// <summary>
     /// To enable automated triggers (true/false)
     /// Optional, defaults to no triggers
     /// </summary>
-    public bool Trigger { get; init; }
+    public Conditioned<bool>? Trigger { get; init; }
 
     /// <summary>
     /// Creates a new instance of the <see cref="PackageResource"/> class.

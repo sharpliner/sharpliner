@@ -38,6 +38,7 @@
       externals: true
       tasks: true
       tools: true
+      work: false
 
   - container: ubuntu-latest
     image: ubuntu:22:04
@@ -46,6 +47,7 @@
       externals: true
       tasks: true
       tools: true
+      work: true
 
   - container: $(image)
     options: --gpus all --shm-size=512m

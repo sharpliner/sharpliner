@@ -45,7 +45,7 @@ public record BuildResource
     /// Triggers aren't enabled by default and should be explicitly set
     /// </summary>
     [DisallowNull]
-    public bool Trigger { get; init; } = false;
+    public Conditioned<bool>? Trigger { get; init; } = false;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BuildResource"/> class with the specified identifier.
