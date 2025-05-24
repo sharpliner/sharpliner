@@ -1,0 +1,4 @@
+﻿task: UniversalPackages@0
+
+inputs:
+  command: publish

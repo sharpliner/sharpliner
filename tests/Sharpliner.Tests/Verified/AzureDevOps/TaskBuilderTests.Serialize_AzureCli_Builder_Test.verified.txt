@@ -1,0 +1,43 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: connectedServiceNameARM
+      scriptType: ps
+      scriptLocation: scriptPath
+      scriptPath: foo.ps1
+
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: connectedServiceNameARM
+      scriptType: ps
+      scriptLocation: inlineScript
+      inlineScript: |+
+        Set-ErrorActionPreference Stop
+        Write-Host "Lorem ipsum dolor sit amet"
+
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: connectedServiceNameARM
+      scriptType: ps
+      scriptLocation: inlineScript
+      inlineScript: |+
+        Set-ErrorActionPreference Stop
+        Write-Host "Lorem ipsum dolor sit amet"
+
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: connectedServiceNameARM
+      scriptType: ps
+      scriptLocation: inlineScript
+      inlineScript: |+
+        Set-ErrorActionPreference Stop
+        Write-Host "Lorem ipsum dolor sit amet"
+
+  - task: AzureCLI@2
+    inputs:
+      azureSubscription: connectedServiceNameARM
+      scriptType: ps
+      scriptLocation: inlineScript
+      inlineScript: Write-Host "test"

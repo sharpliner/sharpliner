@@ -5,14 +5,20 @@
 
   - checkout: self
     lfs: true
+    persistCredentials: true
     submodules: false
     path: $(Build.SourcesDirectory)/local
-    persistCredentials: true
 
   - checkout: self
     displayName: Checkout shallow self
     submodules: true
     path: $(Build.SourcesDirectory)/local-shallow
+
+  - checkout: self
+    displayName: Checkout sparse self
+    path: $(Build.SourcesDirectory)/local-sparse
+    sparseCheckoutDirectories: src/Sharpliner
+    workspaceRepo: true
 
   - checkout: https://github.com/sharpliner/sharpliner.git
     clean: true
