@@ -64,7 +64,7 @@ public class GettingStartedTests : AzureDevOpsDefinition
         var pipeline = new TestPipeline();
         var yaml = pipeline.Serialize();
         yaml.Trim().Should().Be(
-        #region single-stage-pipeline-example-yaml
+#region single-stage-pipeline-example-yaml
             """
             pr:
               branches:
@@ -114,7 +114,7 @@ public class GettingStartedTests : AzureDevOpsDefinition
                   command: test
                   projects: src/MyProject.sln
             """
-        #endregion
+#endregion
         );
     }
 
