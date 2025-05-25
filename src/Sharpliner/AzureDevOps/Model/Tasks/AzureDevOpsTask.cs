@@ -141,6 +141,11 @@ public record AzureDevOpsTask : Step
         }
     }
 
+    /// <summary>
+    /// Sets the value of a input parameter, supporting various expressions such as variables and parameters.
+    /// </summary>
+    /// <param name="name">The name of the input parameter.</param>
+    /// <param name="value">The value to set.</param>
     protected void SetProperty<T>(string name, Conditioned<T>? value)
     {
         if (value == null)
