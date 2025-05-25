@@ -30,7 +30,7 @@
       project: internal
       pipeline: 23
       runBranch: refs/heads/develop
-      path: $(Build.ArtifactStagingDirectory)
+      path: ${{ variables['Build.ArtifactStagingDirectory'] }}
       allowFailedBuilds: true
       checkDownloadedFiles: true
       preferTriggeringPipeline: true

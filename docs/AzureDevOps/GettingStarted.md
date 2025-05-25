@@ -79,7 +79,7 @@ Check out the [full reference with tips](./DefinitionReference.md) so that you c
 An example of a pipeline that builds and tests your PR can look like this:
 
 ```csharp
-private static readonly Variable DotnetVersion = new Variable("DotnetVersion", string.Empty);
+private static readonly Variable DotnetVersion = new("DotnetVersion", string.Empty);
 
 public override SingleStagePipeline Pipeline => new()
 {
@@ -187,7 +187,7 @@ jobs:
     displayName: Install .NET SDK
     inputs:
       packageType: sdk
-      version: $(DotnetVersion)
+      version: ${{ variables['DotnetVersion'] }}
 
   - task: DotNetCoreCLI@2
     displayName: Build

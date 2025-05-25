@@ -145,6 +145,24 @@ public record Variable : VariableBase
     /// </summary>
     /// <param name="variable">The variable.</param>
     public static implicit operator InlineExpression(Variable variable) => new VariableReference(variable.Name);
+
+    /// <summary>
+    /// Converts a <see cref="Variable"/> to a <see cref="Conditioned"/> by getting the reference to the variable.
+    /// </summary>
+    /// <param name="variable">The variable.</param>
+    public static implicit operator Conditioned<string>(Variable variable) => new VariableReference(variable.Name);
+
+    /// <summary>
+    /// Converts a <see cref="Variable"/> to a <see cref="Conditioned"/> by getting the reference to the variable.
+    /// </summary>
+    /// <param name="variable">The variable.</param>
+    public static implicit operator Conditioned<int>(Variable variable) => new VariableReference(variable.Name);
+
+    /// <summary>
+    /// Converts a <see cref="Variable"/> to a <see cref="Conditioned"/> by getting the reference to the variable.
+    /// </summary>
+    /// <param name="variable">The variable.</param>
+    public static implicit operator Conditioned<bool>(Variable variable) => new VariableReference(variable.Name);
 }
 
 /// <summary>

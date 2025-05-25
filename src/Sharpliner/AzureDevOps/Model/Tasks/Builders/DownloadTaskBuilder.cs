@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
@@ -125,11 +126,11 @@ public class DownloadTaskBuilder
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/file-matching-patterns?view=azure-devops">file matching patterns</see>.
     /// </param>
     public SpecificDownloadTask SpecificBuild(
-        string project,
-        int definition,
-        int buildId,
-        string? artifact = null,
-        string? path = null,
+        Conditioned<string> project,
+        Conditioned<int> definition,
+        Conditioned<int> buildId,
+        Conditioned<string>? artifact = null,
+        Conditioned<string>? path = null,
         IEnumerable<string>? patterns = null)
         =>
         new(RunVersion.Specific, project, definition)
@@ -137,7 +138,7 @@ public class DownloadTaskBuilder
             BuildId = buildId,
             Artifact = artifact,
             Path = path,
-            Patterns = patterns?.ToList()
+            Patterns = patterns?.ToList(),
         };
 
     /// <summary>
@@ -197,11 +198,11 @@ public class DownloadTaskBuilder
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/file-matching-patterns?view=azure-devops">file matching patterns</see>.
     /// </param>
     public SpecificDownloadTask LatestFromBranch(
-        string project,
-        int definition,
-        string? branchName = null,
-        string? artifact = null,
-        string? path = null,
+        Conditioned<string> project,
+        Conditioned<int> definition,
+        Conditioned<string>? branchName = null,
+        Conditioned<string>? artifact = null,
+        Conditioned<string>? path = null,
         IEnumerable<string>? patterns = null)
         =>
         new(RunVersion.LatestFromBranch, project, definition)
@@ -209,7 +210,7 @@ public class DownloadTaskBuilder
             BranchName = branchName,
             Artifact = artifact,
             Path = path,
-            Patterns = patterns?.ToList()
+            Patterns = patterns?.ToList(),
         };
 
     /// <summary>
@@ -236,7 +237,7 @@ public class DownloadTaskBuilder
 
         if (patterns != null)
         {
-            task = task with { Patterns = patterns.ToList() };
+            task = task with { Patterns = [.. patterns] };
         }
 
         return task;

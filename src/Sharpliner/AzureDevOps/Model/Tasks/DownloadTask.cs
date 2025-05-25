@@ -125,7 +125,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// <param name="runVersion">The build version to download.</param>
     /// <param name="project">The project GUID from which to download the pipeline artifacts.</param>
     /// <param name="pipeline">The definition ID of the build pipeline.</param>
-    public SpecificDownloadTask(RunVersion runVersion, string project, int pipeline)
+    public SpecificDownloadTask(Conditioned<RunVersion> runVersion, Conditioned<string> project, Conditioned<int> pipeline)
         : base("DownloadPipelineArtifact@2")
     {
         RunVersion = runVersion;
@@ -137,9 +137,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// The name of the artifact to download. If left empty, all artifacts associated to the pipeline run will be downloaded.
     /// </summary>
     [YamlIgnore]
-    public string? Artifact
+    public Conditioned<string>? Artifact
     {
-        get => GetString(ArtifactProperty);
+        get => GetConditioned<string>(ArtifactProperty);
         init => SetProperty(ArtifactProperty, value);
     }
 
@@ -154,9 +154,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// </para>
     /// </summary>
     [YamlIgnore]
-    public string? Path
+    public Conditioned<string>? Path
     {
-        get => GetString(PathProperty);
+        get => GetConditioned<string>(PathProperty);
         init => SetProperty(PathProperty, value);
     }
 
@@ -176,9 +176,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// The project GUID from which to download the pipeline artifacts.
     /// </summary>
     [YamlIgnore]
-    public string Project
+    public Conditioned<string> Project
     {
-        get => GetString(ProjectProperty) ?? throw new NullReferenceException();
+        get => GetConditioned<string>(ProjectProperty) ?? throw new NullReferenceException();
         private init => SetProperty(ProjectProperty, value);
     }
 
@@ -186,19 +186,19 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// The definition ID of the build pipeline.
     /// </summary>
     [YamlIgnore]
-    public int Pipeline
+    public Conditioned<int>? Pipeline
     {
-        get => GetInt(PipelineProperty) ?? 0;
-        private init => SetProperty(PipelineProperty, value.ToString());
+        get => GetConditioned<int>(PipelineProperty);
+        private init => SetProperty(PipelineProperty, value);
     }
 
     /// <summary>
     /// The build version to download.
     /// </summary>
     [YamlIgnore]
-    public RunVersion RunVersion
+    public Conditioned<RunVersion>? RunVersion
     {
-        get => GetEnum(RunVersionProperty, RunVersion.Latest);
+        get => GetConditioned<RunVersion>(RunVersionProperty);
         internal init => SetProperty(RunVersionProperty, value);
     }
 
@@ -208,9 +208,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Argument aliases: branchName
     /// </summary>
     [YamlIgnore]
-    public string? RunBranch
+    public Conditioned<string>? RunBranch
     {
-        get => GetString(RunBranchProperty);
+        get => GetConditioned<string>(RunBranchProperty);
         internal init => SetProperty(RunBranchProperty, value);
     }
 
@@ -220,9 +220,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Argument aliases: runBranch
     /// </summary>
     [YamlIgnore]
-    public string? BranchName
+    public Conditioned<string>? BranchName
     {
-        get => GetString(RunBranchProperty);
+        get => GetConditioned<string>(RunBranchProperty);
         internal init => SetProperty(RunBranchProperty, value);
     }
 
@@ -232,7 +232,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Argument aliases: pipelineId, buildId
     /// </summary>
     [YamlIgnore]
-    public int RunId
+    public Conditioned<int> RunId
     {
         get => GetInt(RunIdProperty) ?? 0;
         internal init => SetProperty(RunIdProperty, value);
@@ -244,7 +244,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Argument aliases: runId, buildId
     /// </summary>
     [YamlIgnore]
-    public int PipelineId
+    public Conditioned<int> PipelineId
     {
         get => GetInt(RunIdProperty) ?? 0;
         internal init => SetProperty(RunIdProperty, value);
@@ -256,7 +256,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Argument aliases: runId, pipelineId
     /// </summary>
     [YamlIgnore]
-    public int BuildId
+    public Conditioned<int> BuildId
     {
         get => GetInt(RunIdProperty) ?? 0;
         internal init => SetProperty(RunIdProperty, value);
@@ -321,9 +321,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Defaults to 4.
     /// </summary>
     [YamlIgnore]
-    public int RetryDownloadCount
+    public Conditioned<int> RetryDownloadCount
     {
-        get => GetInt(RetryDownloadCountProperty) ?? 0;
+        get => GetConditioned<int>(RetryDownloadCountProperty) ?? 0;
         init => SetProperty(RetryDownloadCountProperty, value);
     }
 }

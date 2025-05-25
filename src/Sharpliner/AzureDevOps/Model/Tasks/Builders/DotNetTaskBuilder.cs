@@ -1,4 +1,6 @@
-﻿namespace Sharpliner.AzureDevOps.Tasks;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+
+namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
 /// Builder for creating a dotnet task using the <c>DotNetCoreCLI</c> task and <c>UseDotNet</c>.
@@ -75,7 +77,7 @@ public class DotNetTaskBuilder
     /// <param name="includeNuGetOrg">Include nuget.org in package sources?</param>
     /// <param name="arguments">Additional arguments</param>
     /// <returns>A new instance of the <see cref="DotNetBuildCoreCliTask"/> with the specified arguments</returns>
-    public DotNetBuildCoreCliTask Build(string projects, bool? includeNuGetOrg = null, string? arguments = null) => new()
+    public DotNetBuildCoreCliTask Build(Conditioned<string> projects, Conditioned<bool>? includeNuGetOrg = null, Conditioned<string>? arguments = null) => new()
     {
         Projects = projects,
         Arguments = arguments,
@@ -127,7 +129,7 @@ public class DotNetTaskBuilder
     /// </param>
     /// <param name="arguments">Additional arguments</param>
     /// <returns>A new instance of <see cref="DotNetPackCoreCliTask"/> with the specified values.</returns>
-    public DotNetPackCoreCliTask Pack(string? packagesToPack = "**/*.csproj", string? arguments = null) => new()
+    public DotNetPackCoreCliTask Pack(Conditioned<string>? packagesToPack, Conditioned<string>? arguments = null) => new()
     {
         PackagesToPack = packagesToPack,
         Arguments = arguments,
@@ -177,7 +179,7 @@ public class DotNetTaskBuilder
     /// </param>
     /// <param name="arguments">Additional arguments</param>
     /// <returns>A new instance of <see cref="DotNetPublishCoreCliTask"/> with the specified values.</returns>
-    public DotNetPublishCoreCliTask Publish(string projects, bool publishWebProjects = true, string? arguments = null) => new()
+    public DotNetPublishCoreCliTask Publish(Conditioned<string> projects, Conditioned<bool>? publishWebProjects = null, Conditioned<string>? arguments = null) => new()
     {
         Projects = projects,
         Arguments = arguments,
@@ -211,6 +213,7 @@ public class DotNetTaskBuilder
     /// </summary>
     /// <param name="packagesToPush">The pattern to match or path to nupkg files to be uploaded
     /// Multiple patterns can be separated by a semicolon, and you can make a pattern negative by prefixing it with <c>!</c>.
+    /// Default: $(Build.ArtifactStagingDirectory)/*.nupkg.
     /// <para>
     /// Example: <c>**/*.nupkg;!**/*.Tests.nupkg</c>.
     /// </para>
@@ -220,7 +223,7 @@ public class DotNetTaskBuilder
     /// </param>
     /// <param name="arguments">Additional arguments</param>
     /// <returns>A new instance of <see cref="DotNetPushCoreCliTask"/> with the specified values.</returns>
-    public DotNetPushCoreCliTask Push(string packagesToPush = "$(Build.ArtifactStagingDirectory)/*.nupkg", string? arguments = null) => new()
+    public DotNetPushCoreCliTask Push(Conditioned<string>? packagesToPush = null, Conditioned<string>? arguments = null) => new()
     {
         PackagesToPush = packagesToPush,
         Arguments = arguments,
@@ -254,7 +257,7 @@ public class DotNetTaskBuilder
     /// <param name="projects">Projects to test</param>
     /// <param name="arguments">Additional arguments</param>
     /// <returns>A new instance of <see cref="DotNetTestCoreCliTask"/> with the specified values.</returns>
-    public DotNetTestCoreCliTask Test(string projects, string? arguments = null) => new()
+    public DotNetTestCoreCliTask Test(Conditioned<string> projects, Conditioned<string>? arguments = null) => new()
     {
         Projects = projects,
         Arguments = arguments,
@@ -288,7 +291,7 @@ public class DotNetTaskBuilder
     /// <param name="arguments">Additional arguments for the call</param>
     /// <param name="inputs">Additional arguments defined by the DotNetCoreCLI task</param>
     /// <returns>A new instance of <see cref="Step"/> and not something more specific so that user cannot override Inputs</returns>
-    public Step CustomCommand(string command, string? arguments = null, TaskInputs? inputs = null)
+    public Step CustomCommand(string command, Conditioned<string>? arguments = null, TaskInputs? inputs = null)
     {
         var orderedInputs = new TaskInputs()
             {
@@ -357,7 +360,8 @@ public class DotNetTaskBuilder
         /// This setting is ignored if you specify an exact version, such as: 3.0.100-preview3-010431
         /// </para>
         /// </param>
-        public UseDotNetTask Sdk(string version, bool includePreviewVersions = false) => new(DotNetPackageType.Sdk, version, includePreviewVersions);
+        public UseDotNetTask Sdk(Conditioned<string> version, Conditioned<bool>? includePreviewVersions = null)
+            => new(DotNetPackageType.Sdk, version, includePreviewVersions);
 
         /// <summary>
         /// <para>
@@ -397,7 +401,8 @@ public class DotNetTaskBuilder
         /// This setting is ignored if you specify an exact version, such as: 3.0.100-preview3-010431
         /// </para>
         /// </param>
-        public UseDotNetTask Runtime(string version, bool includePreviewVersions = false) => new(DotNetPackageType.Runtime, version, includePreviewVersions);
+        public UseDotNetTask Runtime(Conditioned<string> version, Conditioned<bool>? includePreviewVersions = null)
+            => new(DotNetPackageType.Runtime, version, includePreviewVersions);
 
         /// <summary>
         /// <para>
@@ -432,7 +437,7 @@ public class DotNetTaskBuilder
         /// Current working directory where the script is run.
         /// Empty is the root of the repo (build) or artifacts (release), which is <c>$(System.DefaultWorkingDirectory)</c>
         /// </param>
-        public UseDotNetTask FromGlobalJson(string? workingDirectory = null) => new()
+        public UseDotNetTask FromGlobalJson(Conditioned<string>? workingDirectory = null) => new()
         {
             UseGlobalJson = true,
             WorkingDirectory = workingDirectory,
@@ -476,7 +481,7 @@ public class DotNetTaskBuilder
         /// <param name="projects">
         /// The path to the csproj file(s) to use You can use wildcards (e.g. <c>**/*.csproj</c> for all .csproj files in all subfolders)
         /// </param>
-        public DotNetRestoreCoreCliTask Projects(string projects) => new()
+        public DotNetRestoreCoreCliTask Projects(Conditioned<string> projects) => new()
         {
             Projects = projects,
         };
@@ -524,14 +529,14 @@ public class DotNetTaskBuilder
         /// </para>
         /// </param>
         /// <param name="includeNuGetOrg">Include NuGet.org in the generated NuGet.config</param>
-        public DotNetRestoreCoreCliTask FromFeed(string feed, bool? includeNuGetOrg = null) => new()
+        public DotNetRestoreCoreCliTask FromFeed(string feed, Conditioned<bool>? includeNuGetOrg = null) => new()
         {
             IncludeNuGetOrg = includeNuGetOrg,
             Inputs =
-                {
-                    { DotNetRestoreCoreCliTask.FeedsToUseProperty, DotNetRestoreCoreCliTask.FeedsRestoreValue },
-                    { DotNetRestoreCoreCliTask.FeedRestoreProperty, feed },
-                }
+            {
+                { DotNetRestoreCoreCliTask.FeedsToUseProperty, DotNetRestoreCoreCliTask.FeedsRestoreValue },
+                { DotNetRestoreCoreCliTask.FeedRestoreProperty, feed },
+            }
         };
 
         /// <summary>
@@ -559,10 +564,10 @@ public class DotNetTaskBuilder
         public DotNetRestoreCoreCliTask FromNuGetConfig(string nugetConfigPath) => new()
         {
             Inputs =
-                {
-                    { DotNetRestoreCoreCliTask.FeedsToUseProperty, DotNetRestoreCoreCliTask.ConfigRestoreValue },
-                    { DotNetRestoreCoreCliTask.NugetConfigPathProperty, nugetConfigPath },
-                }
+            {
+                { DotNetRestoreCoreCliTask.FeedsToUseProperty, DotNetRestoreCoreCliTask.ConfigRestoreValue },
+                { DotNetRestoreCoreCliTask.NugetConfigPathProperty, nugetConfigPath },
+            }
         };
     }
 }

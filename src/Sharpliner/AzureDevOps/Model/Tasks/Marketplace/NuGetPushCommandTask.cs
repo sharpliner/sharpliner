@@ -85,7 +85,7 @@ public record NuGetPushInternalCommandTask : NuGetPushCommandTask
     /// Initializes a new instance of the <see cref="NuGetPushInternalCommandTask"/> class.
     /// </summary>
     /// <param name="publishVstsFeed">Specifies a feed hosted in this account. You must have Azure Artifacts installed and licensed to select a feed here.</param>
-    public NuGetPushInternalCommandTask(string publishVstsFeed) : base("internal")
+    public NuGetPushInternalCommandTask(Conditioned<string> publishVstsFeed) : base("internal")
     {
         PublishVstsFeed = publishVstsFeed;
     }
@@ -134,7 +134,7 @@ public record NuGetPushExternalCommandTask : NuGetPushCommandTask
     /// Initializes a new instance of the <see cref="NuGetPushExternalCommandTask"/> class.
     /// </summary>
     /// <param name="publishFeedCredentials">Specifies the NuGet service connection that contains the external NuGet server's credentials.</param>
-    public NuGetPushExternalCommandTask(string publishFeedCredentials) : base("external")
+    public NuGetPushExternalCommandTask(Conditioned<string> publishFeedCredentials) : base("external")
     {
         PublishFeedCredentials = publishFeedCredentials;
     }

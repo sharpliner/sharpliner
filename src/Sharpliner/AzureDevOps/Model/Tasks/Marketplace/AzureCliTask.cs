@@ -22,9 +22,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Required. Type of script. Select a bash or pscore script when running on Linux agent. Or, select a batch, ps, or pscore script when running on Windows agent. A pscore script can run on cross-platform agents (Linux, macOS, or Windows).
     /// </summary>
     [YamlIgnore]
-    public ScriptType ScriptType
+    public Conditioned<ScriptType>? ScriptType
     {
-        get => GetEnum("scriptType", ScriptType.Ps);
+        get => GetConditioned<ScriptType>("scriptType");
         init => SetProperty("scriptType", value);
     }
 
@@ -32,9 +32,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Required. Allowed values: inlineScript (Inline script), scriptPath (Script path). Default value: scriptPath.
     /// </summary>
     [YamlIgnore]
-    public ScriptLocation ScriptLocation
+    public Conditioned<ScriptLocation>? ScriptLocation
     {
-        get => GetEnum("scriptLocation", ScriptLocation.ScriptPath);
+        get => GetConditioned<ScriptLocation>("scriptLocation");
         init => SetProperty("scriptLocation", value);
     }
 
@@ -53,9 +53,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Prepends the line $ErrorActionPreference = 'VALUE' at the top of your PowerShell/PowerShell Core script.
     /// </summary>
     [YamlIgnore]
-    public PowerShellErrorActionPreference PowerShellErrorActionPreference
+    public Conditioned<PowerShellErrorActionPreference>? PowerShellErrorActionPreference
     {
-        get => GetEnum("powerShellErrorActionPreference", PowerShellErrorActionPreference.Stop);
+        get => GetConditioned<PowerShellErrorActionPreference>("powerShellErrorActionPreference");
         init => SetProperty("powerShellErrorActionPreference", value);
     }
 
@@ -133,8 +133,8 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
     /// <param name="scriptType">Type of script.</param>
     /// <param name="scriptLocation">Path to the script.</param>
-    public AzureCliTask(string azureSubscription, ScriptType scriptType, ScriptLocation scriptLocation)
-    : base("AzureCLI@2")
+    public AzureCliTask(Conditioned<string> azureSubscription, Conditioned<ScriptType> scriptType, Conditioned<ScriptLocation> scriptLocation)
+        : base("AzureCLI@2")
     {
         AzureSubscription = azureSubscription;
         ScriptType = scriptType;
@@ -166,8 +166,8 @@ public record InlineAzureCliTask : AzureCliTask
     /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
     /// <param name="scriptType">Type of script.</param>
     /// <param name="inlineScript">Lines of the script as a string.</param>
-    public InlineAzureCliTask(string azureSubscription, ScriptType scriptType, string inlineScript)
-    : base(azureSubscription, scriptType, ScriptLocation.InlineScript)
+    public InlineAzureCliTask(Conditioned<string> azureSubscription, Conditioned<ScriptType> scriptType, Conditioned<string> inlineScript)
+    : base(azureSubscription, scriptType, Tasks.ScriptLocation.InlineScript)
     {
         InlineScript = inlineScript;
     }
@@ -195,8 +195,8 @@ public record AzureCliFileTask : AzureCliTask
     /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
     /// <param name="scriptType">Type of script.</param>
     /// <param name="scriptPath">Path to the script.</param>
-    public AzureCliFileTask(string azureSubscription, ScriptType scriptType, string scriptPath)
-    : base(azureSubscription, scriptType, ScriptLocation.ScriptPath)
+    public AzureCliFileTask(Conditioned<string> azureSubscription, Conditioned<ScriptType> scriptType, Conditioned<string> scriptPath)
+    : base(azureSubscription, scriptType, Tasks.ScriptLocation.ScriptPath)
     {
         ScriptPath = scriptPath;
     }

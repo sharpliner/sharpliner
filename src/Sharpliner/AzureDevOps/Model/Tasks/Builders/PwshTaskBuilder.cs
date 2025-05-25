@@ -37,10 +37,10 @@ public class PwshTaskBuilder : TaskBuilderBase
     /// <param name="resourceFileName">Name of the resource file</param>
     /// <param name="displayName">Display name of the build step</param>
     /// <returns>A new instance of <see cref="InlinePwshTask"/> with the contents of the resource file</returns>
-    public InlinePwshTask FromResourceFile(string resourceFileName, string? displayName = null)
+    public InlinePwshTask FromResourceFile(string resourceFileName, Conditioned<string>? displayName = null)
         => new InlinePwshTask(GetResourceFile(Assembly.GetCallingAssembly()!, resourceFileName)) with
         {
-            DisplayName = displayName is null ? null! : new Conditioned<string>(displayName)
+            DisplayName = displayName!
         };
 
     /// <summary>
@@ -72,10 +72,10 @@ public class PwshTaskBuilder : TaskBuilderBase
     /// <param name="path">Path to the file</param>
     /// <param name="displayName">Display name of the build step</param>
     /// <returns>A new instance of <see cref="InlinePwshTask"/> with the contents of the file</returns>
-    public InlinePwshTask FromFile(string path, string? displayName = null)
+    public InlinePwshTask FromFile(string path, Conditioned<string>? displayName = null)
         => new InlinePwshTask(System.IO.File.ReadAllText(path)) with
         {
-            DisplayName = displayName is null ? null! : new Conditioned<string>(displayName)
+            DisplayName = displayName!
         };
 
     /// <summary>
@@ -103,10 +103,10 @@ public class PwshTaskBuilder : TaskBuilderBase
     /// <param name="filePath">Path to the file</param>
     /// <param name="displayName">Display name of the build step</param>
     /// <returns>A new instance of <see cref="PowershellFileTask"/> with the contents of the file</returns>
-    public PowershellFileTask File(string filePath, string? displayName = null)
+    public PowershellFileTask File(Conditioned<string> filePath, Conditioned<string>? displayName = null)
         => new PowershellFileTask(filePath, isPwsh: true) with
         {
-            DisplayName = displayName is null ? null! : new Conditioned<string>(displayName)
+            DisplayName = displayName!
         };
 
     /// <summary>

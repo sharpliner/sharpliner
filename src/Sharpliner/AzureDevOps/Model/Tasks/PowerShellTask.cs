@@ -115,7 +115,7 @@ public record PowershellFileTask : PowershellTask, IYamlConvertible
     /// <param name="filePath">The path to the script file.</param>
     /// <param name="isPwsh">Whether to use PowerShell Core.</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public PowershellFileTask(string filePath, bool isPwsh)
+    public PowershellFileTask(Conditioned<string> filePath, bool isPwsh)
     {
         FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
         _isPwsh = isPwsh;

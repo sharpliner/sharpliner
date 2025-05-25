@@ -37,10 +37,10 @@ public class PowershellTaskBuilder : TaskBuilderBase
     /// <param name="resourceFileName">Name of the resource file</param>
     /// <param name="displayName">Display name of the build step</param>
     /// <returns>A new instance of <see cref="InlinePowershellTask"/> with the contents of the resource file</returns>
-    public InlinePowershellTask FromResourceFile(string resourceFileName, string? displayName = null)
+    public InlinePowershellTask FromResourceFile(string resourceFileName, Conditioned<string>? displayName = null)
         => new InlinePowershellTask(GetResourceFile(Assembly.GetCallingAssembly()!, resourceFileName)) with
         {
-            DisplayName = displayName is null ? null! : new Conditioned<string>(displayName),
+            DisplayName = displayName!,
         };
 
     /// <summary>
@@ -72,10 +72,10 @@ public class PowershellTaskBuilder : TaskBuilderBase
     /// <param name="path">Path to the file</param>
     /// <param name="displayName">Display name of the build step</param>
     /// <returns>A new instance of <see cref="InlinePowershellTask"/> with the contents of the resource file</returns>
-    public InlinePowershellTask FromFile(string path, string? displayName = null)
+    public InlinePowershellTask FromFile(string path, Conditioned<string>? displayName = null)
         => new InlinePowershellTask(System.IO.File.ReadAllText(path)) with
         {
-            DisplayName = displayName is null ? null! : new Conditioned<string>(displayName),
+            DisplayName = displayName!,
         };
 
     /// <summary>
@@ -102,10 +102,10 @@ public class PowershellTaskBuilder : TaskBuilderBase
     /// <param name="filePath">Path to the file</param>
     /// <param name="displayName">Display name of the build step</param>
     /// <returns>A new instance of <see cref="PowershellFileTask"/> with the contents of the resource file</returns>
-    public PowershellFileTask File(string filePath, string? displayName = null)
+    public PowershellFileTask File(Conditioned<string> filePath, Conditioned<string>? displayName = null)
         => new PowershellFileTask(filePath, isPwsh: false) with
         {
-            DisplayName = displayName is null ? null! : new Conditioned<string>(displayName),
+            DisplayName = displayName!,
         };
 
     /// <summary>

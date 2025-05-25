@@ -56,10 +56,10 @@ public record PublishTask : Step
     /// <param name="targetPath">The path to the folder or file you want to publish.</param>
     /// <param name="artifactName">Your artifact name. You can specify any name you prefer. E.g.: drop</param>
     /// <exception cref="ArgumentNullException">Thrown when <paramref name="targetPath"/> or <paramref name="artifactName"/> is null.</exception>
-    public PublishTask(string targetPath, string artifactName = "drop")
+    public PublishTask(Conditioned<string> targetPath, Conditioned<string>? artifactName = null)
     {
         TargetPath = targetPath ?? throw new ArgumentNullException(nameof(targetPath));
-        Artifact = artifactName ?? throw new ArgumentNullException(nameof(artifactName));
+        Artifact = artifactName ?? "drop";
     }
 }
 

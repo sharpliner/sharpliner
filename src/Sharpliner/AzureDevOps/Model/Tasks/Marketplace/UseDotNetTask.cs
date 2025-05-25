@@ -13,9 +13,9 @@ public record UseDotNetTask : AzureDevOpsTask
     /// Default value: sdk
     /// </summary>
     [YamlIgnore]
-    public Conditioned<DotNetPackageType>? PackageType
+    public DotNetPackageType PackageType
     {
-        get => GetConditioned<DotNetPackageType>("packageType");
+        get => GetEnum("packageType", DotNetPackageType.Sdk);
         init => SetProperty("packageType", value);
     }
 
@@ -126,15 +126,11 @@ public record UseDotNetTask : AzureDevOpsTask
     /// This setting is ignored if you specify an exact version, such as: 3.0.100-preview3-010431
     /// </para>
     /// </param>
-    public UseDotNetTask(DotNetPackageType packageType, string version, bool includePreviewVersions = false) : this()
+    public UseDotNetTask(DotNetPackageType packageType, Conditioned<string> version, Conditioned<bool>? includePreviewVersions = null) : this()
     {
         PackageType = packageType;
         Version = version;
-
-        if (includePreviewVersions)
-        {
-            IncludePreviewVersions = includePreviewVersions;
-        }
+        IncludePreviewVersions = includePreviewVersions;
     }
 
     /// <summary>

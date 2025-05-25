@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
@@ -257,9 +258,9 @@ public record NuGetPackCommandTaskByEnvVar : NuGetPackCommandTask
     /// Initializes a new instance of the <see cref="NuGetPackCommandTaskByEnvVar"/> class.
     /// </summary>
     /// <param name="versionEnvVar">The variable name without <c>$</c>, <c>$env</c>, or <c>%</c>.</param>
-    public NuGetPackCommandTaskByEnvVar(string versionEnvVar) : base("byEnvVar")
+    public NuGetPackCommandTaskByEnvVar(Conditioned<string> versionEnvVar) : base("byEnvVar")
     {
-        VersionEnvVar = Require.NotNullAndNotEmpty(versionEnvVar);
+        VersionEnvVar = versionEnvVar ?? throw new ArgumentNullException(nameof(versionEnvVar));
     }
 
     /// <summary>

@@ -12,7 +12,7 @@ public class GettingStartedTests : AzureDevOpsDefinition
         public override string TargetFile => "test-pipeline.yaml";
 
 #region single-stage-pipeline-example-csharp
-        private static readonly Variable DotnetVersion = new Variable("DotnetVersion", string.Empty);
+        private static readonly Variable DotnetVersion = new("DotnetVersion", string.Empty);
 
         public override SingleStagePipeline Pipeline => new()
         {
@@ -99,7 +99,7 @@ public class GettingStartedTests : AzureDevOpsDefinition
                 displayName: Install .NET SDK
                 inputs:
                   packageType: sdk
-                  version: $(DotnetVersion)
+                  version: ${{ variables['DotnetVersion'] }}
 
               - task: DotNetCoreCLI@2
                 displayName: Build
