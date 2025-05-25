@@ -140,7 +140,8 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// <param name="rootFolderOrFile">The name of the root folder or the file path to files to add to the archive.</param>
     /// <param name="archiveType">The compression format.</param>
     /// <param name="archiveFile">The name of the archive file to create.</param>
-    public ArchiveFilesTask(string rootFolderOrFile, ArchiveType archiveType, string archiveFile) : base("ArchiveFiles@2")
+    public ArchiveFilesTask(string rootFolderOrFile, Conditioned<ArchiveType> archiveType, Conditioned<string> archiveFile)
+        : base("ArchiveFiles@2")
     {
         RootFolderOrFile = rootFolderOrFile;
         ArchiveType = archiveType;
