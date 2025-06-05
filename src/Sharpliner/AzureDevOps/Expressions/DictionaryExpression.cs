@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Sharpliner.AzureDevOps.ConditionedExpressions;
+namespace Sharpliner.AzureDevOps.Expressions;
 
 /// <summary>
 /// A dictionary that can contain <see cref="AdoExpression"/> items.

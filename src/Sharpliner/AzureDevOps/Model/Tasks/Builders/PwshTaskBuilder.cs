@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using Sharpliner.Common.Model.Tasks;
 
 namespace Sharpliner.AzureDevOps.Tasks;

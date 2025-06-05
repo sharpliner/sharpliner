@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -42,7 +42,7 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     [YamlIgnore]
     public AdoExpression<string>? PackagesToPack
     {
-        get => GetConditioned<string>("packagesToPack");
+        get => GetExpression<string>("packagesToPack");
         init => SetProperty("packagesToPack", value);
     }
 
@@ -52,7 +52,7 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     [YamlIgnore]
     internal AdoExpression<string>? VersioningScheme
     {
-        get => GetConditioned<string>("versioningScheme");
+        get => GetExpression<string>("versioningScheme");
         init => SetProperty("versioningScheme", value);
     }
 
@@ -62,7 +62,7 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     [YamlIgnore]
     public AdoExpression<string>? Configuration
     {
-        get => GetConditioned<string>("configuration");
+        get => GetExpression<string>("configuration");
         init => SetProperty("configuration", value);
     }
 
@@ -72,7 +72,7 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     [YamlIgnore]
     public AdoExpression<string>? PackDestination
     {
-        get => GetConditioned<string>("packDestination");
+        get => GetExpression<string>("packDestination");
         init => SetProperty("packDestination", value);
     }
 
@@ -82,7 +82,7 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     [YamlIgnore]
     public AdoExpression<bool>? IncludeSymbols
     {
-        get => GetConditioned<bool>("includeSymbols");
+        get => GetExpression<bool>("includeSymbols");
         init => SetProperty("includeSymbols", value);
     }
 
@@ -92,7 +92,7 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     [YamlIgnore]
     public AdoExpression<bool>? ToolPackage
     {
-        get => GetConditioned<bool>("toolPackage");
+        get => GetExpression<bool>("toolPackage");
         init => SetProperty("toolPackage", value);
     }
 
@@ -113,7 +113,7 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     [YamlIgnore]
     public AdoExpression<PackVerbosity>? VerbosityPack
     {
-        get => GetConditioned<PackVerbosity>("verbosityPack");
+        get => GetExpression<PackVerbosity>("verbosityPack");
         init => SetProperty("verbosityPack", value);
     }
 
@@ -123,7 +123,7 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     /// </summary>
     public AdoExpression<string>? BasePath
     {
-        get => GetConditioned<string>("basePath");
+        get => GetExpression<string>("basePath");
         init => SetProperty("basePath", value);
     }
 }
@@ -169,7 +169,7 @@ public record NuGetPackCommandTaskOff : NuGetPackCommandTask
     [YamlIgnore]
     public AdoExpression<bool>? IncludeReferencedProjects
     {
-        get => GetConditioned<bool>("includeReferencedProjects");
+        get => GetExpression<bool>("includeReferencedProjects");
         init => SetProperty("includeReferencedProjects", value);
     } 
 }
@@ -198,7 +198,7 @@ public record NuGetPackCommandTaskByPrereleaseNumber : NuGetPackCommandTask
     [YamlIgnore]
     public AdoExpression<string>? MajorVersion
     {
-        get => GetConditioned<string>("majorVersion");
+        get => GetExpression<string>("majorVersion");
         init => SetProperty("majorVersion", value);
     }
 
@@ -208,7 +208,7 @@ public record NuGetPackCommandTaskByPrereleaseNumber : NuGetPackCommandTask
     [YamlIgnore]
     public AdoExpression<string>? MinorVersion
     {
-        get => GetConditioned<string>("minorVersion");
+        get => GetExpression<string>("minorVersion");
         init => SetProperty("minorVersion", value);
     }
 
@@ -218,7 +218,7 @@ public record NuGetPackCommandTaskByPrereleaseNumber : NuGetPackCommandTask
     [YamlIgnore]
     public AdoExpression<string>? PatchVersion
     {
-        get => GetConditioned<string>("patchVersion");
+        get => GetExpression<string>("patchVersion");
         init => SetProperty("patchVersion", value);
     }
 
@@ -228,7 +228,7 @@ public record NuGetPackCommandTaskByPrereleaseNumber : NuGetPackCommandTask
     [YamlIgnore]
     public AdoExpression<PackTimezoneType>? PackTimezone 
     {
-        get => GetConditioned<PackTimezoneType>("packTimezone");
+        get => GetExpression<PackTimezoneType>("packTimezone");
         init => SetProperty("packTimezone", value);
     }
 }
@@ -269,7 +269,7 @@ public record NuGetPackCommandTaskByEnvVar : NuGetPackCommandTask
     [YamlIgnore]
     public AdoExpression<string>? VersionEnvVar
     {
-        get => GetConditioned<string>("versionEnvVar");
+        get => GetExpression<string>("versionEnvVar");
         init => SetProperty("versionEnvVar", value);
     }
 }

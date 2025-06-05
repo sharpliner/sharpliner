@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.Tests.AzureDevOps;

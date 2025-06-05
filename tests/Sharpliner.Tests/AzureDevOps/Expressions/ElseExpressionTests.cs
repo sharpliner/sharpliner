@@ -1,7 +1,7 @@
 ﻿using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.Tasks;
 
-namespace Sharpliner.Tests.AzureDevOps.ConditionedExpressions;
+namespace Sharpliner.Tests.AzureDevOps.Expressions;
 
 public class ElseExpressionTests
 {

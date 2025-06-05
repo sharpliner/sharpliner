@@ -1,6 +1,6 @@
 using FluentAssertions;
 using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using Sharpliner.Common;
 
 namespace Sharpliner.Tests.AzureDevOps.Docs;

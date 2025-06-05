@@ -2,7 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 
-namespace Sharpliner.AzureDevOps.ConditionedExpressions;
+namespace Sharpliner.AzureDevOps.Expressions;
 
 /// <summary>
 /// This class is here only to override the Add() which is used for definition.
@@ -30,7 +30,7 @@ public class AdoExpressionList<T> : List<AdoExpression<T>>
     /// </summary>
     public new void Add(AdoExpression<T> item)
     {
-        base.Add(GetRootConditioned(item));
+        base.Add(GetRootExpression(item));
     }
 
     /// <summary>
@@ -40,10 +40,10 @@ public class AdoExpressionList<T> : List<AdoExpression<T>>
     public new AdoExpression<T> this[int index]
     {
         get => base[index];
-        set => base[index] = GetRootConditioned(value);
+        set => base[index] = GetRootExpression(value);
     }
 
-    private static AdoExpression<T> GetRootConditioned(AdoExpression<T> item)
+    private static AdoExpression<T> GetRootExpression(AdoExpression<T> item)
     {
         // When we define a tree of conditional definitions, the expression returns
         // the leaf definition so we have to move up to the top-level definition

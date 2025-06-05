@@ -1,4 +1,4 @@
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -22,7 +22,7 @@ public abstract record NuGetRestoreCommandTask : NuGetCommandTask
     [YamlIgnore]
     public AdoExpression<string>? RestoreSolution
     {
-        get => GetConditioned<string>("restoreSolution");
+        get => GetExpression<string>("restoreSolution");
         init => SetProperty("restoreSolution", value);
     }
 
@@ -32,14 +32,14 @@ public abstract record NuGetRestoreCommandTask : NuGetCommandTask
     [YamlIgnore]
     public AdoExpression<bool>? NoCache
     {
-        get => GetConditioned<bool>("noCache");
+        get => GetExpression<bool>("noCache");
         init => SetProperty("noCache", value);
     }
 
     [YamlIgnore]
     internal AdoExpression<string>? FeedsToUse
     {
-        get => GetConditioned<string>("feedsToUse");
+        get => GetExpression<string>("feedsToUse");
         init => SetProperty("feedsToUse", value);
     }
 }
@@ -62,7 +62,7 @@ public record NuGetRestoreFeedCommandTask : NuGetRestoreCommandTask
     [YamlIgnore]
     public AdoExpression<string>? VstsFeed
     {
-        get => GetConditioned<string>("vstsFeed");
+        get => GetExpression<string>("vstsFeed");
         init => SetProperty("vstsFeed", value);
     }
 
@@ -72,7 +72,7 @@ public record NuGetRestoreFeedCommandTask : NuGetRestoreCommandTask
     [YamlIgnore]
     public AdoExpression<bool>? IncludeNuGetOrg
     {
-        get => GetConditioned<bool>("includeNuGetOrg");
+        get => GetExpression<bool>("includeNuGetOrg");
         init => SetProperty("includeNuGetOrg", value);
     }
 }
@@ -95,7 +95,7 @@ public record NuGetRestoreConfigCommandTask : NuGetRestoreCommandTask
     [YamlIgnore]
     public AdoExpression<string>? NuGetConfigPath
     {
-        get => GetConditioned<string>("nuGetConfigPath");
+        get => GetExpression<string>("nuGetConfigPath");
         init => SetProperty("nuGetConfigPath", value);
     }
 
@@ -107,7 +107,7 @@ public record NuGetRestoreConfigCommandTask : NuGetRestoreCommandTask
     [YamlIgnore]
     public AdoExpression<string>? ExternalFeedCredentials
     {
-        get => GetConditioned<string>("externalFeedCredentials");
+        get => GetExpression<string>("externalFeedCredentials");
         init => SetProperty("externalFeedCredentials", value);
     } 
 }

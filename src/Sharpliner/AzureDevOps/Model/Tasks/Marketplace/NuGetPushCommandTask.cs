@@ -1,4 +1,4 @@
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -54,7 +54,7 @@ public abstract record NuGetPushCommandTask : NuGetCommandTask
     [YamlIgnore]
     public AdoExpression<string>? TargetFeed
     {
-        get => GetConditioned<string>("targetFeed");
+        get => GetExpression<string>("targetFeed");
         init => SetProperty("targetFeed", value);
     }
 
@@ -64,14 +64,14 @@ public abstract record NuGetPushCommandTask : NuGetCommandTask
     [YamlIgnore]
     public AdoExpression<string>? TargetFeedCredentials
     {
-        get => GetConditioned<string>("targetFeedCredentials");
+        get => GetExpression<string>("targetFeedCredentials");
         init => SetProperty("targetFeedCredentials", value);
     }
 
     [YamlIgnore]
     internal AdoExpression<string>? NuGetFeedType
     {
-        get => GetConditioned<string>("nuGetFeedType");
+        get => GetExpression<string>("nuGetFeedType");
         init => SetProperty("nuGetFeedType", value);
     }
 }
@@ -96,7 +96,7 @@ public record NuGetPushInternalCommandTask : NuGetPushCommandTask
     [YamlIgnore]
     public AdoExpression<string>? PublishVstsFeed
     {
-        get => GetConditioned<string>("publishVstsFeed");
+        get => GetExpression<string>("publishVstsFeed");
         init => SetProperty("publishVstsFeed", value);
     }
 
@@ -106,7 +106,7 @@ public record NuGetPushInternalCommandTask : NuGetPushCommandTask
     [YamlIgnore]
     public AdoExpression<bool>? PublishPackageMetadata
     {
-        get => GetConditioned<bool>("publishPackageMetadata");
+        get => GetExpression<bool>("publishPackageMetadata");
         init => SetProperty("publishPackageMetadata", value);
     }
 
@@ -120,7 +120,7 @@ public record NuGetPushInternalCommandTask : NuGetPushCommandTask
     [YamlIgnore]
     public AdoExpression<bool>? AllowPackageConflicts
     {
-        get => GetConditioned<bool>("allowPackageConflicts");
+        get => GetExpression<bool>("allowPackageConflicts");
         init => SetProperty("allowPackageConflicts", value);
     }
 }
@@ -145,7 +145,7 @@ public record NuGetPushExternalCommandTask : NuGetPushCommandTask
     [YamlIgnore]
     public AdoExpression<string>? PublishFeedCredentials
     {
-        get => GetConditioned<string>("publishFeedCredentials");
+        get => GetExpression<string>("publishFeedCredentials");
         init => SetProperty("publishFeedCredentials", value);
     }
 }

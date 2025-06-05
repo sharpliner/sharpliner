@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using FluentAssertions;
 using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using Sharpliner.AzureDevOps.Tasks;
 using YamlDotNet.Serialization;
 

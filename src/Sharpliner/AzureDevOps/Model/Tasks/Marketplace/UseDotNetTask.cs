@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -27,7 +27,7 @@ public record UseDotNetTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? UseGlobalJson
     {
-        get => GetConditioned<bool>("useGlobalJson");
+        get => GetExpression<bool>("useGlobalJson");
         init => SetProperty("useGlobalJson", value);
     }
 
@@ -38,7 +38,7 @@ public record UseDotNetTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? WorkingDirectory
     {
-        get => GetConditioned<string>("workingDirectory");
+        get => GetExpression<string>("workingDirectory");
         init => SetProperty("workingDirectory", value);
     }
 
@@ -53,7 +53,7 @@ public record UseDotNetTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? Version
     {
-        get => GetConditioned<string>("version");
+        get => GetExpression<string>("version");
         init => SetProperty("version", value);
     }
 
@@ -69,7 +69,7 @@ public record UseDotNetTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? InstallationPath
     {
-        get => GetConditioned<string>("installationPath");
+        get => GetExpression<string>("installationPath");
         init => SetProperty("installationPath", value);
     }
 
@@ -85,7 +85,7 @@ public record UseDotNetTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? PerformMultiLevelLookup
     {
-        get => GetConditioned<bool>("performMultiLevelLookup");
+        get => GetExpression<bool>("performMultiLevelLookup");
         init => SetProperty("performMultiLevelLookup", value);
     }
 
@@ -97,7 +97,7 @@ public record UseDotNetTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? IncludePreviewVersions
     {
-        get => GetConditioned<bool>("includePreviewVersions");
+        get => GetExpression<bool>("includePreviewVersions");
         init => SetProperty("includePreviewVersions", value);
     }
 

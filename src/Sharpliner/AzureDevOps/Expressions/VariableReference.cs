@@ -1,10 +1,10 @@
 using System;
-using Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces;
+using Sharpliner.AzureDevOps.Expressions.Interfaces;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-namespace Sharpliner.AzureDevOps.ConditionedExpressions;
+namespace Sharpliner.AzureDevOps.Expressions;
 
 /// <summary>
 /// Class that makes it possible to put <c>${{ variables['foo'] }}</c> everywhere.

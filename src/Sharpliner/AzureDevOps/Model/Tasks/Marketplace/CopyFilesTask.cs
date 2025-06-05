@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -17,7 +17,7 @@ public record CopyFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? SourceFolder
     {
-        get => GetConditioned<string>("SourceFolder");
+        get => GetExpression<string>("SourceFolder");
         init => SetProperty("SourceFolder", value);
     }
 
@@ -30,7 +30,7 @@ public record CopyFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? Contents
     {
-        get => GetConditioned<string>("Contents");
+        get => GetExpression<string>("Contents");
         init => SetProperty("Contents", value);
     }
 
@@ -42,7 +42,7 @@ public record CopyFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? TargetFolder
     {
-        get => GetConditioned<string>("TargetFolder");
+        get => GetExpression<string>("TargetFolder");
         init => SetProperty("TargetFolder", value);
     }
 
@@ -53,7 +53,7 @@ public record CopyFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? CleanTargetFolder
     {
-        get => GetConditioned<bool>("CleanTargetFolder");
+        get => GetExpression<bool>("CleanTargetFolder");
         init => SetProperty("CleanTargetFolder", value);
     }
 
@@ -64,7 +64,7 @@ public record CopyFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? Overwrite
     {
-        get => GetConditioned<bool>("Overwrite");
+        get => GetExpression<bool>("Overwrite");
         init => SetProperty("Overwrite", value);
     }
 
@@ -75,7 +75,7 @@ public record CopyFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? FlattenFolders
     {
-        get => GetConditioned<bool>("flattenFolders");
+        get => GetExpression<bool>("flattenFolders");
         init => SetProperty("flattenFolders", value);
     }
 
@@ -86,7 +86,7 @@ public record CopyFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? PreserveTimestamp
     {
-        get => GetConditioned<bool>("preserveTimestamp");
+        get => GetExpression<bool>("preserveTimestamp");
         init => SetProperty("preserveTimestamp", value);
     }
 
@@ -97,7 +97,7 @@ public record CopyFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<int>? RetryCount
     {
-        get => GetConditioned<int>("retryCount");
+        get => GetExpression<int>("retryCount");
         init => SetProperty("retryCount", value);
     }
 
@@ -108,7 +108,7 @@ public record CopyFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<int>? DelayBetweenRetries
     {
-        get => GetConditioned<int>("delayBetweenRetries");
+        get => GetExpression<int>("delayBetweenRetries");
         init => SetProperty("delayBetweenRetries", value);
     }
 
@@ -120,7 +120,7 @@ public record CopyFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? IgnoreMakeDirErrors
     {
-        get => GetConditioned<bool>("ignoreMakeDirErrors");
+        get => GetExpression<bool>("ignoreMakeDirErrors");
         init => SetProperty("ignoreMakeDirErrors", value);
     }
 

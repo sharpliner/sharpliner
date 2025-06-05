@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -14,7 +14,7 @@ public record ExtractFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? ArchiveFilePatterns
     {
-        get => GetConditioned<string>("archiveFilePatterns");
+        get => GetExpression<string>("archiveFilePatterns");
         init => SetProperty("archiveFilePatterns", value);
     }
 
@@ -24,7 +24,7 @@ public record ExtractFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? DestinationFolder
     {
-        get => GetConditioned<string>("destinationFolder");
+        get => GetExpression<string>("destinationFolder");
         init => SetProperty("destinationFolder", value);
     }
 
@@ -35,7 +35,7 @@ public record ExtractFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? CleanDestinationFolder
     {
-        get => GetConditioned<bool>("cleanDestinationFolder", true);
+        get => GetExpression<bool>("cleanDestinationFolder", true);
         init => SetProperty("cleanDestinationFolder", value);
     }
 
@@ -47,7 +47,7 @@ public record ExtractFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? OverwriteExistingFiles
     {
-        get => GetConditioned<bool>("overwriteExistingFiles", false);
+        get => GetExpression<bool>("overwriteExistingFiles", false);
         init => SetProperty("overwriteExistingFiles", value);
     }
 
@@ -58,7 +58,7 @@ public record ExtractFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? PathToSevenZipTool
     {
-        get => GetConditioned<string>("pathToSevenZipTool");
+        get => GetExpression<string>("pathToSevenZipTool");
         init => SetProperty("pathToSevenZipTool", value);
     }
 

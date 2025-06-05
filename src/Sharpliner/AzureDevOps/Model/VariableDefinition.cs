@@ -1,6 +1,6 @@
 ﻿using System;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
-using Sharpliner.AzureDevOps.ConditionedExpressions.Arguments;
+using Sharpliner.AzureDevOps.Expressions;
+using Sharpliner.AzureDevOps.Expressions.Arguments;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;

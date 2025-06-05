@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -15,7 +15,7 @@ public record PublishCodeCoverageResultsTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? SummaryFileLocation
     {
-        get => GetConditioned<string>("summaryFileLocation");
+        get => GetExpression<string>("summaryFileLocation");
         init => SetProperty("summaryFileLocation", value);
     }
 
@@ -25,7 +25,7 @@ public record PublishCodeCoverageResultsTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? PathToSources
     {
-        get => GetConditioned<string>("pathToSources");
+        get => GetExpression<string>("pathToSources");
         init => SetProperty("pathToSources", value);
     }
 
@@ -36,7 +36,7 @@ public record PublishCodeCoverageResultsTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? FailIfCoverageEmpty
     {
-        get => GetConditioned<bool>("failIfCoverageEmpty");
+        get => GetExpression<bool>("failIfCoverageEmpty");
         init => SetProperty("failIfCoverageEmpty", value);
     }
 

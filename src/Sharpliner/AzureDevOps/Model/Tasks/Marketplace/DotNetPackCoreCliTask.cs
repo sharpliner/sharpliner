@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -26,7 +26,7 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<string>? PackagesToPack
     {
-        get => GetConditioned<string>("packagesToPack");
+        get => GetExpression<string>("packagesToPack");
         init => SetProperty("packagesToPack", value);
     }
 
@@ -37,7 +37,7 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<string>? ConfigurationToPack
     {
-        get => GetConditioned<string>("configurationToPack");
+        get => GetExpression<string>("configurationToPack");
         init => SetProperty("configurationToPack", value);
     }
 
@@ -49,7 +49,7 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<string>? OutputDir
     {
-        get => GetConditioned<string>("outputDir");
+        get => GetExpression<string>("outputDir");
         init => SetProperty("outputDir", value);
     }
 
@@ -60,7 +60,7 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<bool>? NoBuild
     {
-        get => GetConditioned<bool>("nobuild");
+        get => GetExpression<bool>("nobuild");
         init => SetProperty("nobuild", value);
     }
 
@@ -71,7 +71,7 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<bool>? IncludeSymbols
     {
-        get => GetConditioned<bool>("includesymbols");
+        get => GetExpression<bool>("includesymbols");
         init => SetProperty("includesymbols", value);
     }
 
@@ -82,7 +82,7 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<bool>? IncludeSource
     {
-        get => GetConditioned<bool>("includesource");
+        get => GetExpression<bool>("includesource");
         init => SetProperty("includesource", value);
     }
 
@@ -95,7 +95,7 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<string>? BuildProperties
     {
-        get => GetConditioned<string>("buildProperties");
+        get => GetExpression<string>("buildProperties");
         init => SetProperty("buildProperties", value);
     }
 

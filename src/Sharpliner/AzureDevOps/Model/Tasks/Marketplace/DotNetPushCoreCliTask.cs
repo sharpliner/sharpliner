@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -32,7 +32,7 @@ public record DotNetPushCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<string>? PackagesToPush
     {
-        get => GetConditioned<string>("packagesToPush");
+        get => GetExpression<string>("packagesToPush");
         init => SetProperty("packagesToPush", value);
     }
 
@@ -64,7 +64,7 @@ public record DotNetPushCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<bool>? PublishPackageMetadata
     {
-        get => GetConditioned<bool>("publishPackageMetadata");
+        get => GetExpression<bool>("publishPackageMetadata");
         init => SetProperty("publishPackageMetadata", value);
     }
 }

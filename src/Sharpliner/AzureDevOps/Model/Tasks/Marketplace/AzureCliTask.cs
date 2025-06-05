@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -14,7 +14,7 @@ public abstract record AzureCliTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? AzureSubscription
     {
-        get => GetConditioned<string>("azureSubscription");
+        get => GetExpression<string>("azureSubscription");
         init => SetProperty("azureSubscription", value);
     }
 
@@ -24,7 +24,7 @@ public abstract record AzureCliTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<ScriptType>? ScriptType
     {
-        get => GetConditioned<ScriptType>("scriptType");
+        get => GetExpression<ScriptType>("scriptType");
         init => SetProperty("scriptType", value);
     }
 
@@ -34,7 +34,7 @@ public abstract record AzureCliTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<ScriptLocation>? ScriptLocation
     {
-        get => GetConditioned<ScriptLocation>("scriptLocation");
+        get => GetExpression<ScriptLocation>("scriptLocation");
         init => SetProperty("scriptLocation", value);
     }
 
@@ -44,7 +44,7 @@ public abstract record AzureCliTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? Arguments
     {
-        get => GetConditioned<string>("arguments");
+        get => GetExpression<string>("arguments");
         init => SetProperty("arguments", value);
     }
 
@@ -55,7 +55,7 @@ public abstract record AzureCliTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<PowerShellErrorActionPreference>? PowerShellErrorActionPreference
     {
-        get => GetConditioned<PowerShellErrorActionPreference>("powerShellErrorActionPreference");
+        get => GetExpression<PowerShellErrorActionPreference>("powerShellErrorActionPreference");
         init => SetProperty("powerShellErrorActionPreference", value);
     }
 
@@ -66,7 +66,7 @@ public abstract record AzureCliTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>?  AddSpnToEnvironment
     {
-        get => GetConditioned<bool>("addSpnToEnvironment", false);
+        get => GetExpression<bool>("addSpnToEnvironment", false);
         init => SetProperty("addSpnToEnvironment", value);
     }
 
@@ -77,7 +77,7 @@ public abstract record AzureCliTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? UseGlobalConfig
     {
-        get => GetConditioned<bool>("useGlobalConfig", false);
+        get => GetExpression<bool>("useGlobalConfig", false);
         init => SetProperty("useGlobalConfig", value);
     }
 
@@ -88,7 +88,7 @@ public abstract record AzureCliTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? WorkingDirectory
     {
-        get => GetConditioned<string>("workingDirectory");
+        get => GetExpression<string>("workingDirectory");
         init => SetProperty("workingDirectory", value);
     }
 
@@ -99,7 +99,7 @@ public abstract record AzureCliTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? FailOnStandardError
     {
-        get => GetConditioned<bool>("failOnStandardError", false);
+        get => GetExpression<bool>("failOnStandardError", false);
         init => SetProperty("failOnStandardError", value);
     }
 
@@ -112,7 +112,7 @@ public abstract record AzureCliTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? PowerShellIgnoreLASTEXITCODE
     {
-        get => GetConditioned<bool>("powerShellIgnoreLASTEXITCODE", false);
+        get => GetExpression<bool>("powerShellIgnoreLASTEXITCODE", false);
         init => SetProperty("powerShellIgnoreLASTEXITCODE", value);
     }
 
@@ -123,7 +123,7 @@ public abstract record AzureCliTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? VisibleAzLogin
     {
-        get => GetConditioned<bool>("visibleAzLogin", true);
+        get => GetExpression<bool>("visibleAzLogin", true);
         init => SetProperty("visibleAzLogin", value);
     }
 
@@ -156,7 +156,7 @@ public record InlineAzureCliTask : AzureCliTask
     [YamlIgnore]
     public AdoExpression<string>? InlineScript
     {
-        get => GetConditioned<string>("inlineScript");
+        get => GetExpression<string>("inlineScript");
         init => SetProperty("inlineScript", value);
     }
 
@@ -185,7 +185,7 @@ public record AzureCliFileTask : AzureCliTask
     [YamlIgnore]
     public AdoExpression<string>? ScriptPath
     {
-        get => GetConditioned<string>("scriptPath");
+        get => GetExpression<string>("scriptPath");
         init => SetProperty("scriptPath", value);
     }
 

@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -21,7 +21,7 @@ public record DotNetTestCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<string>? TestRunTitle
     {
-        get => GetConditioned<string>("testRunTitle");
+        get => GetExpression<string>("testRunTitle");
         init => SetProperty("testRunTitle", value);
     }
 
@@ -35,7 +35,7 @@ public record DotNetTestCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<bool>? PublishTestResults
     {
-        get => GetConditioned<bool>("publishTestResults");
+        get => GetExpression<bool>("publishTestResults");
         init => SetProperty("publishTestResults", value);
     }
 }

@@ -2,7 +2,7 @@
 // To learn more, see https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/GettingStarted.md
 
 using System.Collections.Generic;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using Sharpliner.AzureDevOps.Validation;
 using Sharpliner.Common;
 
@@ -162,14 +162,14 @@ public abstract class StageTemplateDefinition : TemplateDefinition<Stage>
 /// <code language="csharp">
 /// public class MyStageTemplate(MyStageParameters? parameters = null) : StageTemplateDefinition&lt;MyStageParameters&gt;(parameters)
 /// {
-///   public override ConditionedList&lt;Stage&gt; Definition =>
+///   public override AdoExpressionList&lt;Stage&gt; Definition =>
 ///   [
 ///     ...
 ///   ];
 /// }
 /// public class MyStageParameters : AzureDevOpsDefinition
 /// {
-///   public ConditionedList&lt;Stage&gt; SetupStages { get; init; } = [];
+///   public AdoExpressionList&lt;Stage&gt; SetupStages { get; init; } = [];
 ///   public Stage MainStage { get; init; } = null!;
 /// }
 /// </code>
@@ -240,14 +240,14 @@ public abstract class JobTemplateDefinition : TemplateDefinition<JobBase>
 /// <code language="csharp">
 /// public class MyJobTemplate(MyJobParameters? parameters = null) : JobTemplateDefinition&lt;MyJobParameters&gt;(parameters)
 /// {
-///   public override ConditionedList&lt;Job&gt; Definition =>
+///   public override AdoExpressionList&lt;Job&gt; Definition =>
 ///   [
 ///     ...
 ///   ];
 /// }
 /// public class MyJobParameters : AzureDevOpsDefinition
 /// {
-///   public ConditionedList&lt;JobBase&gt; SetupJobs { get; init; } = [];
+///   public AdoExpressionList&lt;JobBase&gt; SetupJobs { get; init; } = [];
 ///   public JobBase MainJob { get; init; } = null!;
 ///   public DeploymentJob Deployment { get; init; } = new("deploy", "Deploy job")
 ///   {
@@ -353,7 +353,7 @@ public abstract class StepTemplateDefinition : TemplateDefinition<Step>
 /// <code language="csharp">
 /// public class MyStepTemplate(MyStepParameters? parameters = null) : StepTemplateDefinition&lt;MyStepParameters&gt;(parameters)
 /// {
-///   public override ConditionedList&lt;Step&gt; Definition =>
+///   public override AdoExpressionList&lt;Step&gt; Definition =>
 ///   [
 ///     ...
 ///   ];
@@ -433,7 +433,7 @@ public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBa
 /// <code language="csharp">
 /// public class MyVariableTemplate(MyVariableParameters? parameters = null) : VariableTemplateDefinition&lt;MyVariableParameters&gt;(parameters)
 /// {
-///   public override ConditionedList&lt;VariableBase&gt; Definition =>
+///   public override AdoExpressionList&lt;VariableBase&gt; Definition =>
 ///   [
 ///     ...
 ///   ];

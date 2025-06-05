@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -25,7 +25,7 @@ public record DotNetCoreCliTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? Projects
     {
-        get => GetConditioned<string>("projects");
+        get => GetExpression<string>("projects");
         init => SetProperty("projects", value);
     }
 
@@ -39,7 +39,7 @@ public record DotNetCoreCliTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? Arguments
     {
-        get => GetConditioned<string>("arguments");
+        get => GetExpression<string>("arguments");
         init => SetProperty("arguments", value);
     }
 
@@ -50,7 +50,7 @@ public record DotNetCoreCliTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? WorkingDirectory
     {
-        get => GetConditioned<string>("workingDirectory");
+        get => GetExpression<string>("workingDirectory");
         init => SetProperty("workingDirectory", value);
     }
 }

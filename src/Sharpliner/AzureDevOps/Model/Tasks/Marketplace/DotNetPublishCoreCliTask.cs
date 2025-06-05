@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -26,7 +26,7 @@ public record DotNetPublishCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<bool>? PublishWebProjects
     {
-        get => GetConditioned<bool>("publishWebProjects");
+        get => GetExpression<bool>("publishWebProjects");
         init => SetProperty("publishWebProjects", value);
     }
 
@@ -36,7 +36,7 @@ public record DotNetPublishCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<bool>? ZipAfterPublish
     {
-        get => GetConditioned<bool>("zipAfterPublish");
+        get => GetExpression<bool>("zipAfterPublish");
         init => SetProperty("zipAfterPublish", value);
     }
 
@@ -48,7 +48,7 @@ public record DotNetPublishCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<bool>? ModifyOutputPath
     {
-        get => GetConditioned<bool>("modifyOutputPath");
+        get => GetExpression<bool>("modifyOutputPath");
         init => SetProperty("modifyOutputPath", value);
     }
 }

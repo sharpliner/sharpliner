@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -27,7 +27,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<TestResultsFormat>? TestResultsFormat
     {
-        get => GetConditioned<TestResultsFormat>("testResultsFormat");
+        get => GetExpression<TestResultsFormat>("testResultsFormat");
         init => SetProperty("testResultsFormat", value);
     }
 
@@ -41,7 +41,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? TestResultsFiles
     {
-        get => GetConditioned<string>("testResultsFiles");
+        get => GetExpression<string>("testResultsFiles");
         init => SetProperty("testResultsFiles", value);
     }
 
@@ -52,7 +52,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? SearchFolder
     {
-        get => GetConditioned<string>("searchFolder");
+        get => GetExpression<string>("searchFolder");
         init => SetProperty("searchFolder", value);
     }
 
@@ -63,7 +63,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? MergeTestResults
     {
-        get => GetConditioned<bool>("mergeTestResults");
+        get => GetExpression<bool>("mergeTestResults");
         init => SetProperty("mergeTestResults", value);
     }
 
@@ -73,7 +73,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? FailTaskOnFailedTests
     {
-        get => GetConditioned<bool>("failTaskOnFailedTests");
+        get => GetExpression<bool>("failTaskOnFailedTests");
         init => SetProperty("failTaskOnFailedTests", value);
     }
 
@@ -83,7 +83,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? FailTaskOnFailureToPublishResults
     {
-        get => GetConditioned<bool>("failTaskOnFailureToPublishResults");
+        get => GetExpression<bool>("failTaskOnFailureToPublishResults");
         init => SetProperty("failTaskOnFailureToPublishResults", value);
     }
 
@@ -93,7 +93,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? FailTaskOnMissingResultsFile
     {
-        get => GetConditioned<bool>("failTaskOnMissingResultsFile");
+        get => GetExpression<bool>("failTaskOnMissingResultsFile");
         init => SetProperty("failTaskOnMissingResultsFile", value);
     }
 
@@ -104,7 +104,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? TestRunTitle
     {
-        get => GetConditioned<string>("testRunTitle");
+        get => GetExpression<string>("testRunTitle");
         init => SetProperty("testRunTitle", value);
     }
 
@@ -115,7 +115,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? BuildPlatform
     {
-        get => GetConditioned<string>("buildPlatform");
+        get => GetExpression<string>("buildPlatform");
         init => SetProperty("buildPlatform", value);
     }
 
@@ -126,7 +126,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? BuildConfiguration
     {
-        get => GetConditioned<string>("buildConfiguration");
+        get => GetExpression<string>("buildConfiguration");
         init => SetProperty("buildConfiguration", value);
     }
 
@@ -136,7 +136,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? PublishRunAttachments
     {
-        get => GetConditioned<bool>("publishRunAttachments");
+        get => GetExpression<bool>("publishRunAttachments");
         init => SetProperty("publishRunAttachments", value);
     }
 }

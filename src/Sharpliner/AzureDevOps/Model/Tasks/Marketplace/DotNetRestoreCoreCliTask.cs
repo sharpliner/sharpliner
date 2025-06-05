@@ -1,5 +1,5 @@
 ﻿using System;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 using static Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder;
 
@@ -38,7 +38,7 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<string>? RestoreDirectory
     {
-        get => GetConditioned<string>(RestoreDirectoryProperty);
+        get => GetExpression<string>(RestoreDirectoryProperty);
         init => SetProperty(RestoreDirectoryProperty, value);
     }
 
@@ -48,7 +48,7 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<string>? RestoreArguments
     {
-        get => GetConditioned<string>(RestoreArgumentsProperty);
+        get => GetExpression<string>(RestoreArgumentsProperty);
         init => SetProperty(RestoreArgumentsProperty, value);
     }
 
@@ -59,7 +59,7 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<BuildVerbosity>? VerbosityRestore
     {
-        get => GetConditioned<BuildVerbosity>(VerbosityRestoreProperty);
+        get => GetExpression<BuildVerbosity>(VerbosityRestoreProperty);
         init => SetProperty(VerbosityRestoreProperty, value);
     }
 
@@ -69,7 +69,7 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<bool>? NoCache
     {
-        get => GetConditioned<bool>(NoCacheProperty);
+        get => GetExpression<bool>(NoCacheProperty);
         init => SetProperty(NoCacheProperty, value);
     }
 
@@ -79,7 +79,7 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<bool>? IncludeNuGetOrg
     {
-        get => GetConditioned<bool>(IncludeNuGetOrgProperty);
+        get => GetExpression<bool>(IncludeNuGetOrgProperty);
         init => SetProperty(IncludeNuGetOrgProperty, value);
     }
 
@@ -89,7 +89,7 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<string>? NuGetConfigPath
     {
-        get => GetConditioned<string>(NugetConfigPathProperty);
+        get => GetExpression<string>(NugetConfigPathProperty);
         init
         {
             var feedsToUse = GetString(FeedsToUseProperty);
@@ -115,7 +115,7 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<string>? ExternalFeedCredentials
     {
-        get => GetConditioned<string>(ExternalFeedCredentialsProperty);
+        get => GetExpression<string>(ExternalFeedCredentialsProperty);
         init => SetProperty(ExternalFeedCredentialsProperty, value);
     }
 }

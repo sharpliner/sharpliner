@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -17,7 +17,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? DownloadDirectory
     {
-        get => GetConditioned<string>("downloadDirectory");
+        get => GetExpression<string>("downloadDirectory");
         init => SetProperty("downloadDirectory", value);
     }
 
@@ -30,7 +30,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? FeedsToUse
     {
-        get => GetConditioned<string>("feedsToUse");
+        get => GetExpression<string>("feedsToUse");
         init => SetProperty("feedsToUse", value);
     }
 
@@ -41,7 +41,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? ExternalFeedCredentials
     {
-        get => GetConditioned<string>("externalFeedCredentials");
+        get => GetExpression<string>("externalFeedCredentials");
         init => SetProperty("externalFeedCredentials", value);
     }
 
@@ -53,7 +53,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? VstsFeed
     {
-        get => GetConditioned<string>("vstsFeed");
+        get => GetExpression<string>("vstsFeed");
         init => SetProperty("vstsFeed", value);
     }
 
@@ -64,7 +64,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? VstsFeedPackage
     {
-        get => GetConditioned<string>("vstsFeedPackage");
+        get => GetExpression<string>("vstsFeedPackage");
         init => SetProperty("vstsFeedPackage", value);
     }
 
@@ -76,7 +76,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? VstsPackageVersion
     {
-        get => GetConditioned<string>("vstsPackageVersion");
+        get => GetExpression<string>("vstsPackageVersion");
         init => SetProperty("vstsPackageVersion", value);
     }
 
@@ -88,7 +88,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? FeedDownloadExternal
     {
-        get => GetConditioned<string>("feedDownloadExternal");
+        get => GetExpression<string>("feedDownloadExternal");
         init => SetProperty("feedDownloadExternal", value);
     }
 
@@ -99,7 +99,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? PackageDownloadExternal
     {
-        get => GetConditioned<string>("packageDownloadExternal");
+        get => GetExpression<string>("packageDownloadExternal");
         init => SetProperty("packageDownloadExternal", value);
     }
 
@@ -112,7 +112,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? VersionDownloadExternal
     {
-        get => GetConditioned<string>("versionDownloadExternal");
+        get => GetExpression<string>("versionDownloadExternal");
         init => SetProperty("versionDownloadExternal", value);
     }
 

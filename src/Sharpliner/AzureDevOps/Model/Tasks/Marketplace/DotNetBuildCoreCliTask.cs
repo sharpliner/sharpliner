@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -21,7 +21,7 @@ public record DotNetBuildCoreCliTask : DotNetCoreCliTask
     [YamlIgnore]
     public AdoExpression<bool>? IncludeNuGetOrg
     {
-        get => GetConditioned<bool>("includeNuGetOrg");
+        get => GetExpression<bool>("includeNuGetOrg");
         init => SetProperty("includeNuGetOrg", value);
     }
 }

@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -15,7 +15,7 @@ public record DeleteFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? SourceFolder
     {
-        get => GetConditioned<string>("SourceFolder");
+        get => GetExpression<string>("SourceFolder");
         init => SetProperty("SourceFolder", value);
     }
 
@@ -26,7 +26,7 @@ public record DeleteFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? Contents
     {
-        get => GetConditioned<string>("Contents");
+        get => GetExpression<string>("Contents");
         init => SetProperty("Contents", value);
     }
 
@@ -36,7 +36,7 @@ public record DeleteFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? RemoveSourceFolder
     {
-        get => GetConditioned<bool>("RemoveSourceFolder");
+        get => GetExpression<bool>("RemoveSourceFolder");
         init => SetProperty("RemoveSourceFolder", value);
     }
 
@@ -46,7 +46,7 @@ public record DeleteFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? RemoveDotFiles
     {
-        get => GetConditioned<bool>("RemoveDotFiles");
+        get => GetExpression<bool>("RemoveDotFiles");
         init => SetProperty("RemoveDotFiles", value);
     }
 

@@ -6,7 +6,7 @@ using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-namespace Sharpliner.AzureDevOps.ConditionedExpressions;
+namespace Sharpliner.AzureDevOps.Expressions;
 
 /// <summary>
 /// Represents an item that might or might not have a condition.
@@ -186,7 +186,7 @@ public record AdoExpression<T> : AdoExpression
 {
     // Make sure we can for example assign a string into ConditionedDefinition<string>
     /// <summary>
-    /// Implicitly converts a value into a <see cref="Conditioned{T}"/> instance with a definition.
+    /// Implicitly converts a value into a <see cref="AdoExpression{T}"/> instance with a definition.
     /// </summary>
     /// <param name="value">The definition.</param>
     public static implicit operator AdoExpression<T>([NotNullIfNotNull(nameof(value))]T? value) =>

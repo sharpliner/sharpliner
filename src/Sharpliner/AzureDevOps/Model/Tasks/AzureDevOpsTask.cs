@@ -1,5 +1,5 @@
 ﻿using System;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -80,7 +80,7 @@ public record AzureDevOpsTask : Step
     /// <param name="name">The name of the input parameter.</param>
     /// <param name="defaultValue">The default value to return if the input parameter is not found.</param>
     /// <returns>The value of the input parameter or the default value if the input parameter is not found.</returns>
-    protected AdoExpression<T>? GetConditioned<T>(string name, AdoExpression<T>? defaultValue = null)
+    protected AdoExpression<T>? GetExpression<T>(string name, AdoExpression<T>? defaultValue = null)
         => Inputs.TryGetValue(name, out var value) ? (AdoExpression<T>)value : defaultValue;
 
     /// <summary>

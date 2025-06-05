@@ -1,4 +1,4 @@
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -31,7 +31,7 @@ public record NuGetAuthenticateTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<bool>? ForceReinstallCredentialProvider
     {
-        get => GetConditioned<bool>("forceReinstallCredentialProvider");
+        get => GetExpression<bool>("forceReinstallCredentialProvider");
         init => SetProperty("forceReinstallCredentialProvider", value);
     }
 }

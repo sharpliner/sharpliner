@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -16,7 +16,7 @@ public abstract record UniversalPackagesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? Command
     {
-        get => GetConditioned<string>("command");
+        get => GetExpression<string>("command");
         init => SetProperty("command", value);
     }
 
@@ -28,7 +28,7 @@ public abstract record UniversalPackagesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? Verbosity
     {
-        get => GetConditioned<string>("verbosity");
+        get => GetExpression<string>("verbosity");
         init => SetProperty("verbosity", value);
     }
 

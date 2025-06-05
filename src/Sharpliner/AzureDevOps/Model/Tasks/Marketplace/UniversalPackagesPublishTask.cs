@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -17,7 +17,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? PublishDirectory
     {
-        get => GetConditioned<string>("publishDirectory");
+        get => GetExpression<string>("publishDirectory");
         init => SetProperty("publishDirectory", value);
     }
 
@@ -30,7 +30,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? FeedsToUsePublish
     {
-        get => GetConditioned<string>("feedsToUsePublish");
+        get => GetExpression<string>("feedsToUsePublish");
         init => SetProperty("feedsToUsePublish", value);
     }
 
@@ -41,7 +41,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? PublishFeedCredentials
     {
-        get => GetConditioned<string>("publishFeedCredentials");
+        get => GetExpression<string>("publishFeedCredentials");
         init => SetProperty("publishFeedCredentials", value);
     }
 
@@ -52,7 +52,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? VstsFeedPublish
     {
-        get => GetConditioned<string>("vstsFeedPublish");
+        get => GetExpression<string>("vstsFeedPublish");
         init => SetProperty("vstsFeedPublish", value);
     }
 
@@ -64,7 +64,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? PublishPackageMetadata
     {
-        get => GetConditioned<string>("publishPackageMetadata");
+        get => GetExpression<string>("publishPackageMetadata");
         init => SetProperty("publishPackageMetadata", value);
     }
 
@@ -76,7 +76,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? VstsFeedPackagePublish
     {
-        get => GetConditioned<string>("vstsFeedPackagePublish");
+        get => GetExpression<string>("vstsFeedPackagePublish");
         init => SetProperty("vstsFeedPackagePublish", value);
     }
 
@@ -89,7 +89,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? FeedPublishExternal
     {
-        get => GetConditioned<string>("feedPublishExternal");
+        get => GetExpression<string>("feedPublishExternal");
         init => SetProperty("feedPublishExternal", value);
     }
 
@@ -100,7 +100,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? PackagePublishExternal
     {
-        get => GetConditioned<string>("packagePublishExternal");
+        get => GetExpression<string>("packagePublishExternal");
         init => SetProperty("packagePublishExternal", value);
     }
 
@@ -114,7 +114,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? VersionOption
     {
-        get => GetConditioned<string>("versionOption");
+        get => GetExpression<string>("versionOption");
         init => SetProperty("versionOption", value);
     }
 
@@ -125,7 +125,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? VersionPublish
     {
-        get => GetConditioned<string>("versionPublish");
+        get => GetExpression<string>("versionPublish");
         init => SetProperty("versionPublish", value);
     }
 
@@ -136,7 +136,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? PackagePublishDescription
     {
-        get => GetConditioned<string>("packagePublishDescription");
+        get => GetExpression<string>("packagePublishDescription");
         init => SetProperty("packagePublishDescription", value);
     }
 
@@ -147,7 +147,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     [YamlIgnore]
     public AdoExpression<string>? PublishedPackageVar
     {
-        get => GetConditioned<string>("publishedPackageVar");
+        get => GetExpression<string>("publishedPackageVar");
         init => SetProperty("publishedPackageVar", value);
     }
 
