@@ -187,7 +187,7 @@ jobs:
     displayName: Install .NET SDK
     inputs:
       packageType: sdk
-      version: ${{ variables['DotnetVersion'] }}
+      version: $(DotnetVersion)
 
   - task: DotNetCoreCLI@2
     displayName: Build
