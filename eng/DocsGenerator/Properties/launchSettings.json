@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DocsGenerator": {
+      "commandName": "Project",
+      "workingDirectory": "$(SolutionDir)"
+    }
+  }
+}
