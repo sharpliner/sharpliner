@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -17,14 +17,14 @@ public record ScheduledTrigger
     /// </summary>
     [YamlMember(Order = 1, Alias = "cron")]
     [DisallowNull]
-    public Conditioned<string>? CronSchedule { get; init; }
+    public AdoExpression<string>? CronSchedule { get; init; }
 
     /// <summary>
     /// Friendly name given to a specific schedule
     /// </summary>
     [YamlMember(Order = 100)]
     [DisallowNull]
-    public Conditioned<string>? DisplayName { get; init; }
+    public AdoExpression<string>? DisplayName { get; init; }
 
     /// <summary>
     /// Branches to include or exclude for triggering a run using a pipeline resource.
@@ -38,7 +38,7 @@ public record ScheduledTrigger
     /// Defaults to false
     /// </summary>
     [YamlMember(Order = 300)]
-    public Conditioned<bool>? Always { get; init; }
+    public AdoExpression<bool>? Always { get; init; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ScheduledTrigger"/> class.

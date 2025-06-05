@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 
 namespace Sharpliner.GitHubActions;
 

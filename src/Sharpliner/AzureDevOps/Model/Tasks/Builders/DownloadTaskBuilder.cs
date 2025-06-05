@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
@@ -126,11 +126,11 @@ public class DownloadTaskBuilder
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/file-matching-patterns?view=azure-devops">file matching patterns</see>.
     /// </param>
     public SpecificDownloadTask SpecificBuild(
-        Conditioned<string> project,
-        Conditioned<int> definition,
-        Conditioned<int> buildId,
-        Conditioned<string>? artifact = null,
-        Conditioned<string>? path = null,
+        AdoExpression<string> project,
+        AdoExpression<int> definition,
+        AdoExpression<int> buildId,
+        AdoExpression<string>? artifact = null,
+        AdoExpression<string>? path = null,
         IEnumerable<string>? patterns = null)
         =>
         new(RunVersion.Specific, project, definition)
@@ -198,11 +198,11 @@ public class DownloadTaskBuilder
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/file-matching-patterns?view=azure-devops">file matching patterns</see>.
     /// </param>
     public SpecificDownloadTask LatestFromBranch(
-        Conditioned<string> project,
-        Conditioned<int> definition,
-        Conditioned<string>? branchName = null,
-        Conditioned<string>? artifact = null,
-        Conditioned<string>? path = null,
+        AdoExpression<string> project,
+        AdoExpression<int> definition,
+        AdoExpression<string>? branchName = null,
+        AdoExpression<string>? artifact = null,
+        AdoExpression<string>? path = null,
         IEnumerable<string>? patterns = null)
         =>
         new(RunVersion.LatestFromBranch, project, definition)

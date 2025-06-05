@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -18,41 +18,41 @@ public abstract record Step
     /// </summary>
     [YamlMember(Order = 100)]
     [DisallowNull]
-    public Conditioned<string>? DisplayName { get; init; }
+    public AdoExpression<string>? DisplayName { get; init; }
 
     /// <summary>
     /// Identifier for this step (A-Z, a-z, 0-9, and underscore).
     /// </summary>
     [YamlMember(Order = 150)]
     [DisallowNull]
-    public Conditioned<string>? Name { get; init; }
+    public AdoExpression<string>? Name { get; init; }
 
     /// <summary>
     /// Whether to run this step; defaults to 'true'.
     /// </summary>
     [YamlMember(Order = 175)]
-    public Conditioned<bool>? Enabled { get; init; }
+    public AdoExpression<bool>? Enabled { get; init; }
 
     /// <summary>
     /// Condition that must be met to run this step.
     /// </summary>
     [YamlMember(Order = 190)]
     [DisallowNull]
-    public Conditioned<InlineCondition>? Condition { get; init; }
+    public AdoExpression<InlineCondition>? Condition { get; init; }
 
     /// <summary>
     /// Whether future steps should run even if this step fails.
     /// Defaults to 'false'.
     /// </summary>
     [YamlMember(Order = 200)]
-    public Conditioned<bool>? ContinueOnError { get; init; }
+    public AdoExpression<bool>? ContinueOnError { get; init; }
 
     /// <summary>
     /// Timeout after which the step will be stopped.
     /// </summary>
     [YamlIgnore]
     [DisallowNull]
-    public Conditioned<TimeSpan>? Timeout
+    public AdoExpression<TimeSpan>? Timeout
     {
         get;
         init
@@ -64,7 +64,7 @@ public abstract record Step
             }
             else if (value?.Condition is not null)
             {
-                TimeoutInMinutes = new Conditioned<int>(default, value.Condition);
+                TimeoutInMinutes = new AdoExpression<int>(default, value.Condition);
             }
         }
     }
@@ -73,7 +73,7 @@ public abstract record Step
     /// Timeout after which the step will be stopped.
     /// </summary>
     [YamlMember(Order = 210)]
-    public Conditioned<int>? TimeoutInMinutes { get; init; }
+    public AdoExpression<int>? TimeoutInMinutes { get; init; }
 
     /// <summary>
     /// A list of additional items to map into the process's environment.
@@ -81,7 +81,7 @@ public abstract record Step
     /// </summary>
     [YamlMember(Order = 220)]
     [DisallowNull]
-    public ConditionedDictionary Env { get; init; } = [];
+    public DictionaryExpression Env { get; init; } = [];
 
     /// <summary>
     /// Make step only run when a condition is met.

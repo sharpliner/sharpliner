@@ -1,4 +1,4 @@
-namespace Sharpliner.AzureDevOps.ConditionedExpressions;
+namespace Sharpliner.AzureDevOps.Expressions;
 
 /// <summary>
 /// Base class that makes it possible to use dependency based output variables in other jobs.

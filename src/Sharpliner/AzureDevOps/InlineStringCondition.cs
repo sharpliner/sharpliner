@@ -1,5 +1,5 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
-using Sharpliner.AzureDevOps.ConditionedExpressions.Arguments;
+﻿using Sharpliner.AzureDevOps.Expressions;
+using Sharpliner.AzureDevOps.Expressions.Arguments;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -74,7 +74,7 @@ public abstract class InlineStringCondition<T> : InlineCondition<T>
     /// <param name="one">The first array expression.</param>
     /// <param name="two">The second expression.</param>
     /// <param name="parent">The parent condition.</param>
-    protected InlineStringCondition(string keyword, InlineArrayExpression one, InlineExpression two, Conditioned<T>? parent = null)
+    protected InlineStringCondition(string keyword, InlineArrayExpression one, InlineExpression two, AdoExpression<T>? parent = null)
         : this(keyword, Serialize(one), two, parent)
     {
     }
@@ -86,7 +86,7 @@ public abstract class InlineStringCondition<T> : InlineCondition<T>
     /// <param name="one">The first expression.</param>
     /// <param name="two">The second array expression.</param>
     /// <param name="parent">The parent condition.</param>
-    protected InlineStringCondition(string keyword, InlineExpression one, InlineArrayExpression two, Conditioned<T>? parent = null)
+    protected InlineStringCondition(string keyword, InlineExpression one, InlineArrayExpression two, AdoExpression<T>? parent = null)
         : this(keyword, one, Serialize(two), parent)
     {
     }
@@ -98,7 +98,7 @@ public abstract class InlineStringCondition<T> : InlineCondition<T>
     /// <param name="one">The first expression.</param>
     /// <param name="two">The second expression.</param>
     /// <param name="parent">The parent condition.</param>
-    protected InlineStringCondition(string keyword, InlineExpression one, InlineExpression two, Conditioned<T>? parent = null)
+    protected InlineStringCondition(string keyword, InlineExpression one, InlineExpression two, AdoExpression<T>? parent = null)
     {
         _keyword = keyword;
         _one = Serialize(one);

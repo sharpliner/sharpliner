@@ -2,7 +2,7 @@
 // To learn more, see https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/GettingStarted.md
 
 using System.Collections.Generic;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using Sharpliner.AzureDevOps.Validation;
 using Sharpliner.Common;
 
@@ -162,14 +162,14 @@ public abstract class StageTemplateDefinition : TemplateDefinition<Stage>
 /// <code language="csharp">
 /// public class MyStageTemplate(MyStageParameters? parameters = null) : StageTemplateDefinition&lt;MyStageParameters&gt;(parameters)
 /// {
-///   public override ConditionedList&lt;Stage&gt; Definition =>
+///   public override AdoExpressionList&lt;Stage&gt; Definition =>
 ///   [
 ///     ...
 ///   ];
 /// }
 /// public class MyStageParameters : AzureDevOpsDefinition
 /// {
-///   public ConditionedList&lt;Stage&gt; SetupStages { get; init; } = [];
+///   public AdoExpressionList&lt;Stage&gt; SetupStages { get; init; } = [];
 ///   public Stage MainStage { get; init; } = null!;
 /// }
 /// </code>
@@ -240,14 +240,14 @@ public abstract class JobTemplateDefinition : TemplateDefinition<JobBase>
 /// <code language="csharp">
 /// public class MyJobTemplate(MyJobParameters? parameters = null) : JobTemplateDefinition&lt;MyJobParameters&gt;(parameters)
 /// {
-///   public override ConditionedList&lt;Job&gt; Definition =>
+///   public override AdoExpressionList&lt;Job&gt; Definition =>
 ///   [
 ///     ...
 ///   ];
 /// }
 /// public class MyJobParameters : AzureDevOpsDefinition
 /// {
-///   public ConditionedList&lt;JobBase&gt; SetupJobs { get; init; } = [];
+///   public AdoExpressionList&lt;JobBase&gt; SetupJobs { get; init; } = [];
 ///   public JobBase MainJob { get; init; } = null!;
 ///   public DeploymentJob Deployment { get; init; } = new("deploy", "Deploy job")
 ///   {
@@ -353,7 +353,7 @@ public abstract class StepTemplateDefinition : TemplateDefinition<Step>
 /// <code language="csharp">
 /// public class MyStepTemplate(MyStepParameters? parameters = null) : StepTemplateDefinition&lt;MyStepParameters&gt;(parameters)
 /// {
-///   public override ConditionedList&lt;Step&gt; Definition =>
+///   public override AdoExpressionList&lt;Step&gt; Definition =>
 ///   [
 ///     ...
 ///   ];
@@ -433,7 +433,7 @@ public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBa
 /// <code language="csharp">
 /// public class MyVariableTemplate(MyVariableParameters? parameters = null) : VariableTemplateDefinition&lt;MyVariableParameters&gt;(parameters)
 /// {
-///   public override ConditionedList&lt;VariableBase&gt; Definition =>
+///   public override AdoExpressionList&lt;VariableBase&gt; Definition =>
 ///   [
 ///     ...
 ///   ];
@@ -570,12 +570,12 @@ public abstract class VariableTemplateCollection : TemplateDefinitionCollection<
 /// </summary>
 public abstract class StageLibrary : DefinitionLibrary<Stage>
 {
-    internal override IEnumerable<Conditioned<Stage>> Items => Stages;
+    internal override IEnumerable<AdoExpression<Stage>> Items => Stages;
 
     /// <summary>
     /// The list of stages in this library.
     /// </summary>
-    public abstract List<Conditioned<Stage>> Stages { get; }
+    public abstract List<AdoExpression<Stage>> Stages { get; }
 }
 
 /// <summary>
@@ -584,12 +584,12 @@ public abstract class StageLibrary : DefinitionLibrary<Stage>
 /// </summary>
 public abstract class JobLibrary : DefinitionLibrary<JobBase>
 {
-    internal override IEnumerable<Conditioned<JobBase>> Items => Jobs;
+    internal override IEnumerable<AdoExpression<JobBase>> Items => Jobs;
 
     /// <summary>
     /// The list of jobs in this library.
     /// </summary>
-    public abstract List<Conditioned<JobBase>> Jobs { get; }
+    public abstract List<AdoExpression<JobBase>> Jobs { get; }
 }
 
 /// <summary>
@@ -598,12 +598,12 @@ public abstract class JobLibrary : DefinitionLibrary<JobBase>
 /// </summary>
 public abstract class StepLibrary : DefinitionLibrary<Step>
 {
-    internal override IEnumerable<Conditioned<Step>> Items => Steps;
+    internal override IEnumerable<AdoExpression<Step>> Items => Steps;
 
     /// <summary>
     /// The list of steps in this library.
     /// </summary>
-    public abstract List<Conditioned<Step>> Steps { get; }
+    public abstract List<AdoExpression<Step>> Steps { get; }
 }
 
 /// <summary>
@@ -612,12 +612,12 @@ public abstract class StepLibrary : DefinitionLibrary<Step>
 /// </summary>
 public abstract class VariableLibrary : DefinitionLibrary<VariableBase>
 {
-    internal override IEnumerable<Conditioned<VariableBase>> Items => Variables;
+    internal override IEnumerable<AdoExpression<VariableBase>> Items => Variables;
 
     /// <summary>
     /// The list of variables in this library.
     /// </summary>
-    public abstract List<Conditioned<VariableBase>> Variables { get; }
+    public abstract List<AdoExpression<VariableBase>> Variables { get; }
 }
 
 #endregion

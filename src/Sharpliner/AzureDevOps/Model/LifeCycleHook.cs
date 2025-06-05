@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -13,7 +13,7 @@ public record LifeCycleHook
     /// A pool specification also holds information about the job's strategy for running.
     /// </summary>
     [YamlMember(Order = 300)]
-    public Conditioned<Pool>? Pool { get; set => field = value?.GetRoot(); }
+    public AdoExpression<Pool>? Pool { get; set => field = value?.GetRoot(); }
 
     /// <summary>
     /// A step is a linear sequence of operations that make up a job
@@ -21,5 +21,5 @@ public record LifeCycleHook
     /// This behavior means environment variables aren't preserved between steps but file system changes are.
     /// </summary>
     [YamlMember(Order = 700)]
-    public ConditionedList<Step> Steps { get; init; } = [];
+    public AdoExpressionList<Step> Steps { get; init; } = [];
 }

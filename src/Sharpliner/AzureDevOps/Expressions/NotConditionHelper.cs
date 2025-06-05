@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sharpliner.AzureDevOps.ConditionedExpressions;
+namespace Sharpliner.AzureDevOps.Expressions;
 
 internal static class NotConditionHelper
 {

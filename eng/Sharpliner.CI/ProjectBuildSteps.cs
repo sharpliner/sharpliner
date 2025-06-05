@@ -4,7 +4,7 @@ using System.IO;
 using System.Reflection;
 using System.Text.Json;
 using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 
 namespace Sharpliner.CI;
 
@@ -12,7 +12,7 @@ class ProjectBuildSteps(string project) : StepLibrary
 {
     public const string PackagePath = "artifacts/packages";
 
-    public override List<Conditioned<Step>> Steps =>
+    public override List<AdoExpression<Step>> Steps =>
     [
         StepTemplate(Pipelines.TemplateLocation + "install-dotnet-sdk.yml", new()
         {

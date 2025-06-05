@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -28,25 +28,25 @@ public record RepositoryResource
     /// Repository name (format depends on `Type`)
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Name { get; init; }
+    public AdoExpression<string>? Name { get; init; }
 
     /// <summary>
     /// Ref name to checkout; defaults to <c>refs/heads/main</c>
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Ref { get; init; }
+    public AdoExpression<string>? Ref { get; init; }
 
     /// <summary>
     /// Name of the service connection to use (for types that aren't Azure Repos)
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Endpoint { get; init; }
+    public AdoExpression<string>? Endpoint { get; init; }
 
     /// <summary>
     /// Triggers are not enabled by default unless you add trigger section to the resource
     /// </summary>
     [DisallowNull]
-    public Conditioned<Trigger>? Trigger { get; init; }
+    public AdoExpression<Trigger>? Trigger { get; init; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RepositoryResource"/> class with the specified identifier.

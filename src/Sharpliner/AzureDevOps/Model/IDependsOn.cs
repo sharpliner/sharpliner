@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 
@@ -26,7 +26,7 @@ public interface IDependsOn
 /// Represents dependencies between stages/jobs.
 /// </summary>
 /// <param name="values">The values to initialize the instance with.</param>
-public class DependsOn(params string[] values) : ConditionedList<string>(values), IYamlConvertible
+public class DependsOn(params string[] values) : AdoExpressionList<string>(values), IYamlConvertible
 {
     /// <summary>
     /// Implicitly converts a string to a single dependency.
@@ -51,7 +51,7 @@ public class DependsOn(params string[] values) : ConditionedList<string>(values)
         else
         {
             // wr want to use the serialized version of the list
-            nestedObjectSerializer(new List<Conditioned<string>>(this));
+            nestedObjectSerializer(new List<AdoExpression<string>>(this));
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using Sharpliner.Common;
 
 namespace Sharpliner.AzureDevOps.Validation;
@@ -58,7 +58,7 @@ internal abstract class DependsOnValidation : IDefinitionValidation
     private string GetTypeName<T>() => typeof(T).Name.Replace("Base", null);
 }
 
-internal class StageDependsOnValidation(ConditionedList<Stage> stages) : DependsOnValidation()
+internal class StageDependsOnValidation(AdoExpressionList<Stage> stages) : DependsOnValidation()
 {
     private readonly IReadOnlyCollection<Stage> _stages = stages.SelectMany(s => s.FlattenDefinitions()).ToList();
 
@@ -78,7 +78,7 @@ internal class StageDependsOnValidation(ConditionedList<Stage> stages) : Depends
     }
 }
 
-internal class JobDependsOnValidation(ConditionedList<JobBase> jobs) : DependsOnValidation()
+internal class JobDependsOnValidation(AdoExpressionList<JobBase> jobs) : DependsOnValidation()
 {
     private readonly IReadOnlyCollection<JobBase> _jobs = jobs.SelectMany(s => s.FlattenDefinitions()).ToList();
 

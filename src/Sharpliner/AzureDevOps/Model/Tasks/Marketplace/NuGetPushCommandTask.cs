@@ -1,4 +1,4 @@
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -52,9 +52,9 @@ public abstract record NuGetPushCommandTask : NuGetCommandTask
     /// Gets or sets the target feed for the push command.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? TargetFeed
+    public AdoExpression<string>? TargetFeed
     {
-        get => GetConditioned<string>("targetFeed");
+        get => GetExpression<string>("targetFeed");
         init => SetProperty("targetFeed", value);
     }
 
@@ -62,16 +62,16 @@ public abstract record NuGetPushCommandTask : NuGetCommandTask
     /// Gets or sets the target feed credentials for the push command.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? TargetFeedCredentials
+    public AdoExpression<string>? TargetFeedCredentials
     {
-        get => GetConditioned<string>("targetFeedCredentials");
+        get => GetExpression<string>("targetFeedCredentials");
         init => SetProperty("targetFeedCredentials", value);
     }
 
     [YamlIgnore]
-    internal Conditioned<string>? NuGetFeedType
+    internal AdoExpression<string>? NuGetFeedType
     {
-        get => GetConditioned<string>("nuGetFeedType");
+        get => GetExpression<string>("nuGetFeedType");
         init => SetProperty("nuGetFeedType", value);
     }
 }
@@ -85,7 +85,7 @@ public record NuGetPushInternalCommandTask : NuGetPushCommandTask
     /// Initializes a new instance of the <see cref="NuGetPushInternalCommandTask"/> class.
     /// </summary>
     /// <param name="publishVstsFeed">Specifies a feed hosted in this account. You must have Azure Artifacts installed and licensed to select a feed here.</param>
-    public NuGetPushInternalCommandTask(Conditioned<string> publishVstsFeed) : base("internal")
+    public NuGetPushInternalCommandTask(AdoExpression<string> publishVstsFeed) : base("internal")
     {
         PublishVstsFeed = publishVstsFeed;
     }
@@ -94,9 +94,9 @@ public record NuGetPushInternalCommandTask : NuGetPushCommandTask
     /// Specifies a feed hosted in this account. You must have Azure Artifacts installed and licensed to select a feed here.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? PublishVstsFeed
+    public AdoExpression<string>? PublishVstsFeed
     {
-        get => GetConditioned<string>("publishVstsFeed");
+        get => GetExpression<string>("publishVstsFeed");
         init => SetProperty("publishVstsFeed", value);
     }
 
@@ -104,9 +104,9 @@ public record NuGetPushInternalCommandTask : NuGetPushCommandTask
     /// Changes the version number of the subset of changed packages within a set of continually published packages.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? PublishPackageMetadata
+    public AdoExpression<bool>? PublishPackageMetadata
     {
-        get => GetConditioned<bool>("publishPackageMetadata");
+        get => GetExpression<bool>("publishPackageMetadata");
         init => SetProperty("publishPackageMetadata", value);
     }
 
@@ -118,9 +118,9 @@ public record NuGetPushInternalCommandTask : NuGetPushCommandTask
     /// If <c>NuGet.exe</c> encounters a conflict, the task will fail. This option will not work and publishing will fail if you are within a proxy environment.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? AllowPackageConflicts
+    public AdoExpression<bool>? AllowPackageConflicts
     {
-        get => GetConditioned<bool>("allowPackageConflicts");
+        get => GetExpression<bool>("allowPackageConflicts");
         init => SetProperty("allowPackageConflicts", value);
     }
 }
@@ -134,7 +134,7 @@ public record NuGetPushExternalCommandTask : NuGetPushCommandTask
     /// Initializes a new instance of the <see cref="NuGetPushExternalCommandTask"/> class.
     /// </summary>
     /// <param name="publishFeedCredentials">Specifies the NuGet service connection that contains the external NuGet server's credentials.</param>
-    public NuGetPushExternalCommandTask(Conditioned<string> publishFeedCredentials) : base("external")
+    public NuGetPushExternalCommandTask(AdoExpression<string> publishFeedCredentials) : base("external")
     {
         PublishFeedCredentials = publishFeedCredentials;
     }
@@ -143,9 +143,9 @@ public record NuGetPushExternalCommandTask : NuGetPushCommandTask
     /// Specifies the NuGet service connection that contains the external NuGet server's credentials.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? PublishFeedCredentials
+    public AdoExpression<string>? PublishFeedCredentials
     {
-        get => GetConditioned<string>("publishFeedCredentials");
+        get => GetExpression<string>("publishFeedCredentials");
         init => SetProperty("publishFeedCredentials", value);
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -13,13 +13,13 @@ public record ContainerReference
     /// Container image name
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Image { get; init; }
+    public AdoExpression<string>? Image { get; init; }
 
     /// <summary>
     /// Arguments to pass to container at startup
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Options { get; init; }
+    public AdoExpression<string>? Options { get; init; }
 
     /// <summary>
     /// Endpoint for a private container registry
@@ -31,5 +31,5 @@ public record ContainerReference
     /// A map of environment variables that are available to all steps of the jobs.
     /// When more than one variable with the same name is used, the latter one will be used.
     /// </summary>
-    public ConditionedDictionary Env { get; init; } = [];
+    public DictionaryExpression Env { get; init; } = [];
 }

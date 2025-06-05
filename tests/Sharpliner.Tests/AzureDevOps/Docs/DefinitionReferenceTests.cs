@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using FluentAssertions;
 using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using Sharpliner.AzureDevOps.Tasks;
 using YamlDotNet.Serialization;
 
@@ -116,7 +116,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
     [Fact]
     public Task AzurePipelineTask_Test()
     {
-        ConditionedList<Step> tasks =
+        AdoExpressionList<Step> tasks =
         [
 #region azure-pipeline-task
             Task("DotNetCoreCLI@2", "Run unit tests") with
@@ -136,7 +136,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
     [Fact]
     public Task Dotnet_Test()
     {
-        ConditionedList<Step> tasks =
+        AdoExpressionList<Step> tasks =
         [
 #region dotnet-tasks
             DotNet.Install.Sdk(parameters["version"]),
@@ -161,7 +161,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
     [Fact]
     public Task NuGet_Test()
     {
-        ConditionedList<Step> tasks =
+        AdoExpressionList<Step> tasks =
         [
 #region nuget-tasks-code
             NuGet.Authenticate(new[] { "NuGetServiceConnection1", "NuGetServiceConnection2" }, forceReinstallCredentialProvider: true),
@@ -326,7 +326,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
     [Fact]
     public void Serialize_TemplateConditionedExpressions_Test()
     {
-        Conditioned<Step> step =
+        AdoExpression<Step> step =
 #region template-conditioned-expressions-code
             StepTemplate("template1.yaml", new()
             {
@@ -489,7 +489,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
         // Where to publish the YAML to
         public override string TargetFile => "templates/install-dotnet.yml";
 
-        public override ConditionedList<Step> Definition =>
+        public override AdoExpressionList<Step> Definition =>
         [
             DotNet.Install.Sdk(parameters["version"]),
 
@@ -584,7 +584,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
             afterBuild,
         ];
 
-        public override ConditionedList<Step> Definition =>
+        public override AdoExpressionList<Step> Definition =>
         [
             DotNet.Install.Sdk(version),
 
@@ -721,7 +721,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
 #region definition-library
     class ProjectBuildSteps : StepLibrary
     {
-        public override List<Conditioned<Step>> Steps =>
+        public override List<AdoExpression<Step>> Steps =>
         [
             DotNet.Install.Sdk("6.0.100"),
 

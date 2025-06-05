@@ -198,7 +198,7 @@ Apart from obvious C# code reuse, you can also define sets of C# building blocks
 ```csharp
 class ProjectBuildSteps : StepLibrary
 {
-    public override List<Conditioned<Step>> Steps =>
+    public override List<AdoExpression<Step>> Steps =>
     [
         DotNet.Install.Sdk("6.0.100"),
 

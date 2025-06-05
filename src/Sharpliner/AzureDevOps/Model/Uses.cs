@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -11,10 +11,10 @@ public record Uses
     /// <summary>
     /// Repositories required by this job that are not already referenced.
     /// </summary>
-    public ConditionedList<string> Repositories { get; init; } = [];
+    public AdoExpressionList<string> Repositories { get; init; } = [];
 
     /// <summary>
     /// Pools required by this job that are not already referenced.
     /// </summary>
-    public ConditionedList<string> Pools { get; init; } = [];
+    public AdoExpressionList<string> Pools { get; init; } = [];
 }

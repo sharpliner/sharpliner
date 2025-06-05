@@ -1,5 +1,5 @@
 ﻿using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
@@ -34,5 +34,5 @@ internal abstract class SimpleStepTestPipeline : SingleStagePipelineDefinition
         }
     };
 
-    protected abstract ConditionedList<Step> Steps { get; }
+    protected abstract AdoExpressionList<Step> Steps { get; }
 }

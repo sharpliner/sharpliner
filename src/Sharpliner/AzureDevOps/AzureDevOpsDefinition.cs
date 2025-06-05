@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
-using Sharpliner.AzureDevOps.ConditionedExpressions.Arguments;
+using Sharpliner.AzureDevOps.Expressions;
+using Sharpliner.AzureDevOps.Expressions.Arguments;
 using Sharpliner.AzureDevOps.Tasks;
 using static Sharpliner.AzureDevOps.TemplateDefinition;
 
@@ -55,145 +55,145 @@ public abstract class AzureDevOpsDefinition
     /// <summary>
     /// Reference a step library (series of library stages).
     /// </summary>
-    protected static Conditioned<Stage> StageLibrary(StageLibrary library)
+    protected static AdoExpression<Stage> StageLibrary(StageLibrary library)
         => new LibraryReference<Stage>(library);
 
     /// <summary>
     /// Reference a step library (series of library jobs).
     /// </summary>
-    protected static Conditioned<JobBase> JobLibrary(JobLibrary library)
+    protected static AdoExpression<JobBase> JobLibrary(JobLibrary library)
         => new LibraryReference<JobBase>(library);
 
     /// <summary>
     /// Reference a step library (series of library steps).
     /// </summary>
-    protected static Conditioned<Step> StepLibrary(StepLibrary library)
+    protected static AdoExpression<Step> StepLibrary(StepLibrary library)
         => new LibraryReference<Step>(library);
 
     /// <summary>
     /// Reference a step library (series of library variables).
     /// </summary>
-    protected static Conditioned<VariableBase> VariableLibrary(VariableLibrary library)
+    protected static AdoExpression<VariableBase> VariableLibrary(VariableLibrary library)
         => new LibraryReference<VariableBase>(library);
 
     /// <summary>
     /// Reference a step library (series of library stages).
     /// </summary>
-    protected static Conditioned<Stage> ExpandStages(params Conditioned<Stage>[] stages)
+    protected static AdoExpression<Stage> ExpandStages(params AdoExpression<Stage>[] stages)
         => new LibraryReference<Stage>(stages);
 
     /// <summary>
     /// Reference a step library (series of library jobs).
     /// </summary>
-    protected static Conditioned<Job> ExpandJobs(params Conditioned<Job>[] jobs)
+    protected static AdoExpression<Job> ExpandJobs(params AdoExpression<Job>[] jobs)
         => new LibraryReference<Job>(jobs);
 
     /// <summary>
     /// Reference a step library (series of library steps).
     /// </summary>
-    protected static Conditioned<Step> ExpandSteps(params Conditioned<Step>[] steps)
+    protected static AdoExpression<Step> ExpandSteps(params AdoExpression<Step>[] steps)
         => new LibraryReference<Step>(steps);
 
     /// <summary>
     /// Reference a step library (series of library variables).
     /// </summary>
-    protected static Conditioned<VariableBase> ExpandVariables(params Conditioned<VariableBase>[] variables)
+    protected static AdoExpression<VariableBase> ExpandVariables(params AdoExpression<VariableBase>[] variables)
         => new LibraryReference<VariableBase>(variables);
 
     /// <summary>
     /// Reference a step library (series of library stages).
     /// </summary>
-    protected static Conditioned<Stage> ExpandStages(IEnumerable<Conditioned<Stage>> stages)
+    protected static AdoExpression<Stage> ExpandStages(IEnumerable<AdoExpression<Stage>> stages)
         => new LibraryReference<Stage>(stages);
 
     /// <summary>
     /// Reference a step library (series of library jobs).
     /// </summary>
-    protected static Conditioned<Job> ExpandJobs(IEnumerable<Conditioned<Job>> jobs)
+    protected static AdoExpression<Job> ExpandJobs(IEnumerable<AdoExpression<Job>> jobs)
         => new LibraryReference<Job>(jobs);
 
     /// <summary>
     /// Reference a step library (series of library steps).
     /// </summary>
-    protected static Conditioned<Step> ExpandSteps(IEnumerable<Conditioned<Step>> steps)
+    protected static AdoExpression<Step> ExpandSteps(IEnumerable<AdoExpression<Step>> steps)
         => new LibraryReference<Step>(steps);
 
     /// <summary>
     /// Reference a step library (series of library variables).
     /// </summary>
-    protected static Conditioned<VariableBase> ExpandVariables(IEnumerable<Conditioned<VariableBase>> variables)
+    protected static AdoExpression<VariableBase> ExpandVariables(IEnumerable<AdoExpression<VariableBase>> variables)
         => new LibraryReference<VariableBase>(variables);
 
     /// <summary>
     /// Reference a step library (series of library stages).
     /// </summary>
-    protected static Conditioned<Stage> ExpandStages(params Stage[] stages)
-        => ExpandStages(stages.Select(x => new Conditioned<Stage>(x)));
+    protected static AdoExpression<Stage> ExpandStages(params Stage[] stages)
+        => ExpandStages(stages.Select(x => new AdoExpression<Stage>(x)));
 
     /// <summary>
     /// Reference a step library (series of library jobs).
     /// </summary>
-    protected static Conditioned<Job> ExpandJobs(params Job[] jobs)
-        => ExpandJobs(jobs.Select(x => new Conditioned<Job>(x)));
+    protected static AdoExpression<Job> ExpandJobs(params Job[] jobs)
+        => ExpandJobs(jobs.Select(x => new AdoExpression<Job>(x)));
 
     /// <summary>
     /// Reference a step library (series of library steps).
     /// </summary>
-    protected static Conditioned<Step> ExpandSteps(params Step[] steps)
-        => ExpandSteps(steps.Select(x => new Conditioned<Step>(x)));
+    protected static AdoExpression<Step> ExpandSteps(params Step[] steps)
+        => ExpandSteps(steps.Select(x => new AdoExpression<Step>(x)));
 
     /// <summary>
     /// Reference a step library (series of library variables).
     /// </summary>
-    protected static Conditioned<VariableBase> ExpandVariables(params VariableBase[] variables)
-        => ExpandVariables(variables.Select(x => new Conditioned<VariableBase>(x)));
+    protected static AdoExpression<VariableBase> ExpandVariables(params VariableBase[] variables)
+        => ExpandVariables(variables.Select(x => new AdoExpression<VariableBase>(x)));
 
     /// <summary>
     /// Reference a step library (series of library stages).
     /// </summary>
-    protected static Conditioned<Stage> ExpandStages(IEnumerable<Stage> stages)
+    protected static AdoExpression<Stage> ExpandStages(IEnumerable<Stage> stages)
         => ExpandStages(stages.ToArray());
 
     /// <summary>
     /// Reference a step library (series of library jobs).
     /// </summary>
-    protected static Conditioned<Job> ExpandJobs(IEnumerable<Job> jobs)
+    protected static AdoExpression<Job> ExpandJobs(IEnumerable<Job> jobs)
         => ExpandJobs(jobs.ToArray());
 
     /// <summary>
     /// Reference a step library (series of library steps).
     /// </summary>
-    protected static Conditioned<Step> ExpandSteps(IEnumerable<Step> steps)
+    protected static AdoExpression<Step> ExpandSteps(IEnumerable<Step> steps)
         => ExpandSteps(steps.ToArray());
 
     /// <summary>
     /// Reference a step library (series of library variables).
     /// </summary>
-    protected static Conditioned<VariableBase> ExpandVariables(IEnumerable<VariableBase> variables)
+    protected static AdoExpression<VariableBase> ExpandVariables(IEnumerable<VariableBase> variables)
         => ExpandVariables(variables.ToArray());
 
     /// <summary>
     /// Reference a stage library (series of library stages).
     /// </summary>
-    protected static Conditioned<Stage> StageLibrary<T>() where T : StageLibrary, new()
+    protected static AdoExpression<Stage> StageLibrary<T>() where T : StageLibrary, new()
         => CreateLibraryRef<T, Stage>();
 
     /// <summary>
     /// Reference a job library (series of library jobs).
     /// </summary>
-    protected static Conditioned<JobBase> JobLibrary<T>() where T : JobLibrary, new()
+    protected static AdoExpression<JobBase> JobLibrary<T>() where T : JobLibrary, new()
         => CreateLibraryRef<T, JobBase>();
 
     /// <summary>
     /// Reference a step library (series of library steps).
     /// </summary>
-    protected static Conditioned<Step> StepLibrary<T>() where T : StepLibrary, new()
+    protected static AdoExpression<Step> StepLibrary<T>() where T : StepLibrary, new()
         => CreateLibraryRef<T, Step>();
 
     /// <summary>
     /// Reference a variable library (set of variable definition).
     /// </summary>
-    protected static Conditioned<VariableBase> VariableLibrary<T>() where T : VariableLibrary, new()
+    protected static AdoExpression<VariableBase> VariableLibrary<T>() where T : VariableLibrary, new()
         => CreateLibraryRef<T, VariableBase>();
 
     /// <summary>
@@ -220,34 +220,34 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     /// <param name="name">Variable name</param>
     /// <param name="value">Variable value</param>
-    protected static Conditioned<VariableBase> Variable(string name, string value) => new(new Variable(name, value));
+    protected static AdoExpression<VariableBase> Variable(string name, string value) => new(new Variable(name, value));
 
     /// <summary>
     /// Defines a variable.
     /// </summary>
     /// <param name="name">Variable name</param>
     /// <param name="value">Variable value</param>
-    protected static Conditioned<VariableBase> Variable(string name, int value) => new(new Variable(name, value));
+    protected static AdoExpression<VariableBase> Variable(string name, int value) => new(new Variable(name, value));
 
     /// <summary>
     /// Defines a variable.
     /// </summary>
     /// <param name="name">Variable name</param>
     /// <param name="value">Variable value</param>
-    protected static Conditioned<VariableBase> Variable(string name, bool value) => new(new Variable(name, value));
+    protected static AdoExpression<VariableBase> Variable(string name, bool value) => new(new Variable(name, value));
 
     /// <summary>
     /// Defines a variable.
     /// </summary>
     /// <param name="name">Variable name</param>
     /// <param name="value">Variable value</param>
-    protected static Conditioned<VariableBase> Variable(string name, Enum value) => new(new Variable(name, value));
+    protected static AdoExpression<VariableBase> Variable(string name, Enum value) => new(new Variable(name, value));
 
     /// <summary>
     /// References a variable group.
     /// </summary>
     /// <param name="name">Group name</param>
-    protected static Conditioned<VariableBase> Group(string name) => new(new VariableGroup(name));
+    protected static AdoExpression<VariableBase> Group(string name) => new(new VariableGroup(name));
 
     #endregion
 
@@ -413,7 +413,7 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static ObjectParameter ObjectParameter(string name, string? displayName = null, ConditionedDictionary? defaultValue = null)
+    protected static ObjectParameter ObjectParameter(string name, string? displayName = null, DictionaryExpression? defaultValue = null)
         => new(name, displayName, defaultValue);
 
     /// <summary>
@@ -422,7 +422,7 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static ObjectParameter<T> ObjectParameter<T>(string name, string? displayName = null, ConditionedList<T>? defaultValue = null)
+    protected static ObjectParameter<T> ObjectParameter<T>(string name, string? displayName = null, AdoExpressionList<T>? defaultValue = null)
         => new(name, displayName, defaultValue);
 
     /// <summary>
@@ -440,7 +440,7 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static StepListParameter StepListParameter(string name, string? displayName = null, ConditionedList<Step>? defaultValue = null)
+    protected static StepListParameter StepListParameter(string name, string? displayName = null, AdoExpressionList<Step>? defaultValue = null)
         => new(name, displayName, defaultValue);
 
     /// <summary>
@@ -458,7 +458,7 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static JobListParameter JobListParameter(string name, string? displayName = null, ConditionedList<JobBase>? defaultValue = null)
+    protected static JobListParameter JobListParameter(string name, string? displayName = null, AdoExpressionList<JobBase>? defaultValue = null)
         => new(name, displayName, defaultValue);
 
     /// <summary>
@@ -476,7 +476,7 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static DeploymentListParameter DeploymentListParameter(string name, string? displayName = null, ConditionedList<DeploymentJob>? defaultValue = null)
+    protected static DeploymentListParameter DeploymentListParameter(string name, string? displayName = null, AdoExpressionList<DeploymentJob>? defaultValue = null)
         => new(name, displayName, defaultValue);
 
     /// <summary>
@@ -494,7 +494,7 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static StageListParameter StageListParameter(string name, string? displayName = null, ConditionedList<Stage>? defaultValue = null)
+    protected static StageListParameter StageListParameter(string name, string? displayName = null, AdoExpressionList<Stage>? defaultValue = null)
         => new(name, displayName, defaultValue);
 
     #endregion

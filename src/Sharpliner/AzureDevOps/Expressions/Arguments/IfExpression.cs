@@ -1,6 +1,6 @@
 ﻿using OneOf;
 
-namespace Sharpliner.AzureDevOps.ConditionedExpressions.Arguments;
+namespace Sharpliner.AzureDevOps.Expressions.Arguments;
 
 /// <summary>
 /// Represents a value that can be used in an if condition.

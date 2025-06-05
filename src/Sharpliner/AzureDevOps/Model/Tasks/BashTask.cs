@@ -1,5 +1,5 @@
 ﻿using System;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 
@@ -15,27 +15,27 @@ public abstract record BashTask : Step
     /// If you leave it empty, the working directory is $(Build.SourcesDirectory).
     /// </summary>
     [YamlMember(Order = 113)]
-    public Conditioned<string>? WorkingDirectory { get; init; }
+    public AdoExpression<string>? WorkingDirectory { get; init; }
 
     /// <summary>
     /// If this is true, this task will fail if any errors are written to stderr.
     /// Default value: `false`.
     /// </summary>
     [YamlMember(Order = 114)]
-    public Conditioned<bool>? FailOnStderr { get; init; }
+    public AdoExpression<bool>? FailOnStderr { get; init; }
 
     /// <summary>
     /// Don't load the system-wide startup file **`/etc/profile`** or any of the personal initialization files.
     /// </summary>
     [YamlMember(Order = 115)]
-    public Conditioned<bool>? NoProfile { get; init; }
+    public AdoExpression<bool>? NoProfile { get; init; }
 
     /// <summary>
     /// If this is true, the task will not process `.bashrc` from the user's home directory.
     /// Default value: `true`.
     /// </summary>
     [YamlMember(Order = 200)]
-    public Conditioned<bool>? NoRc { get; init; }
+    public AdoExpression<bool>? NoRc { get; init; }
 }
 
 /// <summary>
@@ -74,7 +74,7 @@ public record BashFileTask : BashTask, IYamlConvertible
     /// <summary>
     /// Arguments passed to the Bash script.
     /// </summary>
-    public Conditioned<string>? Arguments { get; init; }
+    public AdoExpression<string>? Arguments { get; init; }
 
     /// <summary>
     /// If the related input is specified, the value will be used as the path of a startup file
@@ -83,7 +83,7 @@ public record BashFileTask : BashTask, IYamlConvertible
     /// If the environment variable BASH_ENV has already been defined, the task will override
     /// this variable only for the current task.
     /// </summary>
-    public Conditioned<string>? BashEnv { get; init; }
+    public AdoExpression<string>? BashEnv { get; init; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BashFileTask"/> class with the specified file path.

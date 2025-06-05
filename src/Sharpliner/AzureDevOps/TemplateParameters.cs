@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -7,6 +7,6 @@ namespace Sharpliner.AzureDevOps;
 /// To nest objects, insert another TemplateParameters value.
 /// You can also specify a condition in the key and nest values conditionally.
 /// </summary>
-public class TemplateParameters : ConditionedDictionary
+public class TemplateParameters : DictionaryExpression
 {
 }

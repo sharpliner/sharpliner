@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using Sharpliner.Common;
 
 namespace Sharpliner.AzureDevOps;
@@ -119,7 +119,7 @@ public abstract class TemplateDefinitionBase<T> : TemplateDefinition, ISharpline
     /// <returns>A YAML string.</returns>
     public string Serialize()
     {
-        var template = new ConditionedDictionary();
+        var template = new DictionaryExpression();
 
         if (Parameters != null && Parameters.Count > 0)
         {
@@ -156,7 +156,7 @@ public abstract class TemplateDefinitionBase<T> : TemplateDefinition, ISharpline
 /// This is the ancestor of all definitions that produce a Azure pipelines template.
 /// </summary>
 /// <typeparam name="T">Type of the part of the pipeline that this template is for (one of stages, steps, jobs or variables)</typeparam>
-public abstract class TemplateDefinition<T> : TemplateDefinitionBase<ConditionedList<T>>
+public abstract class TemplateDefinition<T> : TemplateDefinitionBase<AdoExpressionList<T>>
 {
     /// <summary>
     /// Disallow any other types than what we define here as AzDO only supports these.
