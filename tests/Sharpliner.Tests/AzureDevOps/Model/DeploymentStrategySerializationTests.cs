@@ -1,4 +1,5 @@
 ﻿using Sharpliner.AzureDevOps;
+using Sharpliner.AzureDevOps.ConditionedExpressions;
 using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.Tests.AzureDevOps;
@@ -10,7 +11,7 @@ public class DeploymentStrategySerializationTests
     {
         var strategy = new RollingStrategy
         {
-            MaxParallel = 4,
+            MaxParallel = new ParameterReference("mp"),
             PreDeploy =
             {
                 Steps =

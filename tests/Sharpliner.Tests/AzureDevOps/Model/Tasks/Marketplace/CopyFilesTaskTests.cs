@@ -1,4 +1,5 @@
-﻿using Sharpliner.AzureDevOps.Tasks;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Tasks;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
@@ -9,7 +10,7 @@ public class CopyFilesTaskTests
     {
         var task = new CopyFilesTask("**", "$(Build.ArtifactStagingDirectory)")
         {
-            SourceFolder = "$(Build.SourcesDirectory)",
+            SourceFolder = new ParameterReference("sourceDir"),
             CleanTargetFolder = true,
             Overwrite = true,
             FlattenFolders = true,
@@ -25,7 +26,10 @@ public class CopyFilesTaskTests
     [Fact]
     public Task Serialize_Task_With_Defaults_Test()
     {
-        var task = new CopyFilesTask("**", "$(Build.ArtifactStagingDirectory)");
+        var task = new CopyFilesTask("**", "$(Build.ArtifactStagingDirectory)")
+        {
+            SourceFolder = "foo",
+        };
 
         return Verify(SharplinerSerializer.Serialize(task));
     }

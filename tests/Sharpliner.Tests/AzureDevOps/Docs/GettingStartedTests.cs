@@ -12,7 +12,7 @@ public class GettingStartedTests : AzureDevOpsDefinition
         public override string TargetFile => "test-pipeline.yaml";
 
 #region single-stage-pipeline-example-csharp
-        private static readonly Variable DotnetVersion = new Variable("DotnetVersion", string.Empty);
+        private static readonly Variable DotnetVersion = new("DotnetVersion", string.Empty);
 
         public override SingleStagePipeline Pipeline => new()
         {
@@ -35,7 +35,14 @@ public class GettingStartedTests : AzureDevOpsDefinition
                     Steps =
                     [
                         If.IsPullRequest
-                            .Step(Powershell.Inline("Write-Host 'Hello-World'").DisplayAs("Hello world")),
+                            .Step(Powershell.Inline(
+                                    """
+                                    Write-Host 'Hello'
+                                    Write-Host 'World'
+                                    """)
+                                .DisplayAs("Hello world")),
+
+                        NuGet.Authenticate(),
 
                         DotNet.Install
                             .Sdk(DotnetVersion)
@@ -88,8 +95,11 @@ public class GettingStartedTests : AzureDevOpsDefinition
               steps:
               - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
                 - powershell: |-
-                    Write-Host 'Hello-World'
+                    Write-Host 'Hello'
+                    Write-Host 'World'
                   displayName: Hello world
+
+              - task: NuGetAuthenticate@1
 
               - task: UseDotNet@2
                 displayName: Install .NET SDK

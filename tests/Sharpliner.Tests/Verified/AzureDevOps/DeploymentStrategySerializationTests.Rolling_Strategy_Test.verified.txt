@@ -1,5 +1,5 @@
 ﻿rolling:
-  maxParallel: 4
+  maxParallel: ${{ parameters.mp }}
   preDeploy:
     steps:
     - download: current

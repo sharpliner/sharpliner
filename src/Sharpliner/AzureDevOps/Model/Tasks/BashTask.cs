@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
@@ -23,21 +22,20 @@ public abstract record BashTask : Step
     /// Default value: `false`.
     /// </summary>
     [YamlMember(Order = 114)]
-    public bool? FailOnStderr { get; init; }
+    public Conditioned<bool>? FailOnStderr { get; init; }
 
     /// <summary>
     /// Don't load the system-wide startup file **`/etc/profile`** or any of the personal initialization files.
     /// </summary>
     [YamlMember(Order = 115)]
-    public bool? NoProfile { get; init; }
+    public Conditioned<bool>? NoProfile { get; init; }
 
     /// <summary>
     /// If this is true, the task will not process `.bashrc` from the user's home directory.
     /// Default value: `true`.
     /// </summary>
     [YamlMember(Order = 200)]
-    [DefaultValue(true)]
-    public bool NoRc { get; init; } = true;
+    public Conditioned<bool>? NoRc { get; init; }
 }
 
 /// <summary>

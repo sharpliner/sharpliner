@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
@@ -16,7 +14,7 @@ public record ContainerResource
     /// Identifier (A-Z, a-z, 0-9, and underscore)
     /// </summary>
     [YamlMember(Alias = "container")]
-    public string Identifier { get; }
+    public Conditioned<string>? Identifier { get; }
 
     /// <summary>
     /// Container image name
@@ -45,19 +43,18 @@ public record ContainerResource
     /// <summary>
     /// Ports to expose on the container
     /// </summary>
-    public List<string> Ports { get; init; } = [];
+    public ConditionedList<string> Ports { get; init; } = [];
 
     /// <summary>
     /// Volumes to mount on the container
     /// </summary>
-    public List<string> Volumes { get; init; } = [];
+    public ConditionedList<string> Volumes { get; init; } = [];
 
     /// <summary>
     /// Whether to map in the Docker daemon socket; defaults to true
     /// </summary>
     [DisallowNull]
-    [DefaultValue(true)]
-    public bool MapDockerSocket { get; init; } = true;
+    public Conditioned<bool>? MapDockerSocket { get; init; }
 
     /// <summary>
     /// Volumes to mount read-only - all default to false
@@ -83,20 +80,20 @@ public record ContainerMountSettings
     /// <summary>
     /// Components required to talk to the agent
     /// </summary>
-    public bool Externals { get; init; }
+    public Conditioned<bool>? Externals { get; init; }
 
     /// <summary>
     ///  tasks required by the job
     /// </summary>
-    public bool Tasks { get; init; }
+    public Conditioned<bool>? Tasks { get; init; }
 
     /// <summary>
     /// Installable tools like Python and Ruby
     /// </summary>
-    public bool Tools { get; init; }
+    public Conditioned<bool>? Tools { get; init; }
 
     /// <summary>
     /// The work directory
     /// </summary>
-    public bool Work { get; init; }
+    public Conditioned<bool>? Work { get; init; }
 }

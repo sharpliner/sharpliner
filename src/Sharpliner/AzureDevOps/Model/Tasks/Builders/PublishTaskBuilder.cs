@@ -1,3 +1,5 @@
+using Sharpliner.AzureDevOps.ConditionedExpressions;
+
 namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
@@ -33,7 +35,7 @@ public class PublishTaskBuilder
     /// <param name="targetPath">Path to the folder or file you want to publish</param>
     /// <returns>A new instance of <see cref="PublishTask"/> with the specified parameters</returns>
     /// </summary>
-    public PublishTask Pipeline(string artifactName, string targetPath)
+    public PublishTask Pipeline(Conditioned<string> artifactName, Conditioned<string> targetPath)
     {
         return new PublishTask(targetPath, artifactName);
     }
@@ -66,7 +68,7 @@ public class PublishTaskBuilder
     /// <param name="targetPath">Path to the folder or file you want to publish</param>
     /// <param name="fileSharePath">Path to the file share.</param>
     /// <returns>A new instance of <see cref="PublishTask"/> with the specified parameters</returns>
-    public PublishTask FileShare(string artifactName, string targetPath, string fileSharePath)
+    public PublishTask FileShare(Conditioned<string> artifactName, Conditioned<string> targetPath, Conditioned<string> fileSharePath)
     {
         return new PublishTask(targetPath, artifactName)
         {

@@ -1,4 +1,5 @@
-﻿using YamlDotNet.Serialization;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
@@ -23,9 +24,9 @@ public record DotNetPublishCoreCliTask : DotNetCoreCliTask
     /// Note that this argument defaults to true if not specified.
     /// </summary>
     [YamlIgnore]
-    public bool PublishWebProjects
+    public Conditioned<bool>? PublishWebProjects
     {
-        get => GetBool("publishWebProjects", true);
+        get => GetConditioned<bool>("publishWebProjects");
         init => SetProperty("publishWebProjects", value);
     }
 
@@ -33,9 +34,9 @@ public record DotNetPublishCoreCliTask : DotNetCoreCliTask
     /// If true, folder created by the publish command will be zipped and deleted.
     /// </summary>
     [YamlIgnore]
-    public bool ZipAfterPublish
+    public Conditioned<bool>? ZipAfterPublish
     {
-        get => GetBool("zipAfterPublish", false);
+        get => GetConditioned<bool>("zipAfterPublish");
         init => SetProperty("zipAfterPublish", value);
     }
 
@@ -45,9 +46,9 @@ public record DotNetPublishCoreCliTask : DotNetCoreCliTask
     /// This is useful if you want to publish multiple projects to the same folder.
     /// </summary>
     [YamlIgnore]
-    public bool ModifyOutputPath
+    public Conditioned<bool>? ModifyOutputPath
     {
-        get => GetBool("modifyOutputPath", false);
+        get => GetConditioned<bool>("modifyOutputPath");
         init => SetProperty("modifyOutputPath", value);
     }
 }

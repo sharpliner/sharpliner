@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -18,9 +18,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <c>$(Build.BinariesDirectory)</c>
     /// </summary>
     [YamlIgnore]
-    public string? RootFolderOrFile
+    public Conditioned<string>? RootFolderOrFile
     {
-        get => GetString("rootFolderOrFile");
+        get => GetConditioned<string>("rootFolderOrFile");
         init => SetProperty("rootFolderOrFile", value);
     }
 
@@ -34,9 +34,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <c>true</c>
     /// </summary>
     [YamlIgnore]
-    public bool IncludeRootFolder
+    public Conditioned<bool>? IncludeRootFolder
     {
-        get => GetBool("includeRootFolder", true);
+        get => GetConditioned<bool>("includeRootFolder");
         init => SetProperty("includeRootFolder", value);
     }
 
@@ -47,9 +47,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <see cref="ArchiveType.Zip"/>
     /// </summary>
     [YamlIgnore]
-    public ArchiveType ArchiveType
+    public Conditioned<ArchiveType>? ArchiveType
     {
-        get => GetEnum("archiveType", ArchiveType.Zip);
+        get => GetConditioned<ArchiveType>("archiveType");
         init => SetProperty("archiveType", value);
     }
 
@@ -60,9 +60,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <see cref="SevenZipCompressionLevel.Normal"/>
     /// </summary>
     [YamlIgnore]
-    public SevenZipCompressionLevel SevenZipCompression
+    public Conditioned<SevenZipCompressionLevel>? SevenZipCompression
     {
-        get => GetEnum("sevenZipCompression", SevenZipCompressionLevel.Normal);
+        get => GetConditioned<SevenZipCompressionLevel>("sevenZipCompression");
         init => SetProperty("sevenZipCompression", value);
     }
 
@@ -73,9 +73,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <see cref="TarCompressionType.Gz"/>
     /// </summary>
     [YamlIgnore]
-    public TarCompressionType TarCompression
+    public Conditioned<TarCompressionType>? TarCompression
     {
-        get => GetEnum("tarCompression", TarCompressionType.Gz);
+        get => GetConditioned<TarCompressionType>("tarCompression");
         init => SetProperty("tarCompression", value);
     }
 
@@ -86,9 +86,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <c>$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip</c>
     /// </summary>
     [YamlIgnore]
-    public string? ArchiveFile
+    public Conditioned<string>? ArchiveFile
     {
-        get => GetString("archiveFile");
+        get => GetConditioned<string>("archiveFile");
         init => SetProperty("archiveFile", value);
     }
 
@@ -102,9 +102,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <c>true</c>
     /// </summary>
     [YamlIgnore]
-    public bool ReplaceExistingArchive
+    public Conditioned<bool>? ReplaceExistingArchive
     {
-        get => GetBool("replaceExistingArchive", true);
+        get => GetConditioned<bool>("replaceExistingArchive");
         init => SetProperty("replaceExistingArchive", value);
     }
 
@@ -115,9 +115,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <c>false</c>
     /// </summary>
     [YamlIgnore]
-    public bool Verbose
+    public Conditioned<bool>? Verbose
     {
-        get => GetBool("verbose", false);
+        get => GetConditioned<bool>("verbose");
         init => SetProperty("verbose", value);
     }
 
@@ -128,9 +128,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <c>false</c>
     /// </summary>
     [YamlIgnore]
-    public bool Quiet
+    public Conditioned<bool>? Quiet
     {
-        get => GetBool("quiet", false);
+        get => GetConditioned<bool>("quiet");
         init => SetProperty("quiet", value);
     }
 
@@ -140,7 +140,8 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// <param name="rootFolderOrFile">The name of the root folder or the file path to files to add to the archive.</param>
     /// <param name="archiveType">The compression format.</param>
     /// <param name="archiveFile">The name of the archive file to create.</param>
-    public ArchiveFilesTask(string rootFolderOrFile, ArchiveType archiveType, string archiveFile) : base("ArchiveFiles@2")
+    public ArchiveFilesTask(string rootFolderOrFile, Conditioned<ArchiveType> archiveType, Conditioned<string> archiveFile)
+        : base("ArchiveFiles@2")
     {
         RootFolderOrFile = rootFolderOrFile;
         ArchiveType = archiveType;

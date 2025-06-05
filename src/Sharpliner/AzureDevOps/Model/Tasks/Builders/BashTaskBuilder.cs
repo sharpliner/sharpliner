@@ -40,10 +40,10 @@ public class BashTaskBuilder : TaskBuilderBase
     /// <param name="resourceFileName">Name of the resource file</param>
     /// <param name="displayName">Display name of the build step</param>
     /// <returns>A new instance of <see cref="InlineBashTask"/> with the contents of the resource file</returns>
-    public InlineBashTask FromResourceFile(string resourceFileName, string? displayName = null!)
+    public InlineBashTask FromResourceFile(string resourceFileName, Conditioned<string>? displayName = null!)
         => new InlineBashTask(GetResourceFile(Assembly.GetCallingAssembly()!, resourceFileName)) with
         {
-            DisplayName = displayName is null ? null! : new Conditioned<string>(displayName),
+            DisplayName = displayName!,
         };
 
     /// <summary>
@@ -78,10 +78,11 @@ public class BashTaskBuilder : TaskBuilderBase
     /// <param name="path">Path to the file</param>
     /// <param name="displayName">Display name of the build step</param>
     /// <returns>A new instance of <see cref="InlineBashTask"/> with the contents of the file</returns>
-    public InlineBashTask FromFile(string path, string? displayName = null!) => new InlineBashTask(System.IO.File.ReadAllText(path)) with
-    {
-        DisplayName = displayName is null ? null! : new Conditioned<string>(displayName),
-    };
+    public InlineBashTask FromFile(string path, Conditioned<string>? displayName = null!)
+        => new InlineBashTask(System.IO.File.ReadAllText(path)) with
+        {
+            DisplayName = displayName!,
+        };
 
     /// <summary>
     /// <para>
@@ -107,10 +108,11 @@ public class BashTaskBuilder : TaskBuilderBase
     /// <param name="filePath">Path to the file</param>
     /// <param name="displayName">Name of the build step</param>
     /// <returns>A new instance of <see cref="BashFileTask"/> with the file path</returns>
-    public BashFileTask File(string filePath, string? displayName = null) => new(filePath)
-    {
-        DisplayName = displayName is null ? null! : new Conditioned<string>(displayName),
-    };
+    public BashFileTask File(string filePath, Conditioned<string>? displayName = null)
+        => new(filePath)
+        {
+            DisplayName = displayName!,
+        };
 
     /// <summary>
     /// <para>

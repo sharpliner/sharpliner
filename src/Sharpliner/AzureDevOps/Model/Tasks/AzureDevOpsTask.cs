@@ -80,6 +80,15 @@ public record AzureDevOpsTask : Step
     /// <param name="name">The name of the input parameter.</param>
     /// <param name="defaultValue">The default value to return if the input parameter is not found.</param>
     /// <returns>The value of the input parameter or the default value if the input parameter is not found.</returns>
+    protected Conditioned<T>? GetConditioned<T>(string name, Conditioned<T>? defaultValue = null)
+        => Inputs.TryGetValue(name, out var value) ? (Conditioned<T>)value : defaultValue;
+
+    /// <summary>
+    /// Gets the value of the input parameter.
+    /// </summary>
+    /// <param name="name">The name of the input parameter.</param>
+    /// <param name="defaultValue">The default value to return if the input parameter is not found.</param>
+    /// <returns>The value of the input parameter or the default value if the input parameter is not found.</returns>
     protected string? GetString(string name, string? defaultValue = null)
         => Inputs.TryGetValue(name, out var value) ? value.ToString() : defaultValue;
 
@@ -121,6 +130,23 @@ public record AzureDevOpsTask : Step
     /// <param name="name">The name of the input parameter.</param>
     /// <param name="value">The string value to set.</param>
     protected void SetProperty(string name, string? value)
+    {
+        if (value == null)
+        {
+            Inputs.Remove(name);
+        }
+        else
+        {
+            Inputs[name] = value;
+        }
+    }
+
+    /// <summary>
+    /// Sets the value of a input parameter, supporting various expressions such as variables and parameters.
+    /// </summary>
+    /// <param name="name">The name of the input parameter.</param>
+    /// <param name="value">The value to set.</param>
+    protected void SetProperty<T>(string name, Conditioned<T>? value)
     {
         if (value == null)
         {

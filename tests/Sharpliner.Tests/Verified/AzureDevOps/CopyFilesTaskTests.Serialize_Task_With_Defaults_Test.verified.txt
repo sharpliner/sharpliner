@@ -3,3 +3,4 @@
 inputs:
   Contents: '**'
   TargetFolder: $(Build.ArtifactStagingDirectory)
+  SourceFolder: foo

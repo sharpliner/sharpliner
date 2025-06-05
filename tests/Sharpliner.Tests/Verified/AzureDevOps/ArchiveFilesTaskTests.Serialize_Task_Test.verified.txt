@@ -2,7 +2,7 @@
 
 inputs:
   rootFolderOrFile: $(Build.SourcesDirectory)
-  archiveType: tar
+  archiveType: ${{ parameters.archiveType }}
   archiveFile: $(Build.ArtifactStagingDirectory)/Archive.tar
   includeRootFolder: true
   sevenZipCompression: ultra

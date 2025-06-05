@@ -1,4 +1,5 @@
-﻿using YamlDotNet.Serialization;
+﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
@@ -29,9 +30,9 @@ public record DotNetPushCoreCliTask : DotNetCoreCliTask
     /// </para>
     /// </summary>
     [YamlIgnore]
-    public string? PackagesToPush
+    public Conditioned<string>? PackagesToPush
     {
-        get => GetString("packagesToPush");
+        get => GetConditioned<string>("packagesToPush");
         init => SetProperty("packagesToPush", value);
     }
 
@@ -61,9 +62,9 @@ public record DotNetPushCoreCliTask : DotNetCoreCliTask
     /// Associate this build/release pipeline’s metadata (run ID, source code information) with the package
     /// </summary>
     [YamlIgnore]
-    public bool PublishPackageMetadata
+    public Conditioned<bool>? PublishPackageMetadata
     {
-        get => GetBool("publishPackageMetadata", true);
+        get => GetConditioned<bool>("publishPackageMetadata");
         init => SetProperty("publishPackageMetadata", value);
     }
 }

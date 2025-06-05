@@ -114,31 +114,31 @@ public class Program
 
     private static string GetCodeSnippet(string[] lines, string region, string language)
     {
-        for (int i = 0; i < lines.Length; i++)
-        {
-            if (lines[i].Equals($"#region {region}"))
-            {
-                var relevantLines = new List<string>();
-                i++;
-                do
-                {
-                    var line = lines[i];
-                    ++i;
-                    if (line.EndsWith("\"\"\""))
-                    {
-                        continue;
-                    }
+        var snippet = lines
+            .SkipWhile(line => line.Trim() != $"#region {region}")
+            .Skip(1)
+            .TakeWhile(line => line.Trim() != "#endregion")
+            .ToList();
 
-                    relevantLines.Add(line);
-                } while (!lines[i].Equals("#endregion"));
-                return GetCodeSnippet(relevantLines.ToArray(), language);
-            }
+        if (snippet.Count == 0)
+        {
+            throw new Exception($"Region {region} not found in file");
         }
 
-        throw new ArgumentOutOfRangeException($"Region {region} not found in file");
+        if (snippet[0].Trim() == "\"\"\"")
+        {
+            snippet.RemoveAt(0);
+        }
+
+        if (snippet.Last().Trim() == "\"\"\"")
+        {
+            snippet.RemoveAt(snippet.Count - 1);
+        }
+
+        return GetCodeSnippet(snippet, language);
     }
 
-    private static string GetCodeSnippet(string[] lines, string language)
+    private static string GetCodeSnippet(IReadOnlyList<string> lines, string language)
     {
         var snippet = new StringBuilder();
         snippet.AppendLine($"```{language}");

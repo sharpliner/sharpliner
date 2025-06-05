@@ -99,6 +99,24 @@ public abstract record Parameter
     /// </summary>
     /// <param name="parameter">The parameter.</param>
     public static implicit operator InlineExpression(Parameter parameter) => new ParameterReference(parameter.Name);
+
+    /// <summary>
+    /// Converts a <see cref="Parameter"/> to a <see cref="Conditioned"/> by getting the reference to the parameter.
+    /// </summary>
+    /// <param name="parameter">The parameter.</param>
+    public static implicit operator Conditioned<string>(Parameter parameter) => new ParameterReference(parameter.Name);
+
+    /// <summary>
+    /// Converts a <see cref="Parameter"/> to a <see cref="Conditioned"/> by getting the reference to the parameter.
+    /// </summary>
+    /// <param name="parameter">The parameter.</param>
+    public static implicit operator Conditioned<int>(Parameter parameter) => new ParameterReference(parameter.Name);
+
+    /// <summary>
+    /// Converts a <see cref="Parameter"/> to a <see cref="Conditioned"/> by getting the reference to the parameter.
+    /// </summary>
+    /// <param name="parameter">The parameter.</param>
+    public static implicit operator Conditioned<bool>(Parameter parameter) => new ParameterReference(parameter.Name);
 }
 
 /// <summary>

@@ -79,7 +79,7 @@ Check out the [full reference with tips](./DefinitionReference.md) so that you c
 An example of a pipeline that builds and tests your PR can look like this:
 
 ```csharp
-private static readonly Variable DotnetVersion = new Variable("DotnetVersion", string.Empty);
+private static readonly Variable DotnetVersion = new("DotnetVersion", string.Empty);
 
 public override SingleStagePipeline Pipeline => new()
 {
@@ -102,7 +102,14 @@ public override SingleStagePipeline Pipeline => new()
             Steps =
             [
                 If.IsPullRequest
-                    .Step(Powershell.Inline("Write-Host 'Hello-World'").DisplayAs("Hello world")),
+                    .Step(Powershell.Inline(
+                            """
+                            Write-Host 'Hello'
+                            Write-Host 'World'
+                            """)
+                        .DisplayAs("Hello world")),
+
+                NuGet.Authenticate(),
 
                 DotNet.Install
                     .Sdk(DotnetVersion)
@@ -176,8 +183,11 @@ jobs:
   steps:
   - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
     - powershell: |-
-        Write-Host 'Hello-World'
+        Write-Host 'Hello'
+        Write-Host 'World'
       displayName: Hello world
+
+  - task: NuGetAuthenticate@1
 
   - task: UseDotNet@2
     displayName: Install .NET SDK
