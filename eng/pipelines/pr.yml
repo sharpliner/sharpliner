@@ -23,6 +23,11 @@ jobs:
     name: Azure Pipelines
     vmImage: windows-2022
   steps:
+  - powershell: echo $Env:FOO
+    displayName: Test
+    env:
+      FOO: $(System.PullRequest.SourceBranch)
+
   - template: templates/install-dotnet-sdk.yml
     parameters:
       version: 9.0.102

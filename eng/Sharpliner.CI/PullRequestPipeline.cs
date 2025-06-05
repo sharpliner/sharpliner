@@ -25,6 +25,12 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                 Pool = new HostedPool("Azure Pipelines", "windows-2022"),
                 Steps =
                 {
+                    Powershell.Inline("echo $Env:FOO") with
+                    {
+                        Env = new() { { "FOO", variables.System.PullRequest.SourceBranch } },
+                        DisplayName = "Test",
+                    },
+
                     StepLibrary(new ProjectBuildSteps("src/**/*.csproj")),
 
                     DotNet.Run with
