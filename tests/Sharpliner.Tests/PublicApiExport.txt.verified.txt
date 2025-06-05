@@ -939,6 +939,8 @@ namespace Sharpliner.AzureDevOps
         public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.LockBehavior>? LockBehavior { get; init; }
         [YamlDotNet.Serialization.YamlMember(Alias="stage", Order=1)]
         public string Name { get; }
+        [YamlDotNet.Serialization.YamlMember(Order=250)]
+        public Sharpliner.AzureDevOps.ConditionedExpressions.Conditioned<Sharpliner.AzureDevOps.Pool>? Pool { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=200)]
         public Sharpliner.AzureDevOps.ConditionedExpressions.ConditionedList<Sharpliner.AzureDevOps.VariableBase> Variables { get; init; }
         public Sharpliner.AzureDevOps.Stage DisplayAs(string displayName) { }
