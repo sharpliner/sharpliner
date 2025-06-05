@@ -27,20 +27,6 @@ jobs:
     name: Azure Pipelines
     vmImage: windows-2022
   steps:
-  - powershell: echo $(BAR)
-    displayName: ${{ variables['BAR'] }}
-
-  - powershell: echo ${{ variables['BAR'] }}
-    displayName: ${{ variables['BAR'] }}
-
-  - powershell: echo $(BAR)
-    displayName: ${{ variables['BAR'] }}
-    condition: eq(variables['BAR'], 'XYZ')
-
-  - powershell: echo ${{ variables['BAR'] }}
-    displayName: ${{ variables['BAR'] }}
-    condition: eq('${{ variables['BAR'] }}', 'XYZ')
-
   - template: templates/install-dotnet-sdk.yml
     parameters:
       version: 9.0.102

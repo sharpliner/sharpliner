@@ -30,28 +30,6 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                 Pool = new HostedPool("Azure Pipelines", "windows-2022"),
                 Steps =
                 {
-                    Powershell.Inline("echo " + variables["BAR"]) with
-                    {
-                        DisplayName = variables["BAR"],
-                    },
-
-                    Powershell.Inline("echo ${{ variables['BAR'] }}") with
-                    {
-                        DisplayName = "${{ variables['BAR'] }}",
-                    },
-
-                    Powershell.Inline("echo " + variables["BAR"]) with
-                    {
-                        DisplayName = variables["BAR"],
-                        Condition = Equal(variables["BAR"], "XYZ"),
-                    },
-
-                    Powershell.Inline("echo ${{ variables['BAR'] }}") with
-                    {
-                        DisplayName = "${{ variables['BAR'] }}",
-                        Condition = Equal("${{ variables['BAR'] }}", "XYZ"),
-                    },
-
                     StepLibrary(new ProjectBuildSteps("src/**/*.csproj")),
 
                     DotNet.Run with
