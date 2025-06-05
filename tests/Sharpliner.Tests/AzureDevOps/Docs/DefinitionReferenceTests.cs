@@ -116,7 +116,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
     [Fact]
     public Task AzurePipelineTask_Test()
     {
-        ConditionedList<Step> tasks =
+        AdoExpressionList<Step> tasks =
         [
 #region azure-pipeline-task
             Task("DotNetCoreCLI@2", "Run unit tests") with
@@ -136,7 +136,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
     [Fact]
     public Task Dotnet_Test()
     {
-        ConditionedList<Step> tasks =
+        AdoExpressionList<Step> tasks =
         [
 #region dotnet-tasks
             DotNet.Install.Sdk(parameters["version"]),
@@ -161,7 +161,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
     [Fact]
     public Task NuGet_Test()
     {
-        ConditionedList<Step> tasks =
+        AdoExpressionList<Step> tasks =
         [
 #region nuget-tasks-code
             NuGet.Authenticate(new[] { "NuGetServiceConnection1", "NuGetServiceConnection2" }, forceReinstallCredentialProvider: true),
@@ -489,7 +489,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
         // Where to publish the YAML to
         public override string TargetFile => "templates/install-dotnet.yml";
 
-        public override ConditionedList<Step> Definition =>
+        public override AdoExpressionList<Step> Definition =>
         [
             DotNet.Install.Sdk(parameters["version"]),
 
@@ -584,7 +584,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
             afterBuild,
         ];
 
-        public override ConditionedList<Step> Definition =>
+        public override AdoExpressionList<Step> Definition =>
         [
             DotNet.Install.Sdk(version),
 

@@ -34,5 +34,5 @@ internal abstract class SimpleStepTestPipeline : SingleStagePipelineDefinition
         }
     };
 
-    protected abstract ConditionedList<Step> Steps { get; }
+    protected abstract AdoExpressionList<Step> Steps { get; }
 }

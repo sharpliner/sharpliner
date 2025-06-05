@@ -21,5 +21,5 @@ public record LifeCycleHook
     /// This behavior means environment variables aren't preserved between steps but file system changes are.
     /// </summary>
     [YamlMember(Order = 700)]
-    public ConditionedList<Step> Steps { get; init; } = [];
+    public AdoExpressionList<Step> Steps { get; init; } = [];
 }

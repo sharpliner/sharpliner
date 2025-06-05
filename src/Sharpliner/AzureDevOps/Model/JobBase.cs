@@ -54,7 +54,7 @@ public abstract record JobBase : IDependsOn
     /// You can add hard-coded values directly, reference variable groups, or insert via variable templates.
     /// </summary>
     [YamlMember(Order = 600)]
-    public ConditionedList<VariableBase> Variables { get; init; } = [];
+    public AdoExpressionList<VariableBase> Variables { get; init; } = [];
 
     /// <summary>
     /// How long to run the job before automatically cancelling

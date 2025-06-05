@@ -43,12 +43,12 @@ public record ContainerResource
     /// <summary>
     /// Ports to expose on the container
     /// </summary>
-    public ConditionedList<string> Ports { get; init; } = [];
+    public AdoExpressionList<string> Ports { get; init; } = [];
 
     /// <summary>
     /// Volumes to mount on the container
     /// </summary>
-    public ConditionedList<string> Volumes { get; init; } = [];
+    public AdoExpressionList<string> Volumes { get; init; } = [];
 
     /// <summary>
     /// Whether to map in the Docker daemon socket; defaults to true

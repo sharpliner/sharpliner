@@ -26,7 +26,7 @@ public interface IDependsOn
 /// Represents dependencies between stages/jobs.
 /// </summary>
 /// <param name="values">The values to initialize the instance with.</param>
-public class DependsOn(params string[] values) : ConditionedList<string>(values), IYamlConvertible
+public class DependsOn(params string[] values) : AdoExpressionList<string>(values), IYamlConvertible
 {
     /// <summary>
     /// Implicitly converts a string to a single dependency.

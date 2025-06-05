@@ -9,7 +9,7 @@ public class VariableReferenceTests
     {
         public override string TargetFile => "stages.yml";
 
-        public override ConditionedList<Stage> Definition =>
+        public override AdoExpressionList<Stage> Definition =>
         [
             new Stage("Stage_1")
             {

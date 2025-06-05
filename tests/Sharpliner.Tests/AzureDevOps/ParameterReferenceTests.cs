@@ -21,7 +21,7 @@ public class ParameterReferenceTests
             }),
         ];
 
-        public override ConditionedList<Stage> Definition =>
+        public override AdoExpressionList<Stage> Definition =>
         [
             new Stage("Stage_1")
             {

@@ -102,24 +102,24 @@ public abstract record AdoExpression : IYamlConvertible
     /// <returns>The conditioned definition coming out of the inputs</returns>
     internal static AdoExpression<T> Link<T>(IfCondition condition, T definition)
     {
-        var conditionedDefinition = new AdoExpression<T>(definition, condition);
-        condition.Parent?.Definitions.Add(conditionedDefinition);
-        conditionedDefinition.Parent = condition.Parent;
-        return conditionedDefinition;
+        var expression = new AdoExpression<T>(definition, condition);
+        condition.Parent?.Definitions.Add(expression);
+        expression.Parent = condition.Parent;
+        return expression;
     }
 
     /// <summary>
     /// This method is used for double-linking of the definition expression tree.
     /// </summary>
     /// <param name="condition">Parent condition</param>
-    /// <param name="conditionedDefinition">Definition that was added below the condition</param>
+    /// <param name="expression">Definition that was added below the condition</param>
     /// <returns>The conditioned definition coming out of the inputs</returns>
-    internal static AdoExpression<T> Link<T>(IfCondition condition, AdoExpression<T> conditionedDefinition)
+    internal static AdoExpression<T> Link<T>(IfCondition condition, AdoExpression<T> expression)
     {
-        conditionedDefinition.Condition = condition;
-        condition.Parent?.Definitions.Add(conditionedDefinition);
-        conditionedDefinition.Parent = condition.Parent;
-        return conditionedDefinition;
+        expression.Condition = condition;
+        condition.Parent?.Definitions.Add(expression);
+        expression.Parent = condition.Parent;
+        return expression;
     }
 
     /// <summary>
@@ -130,11 +130,11 @@ public abstract record AdoExpression : IYamlConvertible
     /// <returns>The conditioned definition coming out of the inputs</returns>
     internal static AdoExpression<T> Link<T>(IfCondition condition, IEnumerable<AdoExpression<T>> items)
     {
-        var conditionedDefinition = new AdoExpression<T>(default!, condition);
-        conditionedDefinition.Definitions.AddRange(items);
-        condition.Parent?.Definitions.Add(conditionedDefinition);
-        conditionedDefinition.Parent = condition.Parent;
-        return conditionedDefinition;
+        var expression = new AdoExpression<T>(default!, condition);
+        expression.Definitions.AddRange(items);
+        condition.Parent?.Definitions.Add(expression);
+        expression.Parent = condition.Parent;
+        return expression;
     }
 
     /// <summary>

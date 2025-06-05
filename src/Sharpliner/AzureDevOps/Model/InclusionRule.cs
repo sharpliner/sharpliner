@@ -10,10 +10,10 @@ public record InclusionRule
     /// <summary>
     /// List of items to include.
     /// </summary>
-    public ConditionedList<string> Include { get; init; } = [];
+    public AdoExpressionList<string> Include { get; init; } = [];
 
     /// <summary>
     /// List of items to exclude.
     /// </summary>
-    public ConditionedList<string> Exclude { get; init; } = [];
+    public AdoExpressionList<string> Exclude { get; init; } = [];
 }

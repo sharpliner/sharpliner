@@ -15,7 +15,7 @@ public static class ValidationsExtensions
     /// </summary>
     /// <param name="stages">The input stages.</param>
     /// <returns>A flattened list of all jobs.</returns>
-    public static IEnumerable<JobBase> GetJobs(this ConditionedList<Stage> stages)
+    public static IEnumerable<JobBase> GetJobs(this AdoExpressionList<Stage> stages)
         => stages.SelectMany(s => s.FlattenDefinitions().SelectMany(r => r.Jobs.SelectMany(j => j.FlattenDefinitions())));
 
     /// <summary>
@@ -23,7 +23,7 @@ public static class ValidationsExtensions
     /// </summary>
     /// <param name="jobs">The input jobs.</param>
     /// <returns>A flattened list of all steps.</returns>
-    public static IEnumerable<Step> GetSteps(this ConditionedList<JobBase> jobs)
+    public static IEnumerable<Step> GetSteps(this AdoExpressionList<JobBase> jobs)
         => jobs.SelectMany(j => j
                 .FlattenDefinitions()
                 .OfType<Job>()
@@ -34,7 +34,7 @@ public static class ValidationsExtensions
     /// </summary>
     /// <param name="stages">The input stages.</param>
     /// <returns>A list of validations for the input stages.</returns>
-    public static IReadOnlyCollection<IDefinitionValidation> GetStageValidations(this ConditionedList<Stage> stages) =>
+    public static IReadOnlyCollection<IDefinitionValidation> GetStageValidations(this AdoExpressionList<Stage> stages) =>
     [
         new StageDependsOnValidation(stages),
         new NameValidation(stages),
@@ -45,7 +45,7 @@ public static class ValidationsExtensions
     /// </summary>
     /// <param name="jobs">The input jobs.</param>
     /// <returns>A list of validations for the input jobs.</returns>
-    public static IReadOnlyCollection<IDefinitionValidation> GetJobValidations(this ConditionedList<JobBase> jobs) =>
+    public static IReadOnlyCollection<IDefinitionValidation> GetJobValidations(this AdoExpressionList<JobBase> jobs) =>
     [
         new JobDependsOnValidation(jobs),
         new NameValidation(jobs),

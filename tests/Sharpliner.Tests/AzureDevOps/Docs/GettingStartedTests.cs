@@ -148,7 +148,7 @@ public class GettingStartedTests : AzureDevOpsDefinition
     [Fact]
     public void Step_ValidateYamlsArePublished_Test()
     {
-        ConditionedList<Step> steps =
+        AdoExpressionList<Step> steps =
         [
 #region validate-yaml-step
             ValidateYamlsArePublished("src/MyProject.Pipelines.csproj")

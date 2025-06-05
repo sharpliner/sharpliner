@@ -13,7 +13,7 @@ public static class ConditionExtensions
     /// <summary>
     /// Defines a variable.
     /// </summary>
-    /// <param name="condition">Conditioned definition</param>
+    /// <param name="condition">Expression</param>
     /// <param name="name">Variable name</param>
     /// <param name="value">Variable value</param>
     public static AdoExpression<VariableBase> Variable(this IfCondition condition, string name, string value)
@@ -22,7 +22,7 @@ public static class ConditionExtensions
     /// <summary>
     /// Defines a variable.
     /// </summary>
-    /// <param name="condition">Conditioned definition</param>
+    /// <param name="condition">Expression</param>
     /// <param name="name">Variable name</param>
     /// <param name="value">Variable value</param>
     public static AdoExpression<VariableBase> Variable(this IfCondition condition, string name, bool value)
@@ -31,7 +31,7 @@ public static class ConditionExtensions
     /// <summary>
     /// Defines a variable.
     /// </summary>
-    /// <param name="condition">Conditioned definition</param>
+    /// <param name="condition">Expression</param>
     /// <param name="name">Variable name</param>
     /// <param name="value">Variable value</param>
     public static AdoExpression<VariableBase> Variable(this IfCondition condition, string name, int value)
@@ -40,7 +40,7 @@ public static class ConditionExtensions
     /// <summary>
     /// Defines a variable.
     /// </summary>
-    /// <param name="condition">Conditioned definition</param>
+    /// <param name="condition">Expression</param>
     /// <param name="name">Variable name</param>
     /// <param name="value">Variable value</param>
     public static AdoExpression<VariableBase> Variable(this IfCondition condition, string name, Enum value)
@@ -49,7 +49,7 @@ public static class ConditionExtensions
     /// <summary>
     /// Defines a variable.
     /// </summary>
-    /// <param name="condition">Conditioned definition</param>
+    /// <param name="condition">Expression</param>
     /// <param name="variable">Variable instance</param>
     public static AdoExpression<VariableBase> Variable(this IfCondition condition, Variable variable)
         => AdoExpression.Link<VariableBase>(condition, variable);
@@ -57,14 +57,14 @@ public static class ConditionExtensions
     /// <summary>
     /// Defines multiple variables at once.
     /// </summary>
-    /// <param name="condition">Conditioned definition</param>
+    /// <param name="condition">Expression</param>
     /// <param name="variables">List of (key, value) pairs</param>
     public static AdoExpression<VariableBase> Variables(
         this IfCondition condition,
         params (string name, object value)[] variables)
     {
         var (name, value) = variables.First();
-        var conditionedDefinition = value switch
+        var expression = value switch
         {
             int number => AdoExpression.Link<VariableBase>(condition, new Variable(name, number)),
             bool boolean => AdoExpression.Link<VariableBase>(condition, new Variable(name, boolean)),
@@ -74,10 +74,10 @@ public static class ConditionExtensions
 
         if (variables.Length > 1)
         {
-            conditionedDefinition = conditionedDefinition.Variables(variables.Skip(1).ToArray());
+            expression = expression.Variables(variables.Skip(1).ToArray());
         }
 
-        return conditionedDefinition;
+        return expression;
     }
 
     /// <summary>
@@ -149,7 +149,7 @@ public static class ConditionExtensions
     /// <summary>
     /// Reference a YAML stage template.
     /// </summary>
-    /// <param name="condition">Conditioned definition</param>
+    /// <param name="condition">Expression</param>
     /// <param name="path">Relative path to the YAML file with the template</param>
     /// <param name="parameters">Values for template parameters</param>
     public static AdoExpression<Stage> StageTemplate(this IfCondition condition, string path, TemplateParameters? parameters = null)
@@ -158,7 +158,7 @@ public static class ConditionExtensions
     /// <summary>
     /// Reference a YAML job template.
     /// </summary>
-    /// <param name="condition">Conditioned definition</param>
+    /// <param name="condition">Expression</param>
     /// <param name="path">Relative path to the YAML file with the template</param>
     /// <param name="parameters">Values for template parameters</param>
     public static AdoExpression<JobBase> JobTemplate(this IfCondition condition, string path, TemplateParameters? parameters = null)
@@ -167,7 +167,7 @@ public static class ConditionExtensions
     /// <summary>
     /// Reference a YAML step template.
     /// </summary>
-    /// <param name="condition">Conditioned definition</param>
+    /// <param name="condition">Expression</param>
     /// <param name="path">Relative path to the YAML file with the template</param>
     /// <param name="parameters">Values for template parameters</param>
     public static AdoExpression<Step> StepTemplate(this IfCondition condition, string path, TemplateParameters? parameters = null)
@@ -176,7 +176,7 @@ public static class ConditionExtensions
     /// <summary>
     /// Reference a YAML variable template.
     /// </summary>
-    /// <param name="condition">Conditioned definition</param>
+    /// <param name="condition">Expression</param>
     /// <param name="path">Relative path to the YAML file with the template</param>
     /// <param name="parameters">Values for template parameters</param>
     public static AdoExpression<VariableBase> VariableTemplate(this IfCondition condition, string path, TemplateParameters? parameters = null)

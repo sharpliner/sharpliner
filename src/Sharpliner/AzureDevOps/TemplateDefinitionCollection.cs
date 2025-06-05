@@ -17,7 +17,7 @@ namespace Sharpliner.AzureDevOps;
 /// <param name="Header">Header that will be shown at the top of the generated YAML file. Leave empty array for no header, leave null for a default</param>
 public record TemplateDefinitionData<T>(
     string TargetFile,
-    ConditionedList<T> Definition,
+    AdoExpressionList<T> Definition,
     List<Parameter>? Parameters = null,
     TargetPathType PathType = TargetPathType.RelativeToGitRoot,
     string[]? Header = null);
@@ -63,7 +63,7 @@ internal class TemplateDefinitionWrapper<T>(
 
     public override TargetPathType TargetPathType { get; } = data.PathType;
 
-    public override ConditionedList<T> Definition { get; } = data.Definition;
+    public override AdoExpressionList<T> Definition { get; } = data.Definition;
 
     public override List<Parameter> Parameters { get; } = data.Parameters ?? [];
 

@@ -258,7 +258,7 @@ public sealed record ObjectParameter : Parameter<DictionaryExpression>
 /// <summary>
 /// Class for defining parameters with custom structure based on a strongly-typed collection that can be used in templates and pipelines.
 /// </summary>
-public sealed record ObjectParameter<T> : Parameter<ConditionedList<T>>
+public sealed record ObjectParameter<T> : Parameter<AdoExpressionList<T>>
 {
     /// <summary>
     /// Define a template parameter
@@ -266,7 +266,7 @@ public sealed record ObjectParameter<T> : Parameter<ConditionedList<T>>
     /// <param name="name">Name of the parameter, can be referenced in the template as <c>${{ parameters.name }}</c></param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public ObjectParameter(string name, string? displayName = null, ConditionedList<T>? defaultValue = null)
+    public ObjectParameter(string name, string? displayName = null, AdoExpressionList<T>? defaultValue = null)
         : base(name, displayName, defaultValue, null)
     {
     }
@@ -298,7 +298,7 @@ public sealed record StepParameter : Parameter<Step>
 /// <summary>
 /// Class for defining a sequence of <see cref="Step"/> parameters that can be used in templates and pipelines.
 /// </summary>
-public sealed record StepListParameter : Parameter<ConditionedList<Step>>
+public sealed record StepListParameter : Parameter<AdoExpressionList<Step>>
 {
     /// <summary>
     /// Define a template parameter
@@ -306,7 +306,7 @@ public sealed record StepListParameter : Parameter<ConditionedList<Step>>
     /// <param name="name">Name of the parameter, can be referenced in the template as <c>${{ parameters.name }}</c></param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public StepListParameter(string name, string? displayName = null, ConditionedList<Step>? defaultValue = null)
+    public StepListParameter(string name, string? displayName = null, AdoExpressionList<Step>? defaultValue = null)
         : base(name, displayName, defaultValue, null)
     {
     }
@@ -338,7 +338,7 @@ public sealed record JobParameter : Parameter<JobBase>
 /// <summary>
 /// Class for defining a sequence of <see cref="Job"/> parameters that can be used in templates and pipelines.
 /// </summary>
-public sealed record JobListParameter : Parameter<ConditionedList<JobBase>>
+public sealed record JobListParameter : Parameter<AdoExpressionList<JobBase>>
 {
     /// <summary>
     /// Define a template parameter
@@ -346,7 +346,7 @@ public sealed record JobListParameter : Parameter<ConditionedList<JobBase>>
     /// <param name="name">Name of the parameter, can be referenced in the template as <c>${{ parameters.name }}</c></param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public JobListParameter(string name, string? displayName = null, ConditionedList<JobBase>? defaultValue = null)
+    public JobListParameter(string name, string? displayName = null, AdoExpressionList<JobBase>? defaultValue = null)
         : base(name, displayName, defaultValue, null)
     {
     }
@@ -378,7 +378,7 @@ public sealed record DeploymentParameter : Parameter<DeploymentJob>
 /// <summary>
 /// Class for defining a sequence of <see cref="DeploymentJob"/> parameters that can be used in templates and pipelines.
 /// </summary>
-public sealed record DeploymentListParameter : Parameter<ConditionedList<DeploymentJob>>
+public sealed record DeploymentListParameter : Parameter<AdoExpressionList<DeploymentJob>>
 {
     /// <summary>
     /// Define a template parameter
@@ -386,7 +386,7 @@ public sealed record DeploymentListParameter : Parameter<ConditionedList<Deploym
     /// <param name="name">Name of the parameter, can be referenced in the template as <c>${{ parameters.name }}</c></param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public DeploymentListParameter(string name, string? displayName = null, ConditionedList<DeploymentJob>? defaultValue = null)
+    public DeploymentListParameter(string name, string? displayName = null, AdoExpressionList<DeploymentJob>? defaultValue = null)
         : base(name, displayName, defaultValue, null)
     {
     }
@@ -418,7 +418,7 @@ public sealed record StageParameter : Parameter<Stage>
 /// <summary>
 /// Class for defining of sequence of <see cref="Stage"/> parameters  that can be used in templates and pipelines.
 /// </summary>
-public sealed record StageListParameter : Parameter<ConditionedList<Stage>>
+public sealed record StageListParameter : Parameter<AdoExpressionList<Stage>>
 {
     /// <summary>
     /// Define a template parameter
@@ -426,7 +426,7 @@ public sealed record StageListParameter : Parameter<ConditionedList<Stage>>
     /// <param name="name">Name of the parameter, can be referenced in the template as <c>${{ parameters.name }}</c></param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public StageListParameter(string name, string? displayName = null, ConditionedList<Stage>? defaultValue = null)
+    public StageListParameter(string name, string? displayName = null, AdoExpressionList<Stage>? defaultValue = null)
         : base(name, displayName, defaultValue, null)
     {
     }

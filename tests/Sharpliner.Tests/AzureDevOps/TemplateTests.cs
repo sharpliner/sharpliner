@@ -107,7 +107,7 @@ public class TemplateTests
             afterBuild,
         ];
 
-        public override ConditionedList<Step> Definition =>
+        public override AdoExpressionList<Step> Definition =>
         [
             DotNet.Install.Sdk(version),
 
@@ -141,7 +141,7 @@ public class TemplateTests
     {
         public override string TargetFile => "step-template.yml";
 
-        public override ConditionedList<Step> Definition => new Step_Template_Definition().Definition;
+        public override AdoExpressionList<Step> Definition => new Step_Template_Definition().Definition;
     }
 
     class StepTypedParameters : AzureDevOpsDefinition
@@ -180,7 +180,7 @@ public class TemplateTests
             mainJob,
         ];
 
-        public override ConditionedList<JobBase> Definition =>
+        public override AdoExpressionList<JobBase> Definition =>
         [
             Job("initialize") with
             {
@@ -207,7 +207,7 @@ public class TemplateTests
     {
         public override string TargetFile => "job-template.yml";
 
-        public override ConditionedList<JobBase> Definition =>
+        public override AdoExpressionList<JobBase> Definition =>
         [
             ..new Job_Template_Definition().Definition,
             Job("with-templates") with
@@ -230,7 +230,7 @@ public class TemplateTests
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
         public override string TargetFile => "job-template.yml";
 
-        public override ConditionedList<JobBase> Definition =>
+        public override AdoExpressionList<JobBase> Definition =>
         [
             ..new Job_Template_Definition().Definition,
             Job("with-templates") with
@@ -250,7 +250,7 @@ public class TemplateTests
 
     class JobTypedParameters : AzureDevOpsDefinition
     {
-        public ConditionedList<JobBase> SetupJobs { get; init; } = [];
+        public AdoExpressionList<JobBase> SetupJobs { get; init; } = [];
 
         public JobBase MainJob { get; init; } = null!;
 
@@ -272,7 +272,7 @@ public class TemplateTests
             }
         };
 
-        public ConditionedList<DeploymentJob> AdditionalDeployments { get; init; } = [];
+        public AdoExpressionList<DeploymentJob> AdditionalDeployments { get; init; } = [];
     }
 
     [Fact]
@@ -294,7 +294,7 @@ public class TemplateTests
             mainStage,
         ];
 
-        public override ConditionedList<Stage> Definition =>
+        public override AdoExpressionList<Stage> Definition =>
         [
             Stage("initialize") with
             {
@@ -321,7 +321,7 @@ public class TemplateTests
     {
         public override string TargetFile => "stage-template.yml";
 
-        public override ConditionedList<Stage> Definition =>
+        public override AdoExpressionList<Stage> Definition =>
         [
             ..new Stage_Template_Definition().Definition,
             Stage("with-templates") with
@@ -348,7 +348,7 @@ public class TemplateTests
     {
         public override string TargetFile => "stage-template.yml";
 
-        public override ConditionedList<Stage> Definition =>
+        public override AdoExpressionList<Stage> Definition =>
         [
             ..new Stage_Template_Definition().Definition,
             Stage("with-templates") with
@@ -377,7 +377,7 @@ public class TemplateTests
 
     class StageTypedParameters : AzureDevOpsDefinition
     {
-        public ConditionedList<Stage> SetupStages { get; init; } = [];
+        public AdoExpressionList<Stage> SetupStages { get; init; } = [];
 
         public Stage MainStage { get; init; } = null!;
     }
@@ -409,7 +409,7 @@ public class TemplateTests
           NumberParameter("n_param"),
         ];
 
-        public override ConditionedList<VariableBase> Definition =>
+        public override AdoExpressionList<VariableBase> Definition =>
         [
           Variable("s_variable", "value"),
           Variable("b_variable", true),
@@ -429,7 +429,7 @@ public class TemplateTests
         : VariableTemplateDefinition<VariableTypedParameters>(parameters)
     {
         public override string TargetFile => "variables.yml";
-        public override ConditionedList<VariableBase> Definition => new Variable_Template_Definition().Definition;
+        public override AdoExpressionList<VariableBase> Definition => new Variable_Template_Definition().Definition;
     }
 
     class VariableTypedParameters
@@ -493,9 +493,9 @@ public class TemplateTests
         return Verify(pipeline.Serialize());
     }
 
-    private class Conditioned_Template_Reference : SimpleStepTestPipeline
+    private class Expression_Template_Reference : SimpleStepTestPipeline
     {
-        protected override ConditionedList<Step> Steps =>
+        protected override AdoExpressionList<Step> Steps =>
         [
             If.Equal("restore", "true")
                 .StepTemplate("template1.yaml"),
@@ -508,16 +508,16 @@ public class TemplateTests
     }
 
     [Fact]
-    public Task Conditioned_Template_Reference_Serialization_Test()
+    public Task Expression_Template_Reference_Serialization_Test()
     {
-        var pipeline = new Conditioned_Template_Reference();
+        var pipeline = new Expression_Template_Reference();
 
         return Verify(pipeline.Serialize());
     }
 
-    private class Conditioned_Parameters : SimpleStepTestPipeline
+    private class Expression_Parameters : SimpleStepTestPipeline
     {
-        protected override ConditionedList<Step> Steps =>
+        protected override AdoExpressionList<Step> Steps =>
         [
             StepTemplate("template1.yaml", new()
             {
@@ -547,16 +547,16 @@ public class TemplateTests
     }
 
     [Fact]
-    public Task Conditioned_Parameters_Serialization_Test()
+    public Task Expression_Parameters_Serialization_Test()
     {
-        var pipeline = new Conditioned_Parameters();
+        var pipeline = new Expression_Parameters();
 
         return Verify(pipeline.Serialize());
     }
 
-    private class Conditioned_Indexers_Parameters : SimpleStepTestPipeline
+    private class Expression_Indexers_Parameters : SimpleStepTestPipeline
     {
-        protected override ConditionedList<Step> Steps =>
+        protected override AdoExpressionList<Step> Steps =>
         [
             StepTemplate("template1.yaml", new()
             {
@@ -581,23 +581,23 @@ public class TemplateTests
     }
 
     [Fact]
-    public Task Conditioned_Indexers_Parameters_Serialization_Test()
+    public Task Expression_Indexers_Parameters_Serialization_Test()
     {
-        var pipeline = new Conditioned_Indexers_Parameters();
+        var pipeline = new Expression_Indexers_Parameters();
 
         return Verify(pipeline.Serialize());
     }
 
-    private class Conditioned_Template_Variables : SimpleTestPipeline
+    private class Expression_Template_Variables : SimpleTestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
         {
             Variables = CreateVariables(),
         };
 
-        private static ConditionedList<VariableBase> CreateVariables()
+        private static AdoExpressionList<VariableBase> CreateVariables()
         {
-            var items = new ConditionedList<VariableBase>
+            var items = new AdoExpressionList<VariableBase>
             {
                 new Variable("some", "value"),
                 If.IsPullRequest.Variable("pr", true).Else.Variable("pr", false),
@@ -612,9 +612,9 @@ public class TemplateTests
     }
 
     [Fact]
-    public Task Conditioned_Template_Variables_Serialization_Test()
+    public Task Expression_Template_Variables_Serialization_Test()
     {
-        var pipeline = new Conditioned_Template_Variables();
+        var pipeline = new Expression_Template_Variables();
 
         return Verify(pipeline.Serialize());
     }

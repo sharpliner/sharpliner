@@ -13,70 +13,70 @@ public static class AdoExpressionExtensions
     /// <summary>
     /// Defines a variable.
     /// </summary>
-    /// <param name="conditionedDefinition">Conditioned definition</param>
+    /// <param name="expression">Expression</param>
     /// <param name="name">Variable name</param>
     /// <param name="value">Variable value</param>
     public static AdoExpression<VariableBase> Variable(
-        this AdoExpression<VariableBase> conditionedDefinition,
+        this AdoExpression<VariableBase> expression,
         string name,
         string value)
     {
-        conditionedDefinition.Definitions.Add(new AdoExpression<VariableBase>(definition: new Variable(name, value)));
-        return conditionedDefinition;
+        expression.Definitions.Add(new AdoExpression<VariableBase>(definition: new Variable(name, value)));
+        return expression;
     }
 
     /// <summary>
     /// Defines a variable.
     /// </summary>
-    /// <param name="conditionedDefinition">Conditioned definition</param>
+    /// <param name="expression">Expression</param>
     /// <param name="name">Variable name</param>
     /// <param name="value">Variable value</param>
     public static AdoExpression<VariableBase> Variable(
-        this AdoExpression<VariableBase> conditionedDefinition,
+        this AdoExpression<VariableBase> expression,
         string name,
         bool value)
     {
-        conditionedDefinition.Definitions.Add(new AdoExpression<VariableBase>(definition: new Variable(name, value)));
-        return conditionedDefinition;
+        expression.Definitions.Add(new AdoExpression<VariableBase>(definition: new Variable(name, value)));
+        return expression;
     }
 
     /// <summary>
     /// Defines a variable.
     /// </summary>
-    /// <param name="conditionedDefinition">Conditioned definition</param>
+    /// <param name="expression">Expression</param>
     /// <param name="name">Variable name</param>
     /// <param name="value">Variable value</param>
     public static AdoExpression<VariableBase> Variable(
-        this AdoExpression<VariableBase> conditionedDefinition,
+        this AdoExpression<VariableBase> expression,
         string name,
         int value)
     {
-        conditionedDefinition.Definitions.Add(new AdoExpression<VariableBase>(definition: new Variable(name, value)));
-        return conditionedDefinition;
+        expression.Definitions.Add(new AdoExpression<VariableBase>(definition: new Variable(name, value)));
+        return expression;
     }
 
     /// <summary>
     /// Defines a variable.
     /// </summary>
-    /// <param name="conditionedDefinition">Conditioned definition</param>
+    /// <param name="expression">Expression</param>
     /// <param name="name">Variable name</param>
     /// <param name="value">Variable value</param>
     public static AdoExpression<VariableBase> Variable(
-        this AdoExpression<VariableBase> conditionedDefinition,
+        this AdoExpression<VariableBase> expression,
         string name,
         Enum value)
     {
-        conditionedDefinition.Definitions.Add(new AdoExpression<VariableBase>(definition: new Variable(name, value)));
-        return conditionedDefinition;
+        expression.Definitions.Add(new AdoExpression<VariableBase>(definition: new Variable(name, value)));
+        return expression;
     }
 
     /// <summary>
     /// Defines multiple variables at once.
     /// </summary>
-    /// <param name="conditionedDefinition">Conditioned definition</param>
+    /// <param name="expression">Expression</param>
     /// <param name="variables">List of (key, value) pairs</param>
     public static AdoExpression<VariableBase> Variables(
-        this AdoExpression<VariableBase> conditionedDefinition,
+        this AdoExpression<VariableBase> expression,
         params (string name, object value)[] variables)
     {
         foreach (var variable in variables)
@@ -89,362 +89,362 @@ public static class AdoExpressionExtensions
                 object any => new AdoExpression<VariableBase>(definition: new Variable(variable.name, any?.ToString() ?? string.Empty)),
             };
 
-            conditionedDefinition.Definitions.Add(definition);
+            expression.Definitions.Add(definition);
         }
 
-        return conditionedDefinition;
+        return expression;
     }
 
     /// <summary>
     /// References a variable group.
     /// </summary>
     public static AdoExpression<VariableBase> Group(
-        this AdoExpression<VariableBase> conditionedDefinition,
+        this AdoExpression<VariableBase> expression,
         string name)
     {
-        conditionedDefinition.Definitions.Add(new AdoExpression<VariableBase>(definition: new VariableGroup(name)));
-        return conditionedDefinition;
+        expression.Definitions.Add(new AdoExpression<VariableBase>(definition: new VariableGroup(name)));
+        return expression;
     }
 
     /// <summary>
     /// Creates a new stage.
     /// </summary>
-    public static AdoExpression<Stage> Stage(this AdoExpression<Stage> conditionedDefinition, Stage stage)
+    public static AdoExpression<Stage> Stage(this AdoExpression<Stage> expression, Stage stage)
     {
-        conditionedDefinition.Definitions.Add(new AdoExpression<Stage>(definition: stage));
-        return conditionedDefinition;
+        expression.Definitions.Add(new AdoExpression<Stage>(definition: stage));
+        return expression;
     }
 
     /// <summary>
     /// Creates a new step.
     /// </summary>
-    public static AdoExpression<Step> Step(this AdoExpression<Step> conditionedDefinition, Step step)
+    public static AdoExpression<Step> Step(this AdoExpression<Step> expression, Step step)
     {
-        conditionedDefinition.Definitions.Add(new AdoExpression<Step>(definition: step));
-        return conditionedDefinition;
+        expression.Definitions.Add(new AdoExpression<Step>(definition: step));
+        return expression;
     }
 
     /// <summary>
     /// Creates a new job.
     /// </summary>
-    public static AdoExpression<JobBase> Job(this AdoExpression<JobBase> conditionedDefinition, JobBase job)
+    public static AdoExpression<JobBase> Job(this AdoExpression<JobBase> expression, JobBase job)
     {
-        conditionedDefinition.Definitions.Add(new AdoExpression<JobBase>(definition: job));
-        return conditionedDefinition;
+        expression.Definitions.Add(new AdoExpression<JobBase>(definition: job));
+        return expression;
     }
 
     /// <summary>
     /// Creates a new deployment job.
     /// </summary>
-    public static AdoExpression<JobBase> DeploymentJob(this AdoExpression<JobBase> conditionedDefinition, JobBase job)
+    public static AdoExpression<JobBase> DeploymentJob(this AdoExpression<JobBase> expression, JobBase job)
     {
-        conditionedDefinition.Definitions.Add(new AdoExpression<JobBase>(definition: job));
-        return conditionedDefinition;
+        expression.Definitions.Add(new AdoExpression<JobBase>(definition: job));
+        return expression;
     }
 
     /// <summary>
     /// Reference a YAML stage template.
     /// </summary>
-    /// <param name="conditionedDefinition">Conditioned definition</param>
+    /// <param name="expression">Expression</param>
     /// <param name="path">Relative path to the YAML file with the template</param>
     /// <param name="parameters">Values for template parameters</param>
     public static AdoExpression<Stage> StageTemplate(
-        this AdoExpression<Stage> conditionedDefinition,
+        this AdoExpression<Stage> expression,
         string path,
         TemplateParameters parameters)
     {
         var template = new Template<Stage>(path: path, parameters);
-        conditionedDefinition.Definitions.Add(template);
-        return conditionedDefinition;
+        expression.Definitions.Add(template);
+        return expression;
     }
 
     /// <summary>
     /// Reference a YAML job template.
     /// </summary>
-    /// <param name="conditionedDefinition">Conditioned definition</param>
+    /// <param name="expression">Expression</param>
     /// <param name="path">Relative path to the YAML file with the template</param>
     /// <param name="parameters">Values for template parameters</param>
     public static AdoExpression<JobBase> JobTemplate(
-        this AdoExpression<JobBase> conditionedDefinition,
+        this AdoExpression<JobBase> expression,
         string path,
         TemplateParameters parameters)
     {
         var template = new Template<JobBase>(path: path, parameters);
-        conditionedDefinition.Definitions.Add(template);
-        return conditionedDefinition;
+        expression.Definitions.Add(template);
+        return expression;
     }
 
     /// <summary>
     /// Reference a YAML step template.
     /// </summary>
-    /// <param name="conditionedDefinition">Conditioned definition</param>
+    /// <param name="expression">Expression</param>
     /// <param name="path">Relative path to the YAML file with the template</param>
     /// <param name="parameters">Values for template parameters</param>
     public static AdoExpression<Step> StepTemplate(
-        this AdoExpression<Step> conditionedDefinition,
+        this AdoExpression<Step> expression,
         string path,
         TemplateParameters parameters)
     {
         var template = new Template<Step>(path: path, parameters);
-        conditionedDefinition.Definitions.Add(template);
-        return conditionedDefinition;
+        expression.Definitions.Add(template);
+        return expression;
     }
 
     /// <summary>
     /// Reference a YAML variable template.
     /// </summary>
-    /// <param name="conditionedDefinition">Conditioned definition</param>
+    /// <param name="expression">Expression</param>
     /// <param name="path">Relative path to the YAML file with the template</param>
     /// <param name="parameters">Values for template parameters</param>
     public static AdoExpression<VariableBase> VariableTemplate(
-        this AdoExpression<VariableBase> conditionedDefinition,
+        this AdoExpression<VariableBase> expression,
         string path,
         TemplateParameters parameters)
     {
         var template = new Template<VariableBase>(path: path, parameters);
-        conditionedDefinition.Definitions.Add(template);
-        return conditionedDefinition;
+        expression.Definitions.Add(template);
+        return expression;
     }
 
     /// <summary>
     /// Reference a step library (series of library stages).
     /// </summary>
     public static AdoExpression<Stage> StageLibrary(
-        this AdoExpression<Stage> conditionedDefinition,
+        this AdoExpression<Stage> expression,
         StageLibrary library)
     {
-        conditionedDefinition.Definitions.Add(new LibraryReference<Stage>(library));
-        return conditionedDefinition;
+        expression.Definitions.Add(new LibraryReference<Stage>(library));
+        return expression;
     }
 
     /// <summary>
     /// Reference a step library (series of library jobs).
     /// </summary>
     public static AdoExpression<JobBase> JobLibrary(
-        this AdoExpression<JobBase> conditionedDefinition,
+        this AdoExpression<JobBase> expression,
         JobLibrary library)
     {
-        conditionedDefinition.Definitions.Add(new LibraryReference<JobBase>(library));
-        return conditionedDefinition;
+        expression.Definitions.Add(new LibraryReference<JobBase>(library));
+        return expression;
     }
 
     /// <summary>
     /// Reference a step library (series of library steps).
     /// </summary>
     public static AdoExpression<Step> StepLibrary(
-        this AdoExpression<Step> conditionedDefinition,
+        this AdoExpression<Step> expression,
         StepLibrary library)
     {
-        conditionedDefinition.Definitions.Add(new LibraryReference<Step>(library));
-        return conditionedDefinition;
+        expression.Definitions.Add(new LibraryReference<Step>(library));
+        return expression;
     }
 
     /// <summary>
     /// Reference a step library (series of library Variables).
     /// </summary>
     public static AdoExpression<VariableBase> VariableLibrary(
-        this AdoExpression<VariableBase> conditionedDefinition,
+        this AdoExpression<VariableBase> expression,
         VariableLibrary library)
     {
-        conditionedDefinition.Definitions.Add(new LibraryReference<VariableBase>(library));
-        return conditionedDefinition;
+        expression.Definitions.Add(new LibraryReference<VariableBase>(library));
+        return expression;
     }
 
     /// <summary>
     /// Include a set of steps.
     /// </summary>
     public static AdoExpression<Stage> Stages(
-        this AdoExpression<Stage> conditionedDefinition,
+        this AdoExpression<Stage> expression,
         IEnumerable<AdoExpression<Stage>> stages)
     {
-        conditionedDefinition.Definitions.Add(new LibraryReference<Stage>(stages));
-        return conditionedDefinition;
+        expression.Definitions.Add(new LibraryReference<Stage>(stages));
+        return expression;
     }
 
     /// <summary>
     /// Include a set of steps.
     /// </summary>
     public static AdoExpression<Job> Jobs(
-        this AdoExpression<Job> conditionedDefinition,
+        this AdoExpression<Job> expression,
         IEnumerable<AdoExpression<Job>> jobs)
     {
-        conditionedDefinition.Definitions.Add(new LibraryReference<Job>(jobs));
-        return conditionedDefinition;
+        expression.Definitions.Add(new LibraryReference<Job>(jobs));
+        return expression;
     }
 
     /// <summary>
     /// Include a set of steps.
     /// </summary>
     public static AdoExpression<Step> Steps(
-        this AdoExpression<Step> conditionedDefinition,
+        this AdoExpression<Step> expression,
         IEnumerable<AdoExpression<Step>> steps)
     {
-        conditionedDefinition.Definitions.Add(new LibraryReference<Step>(steps));
-        return conditionedDefinition;
+        expression.Definitions.Add(new LibraryReference<Step>(steps));
+        return expression;
     }
 
     /// <summary>
     /// Include a set of steps.
     /// </summary>
     public static AdoExpression<VariableBase> Variables(
-        this AdoExpression<VariableBase> conditionedDefinition,
+        this AdoExpression<VariableBase> expression,
         IEnumerable<AdoExpression<VariableBase>> variables)
     {
-        conditionedDefinition.Definitions.Add(new LibraryReference<VariableBase>(variables));
-        return conditionedDefinition;
+        expression.Definitions.Add(new LibraryReference<VariableBase>(variables));
+        return expression;
     }
 
     /// <summary>
     /// Include a set of steps.
     /// </summary>
     public static AdoExpression<Stage> Stages(
-        this AdoExpression<Stage> conditionedDefinition,
+        this AdoExpression<Stage> expression,
         params AdoExpression<Stage>[] stages)
     {
-        conditionedDefinition.Definitions.Add(new LibraryReference<Stage>(stages));
-        return conditionedDefinition;
+        expression.Definitions.Add(new LibraryReference<Stage>(stages));
+        return expression;
     }
 
     /// <summary>
     /// Include a set of steps.
     /// </summary>
     public static AdoExpression<Job> Jobs(
-        this AdoExpression<Job> conditionedDefinition,
+        this AdoExpression<Job> expression,
         params AdoExpression<Job>[] jobs)
     {
-        conditionedDefinition.Definitions.Add(new LibraryReference<Job>(jobs));
-        return conditionedDefinition;
+        expression.Definitions.Add(new LibraryReference<Job>(jobs));
+        return expression;
     }
 
     /// <summary>
     /// Include a set of steps.
     /// </summary>
     public static AdoExpression<Step> Steps(
-        this AdoExpression<Step> conditionedDefinition,
+        this AdoExpression<Step> expression,
         params AdoExpression<Step>[] steps)
     {
-        conditionedDefinition.Definitions.Add(new LibraryReference<Step>(steps));
-        return conditionedDefinition;
+        expression.Definitions.Add(new LibraryReference<Step>(steps));
+        return expression;
     }
 
     /// <summary>
     /// Include a set of steps.
     /// </summary>
     public static AdoExpression<VariableBase> Variables(
-        this AdoExpression<VariableBase> conditionedDefinition,
+        this AdoExpression<VariableBase> expression,
         params AdoExpression<VariableBase>[] variables)
     {
-        conditionedDefinition.Definitions.Add(new LibraryReference<VariableBase>(variables));
-        return conditionedDefinition;
+        expression.Definitions.Add(new LibraryReference<VariableBase>(variables));
+        return expression;
     }
 
     /// <summary>
     /// Include a set of steps.
     /// </summary>
     public static AdoExpression<Stage> Stages(
-        this AdoExpression<Stage> conditionedDefinition,
+        this AdoExpression<Stage> expression,
         IEnumerable<Stage> stages)
-        => conditionedDefinition.Stages(stages.ToArray());
+        => expression.Stages(stages.ToArray());
 
     /// <summary>
     /// Include a set of steps.
     /// </summary>
     public static AdoExpression<Job> Jobs(
-        this AdoExpression<Job> conditionedDefinition,
+        this AdoExpression<Job> expression,
         IEnumerable<Job> jobs)
-        => conditionedDefinition.Jobs(jobs.ToArray());
+        => expression.Jobs(jobs.ToArray());
 
     /// <summary>
     /// Include a set of steps.
     /// </summary>
     public static AdoExpression<Step> Steps(
-        this AdoExpression<Step> conditionedDefinition,
+        this AdoExpression<Step> expression,
         IEnumerable<Step> steps)
-        => conditionedDefinition.Steps(steps.ToArray());
+        => expression.Steps(steps.ToArray());
 
     /// <summary>
     /// Include a set of steps.
     /// </summary>
     public static AdoExpression<VariableBase> Variables(
-        this AdoExpression<VariableBase> conditionedDefinition,
+        this AdoExpression<VariableBase> expression,
         IEnumerable<VariableBase> variables)
-        => conditionedDefinition.Variables(variables.ToArray());
+        => expression.Variables(variables.ToArray());
 
     /// <summary>
     /// Include a set of steps.
     /// </summary>
     public static AdoExpression<Stage> Stages(
-        this AdoExpression<Stage> conditionedDefinition,
+        this AdoExpression<Stage> expression,
         params Stage[] stages)
-        => conditionedDefinition.Stages(stages.Select(x => new AdoExpression<Stage>(x)));
+        => expression.Stages(stages.Select(x => new AdoExpression<Stage>(x)));
 
     /// <summary>
     /// Include a set of steps.
     /// </summary>
     public static AdoExpression<Job> Jobs(
-        this AdoExpression<Job> conditionedDefinition,
+        this AdoExpression<Job> expression,
         params Job[] jobs)
-        => conditionedDefinition.Jobs(jobs.Select(x => new AdoExpression<Job>(x)));
+        => expression.Jobs(jobs.Select(x => new AdoExpression<Job>(x)));
 
     /// <summary>
     /// Include a set of steps.
     /// </summary>
     public static AdoExpression<Step> Steps(
-        this AdoExpression<Step> conditionedDefinition,
+        this AdoExpression<Step> expression,
         params Step[] steps)
-        => conditionedDefinition.Steps(steps.Select(x => new AdoExpression<Step>(x)));
+        => expression.Steps(steps.Select(x => new AdoExpression<Step>(x)));
 
     /// <summary>
     /// Include a set of steps.
     /// </summary>
     public static AdoExpression<VariableBase> Variables(
-        this AdoExpression<VariableBase> conditionedDefinition,
+        this AdoExpression<VariableBase> expression,
         params VariableBase[] variables)
-        => conditionedDefinition.Variables(variables.Select(x => new AdoExpression<VariableBase>(x)));
+        => expression.Variables(variables.Select(x => new AdoExpression<VariableBase>(x)));
 
     /// <summary>
     /// Reference a step library (series of library stages).
     /// </summary>
-    public static AdoExpression<Stage> StageLibrary<T>(this AdoExpression<Stage> conditionedDefinition)
+    public static AdoExpression<Stage> StageLibrary<T>(this AdoExpression<Stage> expression)
         where T : StageLibrary, new()
     {
-        conditionedDefinition.Definitions.Add(AzureDevOpsDefinition.CreateLibraryRef<T, Stage>());
-        return conditionedDefinition;
+        expression.Definitions.Add(AzureDevOpsDefinition.CreateLibraryRef<T, Stage>());
+        return expression;
     }
 
     /// <summary>
     /// Reference a step library (series of library jobs).
     /// </summary>
-    public static AdoExpression<JobBase> JobLibrary<T>(this AdoExpression<JobBase> conditionedDefinition)
+    public static AdoExpression<JobBase> JobLibrary<T>(this AdoExpression<JobBase> expression)
         where T : JobLibrary, new()
     {
-        conditionedDefinition.Definitions.Add(AzureDevOpsDefinition.CreateLibraryRef<T, JobBase>());
-        return conditionedDefinition;
+        expression.Definitions.Add(AzureDevOpsDefinition.CreateLibraryRef<T, JobBase>());
+        return expression;
     }
 
     /// <summary>
     /// Reference a step library (series of library steps).
     /// </summary>
-    public static AdoExpression<Step> StepLibrary<T>(this AdoExpression<Step> conditionedDefinition)
+    public static AdoExpression<Step> StepLibrary<T>(this AdoExpression<Step> expression)
         where T : StepLibrary, new()
     {
-        conditionedDefinition.Definitions.Add(AzureDevOpsDefinition.CreateLibraryRef<T, Step>());
-        return conditionedDefinition;
+        expression.Definitions.Add(AzureDevOpsDefinition.CreateLibraryRef<T, Step>());
+        return expression;
     }
 
     /// <summary>
     /// Reference a step library (series of library Variables).
     /// </summary>
-    public static AdoExpression<VariableBase> VariableLibrary<T>(this AdoExpression<VariableBase> conditionedDefinition)
+    public static AdoExpression<VariableBase> VariableLibrary<T>(this AdoExpression<VariableBase> expression)
         where T : VariableLibrary, new()
     {
-        conditionedDefinition.Definitions.Add(AzureDevOpsDefinition.CreateLibraryRef<T, VariableBase>());
-        return conditionedDefinition;
+        expression.Definitions.Add(AzureDevOpsDefinition.CreateLibraryRef<T, VariableBase>());
+        return expression;
     }
 
-    internal static AdoExpression<T>? GetRoot<T>(this AdoExpression<T> conditionedDefinition)
+    internal static AdoExpression<T>? GetRoot<T>(this AdoExpression<T> expression)
     {
-        var parent = conditionedDefinition;
+        var parent = expression;
         while (parent?.Parent != null)
         {
             parent = parent.Parent as AdoExpression<T>;

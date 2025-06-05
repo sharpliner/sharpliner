@@ -5,7 +5,7 @@ namespace Sharpliner.Tests.AzureDevOps.Validation;
 
 public class DependsOnValidationTests
 {
-    private class ConditionedDependsOnPipeline : TestPipeline
+    private class DependsOnExpressionPipeline : TestPipeline
     {
         public override Pipeline Pipeline => new()
         {
@@ -70,9 +70,9 @@ public class DependsOnValidationTests
     }
 
     [Fact]
-    public Task ConditionedDependsOn_Validation_Test()
+    public Task DependsOnExpression_Validation_Test()
     {
-        var pipeline = new ConditionedDependsOnPipeline();
+        var pipeline = new DependsOnExpressionPipeline();
         return Verify(pipeline.Serialize());
     }
 

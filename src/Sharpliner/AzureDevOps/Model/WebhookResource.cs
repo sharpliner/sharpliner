@@ -27,7 +27,7 @@ public record WebhookResource
     /// Filters used to customize the triggers for a webhook event.
     /// </summary>
     [DisallowNull]
-    public ConditionedList<JsonParameterFilter> Filters { get; init; } = [];
+    public AdoExpressionList<JsonParameterFilter> Filters { get; init; } = [];
 
     /// <summary>
     /// Instantiates a new instance of <see cref="WebhookResource"/> with the specified identifier.

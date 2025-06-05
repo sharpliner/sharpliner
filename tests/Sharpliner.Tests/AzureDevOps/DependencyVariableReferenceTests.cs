@@ -21,7 +21,7 @@ public class DependencyVariableReferenceTests
         private string getterStageName = "B";
         private string getterJobName = "B1";
 
-        public override ConditionedList<Stage> Definition =>
+        public override AdoExpressionList<Stage> Definition =>
         [
             new Stage(setterStageName)
             {
@@ -70,7 +70,7 @@ public class DependencyVariableReferenceTests
 
         private string getterJobName = "B";
 
-        public override ConditionedList<JobBase> Definition =>
+        public override AdoExpressionList<JobBase> Definition =>
         [
             new Job(setterJobName)
             {
@@ -109,7 +109,7 @@ public class DependencyVariableReferenceTests
         private string getterStageName = "B";
         private string getterJobName = "B1";
 
-        public override ConditionedList<Stage> Definition =>
+        public override AdoExpressionList<Stage> Definition =>
         [
             new Stage(setterStageName)
             {
@@ -160,7 +160,7 @@ public class DependencyVariableReferenceTests
         private string getterStageName = "test";
         private string getterJobName = "run_tests";
 
-        public override ConditionedList<Stage> Definition =>
+        public override AdoExpressionList<Stage> Definition =>
         [
             new Stage(setterStageName)
             {
@@ -226,7 +226,7 @@ public class DependencyVariableReferenceTests
         private string getterStageName = "test";
         private string getterJobName = "A";
 
-        public override ConditionedList<Stage> Definition =>
+        public override AdoExpressionList<Stage> Definition =>
         [
             new Stage(setterStageName)
             {
@@ -290,7 +290,7 @@ public class DependencyVariableReferenceTests
         private string getterStageName = "test";
         private string getterJobName = "A";
 
-        public override ConditionedList<Stage> Definition =>
+        public override AdoExpressionList<Stage> Definition =>
         [
             new Stage(setterStageName)
             {

@@ -156,7 +156,7 @@ public abstract class TemplateDefinitionBase<T> : TemplateDefinition, ISharpline
 /// This is the ancestor of all definitions that produce a Azure pipelines template.
 /// </summary>
 /// <typeparam name="T">Type of the part of the pipeline that this template is for (one of stages, steps, jobs or variables)</typeparam>
-public abstract class TemplateDefinition<T> : TemplateDefinitionBase<ConditionedList<T>>
+public abstract class TemplateDefinition<T> : TemplateDefinitionBase<AdoExpressionList<T>>
 {
     /// <summary>
     /// Disallow any other types than what we define here as AzDO only supports these.

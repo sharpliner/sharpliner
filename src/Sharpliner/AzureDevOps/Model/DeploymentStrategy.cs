@@ -204,7 +204,7 @@ public record CanaryStrategy : DeploymentStrategy
     /// This variable is available only in deploy, routeTraffic, and postRouteTraffic lifecycle hooks.
     /// </summary>
     [YamlMember(Order = 50)]
-    public ConditionedList<int> Increments { get; init; } = [];
+    public AdoExpressionList<int> Increments { get; init; } = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CanaryStrategy"/> class.

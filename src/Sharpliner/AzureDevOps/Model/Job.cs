@@ -32,7 +32,7 @@ public record Job : JobBase
     /// This behavior means environment variables aren't preserved between steps but file system changes are.
     /// </summary>
     [YamlMember(Order = 700)]
-    public ConditionedList<Step> Steps { get; init; } = [];
+    public AdoExpressionList<Step> Steps { get; init; } = [];
 
     /// <summary>
     /// Any resources (repos or pools) required by this job that are not already referenced.

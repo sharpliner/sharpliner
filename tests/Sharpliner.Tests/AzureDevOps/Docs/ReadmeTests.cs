@@ -73,7 +73,7 @@ public class ReadmeTests : AzureDevOpsDefinition
     [Fact]
     public void TestDotnetFluentApi()
     {
-        ConditionedList<Step> steps =
+        AdoExpressionList<Step> steps =
         [
 #region dotnet-fluent-api
             DotNet.Install.Sdk(parameters["version"]),
@@ -121,7 +121,7 @@ public class ReadmeTests : AzureDevOpsDefinition
     [Fact]
     public void TestUsefulMacros()
     {
-        ConditionedList<VariableBase> variables =
+        AdoExpressionList<VariableBase> variables =
         [
 #region useful-macros-csharp
             If.IsBranch("production")

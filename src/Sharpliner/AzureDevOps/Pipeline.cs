@@ -38,7 +38,7 @@ public abstract record PipelineBase
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/runtime-parameters?view=azure-devops">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     [YamlMember(Order = 150)]
-    public ConditionedList<Parameter> Parameters { get; init; } = [];
+    public AdoExpressionList<Parameter> Parameters { get; init; } = [];
 
     /// <summary>
     /// Specifies when the pipeline is supposed to run
@@ -77,7 +77,7 @@ public abstract record PipelineBase
     /// You can add hard-coded values directly, reference variable groups, or insert via variable templates.
     /// </summary>
     [YamlMember(Order = 500)]
-    public ConditionedList<VariableBase> Variables { get; init; } = [];
+    public AdoExpressionList<VariableBase> Variables { get; init; } = [];
 
     /// <summary>
     /// Specifies which pool to use for a job of the pipeline
@@ -103,7 +103,7 @@ public record Pipeline : PipelineBase
     /// Specifies the stages of the pipeline.
     /// </summary>
     [YamlMember(Order = 600)]
-    public ConditionedList<Stage> Stages { get; init; } = [];
+    public AdoExpressionList<Stage> Stages { get; init; } = [];
 
     /// <inheritdoc/>
     public override IReadOnlyCollection<IDefinitionValidation> Validations =>
@@ -144,7 +144,7 @@ public record SingleStagePipeline : PipelineBase
     /// Specifies the jobs of the pipeline.
     /// </summary>
     [YamlMember(Order = 600)]
-    public ConditionedList<JobBase> Jobs { get; init; } = [];
+    public AdoExpressionList<JobBase> Jobs { get; init; } = [];
 
     /// <inheritdoc/>
     public override IReadOnlyCollection<IDefinitionValidation> Validations=>

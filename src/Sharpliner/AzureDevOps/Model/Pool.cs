@@ -74,7 +74,7 @@ public record HostedPool : Pool
     /// </remarks>
     [YamlMember(Order = 110)]
     [DisallowNull]
-    public ConditionedList<string> Demands { get; init; } = [];
+    public AdoExpressionList<string> Demands { get; init; } = [];
 }
 
 /// <summary>
