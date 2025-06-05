@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -113,35 +114,31 @@ public class Program
 
     private static string GetCodeSnippet(string[] lines, string region, string language)
     {
-        for (int i = 0; i < lines.Length; i++)
+        var snippet = lines
+            .SkipWhile(line => line.Trim() != $"#region {region}")
+            .Skip(1)
+            .TakeWhile(line => line.Trim() != "#endregion")
+            .ToList();
+
+        if (snippet.Count == 0)
         {
-            if (lines[i].Trim() != $"#region {region}")
-            {
-                continue;
-            }
-
-            if (lines[++i].EndsWith("\"\"\""))
-            {
-                ++i;
-            }
-
-            var snippet = lines
-                .Skip(i)
-                .TakeWhile(line => line.Trim() != "#endregion")
-                .ToList();
-
-            if (snippet.Last().Trim() == "\"\"\"")
-            {
-                snippet.RemoveAt(snippet.Count - 1);
-            }
-
-            return GetCodeSnippet([..snippet], language);
+            throw new Exception($"Region {region} not found in file");
         }
 
-        throw new ArgumentOutOfRangeException($"Region {region} not found in file");
+        if (snippet[0].Trim() == "\"\"\"")
+        {
+            snippet.RemoveAt(0);
+        }
+
+        if (snippet.Last().Trim() == "\"\"\"")
+        {
+            snippet.RemoveAt(snippet.Count - 1);
+        }
+
+        return GetCodeSnippet(snippet, language);
     }
 
-    private static string GetCodeSnippet(string[] lines, string language)
+    private static string GetCodeSnippet(IReadOnlyList<string> lines, string language)
     {
         var snippet = new StringBuilder();
         snippet.AppendLine($"```{language}");
