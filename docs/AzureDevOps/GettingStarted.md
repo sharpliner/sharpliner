@@ -103,7 +103,7 @@ public override SingleStagePipeline Pipeline => new()
             [
                 If.IsPullRequest
                     .Step(Powershell.Inline(
-                            """ 
+                            """
                             Write-Host 'Hello'
                             Write-Host 'World'
                             """)

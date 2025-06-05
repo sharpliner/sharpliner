@@ -116,23 +116,29 @@ public class Program
     {
         for (int i = 0; i < lines.Length; i++)
         {
-            if (lines[i].Equals($"#region {region}"))
+            if (lines[i].Trim() != $"#region {region}")
             {
-                var relevantLines = new List<string>();
-                i++;
-                do
-                {
-                    var line = lines[i];
-                    ++i;
-                    if (line.EndsWith("\"\"\""))
-                    {
-                        continue;
-                    }
-
-                    relevantLines.Add(line);
-                } while (!lines[i].Equals("#endregion"));
-                return GetCodeSnippet(relevantLines.ToArray(), language);
+                continue;
             }
+
+            i++;
+
+            if (lines[i].EndsWith("\"\"\""))
+            {
+                ++i;
+            }
+
+            var snippet = lines
+                .Skip(i)
+                .TakeWhile(line => line.Trim() != "#endregion")
+                .ToList();
+
+            if (snippet.Last().Trim() == "\"\"\"")
+            {
+                snippet.RemoveAt(snippet.Count - 1);
+            }
+
+            return GetCodeSnippet([..snippet], language);
         }
 
         throw new ArgumentOutOfRangeException($"Region {region} not found in file");

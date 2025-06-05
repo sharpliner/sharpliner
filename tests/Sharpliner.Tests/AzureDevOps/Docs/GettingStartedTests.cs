@@ -36,7 +36,7 @@ public class GettingStartedTests : AzureDevOpsDefinition
                     [
                         If.IsPullRequest
                             .Step(Powershell.Inline(
-                                    """ 
+                                    """
                                     Write-Host 'Hello'
                                     Write-Host 'World'
                                     """)
