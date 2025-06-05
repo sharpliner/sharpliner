@@ -11,9 +11,10 @@ public class StageTests
         {
             Stages =
             [
-                Stage("Stage1")
-                    .DisplayAs("DisplayName")
-                    
+                Stage("Stage1").DisplayAs("DisplayName") with
+                {
+                    Pool = new HostedPool(vmImage: "windows-2022"),
+                }   
             ]
         };
     }
