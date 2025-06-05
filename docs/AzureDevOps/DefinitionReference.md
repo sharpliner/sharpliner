@@ -559,7 +559,7 @@ class StronglyTypedInstallDotNetTemplate(InstallDotNetParameters? parameters = n
     // Where to publish the YAML to
     public override string TargetFile => "templates/install-dotnet.yml";
 
-    public override ConditionedList<Step> Definition =>
+    public override AdoExpressionList<Step> Definition =>
     [
         DotNet.Install.Sdk(parameters["version"]),
 
@@ -647,7 +647,7 @@ class InstallDotNetTemplate : StepTemplateDefinition
         afterBuild,
     ];
 
-    public override ConditionedList<Step> Definition =>
+    public override AdoExpressionList<Step> Definition =>
     [
         DotNet.Install.Sdk(version),
 
@@ -695,7 +695,7 @@ Apart from obvious C# code re-use, you can also define sets of C# building block
 ```csharp
 class ProjectBuildSteps : StepLibrary
 {
-    public override List<Conditioned<Step>> Steps =>
+    public override List<AdoExpression<Step>> Steps =>
     [
         DotNet.Install.Sdk("6.0.100"),
 
