@@ -47,8 +47,7 @@ public record Stage : IDependsOn
     public ConditionedList<VariableBase> Variables { get; init; } = [];
 
     /// <summary>
-    /// Specifies which pool to use for a job of the pipeline
-    /// A pool specification also holds information about the job's strategy for running.
+    /// Specifies which pool to use for jobs of this stage.
     /// </summary>
     [YamlMember(Order = 250)]
     public Conditioned<Pool>? Pool { get; init => field = value?.GetRoot(); }
