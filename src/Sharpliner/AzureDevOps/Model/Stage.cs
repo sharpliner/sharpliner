@@ -47,6 +47,12 @@ public record Stage : IDependsOn
     public ConditionedList<VariableBase> Variables { get; init; } = [];
 
     /// <summary>
+    /// Specifies which pool to use for jobs of this stage.
+    /// </summary>
+    [YamlMember(Order = 250)]
+    public Conditioned<Pool>? Pool { get; init => field = value?.GetRoot(); }
+
+    /// <summary>
     /// A job is a collection of steps run by an agent or on a server.
     /// Jobs can run conditionally and might depend on earlier jobs.
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/phases?tabs=yaml&amp;view=azure-devops">official Azure DevOps pipelines documentation</see>.

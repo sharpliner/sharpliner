@@ -1,3 +1,5 @@
 ﻿stages:
 - stage: Stage1
   displayName: DisplayName
+  pool:
+    vmImage: windows-2022
