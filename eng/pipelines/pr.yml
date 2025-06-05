@@ -24,7 +24,12 @@ jobs:
     vmImage: windows-2022
   steps:
   - powershell: echo $Env:FOO
-    displayName: Test
+    displayName: $(System.PullRequest.SourceBranch)
+    env:
+      FOO: $(System.PullRequest.SourceBranch)
+
+  - powershell: echo $Env:FOO
+    displayName: ${{ variables['System.PullRequest.SourceBranch'] }}
     env:
       FOO: ${{ variables['System.PullRequest.SourceBranch'] }}
 

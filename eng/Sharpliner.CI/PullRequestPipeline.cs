@@ -27,8 +27,14 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                 {
                     Powershell.Inline("echo $Env:FOO") with
                     {
+                        Env = new() { { "FOO", "$(System.PullRequest.SourceBranch)" } },
+                        DisplayName = "$(System.PullRequest.SourceBranch)",
+                    },
+
+                    Powershell.Inline("echo $Env:FOO") with
+                    {
                         Env = new() { { "FOO", "${{ variables['System.PullRequest.SourceBranch'] }}" } },
-                        DisplayName = "Test",
+                        DisplayName = "${{ variables['System.PullRequest.SourceBranch'] }}",
                     },
 
                     StepLibrary(new ProjectBuildSteps("src/**/*.csproj")),
