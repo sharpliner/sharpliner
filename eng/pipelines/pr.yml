@@ -25,7 +25,7 @@ jobs:
   steps:
   - template: templates/install-dotnet-sdk.yml
     parameters:
-      version: 9.0.102
+      version: 10.0.100-preview.3.25201.16
 
   - powershell: New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'
     displayName: Create artifacts/packages
