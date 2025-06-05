@@ -27,7 +27,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                 {
                     Powershell.Inline("echo $Env:FOO") with
                     {
-                        Env = new() { { "FOO", variables.System.PullRequest.SourceBranch } },
+                        Env = new() { { "FOO", "${{ variables['System.PullRequest.SourceBranch'] }}" } },
                         DisplayName = "Test",
                     },
 

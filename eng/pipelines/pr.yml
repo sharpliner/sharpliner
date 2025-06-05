@@ -26,7 +26,7 @@ jobs:
   - powershell: echo $Env:FOO
     displayName: Test
     env:
-      FOO: $(System.PullRequest.SourceBranch)
+      FOO: ${{ variables['System.PullRequest.SourceBranch'] }}
 
   - template: templates/install-dotnet-sdk.yml
     parameters:
