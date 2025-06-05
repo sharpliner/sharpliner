@@ -27,14 +27,16 @@ public class NuGetTaskBuilder
     /// </example>
     public NuGetAuthenticateTask Authenticate(string[]? nuGetServiceConnections = null, Conditioned<bool>? forceReinstallCredentialProvider = null)
     {
-        var task = new NuGetAuthenticateTask
-        {
-            ForceReinstallCredentialProvider = forceReinstallCredentialProvider
-        };
+        var task = new NuGetAuthenticateTask();
 
         if (nuGetServiceConnections is not null)
         {
             task = task with { NuGetServiceConnections = nuGetServiceConnections };
+        }
+
+        if (forceReinstallCredentialProvider is not null)
+        {
+            task = task with { ForceReinstallCredentialProvider = forceReinstallCredentialProvider };
         }
 
         return task;

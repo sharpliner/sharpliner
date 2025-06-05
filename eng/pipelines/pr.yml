@@ -27,8 +27,7 @@ jobs:
     parameters:
       version: 9.0.102
 
-  - powershell: |-
-      New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'
+  - powershell: New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'
     displayName: Create artifacts/packages
 
   - task: DotNetCoreCLI@2
@@ -63,7 +62,7 @@ jobs:
     displayName: Publish code coverage
     inputs:
       summaryFileLocation: tests/Sharpliner.Tests/coverage.cobertura.xml
-      pathToSources: $(Build.SourcesDirectory)
+      pathToSources: ${{ variables['Build.SourcesDirectory'] }}
 
   - task: DotNetCoreCLI@2
     displayName: E2E tests - Pack E2E.Tests library
