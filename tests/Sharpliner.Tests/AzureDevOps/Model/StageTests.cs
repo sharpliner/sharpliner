@@ -14,7 +14,7 @@ public class StageTests
                 Stage("Stage1").DisplayAs("DisplayName") with
                 {
                     Pool = new HostedPool(vmImage: "windows-2022"),
-                }   
+                }
             ]
         };
     }
