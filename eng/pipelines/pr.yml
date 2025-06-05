@@ -16,6 +16,10 @@ pr:
     include:
     - main
 
+variables:
+- name: BAR
+  value: XYZ
+
 jobs:
 - job: Build
   displayName: Build and test
@@ -23,15 +27,19 @@ jobs:
     name: Azure Pipelines
     vmImage: windows-2022
   steps:
-  - powershell: echo $Env:FOO
-    displayName: $(System.PullRequest.SourceBranch)
-    env:
-      FOO: $(System.PullRequest.SourceBranch)
+  - powershell: echo $(BAR)
+    displayName: ${{ variables['BAR'] }}
 
-  - powershell: echo $Env:FOO
-    displayName: ${{ variables['System.PullRequest.SourceBranch'] }}
-    env:
-      FOO: ${{ variables['System.PullRequest.SourceBranch'] }}
+  - powershell: echo ${{ variables['BAR'] }}
+    displayName: ${{ variables['BAR'] }}
+
+  - powershell: echo $(BAR)
+    displayName: ${{ variables['BAR'] }}
+    condition: eq(variables['BAR'], 'XYZ')
+
+  - powershell: echo ${{ variables['BAR'] }}
+    displayName: ${{ variables['BAR'] }}
+    condition: eq('${{ variables['BAR'] }}', 'XYZ')
 
   - template: templates/install-dotnet-sdk.yml
     parameters:

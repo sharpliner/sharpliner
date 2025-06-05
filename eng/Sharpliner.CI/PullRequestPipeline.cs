@@ -18,6 +18,11 @@ class PullRequestPipeline : SingleStagePipelineDefinition
 
         Pr = new PrTrigger("main"),
 
+        Variables =
+        [
+            Variable("BAR", "XYZ")
+        ],
+
         Jobs =
         {
             new Job("Build", "Build and test")
@@ -25,16 +30,26 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                 Pool = new HostedPool("Azure Pipelines", "windows-2022"),
                 Steps =
                 {
-                    Powershell.Inline("echo $Env:FOO") with
+                    Powershell.Inline("echo " + variables["BAR"]) with
                     {
-                        Env = new() { { "FOO", "$(System.PullRequest.SourceBranch)" } },
-                        DisplayName = "$(System.PullRequest.SourceBranch)",
+                        DisplayName = variables["BAR"],
                     },
 
-                    Powershell.Inline("echo $Env:FOO") with
+                    Powershell.Inline("echo ${{ variables['BAR'] }}") with
                     {
-                        Env = new() { { "FOO", "${{ variables['System.PullRequest.SourceBranch'] }}" } },
-                        DisplayName = "${{ variables['System.PullRequest.SourceBranch'] }}",
+                        DisplayName = "${{ variables['BAR'] }}",
+                    },
+
+                    Powershell.Inline("echo " + variables["BAR"]) with
+                    {
+                        DisplayName = variables["BAR"],
+                        Condition = Equal(variables["BAR"], "XYZ"),
+                    },
+
+                    Powershell.Inline("echo ${{ variables['BAR'] }}") with
+                    {
+                        DisplayName = "${{ variables['BAR'] }}",
+                        Condition = Equal("${{ variables['BAR'] }}", "XYZ"),
                     },
 
                     StepLibrary(new ProjectBuildSteps("src/**/*.csproj")),
