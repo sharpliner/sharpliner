@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -121,9 +120,7 @@ public class Program
                 continue;
             }
 
-            i++;
-
-            if (lines[i].EndsWith("\"\"\""))
+            if (lines[++i].EndsWith("\"\"\""))
             {
                 ++i;
             }
