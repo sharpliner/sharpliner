@@ -7,7 +7,7 @@ public class LibraryTests
 {
     private class Job_Library : JobLibrary
     {
-        public override List<Conditioned<JobBase>> Jobs =>
+        public override List<AdoExpression<JobBase>> Jobs =>
         [
             new Job("Start")
             {
@@ -50,7 +50,7 @@ public class LibraryTests
 
     private class DotNet_Step_Library : StepLibrary
     {
-        public override List<Conditioned<Step>> Steps =>
+        public override List<AdoExpression<Step>> Steps =>
         [
             DotNet.Install.Sdk("6.0.100"),
 
@@ -92,7 +92,7 @@ public class LibraryTests
 
     private class Variable_Library(string env) : VariableLibrary
     {
-        public override List<Conditioned<VariableBase>> Variables =>
+        public override List<AdoExpression<VariableBase>> Variables =>
         [
             Variable($"connection-string-{env}", $"{env}_123"),
 

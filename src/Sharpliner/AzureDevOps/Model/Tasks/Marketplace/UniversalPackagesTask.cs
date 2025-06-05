@@ -14,7 +14,7 @@ public abstract record UniversalPackagesTask : AzureDevOpsTask
     /// Default value: download.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? Command
+    public AdoExpression<string>? Command
     {
         get => GetConditioned<string>("command");
         init => SetProperty("command", value);
@@ -26,7 +26,7 @@ public abstract record UniversalPackagesTask : AzureDevOpsTask
     /// Default value: None.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? Verbosity
+    public AdoExpression<string>? Verbosity
     {
         get => GetConditioned<string>("verbosity");
         init => SetProperty("verbosity", value);

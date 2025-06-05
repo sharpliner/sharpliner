@@ -19,7 +19,7 @@ public record DotNetBuildCoreCliTask : DotNetCoreCliTask
     /// Include NuGet.org in the generated NuGet.config
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? IncludeNuGetOrg
+    public AdoExpression<bool>? IncludeNuGetOrg
     {
         get => GetConditioned<bool>("includeNuGetOrg");
         init => SetProperty("includeNuGetOrg", value);

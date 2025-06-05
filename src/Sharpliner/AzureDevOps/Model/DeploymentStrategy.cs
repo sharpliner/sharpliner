@@ -166,7 +166,7 @@ public record RollingStrategy : DeploymentStrategy
     /// This ensures that the app is running on these machines and is capable of handling requests while the deployment is taking place on the rest of the machines, which reduces overall downtime.
     /// </summary>
     [YamlMember(Order = 50, DefaultValuesHandling = DefaultValuesHandling.OmitDefaults)]
-    public Conditioned<int>? MaxParallel { get; init; }
+    public AdoExpression<int>? MaxParallel { get; init; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RollingStrategy"/> class.

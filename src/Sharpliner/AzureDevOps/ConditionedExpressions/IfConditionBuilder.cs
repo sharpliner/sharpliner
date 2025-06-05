@@ -10,11 +10,11 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 public class IfConditionBuilder
 {
     internal bool IsElseIf { get; } = false;
-    internal Conditioned? Parent { get; }
+    internal AdoExpression? Parent { get; }
 
-    internal IfConditionBuilder(Conditioned? parent = null) : this(parent, false) { }
+    internal IfConditionBuilder(AdoExpression? parent = null) : this(parent, false) { }
 
-    internal IfConditionBuilder(Conditioned? parent = null, bool isElseIf = false)
+    internal IfConditionBuilder(AdoExpression? parent = null, bool isElseIf = false)
     {
         Parent = parent;
         IsElseIf = isElseIf;
@@ -439,11 +439,11 @@ public class IfConditionBuilder
 public class IfConditionBuilder<T>
 {
     internal bool IsElseIf { get; } = false;
-    internal Conditioned<T>? Parent { get; }
+    internal AdoExpression<T>? Parent { get; }
 
-    internal IfConditionBuilder(Conditioned<T>? parent = null) : this(parent, false) { }
+    internal IfConditionBuilder(AdoExpression<T>? parent = null) : this(parent, false) { }
 
-    internal IfConditionBuilder(Conditioned<T>? parent = null, bool isElseIf = false)
+    internal IfConditionBuilder(AdoExpression<T>? parent = null, bool isElseIf = false)
     {
         Parent = parent;
         IsElseIf = isElseIf;

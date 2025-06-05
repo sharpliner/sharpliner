@@ -22,7 +22,7 @@ public abstract record NuGetCommandTask : AzureDevOpsTask
     }
 
     [YamlIgnore]
-    internal Conditioned<string>? Command
+    internal AdoExpression<string>? Command
     {
         get => GetConditioned<string>("command");
         init => SetProperty("command", value);

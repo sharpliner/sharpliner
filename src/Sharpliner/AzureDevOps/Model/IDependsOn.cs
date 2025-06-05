@@ -51,7 +51,7 @@ public class DependsOn(params string[] values) : ConditionedList<string>(values)
         else
         {
             // wr want to use the serialized version of the list
-            nestedObjectSerializer(new List<Conditioned<string>>(this));
+            nestedObjectSerializer(new List<AdoExpression<string>>(this));
         }
     }
 }

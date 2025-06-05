@@ -14,31 +14,31 @@ public record ContainerResource
     /// Identifier (A-Z, a-z, 0-9, and underscore)
     /// </summary>
     [YamlMember(Alias = "container")]
-    public Conditioned<string>? Identifier { get; }
+    public AdoExpression<string>? Identifier { get; }
 
     /// <summary>
     /// Container image name
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Image { get; init; }
+    public AdoExpression<string>? Image { get; init; }
 
     /// <summary>
     /// Arguments to pass to container at startup
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Options { get; init; }
+    public AdoExpression<string>? Options { get; init; }
 
     /// <summary>
     /// Reference to a service connection for the private registry
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Endpoint { get; init; }
+    public AdoExpression<string>? Endpoint { get; init; }
 
     /// <summary>
     /// A map of environment variables that are available to all steps of the jobs. When more than one variable
     /// with the same name is used, the latter one will be used.
     /// </summary>
-    public ConditionedDictionary Env { get; init; } = [];
+    public DictionaryExpression Env { get; init; } = [];
 
     /// <summary>
     /// Ports to expose on the container
@@ -54,7 +54,7 @@ public record ContainerResource
     /// Whether to map in the Docker daemon socket; defaults to true
     /// </summary>
     [DisallowNull]
-    public Conditioned<bool>? MapDockerSocket { get; init; }
+    public AdoExpression<bool>? MapDockerSocket { get; init; }
 
     /// <summary>
     /// Volumes to mount read-only - all default to false
@@ -80,20 +80,20 @@ public record ContainerMountSettings
     /// <summary>
     /// Components required to talk to the agent
     /// </summary>
-    public Conditioned<bool>? Externals { get; init; }
+    public AdoExpression<bool>? Externals { get; init; }
 
     /// <summary>
     ///  tasks required by the job
     /// </summary>
-    public Conditioned<bool>? Tasks { get; init; }
+    public AdoExpression<bool>? Tasks { get; init; }
 
     /// <summary>
     /// Installable tools like Python and Ruby
     /// </summary>
-    public Conditioned<bool>? Tools { get; init; }
+    public AdoExpression<bool>? Tools { get; init; }
 
     /// <summary>
     /// The work directory
     /// </summary>
-    public Conditioned<bool>? Work { get; init; }
+    public AdoExpression<bool>? Work { get; init; }
 }

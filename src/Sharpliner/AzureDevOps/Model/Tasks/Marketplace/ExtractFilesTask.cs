@@ -12,7 +12,7 @@ public record ExtractFilesTask : AzureDevOpsTask
     /// Specifies the file paths or patterns of the archive files to extract. Supports multiple lines of minimatch patterns.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? ArchiveFilePatterns
+    public AdoExpression<string>? ArchiveFilePatterns
     {
         get => GetConditioned<string>("archiveFilePatterns");
         init => SetProperty("archiveFilePatterns", value);
@@ -22,7 +22,7 @@ public record ExtractFilesTask : AzureDevOpsTask
     /// Specifies the destination folder into which archive files should be extracted.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? DestinationFolder
+    public AdoExpression<string>? DestinationFolder
     {
         get => GetConditioned<string>("destinationFolder");
         init => SetProperty("destinationFolder", value);
@@ -33,7 +33,7 @@ public record ExtractFilesTask : AzureDevOpsTask
     /// Defaults to <code>true</code>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? CleanDestinationFolder
+    public AdoExpression<bool>? CleanDestinationFolder
     {
         get => GetConditioned<bool>("cleanDestinationFolder", true);
         init => SetProperty("cleanDestinationFolder", value);
@@ -45,7 +45,7 @@ public record ExtractFilesTask : AzureDevOpsTask
     /// Defaults to <code>false</code>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? OverwriteExistingFiles
+    public AdoExpression<bool>? OverwriteExistingFiles
     {
         get => GetConditioned<bool>("overwriteExistingFiles", false);
         init => SetProperty("overwriteExistingFiles", value);
@@ -56,7 +56,7 @@ public record ExtractFilesTask : AzureDevOpsTask
     /// If it's not specified on Windows, the default 7zip version supplied with a task will be used.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? PathToSevenZipTool
+    public AdoExpression<string>? PathToSevenZipTool
     {
         get => GetConditioned<string>("pathToSevenZipTool");
         init => SetProperty("pathToSevenZipTool", value);

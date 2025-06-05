@@ -27,26 +27,26 @@ public abstract record PackageResource
     /// Github service connection with the PAT type
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Connection { get; init; }
+    public AdoExpression<string>? Connection { get; init; }
 
     /// <summary>
     /// &lt;Repository&gt;/&lt;Name of the package&gt;
     /// </summary>
     [DisallowNull]
-    public Conditioned<string> Name { get; init; }
+    public AdoExpression<string> Name { get; init; }
 
     /// <summary>
     /// Version of the packge to consume
     /// Optional, defaults to latest
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Version { get; init; }
+    public AdoExpression<string>? Version { get; init; }
 
     /// <summary>
     /// To enable automated triggers (true/false)
     /// Optional, defaults to no triggers
     /// </summary>
-    public Conditioned<bool>? Trigger { get; init; }
+    public AdoExpression<bool>? Trigger { get; init; }
 
     /// <summary>
     /// Creates a new instance of the <see cref="PackageResource"/> class.

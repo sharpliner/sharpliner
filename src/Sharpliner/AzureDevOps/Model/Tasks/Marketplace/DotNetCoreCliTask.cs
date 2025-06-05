@@ -23,7 +23,7 @@ public record DotNetCoreCliTask : AzureDevOpsTask
     /// You can use wildcards (e.g. **/*.csproj for all .csproj files in all subfolders)
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? Projects
+    public AdoExpression<string>? Projects
     {
         get => GetConditioned<string>("projects");
         init => SetProperty("projects", value);
@@ -37,7 +37,7 @@ public record DotNetCoreCliTask : AzureDevOpsTask
     /// If you would like to add arguments for a command not listed, use custom.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? Arguments
+    public AdoExpression<string>? Arguments
     {
         get => GetConditioned<string>("arguments");
         init => SetProperty("arguments", value);
@@ -48,7 +48,7 @@ public record DotNetCoreCliTask : AzureDevOpsTask
     /// Empty is the root of the repo (build) or artifacts (release), which is $(System.DefaultWorkingDirectory)
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? WorkingDirectory
+    public AdoExpression<string>? WorkingDirectory
     {
         get => GetConditioned<string>("workingDirectory");
         init => SetProperty("workingDirectory", value);

@@ -16,7 +16,7 @@ public abstract record Strategy
     /// The maximum number of simultaneous matrix legs to run at once.
     /// If unspecified or set to 0, no limit is applied.
     /// </summary>
-    public Conditioned<int>? MaxParallel { get; init; }
+    public AdoExpression<int>? MaxParallel { get; init; }
 }
 
 /// <summary>
@@ -70,5 +70,5 @@ public record ParallelStrategy : Strategy
     /// <summary>
     /// Specifies how many duplicates of a job should run
     /// </summary>
-    public Conditioned<int>? Parallel { get; init; }
+    public AdoExpression<int>? Parallel { get; init; }
 }

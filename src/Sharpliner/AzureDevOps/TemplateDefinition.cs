@@ -119,7 +119,7 @@ public abstract class TemplateDefinitionBase<T> : TemplateDefinition, ISharpline
     /// <returns>A YAML string.</returns>
     public string Serialize()
     {
-        var template = new ConditionedDictionary();
+        var template = new DictionaryExpression();
 
         if (Parameters != null && Parameters.Count > 0)
         {

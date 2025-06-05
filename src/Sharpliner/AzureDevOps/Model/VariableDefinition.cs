@@ -25,7 +25,7 @@ public record VariableGroup : VariableBase
     /// The name of the variable group.
     /// </summary>
     [YamlMember(Alias = "group")]
-    public Conditioned<string> Name { get; }
+    public AdoExpression<string> Name { get; }
 
     /// <summary>
     /// Creates a new instance of <see cref="VariableGroup"/>.
@@ -67,7 +67,7 @@ public record Variable : VariableBase
     /// Whether the variable is read-only. See <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/security/inputs#variables">Securely use variables</see>.
     /// </summary>
     [YamlMember(Alias = "readonly", Order = 3, DefaultValuesHandling = DefaultValuesHandling.OmitDefaults)]
-    public Conditioned<bool>? Readonly { get; init; }
+    public AdoExpression<bool>? Readonly { get; init; }
 
     private Variable(string name, object value)
     {
@@ -147,22 +147,22 @@ public record Variable : VariableBase
     public static implicit operator InlineExpression(Variable variable) => new VariableReference(variable.Name);
 
     /// <summary>
-    /// Converts a <see cref="Variable"/> to a <see cref="Conditioned"/> by getting the reference to the variable.
+    /// Converts a <see cref="Variable"/> to a <see cref="AdoExpression"/> by getting the reference to the variable.
     /// </summary>
     /// <param name="variable">The variable.</param>
-    public static implicit operator Conditioned<string>(Variable variable) => new VariableReference(variable.Name);
+    public static implicit operator AdoExpression<string>(Variable variable) => new VariableReference(variable.Name);
 
     /// <summary>
-    /// Converts a <see cref="Variable"/> to a <see cref="Conditioned"/> by getting the reference to the variable.
+    /// Converts a <see cref="Variable"/> to a <see cref="AdoExpression"/> by getting the reference to the variable.
     /// </summary>
     /// <param name="variable">The variable.</param>
-    public static implicit operator Conditioned<int>(Variable variable) => new VariableReference(variable.Name);
+    public static implicit operator AdoExpression<int>(Variable variable) => new VariableReference(variable.Name);
 
     /// <summary>
-    /// Converts a <see cref="Variable"/> to a <see cref="Conditioned"/> by getting the reference to the variable.
+    /// Converts a <see cref="Variable"/> to a <see cref="AdoExpression"/> by getting the reference to the variable.
     /// </summary>
     /// <param name="variable">The variable.</param>
-    public static implicit operator Conditioned<bool>(Variable variable) => new VariableReference(variable.Name);
+    public static implicit operator AdoExpression<bool>(Variable variable) => new VariableReference(variable.Name);
 }
 
 /// <summary>

@@ -31,7 +31,7 @@ public abstract record PipelineBase
     /// LockBehavior of the pipeline
     /// </summary>
     [YamlMember(Order = 120)]
-    public Conditioned<LockBehavior>? LockBehavior { get; init; }
+    public AdoExpression<LockBehavior>? LockBehavior { get; init; }
 
     /// <summary>
     /// Specifies pipeline parameters
@@ -70,7 +70,7 @@ public abstract record PipelineBase
     /// </summary>
     [YamlMember(Order = 400)]
     [DisallowNull]
-    public Conditioned<Resources>? Resources { get; init => field = value?.GetRoot(); }
+    public AdoExpression<Resources>? Resources { get; init => field = value?.GetRoot(); }
 
     /// <summary>
     /// Specifies variables at the pipeline level
@@ -84,7 +84,7 @@ public abstract record PipelineBase
     /// A pool specification also holds information about the job's strategy for running.
     /// </summary>
     [YamlMember(Order = 550)]
-    public Conditioned<Pool>? Pool { get; init => field = value?.GetRoot(); }
+    public AdoExpression<Pool>? Pool { get; init => field = value?.GetRoot(); }
 
     /// <summary>
     /// Returns the list of validations that should be run on the definition (e.g. wrong dependsOn, artifact name typos..).

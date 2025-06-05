@@ -7,7 +7,7 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 /// <summary>
 /// This class is here only to override the Add() which is used for definition.
 /// </summary>
-public class ConditionedList<T> : List<Conditioned<T>>
+public class ConditionedList<T> : List<AdoExpression<T>>
 {
     /// <summary>
     /// Creates a new instance of <see cref="ConditionedList{T}"/>.
@@ -20,34 +20,34 @@ public class ConditionedList<T> : List<Conditioned<T>>
     /// Creates a new instance of <see cref="ConditionedList{T}"/> with the specified values.
     /// </summary>
     protected ConditionedList(IEnumerable<T> values)
-        : base(values.Select(v => new Conditioned<T>(v)))
+        : base(values.Select(v => new AdoExpression<T>(v)))
     {
     }
 
     /// <summary>
     /// Adds a new item to the list.
-    /// If the item is a <see cref="Conditioned{T}"/> item, it will be marked as a list.
+    /// If the item is a <see cref="AdoExpression{T}"/> item, it will be marked as a list.
     /// </summary>
-    public new void Add(Conditioned<T> item)
+    public new void Add(AdoExpression<T> item)
     {
         base.Add(GetRootConditioned(item));
     }
 
     /// <summary>
     /// Gets or sets the item at the specified index.
-    /// If the item is a <see cref="Conditioned{T}"/> item, it will be marked as a list.
+    /// If the item is a <see cref="AdoExpression{T}"/> item, it will be marked as a list.
     /// </summary>
-    public new Conditioned<T> this[int index]
+    public new AdoExpression<T> this[int index]
     {
         get => base[index];
         set => base[index] = GetRootConditioned(value);
     }
 
-    private static Conditioned<T> GetRootConditioned(Conditioned<T> item)
+    private static AdoExpression<T> GetRootConditioned(AdoExpression<T> item)
     {
         // When we define a tree of conditional definitions, the expression returns
         // the leaf definition so we have to move up to the top-level definition
-        while (item.Parent is Conditioned<T> parent)
+        while (item.Parent is AdoExpression<T> parent)
         {
             item = parent;
         }

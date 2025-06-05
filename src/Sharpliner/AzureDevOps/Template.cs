@@ -11,7 +11,7 @@ namespace Sharpliner.AzureDevOps;
 /// Represents a template reference
 /// </summary>
 /// <typeparam name="T">Part of the pipeline this template substitutes (allowed are stage, job, step, variable)</typeparam>
-public record Template<T> : Conditioned<T>
+public record Template<T> : AdoExpression<T>
 {
     private readonly string _path;
 

@@ -14,8 +14,8 @@ public class ConditionedTests
         public static ParameterReference Parameter1 => parameters["Xyz"];
         public static ParameterReference Parameter2 => parameters["Unn"];
 
-        public static Conditioned<string> Conditioned1 => "foo";
-        public static Conditioned<string> Conditioned2 => "bar";
+        public static AdoExpression<string> Conditioned1 => "foo";
+        public static AdoExpression<string> Conditioned2 => "bar";
 
         public override string TargetFile => throw new System.NotImplementedException();
 

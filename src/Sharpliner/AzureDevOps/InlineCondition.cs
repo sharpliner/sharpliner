@@ -40,7 +40,7 @@ public abstract class InlineCondition<T> : InlineCondition
     /// Creates a new instance of <see cref="InlineCondition{T}"/> with the specified parent condition.
     /// </summary>
     /// <param name="parent">The parent condition.</param>
-    protected InlineCondition(Conditioned<T>? parent = null)
+    protected InlineCondition(AdoExpression<T>? parent = null)
     {
         Parent = parent;
     }

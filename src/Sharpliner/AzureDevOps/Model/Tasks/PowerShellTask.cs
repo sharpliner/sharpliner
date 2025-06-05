@@ -15,42 +15,42 @@ public abstract record PowershellTask : Step
     /// If you leave it empty, the working directory is $(Build.SourcesDirectory).
     /// </summary>
     [YamlMember(Order = 113)]
-    public Conditioned<string>? WorkingDirectory { get; init; }
+    public AdoExpression<string>? WorkingDirectory { get; init; }
 
     /// <summary>
     /// Prepends the line $ErrorActionPreference = 'VALUE' at the top of your script.
     /// Default value: `stop`.
     /// </summary>
     [YamlMember(Order = 114)]
-    public Conditioned<ActionPreference>? ErrorActionPreference { get; init; }
+    public AdoExpression<ActionPreference>? ErrorActionPreference { get; init; }
 
     /// <summary>
     /// Prepends the line $WarningPreference = 'VALUE' at the top of your script.
     /// Default value: `continue`.
     /// </summary>
     [YamlMember(Order = 114)]
-    public Conditioned<ActionPreference>? WarningPreference { get; init; }
+    public AdoExpression<ActionPreference>? WarningPreference { get; init; }
 
     /// <summary>
     /// Prepends the line $InformationPreference = 'VALUE' at the top of your script.
     /// Default value: `continue`.
     /// </summary>
     [YamlMember(Order = 114)]
-    public Conditioned<ActionPreference>? InformationPreference { get; init; }
+    public AdoExpression<ActionPreference>? InformationPreference { get; init; }
 
     /// <summary>
     /// Prepends the line $VerbosePreference = 'VALUE' at the top of your script.
     /// Default value: `continue`.
     /// </summary>
     [YamlMember(Order = 114)]
-    public Conditioned<ActionPreference>? VerbosePreference { get; init; }
+    public AdoExpression<ActionPreference>? VerbosePreference { get; init; }
 
     /// <summary>
     /// Prepends the line $DebugPreference = 'VALUE' at the top of your script.
     /// Default value: `continue`.
     /// </summary>
     [YamlMember(Order = 114)]
-    public Conditioned<ActionPreference>? DebugPreference { get; init; }
+    public AdoExpression<ActionPreference>? DebugPreference { get; init; }
 
     /// <summary>
     /// If this is true, this task will fail if any errors are written to the error pipeline, or if any data is written to the Standard Error stream.
@@ -58,7 +58,7 @@ public abstract record PowershellTask : Step
     /// Default value: `false`.
     /// </summary>
     [YamlMember(Order = 125)]
-    public Conditioned<bool>? FailOnStderr { get; init; }
+    public AdoExpression<bool>? FailOnStderr { get; init; }
 
     /// <summary>
     /// If this is false, the line if ((Test-Path -LiteralPath variable:\\LASTEXITCODE)) { exit $LASTEXITCODE } is appended to the end of your script.
@@ -67,7 +67,7 @@ public abstract record PowershellTask : Step
     /// Default value: `false`.
     /// </summary>
     [YamlMember(Order = 126)]
-    public Conditioned<bool>? IgnoreLASTEXITCODE { get; init; }
+    public AdoExpression<bool>? IgnoreLASTEXITCODE { get; init; }
 }
 
 /// <summary>
@@ -79,7 +79,7 @@ public record InlinePowershellTask : PowershellTask
     /// Required if Type is inline, contents of the script.
     /// </summary>
     [YamlMember(Alias = "powershell", Order = 1, ScalarStyle = ScalarStyle.Literal)]
-    public Conditioned<string>? Contents { get; init; }
+    public AdoExpression<string>? Contents { get; init; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InlinePowershellTask"/> class with the specified script lines.
@@ -102,12 +102,12 @@ public record PowershellFileTask : PowershellTask, IYamlConvertible
     /// Path of the script to execute.
     /// Must be a fully qualified path or relative to $(System.DefaultWorkingDirectory).
     /// </summary>
-    public Conditioned<string>? FilePath { get; }
+    public AdoExpression<string>? FilePath { get; }
 
     /// <summary>
     /// Arguments passed to the Bash script.
     /// </summary>
-    public Conditioned<string>? Arguments { get; init; }
+    public AdoExpression<string>? Arguments { get; init; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PowershellFileTask"/> class with the specified file path and whether to use PowerShell Core.
@@ -115,7 +115,7 @@ public record PowershellFileTask : PowershellTask, IYamlConvertible
     /// <param name="filePath">The path to the script file.</param>
     /// <param name="isPwsh">Whether to use PowerShell Core.</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public PowershellFileTask(Conditioned<string> filePath, bool isPwsh)
+    public PowershellFileTask(AdoExpression<string> filePath, bool isPwsh)
     {
         FilePath = filePath ?? throw new ArgumentNullException(nameof(filePath));
         _isPwsh = isPwsh;
@@ -173,7 +173,7 @@ public record InlinePwshTask : PowershellTask
     /// Required if Type is inline, contents of the script.
     /// </summary>
     [YamlMember(Alias = "pwsh", Order = 1, ScalarStyle = ScalarStyle.Literal)]
-    public Conditioned<string>? Contents { get; init; }
+    public AdoExpression<string>? Contents { get; init; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="InlinePwshTask"/> class with the specified script lines.

@@ -60,11 +60,11 @@ public class ParameterReference : IRuntimeExpression, ICompileTimeExpression, IY
     public override int GetHashCode() => ParameterName.GetHashCode();
 }
 
-internal record ConditionedParameterReference<T> : Conditioned<T>
+internal record ParameterReferenceExpression<T> : AdoExpression<T>
 {
     private readonly ParameterReference _parameter;
 
-    public ConditionedParameterReference(ParameterReference parameter) : base()
+    public ParameterReferenceExpression(ParameterReference parameter) : base()
     {
         _parameter = parameter;
     }

@@ -31,9 +31,9 @@ namespace Sharpliner.AzureDevOps.ConditionedExpressions;
 ///     value: true
 /// </code>
 /// </summary>
-public abstract record Conditioned : IYamlConvertible
+public abstract record AdoExpression : IYamlConvertible
 {
-    private class ValueEqualityList : List<Conditioned>
+    private class ValueEqualityList : List<AdoExpression>
     {
         public override bool Equals(object? obj)
         {
@@ -56,12 +56,12 @@ public abstract record Conditioned : IYamlConvertible
     /// <summary>
     /// Pointer in case of nested conditional blocks.
     /// </summary>
-    internal Conditioned? Parent { get; set; }
+    internal AdoExpression? Parent { get; set; }
 
     /// <summary>
     /// In case we define multiple items inside one <c>${{ if }}</c>, they are stored here.
     /// </summary>
-    internal List<Conditioned> Definitions { get; } = new ValueEqualityList();
+    internal List<AdoExpression> Definitions { get; } = new ValueEqualityList();
 
     /// <summary>
     /// When serializing, we need to distinguish whether serializing a list of items under a condition or just a value.
@@ -69,10 +69,10 @@ public abstract record Conditioned : IYamlConvertible
     internal bool IsList { get; set; } = false;
 
     /// <summary>
-    /// Creates a new instance of <see cref="Conditioned"/> with the given condition.
+    /// Creates a new instance of <see cref="AdoExpression"/> with the given condition.
     /// </summary>
     /// <param name="condition">The condition.</param>
-    protected Conditioned(IfCondition? condition)
+    protected AdoExpression(IfCondition? condition)
     {
         Condition = condition;
     }
@@ -100,9 +100,9 @@ public abstract record Conditioned : IYamlConvertible
     /// <param name="condition">Parent condition</param>
     /// <param name="definition">Definition that was added below the condition</param>
     /// <returns>The conditioned definition coming out of the inputs</returns>
-    internal static Conditioned<T> Link<T>(IfCondition condition, T definition)
+    internal static AdoExpression<T> Link<T>(IfCondition condition, T definition)
     {
-        var conditionedDefinition = new Conditioned<T>(definition, condition);
+        var conditionedDefinition = new AdoExpression<T>(definition, condition);
         condition.Parent?.Definitions.Add(conditionedDefinition);
         conditionedDefinition.Parent = condition.Parent;
         return conditionedDefinition;
@@ -114,7 +114,7 @@ public abstract record Conditioned : IYamlConvertible
     /// <param name="condition">Parent condition</param>
     /// <param name="conditionedDefinition">Definition that was added below the condition</param>
     /// <returns>The conditioned definition coming out of the inputs</returns>
-    internal static Conditioned<T> Link<T>(IfCondition condition, Conditioned<T> conditionedDefinition)
+    internal static AdoExpression<T> Link<T>(IfCondition condition, AdoExpression<T> conditionedDefinition)
     {
         conditionedDefinition.Condition = condition;
         condition.Parent?.Definitions.Add(conditionedDefinition);
@@ -128,9 +128,9 @@ public abstract record Conditioned : IYamlConvertible
     /// <param name="condition">Parent condition</param>
     /// <param name="items">Items to add to a condition</param>
     /// <returns>The conditioned definition coming out of the inputs</returns>
-    internal static Conditioned<T> Link<T>(IfCondition condition, IEnumerable<Conditioned<T>> items)
+    internal static AdoExpression<T> Link<T>(IfCondition condition, IEnumerable<AdoExpression<T>> items)
     {
-        var conditionedDefinition = new Conditioned<T>(default!, condition);
+        var conditionedDefinition = new AdoExpression<T>(default!, condition);
         conditionedDefinition.Definitions.AddRange(items);
         condition.Parent?.Definitions.Add(conditionedDefinition);
         conditionedDefinition.Parent = condition.Parent;
@@ -143,7 +143,7 @@ public abstract record Conditioned : IYamlConvertible
     /// <param name="condition">Parent condition</param>
     /// <param name="template">Definition that was added below the condition</param>
     /// <returns>The conditioned definition coming out of the inputs</returns>
-    internal static Conditioned<T> Link<T>(IfCondition condition, Template<T> template)
+    internal static AdoExpression<T> Link<T>(IfCondition condition, Template<T> template)
     {
         if (condition.Parent == null)
         {
@@ -182,54 +182,54 @@ public abstract record Conditioned : IYamlConvertible
 ///     value: true
 /// </code>
 /// </summary>
-public record Conditioned<T> : Conditioned
+public record AdoExpression<T> : AdoExpression
 {
     // Make sure we can for example assign a string into ConditionedDefinition<string>
     /// <summary>
     /// Implicitly converts a value into a <see cref="Conditioned{T}"/> instance with a definition.
     /// </summary>
     /// <param name="value">The definition.</param>
-    public static implicit operator Conditioned<T>([NotNullIfNotNull(nameof(value))]T? value) =>
+    public static implicit operator AdoExpression<T>([NotNullIfNotNull(nameof(value))]T? value) =>
         value == null ? null! : new(definition: value);
 
     // Make sure we can assign ${{ parameters.name }} into conditioned
     /// <summary>
-    /// Implicitly converts a <see cref="ParameterReference"/> into a <see cref="Conditioned{T}"/> instance with a parameter reference.
+    /// Implicitly converts a <see cref="ParameterReference"/> into a <see cref="AdoExpression{T}"/> instance with a parameter reference.
     /// </summary>
     /// <param name="parameterRef">The parameter reference.</param>
-    public static implicit operator Conditioned<T>(ParameterReference parameterRef) => new ConditionedParameterReference<T>(parameterRef);
+    public static implicit operator AdoExpression<T>(ParameterReference parameterRef) => new ParameterReferenceExpression<T>(parameterRef);
 
     /// <summary>
     /// The actual definition (value).
     /// </summary>
     internal T? Definition { get; }
 
-    internal Conditioned(T definition, IfCondition condition) : base(condition)
+    internal AdoExpression(T definition, IfCondition condition) : base(condition)
     {
         Definition = definition;
     }
 
     /// <summary>
-    /// Creates a new instance of <see cref="Conditioned{T}"/> with the given definition.
+    /// Creates a new instance of <see cref="AdoExpression{T}"/> with the given definition.
     /// </summary>
     /// <param name="definition">The definition.</param>
-    public Conditioned(T definition) : this()
+    public AdoExpression(T definition) : this()
     {
         Definition = definition;
     }
 
     /// <summary>
-    /// Creates a new instance of <see cref="Conditioned{T}"/> with the given condition.
+    /// Creates a new instance of <see cref="AdoExpression{T}"/> with the given condition.
     /// </summary>
     /// <param name="condition">The condition.</param>
-    protected Conditioned(IfCondition? condition) : base(condition)
+    protected AdoExpression(IfCondition? condition) : base(condition)
     {
     }
 
     /// <summary>
-    /// Creates a new instance of <see cref="Conditioned{T}"/> with no condition.
+    /// Creates a new instance of <see cref="AdoExpression{T}"/> with no condition.
     /// </summary>
-    protected Conditioned() : base((IfCondition?)null)
+    protected AdoExpression() : base((IfCondition?)null)
     {
     }
 
@@ -276,7 +276,7 @@ public record Conditioned<T> : Conditioned
             // If we're top-level, we create a fake new top with empty definition to collect all the definitions
             if (Parent == null)
             {
-                Parent = new Conditioned<T>();
+                Parent = new AdoExpression<T>();
                 Parent.Definitions.Add(this);
             }
 
@@ -317,18 +317,18 @@ public record Conditioned<T> : Conditioned
     ///       name: pool-B
     /// </code>
     /// </summary>
-    public Conditioned<T> EndIf
+    public AdoExpression<T> EndIf
     {
         get
         {
             // If we're top-level, we create a fake new top with empty definition to collect all the definitions
             if (Parent == null)
             {
-                Parent = new Conditioned<T>();
+                Parent = new AdoExpression<T>();
                 Parent.Definitions.Add(this);
             }
 
-            return Parent as Conditioned<T>
+            return Parent as AdoExpression<T>
                 ?? throw new InvalidOperationException(
                     $"You have called {nameof(EndIf)} on a top-level statement, " +
                     $"{nameof(EndIf)} can only be used to return from a nested definition");
@@ -353,7 +353,7 @@ public record Conditioned<T> : Conditioned
     ///   - job: job2-${{ foo }}
     /// </code>
     /// </summary>
-    public Conditioned<T> EndEach
+    public AdoExpression<T> EndEach
     {
         get
         {
@@ -366,11 +366,11 @@ public record Conditioned<T> : Conditioned
             // If we're top-level, we create a fake new top with empty definition to collect all the definitions
             if (Parent == null)
             {
-                Parent = new Conditioned<T>();
+                Parent = new AdoExpression<T>();
                 Parent.Definitions.Add(this);
             }
 
-            return Parent as Conditioned<T>
+            return Parent as AdoExpression<T>
                 ?? throw new InvalidOperationException(
                     $"You have called {nameof(EndEach)} on a top-level statement, " +
                     $"{nameof(EndEach)} must only be used after Each");
@@ -409,7 +409,7 @@ public record Conditioned<T> : Conditioned
             // If we're top-level, we create a fake new top with empty definition to collect all the definitions
             if (Parent == null)
             {
-                Parent = new Conditioned<T>();
+                Parent = new AdoExpression<T>();
                 Parent.Definitions.Add(this);
             }
 
@@ -446,7 +446,7 @@ public record Conditioned<T> : Conditioned
     {
         base.SetIsList(isList);
 
-        if (Definition is Conditioned conditioned)
+        if (Definition is AdoExpression conditioned)
         {
             conditioned.SetIsList(isList);
         }
@@ -570,7 +570,7 @@ public record Conditioned<T> : Conditioned
 
         definitions.AddRange(
             Definitions
-                .SelectMany(s => (s as Conditioned<T>)?.FlattenDefinitions()!)
+                .SelectMany(s => (s as AdoExpression<T>)?.FlattenDefinitions()!)
                 .Where(s => s is not null));
 
         return definitions;

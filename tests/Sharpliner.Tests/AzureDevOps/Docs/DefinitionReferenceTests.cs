@@ -326,7 +326,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
     [Fact]
     public void Serialize_TemplateConditionedExpressions_Test()
     {
-        Conditioned<Step> step =
+        AdoExpression<Step> step =
 #region template-conditioned-expressions-code
             StepTemplate("template1.yaml", new()
             {
@@ -721,7 +721,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
 #region definition-library
     class ProjectBuildSteps : StepLibrary
     {
-        public override List<Conditioned<Step>> Steps =>
+        public override List<AdoExpression<Step>> Steps =>
         [
             DotNet.Install.Sdk("6.0.100"),
 

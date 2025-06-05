@@ -17,7 +17,7 @@ public class AzureCliTaskBuilder : TaskBuilderBase
     /// <param name="resourceFileName">Name of the resource file</param>
     /// <param name="displayName">Display name of the build step</param>
     /// <returns>A new instance of <see cref="InlineAzureCliTask"/> with the contents of the resource file</returns>
-    public InlineAzureCliTask FromResourceFile(string azureSubscription, Conditioned<ScriptType> scriptType, string resourceFileName, Conditioned<string>? displayName = null!)
+    public InlineAzureCliTask FromResourceFile(string azureSubscription, AdoExpression<ScriptType> scriptType, string resourceFileName, AdoExpression<string>? displayName = null!)
         => new InlineAzureCliTask(azureSubscription, scriptType, GetResourceFile(Assembly.GetCallingAssembly()!, resourceFileName)) with
         {
             DisplayName = displayName!,
@@ -32,7 +32,7 @@ public class AzureCliTaskBuilder : TaskBuilderBase
     /// <param name="path">Path to the file</param>
     /// <param name="displayName">Display name of the build step</param>
     /// <returns>A new instance of <see cref="InlineAzureCliTask"/> with the contents of the file</returns>
-    public InlineAzureCliTask FromFile(string azureSubscription, Conditioned<ScriptType> scriptType, string path, Conditioned<string>? displayName = null!)
+    public InlineAzureCliTask FromFile(string azureSubscription, AdoExpression<ScriptType> scriptType, string path, AdoExpression<string>? displayName = null!)
         => new InlineAzureCliTask(azureSubscription, scriptType, System.IO.File.ReadAllText(path)) with
     {
         DisplayName = displayName!,
@@ -46,7 +46,7 @@ public class AzureCliTaskBuilder : TaskBuilderBase
     /// <param name="scriptPath">Path to the script</param>
     /// <param name="displayName">Name of the build step</param>
     /// <returns>A new instance of <see cref="AzureCliFileTask"/> with the file path</returns>
-    public AzureCliFileTask File(string azureSubscription, Conditioned<ScriptType> scriptType, string scriptPath, Conditioned<string>? displayName = null) => new(azureSubscription, scriptType,scriptPath)
+    public AzureCliFileTask File(string azureSubscription, AdoExpression<ScriptType> scriptType, string scriptPath, AdoExpression<string>? displayName = null) => new(azureSubscription, scriptType,scriptPath)
     {
         DisplayName = displayName!,
         ScriptPath = scriptPath,
@@ -60,7 +60,7 @@ public class AzureCliTaskBuilder : TaskBuilderBase
     /// <param name="scriptLines">Contents of the script</param>
     /// <param name="displayName">Name of the build step</param>
     /// <returns>A new instance of <see cref="InlineAzureCliTask"/> with the script lines</returns>
-    public InlineAzureCliTask Inline(string azureSubscription, Conditioned<ScriptType> scriptType, Conditioned<string>? displayName = null, params string[] scriptLines)
+    public InlineAzureCliTask Inline(string azureSubscription, AdoExpression<ScriptType> scriptType, AdoExpression<string>? displayName = null, params string[] scriptLines)
         => new(azureSubscription, scriptType, string.Join("\n", scriptLines))
         {
             DisplayName = displayName!,

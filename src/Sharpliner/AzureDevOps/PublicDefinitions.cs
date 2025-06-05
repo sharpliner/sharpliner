@@ -570,12 +570,12 @@ public abstract class VariableTemplateCollection : TemplateDefinitionCollection<
 /// </summary>
 public abstract class StageLibrary : DefinitionLibrary<Stage>
 {
-    internal override IEnumerable<Conditioned<Stage>> Items => Stages;
+    internal override IEnumerable<AdoExpression<Stage>> Items => Stages;
 
     /// <summary>
     /// The list of stages in this library.
     /// </summary>
-    public abstract List<Conditioned<Stage>> Stages { get; }
+    public abstract List<AdoExpression<Stage>> Stages { get; }
 }
 
 /// <summary>
@@ -584,12 +584,12 @@ public abstract class StageLibrary : DefinitionLibrary<Stage>
 /// </summary>
 public abstract class JobLibrary : DefinitionLibrary<JobBase>
 {
-    internal override IEnumerable<Conditioned<JobBase>> Items => Jobs;
+    internal override IEnumerable<AdoExpression<JobBase>> Items => Jobs;
 
     /// <summary>
     /// The list of jobs in this library.
     /// </summary>
-    public abstract List<Conditioned<JobBase>> Jobs { get; }
+    public abstract List<AdoExpression<JobBase>> Jobs { get; }
 }
 
 /// <summary>
@@ -598,12 +598,12 @@ public abstract class JobLibrary : DefinitionLibrary<JobBase>
 /// </summary>
 public abstract class StepLibrary : DefinitionLibrary<Step>
 {
-    internal override IEnumerable<Conditioned<Step>> Items => Steps;
+    internal override IEnumerable<AdoExpression<Step>> Items => Steps;
 
     /// <summary>
     /// The list of steps in this library.
     /// </summary>
-    public abstract List<Conditioned<Step>> Steps { get; }
+    public abstract List<AdoExpression<Step>> Steps { get; }
 }
 
 /// <summary>
@@ -612,12 +612,12 @@ public abstract class StepLibrary : DefinitionLibrary<Step>
 /// </summary>
 public abstract class VariableLibrary : DefinitionLibrary<VariableBase>
 {
-    internal override IEnumerable<Conditioned<VariableBase>> Items => Variables;
+    internal override IEnumerable<AdoExpression<VariableBase>> Items => Variables;
 
     /// <summary>
     /// The list of variables in this library.
     /// </summary>
-    public abstract List<Conditioned<VariableBase>> Variables { get; }
+    public abstract List<AdoExpression<VariableBase>> Variables { get; }
 }
 
 #endregion

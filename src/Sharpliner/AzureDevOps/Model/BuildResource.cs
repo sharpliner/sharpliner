@@ -21,31 +21,31 @@ public record BuildResource
     /// The type of your build service like Jenkins, circleCI etc.
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Type { get; init; }
+    public AdoExpression<string>? Type { get; init; }
 
     /// <summary>
     /// Service connection for your build service
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Connection { get; init; }
+    public AdoExpression<string>? Connection { get; init; }
 
     /// <summary>
     /// Source definition of the build
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Source { get; init; }
+    public AdoExpression<string>? Source { get; init; }
 
     /// <summary>
     /// The build number to pick the artifact, defaults to latest successful build
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Version { get; init; }
+    public AdoExpression<string>? Version { get; init; }
 
     /// <summary>
     /// Triggers aren't enabled by default and should be explicitly set
     /// </summary>
     [DisallowNull]
-    public Conditioned<bool>? Trigger { get; init; } = false;
+    public AdoExpression<bool>? Trigger { get; init; } = false;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BuildResource"/> class with the specified identifier.

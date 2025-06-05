@@ -15,7 +15,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Default value: $(System.DefaultWorkingDirectory).
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? DownloadDirectory
+    public AdoExpression<string>? DownloadDirectory
     {
         get => GetConditioned<string>("downloadDirectory");
         init => SetProperty("downloadDirectory", value);
@@ -28,7 +28,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Default value: internal.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? FeedsToUse
+    public AdoExpression<string>? FeedsToUse
     {
         get => GetConditioned<string>("feedsToUse");
         init => SetProperty("feedsToUse", value);
@@ -39,7 +39,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Optional. Use when feedsToUse = external and command = download
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? ExternalFeedCredentials
+    public AdoExpression<string>? ExternalFeedCredentials
     {
         get => GetConditioned<string>("externalFeedCredentials");
         init => SetProperty("externalFeedCredentials", value);
@@ -51,7 +51,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Required when feedsToUse = internal and command = download
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? VstsFeed
+    public AdoExpression<string>? VstsFeed
     {
         get => GetConditioned<string>("vstsFeed");
         init => SetProperty("vstsFeed", value);
@@ -62,7 +62,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Required when feedsToUse = internal and command = download.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? VstsFeedPackage
+    public AdoExpression<string>? VstsFeedPackage
     {
         get => GetConditioned<string>("vstsFeedPackage");
         init => SetProperty("vstsFeedPackage", value);
@@ -74,7 +74,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Required when feedsToUse = internal and command = download.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? VstsPackageVersion
+    public AdoExpression<string>? VstsPackageVersion
     {
         get => GetConditioned<string>("vstsPackageVersion");
         init => SetProperty("vstsPackageVersion", value);
@@ -86,7 +86,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Required when feedsToUse = external and command = download.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? FeedDownloadExternal
+    public AdoExpression<string>? FeedDownloadExternal
     {
         get => GetConditioned<string>("feedDownloadExternal");
         init => SetProperty("feedDownloadExternal", value);
@@ -97,7 +97,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Required when feedsToUse = external and command = download.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? PackageDownloadExternal
+    public AdoExpression<string>? PackageDownloadExternal
     {
         get => GetConditioned<string>("packageDownloadExternal");
         init => SetProperty("packageDownloadExternal", value);
@@ -110,7 +110,7 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     /// Required when feedsToUse = external and command = download.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? VersionDownloadExternal
+    public AdoExpression<string>? VersionDownloadExternal
     {
         get => GetConditioned<string>("versionDownloadExternal");
         init => SetProperty("versionDownloadExternal", value);

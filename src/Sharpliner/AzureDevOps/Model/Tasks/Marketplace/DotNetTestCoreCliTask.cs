@@ -19,7 +19,7 @@ public record DotNetTestCoreCliTask : DotNetCoreCliTask
     /// Provides a name for the test run
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? TestRunTitle
+    public AdoExpression<string>? TestRunTitle
     {
         get => GetConditioned<string>("testRunTitle");
         init => SetProperty("testRunTitle", value);
@@ -33,7 +33,7 @@ public record DotNetTestCoreCliTask : DotNetCoreCliTask
     /// This is currently only available on the Windows platform.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? PublishTestResults
+    public AdoExpression<bool>? PublishTestResults
     {
         get => GetConditioned<bool>("publishTestResults");
         init => SetProperty("publishTestResults", value);

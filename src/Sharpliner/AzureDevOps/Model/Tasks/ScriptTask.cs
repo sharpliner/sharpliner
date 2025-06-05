@@ -21,14 +21,14 @@ public record ScriptTask : Step
     /// If you leave it empty, the working directory is $(Build.SourcesDirectory).
     /// </summary>
     [YamlMember(Order = 113)]
-    public Conditioned<string>? WorkingDirectory { get; init; }
+    public AdoExpression<string>? WorkingDirectory { get; init; }
 
     /// <summary>
     /// If this is true, this task will fail if any errors are written to stderr.
     /// Defaults to 'false'.
     /// </summary>
     [YamlMember(Order = 200)]
-    public Conditioned<bool>? FailOnStdErr { get; init; }
+    public AdoExpression<bool>? FailOnStdErr { get; init; }
 
     /// <summary>
     /// Instantiates a new instance of <see cref="ScriptTask"/> with the specified script contents.

@@ -45,7 +45,7 @@ public record AzureDevOpsTask : Step
     /// Default is 0
     /// </summary>
     [YamlMember(Order = 230)]
-    public Conditioned<int>? RetryCountOnTaskFailure { get; init; }
+    public AdoExpression<int>? RetryCountOnTaskFailure { get; init; }
 
     /// <summary>
     /// Instantiates a new instance of <see cref="AzureDevOpsTask"/> with the specified task name.
@@ -80,8 +80,8 @@ public record AzureDevOpsTask : Step
     /// <param name="name">The name of the input parameter.</param>
     /// <param name="defaultValue">The default value to return if the input parameter is not found.</param>
     /// <returns>The value of the input parameter or the default value if the input parameter is not found.</returns>
-    protected Conditioned<T>? GetConditioned<T>(string name, Conditioned<T>? defaultValue = null)
-        => Inputs.TryGetValue(name, out var value) ? (Conditioned<T>)value : defaultValue;
+    protected AdoExpression<T>? GetConditioned<T>(string name, AdoExpression<T>? defaultValue = null)
+        => Inputs.TryGetValue(name, out var value) ? (AdoExpression<T>)value : defaultValue;
 
     /// <summary>
     /// Gets the value of the input parameter.
@@ -146,7 +146,7 @@ public record AzureDevOpsTask : Step
     /// </summary>
     /// <param name="name">The name of the input parameter.</param>
     /// <param name="value">The value to set.</param>
-    protected void SetProperty<T>(string name, Conditioned<T>? value)
+    protected void SetProperty<T>(string name, AdoExpression<T>? value)
     {
         if (value == null)
         {
@@ -182,6 +182,6 @@ public record AzureDevOpsTask : Step
 }
 
 /// <summary>
-/// Represents a collection of task inputs, supports <see cref="Conditioned{T}"/> values.
+/// Represents a collection of task inputs, supports <see cref="AdoExpression{T}"/> values.
 /// </summary>
-public class TaskInputs : ConditionedDictionary { }
+public class TaskInputs : DictionaryExpression { }

@@ -49,76 +49,76 @@ public class VariableReference : IRuntimeExpression, IMacroExpression, ICompileT
         => emitter.Emit(new Scalar(ToString()));
 
     /// <summary>
-    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="Conditioned{T}"/> of type <see cref="int"/>.
+    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="AdoExpression{T}"/> of type <see cref="int"/>.
     /// </summary>
     /// <param name="value">The variable reference.</param>
-    public static implicit operator Conditioned<int>(VariableReference value) => new ConditionedVariableReference<int>(value);
+    public static implicit operator AdoExpression<int>(VariableReference value) => new VariableReferenceExpression<int>(value);
 
     /// <summary>
-    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="Conditioned{T}"/> of type <see cref="bool"/>.
+    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="AdoExpression{T}"/> of type <see cref="bool"/>.
     /// </summary>
     /// <param name="value">The variable reference.</param>
-    public static implicit operator Conditioned<bool>(VariableReference value) => new ConditionedVariableReference<bool>(value);
+    public static implicit operator AdoExpression<bool>(VariableReference value) => new VariableReferenceExpression<bool>(value);
 
     /// <summary>
-    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="Conditioned{T}"/> of type <see cref="string"/>.
+    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="AdoExpression{T}"/> of type <see cref="string"/>.
     /// </summary>
     /// <param name="value">The variable reference.</param>
-    public static implicit operator Conditioned<string>(VariableReference value) => new ConditionedVariableReference<string>(value);
+    public static implicit operator AdoExpression<string>(VariableReference value) => new VariableReferenceExpression<string>(value);
 
     /// <summary>
-    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="Conditioned{T}"/> of type <see cref="TimeSpan"/>.
+    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="AdoExpression{T}"/> of type <see cref="TimeSpan"/>.
     /// </summary>
     /// <param name="value">The variable reference.</param>
-    public static implicit operator Conditioned<TimeSpan>(VariableReference value) => new ConditionedVariableReference<TimeSpan>(value);
+    public static implicit operator AdoExpression<TimeSpan>(VariableReference value) => new VariableReferenceExpression<TimeSpan>(value);
 
     /// <summary>
-    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="Conditioned{T}"/> of type <see cref="TemplateParameters"/>.
+    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="AdoExpression{T}"/> of type <see cref="TemplateParameters"/>.
     /// </summary>
     /// <param name="value">The variable reference.</param>
-    public static implicit operator Conditioned<TemplateParameters>(VariableReference value) => new ConditionedVariableReference<TemplateParameters>(value);
+    public static implicit operator AdoExpression<TemplateParameters>(VariableReference value) => new VariableReferenceExpression<TemplateParameters>(value);
 
     /// <summary>
-    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="Conditioned{T}"/> of type <see cref="ConditionedDictionary"/>.
+    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="AdoExpression{T}"/> of type <see cref="DictionaryExpression"/>.
     /// </summary>
     /// <param name="value">The variable reference.</param>
-    public static implicit operator Conditioned<ConditionedDictionary>(VariableReference value) => new ConditionedVariableReference<ConditionedDictionary>(value);
+    public static implicit operator AdoExpression<DictionaryExpression>(VariableReference value) => new VariableReferenceExpression<DictionaryExpression>(value);
 
     /// <summary>
-    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="Conditioned{T}"/> of type <see cref="InlineCondition"/>.
+    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="AdoExpression{T}"/> of type <see cref="InlineCondition"/>.
     /// </summary>
     /// <param name="value">The variable reference.</param>
-    public static implicit operator Conditioned<InlineCondition>(VariableReference value) => new ConditionedVariableReference<InlineCondition>(value);
+    public static implicit operator AdoExpression<InlineCondition>(VariableReference value) => new VariableReferenceExpression<InlineCondition>(value);
 
     /// <summary>
-    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="Conditioned{T}"/> of type <see cref="VariableBase"/>.
+    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="AdoExpression{T}"/> of type <see cref="VariableBase"/>.
     /// </summary>
     /// <param name="value">The variable reference.</param>
-    public static implicit operator Conditioned<VariableBase>(VariableReference value) => new ConditionedVariableReference<VariableBase>(value);
+    public static implicit operator AdoExpression<VariableBase>(VariableReference value) => new VariableReferenceExpression<VariableBase>(value);
 
     /// <summary>
-    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="Conditioned{T}"/> of type <see cref="Stage"/>.
+    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="AdoExpression{T}"/> of type <see cref="Stage"/>.
     /// </summary>
     /// <param name="value">The variable reference.</param>
-    public static implicit operator Conditioned<Stage>(VariableReference value) => new ConditionedVariableReference<Stage>(value);
+    public static implicit operator AdoExpression<Stage>(VariableReference value) => new VariableReferenceExpression<Stage>(value);
 
     /// <summary>
-    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="Conditioned{T}"/> of type <see cref="JobBase"/>.
+    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="AdoExpression{T}"/> of type <see cref="JobBase"/>.
     /// </summary>
     /// <param name="value">The variable reference.</param>
-    public static implicit operator Conditioned<JobBase>(VariableReference value) => new ConditionedVariableReference<JobBase>(value);
+    public static implicit operator AdoExpression<JobBase>(VariableReference value) => new VariableReferenceExpression<JobBase>(value);
 
     /// <summary>
-    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="Conditioned{T}"/> of type <see cref="Step"/>.
+    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="AdoExpression{T}"/> of type <see cref="Step"/>.
     /// </summary>
     /// <param name="value">The variable reference.</param>
-    public static implicit operator Conditioned<Step>(VariableReference value) => new ConditionedVariableReference<Step>(value);
+    public static implicit operator AdoExpression<Step>(VariableReference value) => new VariableReferenceExpression<Step>(value);
 
     /// <summary>
-    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="Conditioned{T}"/> of type <see cref="Pool"/>.
+    /// Implicitly converts the <see cref="VariableReference"/> to a <see cref="AdoExpression{T}"/> of type <see cref="Pool"/>.
     /// </summary>
     /// <param name="value">The variable reference.</param>
-    public static implicit operator Conditioned<Pool>(VariableReference value) => new ConditionedVariableReference<Pool>(value);
+    public static implicit operator AdoExpression<Pool>(VariableReference value) => new VariableReferenceExpression<Pool>(value);
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)
@@ -139,15 +139,15 @@ public class VariableReference : IRuntimeExpression, IMacroExpression, ICompileT
 /// Represents a conditioned variable reference.
 /// </summary>
 /// <typeparam name="T">The type of the variable reference.</typeparam>
-public record ConditionedVariableReference<T> : Conditioned<T>
+public record VariableReferenceExpression<T> : AdoExpression<T>
 {
     private readonly VariableReference _variable;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ConditionedVariableReference{T}"/> class with the given <see cref="VariableReference"/>.
+    /// Initializes a new instance of the <see cref="VariableReferenceExpression{T}"/> class with the given <see cref="VariableReference"/>.
     /// </summary>
     /// <param name="variable">The variable reference.</param>
-    public ConditionedVariableReference(VariableReference variable) : base()
+    public VariableReferenceExpression(VariableReference variable) : base()
     {
         _variable = variable;
     }

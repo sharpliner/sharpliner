@@ -15,7 +15,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     /// Default value: $(Build.ArtifactStagingDirectory).
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? PublishDirectory
+    public AdoExpression<string>? PublishDirectory
     {
         get => GetConditioned<string>("publishDirectory");
         init => SetProperty("publishDirectory", value);
@@ -28,7 +28,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     /// Default value: internal.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? FeedsToUsePublish
+    public AdoExpression<string>? FeedsToUsePublish
     {
         get => GetConditioned<string>("feedsToUsePublish");
         init => SetProperty("feedsToUsePublish", value);
@@ -39,7 +39,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     /// Required when internalOrExternalPublish = external and command = publish.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? PublishFeedCredentials
+    public AdoExpression<string>? PublishFeedCredentials
     {
         get => GetConditioned<string>("publishFeedCredentials");
         init => SetProperty("publishFeedCredentials", value);
@@ -50,7 +50,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     /// Required when internalOrExternalPublish = internal and command = publish.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? VstsFeedPublish
+    public AdoExpression<string>? VstsFeedPublish
     {
         get => GetConditioned<string>("vstsFeedPublish");
         init => SetProperty("vstsFeedPublish", value);
@@ -62,7 +62,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     /// Default value: true.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? PublishPackageMetadata
+    public AdoExpression<string>? PublishPackageMetadata
     {
         get => GetConditioned<string>("publishPackageMetadata");
         init => SetProperty("publishPackageMetadata", value);
@@ -74,7 +74,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     /// Required when internalOrExternalPublish = internal and command = publish.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? VstsFeedPackagePublish
+    public AdoExpression<string>? VstsFeedPackagePublish
     {
         get => GetConditioned<string>("vstsFeedPackagePublish");
         init => SetProperty("vstsFeedPackagePublish", value);
@@ -87,7 +87,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     /// Required when internalOrExternalPublish = external and command = publish.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? FeedPublishExternal
+    public AdoExpression<string>? FeedPublishExternal
     {
         get => GetConditioned<string>("feedPublishExternal");
         init => SetProperty("feedPublishExternal", value);
@@ -98,7 +98,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     /// Required when internalOrExternalPublish = external and command = publish.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? PackagePublishExternal
+    public AdoExpression<string>? PackagePublishExternal
     {
         get => GetConditioned<string>("packagePublishExternal");
         init => SetProperty("packagePublishExternal", value);
@@ -112,7 +112,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     /// Default value: patch.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? VersionOption
+    public AdoExpression<string>? VersionOption
     {
         get => GetConditioned<string>("versionOption");
         init => SetProperty("versionOption", value);
@@ -123,7 +123,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     /// Required when versionPublishSelector = custom and command = publish.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? VersionPublish
+    public AdoExpression<string>? VersionPublish
     {
         get => GetConditioned<string>("versionPublish");
         init => SetProperty("versionPublish", value);
@@ -134,7 +134,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     /// Optional. Use when command = publish.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? PackagePublishDescription
+    public AdoExpression<string>? PackagePublishDescription
     {
         get => GetConditioned<string>("packagePublishDescription");
         init => SetProperty("packagePublishDescription", value);
@@ -145,7 +145,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     /// Optional. Use when command = publish.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? PublishedPackageVar
+    public AdoExpression<string>? PublishedPackageVar
     {
         get => GetConditioned<string>("publishedPackageVar");
         init => SetProperty("publishedPackageVar", value);

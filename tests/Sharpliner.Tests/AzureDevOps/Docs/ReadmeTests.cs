@@ -150,7 +150,7 @@ public class ReadmeTests : AzureDevOpsDefinition
 #region pipeline-library
     class ProjectBuildSteps : StepLibrary
     {
-        public override List<Conditioned<Step>> Steps =>
+        public override List<AdoExpression<Step>> Steps =>
         [
             DotNet.Install.Sdk("6.0.100"),
 

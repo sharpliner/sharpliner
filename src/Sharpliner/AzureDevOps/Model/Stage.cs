@@ -20,13 +20,13 @@ public record Stage : IDependsOn
     /// </summary>
     [YamlMember(Order = 2)]
     [DisallowNull]
-    public Conditioned<string>? DisplayName { get; init; }
+    public AdoExpression<string>? DisplayName { get; init; }
 
     /// <summary>
     /// The lock behavior of the stage
     /// </summary>
     [YamlMember(Order = 3)]
-    public Conditioned<LockBehavior>? LockBehavior { get; init; }
+    public AdoExpression<LockBehavior>? LockBehavior { get; init; }
 
     /// <summary>
     /// <para>
@@ -50,7 +50,7 @@ public record Stage : IDependsOn
     /// Specifies which pool to use for jobs of this stage.
     /// </summary>
     [YamlMember(Order = 250)]
-    public Conditioned<Pool>? Pool { get; init => field = value?.GetRoot(); }
+    public AdoExpression<Pool>? Pool { get; init => field = value?.GetRoot(); }
 
     /// <summary>
     /// A job is a collection of steps run by an agent or on a server.

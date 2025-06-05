@@ -59,7 +59,7 @@ public abstract class IfCondition<T> : IfCondition
     /// <summary>
     /// Creates a new instance of <see cref="IfCondition{T}"/> with the specified parent.
     /// </summary>
-    protected IfCondition(Conditioned<T>? parent = null)
+    protected IfCondition(AdoExpression<T>? parent = null)
     {
         Parent = parent;
     }

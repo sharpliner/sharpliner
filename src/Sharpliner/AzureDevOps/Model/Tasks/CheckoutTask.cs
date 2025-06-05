@@ -24,7 +24,7 @@ public abstract record CheckoutTask : Step
     /// Defaults to <c>false</c>.
     /// </summary>
     [YamlMember(Order = 100)]
-    public Conditioned<bool>? Clean { get; init; }
+    public AdoExpression<bool>? Clean { get; init; }
 
     /// <summary>
     /// The depth of commits to ask Git to fetch.
@@ -32,7 +32,7 @@ public abstract record CheckoutTask : Step
     /// Set 0 to no limit (full clone).
     /// </summary>
     [YamlMember(Order = 101)]
-    public Conditioned<int>? FetchDepth { get; init; }
+    public AdoExpression<int>? FetchDepth { get; init; }
 
     /// <summary>
     /// The depth of commits to ask Git to fetch.
@@ -40,7 +40,7 @@ public abstract record CheckoutTask : Step
     /// Set 0 to no limit (full clone).
     /// </summary>
     [YamlMember(Order = 102)]
-    public Conditioned<string>? FetchFilter { get; init; }
+    public AdoExpression<string>? FetchFilter { get; init; }
 
     /// <summary>
     /// Set to 'true' to sync tags when fetching the repo, or 'false' to not sync tags.
@@ -48,35 +48,35 @@ public abstract record CheckoutTask : Step
     /// https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/steps-checkout#remarks
     /// </summary>
     [YamlMember(Order = 103)]
-    public Conditioned<bool>? FetchTags { get; init; }
+    public AdoExpression<bool>? FetchTags { get; init; }
 
     /// <summary>
     /// Whether to download Git-LFS files.
     /// Defaults to false.
     /// </summary>
     [YamlMember(Order = 104)]
-    public Conditioned<bool>? Lfs { get; init; }
+    public AdoExpression<bool>? Lfs { get; init; }
 
     /// <summary>
     /// When true, leave the OAuth token in the Git config after the initial fetch.
     /// Defaults to false.
     /// </summary>
     [YamlMember(Order = 105)]
-    public Conditioned<bool>? PersistCredentials { get; init; }
+    public AdoExpression<bool>? PersistCredentials { get; init; }
 
     /// <summary>
     /// Submodules checkout strategy (single level, recursive to get submodules of submodules).
     /// Defaults to not checking out submodules.
     /// </summary>
     [YamlMember(Order = 106)]
-    public Conditioned<SubmoduleCheckout>? Submodules { get; init; }
+    public AdoExpression<SubmoduleCheckout>? Submodules { get; init; }
 
     /// <summary>
     /// Path to check out source code, relative to the agent's build directory (e.g. \_work\1).
     /// Defaults to a directory called `s`.
     /// </summary>
     [YamlMember(Order = 107)]
-    public Conditioned<string>? Path { get; init; }
+    public AdoExpression<string>? Path { get; init; }
 
     /// <summary>
     /// Specify a directory to enable sparse checkout in cone mode using directory matching.
@@ -85,7 +85,7 @@ public abstract record CheckoutTask : Step
     /// If both sparseCheckoutDirectories and sparseCheckoutPatterns are set, sparseCheckoutDirectories is used and the setting for sparseCheckoutPatterns is disregarded.
     /// </summary>
     [YamlMember(Order = 108)]
-    public Conditioned<string>? SparseCheckoutDirectories { get; init; }
+    public AdoExpression<string>? SparseCheckoutDirectories { get; init; }
 
     /// <summary>
     /// Specify a pattern to enable sparse checkout in non-cone mode using pattern matching.
@@ -94,13 +94,13 @@ public abstract record CheckoutTask : Step
     /// If both sparseCheckoutDirectories and sparseCheckoutPatterns are set, sparseCheckoutDirectories is used and the setting for sparseCheckoutPatterns is disregarded.
     /// </summary>
     [YamlMember(Order = 109)]
-    public Conditioned<string>? SparseCheckoutPatterns { get; init; }
+    public AdoExpression<string>? SparseCheckoutPatterns { get; init; }
 
     /// <summary>
     /// When true, use the repository root directory as the default working directory for the pipeline. The default is false.
     /// </summary>
     [YamlMember(Order = 110)]
-    public Conditioned<bool>? WorkspaceRepo { get; init; }
+    public AdoExpression<bool>? WorkspaceRepo { get; init; }
 }
 
 /// <summary>

@@ -39,7 +39,7 @@ public class ScriptTaskBuilder : TaskBuilderBase
     /// </summary>
     /// <param name="resourceFileName">Name of the resource file</param>
     /// <param name="displayName">Display name of the build step</param>
-    public ScriptTask FromResourceFile(string resourceFileName, Conditioned<string>? displayName = null)
+    public ScriptTask FromResourceFile(string resourceFileName, AdoExpression<string>? displayName = null)
         => new ScriptTask(GetResourceFile(Assembly.GetCallingAssembly()!, resourceFileName)) with
         {
             DisplayName = displayName!,
@@ -76,7 +76,7 @@ public class ScriptTaskBuilder : TaskBuilderBase
     /// </summary>
     /// <param name="path">Path to the file</param>
     /// <param name="displayName">Display name of the build step</param>
-    public ScriptTask FromFile(string path, Conditioned<string>? displayName = null)
+    public ScriptTask FromFile(string path, AdoExpression<string>? displayName = null)
         => new ScriptTask(System.IO.File.ReadAllText(path)) with
         {
             DisplayName = displayName!,

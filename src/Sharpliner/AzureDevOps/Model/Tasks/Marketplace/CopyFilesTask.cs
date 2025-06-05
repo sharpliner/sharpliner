@@ -15,7 +15,7 @@ public record CopyFilesTask : AzureDevOpsTask
     /// <remarks>If your build produces artifacts outside of the sources directory, specify $(Agent.BuildDirectory) to copy files from the directory created for the pipeline.</remarks>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? SourceFolder
+    public AdoExpression<string>? SourceFolder
     {
         get => GetConditioned<string>("SourceFolder");
         init => SetProperty("SourceFolder", value);
@@ -28,7 +28,7 @@ public record CopyFilesTask : AzureDevOpsTask
     /// <remarks>The pattern is used to match only file paths, not folder paths. Specify patterns, such as **\bin\** instead of **\bin.</remarks>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? Contents
+    public AdoExpression<string>? Contents
     {
         get => GetConditioned<string>("Contents");
         init => SetProperty("Contents", value);
@@ -40,7 +40,7 @@ public record CopyFilesTask : AzureDevOpsTask
     /// <example>$(Build.ArtifactStagingDirectory)</example>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? TargetFolder
+    public AdoExpression<string>? TargetFolder
     {
         get => GetConditioned<string>("TargetFolder");
         init => SetProperty("TargetFolder", value);
@@ -51,7 +51,7 @@ public record CopyFilesTask : AzureDevOpsTask
     /// Defaults to <code>false</code>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? CleanTargetFolder
+    public AdoExpression<bool>? CleanTargetFolder
     {
         get => GetConditioned<bool>("CleanTargetFolder");
         init => SetProperty("CleanTargetFolder", value);
@@ -62,7 +62,7 @@ public record CopyFilesTask : AzureDevOpsTask
     /// Defaults to <code>false</code>.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? Overwrite
+    public AdoExpression<bool>? Overwrite
     {
         get => GetConditioned<bool>("Overwrite");
         init => SetProperty("Overwrite", value);
@@ -73,7 +73,7 @@ public record CopyFilesTask : AzureDevOpsTask
     /// Defaults to <code>false</code>.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? FlattenFolders
+    public AdoExpression<bool>? FlattenFolders
     {
         get => GetConditioned<bool>("flattenFolders");
         init => SetProperty("flattenFolders", value);
@@ -84,7 +84,7 @@ public record CopyFilesTask : AzureDevOpsTask
     /// Defaults to <code>false</code>.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? PreserveTimestamp
+    public AdoExpression<bool>? PreserveTimestamp
     {
         get => GetConditioned<bool>("preserveTimestamp");
         init => SetProperty("preserveTimestamp", value);
@@ -95,7 +95,7 @@ public record CopyFilesTask : AzureDevOpsTask
     /// Defaults to <code>0</code>.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<int>? RetryCount
+    public AdoExpression<int>? RetryCount
     {
         get => GetConditioned<int>("retryCount");
         init => SetProperty("retryCount", value);
@@ -106,7 +106,7 @@ public record CopyFilesTask : AzureDevOpsTask
     /// Defaults to <code>1000</code>.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<int>? DelayBetweenRetries
+    public AdoExpression<int>? DelayBetweenRetries
     {
         get => GetConditioned<int>("delayBetweenRetries");
         init => SetProperty("delayBetweenRetries", value);
@@ -118,7 +118,7 @@ public record CopyFilesTask : AzureDevOpsTask
     /// Defaults to <code>false</code>.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? IgnoreMakeDirErrors
+    public AdoExpression<bool>? IgnoreMakeDirErrors
     {
         get => GetConditioned<bool>("ignoreMakeDirErrors");
         init => SetProperty("ignoreMakeDirErrors", value);

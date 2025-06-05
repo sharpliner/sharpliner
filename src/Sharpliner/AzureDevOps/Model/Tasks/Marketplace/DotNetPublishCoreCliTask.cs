@@ -24,7 +24,7 @@ public record DotNetPublishCoreCliTask : DotNetCoreCliTask
     /// Note that this argument defaults to true if not specified.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? PublishWebProjects
+    public AdoExpression<bool>? PublishWebProjects
     {
         get => GetConditioned<bool>("publishWebProjects");
         init => SetProperty("publishWebProjects", value);
@@ -34,7 +34,7 @@ public record DotNetPublishCoreCliTask : DotNetCoreCliTask
     /// If true, folder created by the publish command will be zipped and deleted.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? ZipAfterPublish
+    public AdoExpression<bool>? ZipAfterPublish
     {
         get => GetConditioned<bool>("zipAfterPublish");
         init => SetProperty("zipAfterPublish", value);
@@ -46,7 +46,7 @@ public record DotNetPublishCoreCliTask : DotNetCoreCliTask
     /// This is useful if you want to publish multiple projects to the same folder.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? ModifyOutputPath
+    public AdoExpression<bool>? ModifyOutputPath
     {
         get => GetConditioned<bool>("modifyOutputPath");
         init => SetProperty("modifyOutputPath", value);

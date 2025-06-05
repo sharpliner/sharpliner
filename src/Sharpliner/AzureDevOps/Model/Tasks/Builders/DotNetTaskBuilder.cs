@@ -77,7 +77,7 @@ public class DotNetTaskBuilder
     /// <param name="includeNuGetOrg">Include nuget.org in package sources?</param>
     /// <param name="arguments">Additional arguments</param>
     /// <returns>A new instance of the <see cref="DotNetBuildCoreCliTask"/> with the specified arguments</returns>
-    public DotNetBuildCoreCliTask Build(Conditioned<string> projects, Conditioned<bool>? includeNuGetOrg = null, Conditioned<string>? arguments = null) => new()
+    public DotNetBuildCoreCliTask Build(AdoExpression<string> projects, AdoExpression<bool>? includeNuGetOrg = null, AdoExpression<string>? arguments = null) => new()
     {
         Projects = projects,
         Arguments = arguments,
@@ -129,7 +129,7 @@ public class DotNetTaskBuilder
     /// </param>
     /// <param name="arguments">Additional arguments</param>
     /// <returns>A new instance of <see cref="DotNetPackCoreCliTask"/> with the specified values.</returns>
-    public DotNetPackCoreCliTask Pack(Conditioned<string>? packagesToPack, Conditioned<string>? arguments = null) => new()
+    public DotNetPackCoreCliTask Pack(AdoExpression<string>? packagesToPack, AdoExpression<string>? arguments = null) => new()
     {
         PackagesToPack = packagesToPack,
         Arguments = arguments,
@@ -179,7 +179,7 @@ public class DotNetTaskBuilder
     /// </param>
     /// <param name="arguments">Additional arguments</param>
     /// <returns>A new instance of <see cref="DotNetPublishCoreCliTask"/> with the specified values.</returns>
-    public DotNetPublishCoreCliTask Publish(Conditioned<string> projects, Conditioned<bool>? publishWebProjects = null, Conditioned<string>? arguments = null) => new()
+    public DotNetPublishCoreCliTask Publish(AdoExpression<string> projects, AdoExpression<bool>? publishWebProjects = null, AdoExpression<string>? arguments = null) => new()
     {
         Projects = projects,
         Arguments = arguments,
@@ -223,7 +223,7 @@ public class DotNetTaskBuilder
     /// </param>
     /// <param name="arguments">Additional arguments</param>
     /// <returns>A new instance of <see cref="DotNetPushCoreCliTask"/> with the specified values.</returns>
-    public DotNetPushCoreCliTask Push(Conditioned<string>? packagesToPush = null, Conditioned<string>? arguments = null) => new()
+    public DotNetPushCoreCliTask Push(AdoExpression<string>? packagesToPush = null, AdoExpression<string>? arguments = null) => new()
     {
         PackagesToPush = packagesToPush,
         Arguments = arguments,
@@ -257,7 +257,7 @@ public class DotNetTaskBuilder
     /// <param name="projects">Projects to test</param>
     /// <param name="arguments">Additional arguments</param>
     /// <returns>A new instance of <see cref="DotNetTestCoreCliTask"/> with the specified values.</returns>
-    public DotNetTestCoreCliTask Test(Conditioned<string> projects, Conditioned<string>? arguments = null) => new()
+    public DotNetTestCoreCliTask Test(AdoExpression<string> projects, AdoExpression<string>? arguments = null) => new()
     {
         Projects = projects,
         Arguments = arguments,
@@ -291,7 +291,7 @@ public class DotNetTaskBuilder
     /// <param name="arguments">Additional arguments for the call</param>
     /// <param name="inputs">Additional arguments defined by the DotNetCoreCLI task</param>
     /// <returns>A new instance of <see cref="Step"/> and not something more specific so that user cannot override Inputs</returns>
-    public Step CustomCommand(string command, Conditioned<string>? arguments = null, TaskInputs? inputs = null)
+    public Step CustomCommand(string command, AdoExpression<string>? arguments = null, TaskInputs? inputs = null)
     {
         var orderedInputs = new TaskInputs()
             {
@@ -360,7 +360,7 @@ public class DotNetTaskBuilder
         /// This setting is ignored if you specify an exact version, such as: 3.0.100-preview3-010431
         /// </para>
         /// </param>
-        public UseDotNetTask Sdk(Conditioned<string> version, Conditioned<bool>? includePreviewVersions = null)
+        public UseDotNetTask Sdk(AdoExpression<string> version, AdoExpression<bool>? includePreviewVersions = null)
             => new(DotNetPackageType.Sdk, version, includePreviewVersions);
 
         /// <summary>
@@ -401,7 +401,7 @@ public class DotNetTaskBuilder
         /// This setting is ignored if you specify an exact version, such as: 3.0.100-preview3-010431
         /// </para>
         /// </param>
-        public UseDotNetTask Runtime(Conditioned<string> version, Conditioned<bool>? includePreviewVersions = null)
+        public UseDotNetTask Runtime(AdoExpression<string> version, AdoExpression<bool>? includePreviewVersions = null)
             => new(DotNetPackageType.Runtime, version, includePreviewVersions);
 
         /// <summary>
@@ -437,7 +437,7 @@ public class DotNetTaskBuilder
         /// Current working directory where the script is run.
         /// Empty is the root of the repo (build) or artifacts (release), which is <c>$(System.DefaultWorkingDirectory)</c>
         /// </param>
-        public UseDotNetTask FromGlobalJson(Conditioned<string>? workingDirectory = null) => new()
+        public UseDotNetTask FromGlobalJson(AdoExpression<string>? workingDirectory = null) => new()
         {
             UseGlobalJson = true,
             WorkingDirectory = workingDirectory,
@@ -481,7 +481,7 @@ public class DotNetTaskBuilder
         /// <param name="projects">
         /// The path to the csproj file(s) to use You can use wildcards (e.g. <c>**/*.csproj</c> for all .csproj files in all subfolders)
         /// </param>
-        public DotNetRestoreCoreCliTask Projects(Conditioned<string> projects) => new()
+        public DotNetRestoreCoreCliTask Projects(AdoExpression<string> projects) => new()
         {
             Projects = projects,
         };
@@ -529,7 +529,7 @@ public class DotNetTaskBuilder
         /// </para>
         /// </param>
         /// <param name="includeNuGetOrg">Include NuGet.org in the generated NuGet.config</param>
-        public DotNetRestoreCoreCliTask FromFeed(string feed, Conditioned<bool>? includeNuGetOrg = null) => new()
+        public DotNetRestoreCoreCliTask FromFeed(string feed, AdoExpression<bool>? includeNuGetOrg = null) => new()
         {
             IncludeNuGetOrg = includeNuGetOrg,
             Inputs =

@@ -24,7 +24,7 @@ public record Job : JobBase
     /// </summary>
     [YamlMember(Order = 400)]
     [DisallowNull]
-    public Conditioned<Strategy>? Strategy { get; init => field = value?.GetRoot(); }
+    public AdoExpression<Strategy>? Strategy { get; init => field = value?.GetRoot(); }
 
     /// <summary>
     /// A step is a linear sequence of operations that make up a job

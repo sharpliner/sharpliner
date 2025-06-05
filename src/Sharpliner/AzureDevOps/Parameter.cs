@@ -101,22 +101,22 @@ public abstract record Parameter
     public static implicit operator InlineExpression(Parameter parameter) => new ParameterReference(parameter.Name);
 
     /// <summary>
-    /// Converts a <see cref="Parameter"/> to a <see cref="Conditioned"/> by getting the reference to the parameter.
+    /// Converts a <see cref="Parameter"/> to a <see cref="AdoExpression"/> by getting the reference to the parameter.
     /// </summary>
     /// <param name="parameter">The parameter.</param>
-    public static implicit operator Conditioned<string>(Parameter parameter) => new ParameterReference(parameter.Name);
+    public static implicit operator AdoExpression<string>(Parameter parameter) => new ParameterReference(parameter.Name);
 
     /// <summary>
-    /// Converts a <see cref="Parameter"/> to a <see cref="Conditioned"/> by getting the reference to the parameter.
+    /// Converts a <see cref="Parameter"/> to a <see cref="AdoExpression"/> by getting the reference to the parameter.
     /// </summary>
     /// <param name="parameter">The parameter.</param>
-    public static implicit operator Conditioned<int>(Parameter parameter) => new ParameterReference(parameter.Name);
+    public static implicit operator AdoExpression<int>(Parameter parameter) => new ParameterReference(parameter.Name);
 
     /// <summary>
-    /// Converts a <see cref="Parameter"/> to a <see cref="Conditioned"/> by getting the reference to the parameter.
+    /// Converts a <see cref="Parameter"/> to a <see cref="AdoExpression"/> by getting the reference to the parameter.
     /// </summary>
     /// <param name="parameter">The parameter.</param>
-    public static implicit operator Conditioned<bool>(Parameter parameter) => new ParameterReference(parameter.Name);
+    public static implicit operator AdoExpression<bool>(Parameter parameter) => new ParameterReference(parameter.Name);
 }
 
 /// <summary>
@@ -238,7 +238,7 @@ public sealed record BooleanParameter : Parameter<bool?>
 /// <summary>
 /// Class for defining parameters with custom structure that can be used in templates and pipelines.
 /// </summary>
-public sealed record ObjectParameter : Parameter<ConditionedDictionary>
+public sealed record ObjectParameter : Parameter<DictionaryExpression>
 {
     /// <summary>
     /// Define a template parameter
@@ -246,7 +246,7 @@ public sealed record ObjectParameter : Parameter<ConditionedDictionary>
     /// <param name="name">Name of the parameter, can be referenced in the template as <c>${{ parameters.name }}</c></param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public ObjectParameter(string name, string? displayName = null, ConditionedDictionary? defaultValue = null)
+    public ObjectParameter(string name, string? displayName = null, DictionaryExpression? defaultValue = null)
         : base(name, displayName, defaultValue, null)
     {
     }
