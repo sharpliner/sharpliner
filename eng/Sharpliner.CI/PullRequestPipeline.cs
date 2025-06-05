@@ -18,11 +18,6 @@ class PullRequestPipeline : SingleStagePipelineDefinition
 
         Pr = new PrTrigger("main"),
 
-        Variables =
-        [
-            Variable("BAR", "XYZ")
-        ],
-
         Jobs =
         {
             new Job("Build", "Build and test")

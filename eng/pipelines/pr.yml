@@ -16,10 +16,6 @@ pr:
     include:
     - main
 
-variables:
-- name: BAR
-  value: XYZ
-
 jobs:
 - job: Build
   displayName: Build and test
