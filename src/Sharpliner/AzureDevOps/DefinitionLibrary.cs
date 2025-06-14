@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Core;
 using YamlDotNet.Serialization;
 
@@ -11,7 +11,7 @@ namespace Sharpliner.AzureDevOps;
 /// <typeparam name="T">Type of items in the library</typeparam>
 public abstract class DefinitionLibrary<T> : AzureDevOpsDefinition
 {
-    internal abstract IEnumerable<Conditioned<T>> Items { get; }
+    internal abstract IEnumerable<AdoExpression<T>> Items { get; }
 
     internal DefinitionLibrary() : base()
     {
@@ -22,9 +22,9 @@ public abstract class DefinitionLibrary<T> : AzureDevOpsDefinition
 /// This class is used to reference a library in a pipeline.
 /// </summary>
 /// <typeparam name="T">Type of items in the library</typeparam>
-public record LibraryReference<T> : Conditioned<T>
+public record LibraryReference<T> : AdoExpression<T>
 {
-    internal IEnumerable<Conditioned<T>> Items { get; }
+    internal IEnumerable<AdoExpression<T>> Items { get; }
 
     /// <summary>
     /// Instantiates a new instance of <see cref="LibraryReference{T}"/> with the given <see cref="DefinitionLibrary{T}"/>.
@@ -39,7 +39,7 @@ public record LibraryReference<T> : Conditioned<T>
     /// Instantiates a new instance of <see cref="LibraryReference{T}"/> with the given items.
     /// </summary>
     /// <param name="items">The items to reference.</param>
-    public LibraryReference(IEnumerable<Conditioned<T>> items) : base()
+    public LibraryReference(IEnumerable<AdoExpression<T>> items) : base()
     {
         Items = items;
     }

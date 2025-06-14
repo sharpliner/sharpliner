@@ -1,6 +1,6 @@
 using FluentAssertions;
 using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using Sharpliner.Common;
 
 namespace Sharpliner.Tests.AzureDevOps.Docs;
@@ -73,7 +73,7 @@ public class ReadmeTests : AzureDevOpsDefinition
     [Fact]
     public void TestDotnetFluentApi()
     {
-        ConditionedList<Step> steps =
+        AdoExpressionList<Step> steps =
         [
 #region dotnet-fluent-api
             DotNet.Install.Sdk(parameters["version"]),
@@ -121,7 +121,7 @@ public class ReadmeTests : AzureDevOpsDefinition
     [Fact]
     public void TestUsefulMacros()
     {
-        ConditionedList<VariableBase> variables =
+        AdoExpressionList<VariableBase> variables =
         [
 #region useful-macros-csharp
             If.IsBranch("production")
@@ -150,7 +150,7 @@ public class ReadmeTests : AzureDevOpsDefinition
 #region pipeline-library
     class ProjectBuildSteps : StepLibrary
     {
-        public override List<Conditioned<Step>> Steps =>
+        public override List<AdoExpression<Step>> Steps =>
         [
             DotNet.Install.Sdk("6.0.100"),
 

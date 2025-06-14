@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using Sharpliner.AzureDevOps.Validation;
 using Sharpliner.Common;
 using YamlDotNet.Serialization;
@@ -31,14 +31,14 @@ public abstract record PipelineBase
     /// LockBehavior of the pipeline
     /// </summary>
     [YamlMember(Order = 120)]
-    public Conditioned<LockBehavior>? LockBehavior { get; init; }
+    public AdoExpression<LockBehavior>? LockBehavior { get; init; }
 
     /// <summary>
     /// Specifies pipeline parameters
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/runtime-parameters?view=azure-devops">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     [YamlMember(Order = 150)]
-    public ConditionedList<Parameter> Parameters { get; init; } = [];
+    public AdoExpressionList<Parameter> Parameters { get; init; } = [];
 
     /// <summary>
     /// Specifies when the pipeline is supposed to run
@@ -70,21 +70,21 @@ public abstract record PipelineBase
     /// </summary>
     [YamlMember(Order = 400)]
     [DisallowNull]
-    public Conditioned<Resources>? Resources { get; init => field = value?.GetRoot(); }
+    public AdoExpression<Resources>? Resources { get; init => field = value?.GetRoot(); }
 
     /// <summary>
     /// Specifies variables at the pipeline level
     /// You can add hard-coded values directly, reference variable groups, or insert via variable templates.
     /// </summary>
     [YamlMember(Order = 500)]
-    public ConditionedList<VariableBase> Variables { get; init; } = [];
+    public AdoExpressionList<VariableBase> Variables { get; init; } = [];
 
     /// <summary>
     /// Specifies which pool to use for a job of the pipeline
     /// A pool specification also holds information about the job's strategy for running.
     /// </summary>
     [YamlMember(Order = 550)]
-    public Conditioned<Pool>? Pool { get; init => field = value?.GetRoot(); }
+    public AdoExpression<Pool>? Pool { get; init => field = value?.GetRoot(); }
 
     /// <summary>
     /// Returns the list of validations that should be run on the definition (e.g. wrong dependsOn, artifact name typos..).
@@ -103,7 +103,7 @@ public record Pipeline : PipelineBase
     /// Specifies the stages of the pipeline.
     /// </summary>
     [YamlMember(Order = 600)]
-    public ConditionedList<Stage> Stages { get; init; } = [];
+    public AdoExpressionList<Stage> Stages { get; init; } = [];
 
     /// <inheritdoc/>
     public override IReadOnlyCollection<IDefinitionValidation> Validations =>
@@ -144,7 +144,7 @@ public record SingleStagePipeline : PipelineBase
     /// Specifies the jobs of the pipeline.
     /// </summary>
     [YamlMember(Order = 600)]
-    public ConditionedList<JobBase> Jobs { get; init; } = [];
+    public AdoExpressionList<JobBase> Jobs { get; init; } = [];
 
     /// <inheritdoc/>
     public override IReadOnlyCollection<IDefinitionValidation> Validations=>

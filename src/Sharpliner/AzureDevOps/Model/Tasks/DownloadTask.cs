@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -20,7 +20,7 @@ public abstract record DownloadTask : Step
     /// The name of the artifact to download. If left empty, all artifacts associated to the pipeline run will be downloaded.
     /// </summary>
     [YamlMember(Order = 60)]
-    public Conditioned<string>? Artifact { get; init; }
+    public AdoExpression<string>? Artifact { get; init; }
 
     /// <summary>
     /// One or more file matching patterns (new line delimited) that limit which files get downloaded.
@@ -43,7 +43,7 @@ public abstract record DownloadTask : Step
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/artifacts/pipeline-artifacts?view=azure-devops">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     [YamlMember(Order = 62)]
-    public Conditioned<string>? Path { get; init; }
+    public AdoExpression<string>? Path { get; init; }
 
     /// <summary>
     /// A list of tags. Only builds with these tags will be returned.
@@ -125,7 +125,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// <param name="runVersion">The build version to download.</param>
     /// <param name="project">The project GUID from which to download the pipeline artifacts.</param>
     /// <param name="pipeline">The definition ID of the build pipeline.</param>
-    public SpecificDownloadTask(Conditioned<RunVersion> runVersion, Conditioned<string> project, Conditioned<int> pipeline)
+    public SpecificDownloadTask(AdoExpression<RunVersion> runVersion, AdoExpression<string> project, AdoExpression<int> pipeline)
         : base("DownloadPipelineArtifact@2")
     {
         RunVersion = runVersion;
@@ -137,9 +137,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// The name of the artifact to download. If left empty, all artifacts associated to the pipeline run will be downloaded.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? Artifact
+    public AdoExpression<string>? Artifact
     {
-        get => GetConditioned<string>(ArtifactProperty);
+        get => GetExpression<string>(ArtifactProperty);
         init => SetProperty(ArtifactProperty, value);
     }
 
@@ -154,9 +154,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// </para>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? Path
+    public AdoExpression<string>? Path
     {
-        get => GetConditioned<string>(PathProperty);
+        get => GetExpression<string>(PathProperty);
         init => SetProperty(PathProperty, value);
     }
 
@@ -176,9 +176,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// The project GUID from which to download the pipeline artifacts.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string> Project
+    public AdoExpression<string> Project
     {
-        get => GetConditioned<string>(ProjectProperty) ?? throw new NullReferenceException();
+        get => GetExpression<string>(ProjectProperty) ?? throw new NullReferenceException();
         private init => SetProperty(ProjectProperty, value);
     }
 
@@ -186,9 +186,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// The definition ID of the build pipeline.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<int>? Pipeline
+    public AdoExpression<int>? Pipeline
     {
-        get => GetConditioned<int>(PipelineProperty);
+        get => GetExpression<int>(PipelineProperty);
         private init => SetProperty(PipelineProperty, value);
     }
 
@@ -196,9 +196,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// The build version to download.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<RunVersion>? RunVersion
+    public AdoExpression<RunVersion>? RunVersion
     {
-        get => GetConditioned<RunVersion>(RunVersionProperty);
+        get => GetExpression<RunVersion>(RunVersionProperty);
         internal init => SetProperty(RunVersionProperty, value);
     }
 
@@ -208,9 +208,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Argument aliases: branchName
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? RunBranch
+    public AdoExpression<string>? RunBranch
     {
-        get => GetConditioned<string>(RunBranchProperty);
+        get => GetExpression<string>(RunBranchProperty);
         internal init => SetProperty(RunBranchProperty, value);
     }
 
@@ -220,9 +220,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Argument aliases: runBranch
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? BranchName
+    public AdoExpression<string>? BranchName
     {
-        get => GetConditioned<string>(RunBranchProperty);
+        get => GetExpression<string>(RunBranchProperty);
         internal init => SetProperty(RunBranchProperty, value);
     }
 
@@ -232,7 +232,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Argument aliases: pipelineId, buildId
     /// </summary>
     [YamlIgnore]
-    public Conditioned<int> RunId
+    public AdoExpression<int> RunId
     {
         get => GetInt(RunIdProperty) ?? 0;
         internal init => SetProperty(RunIdProperty, value);
@@ -244,7 +244,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Argument aliases: runId, buildId
     /// </summary>
     [YamlIgnore]
-    public Conditioned<int> PipelineId
+    public AdoExpression<int> PipelineId
     {
         get => GetInt(RunIdProperty) ?? 0;
         internal init => SetProperty(RunIdProperty, value);
@@ -256,7 +256,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Argument aliases: runId, pipelineId
     /// </summary>
     [YamlIgnore]
-    public Conditioned<int> BuildId
+    public AdoExpression<int> BuildId
     {
         get => GetInt(RunIdProperty) ?? 0;
         internal init => SetProperty(RunIdProperty, value);
@@ -277,9 +277,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Defaults to false.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? PreferTriggeringPipeline
+    public AdoExpression<bool>? PreferTriggeringPipeline
     {
-        get => GetConditioned<bool>(PreferTriggeringPipelineProperty);
+        get => GetExpression<bool>(PreferTriggeringPipelineProperty);
         init => SetProperty(PreferTriggeringPipelineProperty, value);
     }
 
@@ -288,9 +288,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Defaults to false.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? AllowPartiallySucceededBuilds
+    public AdoExpression<bool>? AllowPartiallySucceededBuilds
     {
-        get => GetConditioned<bool>(AllowPartiallySucceededBuildsProperty);
+        get => GetExpression<bool>(AllowPartiallySucceededBuildsProperty);
         init => SetProperty(AllowPartiallySucceededBuildsProperty, value);
     }
 
@@ -299,9 +299,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Defaults to false.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? AllowFailedBuilds
+    public AdoExpression<bool>? AllowFailedBuilds
     {
-        get => GetConditioned<bool>(AllowFailedBuildsProperty);
+        get => GetExpression<bool>(AllowFailedBuildsProperty);
         init => SetProperty(AllowFailedBuildsProperty, value);
     }
 
@@ -310,9 +310,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Defaults to false.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? CheckDownloadedFiles
+    public AdoExpression<bool>? CheckDownloadedFiles
     {
-        get => GetConditioned<bool>(CheckDownloadedFilesProperty);
+        get => GetExpression<bool>(CheckDownloadedFilesProperty);
         init => SetProperty(CheckDownloadedFilesProperty, value);
     }
 
@@ -321,9 +321,9 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// Defaults to 4.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<int> RetryDownloadCount
+    public AdoExpression<int> RetryDownloadCount
     {
-        get => GetConditioned<int>(RetryDownloadCountProperty) ?? 0;
+        get => GetExpression<int>(RetryDownloadCountProperty) ?? 0;
         init => SetProperty(RetryDownloadCountProperty, value);
     }
 }

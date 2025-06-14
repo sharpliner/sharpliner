@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sharpliner.AzureDevOps.ConditionedExpressions.Arguments;
+using Sharpliner.AzureDevOps.Expressions.Arguments;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-namespace Sharpliner.AzureDevOps.ConditionedExpressions;
+namespace Sharpliner.AzureDevOps.Expressions;
 
 /// <summary>
 /// <para>
@@ -38,7 +38,7 @@ public abstract class Condition : IYamlConvertible
     internal virtual string TagStart => IfTagStart;
     internal virtual string TagEnd => ExpressionEnd;
 
-    internal Conditioned? Parent { get; set; }
+    internal AdoExpression? Parent { get; set; }
 
     internal EachExpression? EachExpression
     {
@@ -197,12 +197,12 @@ internal class InlineConjunctionCondition<T> : InlineCondition<T>
     private readonly string _keyword;
     private readonly string[] _expressions;
 
-    internal InlineConjunctionCondition(string keyword, InlineCondition[] expressions, Conditioned<T>? parent = null)
+    internal InlineConjunctionCondition(string keyword, InlineCondition[] expressions, AdoExpression<T>? parent = null)
         : this(keyword, expressions.Select(e => e.Serialize()).ToArray(), parent)
     {
     }
 
-    internal InlineConjunctionCondition(string keyword, string[] expressions, Conditioned<T>? parent = null) : base(parent)
+    internal InlineConjunctionCondition(string keyword, string[] expressions, AdoExpression<T>? parent = null) : base(parent)
     {
         _keyword = keyword;
         _expressions = expressions;
@@ -235,12 +235,12 @@ internal class IfConjunctionCondition<T> : IfCondition<T>
     private readonly string _keyword;
     private readonly string[] _expressions;
 
-    internal IfConjunctionCondition(string keyword, IfCondition[] expressions, Conditioned<T>? parent = null)
+    internal IfConjunctionCondition(string keyword, IfCondition[] expressions, AdoExpression<T>? parent = null)
         : this(keyword, expressions.Select(e => e.Serialize()).ToArray(), parent)
     {
     }
 
-    internal IfConjunctionCondition(string keyword, string[] expressions, Conditioned<T>? parent = null) : base(parent)
+    internal IfConjunctionCondition(string keyword, string[] expressions, AdoExpression<T>? parent = null) : base(parent)
     {
         _keyword = keyword;
         _expressions = expressions.Select(WithoutTags).ToArray();

@@ -1,10 +1,10 @@
 using System;
-using Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces;
+using Sharpliner.AzureDevOps.Expressions.Interfaces;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
-namespace Sharpliner.AzureDevOps.ConditionedExpressions;
+namespace Sharpliner.AzureDevOps.Expressions;
 
 /// <summary>
 /// Class that makes it possible to put <c>${{ parameters['foo'] }}</c> everywhere.
@@ -60,11 +60,11 @@ public class ParameterReference : IRuntimeExpression, ICompileTimeExpression, IY
     public override int GetHashCode() => ParameterName.GetHashCode();
 }
 
-internal record ConditionedParameterReference<T> : Conditioned<T>
+internal record ParameterReferenceExpression<T> : AdoExpression<T>
 {
     private readonly ParameterReference _parameter;
 
-    public ConditionedParameterReference(ParameterReference parameter) : base()
+    public ParameterReferenceExpression(ParameterReference parameter) : base()
     {
         _parameter = parameter;
     }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
@@ -16,7 +16,7 @@ public record Pool
     /// Name of this pool. (A-Z, a-z, 0-9, and underscore).
     /// </summary>
     [YamlMember(Order = 100)]
-    public Conditioned<string>? Name { get; init; }
+    public AdoExpression<string>? Name { get; init; }
 
     /// <summary>
     /// Creates a new instance of <see cref="Pool"/>.
@@ -59,7 +59,7 @@ public record HostedPool : Pool
     /// The VM image to use.
     /// </summary>
     [YamlMember(Order = 105)]
-    public Conditioned<string>? VmImage { get; init; }
+    public AdoExpression<string>? VmImage { get; init; }
 
     /// <summary>
     /// The demands required by the private pool.
@@ -74,7 +74,7 @@ public record HostedPool : Pool
     /// </remarks>
     [YamlMember(Order = 110)]
     [DisallowNull]
-    public ConditionedList<string> Demands { get; init; } = [];
+    public AdoExpressionList<string> Demands { get; init; } = [];
 }
 
 /// <summary>

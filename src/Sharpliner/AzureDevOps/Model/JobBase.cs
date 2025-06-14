@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -22,7 +22,7 @@ public abstract record JobBase : IDependsOn
     /// </summary>
     [YamlMember(Order = 100)]
     [DisallowNull]
-    public Conditioned<string>? DisplayName { get; init; }
+    public AdoExpression<string>? DisplayName { get; init; }
 
     /// <summary>
     /// <para>
@@ -40,47 +40,47 @@ public abstract record JobBase : IDependsOn
     /// A pool specification also holds information about the job's strategy for running.
     /// </summary>
     [YamlMember(Order = 300)]
-    public Conditioned<Pool>? Pool { get; init => field = value?.GetRoot(); }
+    public AdoExpression<Pool>? Pool { get; init => field = value?.GetRoot(); }
 
     /// <summary>
     /// Container to run this job inside of.
     /// </summary>
     [YamlMember(Order = 500)]
     [DisallowNull]
-    public Conditioned<ContainerReference>? Container { get; init => field = value?.GetRoot(); }
+    public AdoExpression<ContainerReference>? Container { get; init => field = value?.GetRoot(); }
 
     /// <summary>
     /// Specifies variables at the job level
     /// You can add hard-coded values directly, reference variable groups, or insert via variable templates.
     /// </summary>
     [YamlMember(Order = 600)]
-    public ConditionedList<VariableBase> Variables { get; init; } = [];
+    public AdoExpressionList<VariableBase> Variables { get; init; } = [];
 
     /// <summary>
     /// How long to run the job before automatically cancelling
     /// </summary>
     [YamlIgnore]
     [DisallowNull]
-    public Conditioned<TimeSpan>? Timeout { get; init; }
+    public AdoExpression<TimeSpan>? Timeout { get; init; }
 
     /// <summary>
     /// Time to wait for this job to complete before the server kills it.
     /// </summary>
     [YamlMember(Order = 800)]
-    public Conditioned<int>? TimeoutInMinutes => Timeout?.Definition != null ? (int)Timeout.Definition.TotalMinutes : null;
+    public AdoExpression<int>? TimeoutInMinutes => Timeout?.Definition != null ? (int)Timeout.Definition.TotalMinutes : null;
 
     /// <summary>
     /// How much time to give 'run always even if cancelled tasks' before killing them
     /// </summary>
     [YamlIgnore]
     [DisallowNull]
-    public Conditioned<TimeSpan>? CancelTimeout { get; init; }
+    public AdoExpression<TimeSpan>? CancelTimeout { get; init; }
 
     /// <summary>
     /// Time to wait for the job to cancel before forcibly terminating it.
     /// </summary>
     [YamlMember(Order = 900)]
-    public Conditioned<int>? CancelTimeoutInMinutes => CancelTimeout?.Definition != null ? (int)CancelTimeout.Definition.TotalMinutes : null;
+    public AdoExpression<int>? CancelTimeoutInMinutes => CancelTimeout?.Definition != null ? (int)CancelTimeout.Definition.TotalMinutes : null;
 
     /// <summary>
     /// What to clean up before the job runs
@@ -99,14 +99,14 @@ public abstract record JobBase : IDependsOn
     /// </summary>
     [YamlMember(Order = 1100)]
     [DisallowNull]
-    public Conditioned<InlineCondition>? Condition { get; init; }
+    public AdoExpression<InlineCondition>? Condition { get; init; }
 
     /// <summary>
     /// 'true' if future jobs should run even if this job fails
     /// defaults to 'false'
     /// </summary>
     [YamlMember(Order = 1200)]
-    public Conditioned<bool>? ContinueOnError { get; init; }
+    public AdoExpression<bool>? ContinueOnError { get; init; }
 
     /// <summary>
     /// Instantiates a new instance of <see cref="JobBase"/> with the specified name and optional display name.

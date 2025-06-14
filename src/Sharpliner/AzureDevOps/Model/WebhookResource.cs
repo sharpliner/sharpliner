@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -21,13 +21,13 @@ public record WebhookResource
     /// Service connection for your build service
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Connection { get; init; }
+    public AdoExpression<string>? Connection { get; init; }
 
     /// <summary>
     /// Filters used to customize the triggers for a webhook event.
     /// </summary>
     [DisallowNull]
-    public ConditionedList<JsonParameterFilter> Filters { get; init; } = [];
+    public AdoExpressionList<JsonParameterFilter> Filters { get; init; } = [];
 
     /// <summary>
     /// Instantiates a new instance of <see cref="WebhookResource"/> with the specified identifier.
@@ -48,12 +48,12 @@ public record JsonParameterFilter
     /// <summary>
     /// JSON path in the payload
     /// </summary>
-    public Conditioned<string> Path { get; }
+    public AdoExpression<string> Path { get; }
 
     /// <summary>
     /// Expected value in the path provided
     /// </summary>
-    public Conditioned<string> Value { get; init; }
+    public AdoExpression<string> Value { get; init; }
 
     /// <summary>
     /// Instantiates a new instance of <see cref="JsonParameterFilter"/> with the specified path and value.

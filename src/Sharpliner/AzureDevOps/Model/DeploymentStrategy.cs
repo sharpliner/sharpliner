@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
@@ -166,7 +166,7 @@ public record RollingStrategy : DeploymentStrategy
     /// This ensures that the app is running on these machines and is capable of handling requests while the deployment is taking place on the rest of the machines, which reduces overall downtime.
     /// </summary>
     [YamlMember(Order = 50, DefaultValuesHandling = DefaultValuesHandling.OmitDefaults)]
-    public Conditioned<int>? MaxParallel { get; init; }
+    public AdoExpression<int>? MaxParallel { get; init; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="RollingStrategy"/> class.
@@ -204,7 +204,7 @@ public record CanaryStrategy : DeploymentStrategy
     /// This variable is available only in deploy, routeTraffic, and postRouteTraffic lifecycle hooks.
     /// </summary>
     [YamlMember(Order = 50)]
-    public ConditionedList<int> Increments { get; init; } = [];
+    public AdoExpressionList<int> Increments { get; init; } = [];
 
     /// <summary>
     /// Initializes a new instance of the <see cref="CanaryStrategy"/> class.

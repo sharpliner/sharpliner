@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -13,9 +13,9 @@ public record PublishCodeCoverageResultsTask : AzureDevOpsTask
     /// Multiple summary files are merged into a single report.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? SummaryFileLocation
+    public AdoExpression<string>? SummaryFileLocation
     {
-        get => GetConditioned<string>("summaryFileLocation");
+        get => GetExpression<string>("summaryFileLocation");
         init => SetProperty("summaryFileLocation", value);
     }
 
@@ -23,9 +23,9 @@ public record PublishCodeCoverageResultsTask : AzureDevOpsTask
     /// Specifying a path to source files is required when coverage XML reports don't contain an absolute path to source files.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? PathToSources
+    public AdoExpression<string>? PathToSources
     {
-        get => GetConditioned<string>("pathToSources");
+        get => GetExpression<string>("pathToSources");
         init => SetProperty("pathToSources", value);
     }
 
@@ -34,9 +34,9 @@ public record PublishCodeCoverageResultsTask : AzureDevOpsTask
     /// Defaults to <code>false</code>.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? FailIfCoverageEmpty
+    public AdoExpression<bool>? FailIfCoverageEmpty
     {
-        get => GetConditioned<bool>("failIfCoverageEmpty");
+        get => GetExpression<bool>("failIfCoverageEmpty");
         init => SetProperty("failIfCoverageEmpty", value);
     }
 

@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -25,9 +25,9 @@ public record UseDotNetTask : AzureDevOpsTask
     /// You can change the search root path by setting working directory input
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? UseGlobalJson
+    public AdoExpression<bool>? UseGlobalJson
     {
-        get => GetConditioned<bool>("useGlobalJson");
+        get => GetExpression<bool>("useGlobalJson");
         init => SetProperty("useGlobalJson", value);
     }
 
@@ -36,9 +36,9 @@ public record UseDotNetTask : AzureDevOpsTask
     /// Empty is the root of the repo (build) or artifacts (release), which is $(System.DefaultWorkingDirectory)
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? WorkingDirectory
+    public AdoExpression<string>? WorkingDirectory
     {
-        get => GetConditioned<string>("workingDirectory");
+        get => GetExpression<string>("workingDirectory");
         init => SetProperty("workingDirectory", value);
     }
 
@@ -51,9 +51,9 @@ public record UseDotNetTask : AzureDevOpsTask
     /// Find the value of version for installing SDK/Runtime, from the releases.json.The link to releases.json of that major.minor version can be found in releases-index file.. Like link to releases.json for 3.1 version is https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/3.1/releases.json
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? Version
+    public AdoExpression<string>? Version
     {
-        get => GetConditioned<string>("version");
+        get => GetExpression<string>("version");
         init => SetProperty("version", value);
     }
 
@@ -67,9 +67,9 @@ public record UseDotNetTask : AzureDevOpsTask
     /// Default value: $(Agent.ToolsDirectory)/dotnet
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? InstallationPath
+    public AdoExpression<string>? InstallationPath
     {
-        get => GetConditioned<string>("installationPath");
+        get => GetExpression<string>("installationPath");
         init => SetProperty("installationPath", value);
     }
 
@@ -83,9 +83,9 @@ public record UseDotNetTask : AzureDevOpsTask
     ///     C:/Program Files(x86)/dotnet(32-bit process)
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? PerformMultiLevelLookup
+    public AdoExpression<bool>? PerformMultiLevelLookup
     {
-        get => GetConditioned<bool>("performMultiLevelLookup");
+        get => GetExpression<bool>("performMultiLevelLookup");
         init => SetProperty("performMultiLevelLookup", value);
     }
 
@@ -95,9 +95,9 @@ public record UseDotNetTask : AzureDevOpsTask
     /// Default value: false
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? IncludePreviewVersions
+    public AdoExpression<bool>? IncludePreviewVersions
     {
-        get => GetConditioned<bool>("includePreviewVersions");
+        get => GetExpression<bool>("includePreviewVersions");
         init => SetProperty("includePreviewVersions", value);
     }
 
@@ -126,7 +126,7 @@ public record UseDotNetTask : AzureDevOpsTask
     /// This setting is ignored if you specify an exact version, such as: 3.0.100-preview3-010431
     /// </para>
     /// </param>
-    public UseDotNetTask(DotNetPackageType packageType, Conditioned<string> version, Conditioned<bool>? includePreviewVersions = null) : this()
+    public UseDotNetTask(DotNetPackageType packageType, AdoExpression<string> version, AdoExpression<bool>? includePreviewVersions = null) : this()
     {
         PackageType = packageType;
         Version = version;

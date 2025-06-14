@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using Sharpliner.Common;
 
 namespace Sharpliner.AzureDevOps.Validation;
@@ -16,12 +16,12 @@ internal class NameValidation : IDefinitionValidation
         _nameGroups = nameGroups;
     }
 
-    public NameValidation(ConditionedList<Stage> stages)
+    public NameValidation(AdoExpressionList<Stage> stages)
         : this(GetStageAndBuildNameGroups(stages))
     {
     }
 
-    public NameValidation(ConditionedList<JobBase> jobs)
+    public NameValidation(AdoExpressionList<JobBase> jobs)
         : this([jobs.SelectMany(j => j.FlattenDefinitions()).Select(s => s.Name).ToList()])
     {
     }
@@ -54,7 +54,7 @@ internal class NameValidation : IDefinitionValidation
         return errors;
     }
 
-    private static List<List<string>> GetStageAndBuildNameGroups(ConditionedList<Stage> stages)
+    private static List<List<string>> GetStageAndBuildNameGroups(AdoExpressionList<Stage> stages)
     {
         var stageNames = stages
             .SelectMany(s => s.FlattenDefinitions())

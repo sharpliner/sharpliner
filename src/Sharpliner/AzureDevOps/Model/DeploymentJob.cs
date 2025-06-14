@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -32,7 +32,7 @@ public record DeploymentJob : JobBase
     /// </summary>
     [YamlMember(Order = 1300)]
     [DisallowNull]
-    public Conditioned<DeploymentStrategy>? Strategy { get; init => field = value?.GetRoot(); }
+    public AdoExpression<DeploymentStrategy>? Strategy { get; init => field = value?.GetRoot(); }
 
     /// <summary>
     /// A deployment job is a special type of job.

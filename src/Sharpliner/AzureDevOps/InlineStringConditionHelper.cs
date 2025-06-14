@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
-using Sharpliner.AzureDevOps.ConditionedExpressions.Arguments;
+using Sharpliner.AzureDevOps.Expressions;
+using Sharpliner.AzureDevOps.Expressions.Arguments;
 
 namespace Sharpliner.AzureDevOps;
 

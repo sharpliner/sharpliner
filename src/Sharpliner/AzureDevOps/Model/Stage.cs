@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -20,13 +20,13 @@ public record Stage : IDependsOn
     /// </summary>
     [YamlMember(Order = 2)]
     [DisallowNull]
-    public Conditioned<string>? DisplayName { get; init; }
+    public AdoExpression<string>? DisplayName { get; init; }
 
     /// <summary>
     /// The lock behavior of the stage
     /// </summary>
     [YamlMember(Order = 3)]
-    public Conditioned<LockBehavior>? LockBehavior { get; init; }
+    public AdoExpression<LockBehavior>? LockBehavior { get; init; }
 
     /// <summary>
     /// <para>
@@ -44,13 +44,13 @@ public record Stage : IDependsOn
     /// You can add hard-coded values directly, reference variable groups, or insert via variable templates.
     /// </summary>
     [YamlMember(Order = 200)]
-    public ConditionedList<VariableBase> Variables { get; init; } = [];
+    public AdoExpressionList<VariableBase> Variables { get; init; } = [];
 
     /// <summary>
     /// Specifies which pool to use for jobs of this stage.
     /// </summary>
     [YamlMember(Order = 250)]
-    public Conditioned<Pool>? Pool { get; init => field = value?.GetRoot(); }
+    public AdoExpression<Pool>? Pool { get; init => field = value?.GetRoot(); }
 
     /// <summary>
     /// A job is a collection of steps run by an agent or on a server.
@@ -58,7 +58,7 @@ public record Stage : IDependsOn
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/process/phases?tabs=yaml&amp;view=azure-devops">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     [YamlMember(Order = 300)]
-    public ConditionedList<JobBase> Jobs { get; init; } = [];
+    public AdoExpressionList<JobBase> Jobs { get; init; } = [];
 
     /// <summary>
     /// Gets the condition expression to determine whether to run this stage.

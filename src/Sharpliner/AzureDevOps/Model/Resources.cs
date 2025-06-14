@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -10,30 +10,30 @@ public record Resources
     /// <summary>
     /// List of pipelines resources referenced by the pipeline.
     /// </summary>
-    public ConditionedList<PipelineResource> Pipelines { get; init; } = [];
+    public AdoExpressionList<PipelineResource> Pipelines { get; init; } = [];
 
     /// <summary>
     /// List of build resources referenced by the pipeline.
     /// </summary>
-    public ConditionedList<BuildResource> Builds { get; init; } = [];
+    public AdoExpressionList<BuildResource> Builds { get; init; } = [];
 
     /// <summary>
     /// List of repository resources referenced by the pipeline.
     /// </summary>
-    public ConditionedList<RepositoryResource> Repositories { get; init; } = [];
+    public AdoExpressionList<RepositoryResource> Repositories { get; init; } = [];
 
     /// <summary>
     /// List of container images referenced by the pipeline.
     /// </summary>
-    public ConditionedList<ContainerResource> Containers { get; init; } = [];
+    public AdoExpressionList<ContainerResource> Containers { get; init; } = [];
 
     /// <summary>
     /// List of packages resources referenced by the pipeline.
     /// </summary>
-    public ConditionedList<PackageResource> Packages { get; init; } = [];
+    public AdoExpressionList<PackageResource> Packages { get; init; } = [];
 
     /// <summary>
     /// List of webhooks resources referenced by the pipeline.
     /// </summary>
-    public ConditionedList<WebhookResource> Webhooks { get; init; } = [];
+    public AdoExpressionList<WebhookResource> Webhooks { get; init; } = [];
 }

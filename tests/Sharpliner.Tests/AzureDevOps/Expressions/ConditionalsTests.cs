@@ -1,6 +1,6 @@
 ﻿using Sharpliner.AzureDevOps;
 
-namespace Sharpliner.Tests.AzureDevOps.ConditionedExpressions;
+namespace Sharpliner.Tests.AzureDevOps.Expressions;
 
 public class ConditionalsTests
 {

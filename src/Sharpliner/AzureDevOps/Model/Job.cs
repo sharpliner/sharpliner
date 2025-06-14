@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -24,7 +24,7 @@ public record Job : JobBase
     /// </summary>
     [YamlMember(Order = 400)]
     [DisallowNull]
-    public Conditioned<Strategy>? Strategy { get; init => field = value?.GetRoot(); }
+    public AdoExpression<Strategy>? Strategy { get; init => field = value?.GetRoot(); }
 
     /// <summary>
     /// A step is a linear sequence of operations that make up a job
@@ -32,7 +32,7 @@ public record Job : JobBase
     /// This behavior means environment variables aren't preserved between steps but file system changes are.
     /// </summary>
     [YamlMember(Order = 700)]
-    public ConditionedList<Step> Steps { get; init; } = [];
+    public AdoExpressionList<Step> Steps { get; init; } = [];
 
     /// <summary>
     /// Any resources (repos or pools) required by this job that are not already referenced.

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
@@ -21,7 +21,7 @@ public record Trigger
     /// <summary>
     /// Batch changes if true; start a new build for every push if false (default).
     /// </summary>
-    public Conditioned<bool>? Batch { get; init; } = false;
+    public AdoExpression<bool>? Batch { get; init; } = false;
 
     /// <summary>
     /// Branches to include or exclude.

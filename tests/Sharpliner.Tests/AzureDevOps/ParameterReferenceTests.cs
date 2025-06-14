@@ -1,5 +1,5 @@
 ﻿using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 
 namespace Sharpliner.Tests.AzureDevOps;
 
@@ -21,7 +21,7 @@ public class ParameterReferenceTests
             }),
         ];
 
-        public override ConditionedList<Stage> Definition =>
+        public override AdoExpressionList<Stage> Definition =>
         [
             new Stage("Stage_1")
             {

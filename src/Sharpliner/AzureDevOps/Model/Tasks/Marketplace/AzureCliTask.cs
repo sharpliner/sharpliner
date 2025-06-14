@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -12,9 +12,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Alias: connectedServiceNameARM. Required. Azure Resource Manager connection.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? AzureSubscription
+    public AdoExpression<string>? AzureSubscription
     {
-        get => GetConditioned<string>("azureSubscription");
+        get => GetExpression<string>("azureSubscription");
         init => SetProperty("azureSubscription", value);
     }
 
@@ -22,9 +22,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Required. Type of script. Select a bash or pscore script when running on Linux agent. Or, select a batch, ps, or pscore script when running on Windows agent. A pscore script can run on cross-platform agents (Linux, macOS, or Windows).
     /// </summary>
     [YamlIgnore]
-    public Conditioned<ScriptType>? ScriptType
+    public AdoExpression<ScriptType>? ScriptType
     {
-        get => GetConditioned<ScriptType>("scriptType");
+        get => GetExpression<ScriptType>("scriptType");
         init => SetProperty("scriptType", value);
     }
 
@@ -32,9 +32,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Required. Allowed values: inlineScript (Inline script), scriptPath (Script path). Default value: scriptPath.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<ScriptLocation>? ScriptLocation
+    public AdoExpression<ScriptLocation>? ScriptLocation
     {
-        get => GetConditioned<ScriptLocation>("scriptLocation");
+        get => GetExpression<ScriptLocation>("scriptLocation");
         init => SetProperty("scriptLocation", value);
     }
 
@@ -42,9 +42,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Input alias: scriptArguments. Arguments passed to the script.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? Arguments
+    public AdoExpression<string>? Arguments
     {
-        get => GetConditioned<string>("arguments");
+        get => GetExpression<string>("arguments");
         init => SetProperty("arguments", value);
     }
 
@@ -53,9 +53,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Prepends the line $ErrorActionPreference = 'VALUE' at the top of your PowerShell/PowerShell Core script.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<PowerShellErrorActionPreference>? PowerShellErrorActionPreference
+    public AdoExpression<PowerShellErrorActionPreference>? PowerShellErrorActionPreference
     {
-        get => GetConditioned<PowerShellErrorActionPreference>("powerShellErrorActionPreference");
+        get => GetExpression<PowerShellErrorActionPreference>("powerShellErrorActionPreference");
         init => SetProperty("powerShellErrorActionPreference", value);
     }
 
@@ -64,9 +64,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// You can use the servicePrincipalId, servicePrincipalKey or idToken, and tenantId variables in your script.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>?  AddSpnToEnvironment
+    public AdoExpression<bool>?  AddSpnToEnvironment
     {
-        get => GetConditioned<bool>("addSpnToEnvironment", false);
+        get => GetExpression<bool>("addSpnToEnvironment", false);
         init => SetProperty("addSpnToEnvironment", value);
     }
 
@@ -75,9 +75,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Use this task to run Azure CLI tasks in parallel releases.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? UseGlobalConfig
+    public AdoExpression<bool>? UseGlobalConfig
     {
-        get => GetConditioned<bool>("useGlobalConfig", false);
+        get => GetExpression<bool>("useGlobalConfig", false);
         init => SetProperty("useGlobalConfig", value);
     }
 
@@ -86,9 +86,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// If left blank, this input is the root of the repo (build) or artifacts (release), which is $(System.DefaultWorkingDirectory).
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? WorkingDirectory
+    public AdoExpression<string>? WorkingDirectory
     {
-        get => GetConditioned<string>("workingDirectory");
+        get => GetExpression<string>("workingDirectory");
         init => SetProperty("workingDirectory", value);
     }
 
@@ -97,9 +97,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Clear the checkbox to ignore standard errors and instead rely on exit codes to determine the status.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? FailOnStandardError
+    public AdoExpression<bool>? FailOnStandardError
     {
-        get => GetConditioned<bool>("failOnStandardError", false);
+        get => GetExpression<bool>("failOnStandardError", false);
         init => SetProperty("failOnStandardError", value);
     }
 
@@ -110,9 +110,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Otherwise, the line is not appended to the end of your script.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? PowerShellIgnoreLASTEXITCODE
+    public AdoExpression<bool>? PowerShellIgnoreLASTEXITCODE
     {
-        get => GetConditioned<bool>("powerShellIgnoreLASTEXITCODE", false);
+        get => GetExpression<bool>("powerShellIgnoreLASTEXITCODE", false);
         init => SetProperty("powerShellIgnoreLASTEXITCODE", value);
     }
 
@@ -121,9 +121,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// Setting it to false will suppress the az login output.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? VisibleAzLogin
+    public AdoExpression<bool>? VisibleAzLogin
     {
-        get => GetConditioned<bool>("visibleAzLogin", true);
+        get => GetExpression<bool>("visibleAzLogin", true);
         init => SetProperty("visibleAzLogin", value);
     }
 
@@ -133,7 +133,7 @@ public abstract record AzureCliTask : AzureDevOpsTask
     /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
     /// <param name="scriptType">Type of script.</param>
     /// <param name="scriptLocation">Path to the script.</param>
-    public AzureCliTask(Conditioned<string> azureSubscription, Conditioned<ScriptType> scriptType, Conditioned<ScriptLocation> scriptLocation)
+    public AzureCliTask(AdoExpression<string> azureSubscription, AdoExpression<ScriptType> scriptType, AdoExpression<ScriptLocation> scriptLocation)
         : base("AzureCLI@2")
     {
         AzureSubscription = azureSubscription;
@@ -154,9 +154,9 @@ public record InlineAzureCliTask : AzureCliTask
     /// You can also pass predefined and custom variables to this script by using arguments.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? InlineScript
+    public AdoExpression<string>? InlineScript
     {
-        get => GetConditioned<string>("inlineScript");
+        get => GetExpression<string>("inlineScript");
         init => SetProperty("inlineScript", value);
     }
 
@@ -166,7 +166,7 @@ public record InlineAzureCliTask : AzureCliTask
     /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
     /// <param name="scriptType">Type of script.</param>
     /// <param name="inlineScript">Lines of the script as a string.</param>
-    public InlineAzureCliTask(Conditioned<string> azureSubscription, Conditioned<ScriptType> scriptType, Conditioned<string> inlineScript)
+    public InlineAzureCliTask(AdoExpression<string> azureSubscription, AdoExpression<ScriptType> scriptType, AdoExpression<string> inlineScript)
     : base(azureSubscription, scriptType, Tasks.ScriptLocation.InlineScript)
     {
         InlineScript = inlineScript;
@@ -183,9 +183,9 @@ public record AzureCliFileTask : AzureCliTask
     /// Use .ps1 or .sh when using Linux-based agent or a path relative to the the default working directory.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? ScriptPath
+    public AdoExpression<string>? ScriptPath
     {
-        get => GetConditioned<string>("scriptPath");
+        get => GetExpression<string>("scriptPath");
         init => SetProperty("scriptPath", value);
     }
 
@@ -195,7 +195,7 @@ public record AzureCliFileTask : AzureCliTask
     /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
     /// <param name="scriptType">Type of script.</param>
     /// <param name="scriptPath">Path to the script.</param>
-    public AzureCliFileTask(Conditioned<string> azureSubscription, Conditioned<ScriptType> scriptType, Conditioned<string> scriptPath)
+    public AzureCliFileTask(AdoExpression<string> azureSubscription, AdoExpression<ScriptType> scriptType, AdoExpression<string> scriptPath)
     : base(azureSubscription, scriptType, Tasks.ScriptLocation.ScriptPath)
     {
         ScriptPath = scriptPath;

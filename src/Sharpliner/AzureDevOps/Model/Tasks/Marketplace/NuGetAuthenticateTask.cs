@@ -1,4 +1,4 @@
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -29,9 +29,9 @@ public record NuGetAuthenticateTask : AzureDevOpsTask
     /// Gets or sets a value indicating whether to force reinstall of the credential provider even if already installed. Default: false.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? ForceReinstallCredentialProvider
+    public AdoExpression<bool>? ForceReinstallCredentialProvider
     {
-        get => GetConditioned<bool>("forceReinstallCredentialProvider");
+        get => GetExpression<bool>("forceReinstallCredentialProvider");
         init => SetProperty("forceReinstallCredentialProvider", value);
     }
 }

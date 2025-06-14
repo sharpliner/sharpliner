@@ -1,4 +1,4 @@
-﻿namespace Sharpliner.AzureDevOps.ConditionedExpressions.Interfaces;
+﻿namespace Sharpliner.AzureDevOps.Expressions.Interfaces;
 
 /// <summary>
 /// <para>

@@ -1,5 +1,5 @@
 ﻿using System.Reflection;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using Sharpliner.Common.Model.Tasks;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -37,7 +37,7 @@ public class PowershellTaskBuilder : TaskBuilderBase
     /// <param name="resourceFileName">Name of the resource file</param>
     /// <param name="displayName">Display name of the build step</param>
     /// <returns>A new instance of <see cref="InlinePowershellTask"/> with the contents of the resource file</returns>
-    public InlinePowershellTask FromResourceFile(string resourceFileName, Conditioned<string>? displayName = null)
+    public InlinePowershellTask FromResourceFile(string resourceFileName, AdoExpression<string>? displayName = null)
         => new InlinePowershellTask(GetResourceFile(Assembly.GetCallingAssembly()!, resourceFileName)) with
         {
             DisplayName = displayName!,
@@ -72,7 +72,7 @@ public class PowershellTaskBuilder : TaskBuilderBase
     /// <param name="path">Path to the file</param>
     /// <param name="displayName">Display name of the build step</param>
     /// <returns>A new instance of <see cref="InlinePowershellTask"/> with the contents of the resource file</returns>
-    public InlinePowershellTask FromFile(string path, Conditioned<string>? displayName = null)
+    public InlinePowershellTask FromFile(string path, AdoExpression<string>? displayName = null)
         => new InlinePowershellTask(System.IO.File.ReadAllText(path)) with
         {
             DisplayName = displayName!,
@@ -102,7 +102,7 @@ public class PowershellTaskBuilder : TaskBuilderBase
     /// <param name="filePath">Path to the file</param>
     /// <param name="displayName">Display name of the build step</param>
     /// <returns>A new instance of <see cref="PowershellFileTask"/> with the contents of the resource file</returns>
-    public PowershellFileTask File(Conditioned<string> filePath, Conditioned<string>? displayName = null)
+    public PowershellFileTask File(AdoExpression<string> filePath, AdoExpression<string>? displayName = null)
         => new PowershellFileTask(filePath, isPwsh: false) with
         {
             DisplayName = displayName!,

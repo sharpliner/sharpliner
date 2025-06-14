@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -40,9 +40,9 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     /// Gets or sets the pattern to search for csproj or nuspec files to pack.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? PackagesToPack
+    public AdoExpression<string>? PackagesToPack
     {
-        get => GetConditioned<string>("packagesToPack");
+        get => GetExpression<string>("packagesToPack");
         init => SetProperty("packagesToPack", value);
     }
 
@@ -50,9 +50,9 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     /// Gets or sets the versioning scheme to use for the package version.
     /// </summary>
     [YamlIgnore]
-    internal Conditioned<string>? VersioningScheme
+    internal AdoExpression<string>? VersioningScheme
     {
-        get => GetConditioned<string>("versioningScheme");
+        get => GetExpression<string>("versioningScheme");
         init => SetProperty("versioningScheme", value);
     }
 
@@ -60,9 +60,9 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     /// Specifies the configuration to package when using a csproj file.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? Configuration
+    public AdoExpression<string>? Configuration
     {
-        get => GetConditioned<string>("configuration");
+        get => GetExpression<string>("configuration");
         init => SetProperty("configuration", value);
     }
 
@@ -70,9 +70,9 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     /// Specifies the folder where the task creates packages. If the value is empty, the task creates packages at the source root.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? PackDestination
+    public AdoExpression<string>? PackDestination
     {
-        get => GetConditioned<string>("packDestination");
+        get => GetExpression<string>("packDestination");
         init => SetProperty("packDestination", value);
     }
 
@@ -80,9 +80,9 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     /// Specifies that the package contains sources and symbols. When used with a <c>.nuspec</c> file, this creates a regular NuGet package file and the corresponding symbols package.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? IncludeSymbols
+    public AdoExpression<bool>? IncludeSymbols
     {
-        get => GetConditioned<bool>("includeSymbols");
+        get => GetExpression<bool>("includeSymbols");
         init => SetProperty("includeSymbols", value);
     }
 
@@ -90,9 +90,9 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     /// Determines if the output files of the project should be in the tool folder.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? ToolPackage
+    public AdoExpression<bool>? ToolPackage
     {
-        get => GetConditioned<bool>("toolPackage");
+        get => GetExpression<bool>("toolPackage");
         init => SetProperty("toolPackage", value);
     }
 
@@ -111,9 +111,9 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     /// Specifies the amount of detail displayed in the output.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<PackVerbosity>? VerbosityPack
+    public AdoExpression<PackVerbosity>? VerbosityPack
     {
-        get => GetConditioned<PackVerbosity>("verbosityPack");
+        get => GetExpression<PackVerbosity>("verbosityPack");
         init => SetProperty("verbosityPack", value);
     }
 
@@ -121,9 +121,9 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     /// <summary>
     /// Specifies the base path of the files defined in the <c>nuspec</c> file.
     /// </summary>
-    public Conditioned<string>? BasePath
+    public AdoExpression<string>? BasePath
     {
-        get => GetConditioned<string>("basePath");
+        get => GetExpression<string>("basePath");
         init => SetProperty("basePath", value);
     }
 }
@@ -167,9 +167,9 @@ public record NuGetPackCommandTaskOff : NuGetPackCommandTask
     /// Learn more about <see href="https://learn.microsoft.com/en-us/nuget/tools/cli-ref-pack">using the pack command for NuGet CLI to create NuGet packages</see>.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? IncludeReferencedProjects
+    public AdoExpression<bool>? IncludeReferencedProjects
     {
-        get => GetConditioned<bool>("includeReferencedProjects");
+        get => GetExpression<bool>("includeReferencedProjects");
         init => SetProperty("includeReferencedProjects", value);
     } 
 }
@@ -196,9 +196,9 @@ public record NuGetPackCommandTaskByPrereleaseNumber : NuGetPackCommandTask
     /// The <c>X</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? MajorVersion
+    public AdoExpression<string>? MajorVersion
     {
-        get => GetConditioned<string>("majorVersion");
+        get => GetExpression<string>("majorVersion");
         init => SetProperty("majorVersion", value);
     }
 
@@ -206,9 +206,9 @@ public record NuGetPackCommandTaskByPrereleaseNumber : NuGetPackCommandTask
     /// The <c>Y</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? MinorVersion
+    public AdoExpression<string>? MinorVersion
     {
-        get => GetConditioned<string>("minorVersion");
+        get => GetExpression<string>("minorVersion");
         init => SetProperty("minorVersion", value);
     }
 
@@ -216,9 +216,9 @@ public record NuGetPackCommandTaskByPrereleaseNumber : NuGetPackCommandTask
     /// The <c>Z</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? PatchVersion
+    public AdoExpression<string>? PatchVersion
     {
-        get => GetConditioned<string>("patchVersion");
+        get => GetExpression<string>("patchVersion");
         init => SetProperty("patchVersion", value);
     }
 
@@ -226,9 +226,9 @@ public record NuGetPackCommandTaskByPrereleaseNumber : NuGetPackCommandTask
     /// Specifies the desired time zone used to produce the version of the package. Selecting <see cref="PackTimezoneType.UTC"/> is recommended if you're using hosted build agents, as their date and time might differ.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<PackTimezoneType>? PackTimezone 
+    public AdoExpression<PackTimezoneType>? PackTimezone 
     {
-        get => GetConditioned<PackTimezoneType>("packTimezone");
+        get => GetExpression<PackTimezoneType>("packTimezone");
         init => SetProperty("packTimezone", value);
     }
 }
@@ -258,7 +258,7 @@ public record NuGetPackCommandTaskByEnvVar : NuGetPackCommandTask
     /// Initializes a new instance of the <see cref="NuGetPackCommandTaskByEnvVar"/> class.
     /// </summary>
     /// <param name="versionEnvVar">The variable name without <c>$</c>, <c>$env</c>, or <c>%</c>.</param>
-    public NuGetPackCommandTaskByEnvVar(Conditioned<string> versionEnvVar) : base("byEnvVar")
+    public NuGetPackCommandTaskByEnvVar(AdoExpression<string> versionEnvVar) : base("byEnvVar")
     {
         VersionEnvVar = versionEnvVar ?? throw new ArgumentNullException(nameof(versionEnvVar));
     }
@@ -267,9 +267,9 @@ public record NuGetPackCommandTaskByEnvVar : NuGetPackCommandTask
     /// Specifies the variable name without <c>$</c>, <c>$env</c>, or <c>%</c>.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? VersionEnvVar
+    public AdoExpression<string>? VersionEnvVar
     {
-        get => GetConditioned<string>("versionEnvVar");
+        get => GetExpression<string>("versionEnvVar");
         init => SetProperty("versionEnvVar", value);
     }
 }

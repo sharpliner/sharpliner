@@ -1,4 +1,4 @@
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
@@ -25,7 +25,7 @@ public class NuGetTaskBuilder
     ///     forceReinstallCredentialProvider: true
     /// </code>
     /// </example>
-    public NuGetAuthenticateTask Authenticate(string[]? nuGetServiceConnections = null, Conditioned<bool>? forceReinstallCredentialProvider = null)
+    public NuGetAuthenticateTask Authenticate(string[]? nuGetServiceConnections = null, AdoExpression<bool>? forceReinstallCredentialProvider = null)
     {
         var task = new NuGetAuthenticateTask();
 
@@ -176,7 +176,7 @@ public class NuGetRestoreBuilder
     /// </summary>
     /// <param name="nugetConfigPath">The path to the NuGet.config file.</param>
     /// <returns>A NuGetRestoreCommandTask instance.</returns>
-    public NuGetRestoreConfigCommandTask FromNuGetConfig(Conditioned<string> nugetConfigPath)
+    public NuGetRestoreConfigCommandTask FromNuGetConfig(AdoExpression<string> nugetConfigPath)
     {
         return new()
         {
@@ -210,7 +210,7 @@ public class NuGetPushBuilder
     /// </example>
     /// </summary>
     /// <returns>A <see cref="NuGetPushInternalCommandTask"/> instance.</returns>
-    public NuGetPushInternalCommandTask ToInternalFeed(Conditioned<string> publishVstsFeed) => new(publishVstsFeed);
+    public NuGetPushInternalCommandTask ToInternalFeed(AdoExpression<string> publishVstsFeed) => new(publishVstsFeed);
 
     /// <summary>
     /// Creates a NuGetPushCommandTask to push packages to an external feed.
@@ -230,7 +230,7 @@ public class NuGetPushBuilder
     ///     externalFeedCredentials: myExternalFeedCredentials
     /// </code>
     /// </example>
-    public NuGetPushExternalCommandTask ToExternalFeed(Conditioned<string> publishFeedCredentials) => new(publishFeedCredentials);
+    public NuGetPushExternalCommandTask ToExternalFeed(AdoExpression<string> publishFeedCredentials) => new(publishFeedCredentials);
 }
 
 /// <summary>
@@ -263,7 +263,7 @@ public class NuGetPackBuilder
     /// </summary>
     /// <param name="versionEnvVar">The name of the environment variable that contains the version.</param>
     /// <returns>A new instance of <see cref="NuGetPackCommandTaskByEnvVar"/>.</returns>
-    public NuGetPackCommandTaskByEnvVar ByEnvVar(Conditioned<string> versionEnvVar) => new(versionEnvVar);
+    public NuGetPackCommandTaskByEnvVar ByEnvVar(AdoExpression<string> versionEnvVar) => new(versionEnvVar);
 
     /// <summary>
     /// <para>

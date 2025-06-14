@@ -1,4 +1,4 @@
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -22,9 +22,9 @@ public abstract record NuGetCommandTask : AzureDevOpsTask
     }
 
     [YamlIgnore]
-    internal Conditioned<string>? Command
+    internal AdoExpression<string>? Command
     {
-        get => GetConditioned<string>("command");
+        get => GetExpression<string>("command");
         init => SetProperty("command", value);
     }
 }

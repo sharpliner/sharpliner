@@ -1,4 +1,4 @@
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -20,9 +20,9 @@ public abstract record NuGetRestoreCommandTask : NuGetCommandTask
     /// Specifies the path to the solution, <c>packages.config</c>, or <c>project.json</c> file that references the packages to be restored.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? RestoreSolution
+    public AdoExpression<string>? RestoreSolution
     {
-        get => GetConditioned<string>("restoreSolution");
+        get => GetExpression<string>("restoreSolution");
         init => SetProperty("restoreSolution", value);
     }
 
@@ -30,16 +30,16 @@ public abstract record NuGetRestoreCommandTask : NuGetCommandTask
     /// Prevents NuGet from using packages from local machine caches when set to <c>true</c>.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? NoCache
+    public AdoExpression<bool>? NoCache
     {
-        get => GetConditioned<bool>("noCache");
+        get => GetExpression<bool>("noCache");
         init => SetProperty("noCache", value);
     }
 
     [YamlIgnore]
-    internal Conditioned<string>? FeedsToUse
+    internal AdoExpression<string>? FeedsToUse
     {
-        get => GetConditioned<string>("feedsToUse");
+        get => GetExpression<string>("feedsToUse");
         init => SetProperty("feedsToUse", value);
     }
 }
@@ -60,9 +60,9 @@ public record NuGetRestoreFeedCommandTask : NuGetRestoreCommandTask
     /// Gets or sets the vstsFeed to restore packages from.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? VstsFeed
+    public AdoExpression<string>? VstsFeed
     {
-        get => GetConditioned<string>("vstsFeed");
+        get => GetExpression<string>("vstsFeed");
         init => SetProperty("vstsFeed", value);
     }
 
@@ -70,9 +70,9 @@ public record NuGetRestoreFeedCommandTask : NuGetRestoreCommandTask
     /// Includes NuGet.org in the generated <c>NuGet.config</c>.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? IncludeNuGetOrg
+    public AdoExpression<bool>? IncludeNuGetOrg
     {
-        get => GetConditioned<bool>("includeNuGetOrg");
+        get => GetExpression<bool>("includeNuGetOrg");
         init => SetProperty("includeNuGetOrg", value);
     }
 }
@@ -93,9 +93,9 @@ public record NuGetRestoreConfigCommandTask : NuGetRestoreCommandTask
     /// Gets or sets the path to the NuGet.config file.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? NuGetConfigPath
+    public AdoExpression<string>? NuGetConfigPath
     {
-        get => GetConditioned<string>("nuGetConfigPath");
+        get => GetExpression<string>("nuGetConfigPath");
         init => SetProperty("nuGetConfigPath", value);
     }
 
@@ -105,9 +105,9 @@ public record NuGetRestoreConfigCommandTask : NuGetRestoreCommandTask
     /// For feeds in this organization or collection, leave this blank; the build's credentials are used automatically.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? ExternalFeedCredentials
+    public AdoExpression<string>? ExternalFeedCredentials
     {
-        get => GetConditioned<string>("externalFeedCredentials");
+        get => GetExpression<string>("externalFeedCredentials");
         init => SetProperty("externalFeedCredentials", value);
     } 
 }

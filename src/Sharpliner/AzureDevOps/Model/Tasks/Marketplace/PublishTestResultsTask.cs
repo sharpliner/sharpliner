@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -25,9 +25,9 @@ public record PublishTestResultsTask : AzureDevOpsTask
     /// Defaults to <code>JUnit</code>.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<TestResultsFormat>? TestResultsFormat
+    public AdoExpression<TestResultsFormat>? TestResultsFormat
     {
-        get => GetConditioned<TestResultsFormat>("testResultsFormat");
+        get => GetExpression<TestResultsFormat>("testResultsFormat");
         init => SetProperty("testResultsFormat", value);
     }
 
@@ -39,9 +39,9 @@ public record PublishTestResultsTask : AzureDevOpsTask
     /// <remarks>If using VSTest as the test result format, the file type should be changed to .trx e.g. **/TEST-*.trx</remarks>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? TestResultsFiles
+    public AdoExpression<string>? TestResultsFiles
     {
-        get => GetConditioned<string>("testResultsFiles");
+        get => GetExpression<string>("testResultsFiles");
         init => SetProperty("testResultsFiles", value);
     }
 
@@ -50,9 +50,9 @@ public record PublishTestResultsTask : AzureDevOpsTask
     /// Defaults to <code>$(System.DefaultWorkingDirectory)</code>.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? SearchFolder
+    public AdoExpression<string>? SearchFolder
     {
-        get => GetConditioned<string>("searchFolder");
+        get => GetExpression<string>("searchFolder");
         init => SetProperty("searchFolder", value);
     }
 
@@ -61,9 +61,9 @@ public record PublishTestResultsTask : AzureDevOpsTask
     /// If the value is false, the task creates a separate test run for each test result file.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? MergeTestResults
+    public AdoExpression<bool>? MergeTestResults
     {
-        get => GetConditioned<bool>("mergeTestResults");
+        get => GetExpression<bool>("mergeTestResults");
         init => SetProperty("mergeTestResults", value);
     }
 
@@ -71,9 +71,9 @@ public record PublishTestResultsTask : AzureDevOpsTask
     /// When this boolean's value is true, the task will fail if any of the tests in the results file are marked as failed.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? FailTaskOnFailedTests
+    public AdoExpression<bool>? FailTaskOnFailedTests
     {
-        get => GetConditioned<bool>("failTaskOnFailedTests");
+        get => GetExpression<bool>("failTaskOnFailedTests");
         init => SetProperty("failTaskOnFailedTests", value);
     }
 
@@ -81,9 +81,9 @@ public record PublishTestResultsTask : AzureDevOpsTask
     /// When true, fails the task if there is failure in publishing test results.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? FailTaskOnFailureToPublishResults
+    public AdoExpression<bool>? FailTaskOnFailureToPublishResults
     {
-        get => GetConditioned<bool>("failTaskOnFailureToPublishResults");
+        get => GetExpression<bool>("failTaskOnFailureToPublishResults");
         init => SetProperty("failTaskOnFailureToPublishResults", value);
     }
 
@@ -91,9 +91,9 @@ public record PublishTestResultsTask : AzureDevOpsTask
     /// Fail the task if no result files are found.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? FailTaskOnMissingResultsFile
+    public AdoExpression<bool>? FailTaskOnMissingResultsFile
     {
-        get => GetConditioned<bool>("failTaskOnMissingResultsFile");
+        get => GetExpression<bool>("failTaskOnMissingResultsFile");
         init => SetProperty("failTaskOnMissingResultsFile", value);
     }
 
@@ -102,9 +102,9 @@ public record PublishTestResultsTask : AzureDevOpsTask
     /// Variable names declared in the build or release pipeline can be used.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? TestRunTitle
+    public AdoExpression<string>? TestRunTitle
     {
-        get => GetConditioned<string>("testRunTitle");
+        get => GetExpression<string>("testRunTitle");
         init => SetProperty("testRunTitle", value);
     }
 
@@ -113,9 +113,9 @@ public record PublishTestResultsTask : AzureDevOpsTask
     /// <example>x64 or x86</example>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? BuildPlatform
+    public AdoExpression<string>? BuildPlatform
     {
-        get => GetConditioned<string>("buildPlatform");
+        get => GetExpression<string>("buildPlatform");
         init => SetProperty("buildPlatform", value);
     }
 
@@ -124,9 +124,9 @@ public record PublishTestResultsTask : AzureDevOpsTask
     /// <example>Debug or Release</example>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? BuildConfiguration
+    public AdoExpression<string>? BuildConfiguration
     {
-        get => GetConditioned<string>("buildConfiguration");
+        get => GetExpression<string>("buildConfiguration");
         init => SetProperty("buildConfiguration", value);
     }
 
@@ -134,9 +134,9 @@ public record PublishTestResultsTask : AzureDevOpsTask
     /// When this boolean's value is true, the task uploads all the test result files as attachments to the test run.
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? PublishRunAttachments
+    public AdoExpression<bool>? PublishRunAttachments
     {
-        get => GetConditioned<bool>("publishRunAttachments");
+        get => GetExpression<bool>("publishRunAttachments");
         init => SetProperty("publishRunAttachments", value);
     }
 }

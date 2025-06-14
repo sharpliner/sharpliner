@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Sharpliner.AzureDevOps.ConditionedExpressions;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;
@@ -24,13 +24,13 @@ public record PipelineResource
     /// Optional for current project
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Project { get; init; }
+    public AdoExpression<string>? Project { get; init; }
 
     /// <summary>
     /// Name of the pipeline that produces an artifact
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Source { get; init; }
+    public AdoExpression<string>? Source { get; init; }
 
     /// <summary>
     /// The pipeline run number to pick the artifact
@@ -38,7 +38,7 @@ public record PipelineResource
     /// Used only for manual or scheduled triggers
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Version { get; init; }
+    public AdoExpression<string>? Version { get; init; }
 
     /// <summary>
     /// Branch to pick the artifact
@@ -46,7 +46,7 @@ public record PipelineResource
     /// Used only for manual or scheduled triggers
     /// </summary>
     [DisallowNull]
-    public Conditioned<string>? Branch { get; init; }
+    public AdoExpression<string>? Branch { get; init; }
 
     /// <summary>
     /// List of tags required on the pipeline to pickup default artifacts

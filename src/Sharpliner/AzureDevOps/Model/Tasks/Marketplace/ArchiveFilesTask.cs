@@ -1,4 +1,4 @@
-﻿using Sharpliner.AzureDevOps.ConditionedExpressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -18,9 +18,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <c>$(Build.BinariesDirectory)</c>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? RootFolderOrFile
+    public AdoExpression<string>? RootFolderOrFile
     {
-        get => GetConditioned<string>("rootFolderOrFile");
+        get => GetExpression<string>("rootFolderOrFile");
         init => SetProperty("rootFolderOrFile", value);
     }
 
@@ -34,9 +34,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <c>true</c>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? IncludeRootFolder
+    public AdoExpression<bool>? IncludeRootFolder
     {
-        get => GetConditioned<bool>("includeRootFolder");
+        get => GetExpression<bool>("includeRootFolder");
         init => SetProperty("includeRootFolder", value);
     }
 
@@ -47,9 +47,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <see cref="ArchiveType.Zip"/>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<ArchiveType>? ArchiveType
+    public AdoExpression<ArchiveType>? ArchiveType
     {
-        get => GetConditioned<ArchiveType>("archiveType");
+        get => GetExpression<ArchiveType>("archiveType");
         init => SetProperty("archiveType", value);
     }
 
@@ -60,9 +60,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <see cref="SevenZipCompressionLevel.Normal"/>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<SevenZipCompressionLevel>? SevenZipCompression
+    public AdoExpression<SevenZipCompressionLevel>? SevenZipCompression
     {
-        get => GetConditioned<SevenZipCompressionLevel>("sevenZipCompression");
+        get => GetExpression<SevenZipCompressionLevel>("sevenZipCompression");
         init => SetProperty("sevenZipCompression", value);
     }
 
@@ -73,9 +73,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <see cref="TarCompressionType.Gz"/>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<TarCompressionType>? TarCompression
+    public AdoExpression<TarCompressionType>? TarCompression
     {
-        get => GetConditioned<TarCompressionType>("tarCompression");
+        get => GetExpression<TarCompressionType>("tarCompression");
         init => SetProperty("tarCompression", value);
     }
 
@@ -86,9 +86,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <c>$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip</c>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<string>? ArchiveFile
+    public AdoExpression<string>? ArchiveFile
     {
-        get => GetConditioned<string>("archiveFile");
+        get => GetExpression<string>("archiveFile");
         init => SetProperty("archiveFile", value);
     }
 
@@ -102,9 +102,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <c>true</c>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? ReplaceExistingArchive
+    public AdoExpression<bool>? ReplaceExistingArchive
     {
-        get => GetConditioned<bool>("replaceExistingArchive");
+        get => GetExpression<bool>("replaceExistingArchive");
         init => SetProperty("replaceExistingArchive", value);
     }
 
@@ -115,9 +115,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <c>false</c>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? Verbose
+    public AdoExpression<bool>? Verbose
     {
-        get => GetConditioned<bool>("verbose");
+        get => GetExpression<bool>("verbose");
         init => SetProperty("verbose", value);
     }
 
@@ -128,9 +128,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// Defaults to <c>false</c>
     /// </summary>
     [YamlIgnore]
-    public Conditioned<bool>? Quiet
+    public AdoExpression<bool>? Quiet
     {
-        get => GetConditioned<bool>("quiet");
+        get => GetExpression<bool>("quiet");
         init => SetProperty("quiet", value);
     }
 
@@ -140,7 +140,7 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// <param name="rootFolderOrFile">The name of the root folder or the file path to files to add to the archive.</param>
     /// <param name="archiveType">The compression format.</param>
     /// <param name="archiveFile">The name of the archive file to create.</param>
-    public ArchiveFilesTask(string rootFolderOrFile, Conditioned<ArchiveType> archiveType, Conditioned<string> archiveFile)
+    public ArchiveFilesTask(string rootFolderOrFile, AdoExpression<ArchiveType> archiveType, AdoExpression<string> archiveFile)
         : base("ArchiveFiles@2")
     {
         RootFolderOrFile = rootFolderOrFile;
