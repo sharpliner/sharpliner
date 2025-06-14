@@ -6,16 +6,16 @@
   <ItemGroup>
     <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
     <PackageVersion Include="FluentAssertions" Version="7.1.0" />
-    <PackageVersion Include="Microsoft.Build.Framework" Version="17.12.6" />
-    <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="17.12.6" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageVersion Include="Microsoft.Build.Framework" Version="17.14.8" />
+    <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="17.14.8" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageVersion Include="E2E.Tests.SharplinerLibrary" Version="1.0.0" />
     <PackageVersion Include="OneOf.SourceGenerator" Version="3.0.271" />
     <PackageVersion Include="OneOf" Version="3.0.271" />
-    <PackageVersion Include="PublicApiGenerator" Version="11.4.1" />
+    <PackageVersion Include="PublicApiGenerator" Version="11.4.6" />
     <PackageVersion Include="Sharpliner" Version="43.43.43" />
-    <PackageVersion Include="Verify.Xunit" Version="28.9.0" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="3.0.1" />
+    <PackageVersion Include="Verify.Xunit" Version="30.4.0" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.1" />
     <PackageVersion Include="xunit" Version="2.9.3" />
     <PackageVersion Include="YamlDotNet" Version="16.3.0" />
   </ItemGroup>

@@ -35,8 +35,8 @@ namespace Sharpliner.AzureDevOps
         public static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Step> Steps(this Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Step> expression, params Sharpliner.AzureDevOps.Step[] steps) { }
         public static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Step> Steps(this Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Step> expression, System.Collections.Generic.IEnumerable<Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Step>> steps) { }
         public static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Step> Steps(this Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Step> expression, System.Collections.Generic.IEnumerable<Sharpliner.AzureDevOps.Step> steps) { }
-        public static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> expression, string name, bool value) { }
         public static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> expression, string name, System.Enum value) { }
+        public static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> expression, string name, bool value) { }
         public static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> expression, string name, int value) { }
         public static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> expression, string name, string value) { }
         public static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> VariableLibrary(this Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> expression, Sharpliner.AzureDevOps.VariableLibrary library) { }
@@ -176,8 +176,8 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.StringParameter StringParameter(string name, string? displayName = null, string? defaultValue = null, System.Collections.Generic.IEnumerable<string>? allowedValues = null) { }
         protected static Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask Task(string taskName, string? displayName = null) { }
         protected static Sharpliner.AzureDevOps.Step ValidateYamlsArePublished(string pipelineProject) { }
-        protected static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> Variable(string name, bool value) { }
         protected static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> Variable(string name, System.Enum value) { }
+        protected static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> Variable(string name, bool value) { }
         protected static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> Variable(string name, int value) { }
         protected static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> Variable(string name, string value) { }
         protected static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> VariableLibrary(Sharpliner.AzureDevOps.VariableLibrary library) { }
@@ -286,8 +286,8 @@ namespace Sharpliner.AzureDevOps
         public static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Strategy> Strategy(this Sharpliner.AzureDevOps.IfCondition condition, Sharpliner.AzureDevOps.Strategy strategy) { }
         public static Sharpliner.AzureDevOps.Expressions.AdoExpression<T> Value<T>(this Sharpliner.AzureDevOps.IfCondition condition, T value) { }
         public static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.IfCondition condition, Sharpliner.AzureDevOps.Variable variable) { }
-        public static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.IfCondition condition, string name, bool value) { }
         public static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.IfCondition condition, string name, System.Enum value) { }
+        public static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.IfCondition condition, string name, bool value) { }
         public static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.IfCondition condition, string name, int value) { }
         public static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> Variable(this Sharpliner.AzureDevOps.IfCondition condition, string name, string value) { }
         public static Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.VariableBase> VariableLibrary(this Sharpliner.AzureDevOps.IfCondition condition, Sharpliner.AzureDevOps.VariableLibrary library) { }
@@ -786,15 +786,11 @@ namespace Sharpliner.AzureDevOps
         protected override string Prefix { get; }
         public Sharpliner.AzureDevOps.Expressions.VariableReference Workspace { get; }
     }
-    [System.Runtime.CompilerServices.RequiredMember]
     public class PipelineWithExtends : Sharpliner.AzureDevOps.PipelineBase, System.IEquatable<Sharpliner.AzureDevOps.PipelineWithExtends>
     {
-        [System.Obsolete("Constructors of types with required members are not supported in this version of " +
-            "your compiler.", true)]
         public PipelineWithExtends() { }
-        [System.Runtime.CompilerServices.RequiredMember]
         [YamlDotNet.Serialization.YamlMember(Order=600)]
-        public Sharpliner.AzureDevOps.Extends Extends { get; init; }
+        public required Sharpliner.AzureDevOps.Extends Extends { get; init; }
         public override System.Collections.Generic.IReadOnlyCollection<Sharpliner.Common.IDefinitionValidation> Validations { get; }
     }
     public class Pool : System.IEquatable<Sharpliner.AzureDevOps.Pool>
@@ -1152,8 +1148,8 @@ namespace Sharpliner.AzureDevOps
     }
     public class Variable : Sharpliner.AzureDevOps.VariableBase, System.IEquatable<Sharpliner.AzureDevOps.Variable>
     {
-        public Variable(string name, bool value) { }
         public Variable(string name, System.Enum value) { }
+        public Variable(string name, bool value) { }
         public Variable(string name, int value) { }
         public Variable(string name, string value) { }
         [YamlDotNet.Serialization.YamlMember(Alias="name", Order=1)]
