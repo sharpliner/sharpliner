@@ -25,7 +25,7 @@ class TestPipelines : SingleStagePipelineCollection
     // Create a list of definitions, each is published in its own YAML file
     public override IEnumerable<PipelineDefinitionData<SingleStagePipeline>> Pipelines =>
         s_platforms.Select(platform => new PipelineDefinitionData<SingleStagePipeline>(
-            TargetFile: $"{CI.Pipelines.Location}test/{platform}.yml",
+            TargetFile: $"tests/pipelines/{platform}.yml",
             Pipeline: Define(platform),
             // Optional custom YAML file header
             Header:
