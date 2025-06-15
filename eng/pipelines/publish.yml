@@ -62,4 +62,4 @@ jobs:
         command: push
         nuGetFeedType: external
         publishFeedCredentials: Sharpliner / nuget.org
-        packagesToPush: artifacts/package/release/Sharpliner.$(packageVersion).nupkg;artifacts/package/release/Sharpliner.$(packageVersion).snupkg
+        packagesToPush: artifacts/package/release/Sharpliner.$(packageVersion).nupkg
