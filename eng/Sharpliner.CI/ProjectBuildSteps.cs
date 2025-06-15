@@ -10,7 +10,7 @@ namespace Sharpliner.CI;
 
 class ProjectBuildSteps(string project) : StepLibrary
 {
-    public const string PackagePath = "artifacts/packages";
+    public const string PackagePath = "artifacts/package/release";
 
     public override List<AdoExpression<Step>> Steps =>
     [
@@ -20,7 +20,9 @@ class ProjectBuildSteps(string project) : StepLibrary
         }),
 
         Powershell
-            .Inline("New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'")
+            .Inline(
+                "New-Item -Path 'artifacts' -Name 'package' -ItemType 'directory'",
+                "New-Item -Path 'artifacts/package' -Name 'release' -ItemType 'directory'")
             .DisplayAs($"Create {PackagePath}"),
 
         DotNet

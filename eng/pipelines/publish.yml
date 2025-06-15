@@ -27,8 +27,10 @@ jobs:
     parameters:
       version: 10.0.100-preview.3.25201.16
 
-  - powershell: New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'
-    displayName: Create artifacts/packages
+  - powershell: |-
+      New-Item -Path 'artifacts' -Name 'package' -ItemType 'directory'
+      New-Item -Path 'artifacts/package' -Name 'release' -ItemType 'directory'
+    displayName: Create artifacts/package/release
 
   - task: DotNetCoreCLI@2
     displayName: Build
@@ -43,10 +45,10 @@ jobs:
       command: pack
       packagesToPack: src/Sharpliner/Sharpliner.csproj
       arguments: -p:PackageVersion=$(packageVersion)
-      outputDir: artifacts/packages
+      outputDir: artifacts/package/release
       configurationToPack: Release
 
-  - publish: artifacts/packages/Sharpliner.$(packageVersion).nupkg
+  - publish: artifacts/package/release/Sharpliner.$(packageVersion).nupkg
     displayName: Publish build artifacts
     artifact: Sharpliner
 
@@ -60,4 +62,4 @@ jobs:
         command: push
         nuGetFeedType: external
         publishFeedCredentials: Sharpliner / nuget.org
-        packagesToPush: artifacts/packages/Sharpliner.$(packageVersion).nupkg;artifacts/packages/Sharpliner.$(packageVersion).snupkg
+        packagesToPush: artifacts/package/release/Sharpliner.$(packageVersion).nupkg;artifacts/package/release/Sharpliner.$(packageVersion).snupkg
