@@ -18,6 +18,11 @@
     <NeutralLanguage>en</NeutralLanguage>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
 
+    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSource>true</IncludeSource>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
     <!-- Copy dependencies (YamlDotNet.dll) to bin/ so that we can include it in the NuGet later -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
@@ -27,10 +32,10 @@
 
   <PropertyGroup Condition="'$(Configuration)'=='Release'">
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <DocumentationFile>$(BaseOutputPath)\$(TargetFramework)\$(AssemblyName).xml</DocumentationFile>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
     <PackageReference Include="OneOf" />
     <PackageReference Include="OneOf.SourceGenerator" />
     <PackageReference Include="YamlDotNet" />
@@ -55,31 +60,31 @@
       but before NuGet generates a nuspec. See https://github.com/NuGet/Home/issues/4704.
     -->
     <ItemGroup>
-      <_PackageFiles Include="$(OutputPath)\net6.0\YamlDotNet.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net6.0\YamlDotNet.dll">
         <PackagePath>lib\net6.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(OutputPath)\net7.0\YamlDotNet.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net7.0\YamlDotNet.dll">
         <PackagePath>lib\net7.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(OutputPath)\net8.0\YamlDotNet.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net8.0\YamlDotNet.dll">
         <PackagePath>lib\net8.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(OutputPath)\net9.0\YamlDotNet.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net9.0\YamlDotNet.dll">
         <PackagePath>lib\net9.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(OutputPath)\net10.0\YamlDotNet.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net10.0\YamlDotNet.dll">
         <PackagePath>lib\net10.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
@@ -87,31 +92,31 @@
     </ItemGroup>
 
     <ItemGroup>
-      <_PackageFiles Include="$(OutputPath)\net6.0\OneOf.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net6.0\OneOf.dll">
         <PackagePath>lib\net6.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(OutputPath)\net7.0\OneOf.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net7.0\OneOf.dll">
         <PackagePath>lib\net7.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(OutputPath)\net8.0\OneOf.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net8.0\OneOf.dll">
         <PackagePath>lib\net8.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(OutputPath)\net9.0\OneOf.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net9.0\OneOf.dll">
         <PackagePath>lib\net9.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(OutputPath)\net10.0\OneOf.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net10.0\OneOf.dll">
         <PackagePath>lib\net10.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>

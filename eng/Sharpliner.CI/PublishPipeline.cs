@@ -42,7 +42,8 @@ class PublishPipeline : SingleStagePipelineDefinition
                             DisplayName = "Publish to nuget.org",
                             PackagesToPush =
                             [
-                                $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.nupkg"
+                                $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.nupkg",
+                                $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.snupkg"
                             ]
                         })
                 }
