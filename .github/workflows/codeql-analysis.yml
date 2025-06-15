@@ -35,8 +35,10 @@ jobs:
         # Prefix the list here with "+" to use these queries and those in the config file.
         # queries: ./path/to/local/query, your-org/your-repo/queries@main
 
-    - name: Create artifacts/packages
-      run: New-Item -Path 'artifacts' -Name 'packages' -ItemType 'directory'
+    - name: Create artifacts/package/release dir
+      run: |
+        New-Item -Path 'artifacts' -Name 'package' -ItemType 'directory'
+        New-Item -Path 'artifacts/package' -Name 'release' -ItemType 'directory'
       shell: pwsh
 
     - uses: actions/setup-dotnet@v2
