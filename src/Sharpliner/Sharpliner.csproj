@@ -60,31 +60,31 @@
       but before NuGet generates a nuspec. See https://github.com/NuGet/Home/issues/4704.
     -->
     <ItemGroup>
-      <_PackageFiles Include="$(OutputPath)..\$(Configuration)_net6.0\YamlDotNet.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net6.0\YamlDotNet.dll">
         <PackagePath>lib\net6.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(OutputPath)..\$(Configuration)_net7.0\YamlDotNet.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net7.0\YamlDotNet.dll">
         <PackagePath>lib\net7.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(OutputPath)..\$(Configuration)_net8.0\YamlDotNet.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net8.0\YamlDotNet.dll">
         <PackagePath>lib\net8.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(OutputPath)..\$(Configuration)_net9.0\YamlDotNet.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net9.0\YamlDotNet.dll">
         <PackagePath>lib\net9.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(OutputPath)..\$(Configuration)_net10.0\YamlDotNet.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net10.0\YamlDotNet.dll">
         <PackagePath>lib\net10.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
@@ -92,31 +92,31 @@
     </ItemGroup>
 
     <ItemGroup>
-      <_PackageFiles Include="$(OutputPath)..\$(Configuration)_net6.0\OneOf.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net6.0\OneOf.dll">
         <PackagePath>lib\net6.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(OutputPath)..\$(Configuration)_net7.0\OneOf.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net7.0\OneOf.dll">
         <PackagePath>lib\net7.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(OutputPath)..\$(Configuration)_net8.0\OneOf.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net8.0\OneOf.dll">
         <PackagePath>lib\net8.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(OutputPath)..\$(Configuration)_net9.0\OneOf.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net9.0\OneOf.dll">
         <PackagePath>lib\net9.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
       </_PackageFiles>
 
-      <_PackageFiles Include="$(OutputPath)..\$(Configuration)_net10.0\OneOf.dll">
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net10.0\OneOf.dll">
         <PackagePath>lib\net10.0</PackagePath>
         <Visible>false</Visible>
         <BuildAction>Content</BuildAction>
