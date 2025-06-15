@@ -9,6 +9,6 @@ $repo_root = Join-Path $repo_root ".."
 
 # Remove Sharpliner .nupkg packages
 
-if (Test-Path "$repo_root/artifacts/packages") {
-    Remove-Item -Recurse "$repo_root/artifacts/packages/*"
+if (Test-Path "$repo_root/artifacts/package/release") {
+    Remove-Item -Recurse "$repo_root/artifacts/package/release/*"
 }
