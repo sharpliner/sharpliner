@@ -9,11 +9,18 @@ namespace Sharpliner.AzureDevOps;
 /// </para>
 /// Can be used with <see cref="IfConditionBuilder.Equal(IfExpression, IfExpression)"/> and <see cref="IfConditionBuilder.NotEqual(IfExpression, IfExpression)"/> and more.
 /// </summary>
-public abstract class IfStringCondition : IfCondition
+/// <remarks>
+/// Creates a new instance of <see cref="IfStringCondition"/> with the specified keyword and expressions.
+/// </remarks>
+/// <param name="keyword">The function keyword.</param>
+/// <param name="one">The first expression.</param>
+/// <param name="two">The second expression.</param>
+public abstract class IfStringCondition(string keyword, IfExpression one, IfExpression two)
+    : IfCondition
 {
-    private readonly string _keyword;
-    private readonly string _one;
-    private readonly string _two;
+    private readonly string _keyword = keyword;
+    private readonly string _one = Serialize(one);
+    private readonly string _two = Serialize(two);
 
     /// <summary>
     /// Creates a new instance of <see cref="IfStringCondition"/> with the specified keyword and expressions.
@@ -35,19 +42,6 @@ public abstract class IfStringCondition : IfCondition
     protected IfStringCondition(string keyword, IfExpression one, IfArrayExpression two)
         : this(keyword, one, Serialize(two))
     {
-    }
-
-    /// <summary>
-    /// Creates a new instance of <see cref="IfStringCondition"/> with the specified keyword and expressions.
-    /// </summary>
-    /// <param name="keyword">The function keyword.</param>
-    /// <param name="one">The first expression.</param>
-    /// <param name="two">The second expression.</param>
-    protected IfStringCondition(string keyword, IfExpression one, IfExpression two)
-    {
-        _keyword = keyword;
-        _one = Serialize(one);
-        _two = Serialize(two);
     }
 
     internal override string Serialize() => WrapTag($"{_keyword}({WrapQuotes(_one)}, {WrapQuotes(_two)})");

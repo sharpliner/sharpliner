@@ -22,7 +22,6 @@ public class DependencyVariable
     /// ${{ stageDependencies.stage.outputs['job.step.variable'] }}
     /// </code>
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Should not be capitalized to follow YAML syntax")]
     public readonly StageLevelDependencyVariable stage = new();
 
     /// <summary>
@@ -39,6 +38,5 @@ public class DependencyVariable
     /// ${{ stageDependencies.stage.job.outputs['step.variable'] }}
     /// </code>
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Should not be capitalized to follow YAML syntax")]
     public readonly JobLevelDependencyVariable job = new();
 }

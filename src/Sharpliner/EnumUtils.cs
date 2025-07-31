@@ -9,11 +9,11 @@ namespace Sharpliner;
 
 internal static class EnumUtils<TEnum> where TEnum : struct, Enum
 {
-    private static readonly Dictionary<string, TEnum> _enumValues = Enum.GetValues<TEnum>()
+    private static readonly Dictionary<string, TEnum> s_enumValues = Enum.GetValues<TEnum>()
         .ToDictionary(GetEnumValueName, x => x);
 
     public static TEnum Parse(string value) 
-        => _enumValues.TryGetValue(value, out var result) ? result : throw new ArgumentException($"Unknown value '{value}' for enum '{typeof(TEnum).Name}'");
+        => s_enumValues.TryGetValue(value, out var result) ? result : throw new ArgumentException($"Unknown value '{value}' for enum '{typeof(TEnum).Name}'");
 
     private static string GetEnumValueName(TEnum value)
     {

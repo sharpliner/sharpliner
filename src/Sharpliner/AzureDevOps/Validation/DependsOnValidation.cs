@@ -60,7 +60,7 @@ internal abstract class DependsOnValidation : IDefinitionValidation
 
 internal class StageDependsOnValidation(AdoExpressionList<Stage> stages) : DependsOnValidation()
 {
-    private readonly IReadOnlyCollection<Stage> _stages = stages.SelectMany(s => s.FlattenDefinitions()).ToList();
+    private readonly IReadOnlyCollection<Stage> _stages = [.. stages.SelectMany(s => s.FlattenDefinitions())];
 
     public override IReadOnlyCollection<ValidationError> Validate()
     {
@@ -80,7 +80,7 @@ internal class StageDependsOnValidation(AdoExpressionList<Stage> stages) : Depen
 
 internal class JobDependsOnValidation(AdoExpressionList<JobBase> jobs) : DependsOnValidation()
 {
-    private readonly IReadOnlyCollection<JobBase> _jobs = jobs.SelectMany(s => s.FlattenDefinitions()).ToList();
+    private readonly IReadOnlyCollection<JobBase> _jobs = [.. jobs.SelectMany(s => s.FlattenDefinitions())];
 
     public override IReadOnlyCollection<ValidationError> Validate() => ValidateDependsOn(_jobs);
 }

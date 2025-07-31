@@ -243,7 +243,7 @@ internal class IfConjunctionCondition<T> : IfCondition<T>
     internal IfConjunctionCondition(string keyword, string[] expressions, AdoExpression<T>? parent = null) : base(parent)
     {
         _keyword = keyword;
-        _expressions = expressions.Select(WithoutTags).ToArray();
+        _expressions = [.. expressions.Select(WithoutTags)];
     }
 
     internal override string Serialize() => WrapTag($"{_keyword}({Join(_expressions)})");

@@ -21,7 +21,6 @@ public class StageLevelDependencyVariable
     /// ${{ stageDependencies.stage.outputs['job.resource.step.variable'] }}
     /// </code>
     /// </summary>
-    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Should not be capitalized to follow YAML syntax")]
     public readonly StageLevelDeploymentDependencyVariable deploy = new();
 
     /// <summary>

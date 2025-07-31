@@ -5,4 +5,4 @@
 
 using System.Diagnostics.CodeAnalysis;
 
-[assembly: SuppressMessage("Style", "IDE0130:Namespace does not match folder structure", Justification = "<Pending>", Scope = "namespaceanddescendants", Target = "~N:Sharpliner")]
+[assembly: SuppressMessage("Style", "IDE0130:Namespace does not match folder structure", Justification = "We keep namespace count low to lower the amoung of usings users of the library have to use", Scope = "namespaceanddescendants", Target = "~N:Sharpliner")]

@@ -164,7 +164,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
         AdoExpressionList<Step> tasks =
         [
 #region nuget-tasks-code
-            NuGet.Authenticate(new[] { "NuGetServiceConnection1", "NuGetServiceConnection2" }, forceReinstallCredentialProvider: true),
+            NuGet.Authenticate(["NuGetServiceConnection1", "NuGetServiceConnection2"], forceReinstallCredentialProvider: true),
 
             NuGet.Restore.FromFeed("my-project/my-project-scoped-feed") with
             {
@@ -383,7 +383,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
     [Fact]
     public void Serialize_ConditionsMacros_Test()
     {
-        object[] conditions =
+        object[] _ =
         [
 #region conditions-macros
             // eq(variables['Build.SourceBranch'], 'refs/heads/production')
