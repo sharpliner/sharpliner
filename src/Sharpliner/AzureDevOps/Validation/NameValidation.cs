@@ -22,7 +22,7 @@ internal class NameValidation : IDefinitionValidation
     }
 
     public NameValidation(AdoExpressionList<JobBase> jobs)
-        : this([jobs.SelectMany(j => j.FlattenDefinitions()).Select(s => s.Name).ToList()])
+        : this([[.. jobs.SelectMany(j => j.FlattenDefinitions()).Select(s => s.Name)]])
     {
     }
 
@@ -66,6 +66,6 @@ internal class NameValidation : IDefinitionValidation
             .SelectMany(s => s.FlattenDefinitions()
                 .Select(s => s.Jobs.SelectMany(j => j.FlattenDefinitions().Select(k => k.Name)).ToList()));
 
-        return jobNames.Prepend(stageNames).ToList();
+        return [.. jobNames.Prepend(stageNames)];
     }
 }

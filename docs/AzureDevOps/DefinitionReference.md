@@ -143,7 +143,7 @@ DotNet.Build("src/MyProject.csproj") with
 The [NuGet v2 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/nuget-command-v2?view=azure-pipelines) also has multiple combinations based on the command.
 
 ```csharp
-NuGet.Authenticate(new[] { "NuGetServiceConnection1", "NuGetServiceConnection2" }, forceReinstallCredentialProvider: true),
+NuGet.Authenticate(["NuGetServiceConnection1", "NuGetServiceConnection2"], forceReinstallCredentialProvider: true),
 
 NuGet.Restore.FromFeed("my-project/my-project-scoped-feed") with
 {
