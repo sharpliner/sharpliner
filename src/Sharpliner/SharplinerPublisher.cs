@@ -41,13 +41,13 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
 
         LoadConfiguration(assembly);
 
-        foreach (ISharplinerDefinition definition in SharplinerPublisher.FindAllImplementations<ISharplinerDefinition>(assembly))
+        foreach (ISharplinerDefinition definition in FindAllImplementations<ISharplinerDefinition>(assembly))
         {
             definitionFound = true;
             PublishDefinition(definition, failIfChanged);
         }
 
-        foreach ((ISharplinerDefinition definition, Type collection) in SharplinerPublisher.FindDefinitionsInCollections(assembly))
+        foreach ((ISharplinerDefinition definition, Type collection) in FindDefinitionsInCollections(assembly))
         {
             definitionFound = true;
             PublishDefinition(definition, failIfChanged, collection);
@@ -72,7 +72,7 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
     /// <param name="collection">Type of the collection the definition is coming from (if it is)</param>
     private void PublishDefinition(ISharplinerDefinition definition, bool failIfChanged, Type? collection = null)
     {
-        var path = SharplinerPublisher.GetDestinationPath(definition);
+        var path = GetDestinationPath(definition);
 
         var typeName = collection == null ? definition.GetType().Name : collection.Name;
 
@@ -152,10 +152,27 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
         var pipelines = new List<T>();
         var typeToFind = typeof(T);
 
-        foreach (Type type in assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.IsAssignableTo(typeToFind) && t.GetConstructor([]) is not null))
+        foreach (Type type in assembly.GetTypes().Where(t => t.IsClass && !t.IsAbstract && t.IsAssignableTo(typeToFind) && IsInstantiable(t)))
         {
-            object? pipelineDefinition = Activator.CreateInstance(type)
-                ?? throw new Exception($"Failed to instantiate {type.GetType().FullName}");
+            // Try parameterless constructor first
+            var parameterlessConstructor = type.GetConstructor([]);
+            object? pipelineDefinition;
+
+            if (parameterlessConstructor is not null)
+            {
+                pipelineDefinition = Activator.CreateInstance(type);
+            }
+            else
+            {
+                // Use single nullable parameter constructor with null
+                var singleParamConstructor = GetSingleParamConstructor(type);
+                pipelineDefinition = Activator.CreateInstance(type, [null]);
+            }
+
+            if (pipelineDefinition == null)
+            {
+                throw new Exception($"Failed to instantiate {type.FullName}");
+            }
 
             pipelines.Add((T)pipelineDefinition);
         }
@@ -165,7 +182,7 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
 
     private void LoadConfiguration(Assembly assembly)
     {
-        var configurations = SharplinerPublisher.FindAllImplementations<SharplinerConfiguration>(assembly);
+        var configurations = FindAllImplementations<SharplinerConfiguration>(assembly);
 
         if (configurations.Count > 1)
         {
@@ -292,4 +309,25 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
         using var stream = File.OpenRead(path);
         return System.Text.Encoding.UTF8.GetString(md5.ComputeHash(stream));
     }
+
+    private static bool IsNullableParameter(ParameterInfo parameter)
+    {
+        // Check if it's a reference type (nullable by default)
+        if (!parameter.ParameterType.IsValueType)
+        {
+            return true;
+        }
+
+        // Check if it's a nullable value type (Nullable<T>)
+        return parameter.ParameterType.IsGenericType &&
+               parameter.ParameterType.GetGenericTypeDefinition() == typeof(Nullable<>);
+    }
+
+    private static bool IsInstantiable(Type t)
+        // Has a parameterless constructor or has a single constructor with a nullable parameter
+        // The nullable parameter can be expected in definitions of strongly typed templates e.g. StepTemplateDefinition<InstallDotNetParameters>
+        => (t.GetConstructor([]) is not null) || (GetSingleParamConstructor(t) is not null);
+
+    private static ConstructorInfo? GetSingleParamConstructor(Type type)
+        => type.GetConstructors().FirstOrDefault(c => c.GetParameters().Length == 1 && IsNullableParameter(c.GetParameters()[0]));
 }
