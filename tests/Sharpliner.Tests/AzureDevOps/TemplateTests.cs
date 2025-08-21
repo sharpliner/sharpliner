@@ -137,7 +137,8 @@ public class TemplateTests
         return Verify(pipeline.Serialize());
     }
 
-    private class Step_Typed_Template_Definition(StepTypedParameters? parameters = null) : StepTemplateDefinition<StepTypedParameters>(parameters)
+    private class Step_Typed_Template_Definition(StepTypedParameters? parameters = null)
+        : StepTemplateDefinition<StepTypedParameters>(parameters)
     {
         public override string TargetFile => "step-template.yml";
 
@@ -147,18 +148,31 @@ public class TemplateTests
     class StepTypedParameters : AzureDevOpsDefinition
     {
         public BuildConfiguration Configuration { get; init; }
+
         public string? Project { get; init; }
 
         [AllowedValues("5.0.100", "5.0.102")]
         public string? Version { get; init; }
+
         public bool? SkipBuild { get; init; }
+
         public bool UseNugetOrg { get; init; } = false;
+
         public bool Restore { get; init; } = true;
+
         public Step AfterBuild { get; init; } = Bash.Inline($"cp -R logs {variables.Build.ArtifactStagingDirectory}");
+
         [YamlMember(Alias = "theCounter")]
         public int Counter { get; init; } = 2;
+
         [AllowedValues(1, 2, 3, 4)]
         public int? DefaultCounter { get; init; }
+
+        #region Parameters with empty default values
+        public object? ObjectEmptyByDefault { get; init; } = new();
+        public string[]? ArrayEmptyByDefault { get; init; } = [];
+        public string[]? ArrayWithDefaults { get; init; } = ["foo", "bar"];
+        #endregion
     }
 
     [Fact]
@@ -193,7 +207,7 @@ public class TemplateTests
             },
         ];
     }
-
+    
     [Fact]
     public Task Job_Template_Definition_Serialization_Test()
     {

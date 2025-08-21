@@ -8,6 +8,23 @@ namespace Sharpliner.AzureDevOps.Expressions;
 public class DictionaryExpression : Dictionary<string, object>
 {
     /// <summary>
+    /// Initializes a new instance of the DictionaryExpression class.
+    /// </summary>
+    public DictionaryExpression()
+    {
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the DictionaryExpression class using the specified dictionary as the source of
+    /// key-value pairs.
+    /// </summary>
+    /// <param name="other">A dictionary containing the key-value pairs to initialize the expression with. Cannot be null.</param>
+    public DictionaryExpression(Dictionary<string, object> other)
+        : base(other)
+    {
+    }
+
+    /// <summary>
     /// Adds a new item to the dictionary.
     /// If the item is a <see cref="AdoExpression"/> item, it will be marked as a single item.
     /// </summary>

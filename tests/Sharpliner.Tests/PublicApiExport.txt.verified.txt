@@ -74,6 +74,11 @@ namespace Sharpliner.AzureDevOps
         public AllowedValuesAttribute(params object?[] values) { }
         public object?[] Values { get; }
     }
+    public sealed class ArrayParameter<T> : Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.Expressions.AdoExpressionList<T>>, System.IEquatable<Sharpliner.AzureDevOps.ArrayParameter<T>>
+    {
+        public ArrayParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.Expressions.AdoExpressionList<T>? defaultValue = null) { }
+        public override string Type { get; }
+    }
     public abstract class AzureDevOpsDefinition
     {
         protected static readonly Sharpliner.AzureDevOps.VariableReferences.DependencyVariable dependencies;
@@ -153,7 +158,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.InlineCondition NotIn<T>(Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression needle, params Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression[] haystack) { }
         protected static Sharpliner.AzureDevOps.NumberParameter NumberParameter(string name, string? displayName = null, int? defaultValue = default, System.Collections.Generic.IEnumerable<int?>? allowedValues = null) { }
         protected static Sharpliner.AzureDevOps.ObjectParameter ObjectParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.Expressions.DictionaryExpression? defaultValue = null) { }
-        protected static Sharpliner.AzureDevOps.ObjectParameter<T> ObjectParameter<T>(string name, string? displayName = null, Sharpliner.AzureDevOps.Expressions.AdoExpressionList<T>? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.ArrayParameter<T> ObjectParameter<T>(string name, string? displayName = null, Sharpliner.AzureDevOps.Expressions.AdoExpressionList<T>? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.InlineCondition Or(params Sharpliner.AzureDevOps.InlineCondition[] expressions) { }
         protected static Sharpliner.AzureDevOps.InlineCondition Or(params string[] expressions) { }
         protected static Sharpliner.AzureDevOps.InlineCondition Or<T>(params Sharpliner.AzureDevOps.InlineCondition[] expressions) { }
@@ -647,11 +652,6 @@ namespace Sharpliner.AzureDevOps
     public sealed class ObjectParameter : Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.Expressions.DictionaryExpression>, System.IEquatable<Sharpliner.AzureDevOps.ObjectParameter>
     {
         public ObjectParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.Expressions.DictionaryExpression? defaultValue = null) { }
-        public override string Type { get; }
-    }
-    public sealed class ObjectParameter<T> : Sharpliner.AzureDevOps.Parameter<Sharpliner.AzureDevOps.Expressions.AdoExpressionList<T>>, System.IEquatable<Sharpliner.AzureDevOps.ObjectParameter<T>>
-    {
-        public ObjectParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.Expressions.AdoExpressionList<T>? defaultValue = null) { }
         public override string Type { get; }
     }
     public abstract class PackageResource : System.IEquatable<Sharpliner.AzureDevOps.PackageResource>
@@ -1238,7 +1238,6 @@ namespace Sharpliner.AzureDevOps.Expressions
     public class AdoExpressionList<T> : System.Collections.Generic.List<Sharpliner.AzureDevOps.Expressions.AdoExpression<T>>
     {
         public AdoExpressionList() { }
-        protected AdoExpressionList(System.Collections.Generic.IEnumerable<T> values) { }
         public new Sharpliner.AzureDevOps.Expressions.AdoExpression<T> this[int index] { get; set; }
         public void Add(Sharpliner.AzureDevOps.Expressions.AdoExpression<T> item) { }
         public static Sharpliner.AzureDevOps.Expressions.AdoExpressionList<T> op_Implicit(System.Collections.Generic.List<T> list) { }
@@ -1279,6 +1278,7 @@ namespace Sharpliner.AzureDevOps.Expressions
     public class DictionaryExpression : System.Collections.Generic.Dictionary<string, object>
     {
         public DictionaryExpression() { }
+        public DictionaryExpression(System.Collections.Generic.Dictionary<string, object> other) { }
         public object this[string key] { get; set; }
         public void Add(string key, object item) { }
     }

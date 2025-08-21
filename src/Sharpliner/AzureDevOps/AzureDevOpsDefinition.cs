@@ -422,7 +422,7 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static ObjectParameter<T> ObjectParameter<T>(string name, string? displayName = null, AdoExpressionList<T>? defaultValue = null)
+    protected static ArrayParameter<T> ObjectParameter<T>(string name, string? displayName = null, AdoExpressionList<T>? defaultValue = null)
         => new(name, displayName, defaultValue);
 
     /// <summary>

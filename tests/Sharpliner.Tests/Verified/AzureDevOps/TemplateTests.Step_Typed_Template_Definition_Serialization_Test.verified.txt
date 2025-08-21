@@ -44,6 +44,20 @@
   - 3
   - 4
 
+- name: objectEmptyByDefault
+  type: object
+  default: {}
+
+- name: arrayEmptyByDefault
+  type: object
+  default: []
+
+- name: arrayWithDefaults
+  type: object
+  default:
+  - foo
+  - bar
+
 steps:
 - task: UseDotNet@2
   inputs:

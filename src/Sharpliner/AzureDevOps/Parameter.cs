@@ -258,7 +258,7 @@ public sealed record ObjectParameter : Parameter<DictionaryExpression>
 /// <summary>
 /// Class for defining parameters with custom structure based on a strongly-typed collection that can be used in templates and pipelines.
 /// </summary>
-public sealed record ObjectParameter<T> : Parameter<AdoExpressionList<T>>
+public sealed record ArrayParameter<T> : Parameter<AdoExpressionList<T>>
 {
     /// <summary>
     /// Define a template parameter
@@ -266,7 +266,7 @@ public sealed record ObjectParameter<T> : Parameter<AdoExpressionList<T>>
     /// <param name="name">Name of the parameter, can be referenced in the template as <c>${{ parameters.name }}</c></param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public ObjectParameter(string name, string? displayName = null, AdoExpressionList<T>? defaultValue = null)
+    public ArrayParameter(string name, string? displayName = null, AdoExpressionList<T>? defaultValue = null)
         : base(name, displayName, defaultValue, null)
     {
     }
