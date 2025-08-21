@@ -7,6 +7,15 @@ namespace Sharpliner.AzureDevOps.Expressions;
 /// </summary>
 public class DictionaryExpression : Dictionary<string, object>
 {
+    public DictionaryExpression()
+    {
+    }
+
+    public DictionaryExpression(Dictionary<string, object> other)
+        : base(other)
+    {   
+    }
+
     /// <summary>
     /// Adds a new item to the dictionary.
     /// If the item is a <see cref="AdoExpression"/> item, it will be marked as a single item.

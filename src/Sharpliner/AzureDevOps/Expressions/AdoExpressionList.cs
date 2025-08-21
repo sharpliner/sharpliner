@@ -19,7 +19,7 @@ public class AdoExpressionList<T> : List<AdoExpression<T>>
     /// <summary>
     /// Creates a new instance of <see cref="AdoExpressionList{T}"/> with the specified values.
     /// </summary>
-    protected AdoExpressionList(IEnumerable<T> values)
+    internal AdoExpressionList(IEnumerable<T> values)
         : base(values.Select(v => new AdoExpression<T>(v)))
     {
     }

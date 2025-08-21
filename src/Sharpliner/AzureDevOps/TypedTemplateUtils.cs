@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
@@ -28,16 +29,17 @@ internal static class TypedTemplateUtils<TParameters> where TParameters : class,
                 { } type when type == typeof(int?) || type == typeof(int) => new NumberParameter(name, defaultValue: defaultValue as int?, allowedValues: allowedValues?.Cast<int?>()),
                 { } type when type == typeof(Step) => new StepParameter(name, defaultValue: defaultValue as Step),
                 { } type when type == typeof(AdoExpressionList<Step>) => new StepListParameter(name, defaultValue: defaultValue as AdoExpressionList<Step>),
-                { } type when type.IsAssignableFrom(typeof(JobBase)) => new JobParameter(name, defaultValue: defaultValue as JobBase),
+                { } type when type.IsAssignableFrom(typeof(JobBase)) && type != typeof(object) => new JobParameter(name, defaultValue: defaultValue as JobBase),
                 { } type when type == typeof(AdoExpressionList<JobBase>) => new JobListParameter(name, defaultValue: defaultValue as AdoExpressionList<JobBase>),
                 { } type when type == typeof(DeploymentJob) => new DeploymentParameter(name, defaultValue: defaultValue as DeploymentJob),
                 { } type when type == typeof(AdoExpressionList<DeploymentJob>) => new DeploymentListParameter(name, defaultValue: defaultValue as AdoExpressionList<DeploymentJob>),
                 { } type when type == typeof(Stage) => new StageParameter(name, defaultValue: defaultValue as Stage),
                 { } type when type == typeof(AdoExpressionList<Stage>) => new StageListParameter(name, defaultValue: defaultValue as AdoExpressionList<Stage>),
-                _ => new ObjectParameter(name),
+                { } type when type.IsArray => ParseDefaultArrayParameter(name, defaultValue as Array),
+                _ => ParseDefaultObjectParameter(name, defaultValue),
             };
 
-            parameter =  parameter with { DisplayName = property.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName };
+            parameter = parameter with { DisplayName = property.GetCustomAttribute<DisplayNameAttribute>()?.DisplayName };
             result.Add(parameter);
         }
 
@@ -64,4 +66,14 @@ internal static class TypedTemplateUtils<TParameters> where TParameters : class,
 
         return result;
     }
+
+    private static ObjectParameter ParseDefaultObjectParameter(string name, object? defaultValue)
+        => new(name, defaultValue: defaultValue != null
+            ? new(JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(defaultValue))!)
+            : null);
+
+    private static ArrayParameter<object?> ParseDefaultArrayParameter(string name, Array? defaultValue)
+        => new(name, defaultValue: defaultValue != null
+            ? new(defaultValue.Cast<object?>())
+            : null);
 }
