@@ -19,7 +19,7 @@ public class ReadmeTests : AzureDevOpsDefinition
         public override string TargetFile => "eng/pr.yml";
         public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
-        private static readonly Variable DotnetVersion = new Variable("DotnetVersion", string.Empty);
+        private static readonly Variable DotnetVersion = new("DotnetVersion", string.Empty);
 
         public override SingleStagePipeline Pipeline => new()
         {

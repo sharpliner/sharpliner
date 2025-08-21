@@ -109,18 +109,14 @@ public abstract class ExtendsTemplateDefinition : TemplateDefinitionBase<Extends
 ///     param2: false
 /// </code>
 /// </summary>
-public abstract class ExtendsTemplateDefinition<TParameters> : ExtendsTemplateDefinition where TParameters : class, new()
+/// <remarks>
+/// Instantiates a new <see cref="ExtendsTemplateDefinition{TParameters}"/> with the specified typed parameters.
+/// </remarks>
+/// <param name="typedParameters">The typed parameters to use in the template</param>
+public abstract class ExtendsTemplateDefinition<TParameters>(TParameters? typedParameters = null)
+    : ExtendsTemplateDefinition where TParameters : class, new()
 {
-    private readonly TParameters _typedParameters;
-
-    /// <summary>
-    /// Instantiates a new <see cref="ExtendsTemplateDefinition{TParameters}"/> with the specified typed parameters.
-    /// </summary>
-    /// <param name="typedParameters">The typed parameters to use in the template</param>
-    protected ExtendsTemplateDefinition(TParameters? typedParameters = null)
-    {
-        _typedParameters = typedParameters ?? new();
-    }
+    private readonly TParameters _typedParameters = typedParameters ?? new();
 
     /// <inheritdoc/>
     public sealed override List<Parameter> Parameters => TypedTemplateUtils<TParameters>.ToParameters();
@@ -204,17 +200,14 @@ public abstract class StageTemplateDefinition : TemplateDefinition<Stage>
 /// </code>
 /// </summary>
 /// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
-public abstract class StageTemplateDefinition<TParameters> : TemplateDefinition<Stage, TParameters> where TParameters : class, new()
+/// <remarks>
+/// Instantiates a new <see cref="StageTemplateDefinition{TParameters}"/> with the specified typed parameters.
+/// </remarks>
+/// <param name="typedParameters">The typed parameters to use in the template</param>
+public abstract class StageTemplateDefinition<TParameters>(TParameters? typedParameters = null)
+    : TemplateDefinition<Stage, TParameters>(typedParameters) where TParameters : class, new()
 {
     internal sealed override string YamlProperty => "stages";
-
-    /// <summary>
-    /// Instantiates a new <see cref="StageTemplateDefinition{TParameters}"/> with the specified typed parameters.
-    /// </summary>
-    /// <param name="typedParameters">The typed parameters to use in the template</param>
-    protected StageTemplateDefinition(TParameters? typedParameters = null) : base(typedParameters)
-    {
-    }
 
     /// <inheritdoc/>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetStageValidations();
@@ -317,17 +310,14 @@ public abstract class JobTemplateDefinition : TemplateDefinition<JobBase>
 /// </code>
 /// </summary>
 /// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
-public abstract class JobTemplateDefinition<TParameters> : TemplateDefinition<JobBase, TParameters> where TParameters : class, new()
+/// <remarks>
+/// Instantiates a new <see cref="JobTemplateDefinition{TParameters}"/> with the specified typed parameters.
+/// </remarks>
+/// <param name="typedParameters">The typed parameters to use in the template</param>
+public abstract class JobTemplateDefinition<TParameters>(TParameters? typedParameters = null)
+    : TemplateDefinition<JobBase, TParameters>(typedParameters) where TParameters : class, new()
 {
     internal sealed override string YamlProperty => "jobs";
-
-    /// <summary>
-    /// Instantiates a new <see cref="JobTemplateDefinition{TParameters}"/> with the specified typed parameters.
-    /// </summary>
-    /// <param name="typedParameters">The typed parameters to use in the template</param>
-    protected JobTemplateDefinition(TParameters? typedParameters = null) : base(typedParameters)
-    {
-    }
 
     /// <inheritdoc/>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => Definition.GetJobValidations();
@@ -397,17 +387,14 @@ public abstract class StepTemplateDefinition : TemplateDefinition<Step>
 /// </code>
 /// </summary>
 /// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
-public abstract class StepTemplateDefinition<TParameters> : TemplateDefinition<Step, TParameters> where TParameters : class, new()
+/// <remarks>
+/// Instantiates a new instance of <see cref="StepTemplateDefinition{TParameters}"/> with the specified typed parameters.
+/// </remarks>
+/// <param name="typedParameters">The typed parameters to use in the template</param>
+public abstract class StepTemplateDefinition<TParameters>(TParameters? typedParameters = null)
+    : TemplateDefinition<Step, TParameters>(typedParameters) where TParameters : class, new()
 {
     internal sealed override string YamlProperty => "steps";
-
-    /// <summary>
-    /// Instantiates a new instance of <see cref="StepTemplateDefinition{TParameters}"/> with the specified typed parameters.
-    /// </summary>
-    /// <param name="typedParameters">The typed parameters to use in the template</param>
-    protected StepTemplateDefinition(TParameters? typedParameters = null) : base(typedParameters)
-    {
-    }
 
     /// <inheritdoc/>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => [];
@@ -477,17 +464,14 @@ public abstract class VariableTemplateDefinition : TemplateDefinition<VariableBa
 /// </code>
 /// </summary>
 /// <typeparam name="TParameters">Type of the parameters that can be passed to the template</typeparam>
-public abstract class VariableTemplateDefinition<TParameters> : TemplateDefinition<VariableBase, TParameters> where TParameters : class, new()
+/// <remarks>
+/// Instantiates a new instance of <see cref="VariableTemplateDefinition{TParameters}"/> with the specified typed parameters.
+/// </remarks>
+/// <param name="typedParameters">The typed parameters to use in the template</param>
+public abstract class VariableTemplateDefinition<TParameters>(TParameters? typedParameters = null)
+    : TemplateDefinition<VariableBase, TParameters>(typedParameters) where TParameters : class, new()
 {
     internal sealed override string YamlProperty => "variables";
-
-    /// <summary>
-    /// Instantiates a new instance of <see cref="VariableTemplateDefinition{TParameters}"/> with the specified typed parameters.
-    /// </summary>
-    /// <param name="typedParameters">The typed parameters to use in the template</param>
-    protected VariableTemplateDefinition(TParameters? typedParameters = null) : base(typedParameters)
-    {
-    }
 
     /// <inheritdoc/>
     public sealed override IReadOnlyCollection<IDefinitionValidation> Validations => [];
