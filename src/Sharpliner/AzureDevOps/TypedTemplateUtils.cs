@@ -71,7 +71,20 @@ internal static class TypedTemplateUtils<TParameters> where TParameters : class,
         => new(name, defaultValue: defaultValue != null
             ? new(JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(defaultValue))!)
             : null);
+            ? new(ToDictionary(defaultValue))
+            : null);
 
+
+    // Helper method to convert an object's public properties to a dictionary
+    private static Dictionary<string, object?> ToDictionary(object obj)
+    {
+        var dict = new Dictionary<string, object?>();
+        foreach (var prop in obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        {
+            dict[prop.Name] = prop.GetValue(obj);
+        }
+        return dict;
+    }
     private static ArrayParameter<object?> ParseDefaultArrayParameter(string name, Array? defaultValue)
         => new(name, defaultValue: defaultValue != null
             ? new(defaultValue.Cast<object?>())
