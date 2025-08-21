@@ -13,7 +13,7 @@ public class DictionaryExpression : Dictionary<string, object>
 
     public DictionaryExpression(Dictionary<string, object> other)
         : base(other)
-    {   
+    {
     }
 
     /// <summary>
