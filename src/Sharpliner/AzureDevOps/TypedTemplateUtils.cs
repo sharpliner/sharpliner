@@ -29,9 +29,9 @@ internal static class TypedTemplateUtils<TParameters> where TParameters : class,
                 { } type when type == typeof(int?) || type == typeof(int) => new NumberParameter(name, defaultValue: defaultValue as int?, allowedValues: allowedValues?.Cast<int?>()),
                 { } type when type == typeof(Step) => new StepParameter(name, defaultValue: defaultValue as Step),
                 { } type when type == typeof(AdoExpressionList<Step>) => new StepListParameter(name, defaultValue: defaultValue as AdoExpressionList<Step>),
-                { } type when type.IsSubclassOf(typeof(JobBase)) => new JobParameter(name, defaultValue: defaultValue as JobBase),
-                { } type when type == typeof(AdoExpressionList<JobBase>) => new JobListParameter(name, defaultValue: defaultValue as AdoExpressionList<JobBase>),
                 { } type when type == typeof(DeploymentJob) => new DeploymentParameter(name, defaultValue: defaultValue as DeploymentJob),
+                { } type when type.IsAssignableFrom(typeof(JobBase)) && type != typeof(object) => new JobParameter(name, defaultValue: defaultValue as JobBase),
+                { } type when type == typeof(AdoExpressionList<JobBase>) => new JobListParameter(name, defaultValue: defaultValue as AdoExpressionList<JobBase>),
                 { } type when type == typeof(AdoExpressionList<DeploymentJob>) => new DeploymentListParameter(name, defaultValue: defaultValue as AdoExpressionList<DeploymentJob>),
                 { } type when type == typeof(Stage) => new StageParameter(name, defaultValue: defaultValue as Stage),
                 { } type when type == typeof(AdoExpressionList<Stage>) => new StageListParameter(name, defaultValue: defaultValue as AdoExpressionList<Stage>),
@@ -69,22 +69,20 @@ internal static class TypedTemplateUtils<TParameters> where TParameters : class,
 
     private static ObjectParameter ParseDefaultObjectParameter(string name, object? defaultValue)
         => new(name, defaultValue: defaultValue != null
-            ? new(JsonSerializer.Deserialize<Dictionary<string, object>>(JsonSerializer.Serialize(defaultValue))!)
-            : null);
             ? new(ToDictionary(defaultValue))
             : null);
 
-
     // Helper method to convert an object's public properties to a dictionary
-    private static Dictionary<string, object?> ToDictionary(object obj)
+    private static Dictionary<string, object> ToDictionary(object obj)
     {
-        var dict = new Dictionary<string, object?>();
+        var dict = new Dictionary<string, object>();
         foreach (var prop in obj.GetType().GetProperties(BindingFlags.Public | BindingFlags.Instance))
         {
-            dict[prop.Name] = prop.GetValue(obj);
+            dict[prop.Name] = prop.GetValue(obj)!;
         }
         return dict;
     }
+
     private static ArrayParameter<object?> ParseDefaultArrayParameter(string name, Array? defaultValue)
         => new(name, defaultValue: defaultValue != null
             ? new(defaultValue.Cast<object?>())
