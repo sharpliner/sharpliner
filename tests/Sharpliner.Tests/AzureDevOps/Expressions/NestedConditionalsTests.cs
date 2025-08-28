@@ -102,6 +102,39 @@ public class NestedConditionalsTests
     }
 
     /// <summary>
+    /// Test case for existing working pattern: If with Variable, then If (should create separate blocks)
+    /// </summary>
+    private class ExistingWorkingPattern_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Variables =
+            {
+                If.IsBranch("main")
+                    .Variable("first", "value")
+                    .If.Equal("env", "prod")
+                        .Variable("second", "nested"),
+            }
+        };
+    }
+
+    [Fact]
+    public Task ExistingWorkingPattern_ShouldWork()
+    {
+        var pipeline = new ExistingWorkingPattern_Pipeline();
+        
+        // This should work with current implementation and generate:
+        // - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+        //   - name: first
+        //     value: value
+        //   - ${{ if eq('env', 'prod') }}:
+        //     - name: second
+        //       value: nested
+        
+        return Verify(pipeline.Serialize());
+    }
+
+    /// <summary>
     /// Test case for deeply nested conditions
     /// </summary>
     private class DeeplyNestedTest_Pipeline : TestPipeline

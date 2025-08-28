@@ -972,10 +972,9 @@ public class IfConditionBuilder<T>
         condition.IsElseIf = IsElseIf;
         
         // Check if we should merge conditions (consecutive If().If() with no items)
-        if (Parent != null && Parent.Condition != null && Parent.Definitions.Count == 0 && !IsElseIf)
+        if (Parent != null && Parent.Condition is IfCondition existingCondition && Parent.Definitions.Count == 0 && !IsElseIf)
         {
             // Merge the existing condition with the new one using 'and()'
-            var existingCondition = Parent.Condition;
             var mergedCondition = new IfAndCondition<T>(existingCondition, condition);
             mergedCondition.Parent = Parent.Parent;
             mergedCondition.IsElseIf = IsElseIf;
