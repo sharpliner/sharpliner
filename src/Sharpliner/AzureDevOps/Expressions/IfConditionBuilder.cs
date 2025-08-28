@@ -969,38 +969,27 @@ public class IfConditionBuilder<T>
 
     private IfCondition<T> Link(IfCondition<T> condition)
     {
-        condition.Parent = Parent;
         condition.IsElseIf = IsElseIf;
         
-        // Eager materialization: Create conditional block and attach to parent immediately
-        if (Parent != null)
+        // Check if we should merge conditions (consecutive If().If() with no items)
+        if (Parent != null && Parent.Condition != null && Parent.Definitions.Count == 0 && !IsElseIf)
         {
-            // Check if we should merge conditions (when chaining If().If() with no items)
-            if (Parent.Condition != null && Parent.Definitions.Count == 0 && !IsElseIf)
-            {
-                // Merge conditions with 'and()' - create new condition that combines both
-                var existingCondition = Parent.Condition;
-                var mergedCondition = new IfAndCondition<T>(existingCondition, condition);
-                mergedCondition.Parent = Parent.Parent;
-                mergedCondition.IsElseIf = IsElseIf;
-                
-                // Update the parent's condition to the merged one
-                Parent.Condition = mergedCondition;
-                
-                // Return the merged condition but attach it to the same parent for chaining
-                mergedCondition.Parent = Parent;
-                return mergedCondition;
-            }
-            else
-            {
-                // For eager materialization, we'll create the block structure immediately
-                // but we still return the condition to maintain API compatibility
-                // The chaining will be enabled by adding an If property to IfCondition<T>
-                return condition;
-            }
+            // Merge the existing condition with the new one using 'and()'
+            var existingCondition = Parent.Condition;
+            var mergedCondition = new IfAndCondition<T>(existingCondition, condition);
+            mergedCondition.Parent = Parent.Parent;
+            mergedCondition.IsElseIf = IsElseIf;
+            
+            // Update the parent's condition to the merged one
+            Parent.Condition = mergedCondition;
+            
+            // Return the parent expression's condition for further chaining
+            return mergedCondition;
         }
         else
         {
+            // Standard case: set the condition's parent
+            condition.Parent = Parent;
             return condition;
         }
     }

@@ -72,17 +72,21 @@ public abstract class IfCondition<T> : IfCondition
     { 
         get 
         {
-            // Create a conditional expression block if it doesn't exist yet
-            // This allows for the eager materialization pattern
-            var parentExpression = Parent as AdoExpression<T>;
-            if (parentExpression == null && Parent != null)
-            {
-                // Create an empty conditional expression to hold the current condition
-                parentExpression = new AdoExpression<T>(default!, this);
-                this.Parent = parentExpression;
-            }
+            // For consecutive If().If() calls, we want to:
+            // 1. If no items have been added yet, merge conditions with 'and()'
+            // 2. If items exist, create a nested conditional block
             
-            return new IfConditionBuilder<T>(parentExpression);
+            if (Parent is AdoExpression<T> parentExpression)
+            {
+                return new IfConditionBuilder<T>(parentExpression);
+            }
+            else
+            {
+                // Create a minimal expression wrapper for this condition to enable chaining
+                var wrapperExpression = new AdoExpression<T>(default(T)!, this);
+                this.Parent = wrapperExpression;
+                return new IfConditionBuilder<T>(wrapperExpression);
+            }
         } 
     }
 }
