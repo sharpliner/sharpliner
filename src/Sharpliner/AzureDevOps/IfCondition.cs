@@ -63,4 +63,26 @@ public abstract class IfCondition<T> : IfCondition
     {
         Parent = parent;
     }
+    
+    /// <summary>
+    /// Starts a new <c>${{ if (...) }}</c> section for chaining conditions.
+    /// This enables patterns like If().If() to merge conditions with 'and()'.
+    /// </summary>
+    public IfConditionBuilder<T> If 
+    { 
+        get 
+        {
+            // Create a conditional expression block if it doesn't exist yet
+            // This allows for the eager materialization pattern
+            var parentExpression = Parent as AdoExpression<T>;
+            if (parentExpression == null && Parent != null)
+            {
+                // Create an empty conditional expression to hold the current condition
+                parentExpression = new AdoExpression<T>(default!, this);
+                this.Parent = parentExpression;
+            }
+            
+            return new IfConditionBuilder<T>(parentExpression);
+        } 
+    }
 }

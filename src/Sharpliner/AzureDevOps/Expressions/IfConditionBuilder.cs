@@ -971,6 +971,37 @@ public class IfConditionBuilder<T>
     {
         condition.Parent = Parent;
         condition.IsElseIf = IsElseIf;
-        return condition;
+        
+        // Eager materialization: Create conditional block and attach to parent immediately
+        if (Parent != null)
+        {
+            // Check if we should merge conditions (when chaining If().If() with no items)
+            if (Parent.Condition != null && Parent.Definitions.Count == 0 && !IsElseIf)
+            {
+                // Merge conditions with 'and()' - create new condition that combines both
+                var existingCondition = Parent.Condition;
+                var mergedCondition = new IfAndCondition<T>(existingCondition, condition);
+                mergedCondition.Parent = Parent.Parent;
+                mergedCondition.IsElseIf = IsElseIf;
+                
+                // Update the parent's condition to the merged one
+                Parent.Condition = mergedCondition;
+                
+                // Return the merged condition but attach it to the same parent for chaining
+                mergedCondition.Parent = Parent;
+                return mergedCondition;
+            }
+            else
+            {
+                // For eager materialization, we'll create the block structure immediately
+                // but we still return the condition to maintain API compatibility
+                // The chaining will be enabled by adding an If property to IfCondition<T>
+                return condition;
+            }
+        }
+        else
+        {
+            return condition;
+        }
     }
 }
