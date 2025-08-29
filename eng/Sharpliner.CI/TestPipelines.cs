@@ -8,7 +8,6 @@ namespace Sharpliner.CI;
 /// These pipelines are just a minimal E2E test of the collection generation mechanism.
 /// Resulting pipelines are not used in the project (as opposed to the pr and publish pipelines).
 /// </summary>
-#region pipeline-collection
 class TestPipelines : SingleStagePipelineCollection
 {
     // Define your data
@@ -50,4 +49,3 @@ class TestPipelines : SingleStagePipelineCollection
         }
     };
 }
-#endregion

@@ -12,7 +12,7 @@ jobs:
     name: Azure Pipelines
     vmImage: windows-2022
   steps:
-  - powershell: |
+  - powershell: |+
       $tag = git tag --points-at HEAD
 
       if ("" -eq "$tag") {
