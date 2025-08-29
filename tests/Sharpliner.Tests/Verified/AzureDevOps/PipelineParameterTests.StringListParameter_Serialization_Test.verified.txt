@@ -1,0 +1,18 @@
+﻿parameters:
+- name: tags
+  displayName: Build tags
+  type: stringlist
+
+- name: configs
+  displayName: Configuration list
+  type: stringlist
+  default:
+  - Debug
+  - Release
+
+- name: platforms
+  displayName: Platform list
+  type: stringlist
+  default:
+  - x64
+  - ARM64
