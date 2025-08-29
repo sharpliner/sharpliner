@@ -36,15 +36,6 @@ Sharpliner is a .NET library that enables developers to define Azure DevOps pipe
    dotnet pack src/Sharpliner/Sharpliner.csproj -p:PackageVersion=43.43.43 -c Release
    # Creates: artifacts/package/release/Sharpliner.43.43.43.nupkg
    ```
-   **NOTE**: If packing fails with "Could not find Release_net6.0", run these commands first:
-   ```bash
-   mkdir -p artifacts/bin/Sharpliner/Release_net{6.0,7.0,8.0,9.0,10.0}
-   cp -r artifacts/bin/Sharpliner/release_net6.0/* artifacts/bin/Sharpliner/Release_net6.0/
-   cp -r artifacts/bin/Sharpliner/release_net7.0/* artifacts/bin/Sharpliner/Release_net7.0/
-   cp -r artifacts/bin/Sharpliner/release_net8.0/* artifacts/bin/Sharpliner/Release_net8.0/
-   cp -r artifacts/bin/Sharpliner/release_net9.0/* artifacts/bin/Sharpliner/Release_net9.0/
-   cp -r artifacts/bin/Sharpliner/release_net10.0/* artifacts/bin/Sharpliner/Release_net10.0/
-   ```
 
 3. **Build CI project** (takes ~2 seconds):
    ```bash
@@ -125,36 +116,6 @@ Sharpliner is a .NET library that enables developers to define Azure DevOps pipe
 2. **Sharpliner.CI** (`eng/Sharpliner.CI/`): Meta project - uses Sharpliner to define Sharpliner's own CI pipelines  
 3. **DocsGenerator** (`eng/DocsGenerator/`): Generates documentation from templates
 4. **E2E.Tests** (`tests/E2E.Tests/`): Tests that validate real-world usage scenarios
-
-## Common Issues and Troubleshooting
-
-### SDK Version Issues
-If you see "A compatible .NET SDK was not found":
-```bash
-# Install the exact required version
-curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 10.0.100-preview.3.25201.16
-export PATH="$HOME/.dotnet:$PATH"
-```
-
-### CI Project Build Fails
-If `eng/Sharpliner.CI/Sharpliner.CI.csproj` fails to build:
-```bash
-# The CI project needs the local NuGet package
-/home/runner/work/sharpliner/sharpliner/eng/scripts/build-dependencies.sh
-# Verify package was created
-ls -la artifacts/package/release/Sharpliner.43.43.43.nupkg
-```
-
-### Pack Command Fails with "Could not find Release_net6.0"
-The build system has a case-sensitivity issue. Fix with:
-```bash
-mkdir -p artifacts/bin/Sharpliner/Release_net{6.0,7.0,8.0,9.0,10.0}
-cp -r artifacts/bin/Sharpliner/release_net6.0/* artifacts/bin/Sharpliner/Release_net6.0/
-cp -r artifacts/bin/Sharpliner/release_net7.0/* artifacts/bin/Sharpliner/Release_net7.0/
-cp -r artifacts/bin/Sharpliner/release_net8.0/* artifacts/bin/Sharpliner/Release_net8.0/
-cp -r artifacts/bin/Sharpliner/release_net9.0/* artifacts/bin/Sharpliner/Release_net9.0/
-cp -r artifacts/bin/Sharpliner/release_net10.0/* artifacts/bin/Sharpliner/Release_net10.0/
-```
 
 ## Development Workflow
 
