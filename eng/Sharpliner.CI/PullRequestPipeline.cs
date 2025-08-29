@@ -50,7 +50,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                     {
                         DisplayName = "E2E tests - Pack E2E.Tests library",
                         ConfigurationToPack = "release",
-                        Arguments = "-p:PackageVersion=43.43.43",
+                        BuildProperties = "PackageVersion=43.43.43",
                         OutputDir = "artifacts/packages",
                         WorkingDirectory = "tests/E2E.Tests",
                     },

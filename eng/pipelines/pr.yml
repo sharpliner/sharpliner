@@ -72,7 +72,7 @@ jobs:
       command: pack
       packagesToPack: tests/E2E.Tests/SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj
       configurationToPack: release
-      arguments: -p:PackageVersion=43.43.43
+      buildProperties: PackageVersion=43.43.43
       outputDir: artifacts/packages
       workingDirectory: tests/E2E.Tests
 
