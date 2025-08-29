@@ -6,16 +6,6 @@ Sharpliner is a .NET library that enables developers to define Azure DevOps pipe
 
 ## Working Effectively
 
-### Prerequisites and SDK Installation
-**CRITICAL**: This project requires .NET 10.0.100-preview.3.25201.16 specifically (not the system default).
-
-Install the required .NET SDK:
-```bash
-curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 10.0.100-preview.3.25201.16
-export PATH="$HOME/.dotnet:$PATH"
-dotnet --version  # Should show: 10.0.100-preview.3.25201.16
-```
-
 ### Build and Setup Process
 **NEVER CANCEL any build commands - they can take up to 2 minutes with cold cache. Set timeouts to 180+ seconds minimum.**
 
