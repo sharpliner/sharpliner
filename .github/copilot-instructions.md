@@ -17,12 +17,26 @@ dotnet --version  # Should show: 10.0.100-preview.3.25201.16
 ```
 
 ### Build and Setup Process
-**NEVER CANCEL any build commands - they complete in under 30 seconds. Set timeouts to 120+ seconds minimum.**
+**NEVER CANCEL any build commands - they can take up to 2 minutes with cold cache. Set timeouts to 180+ seconds minimum.**
 
-1. **Build main library** (takes ~10 seconds):
+**Quick Start**: Use the provided build script to install prerequisites and build the repository:
+```bash
+./build.sh
+# This script will:
+# - Install .NET SDK if needed
+# - Set up PATH
+# - Create necessary directories  
+# - Build main library and CI project
+# - Pack E2E test library
+# - Build entire solution
+```
+
+**Manual Steps** (if you need more control):
+
+1. **Build main library** (takes up to 2 minutes with cold cache):
    ```bash
    dotnet build src/Sharpliner/Sharpliner.csproj
-   # NEVER CANCEL - completes in 10 seconds, set 120+ second timeout
+   # NEVER CANCEL - takes up to 2 minutes with cold cache, set 180+ second timeout
    ```
 
 2. **Create local NuGet package** for CI project (takes ~3 seconds):
@@ -45,14 +59,14 @@ dotnet --version  # Should show: 10.0.100-preview.3.25201.16
 3. **Build CI project** (takes ~2 seconds):
    ```bash
    dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj
-   # NEVER CANCEL - completes in 2 seconds, set 120+ second timeout
+   # NEVER CANCEL - completes in 2 seconds, set 180+ second timeout
    # This project uses Sharpliner itself to define the CI pipelines
    ```
 
 4. **Run unit tests** (takes ~9 seconds, some tests may fail with path verification issues - this is expected):
    ```bash
    dotnet test tests/Sharpliner.Tests/Sharpliner.Tests.csproj
-   # NEVER CANCEL - completes in 9 seconds, set 120+ second timeout
+   # NEVER CANCEL - completes in 9 seconds, set 180+ second timeout
    # Some path-related test failures are expected and not critical
    ```
 
@@ -61,7 +75,7 @@ dotnet --version  # Should show: 10.0.100-preview.3.25201.16
    dotnet build tests/E2E.Tests/SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj
    dotnet build tests/E2E.Tests/ProjectUsingTheLibrary/E2E.Tests.ProjectUsingTheLibrary.csproj
    dotnet build tests/E2E.Tests/ProjectUsingTheLibraryNuGet/E2E.Tests.ProjectUsingTheLibraryNuGet.csproj
-   # NEVER CANCEL - each completes in 2 seconds, set 120+ second timeout
+   # NEVER CANCEL - each completes in 2 seconds, set 180+ second timeout
    ```
 
 ### Validation Scenarios
@@ -83,14 +97,14 @@ dotnet --version  # Should show: 10.0.100-preview.3.25201.16
 2. **Documentation generation validation** (takes ~2 seconds):
    ```bash
    dotnet run --project eng/DocsGenerator/DocsGenerator.csproj -- FailIfChanged=false
-   # NEVER CANCEL - completes in 2 seconds, set 120+ second timeout
+   # NEVER CANCEL - completes in 2 seconds, set 180+ second timeout
    # Verifies all documentation templates generate correctly
    ```
 
 3. **E2E validation**:
    ```bash
-   # Build E2E library that uses Sharpliner
-   dotnet build tests/E2E.Tests/SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj
+   # Pack E2E library that uses Sharpliner
+   dotnet pack tests/E2E.Tests/SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj -p:PackageVersion=43.43.43 -c:release
    
    # Build project that references the library
    dotnet build tests/E2E.Tests/ProjectUsingTheLibrary/E2E.Tests.ProjectUsingTheLibrary.csproj
@@ -177,8 +191,8 @@ cp -r artifacts/bin/Sharpliner/release_net10.0/* artifacts/bin/Sharpliner/Releas
 
 ## Critical Notes
 
-- **NEVER CANCEL builds/tests** - all operations complete in under 30 seconds
-- **Always set timeouts to 120+ seconds** for any build/test commands  
+- **NEVER CANCEL builds/tests** - operations can take up to 2 minutes with cold cache
+- **Always set timeouts to 180+ seconds** for any build/test commands  
 - **The CI project requires the local NuGet package** - run `eng/scripts/build-dependencies.sh` first
 - **Some unit test failures are expected** due to path verification in test environment
 - **Case sensitivity matters** for Release vs release folder names in build output
