@@ -49,7 +49,8 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                     DotNet.Pack("tests/E2E.Tests/SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj") with
                     {
                         DisplayName = "E2E tests - Pack E2E.Tests library",
-                        ConfigurationToPack = "Release",
+                        ConfigurationToPack = "release",
+                        BuildProperties = "PackageVersion=43.43.43",
                         OutputDir = "artifacts/packages",
                         WorkingDirectory = "tests/E2E.Tests",
                     },
