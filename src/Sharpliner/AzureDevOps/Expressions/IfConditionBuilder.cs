@@ -426,9 +426,28 @@ public class IfConditionBuilder
 
     private IfCondition Link(IfCondition condition)
     {
-        condition.Parent = Parent;
         condition.IsElseIf = IsElseIf;
-        return condition;
+        
+        // Check if we should merge conditions (consecutive If().If() with no items)
+        if (Parent != null && Parent.Condition is IfCondition existingCondition && Parent.Definitions.Count == 0 && !IsElseIf)
+        {
+            // Merge the existing condition with the new one using 'and()'
+            var mergedCondition = new IfAndCondition(existingCondition, condition);
+            mergedCondition.Parent = Parent.Parent;
+            mergedCondition.IsElseIf = IsElseIf;
+            
+            // Update the parent's condition to the merged one
+            Parent.Condition = mergedCondition;
+            
+            // Return the merged condition for further chaining
+            return mergedCondition;
+        }
+        else
+        {
+            // Standard case: set the condition's parent
+            condition.Parent = Parent;
+            return condition;
+        }
     }
 }
 

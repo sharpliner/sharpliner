@@ -48,7 +48,7 @@ public class NestedConditionalsTests
             Variables =
             {
                 If.IsBranch("main")
-                    .Each("item", new[] { "val1", "val2" })
+                    .Each("item", "parameters.items")
                         .Variable("test-${{ item }}", "value-${{ item }}"),
             }
         };

@@ -8,6 +8,21 @@ namespace Sharpliner.AzureDevOps;
 public abstract class IfCondition : Condition
 {
     internal bool IsElseIf = false;
+    
+    /// <summary>
+    /// Starts a new <c>${{ if (...) }}</c> section for chaining conditions.
+    /// This enables patterns like If.IsBranch().If.Equal() to merge conditions with 'and()'.
+    /// </summary>
+    public IfConditionBuilder If 
+    { 
+        get 
+        {
+            // Create a wrapper expression around this condition to enable chaining
+            var wrapperExpression = new AdoExpression<object>(new object(), this);
+            this.Parent = wrapperExpression;
+            return new IfConditionBuilder(wrapperExpression, false);
+        } 
+    }
 
     internal override string TagStart => IsElseIf ? ElseIfTagStart : IfTagStart;
 
@@ -68,7 +83,7 @@ public abstract class IfCondition<T> : IfCondition
     /// Starts a new <c>${{ if (...) }}</c> section for chaining conditions.
     /// This enables patterns like If().If() to merge conditions with 'and()'.
     /// </summary>
-    public IfConditionBuilder<T> If 
+    public new IfConditionBuilder<T> If 
     { 
         get 
         {
