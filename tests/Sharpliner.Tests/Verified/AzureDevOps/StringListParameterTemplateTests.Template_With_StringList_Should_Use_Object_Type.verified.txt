@@ -1,0 +1,23 @@
+﻿parameters:
+- name: environments
+  type: object
+  default:
+  - dev
+  - staging
+  - prod
+
+- name: tags
+  type: object
+  default:
+  - build
+  - test
+
+- name: platforms
+  type: object
+  default:
+  - x64
+  - ARM64
+
+steps:
+- bash: |-
+    echo 'Processing environments'
