@@ -190,7 +190,7 @@ public sealed record StringListParameter : Parameter<IEnumerable<string>>
     }
 
     /// <inheritdoc />
-    public override string Type => "stringlist";
+    public override string Type => "stringList";
 }
 
 /// <summary>
