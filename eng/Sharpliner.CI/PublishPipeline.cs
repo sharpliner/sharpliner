@@ -10,6 +10,14 @@ class PublishPipeline : SingleStagePipelineDefinition
 
     public override SingleStagePipeline Pipeline => new()
     {
+        Trigger = new Trigger
+        {
+            Tags = new InclusionRule
+            {
+                Include = ["*"]
+            }
+        },
+        
         Jobs =
         {
             new Job("Publish", "Publish to nuget.org")
@@ -35,7 +43,7 @@ class PublishPipeline : SingleStagePipelineDefinition
                         .Pipeline("Sharpliner", $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.nupkg")
                         .DisplayAs("Publish build artifacts"),
 
-                    If.And(IsNotPullRequest, IsBranch("main"))
+                    If.And(IsNotPullRequest, StartsWith("refs/tags/", variables.Build.SourceBranch))
                         .Step(NuGet.Authenticate() with { DisplayName = "Authenticate NuGet" })
                         .Step(NuGet.Push.ToExternalFeed("Sharpliner / nuget.org") with
                         {

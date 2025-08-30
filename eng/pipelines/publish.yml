@@ -5,6 +5,12 @@
 ### To make changes, change the C# definition and rebuild its project
 ###
 
+trigger:
+  batch: false
+  tags:
+    include:
+    - '*'
+
 jobs:
 - job: Publish
   displayName: Publish to nuget.org
@@ -52,7 +58,7 @@ jobs:
     displayName: Publish build artifacts
     artifact: Sharpliner
 
-  - ${{ if and(ne(variables['Build.Reason'], 'PullRequest'), eq(variables['Build.SourceBranch'], 'refs/heads/main')) }}:
+  - ${{ if and(ne(variables['Build.Reason'], 'PullRequest'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
     - task: NuGetAuthenticate@1
       displayName: Authenticate NuGet
 
