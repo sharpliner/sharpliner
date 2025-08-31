@@ -174,6 +174,26 @@ public sealed record StringParameter : Parameter<string>
 }
 
 /// <summary>
+/// Class for defining a list of <see cref="string"/> parameters that can be used in templates and pipelines.
+/// </summary>
+public sealed record StringListParameter : Parameter<IEnumerable<string>>
+{
+    /// <summary>
+    /// Define a template parameter
+    /// </summary>
+    /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
+    /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
+    /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
+    public StringListParameter(string name, string? displayName = null, IEnumerable<string>? defaultValue = null)
+        : base(name, displayName, defaultValue, null)
+    {
+    }
+
+    /// <inheritdoc />
+    public override string Type => "stringList";
+}
+
+/// <summary>
 /// Class for defining <see cref="Enum"/> parameters that can be used in templates and pipelines.
 /// </summary>
 /// <typeparam name="TEnum">The type of the enum.</typeparam>

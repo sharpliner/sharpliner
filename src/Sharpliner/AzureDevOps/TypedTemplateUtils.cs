@@ -25,6 +25,12 @@ internal static class TypedTemplateUtils<TParameters> where TParameters : class,
             {
                 { } type when type.IsEnum => (Parameter)Activator.CreateInstance(typeof(EnumParameter<>).MakeGenericType(type), name, null, defaultValue)!,
                 { } type when type == typeof(string) => new StringParameter(name, defaultValue: defaultValue as string, allowedValues: allowedValues?.Cast<string>()),
+                { } type when type == typeof(IEnumerable<string>) => new ArrayParameter<string>(name, defaultValue: defaultValue != null
+                    ? new(((IEnumerable<string>)defaultValue).ToArray())
+                    : null),
+                { } type when type == typeof(List<string>) => new ArrayParameter<string>(name, defaultValue: defaultValue != null
+                    ? new(((List<string>)defaultValue).ToArray())
+                    : null),
                 { } type when type == typeof(bool?) || type == typeof(bool) => new BooleanParameter(name, defaultValue: defaultValue as bool?),
                 { } type when type == typeof(int?) || type == typeof(int) => new NumberParameter(name, defaultValue: defaultValue as int?, allowedValues: allowedValues?.Cast<int?>()),
                 { } type when type == typeof(Step) => new StepParameter(name, defaultValue: defaultValue as Step),

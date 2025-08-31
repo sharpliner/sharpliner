@@ -28,3 +28,11 @@
   default:
     bash: |-
       cp -R logs $(Build.ArtifactStagingDirectory)
+
+- name: environments
+  displayName: Target environments
+  type: stringList
+  default:
+  - dev
+  - staging
+  - production

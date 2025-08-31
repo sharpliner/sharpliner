@@ -178,6 +178,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.StepListParameter StepListParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.Expressions.AdoExpressionList<Sharpliner.AzureDevOps.Step>? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.StepParameter StepParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.Step? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.Template<Sharpliner.AzureDevOps.Step> StepTemplate(string path, Sharpliner.AzureDevOps.TemplateParameters? parameters = null) { }
+        protected static Sharpliner.AzureDevOps.StringListParameter StringListParameter(string name, string? displayName = null, System.Collections.Generic.IEnumerable<string>? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.StringParameter StringParameter(string name, string? displayName = null, string? defaultValue = null, System.Collections.Generic.IEnumerable<string>? allowedValues = null) { }
         protected static Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask Task(string taskName, string? displayName = null) { }
         protected static Sharpliner.AzureDevOps.Step ValidateYamlsArePublished(string pipelineProject) { }
@@ -1040,6 +1041,11 @@ namespace Sharpliner.AzureDevOps
         public Sharpliner.AzureDevOps.Expressions.VariableReference CycleName { get; }
         public Sharpliner.AzureDevOps.Expressions.VariableReference Name { get; }
         protected override string Prefix { get; }
+    }
+    public sealed class StringListParameter : Sharpliner.AzureDevOps.Parameter<System.Collections.Generic.IEnumerable<string>>, System.IEquatable<Sharpliner.AzureDevOps.StringListParameter>
+    {
+        public StringListParameter(string name, string? displayName = null, System.Collections.Generic.IEnumerable<string>? defaultValue = null) { }
+        public override string Type { get; }
     }
     public sealed class StringParameter : Sharpliner.AzureDevOps.Parameter<string>, System.IEquatable<Sharpliner.AzureDevOps.StringParameter>
     {
