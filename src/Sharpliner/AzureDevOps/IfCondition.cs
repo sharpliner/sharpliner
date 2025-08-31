@@ -11,16 +11,20 @@ public abstract class IfCondition : Condition
     
     /// <summary>
     /// Starts a new <c>${{ if (...) }}</c> section for chaining conditions.
-    /// This enables patterns like If.IsBranch().If.Equal() to merge conditions with 'and()'.
+    /// This enables patterns like If.IsBranch().If.Equal() to create nested conditional structures.
     /// </summary>
     public IfConditionBuilder If 
     { 
         get 
         {
-            // Create a wrapper expression around this condition to enable chaining
-            var wrapperExpression = new AdoExpression<object>(new object(), this);
-            this.Parent = wrapperExpression;
-            return new IfConditionBuilder(wrapperExpression, false);
+            // The key insight is that we need to create a parent-child relationship
+            // where this condition becomes the parent of any subsequent conditions.
+            // We'll use a dummy AdoExpression as a container.
+            var containerExpression = new AdoExpression<object>(new object());
+            containerExpression.Condition = this;
+            
+            // The container becomes the "current context" for building nested conditions
+            return new IfConditionBuilder(containerExpression, false);
         } 
     }
 
@@ -81,16 +85,12 @@ public abstract class IfCondition<T> : IfCondition
     
     /// <summary>
     /// Starts a new <c>${{ if (...) }}</c> section for chaining conditions.
-    /// This enables patterns like If().If() to merge conditions with 'and()'.
+    /// This enables patterns like If().If() to create nested conditional structures.
     /// </summary>
     public new IfConditionBuilder<T> If 
     { 
         get 
         {
-            // For consecutive If().If() calls, we want to:
-            // 1. If no items have been added yet, merge conditions with 'and()'
-            // 2. If items exist, create a nested conditional block
-            
             if (Parent is AdoExpression<T> parentExpression)
             {
                 return new IfConditionBuilder<T>(parentExpression);

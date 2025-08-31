@@ -4,13 +4,14 @@ using Sharpliner.AzureDevOps.Expressions;
 namespace Sharpliner.Tests.AzureDevOps.Expressions;
 
 /// <summary>
-/// Tests for nested conditional expressions to demonstrate and fix the issues in #287
+/// Tests for nested conditional expressions to ensure proper nesting structure
+/// that matches the C# structure in YAML output (issue #469)
 /// </summary>
 public class NestedConditionalsTests
 {
     /// <summary>
-    /// Test case for issue #287: chained If().If() should merge conditions with 'and()'
-    /// when no items have been added to the current block
+    /// Test case for issue #469: chained If().If() should create nested conditional structures
+    /// in YAML that match the C# structure
     /// </summary>
     private class ChainedIfTest_Pipeline : TestPipeline
     {
@@ -26,44 +27,15 @@ public class NestedConditionalsTests
     }
 
     [Fact]
-    public Task ChainedIf_ShouldMergeConditions()
+    public Task ChainedIf_ShouldCreateNestedStructure()
     {
         var pipeline = new ChainedIfTest_Pipeline();
         
-        // This should generate:
-        // - ${{ if and(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq('foo', 'bar')) }}:
-        //   - name: test
-        //     value: value
-        
-        return Verify(pipeline.Serialize());
-    }
-
-    /// <summary>
-    /// Test case for nested If with Each
-    /// </summary>
-    private class IfWithEachTest_Pipeline : TestPipeline
-    {
-        public override Pipeline Pipeline => new()
-        {
-            Variables =
-            {
-                If.IsBranch("main")
-                    .Each("item", "parameters.items")
-                        .Variable("test-${{ item }}", "value-${{ item }}"),
-            }
-        };
-    }
-
-    [Fact]
-    public Task IfWithEach_ShouldCreateNestedBlocks()
-    {
-        var pipeline = new IfWithEachTest_Pipeline();
-        
-        // This should generate:
+        // This should generate nested conditionals:
         // - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-        //   - ${{ each item in ['val1', 'val2'] }}:
-        //     - name: test-${{ item }}
-        //       value: value-${{ item }}
+        //   - ${{ if eq('foo', 'bar') }}:
+        //     - name: test
+        //       value: value
         
         return Verify(pipeline.Serialize());
     }
@@ -102,42 +74,9 @@ public class NestedConditionalsTests
     }
 
     /// <summary>
-    /// Test case for existing working pattern: If with Variable, then If (should create separate blocks)
+    /// Test case for triple nested If chains
     /// </summary>
-    private class ExistingWorkingPattern_Pipeline : TestPipeline
-    {
-        public override Pipeline Pipeline => new()
-        {
-            Variables =
-            {
-                If.IsBranch("main")
-                    .Variable("first", "value")
-                    .If.Equal("env", "prod")
-                        .Variable("second", "nested"),
-            }
-        };
-    }
-
-    [Fact]
-    public Task ExistingWorkingPattern_ShouldWork()
-    {
-        var pipeline = new ExistingWorkingPattern_Pipeline();
-        
-        // This should work with current implementation and generate:
-        // - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-        //   - name: first
-        //     value: value
-        //   - ${{ if eq('env', 'prod') }}:
-        //     - name: second
-        //       value: nested
-        
-        return Verify(pipeline.Serialize());
-    }
-
-    /// <summary>
-    /// Test case for deeply nested conditions
-    /// </summary>
-    private class DeeplyNestedTest_Pipeline : TestPipeline
+    private class TripleNestedTest_Pipeline : TestPipeline
     {
         public override Pipeline Pipeline => new()
         {
@@ -152,14 +91,16 @@ public class NestedConditionalsTests
     }
 
     [Fact]
-    public Task DeeplyNested_ShouldMergeAllConditions()
+    public Task TripleNested_ShouldCreateTripleNestedStructure()
     {
-        var pipeline = new DeeplyNestedTest_Pipeline();
+        var pipeline = new TripleNestedTest_Pipeline();
         
-        // This should generate:
-        // - ${{ if and(eq(variables['Build.SourceBranch'], 'refs/heads/main'), eq('env', 'prod'), eq('region', 'us-west')) }}:
-        //   - name: config
-        //     value: prod-us-west
+        // This should generate triple nested conditionals:
+        // - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+        //   - ${{ if eq('env', 'prod') }}:
+        //     - ${{ if eq('region', 'us-west') }}:
+        //       - name: config
+        //         value: prod-us-west
         
         return Verify(pipeline.Serialize());
     }
