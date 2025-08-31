@@ -17,14 +17,18 @@ public abstract class IfCondition : Condition
     { 
         get 
         {
-            // The key insight is that we need to create a parent-child relationship
-            // where this condition becomes the parent of any subsequent conditions.
-            // We'll use a dummy AdoExpression as a container.
-            var containerExpression = new AdoExpression<object>(new object());
-            containerExpression.Condition = this;
+            // Create an AdoExpression with this condition and a dummy definition
+            // This will serve as the parent for nested conditions  
+            var parentExpression = new AdoExpression<object>(new object(), this);
             
-            // The container becomes the "current context" for building nested conditions
-            return new IfConditionBuilder(containerExpression, false);
+            // If this condition has a parent, add the parent expression to it
+            if (this.Parent != null)
+            {
+                this.Parent.Definitions.Add(parentExpression);
+                parentExpression.Parent = this.Parent;
+            }
+            
+            return new IfConditionBuilder(parentExpression, false);
         } 
     }
 

@@ -1,0 +1,8 @@
+﻿variables:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - name: first
+    value: value1
+
+  - ${{ if eq('foo', 'bar') }}:
+    - name: second
+      value: value2
