@@ -8,6 +8,29 @@ namespace Sharpliner.AzureDevOps;
 public abstract class IfCondition : Condition
 {
     internal bool IsElseIf = false;
+    
+    /// <summary>
+    /// Starts a new <c>${{ if (...) }}</c> section for chaining conditions.
+    /// This enables patterns like If.IsBranch().If.Equal() to create nested conditional structures.
+    /// </summary>
+    public IfConditionBuilder If 
+    { 
+        get 
+        {
+            // Create an AdoExpression with this condition and a dummy definition
+            // This will serve as the parent for nested conditions  
+            var parentExpression = new AdoExpression<object>(new object(), this);
+            
+            // If this condition has a parent, add the parent expression to it
+            if (this.Parent != null)
+            {
+                this.Parent.Definitions.Add(parentExpression);
+                parentExpression.Parent = this.Parent;
+            }
+            
+            return new IfConditionBuilder(parentExpression, false);
+        } 
+    }
 
     internal override string TagStart => IsElseIf ? ElseIfTagStart : IfTagStart;
 
@@ -62,5 +85,27 @@ public abstract class IfCondition<T> : IfCondition
     protected IfCondition(AdoExpression<T>? parent = null)
     {
         Parent = parent;
+    }
+    
+    /// <summary>
+    /// Starts a new <c>${{ if (...) }}</c> section for chaining conditions.
+    /// This enables patterns like If().If() to create nested conditional structures.
+    /// </summary>
+    public new IfConditionBuilder<T> If 
+    { 
+        get 
+        {
+            if (Parent is AdoExpression<T> parentExpression)
+            {
+                return new IfConditionBuilder<T>(parentExpression);
+            }
+            else
+            {
+                // Create a minimal expression wrapper for this condition to enable chaining
+                var wrapperExpression = new AdoExpression<T>(default(T)!, this);
+                this.Parent = wrapperExpression;
+                return new IfConditionBuilder<T>(wrapperExpression);
+            }
+        } 
     }
 }
