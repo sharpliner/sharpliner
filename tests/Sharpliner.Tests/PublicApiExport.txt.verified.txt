@@ -467,11 +467,13 @@ namespace Sharpliner.AzureDevOps
     public abstract class IfCondition : Sharpliner.AzureDevOps.Expressions.Condition
     {
         protected IfCondition() { }
+        public Sharpliner.AzureDevOps.Expressions.IfConditionBuilder If { get; }
         public string WithoutTags() { }
     }
     public abstract class IfCondition<T> : Sharpliner.AzureDevOps.IfCondition
     {
         protected IfCondition(Sharpliner.AzureDevOps.Expressions.AdoExpression<T>? parent = null) { }
+        public new Sharpliner.AzureDevOps.Expressions.IfConditionBuilder<T> If { get; }
     }
     public abstract class IfStringCondition : Sharpliner.AzureDevOps.IfCondition
     {
