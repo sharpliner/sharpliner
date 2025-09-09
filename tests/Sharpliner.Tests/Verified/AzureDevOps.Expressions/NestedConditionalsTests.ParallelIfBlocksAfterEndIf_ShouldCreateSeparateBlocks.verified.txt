@@ -1,0 +1,19 @@
+﻿variables:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - name: first
+    value: main-branch
+
+  - ${{ if eq('env', 'prod') }}:
+    - name: nested
+      value: prod-config
+
+  - name: second
+    value: after-nested
+
+- ${{ if eq('deploy', true) }}:
+  - name: deployment
+    value: enabled
+
+- ${{ if contains(variables['Build.SourceBranch'], 'feature/') }}:
+  - name: feature-flag
+    value: on

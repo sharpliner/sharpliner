@@ -1,0 +1,18 @@
+﻿variables:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - name: outer
+    value: main-branch
+
+  - ${{ if eq('env', 'prod') }}:
+    - name: inner
+      value: prod-env
+
+  - name: after-inner
+    value: still-in-main
+
+- ${{ else }}:
+  - name: outer
+    value: not-main
+
+  - name: fallback
+    value: default
