@@ -71,7 +71,7 @@ public abstract record Parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as <c>${{ parameters.name }}</c></param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
-    public Parameter(string name, string? displayName = null)
+    protected Parameter(string name, string? displayName = null)
     {
         Name = name;
         DisplayName = displayName;
@@ -144,7 +144,7 @@ public abstract record Parameter<T> : Parameter
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
     /// <param name="allowedValues">Allowed list of values (for some data types)</param>
-    public Parameter(string name, string? displayName = null, T? defaultValue = default, IEnumerable<T>? allowedValues = null)
+    protected Parameter(string name, string? displayName = null, T? defaultValue = default, IEnumerable<T>? allowedValues = null)
         : base(name, displayName)
     {
         Default = defaultValue;

@@ -17,10 +17,24 @@
 
 - name: list
   displayName: List input
-  type: object
+  type: stringList
   default:
   - Azure
   - DevOps
+
+- name: object
+  displayName: Object input
+  type: object
+  default:
+    key1: value1
+    key2: 2
+    key3: true
+    key4:
+    - 1
+    - 2
+    - 3
+    key5:
+      subkey1: subvalue1
 
 - name: afterBuild
   displayName: After steps
