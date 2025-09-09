@@ -1,0 +1,41 @@
+﻿variables:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - name: level1
+    value: main
+
+  - ${{ if eq('env', 'prod') }}:
+    - name: level2
+      value: prod
+
+    - ${{ if eq('region', 'us') }}:
+      - name: level3
+        value: us
+
+      - ${{ if eq('datacenter', 'west') }}:
+        - name: level4
+          value: west
+
+      - name: back-to-level3
+        value: us-config
+
+    - name: back-to-level2
+      value: prod-config
+
+  - ${{ elseif eq('env', 'staging') }}:
+    - name: level2
+      value: staging
+
+    - ${{ if eq('debug', true) }}:
+      - name: level3
+        value: debug-on
+
+    - ${{ else }}:
+      - name: level3
+        value: debug-off
+
+  - name: back-to-level1
+    value: final-main-config
+
+- ${{ else }}:
+  - name: level1
+    value: not-main

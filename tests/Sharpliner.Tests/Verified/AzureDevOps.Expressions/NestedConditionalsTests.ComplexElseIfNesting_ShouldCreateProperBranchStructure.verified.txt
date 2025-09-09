@@ -1,0 +1,27 @@
+﻿variables:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - name: branch-type
+    value: main
+
+  - ${{ if eq('deploy', true) }}:
+    - name: action
+      value: deploy-main
+
+- ${{ elseif eq(variables['Build.SourceBranch'], 'refs/heads/develop') }}:
+  - name: branch-type
+    value: develop
+
+  - ${{ if eq('test', true) }}:
+    - name: action
+      value: test-develop
+
+  - ${{ else }}:
+    - name: action
+      value: skip-develop
+
+- ${{ else }}:
+  - name: branch-type
+    value: feature
+
+  - name: action
+    value: build-only
