@@ -673,7 +673,7 @@ namespace Sharpliner.AzureDevOps
     }
     public abstract class Parameter : System.IEquatable<Sharpliner.AzureDevOps.Parameter>
     {
-        public Parameter(string name, string? displayName = null) { }
+        protected Parameter(string name, string? displayName = null) { }
         [YamlDotNet.Serialization.YamlMember(Order=101)]
         public string? DisplayName { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=100)]
@@ -690,7 +690,7 @@ namespace Sharpliner.AzureDevOps
     }
     public abstract class Parameter<T> : Sharpliner.AzureDevOps.Parameter, System.IEquatable<Sharpliner.AzureDevOps.Parameter<T>>
     {
-        public Parameter(string name, string? displayName = null, T? defaultValue = default, System.Collections.Generic.IEnumerable<T>? allowedValues = null) { }
+        protected Parameter(string name, string? displayName = null, T? defaultValue = default, System.Collections.Generic.IEnumerable<T>? allowedValues = null) { }
         [YamlDotNet.Serialization.YamlMember(Alias="values", Order=130)]
         public System.Collections.Generic.IEnumerable<T>? AllowedValues { get; init; }
         [YamlDotNet.Serialization.YamlMember(DefaultValuesHandling=YamlDotNet.Serialization.DefaultValuesHandling.OmitNull, Order=120)]

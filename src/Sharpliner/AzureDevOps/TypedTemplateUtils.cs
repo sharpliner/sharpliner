@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
-using System.Text.Json;
 using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
