@@ -102,7 +102,12 @@ public abstract class IfCondition<T> : IfCondition
             else
             {
                 // Create a minimal expression wrapper for this condition to enable chaining
-                var wrapperExpression = new AdoExpression<T>(default(T)!, this);
+                var value = Activator.CreateInstance<T>();
+                if (value == null)
+                {
+                    throw new InvalidOperationException($"Cannot create a default instance for type '{typeof(T)}'. Please provide a non-null value.");
+                }
+                var wrapperExpression = new AdoExpression<T>(value, this);
                 this.Parent = wrapperExpression;
                 return new IfConditionBuilder<T>(wrapperExpression);
             }
