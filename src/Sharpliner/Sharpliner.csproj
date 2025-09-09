@@ -50,6 +50,13 @@
     <Content Include="build\Sharpliner.targets" PackagePath="build\" />
   </ItemGroup>
 
+  <!-- Include template files in NuGet package -->
+  <ItemGroup>
+    <Content Include="..\..\templates\sharpliner-pipeline\.template.config\template.json" PackagePath="content\.template.config\template.json" />
+    <Content Include="..\..\templates\sharpliner-pipeline\SharplinerPipelineProject.csproj" PackagePath="content\SharplinerPipelineProject.csproj" />
+    <Content Include="..\..\templates\sharpliner-pipeline\pipelines\SamplePipeline.cs" PackagePath="content\pipelines\SamplePipeline.cs" />
+  </ItemGroup>
+
   <!--
     This Target makes sure we include YamlDotNet.dll in the NuGet as it will be needed by the task
     https://natemcmaster.com/blog/2017/11/11/msbuild-task-with-dependencies/#third-party-dependencies-and-nuget

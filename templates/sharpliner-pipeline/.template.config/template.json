@@ -1,0 +1,56 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Sharpliner Contributors",
+  "classifications": ["Common", "DevOps", "Pipeline", "Azure DevOps"],
+  "name": "Sharpliner Pipeline Project",
+  "description": "A project template for creating Azure DevOps pipelines using Sharpliner",
+  "identity": "Sharpliner.ProjectTemplate",
+  "groupIdentity": "Sharpliner.ProjectTemplate",
+  "shortName": "sharpliner-pipeline", 
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "SharplinerPipelineProject",
+  "preferNameDirectory": true,
+  "symbols": {
+    "Framework": {
+      "type": "parameter",
+      "description": "The target framework for the project.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "net8.0",
+          "description": "Target net8.0"
+        }
+      ],
+      "replaces": "net8.0",
+      "defaultValue": "net8.0"
+    },
+    "skipRestore": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "If specified, skips the automatic restore of the project on create.",
+      "defaultValue": "false"
+    }
+  },
+  "primaryOutputs": [
+    {
+      "path": "SharplinerPipelineProject.csproj"
+    }
+  ],
+  "defaultName": "SharplinerPipeline1",
+  "postActions": [
+    {
+      "condition": "(!skipRestore)",
+      "description": "Restore NuGet packages required by this project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet restore'"
+        }
+      ],
+      "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
+      "continueOnError": true
+    }
+  ]
+}
