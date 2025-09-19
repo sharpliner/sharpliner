@@ -24,10 +24,10 @@ public static class ConditionExtensions
         var chainedParents = new List<AdoExpression<object>>();
         var current = expression.Parent;
         
-        while (current != null && 
-               current is AdoExpression<object> parentExpr && 
-               parentExpr.Definition?.GetType() == typeof(object) &&
-               parentExpr.Condition != null)
+        while (current != null
+               && current is AdoExpression<object> parentExpr
+               && parentExpr.Definition?.GetType() == typeof(object)
+               && parentExpr.Condition != null)
         {
             chainedParents.Add(parentExpr);
             current = parentExpr.Parent;
