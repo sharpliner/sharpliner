@@ -13,7 +13,15 @@ public class PipelineParameterTests
                 StringParameter("project", "AzureDevops project"),
                 StringParameter("version", ".NET version", allowedValues: [ "5.0.100", "5.0.102" ]),
                 BooleanParameter("restore", "Restore NuGets", defaultValue: true),
-                ObjectParameter<string>("list", "List input", ["Azure" , "DevOps"]),
+                StringListParameter("list", "List input", ["Azure" , "DevOps"]),
+                ObjectParameter("object", "Object input", new TemplateParameters
+                {
+                    { "key1", "value1" },
+                    { "key2", 2 },
+                    { "key3", true },
+                    { "key4", new[] {1, 2, 3 } },
+                    { "key5", new Dictionary<string, object?> { { "subkey1", "subvalue1" } } }
+                }),
                 StepParameter("afterBuild", "After steps", Bash.Inline("cp -R logs $(Build.ArtifactStagingDirectory)")),
                 StringListParameter("environments", "Target environments", ["dev", "staging", "production"]),
             }
