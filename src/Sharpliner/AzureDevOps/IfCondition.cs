@@ -18,9 +18,9 @@ public abstract class IfCondition : Condition
     { 
         get 
         {
-            // Create an AdoExpression with this condition and a dummy definition
+            // Create an AdoExpression with this condition and a chain marker
             // This will serve as the parent for nested conditions  
-            var parentExpression = new AdoExpression<object>(new object(), this);
+            var parentExpression = new AdoExpression<object>(ConditionalChainMarker.Instance, this);
             
             // If this condition has a parent, add the parent expression to it
             if (this.Parent != null)

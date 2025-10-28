@@ -10,6 +10,22 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps.Expressions;
 
 /// <summary>
+/// Internal marker class used to identify chain expressions created by If.If patterns.
+/// This marker is used as a placeholder definition when chaining conditions,
+/// allowing the expression tree traversal logic to detect and properly handle nested conditionals.
+/// </summary>
+internal sealed class ConditionalChainMarker
+{
+    /// <summary>
+    /// Singleton instance of the marker to avoid unnecessary allocations.
+    /// </summary>
+    public static readonly ConditionalChainMarker Instance = new();
+
+    // Private constructor to prevent external instantiation
+    private ConditionalChainMarker() { }
+}
+
+/// <summary>
 /// Represents an item that might or might not have a condition.
 /// Example of regular definition:
 /// <code lang="csharp">
@@ -175,11 +191,11 @@ public abstract record AdoExpression : IYamlConvertible
     /// Checks if the given expression is a chain marker created by the If.If pattern.
     /// Chain markers are AdoExpression instances with:
     /// - A non-null Condition
-    /// - A Definition of type object (dummy marker)
+    /// - A Definition that is a ConditionalChainMarker instance
     /// </summary>
     private static bool IsChainMarker(AdoExpression expression)
     {
-        // Check if this is an AdoExpression<object> with a dummy object definition
+        // Check if this is an AdoExpression<object> with a ConditionalChainMarker definition
         // This is the marker pattern used by IfCondition.If property
         if (expression.Condition == null)
         {
@@ -199,7 +215,7 @@ public abstract record AdoExpression : IYamlConvertible
             return false;
         }
         
-        // Check if the definition is the dummy object marker
+        // Check if the definition is the ConditionalChainMarker
         var definitionProperty = expressionType.GetProperty("Definition", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
         if (definitionProperty == null)
         {
@@ -207,7 +223,7 @@ public abstract record AdoExpression : IYamlConvertible
         }
         
         var definition = definitionProperty.GetValue(expression);
-        return definition?.GetType() == typeof(object);
+        return definition is ConditionalChainMarker;
     }
 
     /// <summary>
