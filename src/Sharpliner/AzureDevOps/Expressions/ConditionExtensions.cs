@@ -17,63 +17,7 @@ public static class ConditionExtensions
     /// <param name="name">Variable name</param>
     /// <param name="value">Variable value</param>
     public static AdoExpression<VariableBase> Variable(this IfCondition condition, string name, string value)
-    {
-        var expression = AdoExpression.Link<VariableBase>(condition, new Variable(name, value));
-        
-        // Walk up the parent chain to find all chaining expressions created by the If property
-        var chainedParents = new List<AdoExpression<object>>();
-        var current = expression.Parent;
-        
-        while (current != null
-               && current is AdoExpression<object> parentExpr
-               && parentExpr.Definition?.GetType() == typeof(object)
-               && parentExpr.Condition != null)
-        {
-            chainedParents.Add(parentExpr);
-            current = parentExpr.Parent;
-        }
-        
-        if (chainedParents.Count > 0)
-        {
-            // We found chained parents created by the If property
-            // We need to create a proper nested structure
-            
-            // Start with the topmost parent (first condition)
-            var topmostParent = chainedParents.Last();
-            var rootExpression = new AdoExpression<VariableBase>(default(VariableBase)!, topmostParent.Condition!);
-            
-            // Preserve the grandparent hierarchy if it exists
-            if (topmostParent.Parent != null)
-            {
-                var grandParent = topmostParent.Parent;
-                var index = grandParent.Definitions.IndexOf(topmostParent);
-                if (index >= 0)
-                {
-                    grandParent.Definitions[index] = rootExpression;
-                }
-                rootExpression.Parent = grandParent;
-            }
-            
-            // Build the nested chain
-            var currentNestingLevel = rootExpression;
-            for (int i = chainedParents.Count - 2; i >= 0; i--)
-            {
-                var parentExpr = chainedParents[i];
-                var nestedExpression = new AdoExpression<VariableBase>(default(VariableBase)!, parentExpr.Condition!);
-                currentNestingLevel.Definitions.Add(nestedExpression);
-                nestedExpression.Parent = currentNestingLevel;
-                currentNestingLevel = nestedExpression;
-            }
-            
-            // Finally, add the variable expression at the deepest level
-            currentNestingLevel.Definitions.Add(expression);
-            expression.Parent = currentNestingLevel;
-            
-            return rootExpression;
-        }
-        
-        return expression;
-    }
+        => AdoExpression.Link<VariableBase>(condition, new Variable(name, value));
 
     /// <summary>
     /// Defines a variable.

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Reflection;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
@@ -105,7 +106,108 @@ public abstract record AdoExpression : IYamlConvertible
         var expression = new AdoExpression<T>(definition, condition);
         condition.Parent?.Definitions.Add(expression);
         expression.Parent = condition.Parent;
+        
+        // Handle chained conditionals (If.If patterns)
+        return HandleChainedConditionals(expression);
+    }
+    
+    /// <summary>
+    /// Detects and handles chained conditional expressions created by If.If patterns.
+    /// Walks up the parent chain to find dummy AdoExpression<object> markers and creates
+    /// a proper nested structure in YAML that matches the C# hierarchy.
+    /// </summary>
+    private static AdoExpression<T> HandleChainedConditionals<T>(AdoExpression<T> expression)
+    {
+        // Walk up the parent chain to find all chaining expressions created by the If property
+        var chainedParents = new List<AdoExpression>();
+        var current = expression.Parent;
+        
+        while (current != null
+               && IsChainMarker(current))
+        {
+            chainedParents.Add(current);
+            current = current.Parent;
+        }
+        
+        if (chainedParents.Count > 0)
+        {
+            // We found chained parents created by the If property
+            // We need to create a proper nested structure
+            
+            // Start with the topmost parent (first condition)
+            var topmostParent = chainedParents.Last();
+            var rootExpression = new AdoExpression<T>(default!, topmostParent.Condition!);
+            
+            // Preserve the grandparent hierarchy if it exists
+            if (topmostParent.Parent != null)
+            {
+                var grandParent = topmostParent.Parent;
+                var index = grandParent.Definitions.IndexOf(topmostParent);
+                if (index >= 0)
+                {
+                    grandParent.Definitions[index] = rootExpression;
+                }
+                rootExpression.Parent = grandParent;
+            }
+            
+            // Build the nested chain
+            var currentNestingLevel = rootExpression;
+            for (int i = chainedParents.Count - 2; i >= 0; i--)
+            {
+                var parentExpr = chainedParents[i];
+                var nestedExpression = new AdoExpression<T>(default!, parentExpr.Condition!);
+                currentNestingLevel.Definitions.Add(nestedExpression);
+                nestedExpression.Parent = currentNestingLevel;
+                currentNestingLevel = nestedExpression;
+            }
+            
+            // Finally, add the actual definition expression at the deepest level
+            currentNestingLevel.Definitions.Add(expression);
+            expression.Parent = currentNestingLevel;
+            
+            return rootExpression;
+        }
+        
         return expression;
+    }
+    
+    /// <summary>
+    /// Checks if the given expression is a chain marker created by the If.If pattern.
+    /// Chain markers are AdoExpression instances with:
+    /// - A non-null Condition
+    /// - A Definition of type object (dummy marker)
+    /// </summary>
+    private static bool IsChainMarker(AdoExpression expression)
+    {
+        // Check if this is an AdoExpression<object> with a dummy object definition
+        // This is the marker pattern used by IfCondition.If property
+        if (expression.Condition == null)
+        {
+            return false;
+        }
+        
+        // Use reflection to check the generic type and definition
+        var expressionType = expression.GetType();
+        if (!expressionType.IsGenericType || expressionType.GetGenericTypeDefinition() != typeof(AdoExpression<>))
+        {
+            return false;
+        }
+        
+        var genericArg = expressionType.GetGenericArguments()[0];
+        if (genericArg != typeof(object))
+        {
+            return false;
+        }
+        
+        // Check if the definition is the dummy object marker
+        var definitionProperty = expressionType.GetProperty("Definition", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+        if (definitionProperty == null)
+        {
+            return false;
+        }
+        
+        var definition = definitionProperty.GetValue(expression);
+        return definition?.GetType() == typeof(object);
     }
 
     /// <summary>
@@ -119,7 +221,9 @@ public abstract record AdoExpression : IYamlConvertible
         expression.Condition = condition;
         condition.Parent?.Definitions.Add(expression);
         expression.Parent = condition.Parent;
-        return expression;
+        
+        // Handle chained conditionals (If.If patterns)
+        return HandleChainedConditionals(expression);
     }
 
     /// <summary>
@@ -134,7 +238,9 @@ public abstract record AdoExpression : IYamlConvertible
         expression.Definitions.AddRange(items);
         condition.Parent?.Definitions.Add(expression);
         expression.Parent = condition.Parent;
-        return expression;
+        
+        // Handle chained conditionals (If.If patterns)
+        return HandleChainedConditionals(expression);
     }
 
     /// <summary>
@@ -155,7 +261,8 @@ public abstract record AdoExpression : IYamlConvertible
             template.Parent = condition.Parent;
         }
 
-        return template;
+        // Handle chained conditionals (If.If patterns)
+        return HandleChainedConditionals(template);
     }
 }
 
