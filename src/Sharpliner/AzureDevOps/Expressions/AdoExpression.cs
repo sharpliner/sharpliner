@@ -113,7 +113,7 @@ public abstract record AdoExpression : IYamlConvertible
     
     /// <summary>
     /// Detects and handles chained conditional expressions created by If.If patterns.
-    /// Walks up the parent chain to find dummy AdoExpression<object> markers and creates
+    /// Walks up the parent chain to find dummy AdoExpression markers and creates
     /// a proper nested structure in YAML that matches the C# hierarchy.
     /// </summary>
     private static AdoExpression<T> HandleChainedConditionals<T>(AdoExpression<T> expression)
