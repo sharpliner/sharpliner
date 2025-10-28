@@ -1,0 +1,11 @@
+﻿stages:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - stage: build-main
+    displayName: Build Main
+
+  - ${{ if eq('env', 'prod') }}:
+    - stage: deploy-prod
+      displayName: Deploy Prod
+
+  - stage: finalize
+    displayName: Finalize

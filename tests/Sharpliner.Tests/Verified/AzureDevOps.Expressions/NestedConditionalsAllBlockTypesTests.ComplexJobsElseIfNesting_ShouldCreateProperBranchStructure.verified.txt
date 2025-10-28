@@ -1,0 +1,36 @@
+﻿jobs:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - job: main-job
+    displayName: Main Branch Job
+    pool:
+      name: ubuntu-latest
+
+  - ${{ if eq('deploy', true) }}:
+    - job: deploy-main
+      displayName: Deploy Main
+      pool:
+        name: ubuntu-latest
+
+- ${{ elseif eq(variables['Build.SourceBranch'], 'refs/heads/develop') }}:
+  - job: develop-job
+    displayName: Develop Branch Job
+    pool:
+      name: ubuntu-latest
+
+  - ${{ if eq('test', true) }}:
+    - job: test-develop
+      displayName: Test Develop
+      pool:
+        name: ubuntu-latest
+
+  - ${{ else }}:
+    - job: skip-develop
+      displayName: Skip Develop Tests
+      pool:
+        name: ubuntu-latest
+
+- ${{ else }}:
+  - job: feature-job
+    displayName: Feature Branch Job
+    pool:
+      name: ubuntu-latest
