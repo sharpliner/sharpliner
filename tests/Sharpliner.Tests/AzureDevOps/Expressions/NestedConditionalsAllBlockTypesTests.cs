@@ -213,4 +213,319 @@ public class NestedConditionalsAllBlockTypesTests
         
         return Verify(pipeline.Serialize());
     }
+
+    /// <summary>
+    /// Test case for nested If with EndIf followed by Else on Stages - Else should apply to outer If
+    /// </summary>
+    private class NestedStagesIfEndIfElse_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Stages =
+            {
+                If.IsBranch("main")
+                    .Stage(new Stage("outer-stage")
+                    {
+                        DisplayName = "Main Branch Stage"
+                    })
+                    .If.Equal("env", "prod")
+                        .Stage(new Stage("inner-stage")
+                        {
+                            DisplayName = "Production Environment"
+                        })
+                    .EndIf
+                    .Stage(new Stage("after-inner")
+                    {
+                        DisplayName = "Still in Main"
+                    })
+                .Else
+                    .Stage(new Stage("fallback-stage")
+                    {
+                        DisplayName = "Not Main Branch"
+                    }),
+            }
+        };
+    }
+
+    [Fact]
+    public Task NestedStagesIfEndIfElse_ShouldApplyElseToOuterIf()
+    {
+        var pipeline = new NestedStagesIfEndIfElse_Pipeline();
+        
+        // This should generate:
+        // stages:
+        // - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+        //   - stage: outer-stage
+        //     displayName: Main Branch Stage
+        //   - ${{ if eq('env', 'prod') }}:
+        //     - stage: inner-stage
+        //       displayName: Production Environment
+        //   - stage: after-inner
+        //     displayName: Still in Main
+        // - ${{ else }}:
+        //   - stage: fallback-stage
+        //     displayName: Not Main Branch
+        
+        return Verify(pipeline.Serialize());
+    }
+
+    /// <summary>
+    /// Test case for complex ElseIf chains with nesting on Jobs
+    /// </summary>
+    private class ComplexJobsElseIfNesting_Pipeline : SimpleTestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                If.IsBranch("main")
+                    .Job(new Job("main-job")
+                    {
+                        DisplayName = "Main Branch Job",
+                        Pool = new HostedPool("ubuntu-latest")
+                    })
+                    .If.Equal("deploy", "true")
+                        .Job(new Job("deploy-main")
+                        {
+                            DisplayName = "Deploy Main",
+                            Pool = new HostedPool("ubuntu-latest")
+                        })
+                    .EndIf
+                .ElseIf.IsBranch("develop")
+                    .Job(new Job("develop-job")
+                    {
+                        DisplayName = "Develop Branch Job",
+                        Pool = new HostedPool("ubuntu-latest")
+                    })
+                    .If.Equal("test", "true")
+                        .Job(new Job("test-develop")
+                        {
+                            DisplayName = "Test Develop",
+                            Pool = new HostedPool("ubuntu-latest")
+                        })
+                    .Else
+                        .Job(new Job("skip-develop")
+                        {
+                            DisplayName = "Skip Develop Tests",
+                            Pool = new HostedPool("ubuntu-latest")
+                        })
+                    .EndIf
+                .Else
+                    .Job(new Job("feature-job")
+                    {
+                        DisplayName = "Feature Branch Job",
+                        Pool = new HostedPool("ubuntu-latest")
+                    }),
+            }
+        };
+    }
+
+    [Fact]
+    public Task ComplexJobsElseIfNesting_ShouldCreateProperBranchStructure()
+    {
+        var pipeline = new ComplexJobsElseIfNesting_Pipeline();
+        
+        // This should generate proper ElseIf chain with nested conditions for jobs
+        
+        return Verify(pipeline.Serialize());
+    }
+
+    /// <summary>
+    /// Test case for multiple parallel Stage blocks after EndIf
+    /// </summary>
+    private class ParallelStagesAfterEndIf_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Stages =
+            {
+                If.IsBranch("main")
+                    .Stage(new Stage("first-stage")
+                    {
+                        DisplayName = "First Stage"
+                    })
+                    .If.Equal("env", "prod")
+                        .Stage(new Stage("nested-stage")
+                        {
+                            DisplayName = "Nested Stage"
+                        })
+                    .EndIf
+                    .Stage(new Stage("second-stage")
+                    {
+                        DisplayName = "Second Stage"
+                    }),
+                    
+                // These should be separate parallel Stage blocks
+                If.Equal("deploy", "true")
+                    .Stage(new Stage("deploy-stage")
+                    {
+                        DisplayName = "Deployment Stage"
+                    }),
+                    
+                If.Contains("feature/", variables.Build.SourceBranch)
+                    .Stage(new Stage("feature-stage")
+                    {
+                        DisplayName = "Feature Stage"
+                    }),
+            }
+        };
+    }
+
+    [Fact]
+    public Task ParallelStagesAfterEndIf_ShouldCreateSeparateBlocks()
+    {
+        var pipeline = new ParallelStagesAfterEndIf_Pipeline();
+        
+        // This should generate separate Stage blocks at the top level
+        
+        return Verify(pipeline.Serialize());
+    }
+
+    /// <summary>
+    /// Test case for deep nesting with multiple strategic EndIf points on Jobs
+    /// </summary>
+    private class DeepJobsNestingWithMultipleEndIf_Pipeline : SimpleTestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                If.IsBranch("main")
+                    .Job(new Job("level1-job")
+                    {
+                        DisplayName = "Level 1 - Main",
+                        Pool = new HostedPool("ubuntu-latest")
+                    })
+                    .If.Equal("env", "prod")
+                        .Job(new Job("level2-job")
+                        {
+                            DisplayName = "Level 2 - Prod",
+                            Pool = new HostedPool("ubuntu-latest")
+                        })
+                        .If.Equal("region", "us")
+                            .Job(new Job("level3-job")
+                            {
+                                DisplayName = "Level 3 - US",
+                                Pool = new HostedPool("ubuntu-latest")
+                            })
+                            .If.Equal("datacenter", "west")
+                                .Job(new Job("level4-job")
+                                {
+                                    DisplayName = "Level 4 - West",
+                                    Pool = new HostedPool("ubuntu-latest")
+                                })
+                            .EndIf  // Ends level4 (datacenter)
+                            .Job(new Job("back-to-level3")
+                            {
+                                DisplayName = "Back to Level 3",
+                                Pool = new HostedPool("ubuntu-latest")
+                            })
+                        .EndIf  // Ends level3 (region)
+                        .Job(new Job("back-to-level2")
+                        {
+                            DisplayName = "Back to Level 2",
+                            Pool = new HostedPool("ubuntu-latest")
+                        })
+                    .ElseIf.Equal("env", "staging")
+                        .Job(new Job("level2-staging")
+                        {
+                            DisplayName = "Level 2 - Staging",
+                            Pool = new HostedPool("ubuntu-latest")
+                        })
+                        .If.Equal("debug", "true")
+                            .Job(new Job("level3-debug")
+                            {
+                                DisplayName = "Level 3 - Debug On",
+                                Pool = new HostedPool("ubuntu-latest")
+                            })
+                        .Else
+                            .Job(new Job("level3-no-debug")
+                            {
+                                DisplayName = "Level 3 - Debug Off",
+                                Pool = new HostedPool("ubuntu-latest")
+                            })
+                        .EndIf  // Ends level3 (debug)
+                    .EndIf  // Ends level2 (env)
+                    .Job(new Job("back-to-level1")
+                    {
+                        DisplayName = "Back to Level 1",
+                        Pool = new HostedPool("ubuntu-latest")
+                    })
+                .Else
+                    .Job(new Job("not-main")
+                    {
+                        DisplayName = "Not Main Branch",
+                        Pool = new HostedPool("ubuntu-latest")
+                    }),
+            }
+        };
+    }
+
+    [Fact]
+    public Task DeepJobsNestingWithMultipleEndIf_ShouldMaintainProperStructure()
+    {
+        var pipeline = new DeepJobsNestingWithMultipleEndIf_Pipeline();
+        
+        // This should generate a complex nested structure with proper EndIf termination points for jobs
+        
+        return Verify(pipeline.Serialize());
+    }
+
+    /// <summary>
+    /// Test case for nested If with Else inside, then EndIf on Steps
+    /// </summary>
+    private class NestedStepsIfElseEndIf_Pipeline : SimpleStepTestPipeline
+    {
+        protected override AdoExpressionList<Step> Steps => new()
+        {
+            If.IsBranch("main")
+                .Step(new InlineBashTask("echo 'Outer step'")
+                {
+                    DisplayName = "Main Branch Step"
+                })
+                .If.Equal("env", "prod")
+                    .Step(new InlineBashTask("echo 'Inner prod step'")
+                    {
+                        DisplayName = "Production Step"
+                    })
+                .Else
+                    .Step(new InlineBashTask("echo 'Inner non-prod step'")
+                    {
+                        DisplayName = "Non-Production Step"
+                    })
+                .EndIf
+                .Step(new InlineBashTask("echo 'Back to outer'")
+                {
+                    DisplayName = "Back to Main Context"
+                })
+                .Step(new InlineBashTask("echo 'Still in main'")
+                {
+                    DisplayName = "Still in Main Branch"
+                }),
+        };
+    }
+
+    [Fact]
+    public Task NestedStepsIfElseEndIf_ShouldContainElseWithinNesting()
+    {
+        var pipeline = new NestedStepsIfElseEndIf_Pipeline();
+        
+        // This should generate:
+        // steps:
+        // - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+        //   - bash: echo 'Outer step'
+        //     displayName: Main Branch Step
+        //   - ${{ if eq('env', 'prod') }}:
+        //     - bash: echo 'Inner prod step'
+        //       displayName: Production Step
+        //   - ${{ else }}:
+        //     - bash: echo 'Inner non-prod step'
+        //       displayName: Non-Production Step
+        //   - bash: echo 'Back to outer'
+        //     displayName: Back to Main Context
+        //   - bash: echo 'Still in main'
+        //     displayName: Still in Main Branch
+        
+        return Verify(pipeline.Serialize());
+    }
 }
