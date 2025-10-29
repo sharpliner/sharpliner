@@ -1,0 +1,25 @@
+﻿jobs:
+- job: testJob
+  steps:
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    - bash: |-
+        echo 'Outer step'
+      displayName: Main Branch Step
+
+    - ${{ if eq('env', 'prod') }}:
+      - bash: |-
+          echo 'Inner prod step'
+        displayName: Production Step
+
+    - ${{ else }}:
+      - bash: |-
+          echo 'Inner non-prod step'
+        displayName: Non-Production Step
+
+    - bash: |-
+        echo 'Back to outer'
+      displayName: Back to Main Context
+
+    - bash: |-
+        echo 'Still in main'
+      displayName: Still in Main Branch

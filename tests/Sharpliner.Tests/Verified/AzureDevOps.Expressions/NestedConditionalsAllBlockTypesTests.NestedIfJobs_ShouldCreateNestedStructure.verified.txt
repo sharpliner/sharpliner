@@ -1,0 +1,7 @@
+﻿jobs:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - ${{ if eq('deploy', true) }}:
+    - job: deploy-job
+      displayName: Deploy Job
+      pool:
+        name: ubuntu-latest

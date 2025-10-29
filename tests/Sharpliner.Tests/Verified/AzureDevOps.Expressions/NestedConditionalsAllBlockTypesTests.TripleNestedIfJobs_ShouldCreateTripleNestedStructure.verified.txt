@@ -1,0 +1,8 @@
+﻿jobs:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - ${{ if eq('env', 'prod') }}:
+    - ${{ if eq('region', 'us-west') }}:
+      - job: deploy-us-west
+        displayName: Deploy US West
+        pool:
+          name: ubuntu-latest

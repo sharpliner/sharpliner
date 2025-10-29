@@ -1,0 +1,15 @@
+﻿stages:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - stage: outer-stage
+    displayName: Main Branch Stage
+
+  - ${{ if eq('env', 'prod') }}:
+    - stage: inner-stage
+      displayName: Production Environment
+
+  - stage: after-inner
+    displayName: Still in Main
+
+- ${{ else }}:
+  - stage: fallback-stage
+    displayName: Not Main Branch

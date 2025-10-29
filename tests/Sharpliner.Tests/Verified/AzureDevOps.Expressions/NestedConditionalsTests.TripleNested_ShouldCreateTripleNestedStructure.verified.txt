@@ -1,0 +1,6 @@
+﻿variables:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - ${{ if eq('env', 'prod') }}:
+    - ${{ if eq('region', 'us-west') }}:
+      - name: config
+        value: prod-us-west

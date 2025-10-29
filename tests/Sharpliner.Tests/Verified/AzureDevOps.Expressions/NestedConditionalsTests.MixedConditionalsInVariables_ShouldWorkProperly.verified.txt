@@ -1,0 +1,37 @@
+﻿variables:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - name: branch-setup
+    value: main
+
+  - ${{ if eq(parameters.Environment, 'Production') }}:
+    - name: env-setup
+      value: prod
+
+    - name: deploy-mode
+      value: production
+
+  - ${{ else }}:
+    - name: env-setup
+      value: non-prod
+
+    - name: deploy-mode
+      value: staging
+
+  - name: finalize
+    value: main-branch
+
+- ${{ elseif eq(variables['Build.SourceBranch'], 'refs/heads/develop') }}:
+  - name: branch-setup
+    value: develop
+
+  - ${{ if eq(parameters.RunTests, true) }}:
+    - name: tests
+      value: enabled
+
+- ${{ else }}:
+  - name: branch-setup
+    value: feature
+
+- ${{ if eq(parameters.DeployAfterBuild, true) }}:
+  - name: deployment
+    value: enabled
