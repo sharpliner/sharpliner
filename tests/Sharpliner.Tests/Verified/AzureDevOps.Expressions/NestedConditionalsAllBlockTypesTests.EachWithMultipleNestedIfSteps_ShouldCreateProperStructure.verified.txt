@@ -1,0 +1,13 @@
+﻿jobs:
+- job: testJob
+  steps:
+  - ${{ each config in parameters.configurations }}:
+    - ${{ if eq('config.enabled', true) }}:
+      - ${{ if eq('config.test', true) }}:
+        - bash: |-
+            echo 'Testing ${{ config.name }}'
+          displayName: Test ${{ config.name }}
+
+  - bash: |-
+      echo 'Processing ${{ config.name }}'
+    displayName: Process ${{ config.name }}

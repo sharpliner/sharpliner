@@ -528,4 +528,159 @@ public class NestedConditionalsAllBlockTypesTests
         
         return Verify(pipeline.Serialize());
     }
+
+    /// <summary>
+    /// Test nested If().If() with Each expression on Stages
+    /// </summary>
+    private class NestedIfWithEachStages_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Stages =
+            {
+                If.IsBranch("main")
+                    .If.Equal("deploy", "true")
+                        .Each("env", "parameters.environments")
+                            .Stage(new Stage("deploy-${{ env }}")
+                            {
+                                DisplayName = "Deploy to ${{ env }}"
+                            })
+                        .EndEach,
+            }
+        };
+    }
+
+    [Fact]
+    public Task NestedIfWithEachStages_ShouldCreateNestedStructure()
+    {
+        var pipeline = new NestedIfWithEachStages_Pipeline();
+        
+        // This should generate nested conditionals with each:
+        // stages:
+        // - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+        //   - ${{ if eq('deploy', true) }}:
+        //     - ${{ each env in parameters.environments }}:
+        //       - stage: deploy-${{ env }}
+        //         displayName: Deploy to ${{ env }}
+        
+        return Verify(pipeline.Serialize());
+    }
+
+    /// <summary>
+    /// Test Each with nested If inside on Jobs
+    /// </summary>
+    private class EachWithNestedIfJobs_Pipeline : SimpleTestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                Each("region", "parameters.regions")
+                    .If.Equal("region.enabled", "true")
+                        .Job(new Job("deploy-${{ region.name }}")
+                        {
+                            DisplayName = "Deploy to ${{ region.name }}",
+                            Pool = new HostedPool("ubuntu-latest")
+                        })
+                    .EndIf,
+            }
+        };
+    }
+
+    [Fact]
+    public Task EachWithNestedIfJobs_ShouldCreateNestedStructure()
+    {
+        var pipeline = new EachWithNestedIfJobs_Pipeline();
+        
+        // This should generate each with nested if:
+        // jobs:
+        // - ${{ each region in parameters.regions }}:
+        //   - ${{ if eq('region.enabled', true) }}:
+        //     - job: deploy-${{ region.name }}
+        //       displayName: Deploy to ${{ region.name }}
+        //       pool:
+        //         name: ubuntu-latest
+        
+        return Verify(pipeline.Serialize());
+    }
+
+    /// <summary>
+    /// Test complex nesting: If with Each, and nested If inside Each
+    /// </summary>
+    private class ComplexIfEachNesting_Pipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Stages =
+            {
+                If.IsBranch("main")
+                    .Each("env", "parameters.environments")
+                        .If.Equal("env.deploy", "true")
+                            .Stage(new Stage("deploy-${{ env.name }}")
+                            {
+                                DisplayName = "Deploy to ${{ env.name }}"
+                            })
+                        .EndIf
+                    .EndEach,
+            }
+        };
+    }
+
+    [Fact]
+    public Task ComplexIfEachNesting_ShouldCreateProperStructure()
+    {
+        var pipeline = new ComplexIfEachNesting_Pipeline();
+        
+        // This should generate complex nested structure:
+        // stages:
+        // - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+        //   - ${{ each env in parameters.environments }}:
+        //     - ${{ if eq('env.deploy', true) }}:
+        //       - stage: deploy-${{ env.name }}
+        //         displayName: Deploy to ${{ env.name }}
+        
+        return Verify(pipeline.Serialize());
+    }
+
+    /// <summary>
+    /// Test Each with multiple nested Ifs on Steps
+    /// </summary>
+    private class EachWithMultipleNestedIfSteps_Pipeline : SimpleStepTestPipeline
+    {
+        protected override AdoExpressionList<Step> Steps => new()
+        {
+            Each("config", "parameters.configurations")
+                .If.Equal("config.enabled", "true")
+                    .If.Equal("config.test", "true")
+                        .Step(new InlineBashTask("echo 'Testing ${{ config.name }}'")
+                        {
+                            DisplayName = "Test ${{ config.name }}"
+                        })
+                    .EndIf
+                    .Step(new InlineBashTask("echo 'Processing ${{ config.name }}'")
+                    {
+                        DisplayName = "Process ${{ config.name }}"
+                    })
+                .EndIf
+            .EndEach,
+        };
+    }
+
+    [Fact]
+    public Task EachWithMultipleNestedIfSteps_ShouldCreateProperStructure()
+    {
+        var pipeline = new EachWithMultipleNestedIfSteps_Pipeline();
+        
+        // This should generate each with multiple nested ifs:
+        // steps:
+        // - ${{ each config in parameters.configurations }}:
+        //   - ${{ if eq('config.enabled', true) }}:
+        //     - ${{ if eq('config.test', true) }}:
+        //       - bash: echo 'Testing ${{ config.name }}'
+        //         displayName: Test ${{ config.name }}
+        //     - bash: echo 'Processing ${{ config.name }}'
+        //       displayName: Process ${{ config.name }}
+        
+        return Verify(pipeline.Serialize());
+    }
 }

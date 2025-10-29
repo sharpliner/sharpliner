@@ -1,0 +1,6 @@
+﻿stages:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - ${{ if eq('deploy', true) }}:
+    - ${{ each env in parameters.environments }}:
+      - stage: deploy-${{ env }}
+        displayName: Deploy to ${{ env }}
