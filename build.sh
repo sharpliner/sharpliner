@@ -3,7 +3,7 @@
 # Check if .dotnet directory already exists
 if [ ! -d "./.dotnet" ]; then
     echo "Installing .NET SDK..."
-    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 10.0.100-preview.3.25201.16 --install-dir ./.dotnet
+    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 10.0.100 --install-dir ./.dotnet
 else
     echo ".NET SDK installation directory already exists"
 fi
