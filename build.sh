@@ -16,4 +16,4 @@ mkdir -p artifacts/packages
 dotnet build src/Sharpliner/Sharpliner.csproj
 dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj
 dotnet pack tests/E2E.Tests/SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj -p:PackageVersion=43.43.43 -c:release
-dotnet build Sharpliner.sln
+dotnet build Sharpliner.slnx

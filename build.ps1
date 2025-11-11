@@ -36,6 +36,6 @@ Write-Host "Packing E2E test library..."
 dotnet pack tests\E2E.Tests\SharplinerLibrary\E2E.Tests.SharplinerLibrary.csproj -p:PackageVersion=43.43.43 -c:release
 
 Write-Host "Building entire solution..."
-dotnet build Sharpliner.sln
+dotnet build Sharpliner.slnx
 
 Write-Host "Build completed successfully!"
