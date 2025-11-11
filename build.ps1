@@ -9,7 +9,7 @@ if (!(Test-Path ".\.dotnet")) {
     $installScript.Content | Out-File -FilePath "dotnet-install.ps1" -Encoding UTF8
     
     # Install .NET SDK to local .dotnet directory
-    .\dotnet-install.ps1 -Version "10.0.100-preview.3.25201.16" -InstallDir ".\.dotnet"
+    .\dotnet-install.ps1 -Version "10.0.100" -InstallDir ".\.dotnet"
     
     # Clean up the install script
     Remove-Item "dotnet-install.ps1"
@@ -36,6 +36,6 @@ Write-Host "Packing E2E test library..."
 dotnet pack tests\E2E.Tests\SharplinerLibrary\E2E.Tests.SharplinerLibrary.csproj -p:PackageVersion=43.43.43 -c:release
 
 Write-Host "Building entire solution..."
-dotnet build Sharpliner.sln
+dotnet build Sharpliner.slnx
 
 Write-Host "Build completed successfully!"
