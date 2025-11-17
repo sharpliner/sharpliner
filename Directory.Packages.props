@@ -5,7 +5,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
-    <PackageVersion Include="FluentAssertions" Version="7.1.0" />
+    <PackageVersion Include="FluentAssertions" Version="8.8.0" />
     <PackageVersion Include="Microsoft.Build.Framework" Version="17.14.28" />
     <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="17.14.28" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
