@@ -1,26 +1,21 @@
+using Sharpliner;
 using Sharpliner.AzureDevOps;
-using Sharpliner.AzureDevOps.Tasks;
 
 namespace SharplinerPipelineProject.Pipelines;
 
 /// <summary>
 /// Sample pipeline definition showing basic Sharpliner usage.
-/// This pipeline will be published to 'sample-pipeline.yml' in your repository.
+/// Upon building your project, it will be published to 'sample-pipeline.yml' at the root of your repository.
 /// </summary>
 class SamplePipeline : SingleStagePipelineDefinition
 {
     public override string TargetFile => "sample-pipeline.yml";
-
     public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
     public override SingleStagePipeline Pipeline => new()
     {
-        // Trigger the pipeline on changes to main branch
         Trigger = new Trigger("main"),
-
-        // Also trigger on pull requests
         Pr = new PrTrigger("main"),
-
         Jobs =
         [
             new Job("Build", "Build and test")
