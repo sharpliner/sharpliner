@@ -34,14 +34,26 @@ class PublishPipeline : SingleStagePipelineDefinition
                     DotNet
                         .Pack("src/Sharpliner/Sharpliner.csproj", $"-p:PackageVersion={variables["packageVersion"]}") with
                         {
-                            DisplayName = "Pack the .nupkg",
+                            DisplayName = "Pack Sharpliner .nupkg",
+                            OutputDir = ProjectBuildSteps.PackagePath,
+                            ConfigurationToPack = "Release",
+                        },
+
+                    DotNet
+                        .Pack("templates/Sharpliner.Templates/Sharpliner.Templates.csproj", $"-p:PackageVersion={variables["packageVersion"]}") with
+                        {
+                            DisplayName = "Pack Sharpliner.Templates .nupkg",
                             OutputDir = ProjectBuildSteps.PackagePath,
                             ConfigurationToPack = "Release",
                         },
 
                     Publish
                         .Pipeline("Sharpliner", $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.nupkg")
-                        .DisplayAs("Publish build artifacts"),
+                        .DisplayAs("Publish Sharpliner build artifacts"),
+
+                    Publish
+                        .Pipeline("Sharpliner.Templates", $"{ProjectBuildSteps.PackagePath}/Sharpliner.Templates.{variables["packageVersion"]}.nupkg")
+                        .DisplayAs("Publish Sharpliner.Templates build artifacts"),
 
                     If.And(IsNotPullRequest, StartsWith("refs/tags/", variables.Build.SourceBranch))
                         .Step(NuGet.Authenticate() with { DisplayName = "Authenticate NuGet" })
@@ -50,7 +62,8 @@ class PublishPipeline : SingleStagePipelineDefinition
                             DisplayName = "Publish to nuget.org",
                             PackagesToPush =
                             [
-                                $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.nupkg"
+                                $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.nupkg",
+                                $"{ProjectBuildSteps.PackagePath}/Sharpliner.Templates.{variables["packageVersion"]}.nupkg"
                             ]
                         })
                 }

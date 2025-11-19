@@ -42,4 +42,9 @@
     <Content Include="sharpliner-pipeline\SharplinerPipelineProject.csproj" PackagePath="content\sharpliner-pipeline\SharplinerPipelineProject.csproj" />
   </ItemGroup>
 
+  <!-- Exclude template files from compilation -->
+  <ItemGroup>
+    <Compile Remove="sharpliner-pipeline\**\*.cs" />
+  </ItemGroup>
+
 </Project>
