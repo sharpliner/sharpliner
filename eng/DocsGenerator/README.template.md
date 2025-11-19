@@ -4,6 +4,7 @@ Sharpliner is a .NET library that lets you use C# for Azure DevOps pipeline defi
 Exchange YAML indentation problems for the type-safe environment of C# and let IntelliSense speed up your work!
 
 - [Getting started](#getting-started)
+  - [Quick Start with Project Template](#quick-start-with-project-template)
 - [Example](#example)
 - [Sharpliner features](#sharpliner-features)
   - [Intellisense](#intellisense)
@@ -18,6 +19,27 @@ Exchange YAML indentation problems for the type-safe environment of C# and let I
 All you have to do is reference our [NuGet package](https://www.nuget.org/packages/Sharpliner/) in your project, override a class with your definition and `dotnet build` the project! Dead simple!
 
 For more detailed steps, check our [documentation](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/GettingStarted.md).
+
+### Quick Start with Project Template
+
+If you prefer using .NET project templates, you can get started quickly with the following commands:
+
+```bash
+# Install the Sharpliner.Templates NuGet package
+dotnet new install Sharpliner.Templates
+
+# Create a new pipeline project with your preferred .NET version (6.0-10.0, default is 10.0)
+dotnet new sharpliner-pipeline -n MyProject.Pipelines -F net10.0
+
+# Navigate to your new project
+cd MyProject.Pipelines
+
+# Build the project to generate your first pipeline YAML
+dotnet build
+```
+
+This creates a new project with a sample pipeline definition in `pipelines/SamplePipeline.cs`.
+The generated `sample-pipeline.yml` file will be ready to use in your repository!
 
 ## Example
 

@@ -22,28 +22,24 @@ For more detailed steps, check our [documentation](https://github.com/sharpliner
 
 ### Quick Start with Project Template
 
-The fastest way to get started is using our .NET project template:
+If you prefer using .NET project templates, you can get started quickly with the following commands:
 
 ```bash
 # Install the Sharpliner.Templates NuGet package
 dotnet new install Sharpliner.Templates
 
 # Create a new pipeline project with your preferred .NET version (6.0-10.0, default is 10.0)
-dotnet new sharpliner-pipeline -n MyPipelineProject -F net10.0
+dotnet new sharpliner-pipeline -n MyProject.Pipelines -F net10.0
 
 # Navigate to your new project
-cd MyPipelineProject
+cd MyProject.Pipelines
 
 # Build the project to generate your first pipeline YAML
 dotnet build
 ```
 
-This creates a new project with:
-- A sample pipeline definition in `pipelines/SamplePipeline.cs`
-- Proper project configuration with your chosen target framework
-- All necessary Sharpliner package references
-
-The generated `sample-pipeline.yml` file will be ready to use in your Azure DevOps repository!
+This creates a new project with a sample pipeline definition in `pipelines/SamplePipeline.cs`.
+The generated `sample-pipeline.yml` file will be ready to use in your repository!
 
 ## Example
 
