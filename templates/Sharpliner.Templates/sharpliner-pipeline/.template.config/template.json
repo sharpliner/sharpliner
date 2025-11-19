@@ -1,7 +1,7 @@
 {
   "$schema": "http://json.schemastore.org/template",
   "author": "Premek Vysoky",
-  "classifications": ["YAML", "DevOps", "Pipeline", "Azure DevOps", "Azure Pipelines"],
+  "classifications": ["YAML", "DevOps", "Pipeline", "Azure DevOps", "Azure Pipelines", "Continuous Integration", "CI"],
   "name": "Sharpliner Pipeline Project",
   "description": "A project template for creating Azure DevOps pipelines using Sharpliner",
   "identity": "Sharpliner.ProjectTemplate",
