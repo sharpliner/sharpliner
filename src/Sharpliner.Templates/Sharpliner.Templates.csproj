@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+
+    <!-- NuGet details -->
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/sharpliner/sharpliner</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/sharpliner/sharpliner</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Summary>Project templates for Sharpliner - Define Azure DevOps pipelines using C#</Summary>
+    <Description>Project templates for Sharpliner. Install this package to get access to 'dotnet new sharpliner-pipeline' template for quickly creating new pipeline projects using Sharpliner.</Description>
+    <PackageTags>yaml;azure devops;devops;ado;azdo;pipeline;pipelines;github;actions;csharp;definition;define;csharp;productivity;continous integration;ci;template;dotnet new</PackageTags>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageId>Sharpliner.Templates</PackageId>
+    <Authors>PremekVysoky</Authors>
+    <NeutralLanguage>en</NeutralLanguage>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+    <IncludeSymbols>false</IncludeSymbols>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+    <NoWarn>NU5128</NoWarn>
+
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\LICENSE" PackagePath="\" />
+    <Content Include="..\..\README.md" PackagePath="\" />
+  </ItemGroup>
+
+  <!-- Include template files in NuGet package -->
+  <ItemGroup>
+    <Content Include="..\..\templates\sharpliner-pipeline\.template.config\template.json" PackagePath="content\sharpliner-pipeline\.template.config\template.json" />
+    <Content Include="..\..\templates\sharpliner-pipeline\pipelines\SamplePipeline.cs" PackagePath="content\sharpliner-pipeline\pipelines\SamplePipeline.cs" />
+    <Content Include="..\..\templates\sharpliner-pipeline\SharplinerPipelineProject.csproj" PackagePath="content\sharpliner-pipeline\SharplinerPipelineProject.csproj" />
+  </ItemGroup>
+
+</Project>

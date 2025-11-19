@@ -28,19 +28,15 @@ class SamplePipeline : SingleStagePipelineDefinition
                 Pool = new HostedPool("Azure Pipelines", "ubuntu-latest"),
                 Steps =
                 [
-                    // Install .NET SDK
                     DotNet.Install.Sdk("8.0.x"),
 
-                    // Restore dependencies
                     DotNet.Restore.Projects("**/*.csproj"),
 
-                    // Build the project
                     DotNet.Build("**/*.csproj") with
                     {
                         DisplayName = "Build project"
                     },
 
-                    // Run tests
                     DotNet.Test("**/*Tests.csproj") with
                     {
                         DisplayName = "Run tests"
