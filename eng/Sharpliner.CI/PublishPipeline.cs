@@ -29,6 +29,13 @@ class PublishPipeline : SingleStagePipelineDefinition
                         .FromResourceFile("Get-Version.ps1")
                         .DisplayAs("Detect package version"),
 
+                    Powershell
+                        .Inline(
+                            $"(Get-Content templates/Sharpliner.Templates/sharpliner-pipeline/SharplinerPipelineProject.csproj) " +
+                            $"-replace '__SHARPLINER_PACKAGE_VERSION__', '{variables["packageVersion"]}' " +
+                            $"| Set-Content templates/Sharpliner.Templates/sharpliner-pipeline/SharplinerPipelineProject.csproj")
+                        .DisplayAs("Update template project version"),
+
                     StepLibrary(new ProjectBuildSteps("src/Sharpliner/Sharpliner.csproj")),
 
                     DotNet

@@ -29,6 +29,9 @@ jobs:
       Write-Host "##vso[task.setvariable variable=packageVersion]$tag"
     displayName: Detect package version
 
+  - powershell: (Get-Content templates/Sharpliner.Templates/sharpliner-pipeline/SharplinerPipelineProject.csproj) -replace '__SHARPLINER_PACKAGE_VERSION__', '$(packageVersion)' | Set-Content templates/Sharpliner.Templates/sharpliner-pipeline/SharplinerPipelineProject.csproj
+    displayName: Update template project version
+
   - template: templates/install-dotnet-sdk.yml
     parameters:
       version: 10.0.100
