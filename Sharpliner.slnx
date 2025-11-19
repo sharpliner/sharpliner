@@ -11,7 +11,9 @@
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/Sharpliner/Sharpliner.csproj" />
-    <Project Path="src/Sharpliner.Templates/Sharpliner.Templates.csproj" />
+  </Folder>
+  <Folder Name="/templates/">
+    <Project Path="templates/Sharpliner.Templates/Sharpliner.Templates.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/E2E.Tests/ProjectUsingTheLibrary/E2E.Tests.ProjectUsingTheLibrary.csproj" />
