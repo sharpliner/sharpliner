@@ -1,0 +1,63 @@
+﻿jobs:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - job: level1-job
+    displayName: Level 1 - Main
+    pool:
+      name: ubuntu-latest
+
+  - ${{ if eq('env', 'prod') }}:
+    - job: level2-job
+      displayName: Level 2 - Prod
+      pool:
+        name: ubuntu-latest
+
+    - ${{ if eq('region', 'us') }}:
+      - job: level3-job
+        displayName: Level 3 - US
+        pool:
+          name: ubuntu-latest
+
+      - ${{ if eq('datacenter', 'west') }}:
+        - job: level4-job
+          displayName: Level 4 - West
+          pool:
+            name: ubuntu-latest
+
+      - job: back-to-level3
+        displayName: Back to Level 3
+        pool:
+          name: ubuntu-latest
+
+    - job: back-to-level2
+      displayName: Back to Level 2
+      pool:
+        name: ubuntu-latest
+
+  - ${{ elseif eq('env', 'staging') }}:
+    - job: level2-staging
+      displayName: Level 2 - Staging
+      pool:
+        name: ubuntu-latest
+
+    - ${{ if eq('debug', true) }}:
+      - job: level3-debug
+        displayName: Level 3 - Debug On
+        pool:
+          name: ubuntu-latest
+
+    - ${{ else }}:
+      - job: level3-no-debug
+        displayName: Level 3 - Debug Off
+        pool:
+          name: ubuntu-latest
+
+  - job: back-to-level1
+    displayName: Back to Level 1
+    pool:
+      name: ubuntu-latest
+
+- ${{ else }}:
+  - job: not-main
+    displayName: Not Main Branch
+    pool:
+      name: ubuntu-latest

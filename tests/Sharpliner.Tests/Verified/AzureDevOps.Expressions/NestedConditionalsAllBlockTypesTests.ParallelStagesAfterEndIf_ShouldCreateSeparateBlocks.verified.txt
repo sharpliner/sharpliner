@@ -1,0 +1,19 @@
+﻿stages:
+- ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+  - stage: first-stage
+    displayName: First Stage
+
+  - ${{ if eq('env', 'prod') }}:
+    - stage: nested-stage
+      displayName: Nested Stage
+
+  - stage: second-stage
+    displayName: Second Stage
+
+- ${{ if eq('deploy', true) }}:
+  - stage: deploy-stage
+    displayName: Deployment Stage
+
+- ${{ if contains(variables['Build.SourceBranch'], 'feature/') }}:
+  - stage: feature-stage
+    displayName: Feature Stage

@@ -171,10 +171,10 @@ The repository layout is quite simple:
 ├── tests
 │   ├── E2E.Tests        # E2E tests using the Sharpliner  .nupkg
 │   └── Sharpliner.Tests # Unit tests for the main Sharpliner project
-└── Sharpliner.sln       # Main solution of the project
+└── Sharpliner.slnx      # Main solution of the project
 ```
 
-Developing is quite easy - open the `Sharpliner.sln` solution in VS. However, the solution won't build 100% the first time.
+Developing is quite easy - open the `Sharpliner.slnx` solution in VS. However, the solution won't build 100% the first time.
 This is because of the `Sharpliner.CI` project.
 This projects uses Sharpliner and defines pipelines for the Sharpliner repository - the YAML is published to `eng/pipelines`.
 This way we test quite many Sharpliner features right in the PR build.

@@ -47,11 +47,23 @@ public class AdoExpressionList<T> : List<AdoExpression<T>>
     {
         // When we define a tree of conditional definitions, the expression returns
         // the leaf definition so we have to move up to the top-level definition
-        while (item.Parent is AdoExpression<T> parent)
+        // Climb the parent chain through the non-generic base to handle type mismatches
+        AdoExpression current = item;
+        while (current.Parent != null)
         {
-            item = parent;
+            current = current.Parent;
         }
 
+        // If we found a root that's not the same generic type, we need to handle this case
+        // For now, we'll cast back to the expected type, but this indicates the tree structure
+        // may need to be more carefully managed
+        if (current is AdoExpression<T> typedRoot)
+        {
+            typedRoot.SetIsList(true);
+            return typedRoot;
+        }
+
+        // If the root isn't the same type, use the original item but mark it as list
         item.SetIsList(true);
         return item;
     }

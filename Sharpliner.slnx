@@ -1,0 +1,24 @@
+<Solution>
+  <Folder Name="/eng/">
+    <Project Path="eng/DocsGenerator/DocsGenerator.csproj" />
+    <Project Path="eng/Sharpliner.CI/Sharpliner.CI.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+    <File Path="LICENSE" />
+    <File Path="NuGet.config" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/Sharpliner/Sharpliner.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/E2E.Tests/ProjectUsingTheLibrary/E2E.Tests.ProjectUsingTheLibrary.csproj" />
+    <Project Path="tests/E2E.Tests/ProjectUsingTheLibraryNuGet/E2E.Tests.ProjectUsingTheLibraryNuGet.csproj" />
+    <Project Path="tests/E2E.Tests/SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj" />
+    <Project Path="tests/Sharpliner.Tests/Sharpliner.Tests.csproj" />
+  </Folder>
+  <Folder Name="/tests/E2E.Tests/">
+    <Project Path="tests/E2E.Tests/ProjectUsingTheLibrarySkipPublish/E2E.Tests.ProjectUsingTheLibrarySkipPublish.csproj" />
+  </Folder>
+</Solution>

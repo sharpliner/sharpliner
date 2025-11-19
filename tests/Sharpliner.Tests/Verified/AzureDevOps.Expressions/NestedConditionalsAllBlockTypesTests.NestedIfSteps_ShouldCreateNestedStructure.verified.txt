@@ -1,0 +1,8 @@
+﻿jobs:
+- job: testJob
+  steps:
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    - ${{ if eq('runTests', true) }}:
+      - bash: |-
+          echo 'Running tests'
+        displayName: Run Tests

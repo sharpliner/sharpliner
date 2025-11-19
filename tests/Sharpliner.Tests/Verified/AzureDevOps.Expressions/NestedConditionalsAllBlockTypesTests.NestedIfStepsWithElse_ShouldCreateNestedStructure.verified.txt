@@ -1,0 +1,17 @@
+﻿jobs:
+- job: testJob
+  steps:
+  - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    - ${{ if eq('fastTests', true) }}:
+      - bash: |-
+          echo 'Fast tests'
+        displayName: Fast Tests
+
+  - ${{ else }}:
+    - bash: |-
+        echo 'All tests'
+      displayName: All Tests
+
+  - bash: |-
+      echo 'Done'
+    displayName: Done

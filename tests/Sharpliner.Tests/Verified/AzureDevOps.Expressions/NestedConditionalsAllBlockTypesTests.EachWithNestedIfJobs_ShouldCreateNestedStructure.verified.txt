@@ -1,0 +1,7 @@
+﻿jobs:
+- ${{ each region in parameters.regions }}:
+  - ${{ if eq('region.enabled', true) }}:
+    - job: deploy-${{ region.name }}
+      displayName: Deploy to ${{ region.name }}
+      pool:
+        name: ubuntu-latest
