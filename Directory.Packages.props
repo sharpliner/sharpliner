@@ -6,8 +6,8 @@
   <ItemGroup>
     <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
     <PackageVersion Include="FluentAssertions" Version="7.1.0" />
-    <PackageVersion Include="Microsoft.Build.Framework" Version="17.14.28" />
-    <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="17.14.28" />
+    <PackageVersion Include="Microsoft.Build.Framework" Version="18.0.2" />
+    <PackageVersion Include="Microsoft.Build.Utilities.Core" Version="18.0.2" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
