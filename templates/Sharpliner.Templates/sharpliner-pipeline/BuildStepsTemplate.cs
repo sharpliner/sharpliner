@@ -1,23 +1,25 @@
+using System.Collections.Generic;
 using Sharpliner.AzureDevOps;
+using Sharpliner.AzureDevOps.Expressions;
 
 namespace SharplinerPipelineProject;
 
 /// <summary>
-/// Sample step template demonstrating how to create a reusable YAML step template.
+/// Sample step template demonstrating how to create a reusable YAML step template with typed parameters.
 /// Step templates generate separate YAML files that can be referenced in pipelines.
+/// Typed parameters provide IntelliSense support and type safety when using the template.
 /// </summary>
-class BuildStepsTemplate : StepTemplateDefinition
+class BuildStepsTemplate(BuildStepsParameters buildParameters)
+    : StepTemplateDefinition<BuildStepsParameters>(buildParameters)
 {
+    private readonly BuildStepsParameters _parameters = buildParameters;
+
     public override string TargetFile => "pipelines/templates/build-steps.yml";
 
-    protected Parameter sdkVersion = StringParameter("sdkVersion");
-
-    public override List<Parameter> Parameters => [sdkVersion];
-
-    public override ConditionedList<Step> Definition =>
+    public override AdoExpressionList<Step> Definition =>
     [
-        DotNet.Install.Sdk(sdkVersion)
-            .DisplayAs("Install .NET SDK " + sdkVersion),
+        DotNet.Install.Sdk(_parameters.SdkVersion)
+            .DisplayAs("Install .NET SDK " + _parameters.SdkVersion),
 
         DotNet.Restore.Projects("**/*.csproj"),
 
@@ -26,4 +28,16 @@ class BuildStepsTemplate : StepTemplateDefinition
             DisplayName = "Build project"
         },
     ];
+}
+
+/// <summary>
+/// Typed parameters for the BuildStepsTemplate.
+/// Properties are automatically converted to template parameters with appropriate types.
+/// </summary>
+record BuildStepsParameters
+{
+    /// <summary>
+    /// The .NET SDK version to install and use for building.
+    /// </summary>
+    public string SdkVersion { get; init; } = "8.0.x";
 }

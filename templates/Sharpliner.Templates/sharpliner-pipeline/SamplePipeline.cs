@@ -24,10 +24,10 @@ class SamplePipeline : SingleStagePipelineDefinition
                 Pool = new HostedPool("Azure Pipelines", "ubuntu-latest"),
                 Steps =
                 [
-                    // Reference the step template with parameters
-                    StepTemplate("templates/build-steps.yml", new()
+                    // Reference an example step template with strong-typed parameters
+                    new BuildStepsTemplate(new()
                     {
-                        { "sdkVersion", "8.0.x" }
+                        SdkVersion = "8.0.x"
                     }),
 
                     DotNet.Test("**/*Tests.csproj") with
