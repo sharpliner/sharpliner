@@ -6,6 +6,7 @@ namespace SharplinerPipelineProject.Pipelines;
 /// <summary>
 /// Sample pipeline definition showing basic Sharpliner usage.
 /// Upon building your project, it will be published to 'sample-pipeline.yml' at the root of your repository.
+/// This example demonstrates using a step library to create reusable step collections.
 /// </summary>
 class SamplePipeline : SingleStagePipelineDefinition
 {
@@ -23,14 +24,8 @@ class SamplePipeline : SingleStagePipelineDefinition
                 Pool = new HostedPool("Azure Pipelines", "ubuntu-latest"),
                 Steps =
                 [
-                    DotNet.Install.Sdk("8.0.x"),
-
-                    DotNet.Restore.Projects("**/*.csproj"),
-
-                    DotNet.Build("**/*.csproj") with
-                    {
-                        DisplayName = "Build project"
-                    },
+                    // Use a step library to group common build steps
+                    StepLibrary(new BuildSteps()),
 
                     DotNet.Test("**/*Tests.csproj") with
                     {
