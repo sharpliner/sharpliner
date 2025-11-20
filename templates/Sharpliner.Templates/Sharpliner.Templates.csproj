@@ -38,8 +38,8 @@
   <!-- Include template files in NuGet package -->
   <ItemGroup>
     <Content Include="sharpliner-pipeline\.template.config\template.json" PackagePath="content\sharpliner-pipeline\.template.config\template.json" />
-    <Content Include="sharpliner-pipeline\pipelines\SamplePipeline.cs" PackagePath="content\sharpliner-pipeline\pipelines\SamplePipeline.cs" />
-    <Content Include="sharpliner-pipeline\pipelines\BuildSteps.cs" PackagePath="content\sharpliner-pipeline\pipelines\BuildSteps.cs" />
+    <Content Include="sharpliner-pipeline\SamplePipeline.cs" PackagePath="content\sharpliner-pipeline\SamplePipeline.cs" />
+    <Content Include="sharpliner-pipeline\BuildStepsTemplate.cs" PackagePath="content\sharpliner-pipeline\BuildStepsTemplate.cs" />
     <Content Include="sharpliner-pipeline\SharplinerPipelineProject.csproj" PackagePath="content\sharpliner-pipeline\SharplinerPipelineProject.csproj" />
   </ItemGroup>
 

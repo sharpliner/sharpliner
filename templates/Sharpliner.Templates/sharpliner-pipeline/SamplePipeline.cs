@@ -1,16 +1,16 @@
 using Sharpliner;
 using Sharpliner.AzureDevOps;
 
-namespace SharplinerPipelineProject.Pipelines;
+namespace SharplinerPipelineProject;
 
 /// <summary>
 /// Sample pipeline definition showing basic Sharpliner usage.
-/// Upon building your project, it will be published to 'sample-pipeline.yml' at the root of your repository.
-/// This example demonstrates using a step library to create reusable step collections.
+/// Upon building your project, it will be published to 'pipelines/sample-pipeline.yml'.
+/// This example demonstrates using a step template for reusable YAML components.
 /// </summary>
 class SamplePipeline : SingleStagePipelineDefinition
 {
-    public override string TargetFile => "sample-pipeline.yml";
+    public override string TargetFile => "pipelines/sample-pipeline.yml";
     public override TargetPathType TargetPathType => TargetPathType.RelativeToGitRoot;
 
     public override SingleStagePipeline Pipeline => new()
@@ -24,8 +24,11 @@ class SamplePipeline : SingleStagePipelineDefinition
                 Pool = new HostedPool("Azure Pipelines", "ubuntu-latest"),
                 Steps =
                 [
-                    // Use a step library to group common build steps
-                    StepLibrary(new BuildSteps()),
+                    // Reference the step template with parameters
+                    StepTemplate("templates/build-steps.yml", new()
+                    {
+                        { "sdkVersion", "8.0.x" }
+                    }),
 
                     DotNet.Test("**/*Tests.csproj") with
                     {
