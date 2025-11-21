@@ -17,6 +17,8 @@ jobs:
     vmImage: ubuntu-latest
   steps:
   - template: pipelines/templates/build-steps.yml
+    parameters:
+      sdkVersion: 10.0.x
 
   - task: DotNetCoreCLI@2
     displayName: Run tests

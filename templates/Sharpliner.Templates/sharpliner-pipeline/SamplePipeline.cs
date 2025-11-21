@@ -27,7 +27,7 @@ class SamplePipeline : SingleStagePipelineDefinition
                     // Reference an example step template with strong-typed parameters
                     new SampleTemplate(new()
                     {
-                        SdkVersion = "8.0.x"
+                        SdkVersion = "10.0.x"
                     }),
 
                     DotNet.Test("**/*Tests.csproj") with
