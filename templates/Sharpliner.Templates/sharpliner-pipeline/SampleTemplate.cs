@@ -8,10 +8,10 @@ namespace SharplinerPipelineProject;
 /// Step templates generate separate YAML files that can be referenced in pipelines.
 /// Typed parameters provide IntelliSense support and type safety when using the template.
 /// </summary>
-class SampleTemplate(BuildStepsParameters buildParameters)
-    : StepTemplateDefinition<BuildStepsParameters>(buildParameters)
+class SampleTemplate(SampleTemplateParameters buildParameters)
+    : StepTemplateDefinition<SampleTemplateParameters>(buildParameters)
 {
-    private readonly BuildStepsParameters _parameters = buildParameters;
+    private readonly SampleTemplateParameters _parameters = buildParameters;
 
     public override string TargetFile => "pipelines/templates/build-steps.yml";
 
@@ -30,10 +30,10 @@ class SampleTemplate(BuildStepsParameters buildParameters)
 }
 
 /// <summary>
-/// Typed parameters for the BuildStepsTemplate.
+/// Typed parameters for the SampleTemplate.
 /// Properties are automatically converted to template parameters with appropriate types.
 /// </summary>
-record BuildStepsParameters
+record SampleTemplateParameters
 {
     /// <summary>
     /// The .NET SDK version to install and use for building.

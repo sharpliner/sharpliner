@@ -25,7 +25,7 @@ class SamplePipeline : SingleStagePipelineDefinition
                 Steps =
                 [
                     // Reference an example step template with strong-typed parameters
-                    new BuildStepsTemplate(new()
+                    new SampleTemplate(new()
                     {
                         SdkVersion = "8.0.x"
                     }),

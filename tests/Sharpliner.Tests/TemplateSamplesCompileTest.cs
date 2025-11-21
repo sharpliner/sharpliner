@@ -1,4 +1,6 @@
-namespace SharplinerPipelineProject;
+using SharplinerPipelineProject;
+
+namespace Sharpliner.Tests;
 
 public class TemplateSamplesCompileTest
 {
