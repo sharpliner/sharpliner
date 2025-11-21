@@ -44,6 +44,10 @@ cd MyProject.Pipelines
 dotnet build
 ```
 
+> [!NOTE]
+> The samples produced by the template expect to be built within a git repository when generating the YAMLs.
+> This is configured by the `TargetPathType.RelativeToGitRoot` setting which tells Sharpliner where to produce the YAMLs.
+
 This creates a new project with a sample pipeline definition in `pipelines/SamplePipeline.cs`.
 The generated `sample-pipeline.yml` file will be ready to use in your repository!
 
