@@ -39,7 +39,7 @@
   <ItemGroup>
     <Content Include="sharpliner-pipeline\.template.config\template.json" PackagePath="content\sharpliner-pipeline\.template.config\template.json" />
     <Content Include="sharpliner-pipeline\SamplePipeline.cs" PackagePath="content\sharpliner-pipeline\SamplePipeline.cs" />
-    <Content Include="sharpliner-pipeline\SampleTemplate.cs" PackagePath="content\sharpliner-pipeline\BuildStepsTemplate.cs" />
+    <Content Include="sharpliner-pipeline\SampleTemplate.cs" PackagePath="content\sharpliner-pipeline\SampleTemplate.cs" />
     <Content Include="sharpliner-pipeline\SharplinerPipelineProject.csproj" PackagePath="content\sharpliner-pipeline\SharplinerPipelineProject.csproj" />
   </ItemGroup>
 
