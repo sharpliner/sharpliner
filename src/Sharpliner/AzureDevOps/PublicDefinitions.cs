@@ -392,7 +392,7 @@ public abstract class StepTemplateDefinition : TemplateDefinition<Step>
 /// </remarks>
 /// <param name="typedParameters">The typed parameters to use in the template</param>
 public abstract class StepTemplateDefinition<TParameters>(TParameters? typedParameters = null)
-    : TemplateDefinition<Step, TParameters>(typedParameters) where TParameters : class, new()
+    : TemplateDefinition<Step, TParameters>(typedParameters ?? new()) where TParameters : class, new()
 {
     internal sealed override string YamlProperty => "steps";
 

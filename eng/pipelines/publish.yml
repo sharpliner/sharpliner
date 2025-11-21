@@ -29,6 +29,9 @@ jobs:
       Write-Host "##vso[task.setvariable variable=packageVersion]$tag"
     displayName: Detect package version
 
+  - powershell: (Get-Content templates/Sharpliner.Templates/sharpliner-pipeline/SharplinerPipelineProject.csproj) -replace '__SHARPLINER_PACKAGE_VERSION__', '$(packageVersion)' | Set-Content templates/Sharpliner.Templates/sharpliner-pipeline/SharplinerPipelineProject.csproj
+    displayName: Update template project version
+
   - template: templates/install-dotnet-sdk.yml
     parameters:
       version: 10.0.100
@@ -46,7 +49,7 @@ jobs:
       includeNuGetOrg: true
 
   - task: DotNetCoreCLI@2
-    displayName: Pack the .nupkg
+    displayName: Pack Sharpliner .nupkg
     inputs:
       command: pack
       packagesToPack: src/Sharpliner/Sharpliner.csproj
@@ -54,9 +57,22 @@ jobs:
       outputDir: artifacts/package/release
       configurationToPack: Release
 
+  - task: DotNetCoreCLI@2
+    displayName: Pack Sharpliner.Templates .nupkg
+    inputs:
+      command: pack
+      packagesToPack: templates/Sharpliner.Templates/Sharpliner.Templates.csproj
+      arguments: -p:PackageVersion=$(packageVersion)
+      outputDir: artifacts/package/release
+      configurationToPack: Release
+
   - publish: artifacts/package/release/Sharpliner.$(packageVersion).nupkg
-    displayName: Publish build artifacts
+    displayName: Publish Sharpliner build artifacts
     artifact: Sharpliner
+
+  - publish: artifacts/package/release/Sharpliner.Templates.$(packageVersion).nupkg
+    displayName: Publish Sharpliner.Templates build artifacts
+    artifact: Sharpliner.Templates
 
   - ${{ if and(ne(variables['Build.Reason'], 'PullRequest'), startsWith(variables['Build.SourceBranch'], 'refs/tags/')) }}:
     - task: NuGetAuthenticate@1
@@ -68,4 +84,4 @@ jobs:
         command: push
         nuGetFeedType: external
         publishFeedCredentials: Sharpliner / nuget.org
-        packagesToPush: artifacts/package/release/Sharpliner.$(packageVersion).nupkg
+        packagesToPush: artifacts/package/release/Sharpliner.$(packageVersion).nupkg;artifacts/package/release/Sharpliner.Templates.$(packageVersion).nupkg

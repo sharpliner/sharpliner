@@ -1,16 +1,19 @@
 <Solution>
   <Folder Name="/eng/">
-    <Project Path="eng/DocsGenerator/DocsGenerator.csproj" />
     <Project Path="eng/Sharpliner.CI/Sharpliner.CI.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
     <File Path="LICENSE" />
     <File Path="NuGet.config" />
   </Folder>
   <Folder Name="/src/">
     <Project Path="src/Sharpliner/Sharpliner.csproj" />
+  </Folder>
+  <Folder Name="/templates/">
+    <Project Path="templates/Sharpliner.Templates/Sharpliner.Templates.csproj" />
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/E2E.Tests/ProjectUsingTheLibrary/E2E.Tests.ProjectUsingTheLibrary.csproj" />

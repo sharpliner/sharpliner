@@ -1,0 +1,27 @@
+﻿trigger:
+  batch: false
+  branches:
+    include:
+    - main
+
+pr:
+  branches:
+    include:
+    - main
+
+jobs:
+- job: Build
+  displayName: Build and test
+  pool:
+    name: Azure Pipelines
+    vmImage: ubuntu-latest
+  steps:
+  - template: pipelines/templates/build-steps.yml
+    parameters:
+      sdkVersion: 10.0.x
+
+  - task: DotNetCoreCLI@2
+    displayName: Run tests
+    inputs:
+      command: test
+      projects: '**/*Tests.csproj'
