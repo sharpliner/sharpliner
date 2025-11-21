@@ -1,6 +1,5 @@
 <Solution>
   <Folder Name="/eng/">
-    <Project Path="eng/DocsGenerator/DocsGenerator.csproj" />
     <Project Path="eng/Sharpliner.CI/Sharpliner.CI.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">

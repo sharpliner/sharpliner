@@ -2,16 +2,20 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 
 namespace DocsGenerator;
 
+/// <summary>
+/// Generates documentation files by processing markdown templates and embedding code snippets.
+/// When you alter the code samples or the documentation templates, run this tool by executing:
+///    dotnet eng/DocsGenerator/Program.cs
+/// </summary>
 public class Program
 {
     public static void Main(string[] args)
     {
-        var failIfChanged = args.Contains("FailIfChanged=true");
+        var failIfChanged = args.Contains("FailIfChanged");
 
         var resources = new (string Template, string Output)[]
         {
@@ -84,13 +88,15 @@ public class Program
         {
             if (!existingReadme.Equals(newReadme))
             {
-                LogError($"{output} has changed. Please run `dotnet run --project .\\eng\\DocsGenerator\\` to update it.");
+                LogError($"{output} has changed. Please run `dotnet eng\\DocsGenerator\\Program.cs` to update it.");
                 Environment.Exit(1);
             }
         }
 
         File.WriteAllText(GetRelativeToGitRoot(output), newReadme);
-        Console.WriteLine($"Generated {output} from {template}");
+        Console.ForegroundColor = ConsoleColor.Green;
+        Console.WriteLine($"  📄 {output} → {template}");
+        Console.ResetColor();
     }
 
     private static void LogError(string message)
@@ -164,7 +170,7 @@ public class Program
 
             if (currentDir == null)
             {
-                throw new Exception($"Failed to find git repository in {Directory.GetParent(Assembly.GetExecutingAssembly().Location)?.FullName}");
+                throw new Exception($"Failed to find git repository in {Directory.GetParent(AppContext.BaseDirectory)}");
             }
         }
 

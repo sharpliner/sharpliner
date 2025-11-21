@@ -43,8 +43,7 @@ jobs:
     displayName: Validate generated docs
     inputs:
       command: run
-      projects: eng/DocsGenerator/DocsGenerator.csproj
-      arguments: FailIfChanged=true
+      arguments: dotnet eng/DocsGenerator/Program.cs FailIfChanged
 
   - task: DotNetCoreCLI@2
     displayName: Validate YAML has been published
