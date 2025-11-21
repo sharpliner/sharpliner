@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Sharpliner.Templates.Tests\**" />
+    <EmbeddedResource Remove="Sharpliner.Templates.Tests\**" />
+    <None Remove="Sharpliner.Templates.Tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="AzureDevOps\Resources\Test-Script.ps1" />
     <None Remove="AzureDevOps\Resources\test-script.sh" />
   </ItemGroup>

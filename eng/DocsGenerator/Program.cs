@@ -15,10 +15,15 @@ public class Program
 
         var resources = new (string Template, string Output)[]
         {
-            ("eng/DocsGenerator/README.template.md", "README.md"),
-            ("eng/DocsGenerator/GettingStarted.template.md", "docs/AzureDevOps/GettingStarted.md"),
-            ("eng/DocsGenerator/DefinitionReference.template.md", "docs/AzureDevOps/DefinitionReference.md"),
-            ("eng/DocsGenerator/DefinitionCollections.template.md", "docs/AzureDevOps/DefinitionCollections.md"),
+            // Documentation
+            ("templates/docs/README.template.md", "README.md"),
+            ("templates/docs/GettingStarted.template.md", "docs/AzureDevOps/GettingStarted.md"),
+            ("templates/docs/DefinitionReference.template.md", "docs/AzureDevOps/DefinitionReference.md"),
+            ("templates/docs/DefinitionCollections.template.md", "docs/AzureDevOps/DefinitionCollections.md"),
+
+            // Files in the template project (to make sure they build)
+            ("templates/sharpliner-pipeline-templates/SamplePipeline.template", "templates/Sharpliner.Templates/sharpliner-pipeline/SamplePipeline.cs"),
+            ("templates/sharpliner-pipeline-templates/SampleTemplate.template", "templates/Sharpliner.Templates/sharpliner-pipeline/SampleTemplate.cs"),
         };
 
         foreach (var (template, output) in resources)
@@ -35,7 +40,9 @@ public class Program
         using var sr = new StreamReader(templatePath);
         while (sr.ReadLine() is string line)
         {
-            if (!line.StartsWith("[!code-"))
+            bool isCodeBlock = line.StartsWith("[!code-");
+
+            if (!isCodeBlock && !line.StartsWith("[!text-"))
             {
                 builder.AppendLine(line);
                 continue;
@@ -50,7 +57,7 @@ public class Program
 
             if (!partialFileSnippet)
             {
-                var codeSnippet = GetCodeSnippet(fileLines, language);
+                var codeSnippet = GetCodeSnippet(fileLines, language, isCodeBlock);
                 builder.Append(codeSnippet);
                 continue;
             }
@@ -67,12 +74,12 @@ public class Program
                 var startLine = int.Parse(lines[0].Substring("L".Length));
                 var endLine = int.Parse(lines[1].Substring("L".Length));
 
-                var codeSnippet = GetCodeSnippet(fileLines, startLine, endLine, language);
+                var codeSnippet = GetCodeSnippet(fileLines, startLine, endLine, language, isCodeBlock);
                 builder.Append(codeSnippet);
             }
             else
             {
-                var codeSnippet = GetCodeSnippet(fileLines, lineRangesOrRegion, language);
+                var codeSnippet = GetCodeSnippet(fileLines, lineRangesOrRegion, language, isCodeBlock);
                 builder.Append(codeSnippet);
             }
         }
@@ -107,12 +114,12 @@ public class Program
         }
     }
 
-    private static string GetCodeSnippet(string[] lines, int startLine, int endLine, string language)
+    private static string GetCodeSnippet(string[] lines, int startLine, int endLine, string language, bool isCodeBlock)
     {
-        return GetCodeSnippet(lines[(startLine - 1)..endLine], language);
+        return GetCodeSnippet(lines[(startLine - 1)..endLine], language, isCodeBlock);
     }
 
-    private static string GetCodeSnippet(string[] lines, string region, string language)
+    private static string GetCodeSnippet(string[] lines, string region, string language, bool isCodeBlock)
     {
         var snippet = lines
             .SkipWhile(line => line.Trim() != $"#region {region}")
@@ -135,15 +142,19 @@ public class Program
             snippet.RemoveAt(snippet.Count - 1);
         }
 
-        return GetCodeSnippet(snippet, language);
+        return GetCodeSnippet(snippet, language, isCodeBlock);
     }
 
-    private static string GetCodeSnippet(IReadOnlyList<string> lines, string language)
+    private static string GetCodeSnippet(IReadOnlyList<string> lines, string language, bool isCodeBlock)
     {
         var snippet = new StringBuilder();
-        snippet.AppendLine($"```{language}");
 
-        var indentation = lines[0].Length - lines[0].TrimStart().Length;
+        if (isCodeBlock)
+        {
+            snippet.AppendLine($"```{language}");
+        }
+
+        int indentation = isCodeBlock ? 0 : lines[0].Length - lines[0].TrimStart().Length;
 
         foreach (var line in lines)
         {
@@ -151,7 +162,11 @@ public class Program
             snippet.AppendLine(normalizedLine);
         }
 
-        snippet.AppendLine("```");
+        if (isCodeBlock)
+        {
+            snippet.AppendLine("```");
+        }
+
         return snippet.ToString();
     }
 
