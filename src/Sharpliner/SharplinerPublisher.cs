@@ -165,8 +165,21 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
             else
             {
                 // Use single nullable parameter constructor with null
-                var singleParamConstructor = GetSingleParamConstructor(type);
-                pipelineDefinition = Activator.CreateInstance(type, [null]);
+                ConstructorInfo? singleParamCtor = GetSingleParamConstructor(type);
+                object? parameter = null;
+
+                // If the ctor has a single parameter which has a default constructor, instantiate it
+                if (singleParamCtor is not null)
+                {
+                    Type parameterType = singleParamCtor.GetParameters()[0].ParameterType;
+                    var parameterCtor = parameterType.GetConstructor([]); // Ensure the parameter type is also instantiable
+                    if (parameterCtor is not null)
+                    {
+                        parameter = Activator.CreateInstance(parameterType);
+                    }
+                }
+
+                pipelineDefinition = Activator.CreateInstance(type, [parameter]);
             }
 
             if (pipelineDefinition == null)
