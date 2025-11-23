@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json.schemastore.org/template",
+  "author": "Premek Vysoky",
+  "classifications": ["YAML", "DevOps", "Pipeline", "Azure DevOps", "Azure Pipelines", "Continuous Integration", "CI"],
+  "name": "Sharpliner Pipeline Project",
+  "description": "A project template for creating Azure DevOps pipelines using Sharpliner",
+  "identity": "Sharpliner.ProjectTemplate",
+  "groupIdentity": "Sharpliner.ProjectTemplate",
+  "shortName": "sharpliner-pipeline",
+  "tags": {
+    "language": "C#",
+    "type": "project"
+  },
+  "sourceName": "SharplinerPipelineProject",
+  "preferNameDirectory": true,
+  "symbols": {
+    "Framework": {
+      "type": "parameter",
+      "description": "The target framework for the project.",
+      "datatype": "choice",
+      "choices": [
+        {
+          "choice": "net10.0",
+          "description": "Target net10.0"
+        },
+        {
+          "choice": "net9.0",
+          "description": "Target net9.0"
+        },
+        {
+          "choice": "net8.0",
+          "description": "Target net8.0"
+        },
+        {
+          "choice": "net7.0",
+          "description": "Target net7.0"
+        },
+        {
+          "choice": "net6.0",
+          "description": "Target net6.0"
+        }
+      ],
+      "replaces": "net8.0",
+      "defaultValue": "net10.0"
+    },
+    "skipRestore": {
+      "type": "parameter",
+      "datatype": "bool",
+      "description": "If specified, skips the automatic restore of the project on create.",
+      "defaultValue": "false"
+    }
+  },
+  "primaryOutputs": [
+    {
+      "path": "SharplinerPipelineProject.csproj"
+    }
+  ],
+  "defaultName": "SharplinerPipeline1",
+  "postActions": [
+    {
+      "condition": "(!skipRestore)",
+      "description": "Restore NuGet packages required by this project.",
+      "manualInstructions": [
+        {
+          "text": "Run 'dotnet restore'"
+        }
+      ],
+      "actionId": "210D431B-A78B-4D2F-B762-4ED3E3EA9025",
+      "continueOnError": true
+    }
+  ]
+}

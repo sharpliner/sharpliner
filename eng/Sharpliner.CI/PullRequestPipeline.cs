@@ -30,8 +30,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                     DotNet.Run with
                     {
                         DisplayName = "Validate generated docs",
-                        Projects = "eng/DocsGenerator/DocsGenerator.csproj",
-                        Arguments = "FailIfChanged=true"
+                        Arguments = "eng/DocsGenerator/Program.cs FailIfChanged"
                     },
 
                     ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj"),

@@ -4,20 +4,52 @@ Sharpliner is a .NET library that lets you use C# for Azure DevOps pipeline defi
 Exchange YAML indentation problems for the type-safe environment of C# and let IntelliSense speed up your work!
 
 - [Getting started](#getting-started)
+  - [Quick Start with Project Template](#quick-start-with-project-template)
 - [Example](#example)
 - [Sharpliner features](#sharpliner-features)
   - [Intellisense](#intellisense)
+  - [Nice APIs](#nice-apis)
   - [Useful macros](#useful-macros)
+  - [Re-usable pipeline blocks](#re-usable-pipeline-blocks)
   - [Sourcing scripts from files](#sourcing-scripts-from-files)
+  - [Correct variable/parameter types](#correct-variableparameter-types)
   - [Pipeline validation](#pipeline-validation)
 - [Something missing?](#something-missing)
 - [Developing Sharpliner](#developing-sharpliner)
+  - [Building the Solution](#building-the-solution)
+  - [Generating Documentation](#generating-documentation)
+  - [Generating the Public API](#generating-the-public-api)
 
 ## Getting started
 
 All you have to do is reference our [NuGet package](https://www.nuget.org/packages/Sharpliner/) in your project, override a class with your definition and `dotnet build` the project! Dead simple!
 
 For more detailed steps, check our [documentation](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/GettingStarted.md).
+
+### Quick Start with Project Template
+
+If you prefer using .NET project templates, you can get started quickly with the following commands:
+
+```bash
+# Install the Sharpliner.Templates NuGet package
+dotnet new install Sharpliner.Templates
+
+# Create a new pipeline project with your preferred .NET version (6.0-10.0, default is 10.0)
+dotnet new sharpliner-pipeline -n MyProject.Pipelines -F net10.0
+
+# Navigate to your new project
+cd MyProject.Pipelines
+
+# Build the project to generate your first pipeline YAML
+dotnet build
+```
+
+> [!NOTE]
+> The samples produced by the template expect to be built within a git repository when generating the YAMLs.
+> This is configured by the `TargetPathType.RelativeToGitRoot` setting which tells Sharpliner where to produce the YAMLs.
+
+This creates a new project with a sample pipeline definition in `pipelines/SamplePipeline.cs`.
+The generated `sample-pipeline.yml` file will be ready to use in your repository!
 
 ## Example
 
@@ -174,6 +206,8 @@ The repository layout is quite simple:
 └── Sharpliner.slnx      # Main solution of the project
 ```
 
+### Building the Solution
+
 Developing is quite easy - open the `Sharpliner.slnx` solution in VS. However, the solution won't build 100% the first time.
 This is because of the `Sharpliner.CI` project.
 This projects uses Sharpliner and defines pipelines for the Sharpliner repository - the YAML is published to `eng/pipelines`.
@@ -184,12 +218,32 @@ To build all of the solution 100%, **you have to build `Sharpliner.CI` from cons
 This will package `Sharpliner.csproj` first and produce the `43.43.43` package:
 
 ```text
-> dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj
+dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj
 ```
 
 If you make changes to the main library and want to test it using `Sharpliner.CI`, clean and then build the CI project from console:
 
 ```text
-> dotnet clean eng/Sharpliner.CI/Sharpliner.CI.csproj
-> dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj
+dotnet clean eng/Sharpliner.CI/Sharpliner.CI.csproj
+dotnet build eng/Sharpliner.CI/Sharpliner.CI.csproj
 ```
+
+### Generating Documentation
+
+The documentation markdown files are generated using the `eng/DocsGenerator` tool.
+This tool uses snippets from a real C# code to make sure the samples in the docs always build.
+To regenerate the documentation files, build and run the tool:
+
+```text
+dotnet run --project .\eng\DocsGenerator
+```
+
+Then commit the changed files.
+
+The PR pipeline automatically runs the documentation generator and fails the build if there are any changes, so you don't have to worry about forgetting to do this step.
+
+### Generating the Public API
+
+The public API of Sharpliner is defined in `tests\Sharpliner.Tests\PublicApiExport.txt.verified.txt`.
+Any changes made to the public API of the library then have to be reflected in this file.
+This helps the maintainers to be aware of the changes made to the library that could impact compatibility.

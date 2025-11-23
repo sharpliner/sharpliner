@@ -43,4 +43,10 @@
     <ProjectReference Include="..\..\src\Sharpliner\Sharpliner.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Include="..\..\templates\Sharpliner.Templates\sharpliner-pipeline\SampleTemplate.cs"
+             Link="Templates\SampleTemplate.cs" />
+    <Compile Include="..\..\templates\Sharpliner.Templates\sharpliner-pipeline\SamplePipeline.cs"
+             Link="Templates\SamplePipeline.cs" />
+  </ItemGroup>
 </Project>
