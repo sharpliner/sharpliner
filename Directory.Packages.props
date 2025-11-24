@@ -15,7 +15,7 @@
     </PackageVersion>
     <PackageVersion Include="OneOf.SourceGenerator" Version="3.0.271" />
     <PackageVersion Include="OneOf" Version="3.0.271" />
-    <PackageVersion Include="PublicApiGenerator" Version="11.4.1" />
+    <PackageVersion Include="PublicApiGenerator" Version="11.5.1" />
     <PackageVersion Include="Verify.Xunit" Version="31.7.2" />
     <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.5" />
     <PackageVersion Include="xunit" Version="2.9.3" />
