@@ -1,0 +1,18 @@
+﻿parameters:
+- name: environments
+  displayName: Target environments
+  type: stringList
+  default:
+  - dev
+  values:
+  - dev
+  - staging
+  - production
+
+- name: configs
+  displayName: Build configurations
+  type: stringList
+  values:
+  - Debug
+  - Release
+  - MinSizeRel

@@ -178,7 +178,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.StepListParameter StepListParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.Expressions.AdoExpressionList<Sharpliner.AzureDevOps.Step>? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.StepParameter StepParameter(string name, string? displayName = null, Sharpliner.AzureDevOps.Step? defaultValue = null) { }
         protected static Sharpliner.AzureDevOps.Template<Sharpliner.AzureDevOps.Step> StepTemplate(string path, Sharpliner.AzureDevOps.TemplateParameters? parameters = null) { }
-        protected static Sharpliner.AzureDevOps.StringListParameter StringListParameter(string name, string? displayName = null, System.Collections.Generic.IEnumerable<string>? defaultValue = null) { }
+        protected static Sharpliner.AzureDevOps.StringListParameter StringListParameter(string name, string? displayName = null, System.Collections.Generic.IEnumerable<string>? defaultValue = null, System.Collections.Generic.IEnumerable<string>? allowedValues = null) { }
         protected static Sharpliner.AzureDevOps.StringParameter StringParameter(string name, string? displayName = null, string? defaultValue = null, System.Collections.Generic.IEnumerable<string>? allowedValues = null) { }
         protected static Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask Task(string taskName, string? displayName = null) { }
         protected static Sharpliner.AzureDevOps.Step ValidateYamlsArePublished(string pipelineProject) { }
@@ -1046,7 +1046,9 @@ namespace Sharpliner.AzureDevOps
     }
     public sealed class StringListParameter : Sharpliner.AzureDevOps.Parameter<System.Collections.Generic.IEnumerable<string>>, System.IEquatable<Sharpliner.AzureDevOps.StringListParameter>
     {
-        public StringListParameter(string name, string? displayName = null, System.Collections.Generic.IEnumerable<string>? defaultValue = null) { }
+        public StringListParameter(string name, string? displayName = null, System.Collections.Generic.IEnumerable<string>? defaultValue = null, System.Collections.Generic.IEnumerable<string>? allowedValues = null) { }
+        [YamlDotNet.Serialization.YamlMember(Alias="values", Order=130)]
+        public new System.Collections.Generic.IEnumerable<string>? AllowedValues { get; init; }
         public override string Type { get; }
     }
     public sealed class StringParameter : Sharpliner.AzureDevOps.Parameter<string>, System.IEquatable<Sharpliner.AzureDevOps.StringParameter>

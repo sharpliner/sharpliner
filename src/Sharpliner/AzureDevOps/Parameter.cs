@@ -179,14 +179,22 @@ public sealed record StringParameter : Parameter<string>
 public sealed record StringListParameter : Parameter<IEnumerable<string>>
 {
     /// <summary>
+    /// Allowed list of values (for some data types)
+    /// </summary>
+    [YamlMember(Alias = "values", Order = 130)]
+    public new IEnumerable<string>? AllowedValues { get; init; }
+
+    /// <summary>
     /// Define a template parameter
     /// </summary>
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter in case this is a pipeline parameter</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    public StringListParameter(string name, string? displayName = null, IEnumerable<string>? defaultValue = null)
+    /// <param name="allowedValues">Allowed list of string values</param>
+    public StringListParameter(string name, string? displayName = null, IEnumerable<string>? defaultValue = null, IEnumerable<string>? allowedValues = null)
         : base(name, displayName, defaultValue, null)
     {
+        AllowedValues = allowedValues;
     }
 
     /// <inheritdoc />
