@@ -56,4 +56,27 @@ public class PipelineParameterTests
 
         return Verify(pipeline.Serialize());
     }
+
+    private class StringListParameterWithAllowedValues_Pipeline : SimpleTestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Parameters =
+            {
+                StringListParameter("environments", "Target environments", 
+                    defaultValue: ["dev"],
+                    allowedValues: ["dev", "staging", "production"]),
+                StringListParameter("configs", "Build configurations",
+                    allowedValues: ["Debug", "Release", "MinSizeRel"]),
+            }
+        };
+    }
+
+    [Fact]
+    public Task StringListParameter_With_AllowedValues_Test()
+    {
+        var pipeline = new StringListParameterWithAllowedValues_Pipeline();
+
+        return Verify(pipeline.Serialize());
+    }
 }
