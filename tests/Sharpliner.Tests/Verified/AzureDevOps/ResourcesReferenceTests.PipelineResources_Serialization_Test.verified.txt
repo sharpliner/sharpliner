@@ -1,0 +1,58 @@
+﻿resources:
+  pipelines:
+  - pipeline: source-pipeline
+    project: FabrikamFiber
+    source: PipelineTriggerSource
+    trigger:
+      branches:
+        include:
+        - main
+
+  - pipeline: other-project-pipeline
+    project: FabrikamRepo
+    source: PipelineTriggerFromOtherProject
+    trigger: {}
+
+jobs:
+- job: TestJob
+  pool:
+    name: ubuntu-latest
+  steps:
+  - bash: |-
+      echo $(resources.pipeline.source-pipeline.projectName)
+
+  - bash: |-
+      echo $(resources.pipeline.source-pipeline.projectID)
+
+  - bash: |-
+      echo $(resources.pipeline.source-pipeline.pipelineName)
+
+  - bash: |-
+      echo $(resources.pipeline.source-pipeline.pipelineID)
+
+  - bash: |-
+      echo $(resources.pipeline.source-pipeline.runName)
+
+  - bash: |-
+      echo $(resources.pipeline.source-pipeline.runID)
+
+  - bash: |-
+      echo $(resources.pipeline.source-pipeline.runURI)
+
+  - bash: |-
+      echo $(resources.pipeline.source-pipeline.sourceBranch)
+
+  - bash: |-
+      echo $(resources.pipeline.source-pipeline.sourceCommit)
+
+  - bash: |-
+      echo $(resources.pipeline.source-pipeline.sourceProvider)
+
+  - bash: |-
+      echo $(resources.pipeline.source-pipeline.requestedFor)
+
+  - bash: |-
+      echo $(resources.pipeline.source-pipeline.requestedForID)
+
+  - bash: |-
+      echo $(resources.pipeline.other-project-pipeline.projectName)

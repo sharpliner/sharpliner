@@ -1,4 +1,4 @@
-[assembly: System.Reflection.AssemblyMetadata("RepositoryUrl", "https://github.com/sharpliner/sharpliner")]
+﻿[assembly: System.Reflection.AssemblyMetadata("RepositoryUrl", "https://github.com/sharpliner/sharpliner")]
 [assembly: System.Resources.NeutralResourcesLanguage("en")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner.Tests")]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v10.0", FrameworkDisplayName=".NET 10.0")]
@@ -83,6 +83,7 @@ namespace Sharpliner.AzureDevOps
     {
         protected static readonly Sharpliner.AzureDevOps.VariableReferences.DependencyVariable dependencies;
         protected static readonly Sharpliner.AzureDevOps.TemplateDefinition.TemplateParameterReference parameters;
+        protected static readonly Sharpliner.AzureDevOps.ResourcesReference resources;
         protected static readonly Sharpliner.AzureDevOps.VariablesReference variables;
         protected AzureDevOpsDefinition() { }
         protected static Sharpliner.AzureDevOps.Tasks.AzureCliTaskBuilder AzureCli { get; }
@@ -775,6 +776,25 @@ namespace Sharpliner.AzureDevOps
         public Sharpliner.AzureDevOps.PipelineTrigger? Trigger { get; init; }
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Version { get; init; }
     }
+    public sealed class PipelineResourceMetadata
+    {
+        public Sharpliner.AzureDevOps.Expressions.VariableReference PipelineID { get; }
+        public Sharpliner.AzureDevOps.Expressions.VariableReference PipelineName { get; }
+        public Sharpliner.AzureDevOps.Expressions.VariableReference ProjectID { get; }
+        public Sharpliner.AzureDevOps.Expressions.VariableReference ProjectName { get; }
+        public Sharpliner.AzureDevOps.Expressions.VariableReference RequestedFor { get; }
+        public Sharpliner.AzureDevOps.Expressions.VariableReference RequestedForID { get; }
+        public Sharpliner.AzureDevOps.Expressions.VariableReference RunID { get; }
+        public Sharpliner.AzureDevOps.Expressions.VariableReference RunName { get; }
+        public Sharpliner.AzureDevOps.Expressions.VariableReference RunURI { get; }
+        public Sharpliner.AzureDevOps.Expressions.VariableReference SourceBranch { get; }
+        public Sharpliner.AzureDevOps.Expressions.VariableReference SourceCommit { get; }
+        public Sharpliner.AzureDevOps.Expressions.VariableReference SourceProvider { get; }
+    }
+    public sealed class PipelineResourceReference
+    {
+        public Sharpliner.AzureDevOps.PipelineResourceMetadata this[string alias] { get; }
+    }
     public class PipelineTrigger : System.IEquatable<Sharpliner.AzureDevOps.PipelineTrigger>
     {
         public PipelineTrigger() { }
@@ -878,6 +898,11 @@ namespace Sharpliner.AzureDevOps
         public Sharpliner.AzureDevOps.Expressions.AdoExpressionList<Sharpliner.AzureDevOps.PipelineResource> Pipelines { get; init; }
         public Sharpliner.AzureDevOps.Expressions.AdoExpressionList<Sharpliner.AzureDevOps.RepositoryResource> Repositories { get; init; }
         public Sharpliner.AzureDevOps.Expressions.AdoExpressionList<Sharpliner.AzureDevOps.WebhookResource> Webhooks { get; init; }
+    }
+    public class ResourcesReference
+    {
+        public ResourcesReference() { }
+        public Sharpliner.AzureDevOps.PipelineResourceReference Pipeline { get; }
     }
     public class RollingStrategy : Sharpliner.AzureDevOps.DeploymentStrategy, System.IEquatable<Sharpliner.AzureDevOps.RollingStrategy>
     {
