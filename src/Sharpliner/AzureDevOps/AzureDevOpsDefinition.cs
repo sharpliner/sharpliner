@@ -216,6 +216,14 @@ public abstract class AzureDevOpsDefinition
     protected static readonly VariablesReference variables = new();
 
     /// <summary>
+    /// Allows access to pipeline resources metadata.
+    /// For example: resources.pipeline["source-pipeline"].projectName
+    /// More details can be found in <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/resources-pipelines-pipeline#the-pipeline-resource-metadata-as-predefined-variables">official Azure DevOps pipelines documentation</see>.
+    /// </summary>
+    [System.Diagnostics.CodeAnalysis.SuppressMessage("Style", "IDE1006:Naming Styles", Justification = "Should not be capitalized to follow YAML syntax")]
+    protected static readonly ResourcesReference resources = new();
+
+    /// <summary>
     /// Defines a variable.
     /// </summary>
     /// <param name="name">Variable name</param>

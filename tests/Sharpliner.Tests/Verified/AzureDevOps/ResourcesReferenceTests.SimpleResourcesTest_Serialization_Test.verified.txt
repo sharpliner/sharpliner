@@ -1,0 +1,20 @@
+﻿resources:
+  pipelines:
+  - pipeline: source-pipeline
+    project: FabrikamFiber
+    source: PipelineTriggerSource
+    trigger:
+      branches:
+        include:
+        - main
+
+jobs:
+- job: EchoJob
+  pool:
+    name: ubuntu-latest
+  steps:
+  - bash: |-
+      echo $(resources.pipeline.source-pipeline.projectName)
+
+  - bash: |-
+      printenv | sort
