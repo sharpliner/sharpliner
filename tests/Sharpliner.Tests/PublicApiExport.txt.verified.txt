@@ -793,6 +793,7 @@ namespace Sharpliner.AzureDevOps
     }
     public sealed class PipelineResourceReference
     {
+        public PipelineResourceReference() { }
         public Sharpliner.AzureDevOps.PipelineResourceMetadata this[string alias] { get; }
     }
     public class PipelineTrigger : System.IEquatable<Sharpliner.AzureDevOps.PipelineTrigger>
