@@ -60,10 +60,60 @@ public class ResourcesReferenceTests
         };
     }
 
+    /// <summary>
+    /// Tests that pipeline resource metadata can be accessed using the resources.Pipeline["alias"].PropertyName syntax.
+    /// This verifies all 13 metadata properties are correctly serialized to YAML variables.
+    /// </summary>
     [Fact]
     public Task PipelineResources_Serialization_Test()
     {
         var pipeline = new ResourcesReferenceTest_Pipeline();
+
+        return Verify(pipeline.Serialize());
+    }
+
+    private class SimpleResourcesTest_Pipeline : SingleStagePipelineDefinition
+    {
+        public override string TargetFile => "simple-pipeline.yml";
+
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Resources = new Resources()
+            {
+                Pipelines =
+                {
+                    new PipelineResource("source-pipeline")
+                    {
+                        Source = "PipelineTriggerSource",
+                        Project = "FabrikamFiber",
+                        Trigger = new PipelineTrigger("main")
+                    }
+                }
+            },
+            Jobs =
+            {
+                new Job("EchoJob")
+                {
+                    Pool = new HostedPool("ubuntu-latest"),
+                    Steps =
+                    {
+                        // Example from the issue description
+                        Bash.Inline($"echo {resources.Pipeline["source-pipeline"].ProjectName}"),
+                        Bash.Inline("printenv | sort")
+                    }
+                }
+            }
+        };
+    }
+
+    /// <summary>
+    /// Tests the example scenario from the issue:
+    /// Using resources.Pipeline["source-pipeline"].ProjectName to access pipeline resource metadata.
+    /// </summary>
+    [Fact]
+    public Task SimpleResourcesTest_Serialization_Test()
+    {
+        var pipeline = new SimpleResourcesTest_Pipeline();
 
         return Verify(pipeline.Serialize());
     }

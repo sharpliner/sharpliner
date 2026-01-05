@@ -27,10 +27,6 @@ public sealed class PipelineResourceReference
     /// <param name="alias">The alias of the pipeline resource as defined in the resources section.</param>
     /// <returns>A pipeline resource metadata reference for the specified alias.</returns>
     public PipelineResourceMetadata this[string alias] => new(alias);
-
-    internal PipelineResourceReference()
-    {
-    }
 }
 
 /// <summary>
@@ -45,10 +41,10 @@ public sealed class PipelineResourceMetadata
     internal PipelineResourceMetadata(string alias)
     {
         _alias = alias;
-        _prefix = $"resources.pipeline.{alias}.";
+        _prefix = "resources.pipeline." + alias + ".";
     }
 
-    private VariableReference GetReference(string propertyName) => new($"{_prefix}{propertyName}");
+    private VariableReference GetReference(string propertyName) => new(_prefix + propertyName);
 
     /// <summary>
     /// The project name of the pipeline resource.
