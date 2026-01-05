@@ -35,12 +35,10 @@ public sealed class PipelineResourceReference
 /// </summary>
 public sealed class PipelineResourceMetadata
 {
-    private readonly string _alias;
     private readonly string _prefix;
 
     internal PipelineResourceMetadata(string alias)
     {
-        _alias = alias;
         _prefix = "resources.pipeline." + alias + ".";
     }
 
