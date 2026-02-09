@@ -37,17 +37,19 @@ public class SharplinerSerializerTests
         };
 
         var yaml = SharplinerSerializer.Serialize(dict);
+        var yamlLower = yaml.ToLower();
         
         // Ensure no YAML anchors (&) or aliases (*) are present
         yaml.Should().NotContain("&o");
         yaml.Should().NotContain("*o");
         
         // Ensure both values have the full content
-        yaml.ToLower().Should().Contain("linuxhostversion:");
-        yaml.ToLower().Should().Contain("windowshostversion:");
+        yamlLower.Should().Contain("linuxhostversion:");
+        yamlLower.Should().Contain("windowshostversion:");
         
         // Count occurrences of "sku:" to ensure it appears twice (once for each reference)
-        var skuCount = yaml.ToLower().Split("sku:").Length - 1;
+        var searchTerm = "sku:";
+        var skuCount = (yamlLower.Length - yamlLower.Replace(searchTerm, "").Length) / searchTerm.Length;
         skuCount.Should().Be(2, "SKU should be serialized twice, once for each dictionary entry");
     }
 }
