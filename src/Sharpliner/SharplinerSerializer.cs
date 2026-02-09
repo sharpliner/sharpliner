@@ -31,7 +31,8 @@ public static class SharplinerSerializer
             .WithNamingConvention(CamelCaseNamingConvention.Instance)
             .WithTypeConverter(new YamlStringEnumConverter())
             .ConfigureDefaultValuesHandling(DefaultValuesHandling.OmitDefaults | DefaultValuesHandling.OmitEmptyCollections)
-            .WithEventEmitter(nextEmitter => new MultilineStringEmitter(nextEmitter));
+            .WithEventEmitter(nextEmitter => new MultilineStringEmitter(nextEmitter))
+            .DisableAliases();
 
         return serializerBuilder.Build();
     }
