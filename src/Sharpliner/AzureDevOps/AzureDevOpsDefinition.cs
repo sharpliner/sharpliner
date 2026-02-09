@@ -392,8 +392,9 @@ public abstract class AzureDevOpsDefinition
     /// <param name="name">Name of the parameter, can be referenced in the template as ${{ parameters.name }}</param>
     /// <param name="displayName">Display name of the parameter shown in the UI when creating pipeline run</param>
     /// <param name="defaultValue">Default value; if no default, then the parameter MUST be given by the user at runtime</param>
-    protected static StringListParameter StringListParameter(string name, string? displayName = null, IEnumerable<string>? defaultValue = null)
-        => new(name, displayName, defaultValue);
+    /// <param name="allowedValues">Allowed list of string values</param>
+    protected static StringListParameter StringListParameter(string name, string? displayName = null, IEnumerable<string>? defaultValue = null, IEnumerable<string>? allowedValues = null)
+        => new(name, displayName, defaultValue, allowedValues);
 
     /// <summary>
     /// Defines a string template parameter
