@@ -1,0 +1,5 @@
+﻿LinuxHostVersion:
+  SKU: D16
+
+WindowsHostVersion:
+  SKU: D16
