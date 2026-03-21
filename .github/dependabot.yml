@@ -7,3 +7,7 @@ updates:
     ignore:
       - dependency-name: "Sharpliner"
       - dependency-name: "E2E.Tests.SharplinerLibrary"
+    groups:
+      all-dependencies:
+        patterns:
+        - "*"
