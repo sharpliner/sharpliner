@@ -1,0 +1,14 @@
+﻿resources:
+  pipelines:
+  - pipeline: source-pipeline
+    source: TriggeringPipeline
+    trigger:
+      branches:
+        include:
+        - main
+      tags:
+      - production
+      - signed
+      stages:
+      - PreProduction
+      - Production

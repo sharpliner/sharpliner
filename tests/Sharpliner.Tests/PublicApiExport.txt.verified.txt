@@ -802,8 +802,8 @@ namespace Sharpliner.AzureDevOps
         public PipelineTrigger(params string[] branches) { }
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? Batch { get; init; }
         public Sharpliner.AzureDevOps.InclusionRule? Branches { get; init; }
-        public Sharpliner.AzureDevOps.InclusionRule? Stages { get; init; }
-        public Sharpliner.AzureDevOps.InclusionRule? Tags { get; init; }
+        public System.Collections.Generic.List<string>? Stages { get; init; }
+        public System.Collections.Generic.List<string>? Tags { get; init; }
     }
     public sealed class PipelineVariableReference : Sharpliner.AzureDevOps.VariableReferenceBase
     {
