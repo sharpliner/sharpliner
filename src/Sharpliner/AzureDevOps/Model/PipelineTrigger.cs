@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Sharpliner.AzureDevOps.Expressions;
 
@@ -22,18 +23,20 @@ public record PipelineTrigger
     public InclusionRule? Branches { get; init; }
 
     /// <summary>
-    /// List of tags to evaluate for trigger event
+    /// List of tags to evaluate for trigger event.
+    /// See <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/process/pipeline-triggers?view=azure-devops#tag-filters">tag filters</see>.
     /// Optional, 2020.1 and greater
     /// </summary>
     [DisallowNull]
-    public InclusionRule? Tags { get; init; }
+    public List<string>? Tags { get; init; }
 
     /// <summary>
-    /// List of stages to evaluate for trigger event
+    /// List of stages to evaluate for trigger event.
+    /// See <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/process/pipeline-triggers?view=azure-devops#stage-filters">stage filters</see>.
     /// Optional, 2020.1 and greater
     /// </summary>
     [DisallowNull]
-    public InclusionRule? Stages { get; init; }
+    public List<string>? Stages { get; init; }
 
     /// <summary>
     /// Initializes a new instance of the <see cref="PipelineTrigger"/> class.

@@ -138,4 +138,36 @@ public class PipelineResourceSerializationTests
 
         return Verify(pipeline.Serialize());
     }
+
+    private class ResourcePipelineWithStagesAndTags : SingleStagePipelineDefinition
+    {
+        public override string TargetFile => "foo.yaml";
+
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Resources = new Resources()
+            {
+                Pipelines =
+                {
+                    new PipelineResource("source-pipeline")
+                    {
+                        Source = "TriggeringPipeline",
+                        Trigger = new PipelineTrigger(["main"])
+                        {
+                            Stages = ["PreProduction", "Production"],
+                            Tags = ["production", "signed"],
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task ResourcePipeline_StagesAndTags_Serialization_Test()
+    {
+        var pipeline = new ResourcePipelineWithStagesAndTags();
+
+        return Verify(pipeline.Serialize());
+    }
 }
