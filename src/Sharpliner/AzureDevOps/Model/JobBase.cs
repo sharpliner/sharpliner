@@ -68,13 +68,26 @@ public abstract record JobBase : IDependsOn
     /// </summary>
     [YamlMember(Order = 800)]
     public AdoExpression<int>? TimeoutInMinutes
-        => Timeout?.HasDefinition == true
-            ? Timeout.Condition != null
-                ? Timeout.Condition.Value((int)Timeout.Definition.TotalMinutes).EndIf
-                : (int)Timeout.Definition.TotalMinutes
-            : Timeout?.Condition != null
+    {
+        get
+        {
+            if (Timeout is null)
+            {
+                return null;
+            }
+
+            if (Timeout.HasDefinition)
+            {
+                return Timeout.Condition != null
+                    ? Timeout.Condition.Value((int)Timeout.Definition.TotalMinutes).EndIf
+                    : (int)Timeout.Definition.TotalMinutes;
+            }
+
+            return Timeout.Condition != null
                 ? Timeout.Condition.Value(default(int)).EndIf
                 : null;
+        }
+    }
 
     /// <summary>
     /// How much time to give 'run always even if cancelled tasks' before killing them

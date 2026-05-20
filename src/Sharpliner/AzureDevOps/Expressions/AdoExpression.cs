@@ -348,7 +348,7 @@ public record AdoExpression<T> : AdoExpression
     /// Creates a new instance of <see cref="AdoExpression{T}"/> with the given condition.
     /// </summary>
     /// <param name="condition">The condition.</param>
-    internal protected AdoExpression(IfCondition? condition) : base(condition)
+    protected internal AdoExpression(IfCondition? condition) : base(condition)
     {
     }
 
