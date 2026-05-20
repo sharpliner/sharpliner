@@ -307,6 +307,8 @@ public abstract record AdoExpression : IYamlConvertible
 /// </summary>
 public record AdoExpression<T> : AdoExpression
 {
+    internal static AdoExpression<T> Empty() => new();
+
     // Make sure we can for example assign a string into ConditionedDefinition<string>
     /// <summary>
     /// Implicitly converts a value into a <see cref="AdoExpression{T}"/> instance with a definition.

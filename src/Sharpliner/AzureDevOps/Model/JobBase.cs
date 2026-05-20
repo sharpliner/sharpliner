@@ -78,9 +78,39 @@ public abstract record JobBase : IDependsOn
 
             if (Timeout.HasDefinition)
             {
-                return Timeout.Condition != null
-                    ? Timeout.Condition.Value((int)Timeout.Definition.TotalMinutes).EndIf
-                    : (int)Timeout.Definition.TotalMinutes;
+                if (Timeout.Condition is null)
+                {
+                    return (int)Timeout.Definition.TotalMinutes;
+                }
+
+                var convertedTimeout = Timeout.Condition.Value((int)Timeout.Definition.TotalMinutes);
+                convertedTimeout.SetIsList(false);
+                return convertedTimeout.Parent is null or AdoExpression<int>
+                    ? convertedTimeout.EndIf
+                    : convertedTimeout;
+            }
+
+            if (Timeout.Definitions.Count > 0)
+            {
+                var convertedTimeout = AdoExpression<int>.Empty();
+                var timeoutDefinitions = new List<AdoExpression>(Timeout.Definitions);
+
+                foreach (var timeoutDefinition in timeoutDefinitions)
+                {
+                    if (timeoutDefinition is not AdoExpression<TimeSpan> typedTimeoutDefinition
+                        || !typedTimeoutDefinition.HasDefinition
+                        || typedTimeoutDefinition.Condition is null)
+                    {
+                        continue;
+                    }
+
+                    var convertedTimeoutDefinition =
+                        typedTimeoutDefinition.Condition.Value((int)typedTimeoutDefinition.Definition.TotalMinutes);
+                    convertedTimeoutDefinition.SetIsList(false);
+                    convertedTimeout.Definitions.Add(convertedTimeoutDefinition);
+                }
+
+                return convertedTimeout.Definitions.Count > 0 ? convertedTimeout : null;
             }
 
             return null;

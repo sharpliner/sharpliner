@@ -191,7 +191,11 @@ public class ConditionalsTests
             {
                 new Job("Ev2_Deployment", "Ev2 Deployment")
                 {
-                    Timeout = If.In("parameters.rolloutInfra", "Test", "PPE").Value(TimeSpan.FromMinutes(60)),
+                    Timeout = If.In("parameters.rolloutInfra", "Test", "PPE")
+                        .Value(TimeSpan.FromMinutes(60))
+                        .Else
+                        .Value(TimeSpan.FromMinutes(30))
+                        .EndIf,
                 },
             },
         };
