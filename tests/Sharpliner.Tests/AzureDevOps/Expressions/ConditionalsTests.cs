@@ -179,6 +179,32 @@ public class ConditionalsTests
         return Verify(pipeline.Serialize());
     }
 
+    private class ConditionedJobTimeout_Test_Pipeline : SimpleTestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Parameters =
+            {
+                StringParameter("rolloutInfra"),
+            },
+            Jobs =
+            {
+                new Job("Ev2_Deployment", "Ev2 Deployment")
+                {
+                    Timeout = If.In("parameters.rolloutInfra", "Test", "PPE").Value(TimeSpan.FromMinutes(60)),
+                },
+            },
+        };
+    }
+
+    [Fact]
+    public Task ConditionedJobTimeout_Test()
+    {
+        var pipeline = new ConditionedJobTimeout_Test_Pipeline();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class Custom_Condition_Test_Pipeline : TestPipeline
     {
         public override Pipeline Pipeline => new()

@@ -58,7 +58,7 @@ public abstract record Step
         init
         {
             field = value;
-            if (value?.Definition is not null)
+            if (value?.HasDefinition == true)
             {
                 TimeoutInMinutes = (int)value.Definition.TotalMinutes;
             }

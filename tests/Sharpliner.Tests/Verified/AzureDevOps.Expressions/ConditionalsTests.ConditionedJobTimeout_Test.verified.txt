@@ -1,0 +1,9 @@
+﻿parameters:
+- name: rolloutInfra
+  type: string
+
+jobs:
+- job: Ev2_Deployment
+  displayName: Ev2 Deployment
+  timeoutInMinutes:
+    ${{ if in(parameters.rolloutInfra, 'Test', 'PPE') }}: 60

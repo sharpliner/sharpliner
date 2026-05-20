@@ -152,7 +152,7 @@ public abstract record AdoExpression : IYamlConvertible
             
             // Start with the topmost parent (first condition)
             var topmostParent = chainedParents.Last();
-            var rootExpression = new AdoExpression<T>(default!, topmostParent.Condition!);
+            var rootExpression = new AdoExpression<T>(topmostParent.Condition!);
             
             // Preserve the grandparent hierarchy if it exists
             if (topmostParent.Parent != null)
@@ -171,7 +171,7 @@ public abstract record AdoExpression : IYamlConvertible
             for (int i = chainedParents.Count - 2; i >= 0; i--)
             {
                 var parentExpr = chainedParents[i];
-                var nestedExpression = new AdoExpression<T>(default!, parentExpr.Condition!);
+                var nestedExpression = new AdoExpression<T>(parentExpr.Condition!);
                 currentNestingLevel.Definitions.Add(nestedExpression);
                 nestedExpression.Parent = currentNestingLevel;
                 currentNestingLevel = nestedExpression;
@@ -250,7 +250,7 @@ public abstract record AdoExpression : IYamlConvertible
     /// <returns>The conditioned definition coming out of the inputs</returns>
     internal static AdoExpression<T> Link<T>(IfCondition condition, IEnumerable<AdoExpression<T>> items)
     {
-        var expression = new AdoExpression<T>(default!, condition);
+        var expression = new AdoExpression<T>(condition);
         expression.Definitions.AddRange(items);
         condition.Parent?.Definitions.Add(expression);
         expression.Parent = condition.Parent;
@@ -326,10 +326,12 @@ public record AdoExpression<T> : AdoExpression
     /// The actual definition (value).
     /// </summary>
     internal T? Definition { get; }
+    internal bool HasDefinition { get; }
 
     internal AdoExpression(T definition, IfCondition condition) : base(condition)
     {
         Definition = definition;
+        HasDefinition = true;
     }
 
     /// <summary>
@@ -339,13 +341,14 @@ public record AdoExpression<T> : AdoExpression
     public AdoExpression(T definition) : this()
     {
         Definition = definition;
+        HasDefinition = true;
     }
 
     /// <summary>
     /// Creates a new instance of <see cref="AdoExpression{T}"/> with the given condition.
     /// </summary>
     /// <param name="condition">The condition.</param>
-    protected AdoExpression(IfCondition? condition) : base(condition)
+    internal protected AdoExpression(IfCondition? condition) : base(condition)
     {
     }
 
@@ -671,7 +674,7 @@ public record AdoExpression<T> : AdoExpression
 
     internal virtual void SerializeSelf(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
-        if (Definition != null)
+        if (HasDefinition)
         {
             nestedObjectSerializer(Definition);
         }
@@ -686,9 +689,9 @@ public record AdoExpression<T> : AdoExpression
     {
         var definitions = new List<T>();
 
-        if (Definition is not null)
+        if (HasDefinition)
         {
-            definitions.Add(Definition);
+            definitions.Add(Definition!);
         }
 
         definitions.AddRange(
@@ -702,5 +705,5 @@ public record AdoExpression<T> : AdoExpression
     /// <inheritdoc/>
     public override string ToString() =>
         $"{(Condition == null ? "" : Condition + ": ")}{typeof(T).Name} " +
-        $"with {(Definition == null ? Definitions.Count : Definitions.Count + 1)} items";
+        $"with {(HasDefinition ? Definitions.Count + 1 : Definitions.Count)} items";
 }
