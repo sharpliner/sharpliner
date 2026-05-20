@@ -691,7 +691,7 @@ public record AdoExpression<T> : AdoExpression
 
         if (HasDefinition)
         {
-            definitions.Add(Definition!);
+            definitions.Add(Definition ?? throw new InvalidOperationException("Expression marked with definition has no definition value."));
         }
 
         definitions.AddRange(

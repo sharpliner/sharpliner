@@ -83,9 +83,7 @@ public abstract record JobBase : IDependsOn
                     : (int)Timeout.Definition.TotalMinutes;
             }
 
-            return Timeout.Condition != null
-                ? Timeout.Condition.Value(default(int)).EndIf
-                : null;
+            return null;
         }
     }
 
