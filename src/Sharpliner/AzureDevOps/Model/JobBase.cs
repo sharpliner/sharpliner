@@ -67,7 +67,8 @@ public abstract record JobBase : IDependsOn
     /// Time to wait for this job to complete before the server kills it.
     /// </summary>
     [YamlMember(Order = 800)]
-    public AdoExpression<int>? TimeoutInMinutes => Timeout?.Definition != null ? (int)Timeout.Definition.TotalMinutes : null;
+    public AdoExpression<int>? TimeoutInMinutes
+        => AdoExpressionConversion.ConvertScalar(Timeout, ts => (int)ts.TotalMinutes);
 
     /// <summary>
     /// How much time to give 'run always even if cancelled tasks' before killing them
@@ -80,7 +81,8 @@ public abstract record JobBase : IDependsOn
     /// Time to wait for the job to cancel before forcibly terminating it.
     /// </summary>
     [YamlMember(Order = 900)]
-    public AdoExpression<int>? CancelTimeoutInMinutes => CancelTimeout?.Definition != null ? (int)CancelTimeout.Definition.TotalMinutes : null;
+    public AdoExpression<int>? CancelTimeoutInMinutes
+        => AdoExpressionConversion.ConvertScalar(CancelTimeout, ts => (int)ts.TotalMinutes);
 
     /// <summary>
     /// What to clean up before the job runs

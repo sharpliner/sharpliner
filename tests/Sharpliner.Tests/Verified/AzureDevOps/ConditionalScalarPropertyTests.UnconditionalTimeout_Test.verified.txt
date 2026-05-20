@@ -1,0 +1,5 @@
+jobs:
+- job: Deployment
+  displayName: Deployment
+  timeoutInMinutes: 60
+  cancelTimeoutInMinutes: 5
