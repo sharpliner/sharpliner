@@ -58,14 +58,7 @@ public abstract record Step
         init
         {
             field = value;
-            if (value?.Definition is not null)
-            {
-                TimeoutInMinutes = (int)value.Definition.TotalMinutes;
-            }
-            else if (value?.Condition is not null)
-            {
-                TimeoutInMinutes = new AdoExpression<int>(default, value.Condition);
-            }
+            TimeoutInMinutes = AdoExpressionConversion.ConvertScalar(value, ts => (int)ts.TotalMinutes);
         }
     }
 

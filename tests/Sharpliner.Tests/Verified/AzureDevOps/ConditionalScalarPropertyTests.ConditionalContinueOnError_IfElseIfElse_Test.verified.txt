@@ -1,0 +1,11 @@
+﻿jobs:
+- job: testJob
+  steps:
+  - bash: |-
+      echo hi
+    ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      continueOnError: true
+    ${{ elseif eq(variables['Build.Reason'], 'Manual') }}:
+      continueOnError: false
+    ${{ else }}:
+      continueOnError: true

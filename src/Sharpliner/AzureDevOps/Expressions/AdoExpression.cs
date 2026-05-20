@@ -101,6 +101,14 @@ public abstract record AdoExpression : IYamlConvertible
 
     internal abstract void WriteInternal(IEmitter emitter, ObjectSerializer nestedObjectSerializer);
 
+    /// <summary>
+    /// Returns the boxed value of <see cref="AdoExpression{T}.Definition"/> for this node, or
+    /// <see langword="null"/> if this node has no direct value (e.g. it is a parent that holds
+    /// child <see cref="Definitions"/> only). Used by serialization helpers that need to inspect
+    /// the value without knowing the generic parameter.
+    /// </summary>
+    internal virtual object? GetDefinitionValue() => null;
+
     internal virtual void SetIsList(bool isList)
     {
         IsList = isList;
@@ -327,6 +335,8 @@ public record AdoExpression<T> : AdoExpression
     /// </summary>
     internal T? Definition { get; }
 
+    internal override object? GetDefinitionValue() => Definition;
+
     internal AdoExpression(T definition, IfCondition condition) : base(condition)
     {
         Definition = definition;
@@ -355,6 +365,12 @@ public record AdoExpression<T> : AdoExpression
     protected AdoExpression() : base((IfCondition?)null)
     {
     }
+
+    /// <summary>
+    /// Internal factory for creating an empty <see cref="AdoExpression{T}"/> to act as a
+    /// synthetic root for an If/ElseIf/Else chain.
+    /// </summary>
+    internal static AdoExpression<T> CreateEmpty() => new();
 
     /// <summary>
     /// Starts a new <c>${{ if (...) }}</c> section.

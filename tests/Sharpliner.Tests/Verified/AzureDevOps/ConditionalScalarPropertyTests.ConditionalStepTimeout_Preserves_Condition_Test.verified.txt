@@ -1,0 +1,7 @@
+﻿jobs:
+- job: testJob
+  steps:
+  - bash: |-
+      echo hi
+    ${{ if in(parameters.rolloutInfra, 'Test', 'PPE') }}:
+      timeoutInMinutes: 60

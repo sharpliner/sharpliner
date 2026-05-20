@@ -1,0 +1,7 @@
+jobs:
+- job: Deployment
+  displayName: Deployment
+  ${{ if in(parameters.rolloutInfra, 'Test', 'PPE') }}:
+    timeoutInMinutes: 60
+  ${{ else }}:
+    timeoutInMinutes: 120
