@@ -68,4 +68,18 @@ public class SharplinerSerializerTests
         yaml.Should().NotContain("\\U0001F6E0");
         yaml.Should().NotContain("\\U0001F46E");
     }
+
+    [Fact]
+    public void EscapedUnicodeText_RemainsEscapedText()
+    {
+        var stage = new Stage("build")
+        {
+            DisplayName = @"\U0001F6E0"
+        };
+
+        var yaml = SharplinerSerializer.Serialize(stage);
+
+        yaml.Should().Contain("\\U0001F6E0");
+        yaml.Should().NotContain("🛠");
+    }
 }
