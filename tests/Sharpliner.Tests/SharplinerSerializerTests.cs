@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using FluentAssertions;
+using Sharpliner.AzureDevOps;
 using Sharpliner.AzureDevOps.Expressions;
 
 namespace Sharpliner.Tests;
@@ -51,5 +52,20 @@ public class SharplinerSerializerTests
         var searchTerm = "sku:";
         var skuCount = (yamlLower.Length - yamlLower.Replace(searchTerm, "").Length) / searchTerm.Length;
         skuCount.Should().Be(2, "SKU should be serialized twice, once for each dictionary entry");
+    }
+
+    [Fact]
+    public void NonBmpUnicode_EmitAsLiteralUtf8()
+    {
+        var stage = new Stage("build")
+        {
+            DisplayName = "🛠️ Build Official 👮"
+        };
+
+        var yaml = SharplinerSerializer.Serialize(stage);
+
+        yaml.Should().Contain("🛠️ Build Official 👮");
+        yaml.Should().NotContain("\\U0001F6E0");
+        yaml.Should().NotContain("\\U0001F46E");
     }
 }

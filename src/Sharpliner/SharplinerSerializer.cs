@@ -22,6 +22,7 @@ public static class SharplinerSerializer
     public static string Serialize(object data, ISharplinerConfiguration? configuration = null)
     {
         var yaml = Serializer.Serialize(data);
+        yaml = DecodeEscapedCodePoints(yaml);
         configuration ??= SharplinerConfiguration.Current;
         return configuration.Serialization.PrettifyYaml ? Prettify(yaml) : yaml;
     }
@@ -54,4 +55,12 @@ public static class SharplinerSerializer
     private static readonly Regex s_mainItemStartRegex = new("((\r?\n) {0,8}- ?[a-zA-Z]+@?[a-zA-Z\\.0-9]*:)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
     private static readonly Regex s_conditionedBlockStartRegex = new("((\r?\n) {0,8}- ?\\${{ ?(if|else|each|parameters|variables|dependencies|stageDependencies)[^\n]+\n)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
     private static readonly Regex s_doubleNewLineStartRegex = new("(:\r?\n\r?\n)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    private static readonly Regex s_escapedCodePointRegex = new(@"(?<!\\)\\U([0-9a-fA-F]{8})", RegexOptions.Compiled);
+
+    private static string DecodeEscapedCodePoints(string yaml) =>
+        s_escapedCodePointRegex.Replace(yaml, match =>
+        {
+            var codePoint = Convert.ToInt32(match.Groups[1].Value, 16);
+            return char.ConvertFromUtf32(codePoint);
+        });
 }
