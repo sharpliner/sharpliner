@@ -101,7 +101,7 @@ public class ElseExpressionTests
     }
 
     /// <summary>
-    /// Regression test for https://github.com/sharpliner/sharpliner/issues/XXX:
+    /// Regression test for https://github.com/sharpliner/sharpliner/issues/537:
     /// Two independent if/else groups inside the same task inputs block must both appear
     /// in the generated YAML — the second ${{ else }} must not overwrite the first one.
     /// </summary>

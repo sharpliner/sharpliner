@@ -94,7 +94,11 @@ public class DictionaryExpression : Dictionary<string, object>, IYamlConvertible
     }
 
     void IYamlConvertible.Read(IParser parser, System.Type expectedType, ObjectDeserializer nestedObjectDeserializer)
-        => throw new System.NotImplementedException();
+    {
+        // Deserialization is not supported. Sharpliner is a code-first pipeline generation library;
+        // DictionaryExpression objects are only ever written to YAML, never read back.
+        throw new System.NotImplementedException("DictionaryExpression does not support YAML deserialization.");
+    }
 
     /// <summary>
     /// Serializes all entries in insertion order, emitting the original (un-suffixed) key for
