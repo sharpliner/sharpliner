@@ -1,0 +1,18 @@
+﻿stages:
+- stage: foo
+  jobs:
+  - job: job1
+    steps:
+    - task: SomeTask@1
+      inputs:
+        ${{ if eq(parameters.useEndpoint, true) }}:
+          EndpointProviderType: Ev2Endpoint
+          ConnectedServiceName: ${{ parameters.serviceConnection }}
+        ${{ else }}:
+          EndpointProviderType: ApprovalService
+        ${{ if eq(parameters.rings, '') }}:
+          StageMapName: Microsoft.Azure.SDP.Standard
+          Select: regions(${{ parameters.regions }})
+        ${{ else }}:
+          StageMapName: ${{ parameters.environment }}.Rings
+          Select: rings(${{ parameters.rings }})
