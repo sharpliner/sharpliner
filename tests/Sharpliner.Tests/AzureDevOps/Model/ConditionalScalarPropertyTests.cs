@@ -237,4 +237,29 @@ public class ConditionalScalarPropertyTests
 
         return Verify(pipeline.Serialize());
     }
+
+    private class ConditionalStageDisplayName_IfElsePipeline : TestPipeline
+    {
+        public override Pipeline Pipeline => new()
+        {
+            Stages =
+            {
+                new Stage("Example")
+                {
+                    DisplayName = If.IsBranch("main")
+                        .Value("job_1")
+                        .Else
+                        .Value("job_2"),
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task ConditionalStageDisplayName_IfElse_Test()
+    {
+        ConditionalStageDisplayName_IfElsePipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
 }

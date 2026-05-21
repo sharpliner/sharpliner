@@ -1,0 +1,6 @@
+﻿stages:
+- stage: Example
+  ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
+    displayName: job_1
+  ${{ else }}:
+    displayName: job_2
