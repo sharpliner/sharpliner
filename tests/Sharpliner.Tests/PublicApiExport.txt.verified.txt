@@ -1307,7 +1307,7 @@ namespace Sharpliner.AzureDevOps.Expressions
         public override bool Equals(object? obj) { }
         public override int GetHashCode() { }
     }
-    public class DictionaryExpression : System.Collections.Generic.Dictionary<string, object>
+    public class DictionaryExpression : System.Collections.Generic.Dictionary<string, object>, YamlDotNet.Serialization.IYamlConvertible
     {
         public DictionaryExpression() { }
         public DictionaryExpression(System.Collections.Generic.Dictionary<string, object> other) { }
