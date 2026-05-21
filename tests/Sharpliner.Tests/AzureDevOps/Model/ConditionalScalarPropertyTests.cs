@@ -247,9 +247,9 @@ public class ConditionalScalarPropertyTests
                 new Stage("Example")
                 {
                     DisplayName = If.IsBranch("main")
-                        .Value("job_1")
+                        .Value("main_stage")
                         .Else
-                        .Value("job_2"),
+                        .Value("other_stage"),
                 }
             }
         };

@@ -1,6 +1,6 @@
 ﻿stages:
 - stage: Example
   ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
-    displayName: job_1
+    displayName: main_stage
   ${{ else }}:
-    displayName: job_2
+    displayName: other_stage
