@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework></TargetFramework>
@@ -23,10 +23,10 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
 
-    <!-- Copy dependencies (YamlDotNet.dll) to bin/ so that we can include it in the NuGet later -->
+    <!-- Copy dependencies (Sharpliner.Core.dll, YamlDotNet.dll, OneOf.dll) to bin/ so that we can include them in the NuGet later -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
-    <!-- This makes sure we incluse YamlDotNet.dll in the nuget -->
+    <!-- This makes sure we include the runtime dependencies in the nuget so the MSBuild task can load them -->
     <GenerateNuspecDependsOn>$(GenerateNuspecDependsOn);IncludeDependenciesInNupkg</GenerateNuspecDependsOn>
   </PropertyGroup>
 
@@ -36,11 +36,19 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
-    <PackageReference Include="OneOf" />
-    <PackageReference Include="OneOf.SourceGenerator" />
-    <PackageReference Include="YamlDotNet" />
     <PackageReference Include="Microsoft.Build.Framework" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" />
+  </ItemGroup>
+
+  <!--
+    Sharpliner.Core contains all of the public Sharpliner API. The Sharpliner package
+    depends on Sharpliner.Core (so end users get the APIs through the normal NuGet graph)
+    and also bundles Sharpliner.Core.dll into its lib/ folder via IncludeDependenciesInNupkg
+    so that the MSBuild task can load it alongside the other runtime dependencies from the
+    NuGet cache location where the task is loaded.
+  -->
+  <ItemGroup>
+    <ProjectReference Include="..\Sharpliner.Core\Sharpliner.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,7 +59,8 @@
   </ItemGroup>
 
   <!--
-    This Target makes sure we include YamlDotNet.dll in the NuGet as it will be needed by the task
+    This Target makes sure we include the runtime dependencies (Sharpliner.Core.dll,
+    YamlDotNet.dll, OneOf.dll) in the NuGet as they will be needed by the MSBuild task.
     https://natemcmaster.com/blog/2017/11/11/msbuild-task-with-dependencies/#third-party-dependencies-and-nuget
   -->
   <Target Name="IncludeDependenciesInNupkg">
@@ -59,6 +68,38 @@
       The include needs to happen after output has been copied to build output folder
       but before NuGet generates a nuspec. See https://github.com/NuGet/Home/issues/4704.
     -->
+    <ItemGroup>
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net6.0\Sharpliner.Core.dll">
+        <PackagePath>lib\net6.0</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
+
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net7.0\Sharpliner.Core.dll">
+        <PackagePath>lib\net7.0</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
+
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net8.0\Sharpliner.Core.dll">
+        <PackagePath>lib\net8.0</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
+
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net9.0\Sharpliner.Core.dll">
+        <PackagePath>lib\net9.0</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
+
+      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net10.0\Sharpliner.Core.dll">
+        <PackagePath>lib\net10.0</PackagePath>
+        <Visible>false</Visible>
+        <BuildAction>Content</BuildAction>
+      </_PackageFiles>
+    </ItemGroup>
+
     <ItemGroup>
       <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net6.0\YamlDotNet.dll">
         <PackagePath>lib\net6.0</PackagePath>

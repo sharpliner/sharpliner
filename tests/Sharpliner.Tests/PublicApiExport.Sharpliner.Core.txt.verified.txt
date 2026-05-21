@@ -1,5 +1,6 @@
 ﻿[assembly: System.Reflection.AssemblyMetadata("RepositoryUrl", "https://github.com/sharpliner/sharpliner")]
 [assembly: System.Resources.NeutralResourcesLanguage("en")]
+[assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner.Tests")]
 [assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v10.0", FrameworkDisplayName=".NET 10.0")]
 namespace Sharpliner.AzureDevOps
@@ -2506,15 +2507,6 @@ namespace Sharpliner
     {
         System.Collections.Generic.IEnumerable<Sharpliner.ISharplinerDefinition> Definitions { get; }
     }
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    public class PublishDefinitions : Microsoft.Build.Utilities.Task
-    {
-        public PublishDefinitions() { }
-        [Microsoft.Build.Framework.Required]
-        public string? Assembly { get; set; }
-        public bool FailIfChanged { get; set; }
-        public override bool Execute() { }
-    }
     public abstract class SharplinerConfiguration : Sharpliner.ISharplinerConfiguration
     {
         protected SharplinerConfiguration() { }
@@ -2545,11 +2537,8 @@ namespace Sharpliner
             public Sharpliner.Common.ValidationSeverity RepositoryCheckouts { get; set; }
         }
     }
-    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
-    public class SharplinerPublisher
+    public static class SharplinerDefaults
     {
-        public SharplinerPublisher(Microsoft.Build.Utilities.TaskLoggingHelper logger) { }
-        public bool Publish(string assemblyPath, bool failIfChanged) { }
         public static string[] GetDefaultHeader(System.Type type) { }
     }
     public static class SharplinerSerializer

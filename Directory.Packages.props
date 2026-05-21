@@ -24,6 +24,7 @@
   <!-- Test libraries (we test referencing the Sharpliner library) -->
   <ItemGroup>
     <PackageVersion Include="Sharpliner" Version="43.43.43" />
+    <PackageVersion Include="Sharpliner.Core" Version="43.43.43" />
     <PackageVersion Include="E2E.Tests.SharplinerLibrary" Version="43.43.43" />
   </ItemGroup>
 </Project>

@@ -302,14 +302,7 @@ public class SharplinerPublisher(TaskLoggingHelper logger)
     /// Default YAML file header if one is not provided
     /// </summary>
     public static string[] GetDefaultHeader(Type type) =>
-    [
-        string.Empty,
-        "DO NOT MODIFY THIS FILE!",
-        string.Empty,
-        $"This YAML was auto-generated from { type.Name }",
-        $"To make changes, change the C# definition and rebuild its project",
-        string.Empty,
-    ];
+        SharplinerDefaults.GetDefaultHeader(type);
 
     private static string? GetFileHash(string path)
     {

@@ -142,7 +142,7 @@ public abstract class TemplateDefinitionBase<T> : TemplateDefinition, ISharpline
     /// <remarks>
     /// Leave empty array to omit file header.
     /// </remarks>
-    public virtual string[]? Header => SharplinerPublisher.GetDefaultHeader(GetType());
+    public virtual string[]? Header => SharplinerDefaults.GetDefaultHeader(GetType());
 
     /// <summary>
     /// Disallow any other types than what we define here as AzDO only supports these.
