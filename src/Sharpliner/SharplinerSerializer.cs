@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using Sharpliner.AzureDevOps.Serialization;
 using YamlDotNet.Serialization;
@@ -22,6 +23,7 @@ public static class SharplinerSerializer
     public static string Serialize(object data, ISharplinerConfiguration? configuration = null)
     {
         var yaml = Serializer.Serialize(data);
+        yaml = DecodeEscapedCodePoints(yaml);
         configuration ??= SharplinerConfiguration.Current;
         return configuration.Serialization.PrettifyYaml ? Prettify(yaml) : yaml;
     }
@@ -54,4 +56,56 @@ public static class SharplinerSerializer
     private static readonly Regex s_mainItemStartRegex = new("((\r?\n) {0,8}- ?[a-zA-Z]+@?[a-zA-Z\\.0-9]*:)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
     private static readonly Regex s_conditionedBlockStartRegex = new("((\r?\n) {0,8}- ?\\${{ ?(if|else|each|parameters|variables|dependencies|stageDependencies)[^\n]+\n)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
     private static readonly Regex s_doubleNewLineStartRegex = new("(:\r?\n\r?\n)", RegexOptions.IgnoreCase | RegexOptions.Compiled);
+    private static readonly Regex s_escapedCodePointRegex = new(@"\\U([0-9a-fA-F]{8})", RegexOptions.Compiled);
+
+    private static string DecodeEscapedCodePoints(string yaml) =>
+        s_escapedCodePointRegex.Replace(yaml, match =>
+        {
+            if (!IsInsideDoubleQuotedScalar(yaml, match.Index))
+            {
+                return match.Value;
+            }
+
+            var precedingBackslashes = 0;
+            for (var i = match.Index - 1; i >= 0 && yaml[i] == '\\'; i--)
+            {
+                precedingBackslashes++;
+            }
+
+            // Respect escaped backslashes. For example:
+            // "\\U0001F6E0" should remain text and not be decoded to an emoji.
+            if (precedingBackslashes % 2 != 0)
+            {
+                return match.Value;
+            }
+
+            if (!int.TryParse(match.Groups[1].Value, NumberStyles.HexNumber, CultureInfo.InvariantCulture, out var codePoint))
+            {
+                return match.Value;
+            }
+
+            if (codePoint is > 0x10FFFF or (>= 0xD800 and <= 0xDFFF))
+            {
+                return match.Value;
+            }
+
+            return char.ConvertFromUtf32(codePoint);
+        });
+
+    private static bool IsInsideDoubleQuotedScalar(string yaml, int index)
+    {
+        var lineStart = yaml.LastIndexOf('\n', index);
+        lineStart = lineStart == -1 ? 0 : lineStart + 1;
+
+        var inQuotes = false;
+        for (var i = lineStart; i < index; i++)
+        {
+            if (yaml[i] == '"' && (i == 0 || yaml[i - 1] != '\\'))
+            {
+                inQuotes = !inQuotes;
+            }
+        }
+
+        return inQuotes;
+    }
 }
