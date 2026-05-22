@@ -1,4 +1,5 @@
-﻿using Sharpliner.AzureDevOps.Expressions;
+﻿using System.Linq;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -18,7 +19,20 @@ public record CopyFilesTask : AzureDevOpsTask
     public AdoExpression<string>? SourceFolder
     {
         get => GetExpression<string>("SourceFolder");
-        init => SetProperty("SourceFolder", value);
+        init
+        {
+            if (value is not null)
+            {
+                // Ensure SourceFolder is emitted first in the canonical order (SourceFolder → Contents → TargetFolder → ...)
+                var saved = Inputs.ToList();
+                Inputs.Clear();
+                SetProperty("SourceFolder", value);
+                foreach (var kvp in saved)
+                {
+                    Inputs[kvp.Key] = kvp.Value;
+                }
+            }
+        }
     }
 
     /// <summary>

@@ -1,9 +1,9 @@
 ﻿task: CopyFiles@2
 
 inputs:
+  SourceFolder: ${{ parameters.sourceDir }}
   Contents: '**'
   TargetFolder: $(Build.ArtifactStagingDirectory)
-  SourceFolder: ${{ parameters.sourceDir }}
   CleanTargetFolder: true
   Overwrite: true
   flattenFolders: true
