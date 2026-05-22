@@ -24,7 +24,7 @@ public record CopyFilesTask : AzureDevOpsTask
             if (value is not null)
             {
                 // Ensure SourceFolder is emitted first in the canonical order (SourceFolder → Contents → TargetFolder → ...)
-                var saved = Inputs.ToList();
+                var saved = Inputs.Where(kvp => kvp.Key != "SourceFolder").ToList();
                 Inputs.Clear();
                 SetProperty("SourceFolder", value);
                 foreach (var kvp in saved)
