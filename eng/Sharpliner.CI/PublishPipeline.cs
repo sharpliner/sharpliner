@@ -39,6 +39,14 @@ class PublishPipeline : SingleStagePipelineDefinition
                     StepLibrary(new ProjectBuildSteps("src/Sharpliner/Sharpliner.csproj")),
 
                     DotNet
+                        .Pack("src/Sharpliner.Core/Sharpliner.Core.csproj", $"-p:PackageVersion={variables["packageVersion"]}") with
+                        {
+                            DisplayName = "Pack Sharpliner.Core .nupkg",
+                            OutputDir = ProjectBuildSteps.PackagePath,
+                            ConfigurationToPack = "Release",
+                        },
+
+                    DotNet
                         .Pack("src/Sharpliner/Sharpliner.csproj", $"-p:PackageVersion={variables["packageVersion"]}") with
                         {
                             DisplayName = "Pack Sharpliner .nupkg",
@@ -55,6 +63,10 @@ class PublishPipeline : SingleStagePipelineDefinition
                         },
 
                     Publish
+                        .Pipeline("Sharpliner.Core", $"{ProjectBuildSteps.PackagePath}/Sharpliner.Core.{variables["packageVersion"]}.nupkg")
+                        .DisplayAs("Publish Sharpliner.Core build artifacts"),
+
+                    Publish
                         .Pipeline("Sharpliner", $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.nupkg")
                         .DisplayAs("Publish Sharpliner build artifacts"),
 
@@ -69,6 +81,7 @@ class PublishPipeline : SingleStagePipelineDefinition
                             DisplayName = "Publish to nuget.org",
                             PackagesToPush =
                             [
+                                $"{ProjectBuildSteps.PackagePath}/Sharpliner.Core.{variables["packageVersion"]}.nupkg",
                                 $"{ProjectBuildSteps.PackagePath}/Sharpliner.{variables["packageVersion"]}.nupkg",
                                 $"{ProjectBuildSteps.PackagePath}/Sharpliner.Templates.{variables["packageVersion"]}.nupkg"
                             ]
