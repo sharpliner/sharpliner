@@ -1,0 +1,24 @@
+jobs:
+- job: test
+  steps:
+  - task: npmAuthenticate@0
+    inputs:
+      workingFile: .npmrc
+
+  - task: npmAuthenticate@0
+    inputs:
+      workingFile: packages/mypackage/.npmrc
+      customEndpoint: MyServiceConnection,AnotherServiceConnection
+
+  - task: npmAuthenticate@0
+    inputs:
+      workingFile: empty/.npmrc
+
+  - task: npmAuthenticate@0
+    inputs:
+      workingFile: whitespace/.npmrc
+      customEndpoint: MyServiceConnection,AnotherServiceConnection
+
+  - task: npmAuthenticate@0
+    inputs:
+      workingFile: null/.npmrc

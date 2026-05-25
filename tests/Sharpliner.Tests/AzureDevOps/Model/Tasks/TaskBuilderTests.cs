@@ -402,4 +402,33 @@ public class TaskBuilderTests
         
         return Verify(pipeline.Serialize());
     }
+
+    private class NpmTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        Npm.Authenticate(".npmrc"),
+                        Npm.Authenticate("packages/mypackage/.npmrc", ["MyServiceConnection", "AnotherServiceConnection"]),
+                        Npm.Authenticate("empty/.npmrc", []),
+                        Npm.Authenticate("whitespace/.npmrc", [" MyServiceConnection ", "", " AnotherServiceConnection "]),
+                        new NpmAuthenticateTask("null/.npmrc") with { CustomEndpoints = null },
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_Npm_Builders_Test()
+    {
+        NpmTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
 }
