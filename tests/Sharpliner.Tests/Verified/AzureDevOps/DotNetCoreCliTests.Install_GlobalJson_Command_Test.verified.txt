@@ -2,7 +2,8 @@
 - job: job
   steps:
   - task: UseDotNet@2
+    displayName: Install .NET SDK
     inputs:
       useGlobalJson: true
-      workingDirectory: /tmp
+      workingDirectory: {TempPath}
       installationPath: /.dotnet

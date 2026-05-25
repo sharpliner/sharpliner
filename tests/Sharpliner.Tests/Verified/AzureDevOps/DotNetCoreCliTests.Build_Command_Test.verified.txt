@@ -2,9 +2,10 @@
 - job: job
   steps:
   - task: DotNetCoreCLI@2
+    displayName: dotnet build
     inputs:
       command: build
       projects: project.csproj
       arguments: -c Release
       includeNuGetOrg: true
-      workingDirectory: /tmp
+      workingDirectory: {TempPath}

@@ -1,5 +1,7 @@
 ﻿task: PublishTestResults@2
 
+displayName: Publish test results
+
 inputs:
   testResultsFormat: JUnit
   testResultsFiles: '**/TEST-*.xml'

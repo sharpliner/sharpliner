@@ -13,6 +13,7 @@ public abstract record NuGetRestoreCommandTask : NuGetCommandTask
     /// </summary>
     protected NuGetRestoreCommandTask(string feedsToUse) : base("restore")
     {
+        DisplayName = "NuGet restore";
         FeedsToUse = feedsToUse;
     }
 

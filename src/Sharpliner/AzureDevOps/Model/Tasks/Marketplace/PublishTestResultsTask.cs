@@ -15,6 +15,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     /// <param name="testResultsFile">The test results files.</param>
     public PublishTestResultsTask(TestResultsFormat testResultsFormat, string testResultsFile) : base("PublishTestResults@2")
     {
+        DisplayName = "Publish test results";
         TestResultsFormat = testResultsFormat;
         TestResultsFiles = testResultsFile;
     }

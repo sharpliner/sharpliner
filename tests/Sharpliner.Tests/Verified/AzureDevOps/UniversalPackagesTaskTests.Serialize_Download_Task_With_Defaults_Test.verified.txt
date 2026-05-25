@@ -1,4 +1,6 @@
 ﻿task: UniversalPackages@0
 
+displayName: Download universal package
+
 inputs:
   command: download

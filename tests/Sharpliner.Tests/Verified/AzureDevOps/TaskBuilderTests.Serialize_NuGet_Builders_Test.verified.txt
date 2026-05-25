@@ -2,11 +2,13 @@
 - job: test
   steps:
   - task: NuGetAuthenticate@1
+    displayName: Authenticate to NuGet feeds
     inputs:
       forceReinstallCredentialProvider: true
       nuGetServiceConnections: MyServiceConnection
 
   - task: NuGetCommand@2
+    displayName: NuGet restore
     inputs:
       command: restore
       feedsToUse: select
@@ -15,6 +17,7 @@
       includeNuGetOrg: false
 
   - task: NuGetCommand@2
+    displayName: NuGet restore
     inputs:
       command: restore
       feedsToUse: select
@@ -22,6 +25,7 @@
       restoreSolution: '**/*.sln'
 
   - task: NuGetCommand@2
+    displayName: NuGet restore
     inputs:
       command: restore
       feedsToUse: config
@@ -32,6 +36,7 @@
     continueOnError: true
 
   - task: NuGetCommand@2
+    displayName: NuGet pack
     inputs:
       command: pack
       versioningScheme: off
@@ -41,6 +46,7 @@
       buildProperties: prop1=value1;prop2=value2
 
   - task: NuGetCommand@2
+    displayName: NuGet pack
     inputs:
       command: pack
       versioningScheme: byPrereleaseNumber
@@ -49,12 +55,14 @@
       patchVersion: 4
 
   - task: NuGetCommand@2
+    displayName: NuGet pack
     inputs:
       command: pack
       versioningScheme: byEnvVar
       versionEnvVar: VERSION
 
   - task: NuGetCommand@2
+    displayName: NuGet pack
     inputs:
       command: pack
       versioningScheme: byBuildNumber
@@ -63,12 +71,14 @@
       packDestination: artifacts/packages
 
   - task: NuGetCommand@2
+    displayName: NuGet push
     inputs:
       command: push
       nuGetFeedType: internal
       publishVstsFeed: MyInternalFeed
 
   - task: NuGetCommand@2
+    displayName: NuGet push
     inputs:
       command: push
       nuGetFeedType: external

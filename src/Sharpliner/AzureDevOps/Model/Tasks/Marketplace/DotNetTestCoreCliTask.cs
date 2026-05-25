@@ -13,6 +13,7 @@ public record DotNetTestCoreCliTask : DotNetCoreCliTask
     /// </summary>
     public DotNetTestCoreCliTask() : base("test")
     {
+        DisplayName = "dotnet test";
     }
 
     /// <summary>

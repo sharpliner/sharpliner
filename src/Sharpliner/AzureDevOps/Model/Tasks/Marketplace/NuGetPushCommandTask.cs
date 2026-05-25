@@ -32,6 +32,7 @@ public abstract record NuGetPushCommandTask : NuGetCommandTask
     /// </summary>
     public NuGetPushCommandTask(string nuGetFeedType) : base("push")
     {
+        DisplayName = "NuGet push";
         NuGetFeedType = nuGetFeedType;
     }
 

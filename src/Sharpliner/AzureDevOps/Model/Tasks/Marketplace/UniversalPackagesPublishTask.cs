@@ -157,5 +157,6 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     public UniversalPackagesPublishTask()
         : base("publish")
     {
+        DisplayName = "Publish universal package";
     }
 }

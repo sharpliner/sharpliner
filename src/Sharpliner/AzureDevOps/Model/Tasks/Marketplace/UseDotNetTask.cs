@@ -138,6 +138,7 @@ public record UseDotNetTask : AzureDevOpsTask
     /// </summary>
     public UseDotNetTask() : base("UseDotNet@2")
     {
+        DisplayName = "Install .NET SDK";
     }
 }
 

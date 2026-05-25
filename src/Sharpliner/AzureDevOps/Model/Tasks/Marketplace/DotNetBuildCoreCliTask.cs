@@ -13,6 +13,7 @@ public record DotNetBuildCoreCliTask : DotNetCoreCliTask
     /// </summary>
     public DotNetBuildCoreCliTask() : base("build")
     {
+        DisplayName = "dotnet build";
     }
 
     /// <summary>

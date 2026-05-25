@@ -1,4 +1,6 @@
 ﻿task: PublishCodeCoverageResults@2
 
+displayName: Publish code coverage results
+
 inputs:
   summaryFileLocation: $(System.DefaultWorkingDirectory)/MyApp/**/site/cobertura/coverage.xml

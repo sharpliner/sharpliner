@@ -14,6 +14,7 @@ public record DotNetPublishCoreCliTask : DotNetCoreCliTask
     /// </summary>
     public DotNetPublishCoreCliTask() : base("publish")
     {
+        DisplayName = "dotnet publish";
     }
 
     /// <summary>

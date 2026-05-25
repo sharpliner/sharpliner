@@ -122,5 +122,6 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     public UniversalPackagesDownloadTask()
         : base("download")
     {
+        DisplayName = "Download universal package";
     }
 }

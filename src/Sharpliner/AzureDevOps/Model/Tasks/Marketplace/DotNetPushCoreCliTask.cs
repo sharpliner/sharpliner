@@ -13,6 +13,7 @@ public record DotNetPushCoreCliTask : DotNetCoreCliTask
     /// </summary>
     public DotNetPushCoreCliTask() : base("push")
     {
+        DisplayName = "dotnet nuget push";
     }
 
     /// <summary>

@@ -46,6 +46,7 @@ public record PublishCodeCoverageResultsTask : AzureDevOpsTask
     /// <param name="summaryFileLocation">The path of the summary file containing code coverage statistics.</param>
     public PublishCodeCoverageResultsTask(string summaryFileLocation) : base("PublishCodeCoverageResults@2")
     {
+        DisplayName = "Publish code coverage results";
         SummaryFileLocation = summaryFileLocation;
     }
 }
