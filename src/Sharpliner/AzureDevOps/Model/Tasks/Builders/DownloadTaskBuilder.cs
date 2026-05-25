@@ -214,9 +214,22 @@ public class DownloadTaskBuilder
         };
 
     /// <summary>
-    /// Creates a download task that an artifact from a pipeline resource.
+    /// Creates a download task that downloads an artifact from a pipeline resource.
+    /// <para>For example:</para>
+    /// <code lang="csharp">
+    /// Steps =
+    /// {
+    ///     Download.FromPipelineResource("myPipelineResource", "MyArtifact", ["**/*.dll"])
+    /// }
+    /// </code>
+    /// Will generate:
+    /// <code lang="yaml">
+    /// - download: myPipelineResource
+    ///   artifact: MyArtifact
+    ///   patterns: '**/*.dll'
+    /// </code>
     /// </summary>
-    /// <param name="resourceName">Alredy defined pipeline resource</param>
+    /// <param name="resourceName">Already defined pipeline resource</param>
     /// <param name="artifact">The name of the artifact to download. If left empty, all artifacts associated to the pipeline run will be downloaded.</param>
     /// <param name="patterns">
     /// One or more file matching patterns that limit which files get downloaded.
