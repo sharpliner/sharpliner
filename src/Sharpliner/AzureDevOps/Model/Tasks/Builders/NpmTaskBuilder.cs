@@ -10,8 +10,8 @@ public class NpmTaskBuilder
     /// file in your repository for the scope of the build. This enables npm and other npm-based tasks
     /// (e.g. <c>npm install</c>) to authenticate with private registries.
     /// </summary>
-    /// <param name="workingFile">The path to the <c>.npmrc</c> file that lists the registries you want to work with. Select the file, not the folder, such as <c>/packages/mypackage.npmrc</c>.</param>
-    /// <param name="customEndpoints">Optional comma-separated list of npm service connection names for registries outside this organization/collection.</param>
+    /// <param name="workingFile">The path to the <c>.npmrc</c> file that lists the registries you want to work with. Select the file, not the folder, such as <c>/packages/mypackage/.npmrc</c>.</param>
+    /// <param name="customEndpoints">Optional list of npm service connection names for registries outside this organization/collection.</param>
     /// <returns>An <see cref="NpmAuthenticateTask"/> instance.</returns>
     /// <example>
     /// <code lang="csharp">
@@ -31,7 +31,7 @@ public class NpmTaskBuilder
 
         if (customEndpoints is not null)
         {
-            task = task with { CustomEndpoint = customEndpoints };
+            task = task with { CustomEndpoints = customEndpoints };
         }
 
         return task;

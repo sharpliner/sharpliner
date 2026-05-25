@@ -1934,7 +1934,7 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public NpmAuthenticateTask(string workingFile) { }
         [YamlDotNet.Serialization.YamlIgnore]
-        public string[]? CustomEndpoint { get; init; }
+        public string[]? CustomEndpoints { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public string WorkingFile { get; init; }
     }

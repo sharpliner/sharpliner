@@ -415,6 +415,9 @@ public class TaskBuilderTests
                     {
                         Npm.Authenticate(".npmrc"),
                         Npm.Authenticate("packages/mypackage/.npmrc", ["MyServiceConnection", "AnotherServiceConnection"]),
+                        Npm.Authenticate("empty/.npmrc", []),
+                        Npm.Authenticate("whitespace/.npmrc", [" MyServiceConnection ", "", " AnotherServiceConnection "]),
+                        new NpmAuthenticateTask("null/.npmrc") with { CustomEndpoints = null },
                     }
                 }
             }
