@@ -542,17 +542,20 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
 
             steps:
             - task: UseDotNet@2
+              displayName: Install .NET SDK
               inputs:
                 packageType: sdk
                 version: ${{ parameters.version }}
 
             - ${{ if eq(parameters.restore, true) }}:
               - task: DotNetCoreCLI@2
+                displayName: dotnet restore
                 inputs:
                   command: restore
                   projects: ${{ parameters.project }}
 
             - task: DotNetCoreCLI@2
+              displayName: dotnet build
               inputs:
                 command: build
                 projects: ${{ parameters.project }}
@@ -635,17 +638,20 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
 
             steps:
             - task: UseDotNet@2
+              displayName: Install .NET SDK
               inputs:
                 packageType: sdk
                 version: ${{ parameters.version }}
 
             - ${{ if eq(parameters.restore, true) }}:
               - task: DotNetCoreCLI@2
+                displayName: dotnet restore
                 inputs:
                   command: restore
                   projects: ${{ parameters.project }}
 
             - task: DotNetCoreCLI@2
+              displayName: dotnet build
               inputs:
                 command: build
                 projects: ${{ parameters.project }}
@@ -762,17 +768,20 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
                 echo 'Hello World'
 
             - task: UseDotNet@2
+              displayName: Install .NET SDK
               inputs:
                 packageType: sdk
                 version: 6.0.100
 
             - ${{ if eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
               - task: DotNetCoreCLI@2
+                displayName: dotnet restore
                 inputs:
                   command: restore
                   projects: src/MyProject.sln
 
             - task: DotNetCoreCLI@2
+              displayName: dotnet build
               inputs:
                 command: build
                 projects: src/MyProject.sln

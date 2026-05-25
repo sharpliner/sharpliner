@@ -1,11 +1,11 @@
 ﻿jobs:
 - job: test
   steps:
-  - script: |+
+  - script: |
       dir src
       echo "Hello World!"
 
-  - script: |+
+  - script: |
       dir src
       echo "Hello World!"
     displayName: A display name
@@ -15,6 +15,6 @@
       echo 'Goodbye, world!'
     displayName: A display name
 
-  - script: |+
+  - script: |
       dir src
       echo "Hello World!"

@@ -60,17 +60,20 @@
 
 steps:
 - task: UseDotNet@2
+  displayName: Install .NET SDK
   inputs:
     packageType: sdk
     version: ${{ parameters.version }}
 
 - ${{ if eq(parameters.restore, true) }}:
   - task: DotNetCoreCLI@2
+    displayName: dotnet restore
     inputs:
       command: restore
       projects: ${{ parameters.project }}
 
 - task: DotNetCoreCLI@2
+  displayName: dotnet build
   inputs:
     command: build
     projects: ${{ parameters.project }}
