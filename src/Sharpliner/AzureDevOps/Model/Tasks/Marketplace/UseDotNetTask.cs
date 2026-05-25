@@ -131,6 +131,7 @@ public record UseDotNetTask : AzureDevOpsTask
         PackageType = packageType;
         Version = version;
         IncludePreviewVersions = includePreviewVersions;
+        DisplayName = packageType == DotNetPackageType.Runtime ? "Install .NET runtime" : "Install .NET SDK";
     }
 
     /// <summary>

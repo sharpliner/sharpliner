@@ -9,6 +9,7 @@ public class DefaultDisplayNameTests
     public void Candidate_Tasks_Should_Have_Default_DisplayName()
     {
         new UseDotNetTask().DisplayName!.FlattenDefinitions().Should().ContainSingle().Which.Should().Be("Install .NET SDK");
+        new UseDotNetTask(DotNetPackageType.Runtime, "8.0.x").DisplayName!.FlattenDefinitions().Should().ContainSingle().Which.Should().Be("Install .NET runtime");
         new NuGetAuthenticateTask().DisplayName!.FlattenDefinitions().Should().ContainSingle().Which.Should().Be("Authenticate to NuGet feeds");
         new PublishCodeCoverageResultsTask("coverage.xml").DisplayName!.FlattenDefinitions().Should().ContainSingle().Which.Should().Be("Publish code coverage results");
         new PublishTestResultsTask(TestResultsFormat.JUnit, "**/TEST-*.xml").DisplayName!.FlattenDefinitions().Should().ContainSingle().Which.Should().Be("Publish test results");
