@@ -96,6 +96,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.InlineCondition IsNotPullRequest { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsPullRequest { get; }
         protected static Sharpliner.AzureDevOps.DependsOn NoDependsOn { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.NpmTaskBuilder Npm { get; }
         protected static Sharpliner.AzureDevOps.Tasks.NuGetTaskBuilder NuGet { get; }
         protected static Sharpliner.AzureDevOps.Tasks.PowershellTaskBuilder Powershell { get; }
         protected static Sharpliner.AzureDevOps.Tasks.PublishTaskBuilder Publish { get; }
@@ -1928,6 +1929,19 @@ namespace Sharpliner.AzureDevOps.Tasks
         public NoneDownloadTask() { }
         [YamlDotNet.Serialization.YamlMember(Order=1)]
         public string Download { get; }
+    }
+    public class NpmAuthenticateTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NpmAuthenticateTask>
+    {
+        public NpmAuthenticateTask(string workingFile) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string[]? CustomEndpoint { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string WorkingFile { get; init; }
+    }
+    public class NpmTaskBuilder
+    {
+        public NpmTaskBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.NpmAuthenticateTask Authenticate(string workingFile, string[]? customEndpoints = null) { }
     }
     public class NuGetAuthenticateTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetAuthenticateTask>
     {
