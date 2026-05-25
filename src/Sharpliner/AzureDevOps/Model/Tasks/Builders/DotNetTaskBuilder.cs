@@ -12,12 +12,46 @@ public class DotNetTaskBuilder
     }
 
     /// <summary>
-    /// Creates the <c>install</c> command version of the DotNetCoreCLI task.
+    /// <para>
+    /// Gets a <see cref="DotNetInstallBuilder"/> instance to create <c>UseDotNet</c> tasks
+    /// that install the .NET SDK or runtime.
+    /// </para>
+    /// For example:
+    /// <code lang="csharp">
+    /// Steps =
+    /// {
+    ///     DotNet.Install.Sdk("8.0.x")
+    /// }
+    /// </code>
+    /// Will generate:
+    /// <code lang="yaml">
+    /// - task: UseDotNet@2
+    ///   inputs:
+    ///     packageType: sdk
+    ///     version: 8.0.x
+    /// </code>
     /// </summary>
     public DotNetInstallBuilder Install => new();
 
     /// <summary>
-    /// Creates the <c>restore</c> command version of the DotNetCoreCLI task.
+    /// <para>
+    /// Gets a <see cref="DotNetRestoreBuilder"/> instance to create <c>dotnet restore</c> tasks
+    /// using the DotNetCoreCLI task.
+    /// </para>
+    /// For example:
+    /// <code lang="csharp">
+    /// Steps =
+    /// {
+    ///     DotNet.Restore.Projects("src/*.csproj")
+    /// }
+    /// </code>
+    /// Will generate:
+    /// <code lang="yaml">
+    /// - task: DotNetCoreCLI@2
+    ///   inputs:
+    ///     command: restore
+    ///     projects: src/*.csproj
+    /// </code>
     /// </summary>
     public DotNetRestoreBuilder Restore => new();
 
