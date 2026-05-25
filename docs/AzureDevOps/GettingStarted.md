@@ -188,6 +188,7 @@ jobs:
       displayName: Hello world
 
   - task: NuGetAuthenticate@1
+    displayName: Authenticate to NuGet feeds
 
   - task: UseDotNet@2
     displayName: Install .NET SDK

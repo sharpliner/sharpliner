@@ -164,11 +164,13 @@ Generated YAML:
 
 ```yaml
 - task: NuGetAuthenticate@1
+  displayName: Authenticate to NuGet feeds
   inputs:
     forceReinstallCredentialProvider: true
     nuGetServiceConnections: NuGetServiceConnection1,NuGetServiceConnection2
 
 - task: NuGetCommand@2
+  displayName: NuGet restore
   inputs:
     command: restore
     feedsToUse: select
@@ -177,6 +179,7 @@ Generated YAML:
     includeNuGetOrg: false
 
 - task: NuGetCommand@2
+  displayName: NuGet pack
   inputs:
     command: pack
     versioningScheme: byPrereleaseNumber
@@ -185,18 +188,21 @@ Generated YAML:
     patchVersion: 4
 
 - task: NuGetCommand@2
+  displayName: NuGet pack
   inputs:
     command: pack
     versioningScheme: byEnvVar
     versionEnvVar: VERSION
 
 - task: NuGetCommand@2
+  displayName: NuGet push
   inputs:
     command: push
     nuGetFeedType: internal
     publishVstsFeed: MyInternalFeed
 
 - task: NuGetCommand@2
+  displayName: NuGet push
   inputs:
     command: push
     nuGetFeedType: external
@@ -606,17 +612,20 @@ parameters:
 
 steps:
 - task: UseDotNet@2
+  displayName: Install .NET SDK
   inputs:
     packageType: sdk
     version: ${{ parameters.version }}
 
 - ${{ if eq(parameters.restore, true) }}:
   - task: DotNetCoreCLI@2
+    displayName: dotnet restore
     inputs:
       command: restore
       projects: ${{ parameters.project }}
 
 - task: DotNetCoreCLI@2
+  displayName: dotnet build
   inputs:
     command: build
     projects: ${{ parameters.project }}
