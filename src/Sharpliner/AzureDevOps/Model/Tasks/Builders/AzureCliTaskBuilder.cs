@@ -43,7 +43,7 @@ public class AzureCliTaskBuilder : TaskBuilderBase
 
     /// <summary>
     /// Creates an Azure CLI task where the contents come from a file.
-    /// The contents are inlined in the YAML as contrary to File method where the file name is just referenced.
+    /// The contents are inlined in the YAML as opposed to the File method where the file name is just referenced.
     /// <para>For example: assuming the file <c>scripts/deploy.sh</c> contains <c>az group create --name myRG --location eastus</c>:</para>
     /// <code lang="csharp">
     /// Steps =
@@ -99,7 +99,7 @@ public class AzureCliTaskBuilder : TaskBuilderBase
     /// <param name="scriptPath">Path to the script</param>
     /// <param name="displayName">Name of the build step</param>
     /// <returns>A new instance of <see cref="AzureCliFileTask"/> with the file path</returns>
-    public AzureCliFileTask File(string azureSubscription, AdoExpression<ScriptType> scriptType, string scriptPath, AdoExpression<string>? displayName = null)=> new(azureSubscription, scriptType,scriptPath)
+    public AzureCliFileTask File(string azureSubscription, AdoExpression<ScriptType> scriptType, string scriptPath, AdoExpression<string>? displayName = null) => new(azureSubscription, scriptType, scriptPath)
     {
         DisplayName = displayName!,
         ScriptPath = scriptPath,
