@@ -49,6 +49,15 @@ jobs:
       includeNuGetOrg: true
 
   - task: DotNetCoreCLI@2
+    displayName: Pack Sharpliner.Core .nupkg
+    inputs:
+      command: pack
+      packagesToPack: src/Sharpliner.Core/Sharpliner.Core.csproj
+      arguments: -p:PackageVersion=$(packageVersion)
+      outputDir: artifacts/package/release
+      configurationToPack: Release
+
+  - task: DotNetCoreCLI@2
     displayName: Pack Sharpliner .nupkg
     inputs:
       command: pack
@@ -65,6 +74,10 @@ jobs:
       arguments: -p:PackageVersion=$(packageVersion)
       outputDir: artifacts/package/release
       configurationToPack: Release
+
+  - publish: artifacts/package/release/Sharpliner.Core.$(packageVersion).nupkg
+    displayName: Publish Sharpliner.Core build artifacts
+    artifact: Sharpliner.Core
 
   - publish: artifacts/package/release/Sharpliner.$(packageVersion).nupkg
     displayName: Publish Sharpliner build artifacts
@@ -84,4 +97,4 @@ jobs:
         command: push
         nuGetFeedType: external
         publishFeedCredentials: Sharpliner / nuget.org
-        packagesToPush: artifacts/package/release/Sharpliner.$(packageVersion).nupkg;artifacts/package/release/Sharpliner.Templates.$(packageVersion).nupkg
+        packagesToPush: artifacts/package/release/Sharpliner.Core.$(packageVersion).nupkg;artifacts/package/release/Sharpliner.$(packageVersion).nupkg;artifacts/package/release/Sharpliner.Templates.$(packageVersion).nupkg

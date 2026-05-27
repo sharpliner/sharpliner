@@ -29,7 +29,7 @@ public abstract class PipelineDefinitionBase<TPipeline>
     /// </para>
     /// Leave empty array to omit file header.
     /// </summary>
-    public virtual string[]? Header => SharplinerPublisher.GetDefaultHeader(GetType());
+    public virtual string[]? Header => SharplinerDefaults.GetDefaultHeader(GetType());
 
     /// <summary>
     /// Define the pipeline by implementing this field.

@@ -1,0 +1,7 @@
+jobs:
+- job: testJob
+  steps:
+  - bash: |-
+      echo hi
+    ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      continueOnError: true

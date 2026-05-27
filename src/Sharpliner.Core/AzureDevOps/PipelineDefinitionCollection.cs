@@ -52,7 +52,7 @@ internal class PipelineDefinitionWrapper<T>(PipelineDefinitionData<T> data, Type
 
     public T Pipeline { get; } = data.Pipeline;
 
-    public string[]? Header { get; private set; } = data.Header ?? SharplinerPublisher.GetDefaultHeader(definitionType);
+    public string[]? Header { get; private set; } = data.Header ?? SharplinerDefaults.GetDefaultHeader(definitionType);
 
     public IReadOnlyCollection<IDefinitionValidation> Validations => Pipeline.Validations;
 

@@ -1,0 +1,45 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework></TargetFramework>
+    <TargetFrameworks>net6.0;net7.0;net8.0;net9.0;net10.0</TargetFrameworks>
+
+    <!-- NuGet details -->
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/sharpliner/sharpliner</RepositoryUrl>
+    <PackageProjectUrl>https://github.com/sharpliner/sharpliner</PackageProjectUrl>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <Summary>Define Azure DevOps pipelines using C# instead of YAML (core API library, no MSBuild dependency)</Summary>
+    <Description>Sharpliner.Core contains the core APIs of Sharpliner without an MSBuild dependency. Use this package when you want to generate Azure DevOps or GitHub Actions YAML programmatically from C# code. Reference the Sharpliner package instead if you want the MSBuild integration that publishes YAML automatically after build.</Description>
+    <PackageTags>yaml;azure devops;devops;ado;azdo;pipeline;pipelines;github;actions;csharp;definition;define;csharp;productivity;continous integration;ci</PackageTags>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageId>Sharpliner.Core</PackageId>
+    <Authors>PremekVysoky</Authors>
+    <NeutralLanguage>en</NeutralLanguage>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+
+    <IncludeSymbols>true</IncludeSymbols>
+    <IncludeSource>true</IncludeSource>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+
+    <RootNamespace>Sharpliner</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Release'">
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
+    <PackageReference Include="OneOf" />
+    <PackageReference Include="OneOf.SourceGenerator" />
+    <PackageReference Include="YamlDotNet" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="..\..\LICENSE" PackagePath="\" />
+    <Content Include="..\..\README.md" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

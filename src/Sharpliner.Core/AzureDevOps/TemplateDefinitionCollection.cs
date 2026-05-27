@@ -57,7 +57,7 @@ internal class TemplateDefinitionWrapper<T>(
     Type definitionType,
     IReadOnlyCollection<IDefinitionValidation> validations) : TemplateDefinition<T>
 {
-    private readonly string[]? _header = data.Header ?? SharplinerPublisher.GetDefaultHeader(definitionType);
+    private readonly string[]? _header = data.Header ?? SharplinerDefaults.GetDefaultHeader(definitionType);
 
     public override string TargetFile { get; } = data.TargetFile;
 

@@ -36,13 +36,19 @@ Your file should look something like this:
 </Project>
 ```
 
+> [!TIP]
+> The **Sharpliner** package brings in an MSBuild task that automatically publishes your YAML
+> after every build. If you'd rather drive YAML generation yourself (for example, from a unit test
+> or a custom CLI), reference **Sharpliner.Core** instead. It exposes the same API surface without
+> any MSBuild dependency, and you can call `SharplinerSerializer.Serialize` directly from your code.
+
 ## 2. Create a pipeline definition
 
 Inside of the `MyProject.Pipelines` pipeline project, create a new class.
 Let's call it `PullRequestPipeline.cs` and make it inherit from `Sharpliner.AzureDevops.PipelineDefinition`.
 Once you do this, you will see that you need to implement some of the abstract members of the pipeline:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/GettingStartedPipelineDefinitionTests.cs)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/GettingStartedPipelineDefinitionTests.cs)]
 
 You can also decide to override `SingleStagePipelineDefinition` in case you have a simpler pipeline with only a single stage.
 You can also override `PipelineWithExtends` to [extend an existing template](https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/extends?view=azure-pipelines).
@@ -61,7 +67,7 @@ Check out the [full reference with tips](./DefinitionReference.md) so that you c
 
 An example of a pipeline that builds and tests your PR can look like this:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/GettingStartedTests.cs#single-stage-pipeline-example-csharp)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/GettingStartedTests.cs#single-stage-pipeline-example-csharp)]
 
 ## 4. Export the pipeline
 
@@ -92,7 +98,7 @@ Time Elapsed 00:00:01.23
 
 Your `azure-pipelines.yml` should look something like this:
 
-[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/GettingStartedTests.cs#single-stage-pipeline-example-yaml)]
+[!code-yaml[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/GettingStartedTests.cs#single-stage-pipeline-example-yaml)]
 
 ## 5. Customize serialization or configure validations
 
@@ -102,7 +108,7 @@ The validations are additional checks that Sharpliner does around your model to 
 
 To configure serialization/validations, add a class into your project that inherits from a pre-prepared `SharplinerConfiguration` class:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/GettingStartedTests.cs#configuration)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/GettingStartedTests.cs#configuration)]
 
 ## 6. Make sure you commit your changes
 
@@ -111,7 +117,7 @@ To safeguard against these cases, we have created an AzureDevOps task called `Sh
 
 You can add this step to your pipeline:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/GettingStartedTests.cs#validate-yaml-step)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/GettingStartedTests.cs#validate-yaml-step)]
 
 Please note that this step builds the given project using .NET, so the SDK has to be available on the build agent.
 
