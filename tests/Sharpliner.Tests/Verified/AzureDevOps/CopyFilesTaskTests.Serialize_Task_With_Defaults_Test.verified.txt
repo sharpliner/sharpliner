@@ -1,6 +1,6 @@
 ﻿task: CopyFiles@2
 
 inputs:
+  SourceFolder: foo
   Contents: '**'
   TargetFolder: $(Build.ArtifactStagingDirectory)
-  SourceFolder: foo
