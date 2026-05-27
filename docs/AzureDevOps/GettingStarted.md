@@ -36,6 +36,12 @@ Your file should look something like this:
 </Project>
 ```
 
+> [!TIP]
+> The **Sharpliner** package brings in an MSBuild task that automatically publishes your YAML
+> after every build. If you'd rather drive YAML generation yourself (for example, from a unit test
+> or a custom CLI), reference **Sharpliner.Core** instead. It exposes the same API surface without
+> any MSBuild dependency, and you can call `SharplinerSerializer.Serialize` directly from your code.
+
 ## 2. Create a pipeline definition
 
 Inside of the `MyProject.Pipelines` pipeline project, create a new class.

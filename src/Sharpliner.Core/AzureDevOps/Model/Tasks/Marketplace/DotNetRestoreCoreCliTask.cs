@@ -122,7 +122,7 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
 }
 
 /// <summary>
-/// The msbuild verbosity level. See <see cref="Microsoft.Build.Framework.LoggerVerbosity"/>.
+/// The msbuild verbosity level. See <c>Microsoft.Build.Framework.LoggerVerbosity</c>.
 /// </summary>
 public enum BuildVerbosity
 {

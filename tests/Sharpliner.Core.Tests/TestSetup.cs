@@ -10,7 +10,7 @@ public class TestSetup
         Verifier.DerivePathInfo((sourceFile, projectDirectory, type, method) =>
         {
             return new PathInfo(
-                Path.Join(projectDirectory, "Verified", type.Namespace!.Substring("Sharpliner.Tests".Length).TrimStart('.')),
+                Path.Join(projectDirectory, "Verified", type.Namespace!.Substring("Sharpliner.Tests".Length).TrimStart('.')), 
                 type.Name,
                 method.Name);
         });
