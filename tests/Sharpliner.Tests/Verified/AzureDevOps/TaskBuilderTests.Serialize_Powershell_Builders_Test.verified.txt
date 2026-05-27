@@ -1,11 +1,11 @@
 ﻿jobs:
 - job: test
   steps:
-  - powershell: |+
+  - powershell: |
       Set-ErrorActionPreference Stop
       Write-Host "Lorem ipsum dolor sit amet"
 
-  - powershell: |+
+  - powershell: |
       Set-ErrorActionPreference Stop
       Write-Host "Lorem ipsum dolor sit amet"
 
@@ -18,6 +18,6 @@
       targetType: filePath
       filePath: foo.ps1
 
-  - powershell: |+
+  - powershell: |
       Set-ErrorActionPreference Stop
       Write-Host "Lorem ipsum dolor sit amet"

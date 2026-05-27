@@ -1,11 +1,11 @@
 ﻿jobs:
 - job: test
   steps:
-  - pwsh: |+
+  - pwsh: |
       Set-ErrorActionPreference Stop
       Write-Host "Lorem ipsum dolor sit amet"
 
-  - pwsh: |+
+  - pwsh: |
       Set-ErrorActionPreference Stop
       Write-Host "Lorem ipsum dolor sit amet"
     displayName: A display name
@@ -20,6 +20,6 @@
       filePath: foo.ps1
       pwsh: true
 
-  - pwsh: |+
+  - pwsh: |
       Set-ErrorActionPreference Stop
       Write-Host "Lorem ipsum dolor sit amet"

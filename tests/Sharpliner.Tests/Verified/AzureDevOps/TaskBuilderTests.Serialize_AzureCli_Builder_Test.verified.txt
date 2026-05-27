@@ -13,7 +13,7 @@
       azureSubscription: connectedServiceNameARM
       scriptType: ps
       scriptLocation: inlineScript
-      inlineScript: |+
+      inlineScript: |
         Set-ErrorActionPreference Stop
         Write-Host "Lorem ipsum dolor sit amet"
 
@@ -22,7 +22,7 @@
       azureSubscription: connectedServiceNameARM
       scriptType: ps
       scriptLocation: inlineScript
-      inlineScript: |+
+      inlineScript: |
         Set-ErrorActionPreference Stop
         Write-Host "Lorem ipsum dolor sit amet"
 
@@ -31,7 +31,7 @@
       azureSubscription: connectedServiceNameARM
       scriptType: ps
       scriptLocation: inlineScript
-      inlineScript: |+
+      inlineScript: |
         Set-ErrorActionPreference Stop
         Write-Host "Lorem ipsum dolor sit amet"
 

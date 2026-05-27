@@ -35,7 +35,7 @@ public class TaskBuilderTests
                             BashEnv = "~/.bash_profile",
                             DisplayName = "Test task"
                         },
-                        Bash.FromFile( "AzureDevops/Resources/test-script.sh"),
+                        Bash.FromFile( "AzureDevOps/Resources/test-script.sh"),
                     }
                 }
             }
@@ -64,7 +64,7 @@ public class TaskBuilderTests
                         Powershell.FromResourceFile("Test-Script.ps1"),
                         Powershell.Inline("$Files = Get-ChildItem *.sln", "Remove-Item $Files"),
                         Powershell.File("foo.ps1"),
-                        Powershell.FromFile("AzureDevops/Resources/Test-Script.ps1"),
+                        Powershell.FromFile("AzureDevOps/Resources/Test-Script.ps1"),
                     }
                 }
             }
@@ -93,7 +93,7 @@ public class TaskBuilderTests
                             Pwsh.FromResourceFile("Test-Script.ps1", "A display name"),
                             Pwsh.Inline("$Files = Get-ChildItem *.sln", "Remove-Item $Files"),
                             Pwsh.File("foo.ps1"),
-                            Pwsh.FromFile("AzureDevops/Resources/Test-Script.ps1"),
+                            Pwsh.FromFile("AzureDevOps/Resources/Test-Script.ps1"),
                         }
                     }
                 }
@@ -288,7 +288,7 @@ public class TaskBuilderTests
                     Steps =
                     {
                         AzureCli.File("connectedServiceNameARM", ScriptType.Ps, "foo.ps1"),
-                        AzureCli.FromFile("connectedServiceNameARM", ScriptType.Ps, "AzureDevops/Resources/Test-Script.ps1"),
+                        AzureCli.FromFile("connectedServiceNameARM", ScriptType.Ps, "AzureDevOps/Resources/Test-Script.ps1"),
                         AzureCli.FromResourceFile("connectedServiceNameARM", ScriptType.Ps, "Test-Script.ps1"),
                         AzureCli.FromResourceFile("connectedServiceNameARM", ScriptType.Ps, "Sharpliner.Tests.AzureDevOps.Resources.Test-Script.ps1"),
                         AzureCli.Inline("connectedServiceNameARM", ScriptType.Ps, displayName: null, "Write-Host \"test\"")
