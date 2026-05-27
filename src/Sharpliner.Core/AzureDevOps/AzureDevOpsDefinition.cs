@@ -337,6 +337,11 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static NuGetTaskBuilder NuGet { get; } = new();
 
+    /// <summary>
+    /// Creates an npm task.
+    /// </summary>
+    protected static NpmTaskBuilder Npm { get; } = new();
+
     #endregion
 
     #region Pipeline member shorthands

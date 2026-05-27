@@ -159,7 +159,7 @@ public class NuGetRestoreBuilder
     /// Creates a NuGetRestoreCommandTask to restore packages from a NuGet.config file.
     /// </para>
     /// <code lang="csharp">
-    /// NuGet.Restore.FromNuGetConfig("path/to/NuGet.config");
+    /// NuGet.Restore.FromNuGetConfig("path/to/NuGet.config") with
     /// {
     ///   RestoreSolution = "path/to/solution.sln"
     /// }
@@ -240,6 +240,23 @@ public class NuGetPackBuilder
 {
     /// <summary>
     /// Creates a task to pack NuGet packages without versioning.
+    /// <para>For example:</para>
+    /// <code lang="csharp">
+    /// NuGet.Pack.WithoutPackageVersioning with
+    /// {
+    ///     PackagesToPack = "**/*.csproj",
+    ///     PackDestination = "$(Build.ArtifactStagingDirectory)"
+    /// }
+    /// </code>
+    /// Generated YAML:
+    /// <code lang="yaml">
+    /// - task: NuGetCommand@2
+    ///   inputs:
+    ///     command: pack
+    ///     versioningScheme: off
+    ///     packagesToPack: '**/*.csproj'
+    ///     packDestination: $(Build.ArtifactStagingDirectory)
+    /// </code>
     /// </summary>
     public NuGetPackCommandTaskOff WithoutPackageVersioning => new();
 
@@ -247,6 +264,19 @@ public class NuGetPackBuilder
     /// <para>
     /// Creates a task to pack NuGet packages with the version set by a prerelease number.
     /// </para>
+    /// <code lang="csharp">
+    /// NuGet.Pack.ByPrereleaseNumber("1", "2", "3")
+    /// </code>
+    /// Generated YAML:
+    /// <code lang="yaml">
+    /// - task: NuGetCommand@2
+    ///   inputs:
+    ///     command: pack
+    ///     versioningScheme: byPrereleaseNumber
+    ///     majorVersion: '1'
+    ///     minorVersion: '2'
+    ///     patchVersion: '3'
+    /// </code>
     /// </summary>
     /// <param name="majorVersion">The <c>X</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.</param>
     /// <param name="minorVersion">The <c>Y</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.</param>
@@ -260,6 +290,17 @@ public class NuGetPackBuilder
     /// </para>
     /// The version will be set to the value of the environment variable that has the name specified by the versionEnvVar parameter, e.g. <c>MyVersion</c> (no $, just the environment variable name). 
     /// Make sure the environment variable is set to a proper SemVer, such as <c>1.2.3</c> or <c>1.2.3-beta1</c>.
+    /// <code lang="csharp">
+    /// NuGet.Pack.ByEnvVar("MY_PACKAGE_VERSION")
+    /// </code>
+    /// Generated YAML:
+    /// <code lang="yaml">
+    /// - task: NuGetCommand@2
+    ///   inputs:
+    ///     command: pack
+    ///     versioningScheme: byEnvVar
+    ///     versionEnvVar: MY_PACKAGE_VERSION
+    /// </code>
     /// </summary>
     /// <param name="versionEnvVar">The name of the environment variable that contains the version.</param>
     /// <returns>A new instance of <see cref="NuGetPackCommandTaskByEnvVar"/>.</returns>
@@ -274,6 +315,20 @@ public class NuGetPackBuilder
     /// Ensure that the build number being used contains a proper SemVer, such as <c>1.0.$(Rev:r)</c>. 
     /// The task will extract the dotted version, <c>1.2.3.4</c>, from the build number string, and use only that portion. 
     /// The rest of the string will be dropped.
+    /// <code lang="csharp">
+    /// NuGet.Pack.ByBuildNumber with
+    /// {
+    ///     PackagesToPack = "**/*.csproj"
+    /// }
+    /// </code>
+    /// Generated YAML:
+    /// <code lang="yaml">
+    /// - task: NuGetCommand@2
+    ///   inputs:
+    ///     command: pack
+    ///     versioningScheme: byBuildNumber
+    ///     packagesToPack: '**/*.csproj'
+    /// </code>
     /// </summary>
     public NuGetPackCommandTaskByBuildNumber ByBuildNumber => new();
 }
