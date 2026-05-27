@@ -339,7 +339,7 @@ public override SingleStagePipeline Pipeline => new()
 };
 ```
 
-See more examples in the [test class](../../tests/Sharpliner.Tests/AzureDevOps/TemplateTests.cs#49)
+See more examples in the [test class](../../tests/Sharpliner.Core.Tests/AzureDevOps/TemplateTests.cs#49)
 
 ## Conditional expressions
 

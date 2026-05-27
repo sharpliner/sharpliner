@@ -38,11 +38,11 @@ For each of these, there are two ways how you can define these.
 
 Either you "new" them the regular way though this requires a longer syntax similar to what you would do in YAML:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#classic-pipeline-steps)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#classic-pipeline-steps)]
 
 or you can use the shorthand style. For each of the basic commands, a method/property is defined on the parent class with the same name as the original task:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#shorthand-pipeline-steps)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#shorthand-pipeline-steps)]
 
 Please notice the `with` keyword which is a [new feature in C#](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/record#nondestructive-mutation) that allows modifying of records.
 
@@ -50,7 +50,7 @@ Please notice the `with` keyword which is a [new feature in C#](https://docs.mic
 
 Even though it is possible to use any of the non-default [Azure Pipelines tasks](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/?view=azure-devops) by specifying its name + inputs:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#azure-pipeline-task)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#azure-pipeline-task)]
 
 some of the tasks are quite hard to comprehend such as the [.NET Core CLI task](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/build/dotnet-core-cli?view=azure-devops) whose specification is quite long since the task can do many different things.
 Notice how some of the properties are only valid in a specific combination with another.
@@ -60,17 +60,17 @@ With Sharpliner, we remove some of this complexity by restricting which properti
 
 ### Dotnet
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#dotnet-tasks)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#dotnet-tasks)]
 
 ### NuGet
 
 The [NuGet v2 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/nuget-command-v2?view=azure-pipelines) also has multiple combinations based on the command.
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#nuget-tasks-code)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#nuget-tasks-code)]
 
 Generated YAML:
 
-[!code-yaml[](tests/Sharpliner.Tests/Verified/AzureDevOps.Docs/DefinitionReferenceTests.NuGet_Test.verified.txt)]
+[!code-yaml[](tests/Sharpliner.Core.Tests/Verified/AzureDevOps.Docs/DefinitionReferenceTests.NuGet_Test.verified.txt)]
 
 ### Contributions welcome
 
@@ -91,11 +91,11 @@ Supported marketplace tasks:
 
 Similarly to Build steps, there's a shorthand style of definition of variables too:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-variables)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-variables)]
 
 You can define variables and pass them to methods to make the code more readable:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-variables-readable)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-variables-readable)]
 
 ### Dependency Variables
 
@@ -120,15 +120,15 @@ This chart explains what shorthand to use to get the expected yaml output, as we
 
 To define [pipeline runtime parameters](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/runtime-parameters?view=azure-devops&tabs=script), utilize the `*Parameter` shorthands:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-parameters)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-parameters)]
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#enum-definition)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#enum-definition)]
 
 When referencing these parameters, you can just refer to the parameter and it will be replaced with a parameter reference expression:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-parameters-readable)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#pipeline-parameters-readable)]
 
-See more examples in the [test class](../../tests/Sharpliner.Tests/AzureDevOps/TemplateTests.cs#49)
+See more examples in the [test class](../../tests/Sharpliner.Core.Tests/AzureDevOps/TemplateTests.cs#49)
 
 ## Conditional expressions
 
@@ -138,29 +138,29 @@ If you find a place where `If` cannot be used, raise an issue and we can add it 
 
 This feature was a little bit problematic to mimic in C# but we've found a nice way to express these:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditioned-expressions-code)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditioned-expressions-code)]
 
 The resulting YAML will look like this:
 
-[!code-yaml[](tests/Sharpliner.Tests/Verified/AzureDevOps.Docs/DefinitionReferenceTests.Serialize_ConditionedExpressionsPipeline_Test.verified.txt)]
+[!code-yaml[](tests/Sharpliner.Core.Tests/Verified/AzureDevOps.Docs/DefinitionReferenceTests.Serialize_ConditionedExpressionsPipeline_Test.verified.txt)]
 
 You can also specify conditions in places like template parameters (which are improved dictionaries really):
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#template-conditioned-expressions-code)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#template-conditioned-expressions-code)]
 
 This will produce following YAML:
 
-[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#template-conditioned-expressions-yaml)]
+[!code-yaml[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#template-conditioned-expressions-yaml)]
 
 ### Conditions
 
 The conditions themselves are defined similarly to what Azure DevOps requires, so this example YAML condition:
 
-[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditions-yaml)]
+[!code-yaml[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditions-yaml)]
 
 would have this C# definition:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditions-code)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditions-code)]
 
 The logic operators such as `Equal` or `Or` expect either a string or a nested condition.
 Additionally, you can also use `variables["name"]` instead of `"variables[\"name\"]"` as shorthand notation but it has the same effect.
@@ -168,17 +168,17 @@ Additionally, you can also use `variables["name"]` instead of `"variables[\"name
 Finally, many of the commonly used conditions have macros available for a shorter syntax.
 These are:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditions-macros)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#conditions-macros)]
 
 ## Each expression
 
 The `${{ each var in collection }}` expression is also supported. Similarly to `If` and `EndIf`, you can use `Each` and `EndEach`:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#each-expression-code)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#each-expression-code)]
 
 generates the following YAML:
 
-[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#each-expression-yaml)]
+[!code-yaml[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#each-expression-yaml)]
 
 ## Templates
 
@@ -204,31 +204,31 @@ In such case, you inherit from the generic versions of these classes:
 
 Example usage:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#strongly-typed-parameters-code)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#strongly-typed-parameters-code)]
 
 Which produces following YAML template:
 
-[!code-yaml[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#strongly-typed-parameters-yaml)]
+[!code-yaml[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#strongly-typed-parameters-yaml)]
 
 You can also define a template without strong-typing the parameters:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#untyped-parameters-template)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#untyped-parameters-template)]
 
 To use the template, reference it in the following way:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#use-typed-template)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#use-typed-template)]
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#use-untyped-template)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#use-untyped-template)]
 
 ## Definition libraries
 
 Sharpliner lets you re-use code more easily than YAML templates do.
 Apart from obvious C# code re-use, you can also define sets of C# building blocks and re-use them in your pipelines:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#definition-library)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#definition-library)]
 
 You can then reference this library in between build steps and it will get expanded into the pipeline's YAML:
 
-[!code-csharp[](tests/Sharpliner.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#definition-library-usage)]
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#definition-library-usage)]
 
 More about this feature can be found [here (DefinitionLibraries.md)](https://github.com/sharpliner/sharpliner/blob/main/docs/AzureDevOps/DefinitionLibraries.md).
