@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <IsPackable>false</IsPackable>
-    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
@@ -43,10 +42,13 @@
     <ProjectReference Include="..\..\src\Sharpliner\Sharpliner.csproj" />
   </ItemGroup>
 
+  <!--
+    Link shared test helper from Sharpliner.Core.Tests. These tests live in this project
+    because they exercise internal Core APIs that are exposed via [InternalsVisibleTo("Sharpliner.Tests")].
+  -->
   <ItemGroup>
-    <Compile Include="..\..\templates\Sharpliner.Templates\sharpliner-pipeline\SampleTemplate.cs"
-             Link="Templates\SampleTemplate.cs" />
-    <Compile Include="..\..\templates\Sharpliner.Templates\sharpliner-pipeline\SamplePipeline.cs"
-             Link="Templates\SamplePipeline.cs" />
+    <Compile Include="..\Sharpliner.Core.Tests\AzureDevOps\TestPipeline.cs"
+             Link="AzureDevOps\TestPipeline.cs" />
   </ItemGroup>
+
 </Project>
