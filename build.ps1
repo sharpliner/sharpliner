@@ -1,20 +1,21 @@
 #!/usr/bin/env pwsh
 
-# Check if .dotnet directory already exists
-if (!(Test-Path ".\.dotnet")) {
+$SdkVersion = (Get-Content global.json -Raw | ConvertFrom-Json).sdk.version
+
+# Check if the required .NET SDK already exists
+if (!(Test-Path ".\.dotnet\sdk\$SdkVersion")) {
     Write-Host "Installing .NET SDK..."
     
     # Download and run the .NET install script
-    $installScript = Invoke-WebRequest -Uri "https://dot.net/v1/dotnet-install.ps1" -UseBasicParsing
-    $installScript.Content | Out-File -FilePath "dotnet-install.ps1" -Encoding UTF8
+    Invoke-WebRequest -Uri "https://dot.net/v1/dotnet-install.ps1" -OutFile "dotnet-install.ps1"
     
     # Install .NET SDK to local .dotnet directory
-    .\dotnet-install.ps1 -Version "10.0.100" -InstallDir ".\.dotnet"
+    .\dotnet-install.ps1 -Version $SdkVersion -InstallDir ".\.dotnet"
     
     # Clean up the install script
     Remove-Item "dotnet-install.ps1"
 } else {
-    Write-Host ".NET SDK installation directory already exists"
+    Write-Host ".NET SDK $SdkVersion installation directory already exists"
 }
 
 # Set environment variables
