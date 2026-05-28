@@ -43,7 +43,7 @@ jobs:
 
     - uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: 11.0.100-preview.4
+        dotnet-version: 11.0.100-preview.4.26230.115
 
     - name: Build
       run: dotnet build src/Sharpliner/Sharpliner.csproj
