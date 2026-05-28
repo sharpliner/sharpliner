@@ -2,6 +2,7 @@
 - job: job
   steps:
   - task: UseDotNet@2
+    displayName: Install .NET runtime
     inputs:
       packageType: runtime
       version: 5.0.100

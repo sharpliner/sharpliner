@@ -14,6 +14,7 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     /// </summary>
     public DotNetPackCoreCliTask() : base("pack")
     {
+        DisplayName = "dotnet pack";
     }
 
     /// <summary>

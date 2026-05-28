@@ -33,6 +33,7 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     /// </summary>
     public NuGetPackCommandTask(string versioningScheme) : base("pack")
     {
+        DisplayName = "NuGet pack";
         VersioningScheme = Require.NotNullAndNotEmpty(versioningScheme);
     }
 

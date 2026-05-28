@@ -2,6 +2,7 @@
 - job: job
   steps:
   - task: DotNetCoreCLI@2
+    displayName: dotnet pack
     inputs:
       command: pack
       packagesToPack: src/*.csproj
@@ -10,4 +11,4 @@
       configurationToPack: Release
       includesource: true
       includesymbols: true
-      outputDir: /tmp/staging/
+      outputDir: {TempPath}staging/

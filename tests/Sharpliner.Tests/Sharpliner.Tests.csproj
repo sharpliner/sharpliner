@@ -39,6 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Sharpliner.Core\Sharpliner.Core.csproj" />
     <ProjectReference Include="..\..\src\Sharpliner\Sharpliner.csproj" />
   </ItemGroup>
 

@@ -96,11 +96,13 @@ public class ReadmeTests : AzureDevOpsDefinition
         yaml.Trim().Should().Be(
             """
             - task: UseDotNet@2
+              displayName: Install .NET SDK
               inputs:
                 packageType: sdk
                 version: ${{ parameters.version }}
 
             - task: DotNetCoreCLI@2
+              displayName: dotnet restore
               inputs:
                 command: restore
                 includeNuGetOrg: false
@@ -111,6 +113,7 @@ public class ReadmeTests : AzureDevOpsDefinition
                 restoreDirectory: .packages
 
             - task: DotNetCoreCLI@2
+              displayName: dotnet build
               inputs:
                 command: build
                 projects: src/MyProject.csproj

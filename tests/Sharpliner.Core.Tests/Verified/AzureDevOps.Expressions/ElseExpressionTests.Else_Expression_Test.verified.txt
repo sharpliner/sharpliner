@@ -4,6 +4,7 @@
   - job: job1
     steps:
     - task: DotNetCoreCLI@2
+      displayName: dotnet pack
       inputs:
         command: pack
         packagesToPack: ProjectFile

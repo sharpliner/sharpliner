@@ -2,6 +2,7 @@
 - job: job
   steps:
   - task: DotNetCoreCLI@2
+    displayName: dotnet restore
     inputs:
       command: restore
       feedsToUse: config

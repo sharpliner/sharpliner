@@ -15,6 +15,7 @@
       preferTriggeringPipeline: true
 
   - task: DotNetCoreCLI@2
+    displayName: dotnet build
     inputs:
       command: build
       projects: src/MyProject.sln

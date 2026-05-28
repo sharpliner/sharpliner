@@ -13,6 +13,7 @@ public record NuGetAuthenticateTask : AzureDevOpsTask
     /// </summary>
     public NuGetAuthenticateTask() : base("NuGetAuthenticate@1")
     {
+        DisplayName = "Authenticate to NuGet feeds";
     }
 
     /// <summary>

@@ -2,6 +2,7 @@
 - job: job
   steps:
   - task: DotNetCoreCLI@2
+    displayName: dotnet nuget push
     inputs:
       command: push
       arguments: -c Release

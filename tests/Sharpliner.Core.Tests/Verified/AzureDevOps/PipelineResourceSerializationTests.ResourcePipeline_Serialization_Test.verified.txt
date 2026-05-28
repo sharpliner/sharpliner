@@ -42,7 +42,7 @@
 
   - container: ubuntu-latest
     image: ubuntu:22:04
-    options: --name ci-container -v /usr/bin/docker:/tmp/docker:ro
+    options: --name ci-container -v /usr/bin/docker:{TempPath}docker:ro
     mountReadOnly:
       externals: true
       tasks: true

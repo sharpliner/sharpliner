@@ -28,6 +28,7 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     /// </summary>
     public DotNetRestoreCoreCliTask() : base("restore")
     {
+        DisplayName = "dotnet restore";
     }
 
     /// <summary>
