@@ -15,6 +15,8 @@ public class TestSetup
                 method.Name);
         });
 
+        VerifierSettings.AddScrubber(builder => builder.Replace("/tmp/", "{TempPath}").Replace("/tmp", "{TempPath}"));
+
         // This simplifies adding new tests. see https://github.com/VerifyTests/Verify/blob/main/docs/verify-options.md#autoverify
         // VerifierSettings.AutoVerify();
     }
