@@ -1,6 +1,6 @@
 [assembly: System.Reflection.AssemblyMetadata("RepositoryUrl", "https://github.com/sharpliner/sharpliner")]
 [assembly: System.Resources.NeutralResourcesLanguage("en")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v10.0", FrameworkDisplayName=".NET 10.0")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v11.0", FrameworkDisplayName=".NET 11.0")]
 namespace Sharpliner
 {
     [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
