@@ -214,6 +214,6 @@ dotnet test tests/Sharpliner.Tests/Sharpliner.Tests.csproj --filter "PublicApisH
 - **The CI project requires the local NuGet package** - run `eng/scripts/build-dependencies.sh` first
 - **Some unit test failures are expected** due to path verification in test environment
 - **Case sensitivity matters** for Release vs release folder names in build output
-- **Multi-targeting**: The library targets net6.0, net7.0, net8.0, net9.0, and net10.0
+- **Multi-targeting**: The library targets net6.0, net7.0, net8.0, net9.0, net10.0, and net11.0
 - **Clean builds**: When making library changes, clean the CI project before rebuilding
 - **Public API changes require explicit approval** - update the verified file when intended

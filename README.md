@@ -34,8 +34,8 @@ If you prefer using .NET project templates, you can get started quickly with the
 # Install the Sharpliner.Templates NuGet package
 dotnet new install Sharpliner.Templates
 
-# Create a new pipeline project with your preferred .NET version (6.0-10.0, default is 10.0)
-dotnet new sharpliner-pipeline -n MyProject.Pipelines -F net10.0
+# Create a new pipeline project with your preferred .NET version (6.0-11.0, default is 11.0)
+dotnet new sharpliner-pipeline -n MyProject.Pipelines -F net11.0
 
 # Navigate to your new project
 cd MyProject.Pipelines

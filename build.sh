@@ -1,11 +1,13 @@
 #!/bin/bash
 
-# Check if .dotnet directory already exists
-if [ ! -d "./.dotnet" ]; then
+SDK_VERSION=11.0.100-preview.4
+
+# Check if the required .NET SDK already exists
+if [ ! -d "./.dotnet/sdk/$SDK_VERSION" ]; then
     echo "Installing .NET SDK..."
-    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version 10.0.100 --install-dir ./.dotnet
+    curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --version "$SDK_VERSION" --install-dir ./.dotnet
 else
-    echo ".NET SDK installation directory already exists"
+    echo ".NET SDK $SDK_VERSION installation directory already exists"
 fi
 
 export DOTNET_ROOT=$PWD/.dotnet
