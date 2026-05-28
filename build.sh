@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SDK_VERSION=11.0.100-preview.4
+SDK_VERSION=$(grep -oP '"version"\s*:\s*"\K[^"]+' global.json)
 
 # Check if the required .NET SDK already exists
 if [ ! -d "./.dotnet/sdk/$SDK_VERSION" ]; then

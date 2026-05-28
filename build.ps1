@@ -1,6 +1,6 @@
 #!/usr/bin/env pwsh
 
-$SdkVersion = "11.0.100-preview.4"
+$SdkVersion = (Get-Content global.json -Raw | ConvertFrom-Json).sdk.version
 
 # Check if the required .NET SDK already exists
 if (!(Test-Path ".\.dotnet\sdk\$SdkVersion")) {
