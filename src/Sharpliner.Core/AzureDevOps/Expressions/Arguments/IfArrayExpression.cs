@@ -9,7 +9,7 @@ namespace Sharpliner.AzureDevOps.Expressions.Arguments;
 /// </summary>
 public union IfArrayExpression(IfExpression[], ParameterReference[], VariableReference[], string[])
 {
-    public string Serialize()
+    internal string Serialize()
     {
         return this switch
         {

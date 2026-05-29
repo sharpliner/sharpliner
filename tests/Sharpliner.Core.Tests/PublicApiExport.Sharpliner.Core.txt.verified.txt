@@ -1457,7 +1457,6 @@ namespace Sharpliner.AzureDevOps.Expressions.Arguments
     public struct IfArrayExpression : System.Runtime.CompilerServices.IUnion
     {
         public object? Value { get; }
-        public string Serialize() { }
     }
     [System.Runtime.CompilerServices.Union]
     public struct IfExpression : System.Runtime.CompilerServices.IUnion
@@ -1470,7 +1469,6 @@ namespace Sharpliner.AzureDevOps.Expressions.Arguments
     public struct InlineArrayExpression : System.Runtime.CompilerServices.IUnion
     {
         public object? Value { get; }
-        public string Serialize() { }
     }
     [System.Runtime.CompilerServices.Union]
     public struct InlineExpression : System.Runtime.CompilerServices.IUnion

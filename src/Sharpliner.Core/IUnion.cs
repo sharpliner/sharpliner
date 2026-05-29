@@ -2,9 +2,9 @@
 namespace System.Runtime.CompilerServices;
 
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, AllowMultiple = false, Inherited = false)]
-public sealed class UnionAttribute : Attribute;
+internal sealed class UnionAttribute : Attribute;
 
-public interface IUnion
+internal interface IUnion
 {
     object? Value { get; }
 }
