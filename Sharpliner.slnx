@@ -22,7 +22,6 @@
     <Project Path="tests/E2E.Tests/SharplinerLibrary/E2E.Tests.SharplinerLibrary.csproj" />
     <Project Path="tests/Sharpliner.Core.Tests/Sharpliner.Core.Tests.csproj" />
     <Project Path="tests/Sharpliner.Tests/Sharpliner.Tests.csproj" />
-    <Project Path="tests/Sharpliner.Tests/Sharpliner.Tests.csproj" />
   </Folder>
   <Folder Name="/tests/E2E.Tests/">
     <Project Path="tests/E2E.Tests/ProjectUsingTheLibrarySkipPublish/E2E.Tests.ProjectUsingTheLibrarySkipPublish.csproj" />
