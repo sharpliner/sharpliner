@@ -1,5 +1,4 @@
 ﻿using Sharpliner.AzureDevOps.Expressions;
-using Sharpliner.AzureDevOps.Expressions.Arguments;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -78,6 +77,30 @@ public abstract class IfStringCondition<T> : IfCondition<T>
     /// <param name="parent">The parent condition.</param>
     protected IfStringCondition(string keyword, IfExpression one, IfArrayExpression two, AdoExpression<T>? parent = null)
         : this(keyword, one, Serialize(two), parent)
+    {
+    }
+
+    /// <summary>
+    /// Creates a new instance of <see cref="IfStringCondition{T}"/> with the specified keyword and expressions.
+    /// </summary>
+    /// <param name="keyword">The function keyword.</param>
+    /// <param name="one">The first expression.</param>
+    /// <param name="other">List of expressions.</param>
+    /// <param name="parent">The parent condition.</param>
+    protected IfStringCondition(string keyword, IfExpression one, IfExpression[] other, AdoExpression<T>? parent = null)
+        : this(keyword, one, Serialize(other), parent)
+    {
+    }
+
+    /// <summary>
+    /// Creates a new instance of <see cref="IfStringCondition{T}"/> with the specified keyword and expressions.
+    /// </summary>
+    /// <param name="keyword">The function keyword.</param>
+    /// <param name="one">List of expressions.</param>
+    /// <param name="two">The second expression.</param>
+    /// <param name="parent">The parent condition.</param>
+    protected IfStringCondition(string keyword, IfExpression[] one, IfExpression two, AdoExpression<T>? parent = null)
+        : this(keyword, Serialize(one), two, parent)
     {
     }
 

@@ -32,8 +32,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
-    <PackageReference Include="OneOf" />
-    <PackageReference Include="OneOf.SourceGenerator" />
     <PackageReference Include="YamlDotNet" />
   </ItemGroup>
 

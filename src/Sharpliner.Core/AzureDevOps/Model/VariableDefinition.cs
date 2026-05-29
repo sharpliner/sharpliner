@@ -1,6 +1,5 @@
 ﻿using System;
 using Sharpliner.AzureDevOps.Expressions;
-using Sharpliner.AzureDevOps.Expressions.Arguments;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps;

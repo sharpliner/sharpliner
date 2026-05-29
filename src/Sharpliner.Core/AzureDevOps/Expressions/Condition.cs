@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Sharpliner.AzureDevOps.Expressions.Arguments;
 using YamlDotNet.Core;
 using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
@@ -78,14 +77,19 @@ public abstract class Condition : IYamlConvertible
         return $"'{value}'";
     }
 
-    internal static string Serialize(IfArrayExpression arrayValue)
+    internal static string Serialize(IfArrayExpression ifExpressions)
     {
-        return IfStringConditionHelper.Serialize(arrayValue);
+        return ifExpressions.Serialize();
     }
 
-    internal static string Serialize(IfExpression stringOrVariableOrParameter)
+    internal static string Serialize(IfExpression ifExpression)
     {
-        return IfStringConditionHelper.Serialize(stringOrVariableOrParameter);
+        return ifExpression.Serialize();
+    }
+
+    internal static string Serialize(IfExpression[] inlineExpressions)
+    {
+        return string.Join(", ", inlineExpressions.Select(Serialize));
     }
 
     void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();
