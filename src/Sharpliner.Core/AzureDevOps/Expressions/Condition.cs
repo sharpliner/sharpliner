@@ -80,12 +80,12 @@ public abstract class Condition : IYamlConvertible
 
     internal static string Serialize(IfArrayExpression ifExpressions)
     {
-        return IfStringConditionHelper.Serialize(ifExpressions);
+        return ifExpressions.Serialize();
     }
 
     internal static string Serialize(IfExpression ifExpression)
     {
-        return IfStringConditionHelper.Serialize(ifExpression);
+        return ifExpression.Serialize();
     }
 
     internal static string Serialize(IfExpression[] inlineExpressions)

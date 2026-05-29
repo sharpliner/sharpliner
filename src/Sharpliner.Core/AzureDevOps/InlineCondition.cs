@@ -14,12 +14,12 @@ public abstract class InlineCondition : Condition
 {
     internal static string Serialize(InlineArrayExpression inlineExpressions)
     {
-        return InlineStringConditionHelper.Serialize(inlineExpressions);
+        return inlineExpressions.Serialize();
     }
 
     internal static string Serialize(InlineExpression inlineExpression)
     {
-        return InlineStringConditionHelper.Serialize(inlineExpression);
+        return inlineExpression.Serialize();
     }
 
     internal static string Serialize(InlineExpression[] inlineExpressions)
