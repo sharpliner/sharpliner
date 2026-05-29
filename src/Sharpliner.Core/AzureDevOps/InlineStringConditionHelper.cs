@@ -26,6 +26,7 @@ internal static class InlineStringConditionHelper
             string[] strings => string.Join(", ", strings),
             ParameterReference[] parameters => string.Join(", ", parameters.Select(p => Serialize(p))),
             VariableReference[] variables => string.Join(", ", variables.Select(v => Serialize(v))),
+            InlineExpression[] inlineExpressions => Serialize([..inlineExpressions.Cast<object>()]),
             object[] objects => Serialize(objects),
             _ => throw new InvalidOperationException($"Unsupported type in {nameof(InlineArrayExpression)}")
         };

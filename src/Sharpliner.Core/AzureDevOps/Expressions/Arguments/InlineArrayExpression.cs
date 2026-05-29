@@ -4,6 +4,4 @@
 /// Represents an array of values that can be used in an inline condition.
 /// See methods in <see cref="AzureDevOpsDefinition"/> for usages.
 /// </summary>
-public union InlineArrayExpression(string[], object[], ParameterReference[], VariableReference[])
-{
-}
+public union InlineArrayExpression(InlineExpression[], ParameterReference[], VariableReference[], string[], object[]);

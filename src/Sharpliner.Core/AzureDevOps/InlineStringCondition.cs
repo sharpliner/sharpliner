@@ -1,4 +1,5 @@
-﻿using Sharpliner.AzureDevOps.Expressions;
+﻿using System.Linq;
+using Sharpliner.AzureDevOps.Expressions;
 using Sharpliner.AzureDevOps.Expressions.Arguments;
 
 namespace Sharpliner.AzureDevOps;
@@ -29,6 +30,17 @@ public abstract class InlineStringCondition(string keyword, InlineExpression one
     /// <param name="one">The first array expression.</param>
     /// <param name="two">The second expression.</param>
     protected InlineStringCondition(string keyword, InlineArrayExpression one, InlineExpression two)
+        : this(keyword, Serialize(one), two)
+    {
+    }
+
+    /// <summary>
+    /// Creates a new instance of <see cref="InlineStringCondition"/> with the specified keyword and expressions.
+    /// </summary>
+    /// <param name="keyword">The function keyword.</param>
+    /// <param name="one">List of expressions.</param>
+    /// <param name="two">The second expression.</param>
+    protected InlineStringCondition(string keyword, InlineExpression[] one, InlineExpression two)
         : this(keyword, Serialize(one), two)
     {
     }
@@ -82,6 +94,30 @@ public abstract class InlineStringCondition<T> : InlineCondition<T>
     /// <param name="parent">The parent condition.</param>
     protected InlineStringCondition(string keyword, InlineExpression one, InlineArrayExpression two, AdoExpression<T>? parent = null)
         : this(keyword, one, Serialize(two), parent)
+    {
+    }
+
+    /// <summary>
+    /// Creates a new instance of <see cref="InlineStringCondition"/> with the specified keyword and expressions.
+    /// </summary>
+    /// <param name="keyword">The function keyword.</param>
+    /// <param name="one">The first expression.</param>
+    /// <param name="other">List of expressions.</param>
+    /// <param name="parent">The parent condition.</param>
+    protected InlineStringCondition(string keyword, InlineExpression one, InlineExpression[] other, AdoExpression<T>? parent = null)
+        : this(keyword, one, Serialize(other), parent)
+    {
+    }
+
+    /// <summary>
+    /// Creates a new instance of <see cref="InlineStringCondition"/> with the specified keyword and expressions.
+    /// </summary>
+    /// <param name="keyword">The function keyword.</param>
+    /// <param name="one">List of expressions.</param>
+    /// <param name="two">The second expression.</param>
+    /// <param name="parent">The parent condition.</param>
+    protected InlineStringCondition(string keyword, InlineExpression[] one, InlineExpression two, AdoExpression<T>? parent = null)
+        : this(keyword, Serialize(one), two, parent)
     {
     }
 

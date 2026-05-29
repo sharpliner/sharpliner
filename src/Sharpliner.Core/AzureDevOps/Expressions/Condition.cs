@@ -78,14 +78,19 @@ public abstract class Condition : IYamlConvertible
         return $"'{value}'";
     }
 
-    internal static string Serialize(IfArrayExpression arrayValue)
+    internal static string Serialize(IfArrayExpression ifExpressions)
     {
-        return IfStringConditionHelper.Serialize(arrayValue);
+        return IfStringConditionHelper.Serialize(ifExpressions);
     }
 
-    internal static string Serialize(IfExpression stringOrVariableOrParameter)
+    internal static string Serialize(IfExpression ifExpression)
     {
-        return IfStringConditionHelper.Serialize(stringOrVariableOrParameter);
+        return IfStringConditionHelper.Serialize(ifExpression);
+    }
+
+    internal static string Serialize(IfExpression[] inlineExpressions)
+    {
+        return string.Join(", ", inlineExpressions.Select(Serialize));
     }
 
     void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer) => throw new NotImplementedException();

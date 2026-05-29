@@ -22,9 +22,10 @@ internal static class IfStringConditionHelper
     {
         return arrayValue switch
         {
-            string[] strings => string.Join(", ", strings),
             ParameterReference[] parameters => string.Join(", ", parameters.Select(p => Serialize(p))),
             VariableReference[] variables => string.Join(", ", variables.Select(v => Serialize(v))),
+            IfExpression[] ifExpressions => string.Join(", ", Serialize([..ifExpressions.Cast<object>()])),
+            string[] strings => string.Join(", ", strings),
             object[] objects => Serialize(objects),
             _ => throw new InvalidOperationException($"Unsupported type in {nameof(IfArrayExpression)}")
         };
