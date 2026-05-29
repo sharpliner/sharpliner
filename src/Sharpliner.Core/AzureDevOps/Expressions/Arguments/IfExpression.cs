@@ -15,7 +15,7 @@ public union IfExpression(string, ParameterReference, VariableReference)
         return expression switch
         {
             string s => s,
-            ParameterReference parameter => parameter.RuntimeExpression,
+            ParameterReference parameter => parameter.CompileTimeExpression,
             VariableReference variable => variable.RuntimeExpression,
             _ => throw new InvalidOperationException($"Unsupported type in {nameof(IfExpression)}")
         };
