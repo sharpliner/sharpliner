@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sharpliner.AzureDevOps.Expressions.Arguments;
+namespace Sharpliner.AzureDevOps.Expressions;
 
 /// <summary>
 /// Represents a value that can be used in an inline condition.
@@ -8,9 +8,9 @@ namespace Sharpliner.AzureDevOps.Expressions.Arguments;
 /// </summary>
 public union InlineExpression(string, ParameterReference, VariableReference)
 {
-    public string Serialize() => Serialize(this);
+    internal string Serialize() => Serialize(this);
 
-    public static string Serialize(InlineExpression inlineExpression)
+    internal static string Serialize(InlineExpression inlineExpression)
     {
         return inlineExpression switch
         {

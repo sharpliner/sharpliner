@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace Sharpliner.AzureDevOps.Expressions.Arguments;
+namespace Sharpliner.AzureDevOps.Expressions;
 
 /// <summary>
 /// Represents an array of values that can be used in an if condition.

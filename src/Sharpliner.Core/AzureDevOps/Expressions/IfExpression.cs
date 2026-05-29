@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Sharpliner.AzureDevOps.Expressions.Arguments;
+namespace Sharpliner.AzureDevOps.Expressions;
 
 /// <summary>
 /// Represents a value that can be used in an if condition.
@@ -8,9 +8,9 @@ namespace Sharpliner.AzureDevOps.Expressions.Arguments;
 /// </summary>
 public union IfExpression(string, ParameterReference, VariableReference)
 {
-    public string Serialize() => Serialize(this);
+    internal string Serialize() => Serialize(this);
 
-    public static string Serialize(IfExpression expression)
+    internal static string Serialize(IfExpression expression)
     {
         return expression switch
         {

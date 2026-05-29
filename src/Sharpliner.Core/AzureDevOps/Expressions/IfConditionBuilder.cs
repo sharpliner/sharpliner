@@ -1,6 +1,4 @@
-﻿using Sharpliner.AzureDevOps.Expressions.Arguments;
-
-namespace Sharpliner.AzureDevOps.Expressions;
+﻿namespace Sharpliner.AzureDevOps.Expressions;
 
 /// <summary>
 /// The builder is what let's us start the definition with the "If."
