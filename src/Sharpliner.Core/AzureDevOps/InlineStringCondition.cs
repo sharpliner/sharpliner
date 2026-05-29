@@ -15,7 +15,8 @@ namespace Sharpliner.AzureDevOps;
 /// <param name="keyword">The function keyword.</param>
 /// <param name="one">The first expression.</param>
 /// <param name="two">The second expression.</param>
-public abstract class InlineStringCondition(string keyword, InlineExpression one, InlineExpression two) : InlineCondition
+public abstract class InlineStringCondition(string keyword, InlineExpression one, InlineExpression two)
+    : InlineCondition
 {
     private readonly string _keyword = keyword;
     private readonly string _one = Serialize(one);

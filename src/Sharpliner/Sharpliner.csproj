@@ -23,7 +23,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
 
-    <!-- Copy dependencies (Sharpliner.Core.dll, YamlDotNet.dll, OneOf.dll) to bin/ so that we can include them in the NuGet later -->
+    <!-- Copy dependencies (Sharpliner.Core.dll, YamlDotNet.dll) to bin/ so that we can include them in the NuGet later -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
 
     <!-- This makes sure we include the runtime dependencies in the nuget so the MSBuild task can load them -->
@@ -60,7 +60,7 @@
 
   <!--
     This Target makes sure we include the runtime dependencies (Sharpliner.Core.dll,
-    YamlDotNet.dll, OneOf.dll) in the NuGet as they will be needed by the MSBuild task.
+    YamlDotNet.dll) in the NuGet as they will be needed by the MSBuild task.
     https://natemcmaster.com/blog/2017/11/11/msbuild-task-with-dependencies/#third-party-dependencies-and-nuget
   -->
   <Target Name="IncludeDependenciesInNupkg">
@@ -144,43 +144,6 @@
       </_PackageFiles>
     </ItemGroup>
 
-    <ItemGroup>
-      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net6.0\OneOf.dll">
-        <PackagePath>lib\net6.0</PackagePath>
-        <Visible>false</Visible>
-        <BuildAction>Content</BuildAction>
-      </_PackageFiles>
-
-      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net7.0\OneOf.dll">
-        <PackagePath>lib\net7.0</PackagePath>
-        <Visible>false</Visible>
-        <BuildAction>Content</BuildAction>
-      </_PackageFiles>
-
-      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net8.0\OneOf.dll">
-        <PackagePath>lib\net8.0</PackagePath>
-        <Visible>false</Visible>
-        <BuildAction>Content</BuildAction>
-      </_PackageFiles>
-
-      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net9.0\OneOf.dll">
-        <PackagePath>lib\net9.0</PackagePath>
-        <Visible>false</Visible>
-        <BuildAction>Content</BuildAction>
-      </_PackageFiles>
-
-      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net10.0\OneOf.dll">
-        <PackagePath>lib\net10.0</PackagePath>
-        <Visible>false</Visible>
-        <BuildAction>Content</BuildAction>
-      </_PackageFiles>
-
-      <_PackageFiles Include="$(BaseOutputPath)$(Configuration)_net11.0\OneOf.dll">
-        <PackagePath>lib\net11.0</PackagePath>
-        <Visible>false</Visible>
-        <BuildAction>Content</BuildAction>
-      </_PackageFiles>
-    </ItemGroup>
   </Target>
 
 </Project>

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Sharpliner.AzureDevOps.Expressions;
 using Sharpliner.AzureDevOps.Expressions.Arguments;
 
@@ -6,24 +7,28 @@ namespace Sharpliner.AzureDevOps;
 
 internal static class InlineStringConditionHelper
 {
-    public static string Serialize(InlineExpression stringOrVariableOrParameter)
+    public static string Serialize(InlineExpression inlineExpression)
     {
-        return stringOrVariableOrParameter.Match(
+        return inlineExpression switch
+        {
 
-            str => str,
-            parameter => parameter.CompileTimeExpression,
-            variable => variable.RuntimeExpression
-        );
+            string s => s,
+            ParameterReference parameter => parameter.CompileTimeExpression,
+            VariableReference variable => variable.RuntimeExpression,
+            _ => throw new InvalidOperationException($"Unsupported type in {nameof(InlineExpression)}")
+        };
     }
 
-    public static string Serialize(InlineArrayExpression arrayValue)
+    public static string Serialize(InlineArrayExpression inlineArray)
     {
-        return arrayValue.Match(
-            strings => string.Join(", ", strings),
-            Serialize,
-            parameters => string.Join(", ", parameters.Select(p => Serialize(p))),
-            variables => string.Join(", ", variables.Select(v => Serialize(v)))
-        );
+        return inlineArray switch
+        {
+            string[] strings => string.Join(", ", strings),
+            ParameterReference[] parameters => string.Join(", ", parameters.Select(p => Serialize(p))),
+            VariableReference[] variables => string.Join(", ", variables.Select(v => Serialize(v))),
+            object[] objects => Serialize(objects),
+            _ => throw new InvalidOperationException($"Unsupported type in {nameof(InlineArrayExpression)}")
+        };
     }
 
     public static string Serialize(object[] array)
@@ -32,8 +37,8 @@ internal static class InlineStringConditionHelper
             {
                 return item switch
                 {
-                    InlineExpression oneOfStringValue => Serialize(oneOfStringValue),
-                    InlineArrayExpression oneOfArrayStringValue => Serialize(oneOfArrayStringValue),
+                    InlineExpression inlineExpression => Serialize(inlineExpression),
+                    InlineArrayExpression inlineArrayExpression => Serialize(inlineArrayExpression),
                     ParameterReference parameterReference => Serialize(parameterReference),
                     VariableReference variableReference => Serialize(variableReference),
                     _ => item.ToString()

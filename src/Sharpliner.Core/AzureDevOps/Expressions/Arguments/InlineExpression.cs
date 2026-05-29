@@ -1,4 +1,4 @@
-﻿using OneOf;
+﻿using System;
 
 namespace Sharpliner.AzureDevOps.Expressions.Arguments;
 
@@ -6,7 +6,6 @@ namespace Sharpliner.AzureDevOps.Expressions.Arguments;
 /// Represents a value that can be used in an inline condition.
 /// See methods in <see cref="AzureDevOpsDefinition"/> for usages.
 /// </summary>
-[GenerateOneOf]
-public partial class InlineExpression : OneOfBase<string, ParameterReference, VariableReference>
+public union InlineExpression(string, ParameterReference, VariableReference)
 {
 }
