@@ -7,7 +7,7 @@ namespace Sharpliner.AzureDevOps.Expressions.Arguments;
 /// Represents an array of values that can be used in an if condition.
 /// See <see cref="IfConditionBuilder"/> for usages.
 /// </summary>
-public union IfArrayExpression(IfExpression[], ParameterReference[], VariableReference[], string[], object[])
+public union IfArrayExpression(IfExpression[], ParameterReference[], VariableReference[], string[])
 {
     public string Serialize()
     {
@@ -15,26 +15,11 @@ public union IfArrayExpression(IfExpression[], ParameterReference[], VariableRef
         {
             ParameterReference[] parameters => string.Join(", ", parameters.Select(p => IfExpression.Serialize(p))),
             VariableReference[] variables => string.Join(", ", variables.Select(v => IfExpression.Serialize(v))),
-            IfExpression[] ifExpressions => string.Join(", ", Serialize([.. ifExpressions.Cast<object>()])),
+            IfExpression[] ifExpressions => string.Join(", ", ifExpressions
+                .Select(e => e.Serialize())
+                .Select(value => Condition.WrapQuotes(value ?? string.Empty))),
             string[] strings => string.Join(", ", strings),
-            object[] objects => Serialize(objects),
             _ => throw new InvalidOperationException($"Unsupported type in {nameof(IfArrayExpression)}")
         };
-    }
-
-    private static string Serialize(object[] array)
-    {
-        var convertedStringArray = array
-            .Select(item => item switch
-            {
-                IfExpression ifExpression => ifExpression.Serialize(),
-                IfArrayExpression ifArrayExpression => ifArrayExpression.Serialize(),
-                VariableReference variableReference => IfExpression.Serialize(variableReference),
-                ParameterReference parameterReference => IfExpression.Serialize(parameterReference),
-                _ => item.ToString()
-            })
-            .Select(value => Condition.WrapQuotes(value ?? string.Empty));
-
-        return string.Join(", ", convertedStringArray);
     }
 }
