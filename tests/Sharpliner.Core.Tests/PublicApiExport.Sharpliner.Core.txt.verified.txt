@@ -488,6 +488,8 @@ namespace Sharpliner.AzureDevOps
     {
         protected IfStringCondition(string keyword, Sharpliner.AzureDevOps.Expressions.Arguments.IfArrayExpression one, Sharpliner.AzureDevOps.Expressions.Arguments.IfExpression two, Sharpliner.AzureDevOps.Expressions.AdoExpression<T>? parent = null) { }
         protected IfStringCondition(string keyword, Sharpliner.AzureDevOps.Expressions.Arguments.IfExpression one, Sharpliner.AzureDevOps.Expressions.Arguments.IfArrayExpression two, Sharpliner.AzureDevOps.Expressions.AdoExpression<T>? parent = null) { }
+        protected IfStringCondition(string keyword, Sharpliner.AzureDevOps.Expressions.Arguments.IfExpression one, Sharpliner.AzureDevOps.Expressions.Arguments.IfExpression[] other, Sharpliner.AzureDevOps.Expressions.AdoExpression<T>? parent = null) { }
+        protected IfStringCondition(string keyword, Sharpliner.AzureDevOps.Expressions.Arguments.IfExpression[] one, Sharpliner.AzureDevOps.Expressions.Arguments.IfExpression two, Sharpliner.AzureDevOps.Expressions.AdoExpression<T>? parent = null) { }
         protected IfStringCondition(string keyword, Sharpliner.AzureDevOps.Expressions.Arguments.IfExpression one, Sharpliner.AzureDevOps.Expressions.Arguments.IfExpression two, Sharpliner.AzureDevOps.Expressions.AdoExpression<T>? parent = null) { }
     }
     public class InclusionRule : System.IEquatable<Sharpliner.AzureDevOps.InclusionRule>
@@ -510,11 +512,14 @@ namespace Sharpliner.AzureDevOps
         protected InlineStringCondition(string keyword, Sharpliner.AzureDevOps.Expressions.Arguments.InlineArrayExpression one, Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression two) { }
         protected InlineStringCondition(string keyword, Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression one, Sharpliner.AzureDevOps.Expressions.Arguments.InlineArrayExpression two) { }
         protected InlineStringCondition(string keyword, Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression one, Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression two) { }
+        protected InlineStringCondition(string keyword, Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression[] one, Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression two) { }
     }
     public abstract class InlineStringCondition<T> : Sharpliner.AzureDevOps.InlineCondition<T>
     {
         protected InlineStringCondition(string keyword, Sharpliner.AzureDevOps.Expressions.Arguments.InlineArrayExpression one, Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression two, Sharpliner.AzureDevOps.Expressions.AdoExpression<T>? parent = null) { }
         protected InlineStringCondition(string keyword, Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression one, Sharpliner.AzureDevOps.Expressions.Arguments.InlineArrayExpression two, Sharpliner.AzureDevOps.Expressions.AdoExpression<T>? parent = null) { }
+        protected InlineStringCondition(string keyword, Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression one, Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression[] other, Sharpliner.AzureDevOps.Expressions.AdoExpression<T>? parent = null) { }
+        protected InlineStringCondition(string keyword, Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression[] one, Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression two, Sharpliner.AzureDevOps.Expressions.AdoExpression<T>? parent = null) { }
         protected InlineStringCondition(string keyword, Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression one, Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression two, Sharpliner.AzureDevOps.Expressions.AdoExpression<T>? parent = null) { }
     }
     public class Job : Sharpliner.AzureDevOps.JobBase, System.IEquatable<Sharpliner.AzureDevOps.Job>
@@ -1448,49 +1453,31 @@ namespace Sharpliner.AzureDevOps.Expressions
 }
 namespace Sharpliner.AzureDevOps.Expressions.Arguments
 {
-    public class IfArrayExpression : OneOf.OneOfBase<string[], object[], Sharpliner.AzureDevOps.Expressions.ParameterReference[], Sharpliner.AzureDevOps.Expressions.VariableReference[]>
+    [System.Runtime.CompilerServices.Union]
+    public struct IfArrayExpression : System.Runtime.CompilerServices.IUnion
     {
-        public IfArrayExpression(OneOf.OneOf<string[], object[], Sharpliner.AzureDevOps.Expressions.ParameterReference[], Sharpliner.AzureDevOps.Expressions.VariableReference[]> _) { }
-        public static string[] op_Explicit(Sharpliner.AzureDevOps.Expressions.Arguments.IfArrayExpression _) { }
-        public static object[] op_Explicit(Sharpliner.AzureDevOps.Expressions.Arguments.IfArrayExpression _) { }
-        public static Sharpliner.AzureDevOps.Expressions.ParameterReference[] op_Explicit(Sharpliner.AzureDevOps.Expressions.Arguments.IfArrayExpression _) { }
-        public static Sharpliner.AzureDevOps.Expressions.VariableReference[] op_Explicit(Sharpliner.AzureDevOps.Expressions.Arguments.IfArrayExpression _) { }
-        public static Sharpliner.AzureDevOps.Expressions.Arguments.IfArrayExpression op_Implicit(Sharpliner.AzureDevOps.Expressions.ParameterReference[] _) { }
-        public static Sharpliner.AzureDevOps.Expressions.Arguments.IfArrayExpression op_Implicit(Sharpliner.AzureDevOps.Expressions.VariableReference[] _) { }
-        public static Sharpliner.AzureDevOps.Expressions.Arguments.IfArrayExpression op_Implicit(object[] _) { }
-        public static Sharpliner.AzureDevOps.Expressions.Arguments.IfArrayExpression op_Implicit(string[] _) { }
+        public object? Value { get; }
+        public string Serialize() { }
     }
-    public class IfExpression : OneOf.OneOfBase<string, Sharpliner.AzureDevOps.Expressions.ParameterReference, Sharpliner.AzureDevOps.Expressions.VariableReference>
+    [System.Runtime.CompilerServices.Union]
+    public struct IfExpression : System.Runtime.CompilerServices.IUnion
     {
-        public IfExpression(OneOf.OneOf<string, Sharpliner.AzureDevOps.Expressions.ParameterReference, Sharpliner.AzureDevOps.Expressions.VariableReference> _) { }
-        public static string op_Explicit(Sharpliner.AzureDevOps.Expressions.Arguments.IfExpression _) { }
-        public static Sharpliner.AzureDevOps.Expressions.ParameterReference op_Explicit(Sharpliner.AzureDevOps.Expressions.Arguments.IfExpression _) { }
-        public static Sharpliner.AzureDevOps.Expressions.VariableReference op_Explicit(Sharpliner.AzureDevOps.Expressions.Arguments.IfExpression _) { }
-        public static Sharpliner.AzureDevOps.Expressions.Arguments.IfExpression op_Implicit(Sharpliner.AzureDevOps.Expressions.ParameterReference _) { }
-        public static Sharpliner.AzureDevOps.Expressions.Arguments.IfExpression op_Implicit(Sharpliner.AzureDevOps.Expressions.VariableReference _) { }
-        public static Sharpliner.AzureDevOps.Expressions.Arguments.IfExpression op_Implicit(string _) { }
+        public object? Value { get; }
+        public string Serialize() { }
+        public static string Serialize(Sharpliner.AzureDevOps.Expressions.Arguments.IfExpression expression) { }
     }
-    public class InlineArrayExpression : OneOf.OneOfBase<string[], object[], Sharpliner.AzureDevOps.Expressions.ParameterReference[], Sharpliner.AzureDevOps.Expressions.VariableReference[]>
+    [System.Runtime.CompilerServices.Union]
+    public struct InlineArrayExpression : System.Runtime.CompilerServices.IUnion
     {
-        public InlineArrayExpression(OneOf.OneOf<string[], object[], Sharpliner.AzureDevOps.Expressions.ParameterReference[], Sharpliner.AzureDevOps.Expressions.VariableReference[]> _) { }
-        public static string[] op_Explicit(Sharpliner.AzureDevOps.Expressions.Arguments.InlineArrayExpression _) { }
-        public static object[] op_Explicit(Sharpliner.AzureDevOps.Expressions.Arguments.InlineArrayExpression _) { }
-        public static Sharpliner.AzureDevOps.Expressions.ParameterReference[] op_Explicit(Sharpliner.AzureDevOps.Expressions.Arguments.InlineArrayExpression _) { }
-        public static Sharpliner.AzureDevOps.Expressions.VariableReference[] op_Explicit(Sharpliner.AzureDevOps.Expressions.Arguments.InlineArrayExpression _) { }
-        public static Sharpliner.AzureDevOps.Expressions.Arguments.InlineArrayExpression op_Implicit(Sharpliner.AzureDevOps.Expressions.ParameterReference[] _) { }
-        public static Sharpliner.AzureDevOps.Expressions.Arguments.InlineArrayExpression op_Implicit(Sharpliner.AzureDevOps.Expressions.VariableReference[] _) { }
-        public static Sharpliner.AzureDevOps.Expressions.Arguments.InlineArrayExpression op_Implicit(object[] _) { }
-        public static Sharpliner.AzureDevOps.Expressions.Arguments.InlineArrayExpression op_Implicit(string[] _) { }
+        public object? Value { get; }
+        public string Serialize() { }
     }
-    public class InlineExpression : OneOf.OneOfBase<string, Sharpliner.AzureDevOps.Expressions.ParameterReference, Sharpliner.AzureDevOps.Expressions.VariableReference>
+    [System.Runtime.CompilerServices.Union]
+    public struct InlineExpression : System.Runtime.CompilerServices.IUnion
     {
-        public InlineExpression(OneOf.OneOf<string, Sharpliner.AzureDevOps.Expressions.ParameterReference, Sharpliner.AzureDevOps.Expressions.VariableReference> _) { }
-        public static string op_Explicit(Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression _) { }
-        public static Sharpliner.AzureDevOps.Expressions.ParameterReference op_Explicit(Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression _) { }
-        public static Sharpliner.AzureDevOps.Expressions.VariableReference op_Explicit(Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression _) { }
-        public static Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression op_Implicit(Sharpliner.AzureDevOps.Expressions.ParameterReference _) { }
-        public static Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression op_Implicit(Sharpliner.AzureDevOps.Expressions.VariableReference _) { }
-        public static Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression op_Implicit(string _) { }
+        public object? Value { get; }
+        public string Serialize() { }
+        public static string Serialize(Sharpliner.AzureDevOps.Expressions.Arguments.InlineExpression inlineExpression) { }
     }
 }
 namespace Sharpliner.AzureDevOps.Expressions.Interfaces
