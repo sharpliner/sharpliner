@@ -32,4 +32,21 @@
     <Compile Include="..\..\templates\Sharpliner.Templates\sharpliner-pipeline\SamplePipeline.cs"
              Link="Templates\SamplePipeline.cs" />
   </ItemGroup>
+
+  <!--
+    Resource files consumed by AzureDevOps/Model/Tasks/TaskBuilderTests. The LogicalName is set
+    explicitly so the embedded resource manifest name stays Sharpliner.Tests.AzureDevOps.Resources.*
+    which is what the test definitions (namespace Sharpliner.Tests.AzureDevOps) resolve at runtime.
+  -->
+  <ItemGroup>
+    <EmbeddedResource Include="AzureDevOps\Resources\Test-Script.ps1" LogicalName="Sharpliner.Tests.AzureDevOps.Resources.Test-Script.ps1">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AzureDevOps\Resources\test-script.sh" LogicalName="Sharpliner.Tests.AzureDevOps.Resources.test-script.sh">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AzureDevOps\Resources\test-script" LogicalName="Sharpliner.Tests.AzureDevOps.Resources.test-script">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+  </ItemGroup>
 </Project>

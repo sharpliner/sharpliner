@@ -6,23 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="AzureDevOps\Resources\Test-Script.ps1" />
-    <None Remove="AzureDevOps\Resources\test-script.sh" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Include="AzureDevOps\Resources\Test-Script.ps1">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AzureDevOps\Resources\test-script.sh">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-    <EmbeddedResource Include="AzureDevOps\Resources\test-script">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="FluentAssertions" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="PublicApiGenerator" />
