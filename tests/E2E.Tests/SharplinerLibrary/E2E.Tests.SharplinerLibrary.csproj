@@ -9,6 +9,7 @@
     <PackageReference Include="Microsoft.Build.Framework" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" />
     <PackageReference Include="Sharpliner" />
+    <PackageReference Include="YamlDotNet" />
   </ItemGroup>
 
 </Project>

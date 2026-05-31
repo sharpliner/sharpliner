@@ -174,6 +174,10 @@ internal sealed class ConditionalScalarTypeInspector : TypeInspectorSkeleton
             || nonNullable == typeof(decimal);
     }
 
+    public override bool HasParseMethod(Type type) => false;
+
+    public override object? Parse(string value, Type expectedType) => throw new NotImplementedException();
+
     /// <summary>
     /// A virtual <see cref="IPropertyDescriptor"/> whose name is a
     /// <c>${{ if ... }}</c> expression and whose value is a single-entry mapping
