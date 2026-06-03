@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using Sharpliner.AzureDevOps.Expressions;
+﻿using Sharpliner.AzureDevOps.Expressions;
+using Sharpliner.AzureDevOps.Expressions.Arguments;
 
 namespace Sharpliner.AzureDevOps;
 
@@ -11,19 +11,14 @@ namespace Sharpliner.AzureDevOps;
 /// </summary>
 public abstract class InlineCondition : Condition
 {
-    internal static string Serialize(InlineArrayExpression inlineExpressions)
+    internal static string Serialize(InlineArrayExpression arrayValue)
     {
-        return inlineExpressions.Serialize();
+        return InlineStringConditionHelper.Serialize(arrayValue);
     }
 
-    internal static string Serialize(InlineExpression inlineExpression)
+    internal static string Serialize(InlineExpression stringOrVariableOrParameter)
     {
-        return inlineExpression.Serialize();
-    }
-
-    internal static string Serialize(InlineExpression[] inlineExpressions)
-    {
-        return string.Join(", ", inlineExpressions.Select(Serialize));
+        return InlineStringConditionHelper.Serialize(stringOrVariableOrParameter);
     }
 
     /// <summary>
