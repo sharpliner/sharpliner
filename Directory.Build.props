@@ -6,5 +6,7 @@
     <Nullable>enable</Nullable>
     <LangVersion>preview</LangVersion>
     <UseArtifactsOutput>true</UseArtifactsOutput>
+    <!-- Suppress warnings about unsupported target frameworks in dependencies -->
+    <SuppressTfmSupportBuildWarnings>true</SuppressTfmSupportBuildWarnings>
   </PropertyGroup>
 </Project>
