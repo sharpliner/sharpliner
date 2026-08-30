@@ -87,6 +87,7 @@ public record ExtractFilesTask : AzureDevOpsTask
     public ExtractFilesTask(string destinationFolder)
         : base("ExtractFiles@1")
     {
+        ArchiveFilePatterns = "**/*.zip";
         DestinationFolder = destinationFolder;
     }
 }
