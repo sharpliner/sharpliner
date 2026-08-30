@@ -4,7 +4,7 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
-/// Task represents the `dotnet test` command.
+/// Task represents the <c>dotnet test</c> command.
 /// </summary>
 public record DotNetTestCoreCliTask : DotNetCoreCliTask
 {
@@ -17,7 +17,7 @@ public record DotNetTestCoreCliTask : DotNetCoreCliTask
     }
 
     /// <summary>
-    /// Provides a name for the test run
+    /// Provides a name for the test run.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? TestRunTitle
@@ -31,7 +31,8 @@ public record DotNetTestCoreCliTask : DotNetCoreCliTask
     /// This option appends --logger trx --results-directory $(Agent.TempDirectory) to the command line arguments.
     /// Code coverage can be collected by adding --collect "Code coverage" to the command line arguments.
     ///
-    /// This is currently only available on the Windows platform.
+    /// Code coverage is currently only available on the Windows platform.
+    /// DotNetCoreCLI@2 defaults this input to true.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? PublishTestResults

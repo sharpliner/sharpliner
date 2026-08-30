@@ -49,7 +49,7 @@ public class GettingStartedTests : AzureDevOpsDefinition
                             .DisplayAs("Install .NET SDK"),
 
                         DotNet
-                            .Build("src/MyProject.sln", includeNuGetOrg: true)
+                            .Build("src/MyProject.sln")
                             .DisplayAs("Build"),
 
                         DotNet

@@ -7,5 +7,6 @@
       command: build
       projects: project.csproj
       arguments: -c Release
-      includeNuGetOrg: true
+      ConnectedServiceName: azure-rm
+      requestTimeout: 300000
       workingDirectory: {TempPath}

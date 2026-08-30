@@ -5,4 +5,5 @@
     inputs:
       command: custom
       custom: --list-sdks
+      projects: src/*.csproj
     continueOnError: true

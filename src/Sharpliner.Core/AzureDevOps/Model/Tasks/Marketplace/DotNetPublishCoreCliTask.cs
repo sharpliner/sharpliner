@@ -4,7 +4,7 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
-/// Task represents the `dotnet publish` command.
+/// Task represents the <c>dotnet publish</c> command.
 /// </summary>
 public record DotNetPublishCoreCliTask : DotNetCoreCliTask
 {
@@ -18,11 +18,11 @@ public record DotNetPublishCoreCliTask : DotNetCoreCliTask
     }
 
     /// <summary>
-    /// If true, the projects property value will be skipped and the task will try to find the web projects in the repository and
+    /// If true, the <see cref="DotNetCoreCliTask.Projects"/> value will be skipped and the task will try to find the web projects in the repository and
     /// run the publish command on them. Web projects are identified by presence of either a web.config file or wwwroot folder in the directory.
     /// In the absence of a web.config file or wwwroot folder, projects that use a web SDK, like Microsoft.NET.Sdk.Web, are selected.
     ///
-    /// Note that this argument defaults to true if not specified.
+    /// DotNetCoreCLI@2 defaults this input to true.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? PublishWebProjects
@@ -33,6 +33,7 @@ public record DotNetPublishCoreCliTask : DotNetCoreCliTask
 
     /// <summary>
     /// If true, folder created by the publish command will be zipped and deleted.
+    /// DotNetCoreCLI@2 defaults this input to true.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? ZipAfterPublish
@@ -45,6 +46,7 @@ public record DotNetPublishCoreCliTask : DotNetCoreCliTask
     /// If true, folders created by the publish command will have project file name prefixed to their folder names when output path is
     /// specified explicitly in arguments.
     /// This is useful if you want to publish multiple projects to the same folder.
+    /// DotNetCoreCLI@2 defaults this input to true.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? ModifyOutputPath

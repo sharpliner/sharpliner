@@ -34,7 +34,7 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     /// <summary>
     /// Specifies the folder in which packages are installed. If no folder is specified, packages are restored into the default NuGet package cache
     ///
-    /// Argument aliases: packagesDirectory
+    /// DotNetCoreCLI@2 input: <c>packagesDirectory</c>; serialized using official alias <c>restoreDirectory</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? RestoreDirectory
@@ -45,6 +45,7 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
 
     /// <summary>
     /// Write the additional arguments to be passed to the restore command.
+    /// DotNetCoreCLI@2 supports <c>arguments</c> for build, publish, run, test, and custom commands only; restore uses this input instead.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? RestoreArguments
@@ -55,7 +56,8 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
 
     /// <summary>
     /// Specifies the amount of detail displayed in the output for the restore command.
-    /// quiet, minimal, normal, detailed, diagnostic
+    /// DotNetCoreCLI@2 accepts <c>-</c>, <c>Quiet</c>, <c>Minimal</c>, <c>Normal</c>, <c>Detailed</c>, and <c>Diagnostic</c>.
+    /// Default: <c>Normal</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<BuildVerbosity>? VerbosityRestore
@@ -65,7 +67,8 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     }
 
     /// <summary>
-    /// Prevents NuGet from using packages from local machine caches
+    /// Prevents NuGet from using packages from local machine caches.
+    /// DotNetCoreCLI@2 defaults this input to false.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? NoCache
@@ -75,7 +78,8 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     }
 
     /// <summary>
-    /// Include NuGet.org in the generated NuGet.config000 0.
+    /// Include NuGet.org in the generated NuGet.config when selected feeds are used.
+    /// DotNetCoreCLI@2 defaults this input to true.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? IncludeNuGetOrg
@@ -86,6 +90,7 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
 
     /// <summary>
     /// The NuGet.config in your repository that specifies the feeds from which to restore packages.
+    /// Setting this property selects the <c>config</c> feed mode.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? NuGetConfigPath
@@ -111,7 +116,7 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
     /// Credentials to use for external registries located in the selected NuGet.config.
     /// For feeds in this organization/collection, leave this blank; the build's credentials are used automatically
     ///
-    /// Argument aliases: externalEndpoints
+    /// DotNetCoreCLI@2 input: <c>externalEndpoints</c>; serialized using official alias <c>externalFeedCredentials</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? ExternalFeedCredentials
@@ -127,32 +132,38 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
 public enum BuildVerbosity
 {
     /// <summary>
+    /// Use the task default verbosity.
+    /// </summary>
+    [YamlMember(Alias = "-")]
+    Default,
+
+    /// <summary>
     /// The most minimal output
     /// </summary>
-    [YamlMember(Alias = "quiet")]
+    [YamlMember(Alias = "Quiet")]
     Quiet,
 
     /// <summary>
     /// Relatively little output
     /// </summary>
-    [YamlMember(Alias = "minimal")]
+    [YamlMember(Alias = "Minimal")]
     Minimal,
 
     /// <summary>
     /// Standard output. This should be the default if verbosity level is not set
     /// </summary>
-    [YamlMember(Alias = "normal")]
+    [YamlMember(Alias = "Normal")]
     Normal,
 
     /// <summary>
     /// Relatively verbose, but not exhaustive
     /// </summary>
-    [YamlMember(Alias = "detailed")]
+    [YamlMember(Alias = "Detailed")]
     Detailed,
 
     /// <summary>
     /// The most verbose and informative verbosity
     /// </summary>
-    [YamlMember(Alias = "diagnostic")]
+    [YamlMember(Alias = "Diagnostic")]
     Diagnostic,
 }

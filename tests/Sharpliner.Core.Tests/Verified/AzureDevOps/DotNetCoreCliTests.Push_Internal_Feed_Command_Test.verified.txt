@@ -6,4 +6,7 @@
     inputs:
       command: push
       packagesToPush: $(Build.ArtifactStagingDirectory)/*.nupkg
-      publishPackageMetadata: true
+      nuGetFeedType: internal
+      feedPublish: Project/Feed
+      publishPackageMetadata: false
+      requestTimeout: 600000

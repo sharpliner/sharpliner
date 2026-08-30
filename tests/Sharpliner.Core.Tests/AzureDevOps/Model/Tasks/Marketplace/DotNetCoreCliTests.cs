@@ -25,8 +25,10 @@ public class DotNetCoreCliTests
     [Fact]
     public Task Build_Command_Test()
     {
-        var task = _builder.Build("project.csproj", true, "-c Release") with
+        var task = _builder.Build("project.csproj", "-c Release") with
         {
+            ConnectedServiceName = "azure-rm",
+            RequestTimeout = 300000,
             WorkingDirectory = "/tmp"
         };
 
@@ -71,13 +73,15 @@ public class DotNetCoreCliTests
     [Fact]
     public Task Pack_Command_Test()
     {
-        var task = _builder.Pack("src/*.csproj", "-c Release") with
+        var task = _builder.Pack("src/*.csproj") with
         {
+            BuildProperties = "RepositoryCommit=$(Build.SourceVersion)",
             NoBuild = true,
             ConfigurationToPack = "Release",
             IncludeSource = true,
             IncludeSymbols = true,
             OutputDir = "/tmp/staging/",
+            VerbosityPack = BuildVerbosity.Detailed,
         };
 
         return Verify(GetYaml(task));
@@ -86,7 +90,7 @@ public class DotNetCoreCliTests
     [Fact]
     public Task Publish_Command_Test()
     {
-        var task = _builder.Publish("src/*.csproj", true, "-c Release") with
+        var task = _builder.Publish("src/*.csproj", arguments: "-c Release") with
         {
             ModifyOutputPath = true,
             ZipAfterPublish = true,
@@ -97,12 +101,46 @@ public class DotNetCoreCliTests
     }
 
     [Fact]
+    public Task Publish_WebProjects_Command_Test()
+    {
+        var task = _builder.PublishWebProjects("-c Release") with
+        {
+            ModifyOutputPath = true,
+            ZipAfterPublish = true,
+        };
+
+        return Verify(GetYaml(task));
+    }
+
+    [Fact]
     public Task Push_Command_Test()
     {
-        var task = _builder.Push(arguments: "-c Release") with
+        var task = _builder.Push("$(Build.ArtifactStagingDirectory)/*.nupkg") with
         {
             PublishPackageMetadata = true,
         };
+
+        return Verify(GetYaml(task));
+    }
+
+    [Fact]
+    public Task Push_Internal_Feed_Command_Test()
+    {
+        var task = _builder.Push("$(Build.ArtifactStagingDirectory)/*.nupkg")
+            .PublishInternally("Project/Feed") with
+        {
+            PublishPackageMetadata = false,
+            RequestTimeout = 600000,
+        };
+
+        return Verify(GetYaml(task));
+    }
+
+    [Fact]
+    public Task Push_External_Feed_Command_Test()
+    {
+        var task = _builder.Push("$(Build.ArtifactStagingDirectory)/*.nupkg")
+            .PublishExternally("external-feed");
 
         return Verify(GetYaml(task));
     }
@@ -114,6 +152,15 @@ public class DotNetCoreCliTests
         {
             TestRunTitle = "main-test-results"
         };
+
+        return Verify(GetYaml(task));
+    }
+
+    [Fact]
+    public Task Pack_Versioning_Command_Test()
+    {
+        var task = _builder.Pack("src/*.csproj")
+            .VersionBySemVerBuildNumber();
 
         return Verify(GetYaml(task));
     }
@@ -200,7 +247,7 @@ public class DotNetCoreCliTests
     [Fact]
     public Task Custom_Command_Test()
     {
-        var task = _builder.CustomCommand("--list-sdks") with
+        var task = _builder.CustomCommand("--list-sdks", projects: "src/*.csproj") with
         {
             ContinueOnError = true,
         };
