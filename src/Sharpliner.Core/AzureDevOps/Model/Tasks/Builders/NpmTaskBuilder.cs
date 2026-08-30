@@ -70,12 +70,12 @@ public class NpmTaskBuilder
     {
         if (string.IsNullOrWhiteSpace(azureDevOpsServiceConnection))
         {
-            throw new System.ArgumentException($"'{nameof(azureDevOpsServiceConnection)}' cannot be null or empty.", nameof(azureDevOpsServiceConnection));
+            throw new System.ArgumentException($"'{nameof(azureDevOpsServiceConnection)}' cannot be null, empty, or whitespace.", nameof(azureDevOpsServiceConnection));
         }
 
         if (string.IsNullOrWhiteSpace(feedUrl))
         {
-            throw new System.ArgumentException($"'{nameof(feedUrl)}' cannot be null or empty.", nameof(feedUrl));
+            throw new System.ArgumentException($"'{nameof(feedUrl)}' cannot be null, empty, or whitespace.", nameof(feedUrl));
         }
 
         return new(workingFile)
