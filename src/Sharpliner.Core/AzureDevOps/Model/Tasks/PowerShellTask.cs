@@ -21,8 +21,9 @@ public abstract record PowershellTask : Step
     public AdoExpression<string>? WorkingDirectory { get; init; }
 
     /// <summary>
-    /// When not <see cref="ActionPreference.Default"/>, prepends the line $ErrorActionPreference = 'VALUE' at the top of your script.
-    /// Default value: `Stop`.
+    /// When set to anything other than <see cref="ActionPreference.Default"/>, prepends the line $ErrorActionPreference = 'VALUE' at the top of your script.
+    /// When set to <see cref="ActionPreference.Default"/>, no line is prepended and PowerShell's own default is used.
+    /// When left unset, the task prepends $ErrorActionPreference = 'Stop'.
     /// </summary>
     [YamlMember(Order = 114)]
     public AdoExpression<ActionPreference>? ErrorActionPreference { get; init; }
@@ -91,32 +92,33 @@ public record PowershellFileTask : PowershellTask, IYamlConvertible
     public AdoExpression<string>? Arguments { get; init; }
 
     /// <summary>
-    /// When not <see cref="ActionPreference.Default"/>, prepends the line $WarningPreference = 'VALUE' at the top of your script.
-    /// Default value: `Default`.
+    /// When set to anything other than <see cref="ActionPreference.Default"/>, prepends the line $WarningPreference = 'VALUE' at the top of your script.
+    /// When left unset, the task behaves as if <see cref="ActionPreference.Default"/> was used and no line is prepended.
     /// </summary>
     public AdoExpression<ActionPreference>? WarningPreference { get; init; }
 
     /// <summary>
-    /// When not <see cref="ActionPreference.Default"/>, prepends the line $InformationPreference = 'VALUE' at the top of your script.
-    /// Default value: `Default`.
+    /// When set to anything other than <see cref="ActionPreference.Default"/>, prepends the line $InformationPreference = 'VALUE' at the top of your script.
+    /// When left unset, the task behaves as if <see cref="ActionPreference.Default"/> was used and no line is prepended.
     /// </summary>
     public AdoExpression<ActionPreference>? InformationPreference { get; init; }
 
     /// <summary>
-    /// When not <see cref="ActionPreference.Default"/>, prepends the line $VerbosePreference = 'VALUE' at the top of your script.
-    /// Default value: `Default`.
+    /// When set to anything other than <see cref="ActionPreference.Default"/>, prepends the line $VerbosePreference = 'VALUE' at the top of your script.
+    /// When left unset, the task behaves as if <see cref="ActionPreference.Default"/> was used and no line is prepended.
     /// </summary>
     public AdoExpression<ActionPreference>? VerbosePreference { get; init; }
 
     /// <summary>
-    /// When not <see cref="ActionPreference.Default"/>, prepends the line $DebugPreference = 'VALUE' at the top of your script.
-    /// Default value: `Default`.
+    /// When set to anything other than <see cref="ActionPreference.Default"/>, prepends the line $DebugPreference = 'VALUE' at the top of your script.
+    /// When left unset, the task behaves as if <see cref="ActionPreference.Default"/> was used and no line is prepended.
     /// </summary>
     public AdoExpression<ActionPreference>? DebugPreference { get; init; }
 
     /// <summary>
-    /// When not <see cref="ActionPreference.Default"/>, prepends the line $ProgressPreference = 'VALUE' at the top of your script.
-    /// Default value: `SilentlyContinue`.
+    /// When set to anything other than <see cref="ActionPreference.Default"/>, prepends the line $ProgressPreference = 'VALUE' at the top of your script.
+    /// When set to <see cref="ActionPreference.Default"/>, no line is prepended and PowerShell's own default is used.
+    /// When left unset, the task prepends $ProgressPreference = 'SilentlyContinue'.
     /// </summary>
     public AdoExpression<ActionPreference>? ProgressPreference { get; init; }
 
