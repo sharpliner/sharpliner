@@ -1,0 +1,14 @@
+﻿task: UniversalPackages@0
+
+displayName: Publish universal package
+
+inputs:
+  command: publish
+  publishDirectory: $(Build.ArtifactStagingDirectory)
+  feedsToUsePublish: internal
+  vstsFeedPublish: my-feed
+  publishPackageMetadata: false
+  vstsFeedPackagePublish: my-package
+  versionOption: patch
+  packagePublishDescription: Description of my package
+  publishedPackageVar: PublishedPackageVariable
