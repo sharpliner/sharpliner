@@ -454,8 +454,8 @@ public record SpecificDownloadTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// A boolean specifying whether this build task will check that all files are fully downloaded.
-    /// Defaults to false.
+    /// Compatibility input for older task revisions that controlled whether this build task checks that all files are fully downloaded.
+    /// This input is not present in the current official <c>DownloadPipelineArtifact@2</c> task specification.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? CheckDownloadedFiles
@@ -465,13 +465,13 @@ public record SpecificDownloadTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Number of times to retry downloading a build artifact if the download fails.
-    /// Defaults to 4.
+    /// Compatibility input for older task revisions that controlled the number of times to retry downloading a build artifact if the download fails.
+    /// This input is not present in the current official <c>DownloadPipelineArtifact@2</c> task specification.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<int> RetryDownloadCount
     {
-        get => GetExpression<int>(RetryDownloadCountProperty) ?? 4;
+        get => GetExpression<int>(RetryDownloadCountProperty) ?? 0;
         init => SetProperty(RetryDownloadCountProperty, value);
     }
 }
