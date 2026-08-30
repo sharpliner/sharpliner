@@ -90,7 +90,7 @@ public class DotNetCoreCliTests
     [Fact]
     public Task Publish_Command_Test()
     {
-        var task = _builder.Publish("src/*.csproj", arguments: "-c Release") with
+        var task = _builder.PublishProjects("src/*.csproj", "-c Release") with
         {
             ModifyOutputPath = true,
             ZipAfterPublish = true,

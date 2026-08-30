@@ -172,12 +172,21 @@ public class DotNetTaskBuilder
     /// Example: <c>**/*.csproj;!**/*.Tests.csproj</c>
     /// Argument aliases: <c>searchPatternPack</c>
     /// </param>
-    /// <param name="arguments">Ignored. DotNetCoreCLI@2 does not define <c>arguments</c> for the pack command.</param>
     /// <returns>A new instance of <see cref="DotNetPackCoreCliTask"/> with the specified values.</returns>
-    public DotNetPackCoreCliTask Pack(AdoExpression<string>? packagesToPack, AdoExpression<string>? arguments = null) => new()
+    public DotNetPackCoreCliTask Pack(AdoExpression<string>? packagesToPack = null) => new()
     {
         PackagesToPack = packagesToPack,
     };
+
+    /// <summary>
+    /// Creates the <c>pack</c> command version of the DotNetCoreCLI task.
+    /// </summary>
+    /// <param name="packagesToPack">Pattern to search for csproj or nuspec files to pack.</param>
+    /// <param name="arguments">Ignored. DotNetCoreCLI@2 does not define <c>arguments</c> for the pack command.</param>
+    /// <returns>A new instance of <see cref="DotNetPackCoreCliTask"/> with the specified values.</returns>
+    [Obsolete("DotNetCoreCLI@2 does not define arguments for the pack command. Use BuildProperties, ConfigurationToPack, OutputDir, and other pack-specific properties instead.")]
+    public DotNetPackCoreCliTask Pack(AdoExpression<string>? packagesToPack, AdoExpression<string>? arguments)
+        => Pack(packagesToPack);
 
     /// <summary>
     /// <para>
@@ -228,7 +237,7 @@ public class DotNetTaskBuilder
         var task = new DotNetPublishCoreCliTask
         {
             Arguments = arguments,
-            PublishWebProjects = publishWebProjects ?? false,
+            PublishWebProjects = publishWebProjects,
         };
 
         if (publishWebProjects?.GetDefinitionValue() is not true)
@@ -241,6 +250,19 @@ public class DotNetTaskBuilder
 
         return task;
     }
+
+    /// <summary>
+    /// Creates a <c>publish</c> command that publishes the specified project or solution patterns.
+    /// </summary>
+    /// <param name="projects">Projects to publish. The task's <c>publishWebProjects</c> input is set to false.</param>
+    /// <param name="arguments">Additional arguments.</param>
+    /// <returns>A new instance of <see cref="DotNetPublishCoreCliTask"/> with <c>publishWebProjects</c> set to false.</returns>
+    public DotNetPublishCoreCliTask PublishProjects(AdoExpression<string> projects, AdoExpression<string>? arguments = null) => new()
+    {
+        Arguments = arguments,
+        PublishWebProjects = false,
+        Projects = projects,
+    };
 
     /// <summary>
     /// Creates a <c>publish</c> command that lets DotNetCoreCLI@2 discover web projects automatically.
@@ -288,12 +310,21 @@ public class DotNetTaskBuilder
     /// Argument aliases: <c>searchPatternPush</c>
     /// </para>
     /// </param>
-    /// <param name="arguments">Ignored. DotNetCoreCLI@2 does not define <c>arguments</c> for the push command.</param>
     /// <returns>A new instance of <see cref="DotNetPushCoreCliTask"/> with the specified values.</returns>
-    public DotNetPushCoreCliTask Push(AdoExpression<string>? packagesToPush = null, AdoExpression<string>? arguments = null) => new()
+    public DotNetPushCoreCliTask Push(AdoExpression<string>? packagesToPush = null) => new()
     {
         PackagesToPush = packagesToPush,
     };
+
+    /// <summary>
+    /// Creates the push command version of the DotNetCoreCLI task.
+    /// </summary>
+    /// <param name="packagesToPush">The pattern to match or path to nupkg files to be uploaded.</param>
+    /// <param name="arguments">Ignored. DotNetCoreCLI@2 does not define <c>arguments</c> for the push command.</param>
+    /// <returns>A new instance of <see cref="DotNetPushCoreCliTask"/> with the specified values.</returns>
+    [Obsolete("DotNetCoreCLI@2 does not define arguments for the push command.")]
+    public DotNetPushCoreCliTask Push(AdoExpression<string>? packagesToPush, AdoExpression<string>? arguments)
+        => Push(packagesToPush);
 
     /// <summary>
     /// <para>

@@ -1838,10 +1838,16 @@ namespace Sharpliner.AzureDevOps.Tasks
             "projects, arguments) instead.")]
         public Sharpliner.AzureDevOps.Tasks.DotNetBuildCoreCliTask Build(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> projects, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? includeNuGetOrg, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
         public Sharpliner.AzureDevOps.Step CustomCommand(string command, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null, Sharpliner.AzureDevOps.Tasks.TaskInputs? inputs = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? projects = null) { }
-        public Sharpliner.AzureDevOps.Tasks.DotNetPackCoreCliTask Pack(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? packagesToPack, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
+        public Sharpliner.AzureDevOps.Tasks.DotNetPackCoreCliTask Pack(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? packagesToPack = null) { }
+        [System.Obsolete("DotNetCoreCLI@2 does not define arguments for the pack command. Use BuildProperti" +
+            "es, ConfigurationToPack, OutputDir, and other pack-specific properties instead.")]
+        public Sharpliner.AzureDevOps.Tasks.DotNetPackCoreCliTask Pack(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? packagesToPack, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments) { }
         public Sharpliner.AzureDevOps.Tasks.DotNetPublishCoreCliTask Publish(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> projects, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? publishWebProjects = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
+        public Sharpliner.AzureDevOps.Tasks.DotNetPublishCoreCliTask PublishProjects(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> projects, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
         public Sharpliner.AzureDevOps.Tasks.DotNetPublishCoreCliTask PublishWebProjects(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
-        public Sharpliner.AzureDevOps.Tasks.DotNetPushCoreCliTask Push(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? packagesToPush = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
+        public Sharpliner.AzureDevOps.Tasks.DotNetPushCoreCliTask Push(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? packagesToPush = null) { }
+        [System.Obsolete("DotNetCoreCLI@2 does not define arguments for the push command.")]
+        public Sharpliner.AzureDevOps.Tasks.DotNetPushCoreCliTask Push(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? packagesToPush, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments) { }
         public Sharpliner.AzureDevOps.Tasks.DotNetTestCoreCliTask Test(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> projects, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
         public class DotNetInstallBuilder
         {
