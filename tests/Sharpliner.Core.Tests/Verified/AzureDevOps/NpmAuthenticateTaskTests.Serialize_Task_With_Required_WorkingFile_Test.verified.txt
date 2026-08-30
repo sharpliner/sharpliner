@@ -1,0 +1,4 @@
+﻿task: npmAuthenticate@0
+
+inputs:
+  workingFile: .npmrc
