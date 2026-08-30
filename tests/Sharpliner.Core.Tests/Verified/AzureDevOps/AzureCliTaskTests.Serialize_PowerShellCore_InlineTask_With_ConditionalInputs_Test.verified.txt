@@ -1,0 +1,9 @@
+﻿task: AzureCLI@2
+
+inputs:
+  azureSubscription: connectedServiceNameARM
+  scriptType: pscore
+  scriptLocation: inlineScript
+  inlineScript: az --version
+  powerShellErrorActionPreference: continue
+  powerShellIgnoreLASTEXITCODE: true

@@ -39,6 +39,35 @@ public class AzureCliTaskTests
     }
 
     [Fact]
+    public Task Serialize_Bash_FileTask_With_AdvancedInputs_Test()
+    {
+        var task = new AzureCliFileTask("connectedServiceNameARM", ScriptType.Bash, "deploy.sh")
+        {
+            Arguments = "--name my-app",
+            AddSpnToEnvironment = true,
+            UseGlobalConfig = true,
+            WorkingDirectory = "src",
+            FailOnStandardError = true,
+            VisibleAzLogin = false,
+            KeepAzSessionActive = true
+        };
+
+        return Verify(SharplinerSerializer.Serialize(task));
+    }
+
+    [Fact]
+    public Task Serialize_PowerShellCore_InlineTask_With_ConditionalInputs_Test()
+    {
+        var task = new InlineAzureCliTask("connectedServiceNameARM", ScriptType.Pscore, "az --version")
+        {
+            PowerShellErrorActionPreference = PowerShellErrorActionPreference.Continue,
+            PowerShellIgnoreLASTEXITCODE = true
+        };
+
+        return Verify(SharplinerSerializer.Serialize(task));
+    }
+
+    [Fact]
     public Task Serialize_FileTask_With_Defaults_Test()
     {
         var task = new AzureCliFileTask("connectedServiceNameARM", ScriptType.Ps, "foo.ps1")
