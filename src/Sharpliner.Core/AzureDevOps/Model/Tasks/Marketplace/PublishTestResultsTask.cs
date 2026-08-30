@@ -116,6 +116,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
 
     /// <summary>
     /// Specifies a name for the test run.
+    /// Variable names declared in the build or release pipeline can be used.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? TestRunTitle
