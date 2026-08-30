@@ -101,6 +101,8 @@ public record DownloadFromPipelineResourceTask : DownloadTask
 
 /// <summary>
 /// A download task that downloads artifacts from a specific pipeline run.
+/// Input aliases such as <see cref="Source"/>/<see cref="BuildType"/> or <see cref="Artifact"/>/<see cref="ArtifactName"/> write to the same YAML input key;
+/// if multiple aliases for the same input are set in one initializer, the last assignment wins.
 /// </summary>
 public record SpecificDownloadTask : AzureDevOpsTask
 {
