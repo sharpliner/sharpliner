@@ -85,7 +85,8 @@ public record UseDotNetTask : AzureDevOpsTask
 
     /// <summary>
     /// Select if you want to detect whether the specified version is already installed before attempting
-    /// to download it. Use only when <see cref="InstallationPath"/> is empty or set to its default value.
+    /// to download it. This input is ignored when <see cref="InstallationPath"/> is set to a custom path;
+    /// it only applies when the installation path is empty or set to its default value.
     /// Default value: false.
     /// </summary>
     [YamlIgnore]

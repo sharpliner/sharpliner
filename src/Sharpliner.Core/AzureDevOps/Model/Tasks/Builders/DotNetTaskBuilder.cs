@@ -400,7 +400,8 @@ public class DotNetTaskBuilder
         /// </param>
         /// <param name="checkForExistingVersion">
         /// Optional value indicating whether the task should detect if the specified version is already installed before downloading.
-        /// Use only when the installation path is empty or set to its default value.
+        /// This input is ignored when the installation path is set to a custom path; it only applies when
+        /// the installation path is empty or set to its default value.
         /// </param>
         /// <param name="requestTimeout">
         /// Optional timeout, in milliseconds, for HTTP requests that obtain the .NET package.
@@ -460,7 +461,8 @@ public class DotNetTaskBuilder
         /// </param>
         /// <param name="checkForExistingVersion">
         /// Optional value indicating whether the task should detect if the specified version is already installed before downloading.
-        /// Use only when the installation path is empty or set to its default value.
+        /// This input is ignored when the installation path is set to a custom path; it only applies when
+        /// the installation path is empty or set to its default value.
         /// </param>
         /// <param name="requestTimeout">
         /// Optional timeout, in milliseconds, for HTTP requests that obtain the .NET package.
@@ -503,7 +505,7 @@ public class DotNetTaskBuilder
         ///   inputs:
         ///     packageType: sdk
         ///     useGlobalJson: true
-        ///     workingDirectory: /tmp
+        ///     workingDirectory: /foo
         ///     installationPath: /.dotnet
         /// </code>
         /// </summary>
@@ -513,7 +515,8 @@ public class DotNetTaskBuilder
         /// </param>
         /// <param name="checkForExistingVersion">
         /// Optional value indicating whether the task should detect if a version specified by <c>global.json</c> is already installed before downloading.
-        /// Use only when the installation path is empty or set to its default value.
+        /// This input is ignored when the installation path is set to a custom path; it only applies when
+        /// the installation path is empty or set to its default value.
         /// </param>
         /// <param name="requestTimeout">
         /// Optional timeout, in milliseconds, for HTTP requests that obtain the .NET package.
