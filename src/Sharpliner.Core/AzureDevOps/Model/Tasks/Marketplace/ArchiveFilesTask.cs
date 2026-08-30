@@ -158,9 +158,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// <summary>
     /// Instantiates a new <see cref="ArchiveFilesTask"/> task with the specified parameters.
     /// </summary>
-    /// <param name="rootFolderOrFile">Required <c>filePath</c> input. The name of the root folder or the file path to files to add to the archive.</param>
-    /// <param name="archiveType">Required <c>pickList</c> input. The compression format.</param>
-    /// <param name="archiveFile">Required <c>filePath</c> input. The name of the archive file to create.</param>
+    /// <param name="rootFolderOrFile">The name of the root folder or the file path to files to add to the archive.</param>
+    /// <param name="archiveType">The compression format.</param>
+    /// <param name="archiveFile">The name of the archive file to create.</param>
     public ArchiveFilesTask(string rootFolderOrFile, AdoExpression<ArchiveType> archiveType, AdoExpression<string> archiveFile)
         : base("ArchiveFiles@2")
     {
