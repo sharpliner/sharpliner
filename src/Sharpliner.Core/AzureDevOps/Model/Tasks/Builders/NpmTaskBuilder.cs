@@ -67,9 +67,21 @@ public class NpmTaskBuilder
     /// </code>
     /// </example>
     public NpmAuthenticateTask Authenticate(string workingFile, string azureDevOpsServiceConnection, string feedUrl)
-        => new(workingFile)
+    {
+        if (string.IsNullOrEmpty(azureDevOpsServiceConnection))
+        {
+            throw new System.ArgumentException($"'{nameof(azureDevOpsServiceConnection)}' cannot be null or empty.", nameof(azureDevOpsServiceConnection));
+        }
+
+        if (string.IsNullOrEmpty(feedUrl))
+        {
+            throw new System.ArgumentException($"'{nameof(feedUrl)}' cannot be null or empty.", nameof(feedUrl));
+        }
+
+        return new(workingFile)
         {
             AzureDevOpsServiceConnection = azureDevOpsServiceConnection,
             FeedUrl = feedUrl
         };
+    }
 }

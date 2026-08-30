@@ -48,4 +48,13 @@ public class NpmAuthenticateTaskTests
         Assert.Equal("ExternalNpmRegistry,AnotherExternalNpmRegistry", task.Inputs["customEndpoint"]);
         Assert.Equal(["ExternalNpmRegistry", "AnotherExternalNpmRegistry"], task.CustomEndpoints);
     }
+
+    [Fact]
+    public void Azure_DevOps_Service_Connection_Builder_Requires_Service_Connection_And_Feed_Url()
+    {
+        var builder = new NpmTaskBuilder();
+
+        Assert.Throws<System.ArgumentException>(() => builder.Authenticate(".npmrc", "", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/npm/registry/"));
+        Assert.Throws<System.ArgumentException>(() => builder.Authenticate(".npmrc", "MyAzureDevOpsServiceConnection", ""));
+    }
 }
