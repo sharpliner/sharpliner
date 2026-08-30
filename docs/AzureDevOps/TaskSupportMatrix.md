@@ -309,8 +309,9 @@ When picking one up, a contribution is expected to contain:
 - an updated public API export file (see [Generating the Public API](../../README.md#generating-the-public-api)),
 - an update of this document and of the [definition reference](DefinitionReference.md).
 
-The most requested ones (a good place to start) are `Cache@2`, `Docker@2`, `PublishBuildArtifacts@1`,
-`DownloadBuildArtifacts@1`, `AzureKeyVault@2`, `AzurePowerShell@5`, `Npm@1` and `VSTest@3`.
+Good candidates to start with, as they are the most commonly used ones in .NET pipelines, are `Cache@2`,
+`Docker@2`, `PublishBuildArtifacts@1`, `DownloadBuildArtifacts@1`, `AzureKeyVault@2`, `AzurePowerShell@5`,
+`Npm@1` and `VSTest@3`.
 
 ### Missing build tasks
 
