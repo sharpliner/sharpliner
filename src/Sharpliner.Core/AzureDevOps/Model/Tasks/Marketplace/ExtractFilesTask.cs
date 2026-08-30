@@ -88,10 +88,8 @@ public record ExtractFilesTask : AzureDevOpsTask
     /// </summary>
     /// <param name="destinationFolder">The destination folder into which archive files should be extracted.</param>
     public ExtractFilesTask(AdoExpression<string> destinationFolder)
-        : base("ExtractFiles@1")
+        : this(DefaultArchiveFilePatterns, destinationFolder)
     {
-        ArchiveFilePatterns = DefaultArchiveFilePatterns;
-        DestinationFolder = destinationFolder;
     }
 
     /// <summary>
