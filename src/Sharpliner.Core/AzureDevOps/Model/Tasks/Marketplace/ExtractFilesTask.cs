@@ -87,10 +87,20 @@ public record ExtractFilesTask : AzureDevOpsTask
     /// <c>archiveFilePatterns</c> default value, <c>**/*.zip</c>.
     /// </summary>
     /// <param name="destinationFolder">The destination folder into which archive files should be extracted.</param>
-    public ExtractFilesTask(string destinationFolder)
+    public ExtractFilesTask(AdoExpression<string> destinationFolder)
         : base("ExtractFiles@1")
     {
         ArchiveFilePatterns = DefaultArchiveFilePatterns;
         DestinationFolder = destinationFolder;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ExtractFilesTask"/> class using the official
+    /// <c>archiveFilePatterns</c> default value, <c>**/*.zip</c>.
+    /// </summary>
+    /// <param name="destinationFolder">The destination folder into which archive files should be extracted.</param>
+    public ExtractFilesTask(string destinationFolder)
+        : this((AdoExpression<string>)destinationFolder)
+    {
     }
 }
