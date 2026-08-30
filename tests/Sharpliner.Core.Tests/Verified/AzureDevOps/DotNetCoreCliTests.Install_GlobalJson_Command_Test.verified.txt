@@ -4,6 +4,9 @@
   - task: UseDotNet@2
     displayName: Install .NET SDK
     inputs:
+      packageType: sdk
       useGlobalJson: true
-      workingDirectory: {TempPath}
+      workingDirectory: src
+      checkForExistingVersion: true
+      requestTimeout: 300000
       installationPath: /.dotnet

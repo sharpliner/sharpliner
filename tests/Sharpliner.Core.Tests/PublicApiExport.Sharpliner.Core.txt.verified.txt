@@ -3,7 +3,7 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner.Core.Tests")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner.Tests")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v10.0", FrameworkDisplayName=".NET 10.0")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v11.0", FrameworkDisplayName=".NET 11.0")]
 namespace Sharpliner.AzureDevOps
 {
     public static class AdoExpressionExtensions
@@ -1831,9 +1831,9 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.DotNetTestCoreCliTask Test(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> projects, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
         public class DotNetInstallBuilder
         {
-            public Sharpliner.AzureDevOps.Tasks.UseDotNetTask FromGlobalJson(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? workingDirectory = null) { }
-            public Sharpliner.AzureDevOps.Tasks.UseDotNetTask Runtime(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> version, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? includePreviewVersions = null) { }
-            public Sharpliner.AzureDevOps.Tasks.UseDotNetTask Sdk(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> version, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? includePreviewVersions = null) { }
+            public Sharpliner.AzureDevOps.Tasks.UseDotNetTask FromGlobalJson(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? workingDirectory = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? checkForExistingVersion = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? requestTimeout = null) { }
+            public Sharpliner.AzureDevOps.Tasks.UseDotNetTask Runtime(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> version, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? includePreviewVersions = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? checkForExistingVersion = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? requestTimeout = null) { }
+            public Sharpliner.AzureDevOps.Tasks.UseDotNetTask Sdk(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> version, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? includePreviewVersions = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? vsVersion = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? checkForExistingVersion = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? requestTimeout = null) { }
         }
         public class DotNetRestoreBuilder
         {
@@ -2415,6 +2415,8 @@ namespace Sharpliner.AzureDevOps.Tasks
         public UseDotNetTask() { }
         public UseDotNetTask(Sharpliner.AzureDevOps.Tasks.DotNetPackageType packageType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> version, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? includePreviewVersions = null) { }
         [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? CheckForExistingVersion { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? IncludePreviewVersions { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? InstallationPath { get; init; }
@@ -2423,9 +2425,13 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? PerformMultiLevelLookup { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? RequestTimeout { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? UseGlobalJson { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Version { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? VsVersion { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WorkingDirectory { get; init; }
     }
