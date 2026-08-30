@@ -57,7 +57,8 @@ public record ExtractFilesTask : AzureDevOpsTask
 
     /// <summary>
     /// Specifies the custom path to the 7z utility. For example, <c>C:\7z\7z.exe</c> on Windows and
-    /// <c>/usr/local/bin/7z</c> on macOS/Ubuntu.
+    /// <c>/usr/local/bin/7z</c> on macOS/Ubuntu. If it is not specified on Windows, the default 7z version
+    /// supplied with the task is used.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? PathToSevenZipTool
