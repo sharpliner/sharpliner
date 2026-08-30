@@ -24,7 +24,7 @@ public record DeleteFilesTask : AzureDevOpsTask
     /// <summary>
     /// The file or folder paths to delete.
     /// Supports multiple lines of minimatch patterns.
-    /// The official task metadata declares <c>myFileShare</c> as its UI default, but Sharpliner requires this value explicitly.
+    /// Sharpliner requires this value explicitly.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? Contents
