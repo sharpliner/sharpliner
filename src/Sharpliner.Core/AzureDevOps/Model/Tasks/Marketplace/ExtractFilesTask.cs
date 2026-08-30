@@ -4,22 +4,26 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
+/// Extracts archive and compression files such as <c>.7z</c>, <c>.rar</c>, <c>.tar.gz</c>, and <c>.zip</c>.
 /// More details can be found in <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/extract-files-v1?view=azure-pipelines">official Azure DevOps pipelines documentation</see>
+/// and the <see href="https://raw.githubusercontent.com/microsoft/azure-pipelines-tasks/master/Tasks/ExtractFilesV1/task.json">official task specification</see>.
 /// </summary>
 public record ExtractFilesTask : AzureDevOpsTask
 {
     /// <summary>
     /// Specifies the file paths or patterns of the archive files to extract. Supports multiple lines of minimatch patterns.
+    /// Defaults to <c>**/*.zip</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? ArchiveFilePatterns
     {
-        get => GetExpression<string>("archiveFilePatterns");
+        get => GetExpression<string>("archiveFilePatterns", "**/*.zip");
         init => SetProperty("archiveFilePatterns", value);
     }
 
     /// <summary>
-    /// Specifies the destination folder into which archive files should be extracted.
+    /// Specifies the destination folder into which archive files should be extracted. Use variables when extracting files
+    /// outside the repository, for example <c>$(Agent.BuildDirectory)</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? DestinationFolder
@@ -29,7 +33,7 @@ public record ExtractFilesTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Specifies the option to delete the entire content of the destination directory (clean) before archive contents are extracted into it.
+    /// Specifies whether to delete the entire content of the destination directory before archive contents are extracted into it.
     /// Defaults to <code>true</code>
     /// </summary>
     [YamlIgnore]
@@ -41,7 +45,6 @@ public record ExtractFilesTask : AzureDevOpsTask
 
     /// <summary>
     /// Specifies the option to overwrite existing files in the destination directory if they already exist.
-    /// If the option is false, the script prompts on existing files, asking whether you want to overwrite them.
     /// Defaults to <code>false</code>
     /// </summary>
     [YamlIgnore]
@@ -52,8 +55,8 @@ public record ExtractFilesTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Specifies the custom path to 7z utility. For example, C:\7z\7z.exe on Windows and /usr/local/bin/7z on MacOS/Ubuntu.
-    /// If it's not specified on Windows, the default 7zip version supplied with a task will be used.
+    /// Specifies the custom path to the 7z utility. For example, <c>C:\7z\7z.exe</c> on Windows and
+    /// <c>/usr/local/bin/7z</c> on macOS/Ubuntu.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? PathToSevenZipTool
@@ -63,13 +66,25 @@ public record ExtractFilesTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="CopyFilesTask"/> class with required properties.
+    /// Initializes a new instance of the <see cref="ExtractFilesTask"/> class with the official required properties.
     /// </summary>
-    /// <param name="destinationFolder">The destination folder into which archive files should be extracted..</param>
+    /// <param name="archiveFilePatterns">The file paths or patterns of the archive files to extract.</param>
+    /// <param name="destinationFolder">The destination folder into which archive files should be extracted.</param>
+    public ExtractFilesTask(AdoExpression<string> archiveFilePatterns, AdoExpression<string> destinationFolder)
+        : base("ExtractFiles@1")
+    {
+        ArchiveFilePatterns = archiveFilePatterns;
+        DestinationFolder = destinationFolder;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ExtractFilesTask"/> class using the official
+    /// <c>archiveFilePatterns</c> default value, <c>**/*.zip</c>.
+    /// </summary>
+    /// <param name="destinationFolder">The destination folder into which archive files should be extracted.</param>
     public ExtractFilesTask(string destinationFolder)
         : base("ExtractFiles@1")
     {
         DestinationFolder = destinationFolder;
     }
 }
-
