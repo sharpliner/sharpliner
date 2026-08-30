@@ -1842,6 +1842,8 @@ namespace Sharpliner.AzureDevOps.Tasks
         [System.Obsolete("DotNetCoreCLI@2 does not define arguments for the pack command. Use BuildProperti" +
             "es, ConfigurationToPack, OutputDir, and other pack-specific properties instead.")]
         public Sharpliner.AzureDevOps.Tasks.DotNetPackCoreCliTask Pack(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? packagesToPack, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments) { }
+        [System.Obsolete("Use PublishProjects(projects, arguments) or PublishWebProjects(arguments) to matc" +
+            "h DotNetCoreCLI@2 publish input visibility.")]
         public Sharpliner.AzureDevOps.Tasks.DotNetPublishCoreCliTask Publish(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> projects, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? publishWebProjects = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
         public Sharpliner.AzureDevOps.Tasks.DotNetPublishCoreCliTask PublishProjects(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> projects, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
         public Sharpliner.AzureDevOps.Tasks.DotNetPublishCoreCliTask PublishWebProjects(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }

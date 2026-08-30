@@ -196,7 +196,7 @@ public class DotNetTaskBuilder
     /// <code lang="csharp">
     /// Steps =
     /// {
-    ///     Dotnet.Publish("src/*.csproj", true, "-c Release") with
+    ///     Dotnet.PublishProjects("src/*.csproj", "-c Release") with
     ///     {
     ///         ModifyOutputPath = true,
     ///         ZipAfterPublish = true,
@@ -232,6 +232,7 @@ public class DotNetTaskBuilder
     /// </param>
     /// <param name="arguments">Additional arguments</param>
     /// <returns>A new instance of <see cref="DotNetPublishCoreCliTask"/> with the specified values.</returns>
+    [Obsolete("Use PublishProjects(projects, arguments) or PublishWebProjects(arguments) to match DotNetCoreCLI@2 publish input visibility.")]
     public DotNetPublishCoreCliTask Publish(AdoExpression<string> projects, AdoExpression<bool>? publishWebProjects = null, AdoExpression<string>? arguments = null)
     {
         var task = new DotNetPublishCoreCliTask
