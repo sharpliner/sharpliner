@@ -2329,7 +2329,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         public StepTarget() { }
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.StepTargetCommands>? Commands { get; init; }
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Container { get; init; }
-        public object? SettableVariables { get; init; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.StepTargetSettableVariables>? SettableVariables { get; init; }
     }
     public enum StepTargetCommands
     {
@@ -2337,6 +2337,12 @@ namespace Sharpliner.AzureDevOps.Tasks
         Any = 0,
         [YamlDotNet.Serialization.YamlMember(Alias="restricted")]
         Restricted = 1,
+    }
+    public sealed class StepTargetSettableVariables : YamlDotNet.Serialization.IYamlConvertible
+    {
+        public string? Value { get; }
+        public static Sharpliner.AzureDevOps.Tasks.StepTargetSettableVariables None { get; }
+        public static Sharpliner.AzureDevOps.Tasks.StepTargetSettableVariables Allowed(params string[] variables) { }
     }
     public enum SubmoduleCheckout
     {

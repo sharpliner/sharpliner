@@ -1,6 +1,8 @@
 ﻿using System;
 using Sharpliner.AzureDevOps.Expressions;
+using System.Collections.Generic;
 using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
@@ -73,10 +75,67 @@ public record StepTarget
     public AdoExpression<StepTargetCommands>? Commands { get; init; }
 
     /// <summary>
-    /// Restrictions on which variables this step can set. Use <c>"none"</c> to disable setting variables,
-    /// or a list of variable names to allow only those variables.
+    /// Restrictions on which variables this step can set. Use <see cref="StepTargetSettableVariables.None"/>
+    /// to disable setting variables, or <see cref="StepTargetSettableVariables.Allowed"/> to allow only specific variables.
     /// </summary>
-    public object? SettableVariables { get; init; }
+    public AdoExpression<StepTargetSettableVariables>? SettableVariables { get; init; }
+}
+
+/// <summary>
+/// Restrictions on which variables a targeted Azure Pipelines step can set.
+/// </summary>
+public sealed class StepTargetSettableVariables : IYamlConvertible
+{
+    private const string NoneValue = "none";
+
+    private readonly IReadOnlyList<string>? _variables;
+
+    /// <summary>
+    /// Disables setting variables from this step.
+    /// </summary>
+    public static StepTargetSettableVariables None { get; } = new(NoneValue);
+
+    private StepTargetSettableVariables(string value)
+    {
+        Value = value;
+    }
+
+    private StepTargetSettableVariables(IReadOnlyList<string> variables)
+    {
+        _variables = variables;
+    }
+
+    /// <summary>
+    /// The scalar value to emit. Currently only <c>none</c> is supported by Azure Pipelines.
+    /// </summary>
+    public string? Value { get; }
+
+    /// <summary>
+    /// Restricts variable setting to the specified variable names.
+    /// </summary>
+    /// <param name="variables">Variable names that this step may set.</param>
+    public static StepTargetSettableVariables Allowed(params string[] variables) => new(variables);
+
+    void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+        => throw new NotImplementedException();
+
+    void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+    {
+        if (Value is not null)
+        {
+            emitter.Emit(new Scalar(Value));
+            return;
+        }
+
+        emitter.Emit(new SequenceStart(AnchorName.Empty, TagName.Empty, true, SequenceStyle.Block));
+
+        foreach (var variable in _variables ?? [])
+        {
+            emitter.Emit(new Scalar(variable));
+        }
+
+        emitter.Emit(new SequenceEnd());
+    }
 }
 
 /// <summary>

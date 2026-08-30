@@ -48,7 +48,7 @@ public class TaskBuilderTests
                             {
                                 Container = "node",
                                 Commands = StepTargetCommands.Restricted,
-                                SettableVariables = new[] { "sauce" },
+                                SettableVariables = StepTargetSettableVariables.Allowed("sauce"),
                             },
                             RetryCountOnTaskFailure = 3,
                         },
