@@ -33,6 +33,9 @@
       restoreSolution: '**/*.sln'
       externalFeedCredentials: MyExternalFeedCredentials
       noCache: true
+      disableParallelProcessing: true
+      restoreDirectory: packages
+      verbosityRestore: Normal
     continueOnError: true
 
   - task: NuGetCommand@2
@@ -53,6 +56,7 @@
       majorVersion: 3
       minorVersion: 1
       patchVersion: 4
+      packTimezone: local
 
   - task: NuGetCommand@2
     displayName: NuGet pack
@@ -69,6 +73,8 @@
       packagesToPack: '**/*.csproj'
       configuration: Release
       packDestination: artifacts/packages
+      basePath: src
+      verbosityPack: Quiet
 
   - task: NuGetCommand@2
     displayName: NuGet push
@@ -76,6 +82,11 @@
       command: push
       nuGetFeedType: internal
       publishVstsFeed: MyInternalFeed
+      packagesToPush: $(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg
+      publishPackageMetadata: false
+      allowPackageConflicts: true
+      requestTimeout: 300
+      verbosityPush: Quiet
 
   - task: NuGetCommand@2
     displayName: NuGet push
@@ -83,6 +94,8 @@
       command: push
       nuGetFeedType: external
       publishFeedCredentials: MyExternalFeedCredentials
+      requestTimeout: 120
+      verbosityPush: Normal
 
   - task: NuGetCommand@2
     inputs:
