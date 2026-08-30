@@ -8,10 +8,17 @@ namespace Sharpliner.AzureDevOps.Tasks;
 public class NuGetTaskBuilder
 {
     /// <summary>
-    /// Creates a <see cref="NuGetAuthenticateTask"/> with the specified NuGet service connections and force reinstall credential provider option.
+    /// Creates a <see cref="NuGetAuthenticateTask"/> that configures NuGet tools to authenticate with Azure Artifacts feeds
+    /// in this organization or collection, and optionally with feeds outside this organization through NuGet service connections.
     /// </summary>
-    /// <param name="nuGetServiceConnections">The NuGet service connections.</param>
-    /// <param name="forceReinstallCredentialProvider">A value indicating whether to force reinstall the credential provider.</param>
+    /// <param name="nuGetServiceConnections">
+    /// Optional NuGet service connection names for feeds outside this organization or collection. For feeds in this organization
+    /// or collection, leave this blank; the build's credentials are used automatically.
+    /// </param>
+    /// <param name="forceReinstallCredentialProvider">
+    /// A value indicating whether to overwrite the task-provided credential provider in the user profile even if it is already installed.
+    /// This may upgrade or potentially downgrade the credential provider. Default: <c>false</c>.
+    /// </param>
     /// <returns>A <see cref="NuGetAuthenticateTask"/> instance.</returns>
     /// <example>
     /// <code lang="csharp">
@@ -40,6 +47,41 @@ public class NuGetTaskBuilder
         }
 
         return task;
+    }
+
+    /// <summary>
+    /// Creates a <see cref="NuGetAuthenticateTask"/> that authenticates an Azure Artifacts feed using workload identity federation.
+    /// This Azure DevOps Services-only mode is not compatible with <c>nuGetServiceConnections</c>; the official task input alias
+    /// for <paramref name="azureDevOpsServiceConnection"/> is <c>workloadIdentityServiceConnection</c>.
+    /// </summary>
+    /// <param name="azureDevOpsServiceConnection">The Azure DevOps service connection used for workload identity federation.</param>
+    /// <param name="feedUrl">
+    /// The Azure Artifacts feed URL in NuGet service index format,
+    /// such as <c>https://pkgs.dev.azure.com/{ORG_NAME}/{PROJECT}/_packaging/{FEED_NAME}/nuget/v3/index.json</c>.
+    /// </param>
+    /// <returns>A <see cref="NuGetAuthenticateTask"/> instance.</returns>
+    /// <example>
+    /// <code lang="csharp">
+    /// NuGet.Authenticate("myAzureDevOpsServiceConnection", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/nuget/v3/index.json")
+    /// </code>
+    /// <para>Generated YAML:</para>
+    /// <code>
+    /// - task: NuGetAuthenticate@1
+    ///   inputs:
+    ///     azureDevOpsServiceConnection: myAzureDevOpsServiceConnection
+    ///     feedUrl: https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/nuget/v3/index.json
+    /// </code>
+    /// </example>
+    public NuGetAuthenticateTask Authenticate(AdoExpression<string> azureDevOpsServiceConnection, AdoExpression<string> feedUrl)
+    {
+        System.ArgumentNullException.ThrowIfNull(azureDevOpsServiceConnection);
+        System.ArgumentNullException.ThrowIfNull(feedUrl);
+
+        return new()
+        {
+            AzureDevOpsServiceConnection = azureDevOpsServiceConnection,
+            FeedUrl = feedUrl
+        };
     }
 
     /// <summary>

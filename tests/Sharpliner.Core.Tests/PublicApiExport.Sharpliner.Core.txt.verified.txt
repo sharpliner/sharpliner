@@ -1949,6 +1949,10 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public NuGetAuthenticateTask() { }
         [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureDevOpsServiceConnection { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? FeedUrl { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? ForceReinstallCredentialProvider { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public string[]? NuGetServiceConnections { get; init; }
@@ -2086,6 +2090,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.NuGetPackBuilder Pack { get; }
         public Sharpliner.AzureDevOps.Tasks.NuGetPushBuilder Push { get; }
         public Sharpliner.AzureDevOps.Tasks.NuGetRestoreBuilder Restore { get; }
+        public Sharpliner.AzureDevOps.Tasks.NuGetAuthenticateTask Authenticate(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureDevOpsServiceConnection, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> feedUrl) { }
         public Sharpliner.AzureDevOps.Tasks.NuGetAuthenticateTask Authenticate(string[]? nuGetServiceConnections = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? forceReinstallCredentialProvider = null) { }
         public Sharpliner.AzureDevOps.Tasks.NuGetCustomCommandTask Custom(string arguments) { }
     }

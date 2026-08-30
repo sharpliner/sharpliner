@@ -157,6 +157,7 @@ The [NuGet v2 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tas
 
 ```csharp
 NuGet.Authenticate(["NuGetServiceConnection1", "NuGetServiceConnection2"], forceReinstallCredentialProvider: true),
+NuGet.Authenticate("AzureDevOpsServiceConnection", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/nuget/v3/index.json"),
 
 NuGet.Restore.FromFeed("my-project/my-project-scoped-feed") with
 {
@@ -181,6 +182,12 @@ Generated YAML:
   inputs:
     forceReinstallCredentialProvider: true
     nuGetServiceConnections: NuGetServiceConnection1,NuGetServiceConnection2
+
+- task: NuGetAuthenticate@1
+  displayName: Authenticate to NuGet feeds
+  inputs:
+    azureDevOpsServiceConnection: AzureDevOpsServiceConnection
+    feedUrl: https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/nuget/v3/index.json
 
 - task: NuGetCommand@2
   displayName: NuGet restore
