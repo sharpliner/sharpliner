@@ -36,7 +36,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                     ValidateYamlsArePublished("eng/Sharpliner.CI/Sharpliner.CI.csproj"),
 
                     DotNet
-                        .Test("tests/Sharpliner.Tests/Sharpliner.Tests.csproj", "/p:CollectCoverage=true /p:CoverletOutputFormat=cobertura")
+                        .Test("tests/Sharpliner*.Tests/*.csproj", "/p:CollectCoverage=true /p:CoverletOutputFormat=cobertura")
                         .DisplayAs("Run unit tests"),
 
                     new PublishCodeCoverageResultsTask("tests/Sharpliner.Tests/coverage.cobertura.xml")

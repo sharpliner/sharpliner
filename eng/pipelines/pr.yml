@@ -56,7 +56,7 @@ jobs:
     displayName: Run unit tests
     inputs:
       command: test
-      projects: tests/Sharpliner.Tests/Sharpliner.Tests.csproj
+      projects: tests/Sharpliner*.Tests/*.csproj
       arguments: /p:CollectCoverage=true /p:CoverletOutputFormat=cobertura
 
   - task: PublishCodeCoverageResults@2
