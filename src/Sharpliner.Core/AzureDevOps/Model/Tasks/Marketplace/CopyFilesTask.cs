@@ -74,7 +74,7 @@ public record CopyFilesRetryInput : IYamlConvertible
     public static implicit operator CopyFilesRetryInput(AdoExpression<int> value) => new((AdoExpression)value);
 
     void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
-        => throw new NotImplementedException();
+        => throw new NotSupportedException($"{nameof(CopyFilesRetryInput)} does not support YAML deserialization.");
 
     void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
         => nestedObjectSerializer(_value, _value.GetType());
