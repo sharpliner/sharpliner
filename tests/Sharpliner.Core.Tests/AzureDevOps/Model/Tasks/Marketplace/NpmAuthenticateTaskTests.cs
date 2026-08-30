@@ -55,6 +55,8 @@ public class NpmAuthenticateTaskTests
         var builder = new NpmTaskBuilder();
 
         Assert.Throws<System.ArgumentException>(() => builder.Authenticate(".npmrc", "", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/npm/registry/"));
+        Assert.Throws<System.ArgumentException>(() => builder.Authenticate(".npmrc", " ", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/npm/registry/"));
         Assert.Throws<System.ArgumentException>(() => builder.Authenticate(".npmrc", "MyAzureDevOpsServiceConnection", ""));
+        Assert.Throws<System.ArgumentException>(() => builder.Authenticate(".npmrc", "MyAzureDevOpsServiceConnection", " "));
     }
 }
