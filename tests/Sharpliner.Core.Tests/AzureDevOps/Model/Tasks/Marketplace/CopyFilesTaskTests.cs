@@ -12,7 +12,7 @@ public class CopyFilesTaskTests
         {
             SourceFolder = new ParameterReference("sourceDir"),
             CleanTargetFolder = true,
-            Overwrite = true,
+            OverWrite = true,
             FlattenFolders = true,
             PreserveTimestamp = true,
             RetryCount = 3,

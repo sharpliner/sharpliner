@@ -143,9 +143,24 @@ public record CopyFilesTask : AzureDevOpsTask
     /// Defaults to <code>false</code>.
     /// </summary>
     [YamlIgnore]
-    public AdoExpression<bool>? Overwrite
+    public AdoExpression<bool>? OverWrite
     {
         get => GetExpression<bool>("OverWrite");
+        init => SetProperty("OverWrite", value);
+    }
+
+    /// <summary>
+    /// Replaces the existing files in the target folder.
+    /// Defaults to <code>false</code>.
+    /// </summary>
+    /// <remarks>
+    /// Compatibility alias for <see cref="OverWrite"/>. The emitted YAML input name is <c>OverWrite</c>, matching the official task specification.
+    /// </remarks>
+    [YamlIgnore]
+    [Obsolete($"Use {nameof(OverWrite)} to match the official CopyFiles@2 input casing.")]
+    public AdoExpression<bool>? Overwrite
+    {
+        get => OverWrite;
         init => SetProperty("OverWrite", value);
     }
 
