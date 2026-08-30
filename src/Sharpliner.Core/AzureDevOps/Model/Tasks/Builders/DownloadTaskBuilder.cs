@@ -125,7 +125,7 @@ public class DownloadTaskBuilder
 
     /// <summary>
     /// <para>
-    /// Creates a download task that an artifact from a given pipeline run.
+    /// Creates a download task that downloads an artifact from a given pipeline run.
     /// </para>
     /// For example:
     /// <code lang="csharp">
@@ -259,7 +259,7 @@ public class DownloadTaskBuilder
 
     /// <summary>
     /// <para>
-    /// Creates a download task that an artifact from a given pipeline run.
+    /// Creates a download task that downloads an artifact from a given pipeline run.
     /// </para>
     /// For example:
     /// <code lang="csharp">
