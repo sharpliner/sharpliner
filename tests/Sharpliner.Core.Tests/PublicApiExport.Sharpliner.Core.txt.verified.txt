@@ -1881,7 +1881,10 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
     public class ExtractFilesTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.ExtractFilesTask>
     {
+        public ExtractFilesTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> destinationFolder) { }
         public ExtractFilesTask(string destinationFolder) { }
+        public ExtractFilesTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> archiveFilePatterns, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> destinationFolder) { }
+        public ExtractFilesTask(string archiveFilePatterns, string destinationFolder) { }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ArchiveFilePatterns { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]

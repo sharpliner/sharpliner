@@ -1,4 +1,5 @@
 ﻿task: ExtractFiles@1
 
 inputs:
+  archiveFilePatterns: '**/*.zip'
   destinationFolder: $(Build.ArtifactStagingDirectory)/ExtractedFiles
