@@ -114,7 +114,18 @@ public sealed class StepTargetSettableVariables : IYamlConvertible
     /// Restricts variable setting to the specified variable names.
     /// </summary>
     /// <param name="variables">Variable names that this step may set.</param>
-    public static StepTargetSettableVariables Allowed(params string[] variables) => new(variables);
+    /// <exception cref="ArgumentException">Thrown when <paramref name="variables"/> is empty.</exception>
+    public static StepTargetSettableVariables Allowed(params string[] variables)
+    {
+        ArgumentNullException.ThrowIfNull(variables);
+
+        if (variables.Length == 0)
+        {
+            throw new ArgumentException("At least one variable name must be specified.", nameof(variables));
+        }
+
+        return new(variables);
+    }
 
     void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
         => throw new NotImplementedException();

@@ -67,6 +67,12 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    [Fact]
+    public void StepTargetSettableVariables_Allowed_Requires_AtLeast_One_Variable()
+    {
+        Assert.Throws<ArgumentException>(() => StepTargetSettableVariables.Allowed());
+    }
+
     private class PowershellTaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
