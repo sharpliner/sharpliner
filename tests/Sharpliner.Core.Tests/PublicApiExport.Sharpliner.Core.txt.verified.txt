@@ -1694,7 +1694,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.SelfCheckoutTask Self { get; }
         public Sharpliner.AzureDevOps.Tasks.RepositoryCheckoutTask Repository(string repository) { }
     }
-    public class CopyFilesRetryInput : System.IEquatable<Sharpliner.AzureDevOps.Tasks.CopyFilesRetryInput>, YamlDotNet.Serialization.IYamlConvertible
+    public sealed class CopyFilesRetryInput : YamlDotNet.Serialization.IYamlConvertible
     {
         public CopyFilesRetryInput(int value) { }
         public CopyFilesRetryInput(string value) { }

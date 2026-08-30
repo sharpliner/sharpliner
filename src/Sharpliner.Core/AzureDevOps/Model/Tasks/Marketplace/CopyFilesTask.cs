@@ -10,7 +10,7 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// <summary>
 /// Represents a <c>CopyFiles@2</c> retry-related input value.
 /// </summary>
-public record CopyFilesRetryInput : IYamlConvertible
+public sealed class CopyFilesRetryInput : IYamlConvertible
 {
     private readonly object _value;
 
