@@ -4,12 +4,15 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
-/// More details can be found in <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/azure-cli-v2?view=azure-pipelines">official Azure DevOps pipelines documentation</see>
+/// Runs Azure CLI commands against an Azure subscription using the <c>AzureCLI@2</c> task.
+/// More details can be found in the <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/azure-cli-v2?view=azure-pipelines">official Azure DevOps pipelines documentation</see>
+/// and the <see href="https://raw.githubusercontent.com/microsoft/azure-pipelines-tasks/9dabcbcbcbc3b5a1a94fd32acaa2766fdf934bd6/Tasks/AzureCLIV2/task.json">official AzureCLIV2 task specification audited on 2026-08-30</see>.
 /// </summary>
 public abstract record AzureCliTask : AzureDevOpsTask
 {
     /// <summary>
-    /// Alias: connectedServiceNameARM. Required. Azure Resource Manager connection.
+    /// Required. Azure Resource Manager service connection for the deployment.
+    /// The official input name is <c>connectedServiceNameARM</c>; <c>azureSubscription</c> is its YAML alias and is emitted for compatibility with existing Sharpliner output.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? AzureSubscription
@@ -19,7 +22,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Required. Type of script. Select a bash or pscore script when running on Linux agent. Or, select a batch, ps, or pscore script when running on Windows agent. A pscore script can run on cross-platform agents (Linux, macOS, or Windows).
+    /// Required. Type of script. Allowed values are <c>ps</c> (PowerShell), <c>pscore</c> (PowerShell Core),
+    /// <c>batch</c> (Batch), and <c>bash</c> (Shell). Select Shell or PowerShell Core on Linux agents,
+    /// Batch, PowerShell, or PowerShell Core on Windows agents; PowerShell Core can run on Linux, macOS, or Windows agents.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<ScriptType>? ScriptType
@@ -29,7 +34,8 @@ public abstract record AzureCliTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Required. Allowed values: inlineScript (Inline script), scriptPath (Script path). Default value: scriptPath.
+    /// Required. Script location. Allowed values are <c>inlineScript</c> (Inline script) and <c>scriptPath</c> (Script path).
+    /// Default value: <c>scriptPath</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<ScriptLocation>? ScriptLocation
@@ -39,7 +45,8 @@ public abstract record AzureCliTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Input alias: scriptArguments. Arguments passed to the script.
+    /// Optional. Arguments passed to the script.
+    /// The official input name is <c>scriptArguments</c>; <c>arguments</c> is its YAML alias and is emitted for compatibility with existing Sharpliner output.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? Arguments
@@ -49,8 +56,8 @@ public abstract record AzureCliTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Optional. Use when scriptType = ps || scriptType = pscore. Allowed values: stop, continue, silentlyContinue. Default value: stop.
-    /// Prepends the line $ErrorActionPreference = 'VALUE' at the top of your PowerShell/PowerShell Core script.
+    /// Optional. Use when <c>scriptType = ps || scriptType = pscore</c>. Allowed values are <c>stop</c>, <c>continue</c>, and <c>silentlyContinue</c>.
+    /// Default value: <c>stop</c>. Prepends the line <c>$ErrorActionPreference = 'VALUE'</c> at the top of your PowerShell/PowerShell Core script.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<PowerShellErrorActionPreference>? PowerShellErrorActionPreference
@@ -60,8 +67,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Adds the service principal ID, service principal key or workload identity federation token, and tenant ID of the Azure endpoint you chose to the script's execution environment.
-    /// You can use the servicePrincipalId, servicePrincipalKey or idToken, and tenantId variables in your script.
+    /// Optional. Default value: <c>false</c>. Adds the service principal ID, service principal key, and tenant ID of the Azure endpoint to the script's execution environment.
+    /// This is honored only when the Azure endpoint uses the Service Principal authentication scheme.
+    /// Access the variables as <c>$env:servicePrincipalId</c> in PowerShell, <c>%servicePrincipalId%</c> in Batch, and <c>$servicePrincipalId</c> in Shell.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>?  AddSpnToEnvironment
@@ -71,8 +79,8 @@ public abstract record AzureCliTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// If this input is false, this task will use its own Azure CLI configuration directory.
-    /// Use this task to run Azure CLI tasks in parallel releases.
+    /// Optional. Default value: <c>false</c>. If this input is false, this task uses its own separate Azure CLI configuration directory.
+    /// This can be used to run Azure CLI tasks in parallel releases.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? UseGlobalConfig
@@ -82,8 +90,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Current working directory where the script is run.
-    /// If left blank, this input is the root of the repo (build) or artifacts (release), which is $(System.DefaultWorkingDirectory).
+    /// Optional. Current working directory where the script is run.
+    /// Empty is the root of the repo (build) or artifacts (release), which is <c>$(System.DefaultWorkingDirectory)</c>.
+    /// The official input name is <c>cwd</c>; <c>workingDirectory</c> is its YAML alias and is emitted for compatibility with existing Sharpliner output.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? WorkingDirectory
@@ -93,8 +102,8 @@ public abstract record AzureCliTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// If this input is true, this task will fail when any errors are written to the StandardError stream.
-    /// Clear the checkbox to ignore standard errors and instead rely on exit codes to determine the status.
+    /// Optional. Default value: <c>false</c>. If this input is true, this task fails when any errors are written to the StandardError stream.
+    /// Set to false to ignore standard errors and rely on exit codes to determine the status.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? FailOnStandardError
@@ -104,9 +113,9 @@ public abstract record AzureCliTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Use when scriptType = ps || scriptType = pscore.
-    /// If this input is false, the line if ((Test-Path -LiteralPath variable:\LASTEXITCODE)) { exit $LASTEXITCODE } is appended to the end of your script.
-    /// This will propagate the last exit code from an external command as the exit code of PowerShell.
+    /// Optional. Use when <c>scriptType = ps || scriptType = pscore</c>. Default value: <c>false</c>.
+    /// If this input is false, the line <c>if ((Test-Path -LiteralPath variable:\LASTEXITCODE)) { exit $LASTEXITCODE }</c> is appended to the end of your script.
+    /// This propagates the last exit code from an external command as the exit code of PowerShell.
     /// Otherwise, the line is not appended to the end of your script.
     /// </summary>
     [YamlIgnore]
@@ -117,8 +126,8 @@ public abstract record AzureCliTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// If this is set to true, az login command will output to the task.
-    /// Setting it to false will suppress the az login output.
+    /// Optional. Default value: <c>true</c>. If this is set to true, <c>az login</c> command output is written to the task log.
+    /// Setting it to false suppresses the <c>az login</c> output.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? VisibleAzLogin
@@ -128,11 +137,23 @@ public abstract record AzureCliTask : AzureDevOpsTask
     }
 
     /// <summary>
+    /// Optional. Experimental. Default value: <c>false</c>. When enabled, this task continuously signs in to Azure to avoid
+    /// <c>AADSTS700024</c> errors when requesting access tokens beyond the ID token expiry date.
+    /// Valid only for service connections using the Workload Identity Federation authentication scheme.
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<bool>? KeepAzSessionActive
+    {
+        get => GetExpression<bool>("keepAzSessionActive", false);
+        init => SetProperty("keepAzSessionActive", value);
+    }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="AzureCliTask"/> class with required properties.
     /// </summary>
     /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
     /// <param name="scriptType">Type of script.</param>
-    /// <param name="scriptLocation">Path to the script.</param>
+    /// <param name="scriptLocation">Whether the script is provided inline or by file path.</param>
     public AzureCliTask(AdoExpression<string> azureSubscription, AdoExpression<ScriptType> scriptType, AdoExpression<ScriptLocation> scriptLocation)
         : base("AzureCLI@2")
     {
@@ -143,15 +164,15 @@ public abstract record AzureCliTask : AzureDevOpsTask
 }
 
 /// <summary>
-/// Azure CLI Task with inline script
+/// Azure CLI task with inline script content.
 /// </summary>
 public record InlineAzureCliTask : AzureCliTask
 {
     /// <summary>
-    /// Required when scriptLocation = inlineScript.
+    /// Required when <c>scriptLocation = inlineScript</c>.
     /// You can write your scripts inline here. When using Windows agent, use PowerShell, PowerShell Core, or batch scripting.
-    /// Use PowerShell Core or shell scripting when using Linux-based agents. For batch files, use the prefix call before every Azure command.
-    /// You can also pass predefined and custom variables to this script by using arguments.
+    /// Use PowerShell Core or shell scripting when using Linux-based agents. For batch files, use the prefix <c>call</c> before every Azure command.
+    /// You can also pass predefined and custom variables to this script by using <see cref="AzureCliTask.Arguments"/>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? InlineScript
@@ -174,13 +195,13 @@ public record InlineAzureCliTask : AzureCliTask
 }
 
 /// <summary>
-/// Azure CLI Task with file
+/// Azure CLI task with script file path.
 /// </summary>
 public record AzureCliFileTask : AzureCliTask
 {
     /// <summary>
-    /// Required when scriptLocation = scriptPath. Fully qualified path of the script. Use .ps1, .bat, or .cmd when using Windows-based agent.
-    /// Use .ps1 or .sh when using Linux-based agent or a path relative to the the default working directory.
+    /// Required when <c>scriptLocation = scriptPath</c>. Fully qualified path of the script, or a path relative to the default working directory.
+    /// Use <c>.ps1</c>, <c>.bat</c>, or <c>.cmd</c> when using Windows-based agents; use <c>.ps1</c> or <c>.sh</c> when using Linux-based agents.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? ScriptPath
@@ -203,74 +224,73 @@ public record AzureCliFileTask : AzureCliTask
 }
 
 /// <summary>
-/// Allowed values for ScriptType
+/// Allowed values for Azure CLI task <c>scriptType</c>.
 /// </summary>
 public enum ScriptType
 {
     /// <summary>
-    /// Powershell
+    /// PowerShell. Supported on Windows agents.
     /// </summary>
     [YamlMember(Alias = "ps")]
     Ps,
 
     /// <summary>
-    /// Powershell Core
+    /// PowerShell Core. Supported on Linux, macOS, and Windows agents when PowerShell 6 or later is available.
     /// </summary>
     [YamlMember(Alias = "pscore")]
     Pscore,
 
     /// <summary>
-    /// Batch (Shell)
+    /// Batch. Supported on Windows agents.
     /// </summary>
     [YamlMember(Alias = "batch")]
     Batch,
 
     /// <summary>
-    /// Bash (Shell)
+    /// Shell. Supported on Linux agents.
     /// </summary>
     [YamlMember(Alias = "bash")]
     Bash,
 }
 
 /// <summary>
-/// Allowed values for ScriptLocation
+/// Allowed values for Azure CLI task <c>scriptLocation</c>.
 /// </summary>
 public enum ScriptLocation
 {
     /// <summary>
-    /// Default. Script path
+    /// Default. Script path.
     /// </summary>
     [YamlMember(Alias = "scriptPath")]
     ScriptPath,
 
     /// <summary>
-    /// Inline script
+    /// Inline script.
     /// </summary>
     [YamlMember(Alias = "inlineScript")]
     InlineScript,
 }
 
 /// <summary>
-/// Allowed values for PowerShellErrorActionPreference
+/// Allowed values for Azure CLI task <c>powerShellErrorActionPreference</c>.
 /// </summary>
 public enum PowerShellErrorActionPreference
 {
     /// <summary>
-    /// Default. Stop
+    /// Default. Stop.
     /// </summary>
     [YamlMember(Alias = "stop")]
     Stop,
 
     /// <summary>
-    /// Continue
+    /// Continue.
     /// </summary>
     [YamlMember(Alias = "continue")]
     Continue,
 
     /// <summary>
-    /// Silently Continue
+    /// SilentlyContinue.
     /// </summary>
     [YamlMember(Alias = "silentlyContinue")]
     SilentlyContinue,
 }
-
