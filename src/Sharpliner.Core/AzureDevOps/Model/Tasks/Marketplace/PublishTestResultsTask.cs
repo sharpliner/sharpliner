@@ -21,23 +21,34 @@ public record PublishTestResultsTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Specifies the format of the results files you want to publish.
-    /// JUnit, NUnit, VSTest, XUnit, CTest
-    /// Defaults to <code>JUnit</code>.
+    /// Specifies the format of the result files you want to publish.
+    /// JUnit, NUnit, VSTest, XUnit, CTest.
+    /// Defaults to <code>JUnit</code>. Emits <c>testRunner</c> input.
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<TestResultsFormat>? TestRunner
+    {
+        get => GetExpression<TestResultsFormat>("testRunner");
+        init => SetProperty("testRunner", value);
+    }
+
+    /// <summary>
+    /// Alias for <see cref="TestRunner" />.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<TestResultsFormat>? TestResultsFormat
     {
-        get => GetExpression<TestResultsFormat>("testResultsFormat");
-        init => SetProperty("testResultsFormat", value);
+        get => GetExpression<TestResultsFormat>("testRunner");
+        init => SetProperty("testRunner", value);
     }
 
     /// <summary>
     /// Specifies one or more test results files.
+    /// Supports multiple lines of minimatch patterns.
     /// You can use a single-folder wildcard (*) and recursive wildcards (**).
     /// Defaults to <code>**/TEST-*.xml</code>.
     /// <example>**/TEST-*.xml searches for all the XML files whose names start with TEST- in all subdirectories.</example>
-    /// <remarks>If using VSTest as the test result format, the file type should be changed to .trx e.g. **/TEST-*.trx</remarks>
+    /// <remarks>If using <see cref="TestResultsFormat.VSTest" />, this pattern should target <c>.trx</c> files (for example, <c>**/TEST-*.trx</c>).</remarks>
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? TestResultsFiles
@@ -60,6 +71,8 @@ public record PublishTestResultsTask : AzureDevOpsTask
     /// <summary>
     /// When this boolean's value is true, the task reports test results from all the files against a single test run.
     /// If the value is false, the task creates a separate test run for each test result file.
+    /// Results are merged automatically when more than 100 result files are found.
+    /// Defaults to <code>false</code>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? MergeTestResults
@@ -70,6 +83,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
 
     /// <summary>
     /// When this boolean's value is true, the task will fail if any of the tests in the results file are marked as failed.
+    /// Defaults to <code>false</code>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? FailTaskOnFailedTests
@@ -80,6 +94,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
 
     /// <summary>
     /// When true, fails the task if there is failure in publishing test results.
+    /// Defaults to <code>false</code>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? FailTaskOnFailureToPublishResults
@@ -90,6 +105,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
 
     /// <summary>
     /// Fail the task if no result files are found.
+    /// Defaults to <code>false</code>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? FailTaskOnMissingResultsFile
@@ -99,8 +115,7 @@ public record PublishTestResultsTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Specifies a name for the test run against which the results will be reported.
-    /// Variable names declared in the build or release pipeline can be used.
+    /// Specifies a name for the test run.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? TestRunTitle
@@ -111,28 +126,51 @@ public record PublishTestResultsTask : AzureDevOpsTask
 
     /// <summary>
     /// Specifies the build platform against which the test run should be reported.
+    /// Emits <c>platform</c> input.
     /// <example>x64 or x86</example>
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<string>? Platform
+    {
+        get => GetExpression<string>("platform");
+        init => SetProperty("platform", value);
+    }
+
+    /// <summary>
+    /// Alias for <see cref="Platform" />.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? BuildPlatform
     {
-        get => GetExpression<string>("buildPlatform");
-        init => SetProperty("buildPlatform", value);
+        get => GetExpression<string>("platform");
+        init => SetProperty("platform", value);
     }
 
     /// <summary>
     /// Specifies the build configuration against which the test run should be reported.
+    /// Emits <c>configuration</c> input.
     /// <example>Debug or Release</example>
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<string>? Configuration
+    {
+        get => GetExpression<string>("configuration");
+        init => SetProperty("configuration", value);
+    }
+
+    /// <summary>
+    /// Alias for <see cref="Configuration" />.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? BuildConfiguration
     {
-        get => GetExpression<string>("buildConfiguration");
-        init => SetProperty("buildConfiguration", value);
+        get => GetExpression<string>("configuration");
+        init => SetProperty("configuration", value);
     }
 
     /// <summary>
     /// When this boolean's value is true, the task uploads all the test result files as attachments to the test run.
+    /// Defaults to <code>true</code>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? PublishRunAttachments
