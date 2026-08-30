@@ -46,7 +46,7 @@ public record DeleteFilesTask : AzureDevOpsTask
 
     /// <summary>
     /// Deletes files starting with a dot, such as <c>.git</c> or <c>.dockerfile</c>.
-    /// Otherwise, dot files are omitted unless they are specified explicitly with a pattern such as <c>/.*</c>.
+    /// Otherwise, dot files are omitted unless they are specified explicitly with a pattern such as <c>.*</c> or <c>**/.*</c>.
     /// See <see href="https://github.com/isaacs/minimatch#dot">minimatch dot matching</see> for more information.
     /// </summary>
     [YamlIgnore]
