@@ -10,6 +10,8 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// </summary>
 public record ExtractFilesTask : AzureDevOpsTask
 {
+    private const string DefaultArchiveFilePatterns = "**/*.zip";
+
     /// <summary>
     /// Specifies the file paths or patterns of the archive files to extract. Supports multiple lines of minimatch patterns.
     /// Defaults to <c>**/*.zip</c>.
@@ -17,7 +19,7 @@ public record ExtractFilesTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<string>? ArchiveFilePatterns
     {
-        get => GetExpression<string>("archiveFilePatterns", "**/*.zip");
+        get => GetExpression<string>("archiveFilePatterns", DefaultArchiveFilePatterns);
         init => SetProperty("archiveFilePatterns", value);
     }
 
@@ -87,7 +89,7 @@ public record ExtractFilesTask : AzureDevOpsTask
     public ExtractFilesTask(string destinationFolder)
         : base("ExtractFiles@1")
     {
-        ArchiveFilePatterns = "**/*.zip";
+        ArchiveFilePatterns = DefaultArchiveFilePatterns;
         DestinationFolder = destinationFolder;
     }
 }
