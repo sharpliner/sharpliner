@@ -2149,27 +2149,38 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SummaryFileLocation { get; init; }
     }
+    public class PublishPipelineArtifactTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PublishPipelineArtifactTask>
+    {
+        public PublishPipelineArtifactTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> targetPath, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? artifactName = null) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Artifact { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ArtifactType>? ArtifactType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? FileSharePath { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? Parallel { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<uint>? ParallelCount { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Properties { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string> TargetPath { get; init; }
+    }
     public class PublishTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PublishTask>
     {
         public PublishTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> targetPath, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? artifactName = null) { }
         [YamlDotNet.Serialization.YamlMember(Order=101)]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Artifact { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Order=102)]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ArtifactType>? ArtifactType { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Order=211)]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? FileSharePath { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Order=212)]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? Parallel { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Order=213)]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<uint>? ParallelCount { get; init; }
         [YamlDotNet.Serialization.YamlMember(Alias="publish", Order=1)]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TargetPath { get; }
     }
     public class PublishTaskBuilder
     {
         public PublishTaskBuilder() { }
-        public Sharpliner.AzureDevOps.Tasks.PublishTask FileShare(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> artifactName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> targetPath, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> fileSharePath) { }
+        public Sharpliner.AzureDevOps.Tasks.PublishPipelineArtifactTask FileShare(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> artifactName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> targetPath, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> fileSharePath) { }
         public Sharpliner.AzureDevOps.Tasks.PublishTask Pipeline(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> artifactName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> targetPath) { }
+        public Sharpliner.AzureDevOps.Tasks.PublishPipelineArtifactTask PipelineArtifact(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> artifactName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> targetPath) { }
     }
     public class PublishTestResultsTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PublishTestResultsTask>
     {

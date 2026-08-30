@@ -154,7 +154,14 @@ public class TaskBuilderTests
 
                         Publish.FileShare("additional-binary", "bin/Debug/netstandard2.0/", $"{variables.Build.ArtifactStagingDirectory}/additional-binary") with
                         {
-                            Parallel = true
+                            Parallel = true,
+                            ParallelCount = 16,
+                        },
+
+                        Publish.PipelineArtifact("Packages", "artifacts/packages") with
+                        {
+                            DisplayName = "Publish packages",
+                            Properties = """{"user-type":"packages"}""",
                         },
 
                         Publish.Pipeline("artifactName", "some/file/path.txt"),

@@ -6,11 +6,22 @@
     artifact: Binary
     continueOnError: false
 
-  - publish: bin/Debug/netstandard2.0/
-    artifact: additional-binary
-    artifactType: filepath
-    fileSharePath: $(Build.ArtifactStagingDirectory)/additional-binary
-    parallel: true
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: bin/Debug/netstandard2.0/
+      artifact: additional-binary
+      artifactType: filepath
+      fileSharePath: $(Build.ArtifactStagingDirectory)/additional-binary
+      parallel: true
+      parallelCount: 16
+
+  - task: PublishPipelineArtifact@1
+    displayName: Publish packages
+    inputs:
+      targetPath: artifacts/packages
+      artifact: Packages
+      artifactType: pipeline
+      properties: '{"user-type":"packages"}'
 
   - publish: some/file/path.txt
     artifact: artifactName
