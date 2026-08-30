@@ -245,7 +245,7 @@ public class TaskBuilderTests
                                 "frontend.config",
                             ]
                         },
-                        Download.CurrentBuild("CurrentTaskArtifact", path: variables.Pipeline.Workspace, patterns: [ "**/*.zip" ]) with
+                        Download.CurrentBuild() with
                         {
                             ArtifactName = "CurrentTaskArtifactAlias",
                             DownloadPath = "$(Pipeline.Workspace)/current-task",
