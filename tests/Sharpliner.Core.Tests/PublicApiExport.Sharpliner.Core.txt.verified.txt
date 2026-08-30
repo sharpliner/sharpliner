@@ -3,7 +3,7 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner.Core.Tests")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner.Tests")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v10.0", FrameworkDisplayName=".NET 10.0")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v11.0", FrameworkDisplayName=".NET 11.0")]
 namespace Sharpliner.AzureDevOps
 {
     public static class AdoExpressionExtensions
@@ -1936,7 +1936,11 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public NpmAuthenticateTask(string workingFile) { }
         [YamlDotNet.Serialization.YamlIgnore]
+        public string? AzureDevOpsServiceConnection { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
         public string[]? CustomEndpoints { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? FeedUrl { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public string WorkingFile { get; init; }
     }
@@ -1944,6 +1948,7 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public NpmTaskBuilder() { }
         public Sharpliner.AzureDevOps.Tasks.NpmAuthenticateTask Authenticate(string workingFile, string[]? customEndpoints = null) { }
+        public Sharpliner.AzureDevOps.Tasks.NpmAuthenticateTask Authenticate(string workingFile, string azureDevOpsServiceConnection, string feedUrl) { }
     }
     public class NuGetAuthenticateTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetAuthenticateTask>
     {
