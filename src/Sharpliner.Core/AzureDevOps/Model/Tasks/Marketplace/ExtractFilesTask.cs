@@ -36,7 +36,7 @@ public record ExtractFilesTask : AzureDevOpsTask
 
     /// <summary>
     /// Specifies whether to delete the entire content of the destination directory before archive contents are extracted into it.
-    /// Defaults to <code>true</code>.
+    /// Defaults to <c>true</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? CleanDestinationFolder
@@ -48,7 +48,7 @@ public record ExtractFilesTask : AzureDevOpsTask
     /// <summary>
     /// Specifies the option to overwrite existing files in the destination directory if they already exist. When set to
     /// <c>false</c>, the task does not pass overwrite options to the extraction tools.
-    /// Defaults to <code>false</code>.
+    /// Defaults to <c>false</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? OverwriteExistingFiles
