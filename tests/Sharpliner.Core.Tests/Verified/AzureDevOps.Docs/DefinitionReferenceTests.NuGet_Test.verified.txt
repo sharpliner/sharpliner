@@ -4,6 +4,12 @@
     forceReinstallCredentialProvider: true
     nuGetServiceConnections: NuGetServiceConnection1,NuGetServiceConnection2
 
+- task: NuGetAuthenticate@1
+  displayName: Authenticate to NuGet feeds
+  inputs:
+    azureDevOpsServiceConnection: AzureDevOpsServiceConnection
+    feedUrl: https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/nuget/v3/index.json
+
 - task: NuGetCommand@2
   displayName: NuGet restore
   inputs:

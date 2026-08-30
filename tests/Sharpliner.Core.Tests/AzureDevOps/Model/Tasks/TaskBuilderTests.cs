@@ -349,7 +349,9 @@ public class TaskBuilderTests
                 {
                     Steps =
                     {
-                        NuGet.Authenticate(["MyServiceConnection"], true),
+                        NuGet.Authenticate(),
+                        NuGet.Authenticate([" MyServiceConnection ", "", " AnotherServiceConnection "], true),
+                        NuGet.Authenticate("MyAzureDevOpsServiceConnection", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/nuget/v3/index.json"),
                         NuGet.Restore.FromFeed("my-project/my-project-scoped-feed") with
                         {
                             RestoreSolution = "**/*.sln",
