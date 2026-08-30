@@ -3,7 +3,7 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner.Core.Tests")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner.Tests")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v10.0", FrameworkDisplayName=".NET 10.0")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v11.0", FrameworkDisplayName=".NET 11.0")]
 namespace Sharpliner.AzureDevOps
 {
     public static class AdoExpressionExtensions
@@ -1856,6 +1856,13 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlMember(Order=1)]
         public override string Download { get; }
     }
+    public enum DownloadPipelineArtifactSource
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="current")]
+        Current = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="specific")]
+        Specific = 1,
+    }
     public abstract class DownloadTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DownloadTask>
     {
         protected DownloadTask() { }
@@ -1870,7 +1877,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public System.Collections.Generic.List<string> Tags { get; init; }
         [YamlDotNet.Serialization.YamlMember(Alias="patterns", Order=61, ScalarStyle=YamlDotNet.Core.ScalarStyle.Literal)]
-        public string _Patterns { get; }
+        public string? _Patterns { get; }
         [YamlDotNet.Serialization.YamlMember(Alias="tags", Order=104)]
         public string? _Tags { get; }
     }
@@ -1878,7 +1885,9 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public Sharpliner.AzureDevOps.Tasks.CurrentDownloadTask Current { get; }
         public Sharpliner.AzureDevOps.Tasks.NoneDownloadTask None { get; }
+        public Sharpliner.AzureDevOps.Tasks.SpecificDownloadTask CurrentBuild(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? artifact = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? path = null, System.Collections.Generic.IEnumerable<string>? patterns = null) { }
         public Sharpliner.AzureDevOps.Tasks.DownloadFromPipelineResourceTask FromPipelineResource(string resourceName, string? artifact = null, System.Collections.Generic.IEnumerable<string>? patterns = null) { }
+        public Sharpliner.AzureDevOps.Tasks.SpecificDownloadTask Latest(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> project, Sharpliner.AzureDevOps.Expressions.AdoExpression<int> definition, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? artifact = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? path = null, System.Collections.Generic.IEnumerable<string>? patterns = null) { }
         public Sharpliner.AzureDevOps.Tasks.SpecificDownloadTask LatestFromBranch(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> project, Sharpliner.AzureDevOps.Expressions.AdoExpression<int> definition, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? branchName = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? artifact = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? path = null, System.Collections.Generic.IEnumerable<string>? patterns = null) { }
         public Sharpliner.AzureDevOps.Tasks.SpecificDownloadTask SpecificBuild(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> project, Sharpliner.AzureDevOps.Expressions.AdoExpression<int> definition, Sharpliner.AzureDevOps.Expressions.AdoExpression<int> buildId, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? artifact = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? path = null, System.Collections.Generic.IEnumerable<string>? patterns = null) { }
     }
@@ -2279,6 +2288,7 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
     public class SpecificDownloadTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SpecificDownloadTask>
     {
+        public SpecificDownloadTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.DownloadPipelineArtifactSource> source) { }
         public SpecificDownloadTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.RunVersion> runVersion, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> project, Sharpliner.AzureDevOps.Expressions.AdoExpression<int> pipeline) { }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? AllowFailedBuilds { get; init; }
@@ -2287,33 +2297,51 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Artifact { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? BranchName { get; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ArtifactName { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int> BuildId { get; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? BranchName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int> BuildId { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.DownloadPipelineArtifactSource>? BuildType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.RunVersion>? BuildVersionToDownload { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? CheckDownloadedFiles { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? Definition { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DownloadPath { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public System.Collections.Generic.List<string>? ItemPattern { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Path { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public System.Collections.Generic.List<string>? Patterns { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? Pipeline { get; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? Pipeline { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int> PipelineId { get; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int> PipelineId { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? PreferTriggeringPipeline { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string> Project { get; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Project { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<int> RetryDownloadCount { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RunBranch { get; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RunBranch { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int> RunId { get; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int> RunId { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.RunVersion>? RunVersion { get; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.RunVersion>? RunVersion { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.DownloadPipelineArtifactSource>? Source { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? SpecificBuildWithTriggering { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public System.Collections.Generic.List<string> Tags { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TargetPath { get; init; }
     }
     public enum SubmoduleCheckout
     {

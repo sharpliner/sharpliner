@@ -34,7 +34,7 @@ public abstract record DownloadTask : Step
     /// Internal property to serialize the patterns as a new line delimited string.
     /// </summary>
     [YamlMember(Alias = "patterns", Order = 61, ScalarStyle = YamlDotNet.Core.ScalarStyle.Literal)]
-    public string _Patterns => string.Join("\n", Patterns);
+    public string? _Patterns => Patterns.Count > 0 ? string.Join("\n", Patterns) : null;
 
     /// <summary>
     /// Directory to download the artifact files. Can be relative to the pipeline workspace directory or absolute.
@@ -104,6 +104,7 @@ public record DownloadFromPipelineResourceTask : DownloadTask
 /// </summary>
 public record SpecificDownloadTask : AzureDevOpsTask
 {
+    private const string SourceProperty = "source";
     private const string ArtifactProperty = "artifact";
     private const string PatternsProperty = "patterns";
     private const string PathProperty = "path";
@@ -126,7 +127,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// <param name="project">The project GUID from which to download the pipeline artifacts.</param>
     /// <param name="pipeline">The definition ID of the build pipeline.</param>
     public SpecificDownloadTask(AdoExpression<RunVersion> runVersion, AdoExpression<string> project, AdoExpression<int> pipeline)
-        : base("DownloadPipelineArtifact@2")
+        : this(DownloadPipelineArtifactSource.Specific)
     {
         RunVersion = runVersion;
         Project = project;
@@ -134,10 +135,56 @@ public record SpecificDownloadTask : AzureDevOpsTask
     }
 
     /// <summary>
+    /// Instantiates a new <see cref="SpecificDownloadTask"/> with the specified artifact source.
+    /// </summary>
+    /// <param name="source">Whether to download artifacts produced by the current pipeline run or from a specific pipeline run.</param>
+    public SpecificDownloadTask(AdoExpression<DownloadPipelineArtifactSource> source)
+        : base("DownloadPipelineArtifact@2")
+    {
+        Source = source;
+    }
+
+    /// <summary>
+    /// Download artifacts produced by the current pipeline run, or from a specific pipeline run.
+    /// Default value: current
+    /// Argument aliases: buildType
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<DownloadPipelineArtifactSource>? Source
+    {
+        get => GetExpression<DownloadPipelineArtifactSource>(SourceProperty);
+        init => SetProperty(SourceProperty, value);
+    }
+
+    /// <summary>
+    /// Download artifacts produced by the current pipeline run, or from a specific pipeline run.
+    /// Default value: current
+    /// Argument aliases: source
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<DownloadPipelineArtifactSource>? BuildType
+    {
+        get => GetExpression<DownloadPipelineArtifactSource>(SourceProperty);
+        init => SetProperty(SourceProperty, value);
+    }
+
+    /// <summary>
     /// The name of the artifact to download. If left empty, all artifacts associated to the pipeline run will be downloaded.
+    /// Argument aliases: artifactName
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? Artifact
+    {
+        get => GetExpression<string>(ArtifactProperty);
+        init => SetProperty(ArtifactProperty, value);
+    }
+
+    /// <summary>
+    /// The name of the artifact to download. If left empty, all artifacts associated to the pipeline run will be downloaded.
+    /// Argument aliases: artifact
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<string>? ArtifactName
     {
         get => GetExpression<string>(ArtifactProperty);
         init => SetProperty(ArtifactProperty, value);
@@ -149,6 +196,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// <para>
     /// Default value: <c>$(Pipeline.Workspace)</c>
     /// </para>
+    /// Argument aliases: targetPath, downloadPath
     /// <para>
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/artifacts/pipeline-artifacts?view=azure-devops">Artifacts in Azure Pipelines</see>.
     /// </para>
@@ -161,69 +209,147 @@ public record SpecificDownloadTask : AzureDevOpsTask
     }
 
     /// <summary>
+    /// Specifies either a relative or absolute path on the agent machine where the artifacts will download.
+    /// Argument aliases: path, downloadPath
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<string>? TargetPath
+    {
+        get => GetExpression<string>(PathProperty);
+        init => SetProperty(PathProperty, value);
+    }
+
+    /// <summary>
+    /// Specifies either a relative or absolute path on the agent machine where the artifacts will download.
+    /// Argument aliases: path, targetPath
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<string>? DownloadPath
+    {
+        get => GetExpression<string>(PathProperty);
+        init => SetProperty(PathProperty, value);
+    }
+
+    /// <summary>
     /// One or more file matching patterns that limit which files get downloaded.
     /// Default value: **
+    /// Argument aliases: itemPattern
     /// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/file-matching-patterns?view=azure-devops">official Azure DevOps pipelines documentation</see>.
     /// </summary>
     [YamlIgnore]
     public List<string>? Patterns
     {
-        get => [.. (GetString(PatternsProperty) ?? string.Empty).Split(System.Environment.NewLine)];
+        get
+        {
+            var patterns = GetString(PatternsProperty);
+            return string.IsNullOrEmpty(patterns) ? [] : [.. patterns.Split(System.Environment.NewLine)];
+        }
+        init => SetProperty(PatternsProperty, value is null || value.Count == 0 ? null : string.Join(System.Environment.NewLine, value));
+    }
+
+    /// <summary>
+    /// One or more file matching patterns that limit which files get downloaded.
+    /// Default value: **
+    /// Argument aliases: patterns
+    /// </summary>
+    [YamlIgnore]
+    public List<string>? ItemPattern
+    {
+        get
+        {
+            var patterns = GetString(PatternsProperty);
+            return string.IsNullOrEmpty(patterns) ? [] : [.. patterns.Split(System.Environment.NewLine)];
+        }
         init => SetProperty(PatternsProperty, value is null || value.Count == 0 ? null : string.Join(System.Environment.NewLine, value));
     }
 
     /// <summary>
     /// The project GUID from which to download the pipeline artifacts.
+    /// Required when <see cref="Source"/> is <see cref="DownloadPipelineArtifactSource.Specific"/>.
     /// </summary>
     [YamlIgnore]
-    public AdoExpression<string> Project
+    public AdoExpression<string>? Project
     {
-        get => GetExpression<string>(ProjectProperty) ?? throw new NullReferenceException();
-        private init => SetProperty(ProjectProperty, value);
+        get => GetExpression<string>(ProjectProperty);
+        init => SetProperty(ProjectProperty, value);
     }
 
     /// <summary>
     /// The definition ID of the build pipeline.
+    /// Required when <see cref="Source"/> is <see cref="DownloadPipelineArtifactSource.Specific"/>.
+    /// Argument aliases: definition
     /// </summary>
     [YamlIgnore]
     public AdoExpression<int>? Pipeline
     {
         get => GetExpression<int>(PipelineProperty);
-        private init => SetProperty(PipelineProperty, value);
+        init => SetProperty(PipelineProperty, value);
+    }
+
+    /// <summary>
+    /// The definition ID of the build pipeline.
+    /// Required when <see cref="Source"/> is <see cref="DownloadPipelineArtifactSource.Specific"/>.
+    /// Argument aliases: pipeline
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<int>? Definition
+    {
+        get => GetExpression<int>(PipelineProperty);
+        init => SetProperty(PipelineProperty, value);
     }
 
     /// <summary>
     /// The build version to download.
+    /// Required when <see cref="Source"/> is <see cref="DownloadPipelineArtifactSource.Specific"/>.
+    /// Default value: latest
+    /// Argument aliases: buildVersionToDownload
     /// </summary>
     [YamlIgnore]
     public AdoExpression<RunVersion>? RunVersion
     {
         get => GetExpression<RunVersion>(RunVersionProperty);
-        internal init => SetProperty(RunVersionProperty, value);
+        init => SetProperty(RunVersionProperty, value);
+    }
+
+    /// <summary>
+    /// The build version to download.
+    /// Required when <see cref="Source"/> is <see cref="DownloadPipelineArtifactSource.Specific"/>.
+    /// Default value: latest
+    /// Argument aliases: runVersion
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<RunVersion>? BuildVersionToDownload
+    {
+        get => GetExpression<RunVersion>(RunVersionProperty);
+        init => SetProperty(RunVersionProperty, value);
     }
 
     /// <summary>
     /// Specify to filter on branch/ref name.
     /// For example: <c>refs/heads/develop</c>
+    /// Required when <see cref="Source"/> is <see cref="DownloadPipelineArtifactSource.Specific"/> and <see cref="RunVersion"/> is <see cref="Tasks.RunVersion.LatestFromBranch"/>.
+    /// Default value: refs/heads/master
     /// Argument aliases: branchName
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? RunBranch
     {
         get => GetExpression<string>(RunBranchProperty);
-        internal init => SetProperty(RunBranchProperty, value);
+        init => SetProperty(RunBranchProperty, value);
     }
 
     /// <summary>
     /// Specify to filter on branch/ref name.
     /// For example: refs/heads/develop
+    /// Required when <see cref="Source"/> is <see cref="DownloadPipelineArtifactSource.Specific"/> and <see cref="RunVersion"/> is <see cref="Tasks.RunVersion.LatestFromBranch"/>.
+    /// Default value: refs/heads/master
     /// Argument aliases: runBranch
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? BranchName
     {
         get => GetExpression<string>(RunBranchProperty);
-        internal init => SetProperty(RunBranchProperty, value);
+        init => SetProperty(RunBranchProperty, value);
     }
 
     /// <summary>
@@ -235,7 +361,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     public AdoExpression<int> RunId
     {
         get => GetInt(RunIdProperty) ?? 0;
-        internal init => SetProperty(RunIdProperty, value);
+        init => SetProperty(RunIdProperty, value);
     }
 
     /// <summary>
@@ -247,7 +373,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     public AdoExpression<int> PipelineId
     {
         get => GetInt(RunIdProperty) ?? 0;
-        internal init => SetProperty(RunIdProperty, value);
+        init => SetProperty(RunIdProperty, value);
     }
 
     /// <summary>
@@ -259,22 +385,29 @@ public record SpecificDownloadTask : AzureDevOpsTask
     public AdoExpression<int> BuildId
     {
         get => GetInt(RunIdProperty) ?? 0;
-        internal init => SetProperty(RunIdProperty, value);
+        init => SetProperty(RunIdProperty, value);
     }
 
     /// <summary>
     /// A list of tags. Only builds with these tags will be returned.
+    /// Applies when <see cref="Source"/> is <see cref="DownloadPipelineArtifactSource.Specific"/> and <see cref="RunVersion"/> is not <see cref="Tasks.RunVersion.Specific"/>.
     /// </summary>
     [YamlIgnore]
     public List<string> Tags
     {
-        get => [.. (GetString(TagsProperty) ?? string.Empty).Split(",")];
-        init => SetProperty(TagsProperty, string.Join(",", value));
+        get
+        {
+            var tags = GetString(TagsProperty);
+            return string.IsNullOrEmpty(tags) ? [] : [.. tags.Split(",")];
+        }
+        init => SetProperty(TagsProperty, value is null || value.Count == 0 ? null : string.Join(",", value));
     }
 
     /// <summary>
     /// A boolean specifying whether to download artifacts from a triggering build.
     /// Defaults to false.
+    /// Applies when <see cref="Source"/> is <see cref="DownloadPipelineArtifactSource.Specific"/>.
+    /// Argument aliases: specificBuildWithTriggering
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? PreferTriggeringPipeline
@@ -284,8 +417,22 @@ public record SpecificDownloadTask : AzureDevOpsTask
     }
 
     /// <summary>
+    /// A boolean specifying whether to download artifacts from a triggering build.
+    /// Defaults to false.
+    /// Applies when <see cref="Source"/> is <see cref="DownloadPipelineArtifactSource.Specific"/>.
+    /// Argument aliases: preferTriggeringPipeline
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<bool>? SpecificBuildWithTriggering
+    {
+        get => GetExpression<bool>(PreferTriggeringPipelineProperty);
+        init => SetProperty(PreferTriggeringPipelineProperty, value);
+    }
+
+    /// <summary>
     /// If checked, this build task will try to download artifacts whether the build is succeeded or partially succeeded.
     /// Defaults to false.
+    /// Applies when <see cref="Source"/> is <see cref="DownloadPipelineArtifactSource.Specific"/> and <see cref="RunVersion"/> is not <see cref="Tasks.RunVersion.Specific"/>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? AllowPartiallySucceededBuilds
@@ -297,6 +444,7 @@ public record SpecificDownloadTask : AzureDevOpsTask
     /// <summary>
     /// If checked, this build task will try to download artifacts whether the build is succeeded or failed.
     /// Defaults to false.
+    /// Applies when <see cref="Source"/> is <see cref="DownloadPipelineArtifactSource.Specific"/> and <see cref="RunVersion"/> is not <see cref="Tasks.RunVersion.Specific"/>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? AllowFailedBuilds
@@ -323,9 +471,27 @@ public record SpecificDownloadTask : AzureDevOpsTask
     [YamlIgnore]
     public AdoExpression<int> RetryDownloadCount
     {
-        get => GetExpression<int>(RetryDownloadCountProperty) ?? 0;
+        get => GetExpression<int>(RetryDownloadCountProperty) ?? 4;
         init => SetProperty(RetryDownloadCountProperty, value);
     }
+}
+
+/// <summary>
+/// The source of pipeline artifacts to download.
+/// </summary>
+public enum DownloadPipelineArtifactSource
+{
+    /// <summary>
+    /// Current run.
+    /// </summary>
+    [YamlMember(Alias = "current")]
+    Current,
+
+    /// <summary>
+    /// Specific run.
+    /// </summary>
+    [YamlMember(Alias = "specific")]
+    Specific,
 }
 
 /// <summary>
