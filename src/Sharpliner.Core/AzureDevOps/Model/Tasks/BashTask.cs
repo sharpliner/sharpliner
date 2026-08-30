@@ -105,10 +105,12 @@ public sealed class StepTargetSettableVariables : IYamlConvertible
         _variables = variables;
     }
 
+    private string? Value { get; }
+
     /// <summary>
-    /// The scalar value to emit. Currently only <c>none</c> is supported by Azure Pipelines.
+    /// Variable names that this step may set, or <c>null</c> when this instance disables setting variables.
     /// </summary>
-    public string? Value { get; }
+    public IReadOnlyList<string>? Variables => _variables;
 
     /// <summary>
     /// Restricts variable setting to the specified variable names.

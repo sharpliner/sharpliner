@@ -2340,7 +2340,7 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
     public sealed class StepTargetSettableVariables : YamlDotNet.Serialization.IYamlConvertible
     {
-        public string? Value { get; }
+        public System.Collections.Generic.IReadOnlyList<string>? Variables { get; }
         public static Sharpliner.AzureDevOps.Tasks.StepTargetSettableVariables None { get; }
         public static Sharpliner.AzureDevOps.Tasks.StepTargetSettableVariables Allowed(params string[] variables) { }
     }
