@@ -74,6 +74,9 @@ public class NuGetTaskBuilder
     /// </example>
     public NuGetAuthenticateTask Authenticate(AdoExpression<string> azureDevOpsServiceConnection, AdoExpression<string> feedUrl)
     {
+        System.ArgumentNullException.ThrowIfNull(azureDevOpsServiceConnection);
+        System.ArgumentNullException.ThrowIfNull(feedUrl);
+
         return new()
         {
             AzureDevOpsServiceConnection = azureDevOpsServiceConnection,
