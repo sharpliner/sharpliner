@@ -70,7 +70,8 @@ public record ExtractFilesTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="ExtractFilesTask"/> class with the official required properties.
+    /// Initializes a new instance of the <see cref="ExtractFilesTask"/> class with explicit archive file patterns and
+    /// destination folder.
     /// </summary>
     /// <param name="archiveFilePatterns">The file paths or patterns of the archive files to extract.</param>
     /// <param name="destinationFolder">The destination folder into which archive files should be extracted.</param>
