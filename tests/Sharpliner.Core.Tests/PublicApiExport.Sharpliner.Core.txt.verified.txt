@@ -2390,7 +2390,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? PublishFeedCredentials { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? PublishPackageMetadata { get; init; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? PublishPackageMetadata { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? PublishedPackageVar { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]

@@ -36,7 +36,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
 
     /// <summary>
     /// Specifies the credentials to use for external feeds.
-    /// Required when internalOrExternalPublish = external and command = publish.
+    /// Required when feedsToUsePublish = external and command = publish.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? PublishFeedCredentials
@@ -47,7 +47,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
 
     /// <summary>
     /// Specifies the project and the feed's name/GUID to publish to.
-    /// Required when internalOrExternalPublish = internal and command = publish.
+    /// Required when feedsToUsePublish = internal and command = publish.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? VstsFeedPublish
@@ -58,20 +58,20 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
 
     /// <summary>
     /// Associates this build/release pipeline's metadata (such as run # and source code information) with the package.
-    /// Optional. Use when command = publish and internalOrExternalPublish = internal.
+    /// Optional. Use when command = publish and feedsToUsePublish = internal.
     /// Default value: true.
     /// </summary>
     [YamlIgnore]
-    public AdoExpression<string>? PublishPackageMetadata
+    public AdoExpression<bool>? PublishPackageMetadata
     {
-        get => GetExpression<string>("publishPackageMetadata");
+        get => GetExpression<bool>("publishPackageMetadata");
         init => SetProperty("publishPackageMetadata", value);
     }
 
     /// <summary>
     /// Specifies a package ID to publish or creates a new package ID if you've never published a version of this package
     ///   before. Package names must be lower case and can only use letters, numbers, and dashes (-).
-    /// Required when internalOrExternalPublish = internal and command = publish.
+    /// Required when feedsToUsePublish = internal and command = publish.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? VstsFeedPackagePublish
@@ -84,7 +84,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
     /// Specifies the external feed name to publish to. If the feed was created in a project, the value should be Project/Feed,
     ///   where Project is the project's name or ID, and Feed is the feed's name.If the feed was not created in a project, the
     ///   value should be only the feed name.
-    /// Required when internalOrExternalPublish = external and command = publish.
+    /// Required when feedsToUsePublish = external and command = publish.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? FeedPublishExternal
@@ -95,7 +95,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
 
     /// <summary>
     /// Specifies the package name when publishing to an external feed.
-    /// Required when internalOrExternalPublish = external and command = publish.
+    /// Required when feedsToUsePublish = external and command = publish.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? PackagePublishExternal
@@ -120,7 +120,7 @@ public record UniversalPackagesPublishTask : UniversalPackagesTask
 
     /// <summary>
     /// Specifies a custom version schema for the package.
-    /// Required when versionPublishSelector = custom and command = publish.
+    /// Required when versionOption = custom and command = publish.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? VersionPublish
