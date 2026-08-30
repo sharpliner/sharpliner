@@ -1,0 +1,9 @@
+task: ArchiveFiles@2
+
+inputs:
+  rootFolderOrFile: $(Build.BinariesDirectory)
+  archiveType: tar
+  archiveFile: $(Build.ArtifactStagingDirectory)/Archive.tar.xz
+  tarCompression: xz
+  replaceExistingArchive: false
+
