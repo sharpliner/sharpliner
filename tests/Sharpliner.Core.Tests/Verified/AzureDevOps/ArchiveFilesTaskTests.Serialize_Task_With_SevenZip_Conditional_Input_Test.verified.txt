@@ -1,0 +1,8 @@
+task: ArchiveFiles@2
+
+inputs:
+  rootFolderOrFile: $(Build.BinariesDirectory)
+  archiveType: 7z
+  archiveFile: $(Build.ArtifactStagingDirectory)/Archive.7z
+  sevenZipCompression: maximum
+
