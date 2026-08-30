@@ -19,6 +19,8 @@ public abstract record NuGetRestoreCommandTask : NuGetCommandTask
 
     /// <summary>
     /// Specifies the path to the solution, <c>packages.config</c>, or <c>project.json</c> file that references the packages to be restored.
+    /// The official input is <c>solution</c>; <c>restoreSolution</c> is the YAML alias emitted for compatibility.
+    /// Defaults to <c>**/*.sln</c> when omitted.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? RestoreSolution
@@ -37,6 +39,42 @@ public abstract record NuGetRestoreCommandTask : NuGetCommandTask
         init => SetProperty("noCache", value);
     }
 
+    /// <summary>
+    /// Prevents NuGet from installing multiple packages in parallel when set to <c>true</c>.
+    /// Defaults to <c>false</c> when omitted.
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<bool>? DisableParallelProcessing
+    {
+        get => GetExpression<bool>("disableParallelProcessing");
+        init => SetProperty("disableParallelProcessing", value);
+    }
+
+    /// <summary>
+    /// Specifies the folder in which packages are installed.
+    /// If no folder is specified, packages are restored into a <c>packages/</c> folder alongside the selected solution,
+    /// <c>packages.config</c>, or <c>project.json</c>.
+    /// The official input is <c>packagesDirectory</c>; <c>restoreDirectory</c> is the YAML alias emitted for compatibility.
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<string>? RestoreDirectory
+    {
+        get => GetExpression<string>("restoreDirectory");
+        init => SetProperty("restoreDirectory", value);
+    }
+
+    /// <summary>
+    /// Specifies the amount of detail displayed in the restore output.
+    /// Options are <see cref="NuGetVerbosity.Quiet"/>, <see cref="NuGetVerbosity.Normal"/>, and <see cref="NuGetVerbosity.Detailed"/>.
+    /// Defaults to <see cref="NuGetVerbosity.Detailed"/> when omitted.
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<NuGetVerbosity>? VerbosityRestore
+    {
+        get => GetExpression<NuGetVerbosity>("verbosityRestore");
+        init => SetProperty("verbosityRestore", value);
+    }
+
     [YamlIgnore]
     internal AdoExpression<string>? FeedsToUse
     {
@@ -46,7 +84,7 @@ public abstract record NuGetRestoreCommandTask : NuGetCommandTask
 }
 
 /// <summary>
-/// Represents the NuGetCommand@2 task for restoring NuGet packages with the <c>feedsToUse</c> set to <c>config</c> in Azure DevOps pipelines.
+/// Represents the NuGetCommand@2 task for restoring NuGet packages with the <c>feedsToUse</c>/<c>selectOrConfig</c> input set to <c>select</c> in Azure DevOps pipelines.
 /// </summary>
 public record NuGetRestoreFeedCommandTask : NuGetRestoreCommandTask
 {
@@ -58,7 +96,10 @@ public record NuGetRestoreFeedCommandTask : NuGetRestoreCommandTask
     }
 
     /// <summary>
-    /// Gets or sets the vstsFeed to restore packages from.
+    /// Gets or sets the Azure Artifacts/TFS feed to include in the generated <c>NuGet.config</c>.
+    /// The value can be selected from the service feed list or entered as <c>[project name/]feed name</c>.
+    /// The official input is <c>feedRestore</c>; <c>vstsFeed</c> is the YAML alias emitted for compatibility.
+    /// This input is used when <c>feedsToUse</c>/<c>selectOrConfig</c> is <c>select</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? VstsFeed
@@ -68,7 +109,8 @@ public record NuGetRestoreFeedCommandTask : NuGetRestoreCommandTask
     }
 
     /// <summary>
-    /// Includes NuGet.org in the generated <c>NuGet.config</c>.
+    /// Includes NuGet.org in the generated <c>NuGet.config</c> when <c>feedsToUse</c>/<c>selectOrConfig</c> is <c>select</c>.
+    /// Defaults to <c>true</c> when omitted.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? IncludeNuGetOrg
@@ -79,7 +121,7 @@ public record NuGetRestoreFeedCommandTask : NuGetRestoreCommandTask
 }
 
 /// <summary>
-/// Represents the NuGetCommand@2 task for restoring NuGet packages with the <c>feedsToUse</c> set to <c>config</c> in Azure DevOps pipelines.
+/// Represents the NuGetCommand@2 task for restoring NuGet packages with the <c>feedsToUse</c>/<c>selectOrConfig</c> input set to <c>config</c> in Azure DevOps pipelines.
 /// </summary>
 public record NuGetRestoreConfigCommandTask : NuGetRestoreCommandTask
 {
@@ -91,7 +133,8 @@ public record NuGetRestoreConfigCommandTask : NuGetRestoreCommandTask
     }
 
     /// <summary>
-    /// Gets or sets the path to the NuGet.config file.
+    /// Gets or sets the path to the <c>NuGet.config</c> file in the repository that specifies the feeds from which to restore packages.
+    /// This input is used when <c>feedsToUse</c>/<c>selectOrConfig</c> is <c>config</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? NuGetConfigPath

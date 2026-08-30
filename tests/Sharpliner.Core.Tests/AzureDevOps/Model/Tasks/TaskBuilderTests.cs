@@ -373,6 +373,9 @@ public class TaskBuilderTests
                             RestoreSolution = "**/*.sln",
                             ExternalFeedCredentials = "MyExternalFeedCredentials",
                             NoCache = true,
+                            DisableParallelProcessing = true,
+                            RestoreDirectory = "packages",
+                            VerbosityRestore = NuGetVerbosity.Normal,
                             ContinueOnError = true
                         },
                         NuGet.Pack.WithoutPackageVersioning with
@@ -387,16 +390,32 @@ public class TaskBuilderTests
                             }
 
                         },
-                        NuGet.Pack.ByPrereleaseNumber("3", "1", "4"),
+                        NuGet.Pack.ByPrereleaseNumber("3", "1", "4") with
+                        {
+                            PackTimezone = PackTimezoneType.Local,
+                        },
                         NuGet.Pack.ByEnvVar("VERSION"),
                         NuGet.Pack.ByBuildNumber with
                         {
                             PackagesToPack = "**/*.csproj",
                             Configuration = "Release",
-                            PackDestination = "artifacts/packages"
+                            PackDestination = "artifacts/packages",
+                            BasePath = "src",
+                            VerbosityPack = PackVerbosity.Quiet,
                         },
-                        NuGet.Push.ToInternalFeed("MyInternalFeed"),
-                        NuGet.Push.ToExternalFeed("MyExternalFeedCredentials"),
+                        NuGet.Push.ToInternalFeed("MyInternalFeed") with
+                        {
+                            PackagesToPush = ["$(Build.ArtifactStagingDirectory)/**/*.nupkg", "!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg"],
+                            PublishPackageMetadata = false,
+                            AllowPackageConflicts = true,
+                            RequestTimeout = 300,
+                            VerbosityPush = NuGetVerbosity.Quiet,
+                        },
+                        NuGet.Push.ToExternalFeed("MyExternalFeedCredentials") with
+                        {
+                            RequestTimeout = 120,
+                            VerbosityPush = NuGetVerbosity.Normal,
+                        },
                         NuGet.Custom(@"config -Set repositoryPath=c:\packages -configfile c:\my.config")
                     }
                 }

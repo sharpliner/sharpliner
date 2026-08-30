@@ -8,10 +8,9 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// </summary>
 /// <example>
 /// <code>
-/// var pushTask = new NuGetPushCommandTask
+/// var pushTask = NuGet.Push.ToExternalFeed("MyExternalFeedCredentials") with
 /// {
-///     TargetFeed = "https://example.com/nuget/v3/index.json",
-///     TargetFeedCredentials = "$(System.AccessToken)"
+///     PackagesToPush = new[] { "$(Build.ArtifactStagingDirectory)/**/*.nupkg" }
 /// };
 /// </code>
 ///
@@ -21,8 +20,9 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// - task: NuGetCommand@2
 ///   inputs:
 ///     command: push
-///     targetFeed: 'https://example.com/nuget/v3/index.json'
-///     targetFeedCredentials: '$(System.AccessToken)'
+///     nuGetFeedType: external
+///     publishFeedCredentials: MyExternalFeedCredentials
+///     packagesToPush: $(Build.ArtifactStagingDirectory)/**/*.nupkg
 /// </code>
 /// </example>
 public abstract record NuGetPushCommandTask : NuGetCommandTask
@@ -38,6 +38,7 @@ public abstract record NuGetPushCommandTask : NuGetCommandTask
 
     /// <summary>
     /// Specifies the pattern to match or path to <c>nupkg</c> files to be uploaded. Multiple patterns can be separated by a semicolon.
+    /// The official input is <c>searchPatternPush</c>; <c>packagesToPush</c> is the YAML alias emitted for compatibility.
     /// <para>
     /// Default value: <c>$(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg.</c>
     /// </para>
@@ -51,6 +52,8 @@ public abstract record NuGetPushCommandTask : NuGetCommandTask
 
     /// <summary>
     /// Gets or sets the target feed for the push command.
+    /// This property is kept for compatibility but is not an input in the official NuGetCommand@2 task specification.
+    /// Prefer <see cref="NuGetPushInternalCommandTask.PublishVstsFeed"/> for internal feeds.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? TargetFeed
@@ -61,6 +64,8 @@ public abstract record NuGetPushCommandTask : NuGetCommandTask
 
     /// <summary>
     /// Gets or sets the target feed credentials for the push command.
+    /// This property is kept for compatibility but is not an input in the official NuGetCommand@2 task specification.
+    /// Prefer <see cref="NuGetPushExternalCommandTask.PublishFeedCredentials"/> for external feeds.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? TargetFeedCredentials
@@ -74,6 +79,30 @@ public abstract record NuGetPushCommandTask : NuGetCommandTask
     {
         get => GetExpression<string>("nuGetFeedType");
         init => SetProperty("nuGetFeedType", value);
+    }
+
+    /// <summary>
+    /// Optionally provides a timeout, in seconds, for the package publish operation.
+    /// The value must be a non-negative integer and is capped by the task at 600 seconds (10 minutes).
+    /// If omitted, the task default timeout is used.
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<int>? RequestTimeout
+    {
+        get => GetExpression<int>("requestTimeout");
+        init => SetProperty("requestTimeout", value);
+    }
+
+    /// <summary>
+    /// Specifies the amount of detail displayed in the push output.
+    /// Options are <see cref="NuGetVerbosity.Quiet"/>, <see cref="NuGetVerbosity.Normal"/>, and <see cref="NuGetVerbosity.Detailed"/>.
+    /// Defaults to <see cref="NuGetVerbosity.Detailed"/> when omitted.
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<NuGetVerbosity>? VerbosityPush
+    {
+        get => GetExpression<NuGetVerbosity>("verbosityPush");
+        init => SetProperty("verbosityPush", value);
     }
 }
 
@@ -92,7 +121,10 @@ public record NuGetPushInternalCommandTask : NuGetPushCommandTask
     }
 
     /// <summary>
-    /// Specifies a feed hosted in this account. You must have Azure Artifacts installed and licensed to select a feed here.
+    /// Specifies a feed hosted in this organization or collection.
+    /// You must have Azure Artifacts installed and licensed to select a feed here.
+    /// The official input is <c>feedPublish</c>; <c>publishVstsFeed</c> is the YAML alias emitted for compatibility.
+    /// This input is required when <c>command</c> is <c>push</c> and <c>nuGetFeedType</c> is <c>internal</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? PublishVstsFeed
@@ -102,7 +134,8 @@ public record NuGetPushInternalCommandTask : NuGetPushCommandTask
     }
 
     /// <summary>
-    /// Changes the version number of the subset of changed packages within a set of continually published packages.
+    /// Associates the build/release pipeline metadata (run number and source-code information) with pushed packages.
+    /// Applies only when <c>nuGetFeedType</c> is <c>internal</c> and defaults to <c>true</c> when omitted.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? PublishPackageMetadata
@@ -142,6 +175,8 @@ public record NuGetPushExternalCommandTask : NuGetPushCommandTask
 
     /// <summary>
     /// Specifies the NuGet service connection that contains the external NuGet server's credentials.
+    /// The official input is <c>externalEndpoint</c>; <c>publishFeedCredentials</c> is the YAML alias emitted for compatibility.
+    /// This input is required when <c>command</c> is <c>push</c> and <c>nuGetFeedType</c> is <c>external</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? PublishFeedCredentials

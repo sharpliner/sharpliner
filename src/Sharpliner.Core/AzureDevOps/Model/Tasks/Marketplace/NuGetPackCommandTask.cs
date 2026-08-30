@@ -11,10 +11,13 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// </summary>
 /// <example>
 /// <code>
-/// var packTask = new NuGetPackCommandTask
+/// var packTask = NuGet.Pack.WithoutPackageVersioning with
 /// {
 ///     PackagesToPack = "**/*.csproj",
-///     Arguments = "-Properties Configuration=Release"
+///     BuildProperties = new()
+///     {
+///         ["Configuration"] = "Release"
+///     }
 /// };
 /// </code>
 /// <para>The corresponding YAML will be:</para>
@@ -23,7 +26,7 @@ namespace Sharpliner.AzureDevOps.Tasks;
 ///   inputs:
 ///     command: pack
 ///     packagesToPack: '**/*.csproj'
-///     arguments: '-Properties Configuration=Release'
+///     buildProperties: Configuration=Release
 /// </code>
 /// </example>
 public abstract record NuGetPackCommandTask : NuGetCommandTask
@@ -38,7 +41,11 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     }
 
     /// <summary>
-    /// Gets or sets the pattern to search for csproj or nuspec files to pack.
+    /// Gets or sets the pattern to search for <c>csproj</c> or <c>nuspec</c> files to pack.
+    /// Multiple patterns can be separated with a semicolon and negative patterns can be prefixed with <c>!</c>,
+    /// for example <c>**\*.csproj;!**\*.Tests.csproj</c>.
+    /// The official input is <c>searchPatternPack</c>; <c>packagesToPack</c> is the YAML alias emitted for compatibility.
+    /// Defaults to <c>**/*.csproj</c> when omitted.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? PackagesToPack
@@ -48,7 +55,10 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     }
 
     /// <summary>
-    /// Gets or sets the versioning scheme to use for the package version.
+    /// Gets or sets the automatic package versioning scheme.
+    /// Options are <c>off</c>, <c>byPrereleaseNumber</c>, <c>byEnvVar</c>, and <c>byBuildNumber</c>.
+    /// Automatic package versioning cannot be used with <see cref="NuGetPackCommandTaskOff.IncludeReferencedProjects"/>.
+    /// Defaults to <c>off</c>.
     /// </summary>
     [YamlIgnore]
     internal AdoExpression<string>? VersioningScheme
@@ -58,7 +68,9 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     }
 
     /// <summary>
-    /// Specifies the configuration to package when using a csproj file.
+    /// Specifies the configuration to package when using a <c>csproj</c> file.
+    /// The official input is <c>configurationToPack</c>; <c>configuration</c> is the YAML alias emitted for compatibility.
+    /// Defaults to <c>$(BuildConfiguration)</c> when omitted.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? Configuration
@@ -69,6 +81,8 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
 
     /// <summary>
     /// Specifies the folder where the task creates packages. If the value is empty, the task creates packages at the source root.
+    /// The official input is <c>outputDir</c>; <c>packDestination</c> is the YAML alias emitted for compatibility.
+    /// Defaults to <c>$(Build.ArtifactStagingDirectory)</c> when omitted.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? PackDestination
@@ -79,6 +93,7 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
 
     /// <summary>
     /// Specifies that the package contains sources and symbols. When used with a <c>.nuspec</c> file, this creates a regular NuGet package file and the corresponding symbols package.
+    /// Defaults to <c>false</c> when omitted.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? IncludeSymbols
@@ -89,6 +104,7 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
 
     /// <summary>
     /// Determines if the output files of the project should be in the tool folder.
+    /// Defaults to <c>false</c> when omitted.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? ToolPackage
@@ -109,7 +125,9 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     }
 
     /// <summary>
-    /// Specifies the amount of detail displayed in the output.
+    /// Specifies the amount of detail displayed in the pack output.
+    /// Options are <see cref="PackVerbosity.Quiet"/>, <see cref="PackVerbosity.Normal"/>, and <see cref="PackVerbosity.Detailed"/>.
+    /// Defaults to <see cref="PackVerbosity.Detailed"/> when omitted.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<PackVerbosity>? VerbosityPack
@@ -122,6 +140,7 @@ public abstract record NuGetPackCommandTask : NuGetCommandTask
     /// <summary>
     /// Specifies the base path of the files defined in the <c>nuspec</c> file.
     /// </summary>
+    [YamlIgnore]
     public AdoExpression<string>? BasePath
     {
         get => GetExpression<string>("basePath");
@@ -146,6 +165,7 @@ public enum PackVerbosity
 
     /// <summary>
     /// Detailed verbosity.
+    /// This is the default used by NuGetCommand@2 when verbosity is omitted.
     /// </summary>
     Detailed,
 }
@@ -195,6 +215,8 @@ public record NuGetPackCommandTaskByPrereleaseNumber : NuGetPackCommandTask
 
     /// <summary>
     /// The <c>X</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.
+    /// The official input is <c>requestedMajorVersion</c>; <c>majorVersion</c> is the YAML alias emitted for compatibility.
+    /// Defaults to <c>1</c> in the Azure Pipelines task UI.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? MajorVersion
@@ -205,6 +227,8 @@ public record NuGetPackCommandTaskByPrereleaseNumber : NuGetPackCommandTask
 
     /// <summary>
     /// The <c>Y</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.
+    /// The official input is <c>requestedMinorVersion</c>; <c>minorVersion</c> is the YAML alias emitted for compatibility.
+    /// Defaults to <c>0</c> in the Azure Pipelines task UI.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? MinorVersion
@@ -215,6 +239,8 @@ public record NuGetPackCommandTaskByPrereleaseNumber : NuGetPackCommandTask
 
     /// <summary>
     /// The <c>Z</c> in version <see href="http://semver.org/spec/v1.0.0.html">X.Y.Z</see>.
+    /// The official input is <c>requestedPatchVersion</c>; <c>patchVersion</c> is the YAML alias emitted for compatibility.
+    /// Defaults to <c>0</c> in the Azure Pipelines task UI.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? PatchVersion
@@ -224,7 +250,10 @@ public record NuGetPackCommandTaskByPrereleaseNumber : NuGetPackCommandTask
     }
 
     /// <summary>
-    /// Specifies the desired time zone used to produce the version of the package. Selecting <see cref="PackTimezoneType.UTC"/> is recommended if you're using hosted build agents, as their date and time might differ.
+    /// Specifies the desired time zone used to produce the version of the package.
+    /// Selecting <see cref="PackTimezoneType.UTC"/> is recommended if you're using hosted build agents, as their date and time might differ.
+    /// Applies only when <c>versioningScheme</c> is <c>byPrereleaseNumber</c>.
+    /// Defaults to <c>utc</c> when omitted.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<PackTimezoneType>? PackTimezone 
@@ -242,11 +271,13 @@ public enum PackTimezoneType
     /// <summary>
     /// UTC time zone.
     /// </summary>
+    [YamlMember(Alias = "utc")]
     UTC,
 
     /// <summary>
     /// Local time zone.
     /// </summary>
+    [YamlMember(Alias = "local")]
     Local
 }
 
