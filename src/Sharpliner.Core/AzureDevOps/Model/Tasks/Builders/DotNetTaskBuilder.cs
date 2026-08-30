@@ -492,7 +492,6 @@ public class DotNetTaskBuilder
         /// {
         ///     Dotnet.Install.FromGlobalJson("/foo") with
         ///     {
-        ///         WorkingDirectory = "/tmp",
         ///         InstallationPath = "/.dotnet",
         ///     }
         /// }

@@ -68,7 +68,7 @@ public class DotNetCoreCliTests
     public Task Install_GlobalJson_Command_Test()
     {
         var task = _builder.Install.FromGlobalJson(
-            "src",
+            "/tmp",
             checkForExistingVersion: true,
             requestTimeout: 300000) with
         {
