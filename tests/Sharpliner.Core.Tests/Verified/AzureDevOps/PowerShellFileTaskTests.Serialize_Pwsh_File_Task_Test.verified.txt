@@ -1,0 +1,11 @@
+﻿task: PowerShell@2
+
+displayName: Test task
+
+inputs:
+  targetType: filePath
+  filePath: some\script.ps1
+  arguments: -Foo bar
+  progressPreference: SilentlyContinue
+  pwsh: true
+  runScriptInSeparateScope: true

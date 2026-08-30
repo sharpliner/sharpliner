@@ -1,0 +1,13 @@
+﻿powershell: |-
+  Write-Output 'Hello'
+  Write-Output 'World'
+
+displayName: Test task
+
+workingDirectory: some/dir
+
+errorActionPreference: Continue
+
+failOnStderr: true
+
+ignoreLASTEXITCODE: true

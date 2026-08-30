@@ -5,7 +5,7 @@ using Sharpliner.Common.Model.Tasks;
 namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
-/// Builder for creating a bash task using the <c>pwsh</c> keyword or the Powershell task.
+/// Builder for creating a PowerShell Core task using the <c>pwsh</c> keyword or the <c>PowerShell@2</c> task.
 /// </summary>
 public class PwshTaskBuilder : TaskBuilderBase
 {

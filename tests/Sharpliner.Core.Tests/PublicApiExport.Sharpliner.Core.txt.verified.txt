@@ -1513,13 +1513,10 @@ namespace Sharpliner.AzureDevOps.Tasks
 {
     public enum ActionPreference
     {
-        Continue = 0,
-        Break = 1,
-        Ignore = 2,
-        Inquire = 3,
-        SilentlyContinue = 4,
-        Stop = 5,
-        Suspend = 6,
+        Default = 0,
+        Continue = 1,
+        SilentlyContinue = 2,
+        Stop = 3,
     }
     public class ArchiveFilesTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.ArchiveFilesTask>
     {
@@ -2113,25 +2110,24 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public PowershellFileTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> filePath, bool isPwsh) { }
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Arguments { get; init; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ActionPreference>? DebugPreference { get; init; }
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? FilePath { get; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ActionPreference>? InformationPreference { get; init; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ActionPreference>? ProgressPreference { get; init; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? RunScriptInSeparateScope { get; init; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? ShowWarnings { get; init; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ActionPreference>? VerbosePreference { get; init; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ActionPreference>? WarningPreference { get; init; }
     }
     public abstract class PowershellTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PowershellTask>
     {
         protected PowershellTask() { }
-        [YamlDotNet.Serialization.YamlMember(Order=114)]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ActionPreference>? DebugPreference { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=114)]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ActionPreference>? ErrorActionPreference { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=125)]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? FailOnStderr { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=126)]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? IgnoreLASTEXITCODE { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Order=114)]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ActionPreference>? InformationPreference { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Order=114)]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ActionPreference>? VerbosePreference { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Order=114)]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ActionPreference>? WarningPreference { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=113)]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WorkingDirectory { get; init; }
     }
