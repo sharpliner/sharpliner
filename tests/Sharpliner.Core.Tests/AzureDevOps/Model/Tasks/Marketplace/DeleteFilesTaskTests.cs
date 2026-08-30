@@ -24,4 +24,19 @@ public class DeleteFilesTaskTests
 
         return Verify(SharplinerSerializer.Serialize(task));
     }
+
+    [Fact]
+    public Task Serialize_Task_With_Multiline_Patterns_Test()
+    {
+        var task = new DeleteFilesTask("""
+            **/bin
+            **/obj
+            !**/.gitkeep
+            """)
+        {
+            SourceFolder = "$(Agent.BuildDirectory)",
+        };
+
+        return Verify(SharplinerSerializer.Serialize(task));
+    }
 }

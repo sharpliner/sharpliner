@@ -1,0 +1,8 @@
+﻿task: DeleteFiles@1
+
+inputs:
+  Contents: |-
+    **/bin
+    **/obj
+    !**/.gitkeep
+  SourceFolder: $(Agent.BuildDirectory)
