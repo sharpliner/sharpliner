@@ -3,7 +3,7 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner.Core.Tests")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner.Tests")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v10.0", FrameworkDisplayName=".NET 10.0")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v11.0", FrameworkDisplayName=".NET 11.0")]
 namespace Sharpliner.AzureDevOps
 {
     public static class AdoExpressionExtensions
@@ -1702,7 +1702,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Contents { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? DelayBetweenRetries { get; init; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DelayBetweenRetries { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? FlattenFolders { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
@@ -1712,7 +1712,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? PreserveTimestamp { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? RetryCount { get; init; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RetryCount { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SourceFolder { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
