@@ -6,4 +6,6 @@
     inputs:
       packageType: runtime
       version: 5.0.100
+      checkForExistingVersion: true
+      requestTimeout: 300000
       performMultiLevelLookup: true

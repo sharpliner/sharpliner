@@ -36,7 +36,12 @@ public class DotNetCoreCliTests
     [Fact]
     public Task Install_Sdk_Command_Test()
     {
-        var task = _builder.Install.Sdk("6.0.100-rc.2.21505.57", true) with
+        var task = _builder.Install.Sdk(
+            "6.0.100-rc.2.21505.57",
+            includePreviewVersions: true,
+            vsVersion: "16.6.4",
+            checkForExistingVersion: true,
+            requestTimeout: 600000) with
         {
             WorkingDirectory = "/tmp",
             InstallationPath = "/.dotnet",
@@ -48,7 +53,10 @@ public class DotNetCoreCliTests
     [Fact]
     public Task Install_Runtime_Command_Test()
     {
-        var task = _builder.Install.Runtime("5.0.100") with
+        var task = _builder.Install.Runtime(
+            "5.0.100",
+            checkForExistingVersion: true,
+            requestTimeout: 300000) with
         {
             PerformMultiLevelLookup = true,
         };
@@ -59,9 +67,11 @@ public class DotNetCoreCliTests
     [Fact]
     public Task Install_GlobalJson_Command_Test()
     {
-        var task = _builder.Install.FromGlobalJson("/foo/global.json") with
+        var task = _builder.Install.FromGlobalJson(
+            "/tmp",
+            checkForExistingVersion: true,
+            requestTimeout: 300000) with
         {
-            WorkingDirectory = "/tmp",
             InstallationPath = "/.dotnet",
         };
 

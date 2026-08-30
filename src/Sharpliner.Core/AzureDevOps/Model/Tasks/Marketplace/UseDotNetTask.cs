@@ -4,7 +4,10 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
-/// More details can be found in <see href="https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/tool/dotnet-core-tool-installer?view=azure-devops">official Azure DevOps pipelines documentation</see>.
+/// More details can be found in the
+/// <see href="https://learn.microsoft.com/azure/devops/pipelines/tasks/reference/use-dotnet-v2">official Azure DevOps pipelines documentation</see>.
+/// The task specification is maintained at
+/// <see href="https://github.com/microsoft/azure-pipelines-tasks/blob/master/Tasks/UseDotNetV2/task.json">UseDotNetV2/task.json</see>.
 /// </summary>
 public record UseDotNetTask : AzureDevOpsTask
 {
@@ -20,9 +23,11 @@ public record UseDotNetTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Select this option to install all SDKs from global.json files.
-    /// These files are searched from system.DefaultWorkingDirectory.
-    /// You can change the search root path by setting working directory input
+    /// Select this option to install all SDKs from <c>global.json</c> files.
+    /// This input applies to SDK installs only.
+    /// The files are searched from <c>$(System.DefaultWorkingDirectory)</c> unless
+    /// <see cref="WorkingDirectory"/> provides another search root.
+    /// Default value: false.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? UseGlobalJson
@@ -32,8 +37,10 @@ public record UseDotNetTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Current working directory where the script is run.
-    /// Empty is the root of the repo (build) or artifacts (release), which is $(System.DefaultWorkingDirectory)
+    /// Specifies the directory from which <c>global.json</c> files are searched when
+    /// <see cref="UseGlobalJson"/> is true.
+    /// Empty is the root of the repo (build) or artifacts (release), which is
+    /// <c>$(System.DefaultWorkingDirectory)</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? WorkingDirectory
@@ -44,11 +51,17 @@ public record UseDotNetTask : AzureDevOpsTask
 
     /// <summary>
     /// Specify version of .NET Core SDK or runtime to install.
-    /// Versions can be given in the following formats
-    /// 2.x => Install latest in major version.
-    /// 3.1.x => Install latest in major and minor version
-    /// 3.1.402 => Install exact version
-    /// Find the value of version for installing SDK/Runtime, from the releases.json.The link to releases.json of that major.minor version can be found in releases-index file.. Like link to releases.json for 3.1 version is https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/3.1/releases.json
+    /// This input applies when <see cref="UseGlobalJson"/> is false, or when
+    /// <see cref="PackageType"/> is <see cref="DotNetPackageType.Runtime"/>.
+    /// Versions can be given in the following formats:
+    /// <list type="bullet">
+    /// <item><c>2.x</c>: install latest in major version.</item>
+    /// <item><c>2.2.x</c>: install latest in major and minor version.</item>
+    /// <item><c>2.2.104</c>: install exact version.</item>
+    /// </list>
+    /// Find the value of <c>version</c> for installing SDK/runtime from <c>releases.json</c>.
+    /// The link to <c>releases.json</c> for a major/minor version can be found in the
+    /// <see href="https://builds.dotnet.microsoft.com/dotnet/release-metadata/releases-index.json">releases-index file</see>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? Version
@@ -58,13 +71,41 @@ public record UseDotNetTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Specify where .NET Core SDK/Runtime should be installed.
-    /// Different paths can have the following impact on .NET's behavior.
-    ///   - $(Agent.ToolsDirectory): This makes the version to be cached on the agent since this directory is not cleanup up across pipelines.All pipelines running on the agent, would have access to the versions installed previously using the agent.
-    ///   - $(Agent.TempDirectory): This can ensure that a pipeline doesn't use any cached version of .NET core since this folder is cleaned up after each pipeline.
-    ///   - Any other path: You can configure any other path given the agent process has access to the path.This will change the state of the machine and impact all processes running on it.
-    /// Note that you can also configure Multi-Level Lookup setting which can configure.NET host's probing for a suitable version.
-    /// Default value: $(Agent.ToolsDirectory)/dotnet
+    /// Specify a compatible Visual Studio version for which the .NET Core SDK should be installed.
+    /// Use a complete Visual Studio version containing major, minor, and patch numbers, such as <c>16.6.4</c>.
+    /// Find compatible SDK/runtime version information in the
+    /// <see href="https://builds.dotnet.microsoft.com/dotnet/release-metadata/releases-index.json">releases-index file</see>.
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<string>? VsVersion
+    {
+        get => GetExpression<string>("vsVersion");
+        init => SetProperty("vsVersion", value);
+    }
+
+    /// <summary>
+    /// Select if you want to detect whether the specified version is already installed before attempting
+    /// to download it. This input is ignored when <see cref="InstallationPath"/> is set to a custom path;
+    /// it only applies when the installation path is empty or set to its default value.
+    /// Default value: false.
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<bool>? CheckForExistingVersion
+    {
+        get => GetExpression<bool>("checkForExistingVersion");
+        init => SetProperty("checkForExistingVersion", value);
+    }
+
+    /// <summary>
+    /// Specify where .NET Core SDK/runtime should be installed.
+    /// Different paths can have the following impact on .NET's behavior:
+    /// <list type="bullet">
+    /// <item><c>$(Agent.ToolsDirectory)</c>: caches the version on the agent because this directory is not cleaned between pipelines.</item>
+    /// <item><c>$(Agent.TempDirectory)</c>: avoids cached .NET versions because this folder is cleaned after each pipeline.</item>
+    /// <item>Any other path: changes machine state and affects all processes that use that path.</item>
+    /// </list>
+    /// Note that <see cref="PerformMultiLevelLookup"/> can configure .NET host probing for a suitable version.
+    /// Default value: <c>$(Agent.ToolsDirectory)/dotnet</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? InstallationPath
@@ -75,8 +116,10 @@ public record UseDotNetTask : AzureDevOpsTask
 
     /// <summary>
     /// This input is only applicable to Windows based agents and configures the behavior of .NET host process for looking up a suitable shared framework.
-    ///   - false: (default) Only versions present in the folder specified in this task would be looked by the host process.
-    ///   - true: The host will attempt to look in pre-defined global locations using multi-level lookup.
+    /// <list type="bullet">
+    /// <item><c>false</c>: (default) only versions present in the folder specified in this task are looked up by the host process.</item>
+    /// <item><c>true</c>: the host attempts to look in pre-defined global locations using multi-level lookup.</item>
+    /// </list>
     /// The default global locations are:
     /// For Windows:
     ///     C:/Program Files/dotnet (64-bit processes)
@@ -90,15 +133,28 @@ public record UseDotNetTask : AzureDevOpsTask
     }
 
     /// <summary>
-    /// Select if you want preview versions to be included while searching for latest versions, such as while searching 3.1.x.
-    /// This setting is ignored if you specify an exact version, such as: 3.0.100-preview3-010431
-    /// Default value: false
+    /// Select if you want preview versions to be included while searching for latest versions, such as while searching <c>2.2.x</c>.
+    /// This input applies when <see cref="UseGlobalJson"/> is false, or when
+    /// <see cref="PackageType"/> is <see cref="DotNetPackageType.Runtime"/>.
+    /// This setting is ignored if you specify an exact version, such as <c>3.0.100-preview3-010431</c>.
+    /// Default value: false.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? IncludePreviewVersions
     {
         get => GetExpression<bool>("includePreviewVersions");
         init => SetProperty("includePreviewVersions", value);
+    }
+
+    /// <summary>
+    /// Provide a timeout value, in milliseconds, for HTTP requests that the task makes to obtain the .NET package.
+    /// Default value: 300000 milliseconds (5 minutes). Maximum value: 600000 milliseconds (10 minutes).
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<int>? RequestTimeout
+    {
+        get => GetExpression<int>("requestTimeout");
+        init => SetProperty("requestTimeout", value);
     }
 
     /// <summary>
