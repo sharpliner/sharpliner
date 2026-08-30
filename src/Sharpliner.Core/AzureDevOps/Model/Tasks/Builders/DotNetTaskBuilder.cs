@@ -217,7 +217,7 @@ public class DotNetTaskBuilder
     ///   timeoutInMinutes: 30
     /// </code>
     /// </summary>
-    /// <param name="projects">Projects to publish. The task's <c>publishWebProjects</c> input is set to false when this argument is used.</param>
+    /// <param name="projects">Projects to publish. Ignored by DotNetCoreCLI@2 when <paramref name="publishWebProjects"/> is explicitly set to true.</param>
     /// <param name="publishWebProjects">
     /// <para>
     /// If true, the projects property value will be skipped and the task will try to find the web projects in the repository and run the publish command on them.
