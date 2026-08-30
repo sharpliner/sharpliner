@@ -8,10 +8,22 @@
     patterns: |-
       frontend/**/*
       frontend.config
-    tags: release,nightly
 
   - task: DownloadPipelineArtifact@2
     inputs:
+      source: current
+      artifact: CurrentTaskArtifactAlias
+      path: $(Pipeline.Workspace)/current-task
+      patterns: '**/*.nupkg'
+
+  - download: myPipelineResource
+    artifact: ResourceArtifact
+    patterns: |-
+      **/*.dll
+
+  - task: DownloadPipelineArtifact@2
+    inputs:
+      source: specific
       runVersion: specific
       project: public
       pipeline: 56
@@ -20,18 +32,27 @@
       patterns: |-
         **/*.dll
         **/*.exe
+      path: $(Pipeline.Workspace)/specific
+
+  - task: DownloadPipelineArtifact@2
+    inputs:
+      source: specific
+      runVersion: latest
+      project: public
+      pipeline: 56
+      artifact: Latest.CLI
+      allowFailedBuilds: true
       allowPartiallySucceededBuilds: true
-      retryDownloadCount: 3
+      preferTriggeringPipeline: true
       tags: non-release,preview
 
   - task: DownloadPipelineArtifact@2
     inputs:
+      source: specific
       runVersion: latestFromBranch
       project: internal
       pipeline: 23
       runBranch: refs/heads/develop
       path: $(Build.ArtifactStagingDirectory)
-      allowFailedBuilds: true
       checkDownloadedFiles: true
-      preferTriggeringPipeline: true
       artifact: Another.CLI

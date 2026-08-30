@@ -5,6 +5,7 @@
 
   - task: DownloadPipelineArtifact@2
     inputs:
+      source: specific
       runVersion: latestFromBranch
       project: internal
       pipeline: 23

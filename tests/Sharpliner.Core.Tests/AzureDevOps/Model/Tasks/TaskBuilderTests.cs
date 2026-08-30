@@ -245,11 +245,6 @@ public class TaskBuilderTests
                         Download.None,
                         Download.Current with
                         {
-                            Tags =
-                            [
-                                "release",
-                                "nightly",
-                            ],
                             Artifact = "Frontend",
                             Patterns =
                             [
@@ -257,17 +252,27 @@ public class TaskBuilderTests
                                 "frontend.config",
                             ]
                         },
+                        Download.CurrentBuild() with
+                        {
+                            ArtifactName = "CurrentTaskArtifactAlias",
+                            DownloadPath = "$(Pipeline.Workspace)/current-task",
+                            ItemPattern = [ "**/*.nupkg" ],
+                        },
+                        Download.FromPipelineResource("myPipelineResource", "ResourceArtifact", [ "**/*.dll" ]),
                         Download.SpecificBuild("public", 56, 1745, "MyProject.CLI", patterns: [ "**/*.dll", "**/*.exe" ]) with
                         {
+                            TargetPath = "$(Pipeline.Workspace)/specific",
+                        },
+                        Download.Latest("public", 56, "Latest.CLI") with
+                        {
+                            AllowFailedBuilds = true,
                             AllowPartiallySucceededBuilds = true,
-                            RetryDownloadCount = 3,
+                            PreferTriggeringPipeline = true,
                             Tags = ["non-release", "preview"],
                         },
                         Download.LatestFromBranch("internal", 23, "refs/heads/develop", path: variables.Build.ArtifactStagingDirectory) with
                         {
-                            AllowFailedBuilds = true,
                             CheckDownloadedFiles = true,
-                            PreferTriggeringPipeline = true,
                             Artifact = "Another.CLI",
                         }
                     }
