@@ -39,7 +39,7 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                         .Test("tests/Sharpliner*.Tests/*.csproj", "/p:CollectCoverage=true /p:CoverletOutputFormat=cobertura")
                         .DisplayAs("Run unit tests"),
 
-                    new PublishCodeCoverageResultsTask("tests/Sharpliner.Tests/coverage.cobertura.xml")
+                    new PublishCodeCoverageResultsTask("tests/Sharpliner*.Tests/coverage.cobertura.xml")
                     {
                         DisplayName = "Publish code coverage",
                         PathToSources = variables.Build.SourcesDirectory
