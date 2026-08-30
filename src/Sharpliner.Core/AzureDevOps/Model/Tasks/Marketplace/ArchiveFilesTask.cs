@@ -117,6 +117,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
     /// <para>
     /// When set to <c>false</c>, files are added to the existing archive.
     /// </para>
+    /// <para>
+    /// This append behavior is supported for zip, 7z, compressed tar, and wim archives.
+    /// </para>
     /// Default value: <c>true</c>.
     /// </summary>
     [YamlIgnore]
