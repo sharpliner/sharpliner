@@ -6,7 +6,11 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
-/// More details can be found in <see href="https://github.com/MicrosoftDocs/azure-devops-docs/blob/master/docs/pipelines/tasks/utility/bash.md">official Azure DevOps pipelines documentation</see>.
+/// Base class for Bash steps. Common properties are emitted either as <c>steps.bash</c> shortcut properties
+/// or as <c>Bash@3</c> task inputs/step properties, depending on the concrete task type.
+/// More details can be found in the official
+/// <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/steps-bash">steps.bash schema</see>
+/// and <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/bash-v3">Bash@3 task reference</see>.
 /// </summary>
 public abstract record BashTask : Step
 {
@@ -25,17 +29,72 @@ public abstract record BashTask : Step
     public AdoExpression<bool>? FailOnStderr { get; init; }
 
     /// <summary>
-    /// Don't load the system-wide startup file **`/etc/profile`** or any of the personal initialization files.
+    /// This property is not supported by Azure Pipelines <c>steps.bash</c> or <c>Bash@3</c> and is not emitted.
     /// </summary>
-    [YamlMember(Order = 115)]
+    [Obsolete("NoProfile is not supported by Azure Pipelines steps.bash or Bash@3 and is not emitted.")]
+    [YamlIgnore]
     public AdoExpression<bool>? NoProfile { get; init; }
 
     /// <summary>
-    /// If this is true, the task will not process `.bashrc` from the user's home directory.
-    /// Default value: `true`.
+    /// This property is not supported by Azure Pipelines <c>steps.bash</c> or <c>Bash@3</c> and is not emitted.
     /// </summary>
-    [YamlMember(Order = 200)]
+    [Obsolete("NoRc is not supported by Azure Pipelines steps.bash or Bash@3 and is not emitted.")]
+    [YamlIgnore]
     public AdoExpression<bool>? NoRc { get; init; }
+
+    /// <summary>
+    /// Environment in which to run this Bash step. Use <c>"host"</c>, a container name, or a <see cref="StepTarget"/> object.
+    /// This is a step property, not a <c>Bash@3</c> task input.
+    /// </summary>
+    [YamlMember(Order = 215)]
+    public AdoExpression<object>? Target { get; init; }
+
+    /// <summary>
+    /// Number of retries if this Bash step fails. Default is 0.
+    /// This is a step property, not a <c>Bash@3</c> task input.
+    /// </summary>
+    [YamlMember(Order = 230)]
+    public AdoExpression<int>? RetryCountOnTaskFailure { get; init; }
+}
+
+/// <summary>
+/// Configures the Azure Pipelines step target used by task and script steps.
+/// </summary>
+public record StepTarget
+{
+    /// <summary>
+    /// Container to target, or <c>host</c> for the agent host.
+    /// </summary>
+    public AdoExpression<string>? Container { get; init; }
+
+    /// <summary>
+    /// Set of allowed logging commands. Defaults to <see cref="StepTargetCommands.Any"/> when omitted by Azure Pipelines.
+    /// </summary>
+    public AdoExpression<StepTargetCommands>? Commands { get; init; }
+
+    /// <summary>
+    /// Restrictions on which variables this step can set. Use <c>"none"</c> to disable setting variables,
+    /// or a list of variable names to allow only those variables.
+    /// </summary>
+    public object? SettableVariables { get; init; }
+}
+
+/// <summary>
+/// Allowed Azure Pipelines logging command modes for a step target.
+/// </summary>
+public enum StepTargetCommands
+{
+    /// <summary>
+    /// Allow any supported logging command.
+    /// </summary>
+    [YamlMember(Alias = "any")]
+    Any,
+
+    /// <summary>
+    /// Restrict logging commands that this step may use.
+    /// </summary>
+    [YamlMember(Alias = "restricted")]
+    Restricted,
 }
 
 /// <summary>
@@ -44,7 +103,7 @@ public abstract record BashTask : Step
 public record InlineBashTask : BashTask
 {
     /// <summary>
-    /// Required if Type is inline, contents of the script.
+    /// Inline Bash script content emitted as the required first <c>bash</c> property of the <c>steps.bash</c> shortcut.
     /// </summary>
     [YamlMember(Alias = "bash", Order = 1, ScalarStyle = ScalarStyle.Literal)]
     public string Contents { get; }
@@ -61,7 +120,7 @@ public record InlineBashTask : BashTask
 }
 
 /// <summary>
-/// Task that runs a bash script from a file using the <c>Bash</c> task.
+/// Task that runs a Bash script from a file using the <c>Bash@3</c> task syntax.
 /// </summary>
 public record BashFileTask : BashTask, IYamlConvertible
 {
@@ -77,11 +136,13 @@ public record BashFileTask : BashTask, IYamlConvertible
     public AdoExpression<string>? Arguments { get; init; }
 
     /// <summary>
-    /// If the related input is specified, the value will be used as the path of a startup file
-    /// that will be executed before running the script.
+    /// If specified, emits the <c>bashEnvValue</c> input and uses the value as the path of a startup file
+    /// that is executed before running the script.
     ///
     /// If the environment variable BASH_ENV has already been defined, the task will override
     /// this variable only for the current task.
+    /// This <c>Bash@3</c> input is not available on the <c>steps.bash</c> shortcut; use <see cref="Step.Env"/>
+    /// with a <c>BASH_ENV</c> entry for shortcut steps.
     /// </summary>
     public AdoExpression<string>? BashEnv { get; init; }
 
@@ -98,7 +159,7 @@ public record BashFileTask : BashTask, IYamlConvertible
     void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
         => throw new NotImplementedException();
 
-    // This is unfortunately needed because when referencing a script file, the "powershell: ..." variant does not work
+    // This is unfortunately needed because when referencing a script file, the "bash: ..." variant does not work
     void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
     {
         var inputs = new TaskInputs();
@@ -127,7 +188,9 @@ public record BashFileTask : BashTask, IYamlConvertible
 
         nestedObjectSerializer(new AzureDevOpsTask("Bash@3", this)
         {
-            Inputs = inputs
+            Inputs = inputs,
+            Target = Target,
+            RetryCountOnTaskFailure = RetryCountOnTaskFailure,
         });
     }
 }

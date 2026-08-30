@@ -24,7 +24,16 @@ public class TaskBuilderTests
                     {
                         Bash.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.test-script.sh"),
                         Bash.FromResourceFile("test-script.sh"),
-                        Bash.Inline("cat /etc/passwd", "rm -rf tests.xml"),
+                        Bash.Inline("cat /etc/passwd", "rm -rf tests.xml") with
+                        {
+                            WorkingDirectory = "src",
+                            FailOnStderr = If.Equal("variables['Build.Reason']", "'PullRequest'")
+                                .Value(true)
+                                .Else
+                                .Value(false),
+                            Target = "host",
+                            RetryCountOnTaskFailure = 2,
+                        },
                         Bash.File("foo.sh")
                             .DisplayAs("Test task"),
                         Bash.File("some/script.sh") with
@@ -33,7 +42,15 @@ public class TaskBuilderTests
                             ContinueOnError = true,
                             FailOnStderr = true,
                             BashEnv = "~/.bash_profile",
-                            DisplayName = "Test task"
+                            DisplayName = "Test task",
+                            WorkingDirectory = "src",
+                            Target = new StepTarget
+                            {
+                                Container = "node",
+                                Commands = StepTargetCommands.Restricted,
+                                SettableVariables = new[] { "sauce" },
+                            },
+                            RetryCountOnTaskFailure = 3,
                         },
                         Bash.FromFile( "AzureDevOps/Resources/test-script.sh"),
                     }
