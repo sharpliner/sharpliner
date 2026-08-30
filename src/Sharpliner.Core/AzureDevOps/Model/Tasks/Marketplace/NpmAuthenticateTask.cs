@@ -63,7 +63,7 @@ public record NpmAuthenticateTask : AzureDevOpsTask
     public string? AzureDevOpsServiceConnection
     {
         get => GetString("azureDevOpsServiceConnection");
-        init => SetProperty("azureDevOpsServiceConnection", value);
+        init => SetOptionalStringProperty("azureDevOpsServiceConnection", value);
     }
 
     /// <summary>
@@ -77,7 +77,7 @@ public record NpmAuthenticateTask : AzureDevOpsTask
     public string? FeedUrl
     {
         get => GetString("feedUrl");
-        init => SetProperty("feedUrl", value);
+        init => SetOptionalStringProperty("feedUrl", value);
     }
 
     /// <summary>
@@ -104,5 +104,17 @@ public record NpmAuthenticateTask : AzureDevOpsTask
             .ToArray();
 
         return normalizedEndpoints.Length == 0 ? null : string.Join(",", normalizedEndpoints);
+    }
+
+    private void SetOptionalStringProperty(string name, string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            Inputs.Remove(name);
+        }
+        else
+        {
+            SetProperty(name, value);
+        }
     }
 }

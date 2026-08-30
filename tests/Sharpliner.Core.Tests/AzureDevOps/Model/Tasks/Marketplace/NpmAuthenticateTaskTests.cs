@@ -50,6 +50,19 @@ public class NpmAuthenticateTaskTests
     }
 
     [Fact]
+    public void Optional_Azure_DevOps_Inputs_Are_Not_Emitted_When_Blank()
+    {
+        var task = new NpmAuthenticateTask(".npmrc")
+        {
+            AzureDevOpsServiceConnection = " ",
+            FeedUrl = ""
+        };
+
+        Assert.DoesNotContain("azureDevOpsServiceConnection", task.Inputs.Keys);
+        Assert.DoesNotContain("feedUrl", task.Inputs.Keys);
+    }
+
+    [Fact]
     public void Azure_DevOps_Service_Connection_Builder_Requires_Service_Connection_And_Feed_Url()
     {
         var builder = new NpmTaskBuilder();
