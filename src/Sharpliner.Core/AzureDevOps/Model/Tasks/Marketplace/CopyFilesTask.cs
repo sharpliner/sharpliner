@@ -217,7 +217,22 @@ public record CopyFilesTask : AzureDevOpsTask
     }
 
     private CopyFilesRetryInput? GetRetryInput(string name)
-        => Inputs.TryGetValue(name, out var value) ? (CopyFilesRetryInput)value : null;
+    {
+        if (!Inputs.TryGetValue(name, out var value))
+        {
+            return null;
+        }
+
+        return value switch
+        {
+            CopyFilesRetryInput retryInput => retryInput,
+            string stringValue => stringValue,
+            int intValue => intValue,
+            AdoExpression<string> stringExpression => stringExpression,
+            AdoExpression<int> intExpression => intExpression,
+            _ => value.ToString(),
+        };
+    }
 
     private void SetRetryInput(string name, CopyFilesRetryInput? value)
     {
