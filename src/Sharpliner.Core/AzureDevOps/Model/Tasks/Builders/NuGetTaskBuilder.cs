@@ -4,6 +4,7 @@ namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
 /// Provides methods to create various NuGet tasks in Azure DevOps pipelines.
+/// See the official <see href="https://learn.microsoft.com/azure/devops/pipelines/tasks/reference/nuget-command-v2">NuGetCommand@2 task reference</see>.
 /// </summary>
 public class NuGetTaskBuilder
 {
@@ -48,14 +49,18 @@ public class NuGetTaskBuilder
     /// </para>
     /// For example:
     /// <code lang="csharp">
-    /// var restoreTask = NuGet.Restore.FromFeed("myFeed", true);
+    /// var restoreTask = NuGet.Restore.FromFeed("myFeed") with
+    /// {
+    ///     IncludeNuGetOrg = true
+    /// };
     /// </code>
     /// <para>Generated YAML:</para>
     /// <code lang="yaml">
     /// - task: NuGetCommand@2
     ///   inputs:
     ///     command: restore
-    ///     feedsToUse: myFeed
+    ///     feedsToUse: select
+    ///     vstsFeed: myFeed
     ///     includeNuGetOrg: true
     /// </code>
     /// </summary>
@@ -120,6 +125,8 @@ public class NuGetTaskBuilder
 
 /// <summary>
 /// Provides methods to create NuGet restore tasks.
+/// Restore tasks can either generate a <c>NuGet.config</c> from selected feeds (<c>feedsToUse: select</c>)
+/// or use a repository <c>NuGet.config</c> (<c>feedsToUse: config</c>).
 /// </summary>
 public class NuGetRestoreBuilder
 {
@@ -141,10 +148,10 @@ public class NuGetRestoreBuilder
     ///     command: restore
     ///     feedsToUse: select
     ///     restoreSolution: path/to/solution.sln
-    ///     feedsToUse: myFeed
+    ///     vstsFeed: myFeed
     /// </code>
     /// </summary>
-    /// <param name="vstsFeed">The feed to restore packages from.</param>
+    /// <param name="vstsFeed">The Azure Artifacts/TFS feed to include in the generated <c>NuGet.config</c>. The official input is <c>feedRestore</c>; <c>vstsFeed</c> is the YAML alias emitted for compatibility.</param>
     /// <returns>A NuGetRestoreCommandTask instance.</returns>
     public NuGetRestoreFeedCommandTask FromFeed(string vstsFeed)
     {
@@ -174,7 +181,7 @@ public class NuGetRestoreBuilder
     ///     nugetConfigPath: path/to/NuGet.config
     /// </code>
     /// </summary>
-    /// <param name="nugetConfigPath">The path to the NuGet.config file.</param>
+    /// <param name="nugetConfigPath">The path to the <c>NuGet.config</c> file in the repository that specifies the feeds from which to restore packages.</param>
     /// <returns>A NuGetRestoreCommandTask instance.</returns>
     public NuGetRestoreConfigCommandTask FromNuGetConfig(AdoExpression<string> nugetConfigPath)
     {
@@ -187,6 +194,8 @@ public class NuGetRestoreBuilder
 
 /// <summary>
 /// Provides methods to create NuGet push tasks.
+/// Push tasks can target an Azure Artifacts feed in this organization/collection (<c>nuGetFeedType: internal</c>)
+/// or an external NuGet server via a NuGet service connection (<c>nuGetFeedType: external</c>).
 /// </summary>
 public class NuGetPushBuilder
 {
@@ -209,13 +218,14 @@ public class NuGetPushBuilder
     /// </code>
     /// </example>
     /// </summary>
+    /// <param name="publishVstsFeed">The Azure Artifacts feed hosted in this organization/collection. The official input is <c>feedPublish</c>; <c>publishVstsFeed</c> is the YAML alias emitted for compatibility.</param>
     /// <returns>A <see cref="NuGetPushInternalCommandTask"/> instance.</returns>
     public NuGetPushInternalCommandTask ToInternalFeed(AdoExpression<string> publishVstsFeed) => new(publishVstsFeed);
 
     /// <summary>
     /// Creates a NuGetPushCommandTask to push packages to an external feed.
     /// </summary>
-    /// <param name="publishFeedCredentials">The publish feed credentials.</param>
+    /// <param name="publishFeedCredentials">The NuGet service connection that contains the external NuGet server's credentials. The official input is <c>externalEndpoint</c>; <c>publishFeedCredentials</c> is the YAML alias emitted for compatibility.</param>
     /// <returns>A NuGetPushCommandTask instance.</returns>
     /// <example>
     /// <code lang="csharp">
@@ -227,7 +237,7 @@ public class NuGetPushBuilder
     ///   inputs:
     ///     command: push
     ///     nuGetFeedType: external
-    ///     externalFeedCredentials: myExternalFeedCredentials
+    ///     publishFeedCredentials: myExternalFeedCredentials
     /// </code>
     /// </example>
     public NuGetPushExternalCommandTask ToExternalFeed(AdoExpression<string> publishFeedCredentials) => new(publishFeedCredentials);
@@ -235,6 +245,7 @@ public class NuGetPushBuilder
 
 /// <summary>
 /// Provides methods to create NuGet pack tasks.
+/// Pack tasks support the official versioning schemes <c>off</c>, <c>byPrereleaseNumber</c>, <c>byEnvVar</c>, and <c>byBuildNumber</c>.
 /// </summary>
 public class NuGetPackBuilder
 {

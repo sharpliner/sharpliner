@@ -8,10 +8,9 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// </summary>
 /// <example>
 /// <code>
-/// var pushTask = new NuGetPushCommandTask
+/// var pushTask = NuGet.Push.ToExternalFeed("MyExternalFeedCredentials") with
 /// {
-///     TargetFeed = "https://example.com/nuget/v3/index.json",
-///     TargetFeedCredentials = "$(System.AccessToken)"
+///     PackagesToPush = new[] { "$(Build.ArtifactStagingDirectory)/**/*.nupkg" }
 /// };
 /// </code>
 ///
@@ -21,8 +20,9 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// - task: NuGetCommand@2
 ///   inputs:
 ///     command: push
-///     targetFeed: 'https://example.com/nuget/v3/index.json'
-///     targetFeedCredentials: '$(System.AccessToken)'
+///     nuGetFeedType: external
+///     publishFeedCredentials: MyExternalFeedCredentials
+///     packagesToPush: $(Build.ArtifactStagingDirectory)/**/*.nupkg
 /// </code>
 /// </example>
 public abstract record NuGetPushCommandTask : NuGetCommandTask

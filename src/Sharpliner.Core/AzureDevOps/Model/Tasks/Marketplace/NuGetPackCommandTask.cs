@@ -11,10 +11,13 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// </summary>
 /// <example>
 /// <code>
-/// var packTask = new NuGetPackCommandTask
+/// var packTask = NuGet.Pack.WithoutPackageVersioning with
 /// {
 ///     PackagesToPack = "**/*.csproj",
-///     Arguments = "-Properties Configuration=Release"
+///     BuildProperties = new()
+///     {
+///         ["Configuration"] = "Release"
+///     }
 /// };
 /// </code>
 /// <para>The corresponding YAML will be:</para>
@@ -23,7 +26,7 @@ namespace Sharpliner.AzureDevOps.Tasks;
 ///   inputs:
 ///     command: pack
 ///     packagesToPack: '**/*.csproj'
-///     arguments: '-Properties Configuration=Release'
+///     buildProperties: Configuration=Release
 /// </code>
 /// </example>
 public abstract record NuGetPackCommandTask : NuGetCommandTask
