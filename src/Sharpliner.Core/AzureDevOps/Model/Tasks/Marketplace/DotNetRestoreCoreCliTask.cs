@@ -132,38 +132,38 @@ public record DotNetRestoreCoreCliTask : DotNetCoreCliTask
 public enum BuildVerbosity
 {
     /// <summary>
-    /// Use the task default verbosity.
-    /// </summary>
-    [YamlMember(Alias = "-")]
-    Default,
-
-    /// <summary>
     /// The most minimal output
     /// </summary>
     [YamlMember(Alias = "Quiet")]
-    Quiet,
+    Quiet = 0,
 
     /// <summary>
     /// Relatively little output
     /// </summary>
     [YamlMember(Alias = "Minimal")]
-    Minimal,
+    Minimal = 1,
 
     /// <summary>
     /// Standard output. This should be the default if verbosity level is not set
     /// </summary>
     [YamlMember(Alias = "Normal")]
-    Normal,
+    Normal = 2,
 
     /// <summary>
     /// Relatively verbose, but not exhaustive
     /// </summary>
     [YamlMember(Alias = "Detailed")]
-    Detailed,
+    Detailed = 3,
 
     /// <summary>
     /// The most verbose and informative verbosity
     /// </summary>
     [YamlMember(Alias = "Diagnostic")]
-    Diagnostic,
+    Diagnostic = 4,
+
+    /// <summary>
+    /// Use the task default verbosity.
+    /// </summary>
+    [YamlMember(Alias = "-")]
+    Default = 5,
 }

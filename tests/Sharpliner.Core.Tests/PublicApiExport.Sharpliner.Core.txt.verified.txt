@@ -3,7 +3,7 @@
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner.Core.Tests")]
 [assembly: System.Runtime.CompilerServices.InternalsVisibleTo("Sharpliner.Tests")]
-[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v10.0", FrameworkDisplayName=".NET 10.0")]
+[assembly: System.Runtime.Versioning.TargetFramework(".NETCoreApp,Version=v11.0", FrameworkDisplayName=".NET 11.0")]
 namespace Sharpliner.AzureDevOps
 {
     public static class AdoExpressionExtensions
@@ -1649,16 +1649,18 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
     public enum BuildVerbosity
     {
-        [YamlDotNet.Serialization.YamlMember(Alias="quiet")]
+        [YamlDotNet.Serialization.YamlMember(Alias="Quiet")]
         Quiet = 0,
-        [YamlDotNet.Serialization.YamlMember(Alias="minimal")]
+        [YamlDotNet.Serialization.YamlMember(Alias="Minimal")]
         Minimal = 1,
-        [YamlDotNet.Serialization.YamlMember(Alias="normal")]
+        [YamlDotNet.Serialization.YamlMember(Alias="Normal")]
         Normal = 2,
-        [YamlDotNet.Serialization.YamlMember(Alias="detailed")]
+        [YamlDotNet.Serialization.YamlMember(Alias="Detailed")]
         Detailed = 3,
-        [YamlDotNet.Serialization.YamlMember(Alias="diagnostic")]
+        [YamlDotNet.Serialization.YamlMember(Alias="Diagnostic")]
         Diagnostic = 4,
+        [YamlDotNet.Serialization.YamlMember(Alias="-")]
+        Default = 5,
     }
     public abstract class CheckoutTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.CheckoutTask>
     {
@@ -1739,6 +1741,7 @@ namespace Sharpliner.AzureDevOps.Tasks
     public class DotNetBuildCoreCliTask : Sharpliner.AzureDevOps.Tasks.DotNetCoreCliTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DotNetBuildCoreCliTask>
     {
         public DotNetBuildCoreCliTask() { }
+        [System.Obsolete("DotNetCoreCLI@2 does not define includeNuGetOrg for the build command.")]
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? IncludeNuGetOrg { get; init; }
     }
@@ -1748,7 +1751,11 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Arguments { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ConnectedServiceName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Projects { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? RequestTimeout { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WorkingDirectory { get; init; }
     }
@@ -1769,8 +1776,11 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? OutputDir { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? PackagesToPack { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.BuildVerbosity>? VerbosityPack { get; init; }
         public Sharpliner.AzureDevOps.Tasks.DotNetPackCoreCliTask VersionByBuildNumber() { }
         public Sharpliner.AzureDevOps.Tasks.DotNetPackCoreCliTask VersionByEnvVar(string envVarName) { }
+        public Sharpliner.AzureDevOps.Tasks.DotNetPackCoreCliTask VersionBySemVerBuildNumber() { }
         public Sharpliner.AzureDevOps.Tasks.DotNetPackCoreCliTask VersionManually(string majorVersion, string minorVersion, string patchVersion) { }
     }
     public enum DotNetPackageType
@@ -1823,10 +1833,14 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder.DotNetInstallBuilder Install { get; }
         public Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder.DotNetRestoreBuilder Restore { get; }
         public Sharpliner.AzureDevOps.Tasks.DotNetCoreCliTask Run { get; }
-        public Sharpliner.AzureDevOps.Tasks.DotNetBuildCoreCliTask Build(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> projects, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? includeNuGetOrg = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
-        public Sharpliner.AzureDevOps.Step CustomCommand(string command, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null, Sharpliner.AzureDevOps.Tasks.TaskInputs? inputs = null) { }
+        public Sharpliner.AzureDevOps.Tasks.DotNetBuildCoreCliTask Build(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> projects, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
+        [System.Obsolete("DotNetCoreCLI@2 does not define includeNuGetOrg for the build command. Use Build(" +
+            "projects, arguments) instead.")]
+        public Sharpliner.AzureDevOps.Tasks.DotNetBuildCoreCliTask Build(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> projects, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? includeNuGetOrg, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
+        public Sharpliner.AzureDevOps.Step CustomCommand(string command, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null, Sharpliner.AzureDevOps.Tasks.TaskInputs? inputs = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? projects = null) { }
         public Sharpliner.AzureDevOps.Tasks.DotNetPackCoreCliTask Pack(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? packagesToPack, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
         public Sharpliner.AzureDevOps.Tasks.DotNetPublishCoreCliTask Publish(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> projects, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? publishWebProjects = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
+        public Sharpliner.AzureDevOps.Tasks.DotNetPublishCoreCliTask PublishWebProjects(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
         public Sharpliner.AzureDevOps.Tasks.DotNetPushCoreCliTask Push(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? packagesToPush = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
         public Sharpliner.AzureDevOps.Tasks.DotNetTestCoreCliTask Test(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> projects, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
         public class DotNetInstallBuilder

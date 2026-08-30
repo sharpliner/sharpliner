@@ -18,7 +18,7 @@ jobs:
     name: Azure Pipelines
     vmImage: windows-2022
   steps:
-  - powershell: |+
+  - powershell: |
       $tag = git tag --points-at HEAD
 
       if ("" -eq "$tag") {
@@ -46,34 +46,33 @@ jobs:
     inputs:
       command: build
       projects: src/Sharpliner/Sharpliner.csproj
-      includeNuGetOrg: true
 
   - task: DotNetCoreCLI@2
     displayName: Pack Sharpliner.Core .nupkg
     inputs:
       command: pack
       packagesToPack: src/Sharpliner.Core/Sharpliner.Core.csproj
-      arguments: -p:PackageVersion=$(packageVersion)
       outputDir: artifacts/package/release
       configurationToPack: Release
+      buildProperties: PackageVersion=$(packageVersion)
 
   - task: DotNetCoreCLI@2
     displayName: Pack Sharpliner .nupkg
     inputs:
       command: pack
       packagesToPack: src/Sharpliner/Sharpliner.csproj
-      arguments: -p:PackageVersion=$(packageVersion)
       outputDir: artifacts/package/release
       configurationToPack: Release
+      buildProperties: PackageVersion=$(packageVersion)
 
   - task: DotNetCoreCLI@2
     displayName: Pack Sharpliner.Templates .nupkg
     inputs:
       command: pack
       packagesToPack: templates/Sharpliner.Templates/Sharpliner.Templates.csproj
-      arguments: -p:PackageVersion=$(packageVersion)
       outputDir: artifacts/package/release
       configurationToPack: Release
+      buildProperties: PackageVersion=$(packageVersion)
 
   - publish: artifacts/package/release/Sharpliner.Core.$(packageVersion).nupkg
     displayName: Publish Sharpliner.Core build artifacts

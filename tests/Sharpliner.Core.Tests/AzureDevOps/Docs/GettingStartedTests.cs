@@ -113,7 +113,6 @@ public class GettingStartedTests : AzureDevOpsDefinition
                 inputs:
                   command: build
                   projects: src/MyProject.sln
-                  includeNuGetOrg: true
 
               - task: DotNetCoreCLI@2
                 displayName: Test

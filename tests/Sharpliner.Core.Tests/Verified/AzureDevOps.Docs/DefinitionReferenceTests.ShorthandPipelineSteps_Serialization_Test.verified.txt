@@ -19,7 +19,6 @@
     inputs:
       command: build
       projects: src/MyProject.sln
-      includeNuGetOrg: true
     timeoutInMinutes: 20
 
   - bash: |-
