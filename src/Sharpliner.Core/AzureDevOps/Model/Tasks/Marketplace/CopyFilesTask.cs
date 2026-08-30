@@ -1,7 +1,84 @@
-﻿using Sharpliner.AzureDevOps.Expressions;
+﻿using System;
+using System.Globalization;
+using Sharpliner.AzureDevOps.Expressions;
+using YamlDotNet.Core;
+using YamlDotNet.Core.Events;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
+
+/// <summary>
+/// Represents a <c>CopyFiles@2</c> retry-related input value.
+/// </summary>
+public record CopyFilesRetryInput : IYamlConvertible
+{
+    private readonly object _value;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CopyFilesRetryInput"/> class with a string value or expression.
+    /// </summary>
+    /// <param name="value">The retry input value.</param>
+    public CopyFilesRetryInput(string value)
+    {
+        _value = value;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CopyFilesRetryInput"/> class with a numeric value.
+    /// </summary>
+    /// <param name="value">The retry input value.</param>
+    public CopyFilesRetryInput(int value) : this(value.ToString(CultureInfo.InvariantCulture))
+    {
+    }
+
+    private CopyFilesRetryInput(AdoExpression expression)
+    {
+        _value = expression;
+    }
+
+    /// <summary>
+    /// Implicitly converts a string value or expression into a <see cref="CopyFilesRetryInput"/>.
+    /// </summary>
+    /// <param name="value">The retry input value.</param>
+    public static implicit operator CopyFilesRetryInput?([System.Diagnostics.CodeAnalysis.NotNullIfNotNull(nameof(value))] string? value)
+        => value is null ? null : new(value);
+
+    /// <summary>
+    /// Implicitly converts an integer value into a <see cref="CopyFilesRetryInput"/>.
+    /// </summary>
+    /// <param name="value">The retry input value.</param>
+    public static implicit operator CopyFilesRetryInput(int value) => new(value);
+
+    /// <summary>
+    /// Implicitly converts a parameter reference into a <see cref="CopyFilesRetryInput"/>.
+    /// </summary>
+    /// <param name="value">The parameter reference.</param>
+    public static implicit operator CopyFilesRetryInput(ParameterReference value) => new((AdoExpression)new ParameterReferenceExpression<string>(value));
+
+    /// <summary>
+    /// Implicitly converts a variable reference into a <see cref="CopyFilesRetryInput"/>.
+    /// </summary>
+    /// <param name="value">The variable reference.</param>
+    public static implicit operator CopyFilesRetryInput(VariableReference value) => new((AdoExpression)new VariableReferenceExpression<string>(value));
+
+    /// <summary>
+    /// Implicitly converts a string expression into a <see cref="CopyFilesRetryInput"/>.
+    /// </summary>
+    /// <param name="value">The retry input expression.</param>
+    public static implicit operator CopyFilesRetryInput(AdoExpression<string> value) => new((AdoExpression)value);
+
+    /// <summary>
+    /// Implicitly converts an integer expression into a <see cref="CopyFilesRetryInput"/>.
+    /// </summary>
+    /// <param name="value">The retry input expression.</param>
+    public static implicit operator CopyFilesRetryInput(AdoExpression<int> value) => new((AdoExpression)value);
+
+    void IYamlConvertible.Read(IParser parser, Type expectedType, ObjectDeserializer nestedObjectDeserializer)
+        => throw new NotImplementedException();
+
+    void IYamlConvertible.Write(IEmitter emitter, ObjectSerializer nestedObjectSerializer)
+        => nestedObjectSerializer(_value, _value.GetType());
+}
 
 /// <summary>
 /// Defines the <c>CopyFiles@2</c> Azure Pipelines task.
@@ -99,10 +176,10 @@ public record CopyFilesTask : AzureDevOpsTask
     /// Defaults to <code>0</code>.
     /// </summary>
     [YamlIgnore]
-    public AdoExpression<string>? RetryCount
+    public CopyFilesRetryInput? RetryCount
     {
-        get => GetExpression<string>("retryCount");
-        init => SetProperty("retryCount", value);
+        get => GetRetryInput("retryCount");
+        init => SetRetryInput("retryCount", value);
     }
 
     /// <summary>
@@ -110,10 +187,10 @@ public record CopyFilesTask : AzureDevOpsTask
     /// Defaults to <code>1000</code>.
     /// </summary>
     [YamlIgnore]
-    public AdoExpression<string>? DelayBetweenRetries
+    public CopyFilesRetryInput? DelayBetweenRetries
     {
-        get => GetExpression<string>("delayBetweenRetries");
-        init => SetProperty("delayBetweenRetries", value);
+        get => GetRetryInput("delayBetweenRetries");
+        init => SetRetryInput("delayBetweenRetries", value);
     }
 
     /// <summary>
@@ -137,5 +214,20 @@ public record CopyFilesTask : AzureDevOpsTask
     {
         Contents = contents;
         TargetFolder = targetFolder;
+    }
+
+    private CopyFilesRetryInput? GetRetryInput(string name)
+        => Inputs.TryGetValue(name, out var value) ? (CopyFilesRetryInput)value : null;
+
+    private void SetRetryInput(string name, CopyFilesRetryInput? value)
+    {
+        if (value is null)
+        {
+            Inputs.Remove(name);
+        }
+        else
+        {
+            Inputs[name] = value;
+        }
     }
 }

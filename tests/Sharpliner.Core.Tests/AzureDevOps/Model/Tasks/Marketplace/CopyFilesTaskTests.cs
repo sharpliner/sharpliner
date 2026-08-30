@@ -15,8 +15,8 @@ public class CopyFilesTaskTests
             Overwrite = true,
             FlattenFolders = true,
             PreserveTimestamp = true,
-            RetryCount = "3",
-            DelayBetweenRetries = "100",
+            RetryCount = 3,
+            DelayBetweenRetries = 100,
             IgnoreMakeDirErrors = true,
         };
 

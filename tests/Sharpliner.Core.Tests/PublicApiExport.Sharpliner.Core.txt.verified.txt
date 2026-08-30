@@ -1694,6 +1694,17 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.SelfCheckoutTask Self { get; }
         public Sharpliner.AzureDevOps.Tasks.RepositoryCheckoutTask Repository(string repository) { }
     }
+    public class CopyFilesRetryInput : System.IEquatable<Sharpliner.AzureDevOps.Tasks.CopyFilesRetryInput>, YamlDotNet.Serialization.IYamlConvertible
+    {
+        public CopyFilesRetryInput(int value) { }
+        public CopyFilesRetryInput(string value) { }
+        public static Sharpliner.AzureDevOps.Tasks.CopyFilesRetryInput op_Implicit(Sharpliner.AzureDevOps.Expressions.AdoExpression<int> value) { }
+        public static Sharpliner.AzureDevOps.Tasks.CopyFilesRetryInput op_Implicit(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> value) { }
+        public static Sharpliner.AzureDevOps.Tasks.CopyFilesRetryInput op_Implicit(Sharpliner.AzureDevOps.Expressions.ParameterReference value) { }
+        public static Sharpliner.AzureDevOps.Tasks.CopyFilesRetryInput op_Implicit(Sharpliner.AzureDevOps.Expressions.VariableReference value) { }
+        public static Sharpliner.AzureDevOps.Tasks.CopyFilesRetryInput op_Implicit(int value) { }
+        public static Sharpliner.AzureDevOps.Tasks.CopyFilesRetryInput? op_Implicit([System.Diagnostics.CodeAnalysis.NotNullIfNotNull("value")] string? value) { }
+    }
     public class CopyFilesTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.CopyFilesTask>
     {
         public CopyFilesTask(string contents, string targetFolder) { }
@@ -1702,7 +1713,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Contents { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DelayBetweenRetries { get; init; }
+        public Sharpliner.AzureDevOps.Tasks.CopyFilesRetryInput? DelayBetweenRetries { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? FlattenFolders { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
@@ -1712,7 +1723,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? PreserveTimestamp { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
-        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RetryCount { get; init; }
+        public Sharpliner.AzureDevOps.Tasks.CopyFilesRetryInput? RetryCount { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SourceFolder { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
