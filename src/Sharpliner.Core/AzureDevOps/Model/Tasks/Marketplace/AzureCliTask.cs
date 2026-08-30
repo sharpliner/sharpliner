@@ -247,7 +247,7 @@ public enum ScriptType
     Batch,
 
     /// <summary>
-    /// Shell. Supported on Linux agents.
+    /// Shell. Supported on Linux and macOS agents.
     /// </summary>
     [YamlMember(Alias = "bash")]
     Bash,
