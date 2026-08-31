@@ -1,0 +1,12 @@
+task: Kubernetes@1
+
+inputs:
+  command: create
+  connectionType: None
+  configMapName: application-settings
+  forceUpdateConfigMap: true
+  useConfigMapFile: false
+  configMapArguments: --from-literal=setting=value
+  versionSpec: 1.30.0
+  checkLatest: false
+  cwd: manifests

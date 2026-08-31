@@ -151,7 +151,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | IIS Web App deployment (Deprecated) | `IISWebAppDeployment@1` | ⚪ Out of scope | Deprecated by Microsoft; superseded by `IISWebAppDeploymentOnMachineGroup@0`. |
 | IIS web app manage | `IISWebAppManagementOnMachineGroup@0` | ❌ Missing | No strongly typed model or builder. |
 | Invoke REST API | `InvokeRESTAPI@1`, `InvokeRESTAPI@0` | ❌ Missing | No strongly typed model or builder. |
-| Kubectl | `Kubernetes@1`, `Kubernetes@0` | ❌ Missing | No strongly typed model or builder. |
+| Kubectl | `Kubernetes@1`, `Kubernetes@0` | 🟡 Partial | `Kubernetes.ServiceConnection/AzureResourceManager/None` builders emit `Kubernetes@1`; `KubernetesV0Task` supports existing deprecated pipelines. |
 | Manual intervention | `ManualIntervention@8` | ⚪ Out of scope | Classic release pipelines only, it cannot be used in YAML pipelines which are the only thing Sharpliner generates. |
 | Manual validation | `ManualValidation@1`, `ManualValidation@0` | ❌ Missing | No strongly typed model or builder. |
 | MySQL database deploy | `MysqlDeploymentOnMachineGroup@1` | ❌ Missing | No strongly typed model or builder. |
