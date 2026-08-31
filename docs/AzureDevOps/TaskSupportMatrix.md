@@ -59,6 +59,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `AzureCLI@2` | `AzureCli.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliTask`, `AzureCliFileTask` |
 | `Bash@3` | `Bash.Inline/File/FromFile/FromResourceFile` -> `InlineBashTask`, `BashFileTask` (`bash` step shortcut) |
 | `CmdLine@2` | `Script.Inline/FromFile/FromResourceFile` -> `ScriptTask` (`script` step shortcut) |
+| `ContainerStructureTest@0` | `ContainerStructureTest.Run` -> `ContainerStructureTestTask` |
 | `CopyFiles@2` | `CopyFilesTask` |
 | `DeleteFiles@1` | `DeleteFilesTask` |
 | `DotNetCoreCLI@2` | `DotNet.*` -> `DotNetCoreCliTask` and its `Build`/`Test`/`Pack`/`Publish`/`Push`/`Restore` specializations |
@@ -194,7 +195,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | App Center test | `AppCenterTest@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure Load Testing | `AzureLoadTest@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure Test Plan | `AzureTestPlan@0` | ❌ Missing | No strongly typed model or builder. |
-| Container Structure Test | `ContainerStructureTest@0` | ❌ Missing | No strongly typed model or builder. |
+| Container Structure Test | `ContainerStructureTest@0` | ✅ Supported | `ContainerStructureTest.Run(...)` -> `ContainerStructureTestTask`. |
 | Mobile Center Test | `VSMobileCenterTest@0` | ⚪ Out of scope | Deprecated/renamed by Microsoft; superseded by `AppCenterTest@1`. |
 | Publish code coverage results | `PublishCodeCoverageResults@2`, `PublishCodeCoverageResults@1` | ✅ Supported | `PublishCodeCoverageResultsTask` (`PublishCodeCoverageResults@2`). |
 | Publish Test Results | `PublishTestResults@2`, `PublishTestResults@1` | ✅ Supported | `PublishTestResultsTask` (`PublishTestResults@2`). |
@@ -400,7 +401,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `AppCenterTest@1` – App Center test
 - `AzureLoadTest@1` – Azure Load Testing
 - `AzureTestPlan@0` – Azure Test Plan
-- `ContainerStructureTest@0` – Container Structure Test
 - `VSTest@3` – Visual Studio Test
 
 ### Missing tool tasks

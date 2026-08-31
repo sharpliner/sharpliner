@@ -1,0 +1,12 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: ContainerStructureTest@0
+    displayName: Container Structure Test
+    inputs:
+      dockerRegistryServiceConnection: my-docker-connection
+      repository: my-org/my-image
+      configFile: tests/container-structure.yaml
+      tag: 1.2.3
+      testRunTitle: Container tests
+      failTaskOnFailedTests: true

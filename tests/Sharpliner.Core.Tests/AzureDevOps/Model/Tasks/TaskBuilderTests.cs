@@ -341,6 +341,36 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class ContainerStructureTestTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        ContainerStructureTest.Run("my-docker-connection", "my-org/my-image", "tests/container-structure.yaml") with
+                        {
+                            Tag = "1.2.3",
+                            TestRunTitle = "Container tests",
+                            FailTaskOnFailedTests = true,
+                        },
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_ContainerStructureTest_Builder_Test()
+    {
+        ContainerStructureTestTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class TaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()

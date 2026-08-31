@@ -338,6 +338,11 @@ public abstract class AzureDevOpsDefinition
     protected static NuGetTaskBuilder NuGet { get; } = new();
 
     /// <summary>
+    /// Creates a Container Structure Test task.
+    /// </summary>
+    protected static ContainerStructureTestTaskBuilder ContainerStructureTest { get; } = new();
+
+    /// <summary>
     /// Creates an npm task.
     /// </summary>
     protected static NpmTaskBuilder Npm { get; } = new();
