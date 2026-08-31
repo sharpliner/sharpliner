@@ -1,0 +1,46 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: AzureResourceManagerTemplateDeployment@3
+    inputs:
+      deploymentScope: Management Group
+      ConnectedServiceName: managementConnection
+      location: westus
+      templateLocation: Linked artifact
+      csmFile: infra/main.bicep
+      csmParametersFile: infra/main.bicepparam
+      overrideParameters: -environment prod
+      deploymentMode: Validation
+      deploymentName: management-deployment
+      deploymentOutputs: managementOutputs
+      addSpnToEnvironment: true
+      useWithoutJSON: true
+
+  - task: AzureResourceManagerTemplateDeployment@3
+    inputs:
+      deploymentScope: Subscription
+      ConnectedServiceName: subscriptionConnection
+      subscriptionName: 00000000-0000-0000-0000-000000000000
+      location: eastus
+      templateLocation: URL of the file
+      csmFileLink: https://example.invalid/main.json
+      csmParametersFileLink: https://example.invalid/main.parameters.json
+
+  - task: AzureResourceManagerTemplateDeployment@3
+    inputs:
+      deploymentScope: Resource Group
+      ConnectedServiceName: resourceGroupConnection
+      subscriptionName: 00000000-0000-0000-0000-000000000000
+      resourceGroupName: example-rg
+      location: centralus
+      action: Create Or Update Resource Group
+      templateLocation: Linked artifact
+      csmFile: infra/azuredeploy.json
+
+  - task: AzureResourceManagerTemplateDeployment@3
+    inputs:
+      deploymentScope: Resource Group
+      ConnectedServiceName: resourceGroupConnection
+      subscriptionName: 00000000-0000-0000-0000-000000000000
+      resourceGroupName: example-rg
+      action: DeleteRG

@@ -341,6 +341,42 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class AzureResourceManagerTemplateDeploymentTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        AzureResourceManagerTemplateDeployment.ManagementGroup("managementConnection", "westus").LinkedArtifact("infra/main.bicep", "infra/main.bicepparam") with
+                        {
+                            OverrideParameters = "-environment prod",
+                            DeploymentMode = AzureResourceManagerTemplateDeploymentMode.Validation,
+                            DeploymentName = "management-deployment",
+                            DeploymentOutputs = "managementOutputs",
+                            AddSpnToEnvironment = true,
+                            UseWithoutJSON = true,
+                        },
+                        AzureResourceManagerTemplateDeployment.Subscription("subscriptionConnection", "00000000-0000-0000-0000-000000000000", "eastus").Url("https://example.invalid/main.json", "https://example.invalid/main.parameters.json"),
+                        AzureResourceManagerTemplateDeployment.ResourceGroup("resourceGroupConnection", "00000000-0000-0000-0000-000000000000", "example-rg").CreateOrUpdate("centralus").LinkedArtifact("infra/azuredeploy.json"),
+                        AzureResourceManagerTemplateDeployment.ResourceGroup("resourceGroupConnection", "00000000-0000-0000-0000-000000000000", "example-rg").Delete(),
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_AzureResourceManagerTemplateDeployment_Builder_Test()
+    {
+        AzureResourceManagerTemplateDeploymentTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class TaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
