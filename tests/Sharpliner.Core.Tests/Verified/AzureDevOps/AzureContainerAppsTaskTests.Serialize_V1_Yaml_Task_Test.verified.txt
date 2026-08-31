@@ -1,0 +1,10 @@
+﻿task: AzureContainerApps@1
+
+displayName: Azure Container Apps Deploy
+
+inputs:
+  azureSubscription: my-azure-connection
+  yamlConfigPath: $(System.DefaultWorkingDirectory)/infra/containerapp.yaml
+  containerAppName: my-container-app
+  disableTelemetry: false
+  ingress: disabled

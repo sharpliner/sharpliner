@@ -341,6 +341,41 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class AzureContainerAppsTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        AzureContainerApps.V1.FromSource("my-azure-connection", "$(Build.SourcesDirectory)/src/MyApp", "myregistry") with
+                        {
+                            DockerfilePath = "src/MyApp/Dockerfile",
+                            RuntimeStack = "dotnet:8.0",
+                            Ingress = AzureContainerAppIngress.External
+                        },
+                        AzureContainerApps.V1.FromImage("my-azure-connection", "myregistry.azurecr.io/my-app:$(Build.BuildId)") with
+                        {
+                            ContainerAppName = "my-app",
+                        },
+                        AzureContainerApps.V1.FromYaml("my-azure-connection", "$(System.DefaultWorkingDirectory)/containerapp.yaml")
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_AzureContainerApps_Builder_Test()
+    {
+        AzureContainerAppsTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class TaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()

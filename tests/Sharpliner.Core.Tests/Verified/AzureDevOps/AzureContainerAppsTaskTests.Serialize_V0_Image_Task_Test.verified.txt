@@ -1,0 +1,8 @@
+﻿task: AzureContainerApps@0
+
+displayName: Azure Container Apps Deploy
+
+inputs:
+  azureSubscription: my-azure-connection
+  imageToDeploy: myregistry.azurecr.io/my-app:legacy
+  containerAppName: legacy-container-app

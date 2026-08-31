@@ -89,6 +89,7 @@ namespace Sharpliner.AzureDevOps
         protected static readonly Sharpliner.AzureDevOps.VariablesReference variables;
         protected AzureDevOpsDefinition() { }
         protected static Sharpliner.AzureDevOps.Tasks.AzureCliTaskBuilder AzureCli { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.AzureContainerAppsTaskBuilder AzureContainerApps { get; }
         protected static Sharpliner.AzureDevOps.Tasks.BashTaskBuilder Bash { get; }
         protected static Sharpliner.AzureDevOps.Tasks.CheckoutTaskBuilder Checkout { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder DotNet { get; }
@@ -1598,6 +1599,137 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.InlineAzureCliTask FromFile(string azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptType> scriptType, string path, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
         public Sharpliner.AzureDevOps.Tasks.InlineAzureCliTask FromResourceFile(string azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptType> scriptType, string resourceFileName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
         public Sharpliner.AzureDevOps.Tasks.InlineAzureCliTask Inline(string azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptType> scriptType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null, params string[] scriptLines) { }
+    }
+    public enum AzureContainerAppIngress
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="external")]
+        External = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="internal")]
+        Internal = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="disabled")]
+        Disabled = 2,
+    }
+    public enum AzureContainerAppKind
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="functionapp")]
+        FunctionApp = 0,
+    }
+    public abstract class AzureContainerAppsFromImageTask : Sharpliner.AzureDevOps.Tasks.AzureContainerAppsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureContainerAppsFromImageTask>
+    {
+        protected AzureContainerAppsFromImageTask(string taskName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> imageToDeploy) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AcrName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AcrPassword { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AcrUsername { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ImageToDeploy { get; init; }
+    }
+    public abstract class AzureContainerAppsFromSourceTask : Sharpliner.AzureDevOps.Tasks.AzureContainerAppsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureContainerAppsFromSourceTask>
+    {
+        protected AzureContainerAppsFromSourceTask(string taskName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> appSourcePath, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> acrName) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AcrName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AcrPassword { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AcrUsername { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AppSourcePath { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DockerfilePath { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ImageToBuild { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ImageToDeploy { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RuntimeStack { get; init; }
+    }
+    public abstract class AzureContainerAppsFromYamlTask : Sharpliner.AzureDevOps.Tasks.AzureContainerAppsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureContainerAppsFromYamlTask>
+    {
+        protected AzureContainerAppsFromYamlTask(string taskName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> yamlConfigPath) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? YamlConfigPath { get; init; }
+    }
+    public abstract class AzureContainerAppsTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureContainerAppsTask>
+    {
+        protected AzureContainerAppsTask(string taskName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureSubscription { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ContainerAppEnvironment { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ContainerAppName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? DisableTelemetry { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? EnvironmentVariables { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureContainerAppIngress>? Ingress { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureContainerAppKind>? Kind { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Location { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ResourceGroup { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TargetPort { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WorkingDirectory { get; init; }
+    }
+    public class AzureContainerAppsTaskBuilder
+    {
+        [System.Obsolete("AzureContainerApps@0 is deprecated by Azure Pipelines. Prefer AzureContainerApps@" +
+            "1.")]
+        public Sharpliner.AzureDevOps.Tasks.AzureContainerAppsV0TaskBuilder V0 { get; }
+        public Sharpliner.AzureDevOps.Tasks.AzureContainerAppsV1TaskBuilder V1 { get; }
+    }
+    [System.Obsolete("AzureContainerApps@0 is deprecated by Azure Pipelines. Prefer AzureContainerApps@" +
+        "1.")]
+    public class AzureContainerAppsV0FromImageTask : Sharpliner.AzureDevOps.Tasks.AzureContainerAppsFromImageTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureContainerAppsV0FromImageTask>
+    {
+        public AzureContainerAppsV0FromImageTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> imageToDeploy) { }
+    }
+    [System.Obsolete("AzureContainerApps@0 is deprecated by Azure Pipelines. Prefer AzureContainerApps@" +
+        "1.")]
+    public class AzureContainerAppsV0FromSourceTask : Sharpliner.AzureDevOps.Tasks.AzureContainerAppsFromSourceTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureContainerAppsV0FromSourceTask>
+    {
+        public AzureContainerAppsV0FromSourceTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> appSourcePath, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> acrName) { }
+    }
+    [System.Obsolete("AzureContainerApps@0 is deprecated by Azure Pipelines. Prefer AzureContainerApps@" +
+        "1.")]
+    public class AzureContainerAppsV0FromYamlTask : Sharpliner.AzureDevOps.Tasks.AzureContainerAppsFromYamlTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureContainerAppsV0FromYamlTask>
+    {
+        public AzureContainerAppsV0FromYamlTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> yamlConfigPath) { }
+    }
+    [System.Obsolete("AzureContainerApps@0 is deprecated by Azure Pipelines. Prefer AzureContainerApps@" +
+        "1.")]
+    public class AzureContainerAppsV0TaskBuilder
+    {
+        public AzureContainerAppsV0TaskBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.AzureContainerAppsV0FromImageTask FromImage(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> imageToDeploy) { }
+        public Sharpliner.AzureDevOps.Tasks.AzureContainerAppsV0FromSourceTask FromSource(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> appSourcePath, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> acrName) { }
+        public Sharpliner.AzureDevOps.Tasks.AzureContainerAppsV0FromYamlTask FromYaml(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> yamlConfigPath) { }
+    }
+    public class AzureContainerAppsV1FromImageTask : Sharpliner.AzureDevOps.Tasks.AzureContainerAppsFromImageTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureContainerAppsV1FromImageTask>
+    {
+        public AzureContainerAppsV1FromImageTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> imageToDeploy) { }
+    }
+    public class AzureContainerAppsV1FromSourceTask : Sharpliner.AzureDevOps.Tasks.AzureContainerAppsFromSourceTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureContainerAppsV1FromSourceTask>
+    {
+        public AzureContainerAppsV1FromSourceTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> appSourcePath, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> acrName) { }
+    }
+    public class AzureContainerAppsV1FromYamlTask : Sharpliner.AzureDevOps.Tasks.AzureContainerAppsFromYamlTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureContainerAppsV1FromYamlTask>
+    {
+        public AzureContainerAppsV1FromYamlTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> yamlConfigPath) { }
+    }
+    public class AzureContainerAppsV1TaskBuilder
+    {
+        public AzureContainerAppsV1TaskBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.AzureContainerAppsV1FromImageTask FromImage(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> imageToDeploy) { }
+        public Sharpliner.AzureDevOps.Tasks.AzureContainerAppsV1FromSourceTask FromSource(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> appSourcePath, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> acrName) { }
+        public Sharpliner.AzureDevOps.Tasks.AzureContainerAppsV1FromYamlTask FromYaml(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> yamlConfigPath) { }
     }
     public class AzureDevOpsTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask>
     {

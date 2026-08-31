@@ -1,0 +1,24 @@
+﻿task: AzureContainerApps@1
+
+displayName: Azure Container Apps Deploy
+
+inputs:
+  azureSubscription: my-azure-connection
+  appSourcePath: $(Build.SourcesDirectory)/src/MyApp
+  acrName: myregistry
+  acrUsername: registry-user
+  acrPassword: $(registryPassword)
+  dockerfilePath: deploy/Dockerfile
+  imageToBuild: myregistry.azurecr.io/my-app:$(Build.BuildId)
+  imageToDeploy: myregistry.azurecr.io/my-app:stable
+  runtimeStack: dotnet:8.0
+  containerAppName: my-container-app
+  resourceGroup: rg-container-apps
+  containerAppEnvironment: my-ca-env
+  targetPort: 8080
+  location: westeurope
+  environmentVariables: ASPNETCORE_ENVIRONMENT=Production API_KEY=secretref:apiKey
+  ingress: external
+  kind: functionapp
+  disableTelemetry: true
+  workingDirectory: $(System.DefaultWorkingDirectory)
