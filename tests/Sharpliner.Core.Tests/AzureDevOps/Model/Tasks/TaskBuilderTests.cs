@@ -475,6 +475,34 @@ public class TaskBuilderTests
                         Npm.Authenticate("empty/.npmrc", []),
                         Npm.Authenticate("whitespace/.npmrc", [" MyServiceConnection ", "", " AnotherServiceConnection "]),
                         new NpmAuthenticateTask("null/.npmrc") with { CustomEndpoints = null },
+                        Npm.Install([" MyServiceConnection ", "", " AnotherServiceConnection "]) with
+                        {
+                            WorkingDirectory = "src/web",
+                            Verbose = true,
+                        },
+                        Npm.InstallFromFeed("MyProject/MyFeed"),
+                        Npm.Ci() with
+                        {
+                            WorkingDirectory = "src/web",
+                        },
+                        Npm.CiFromFeed("MyProject/MyFeed") with
+                        {
+                            Verbose = false,
+                        },
+                        Npm.Custom("dist-tag ls mypackage", ["ExternalNpmRegistry"]) with
+                        {
+                            WorkingDirectory = "src/web",
+                        },
+                        Npm.CustomFromFeed("dist-tag ls mypackage", "MyProject/MyFeed"),
+                        Npm.PublishToExternalRegistry("MyExternalPublishServiceConnection") with
+                        {
+                            WorkingDirectory = "src/web",
+                            Verbose = true,
+                        },
+                        Npm.PublishToFeed("MyProject/MyFeed") with
+                        {
+                            PublishPackageMetadata = false,
+                        },
                     }
                 }
             }

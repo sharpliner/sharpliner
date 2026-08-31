@@ -1,0 +1,8 @@
+﻿task: Npm@1
+
+inputs:
+  command: install
+  customRegistry: useNpmrc
+  workingDir: src/web
+  verbose: true
+  customEndpoint: ExternalNpmRegistry,AnotherExternalNpmRegistry
