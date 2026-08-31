@@ -122,7 +122,7 @@ public override SingleStagePipeline Pipeline => new()
                     .DisplayAs("Install .NET SDK"),
 
                 DotNet
-                    .Build("src/MyProject.sln", includeNuGetOrg: true)
+                    .Build("src/MyProject.sln")
                     .DisplayAs("Build"),
 
                 DotNet
@@ -207,7 +207,6 @@ jobs:
     inputs:
       command: build
       projects: src/MyProject.sln
-      includeNuGetOrg: true
 
   - task: DotNetCoreCLI@2
     displayName: Test

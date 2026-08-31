@@ -11,7 +11,6 @@ jobs:
     inputs:
       command: build
       projects: Sharpliner.slnx
-      includeNuGetOrg: true
 
   - task: DotNetCoreCLI@2
     displayName: Run unit tests

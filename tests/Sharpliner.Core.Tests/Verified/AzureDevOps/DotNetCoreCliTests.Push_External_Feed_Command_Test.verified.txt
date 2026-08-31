@@ -6,4 +6,5 @@
     inputs:
       command: push
       packagesToPush: $(Build.ArtifactStagingDirectory)/*.nupkg
-      publishPackageMetadata: true
+      nuGetFeedType: external
+      publishFeedCredentials: external-feed

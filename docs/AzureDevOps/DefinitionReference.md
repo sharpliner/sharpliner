@@ -77,7 +77,7 @@ Steps =
     },
 
     // Tasks are represented as C# records so you can use the `with` keyword to override the properties
-    DotNet.Build("src/MyProject.sln", includeNuGetOrg: true) with
+    DotNet.Build("src/MyProject.sln") with
     {
         Timeout = TimeSpan.FromMinutes(20)
     },

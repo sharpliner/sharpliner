@@ -57,21 +57,18 @@ class PullRequestPipeline : SingleStagePipelineDefinition
                     DotNet.Build("tests/E2E.Tests/ProjectUsingTheLibraryNuGet/E2E.Tests.ProjectUsingTheLibraryNuGet.csproj") with
                     {
                         DisplayName = "Build NuGet reference test",
-                        IncludeNuGetOrg = false,
                         WorkingDirectory = "tests/E2E.Tests",
                     },
 
                     DotNet.Build("tests/E2E.Tests/ProjectUsingTheLibrary/E2E.Tests.ProjectUsingTheLibrary.csproj") with
                     {
                         DisplayName = "Build project reference test",
-                        IncludeNuGetOrg = false,
                         WorkingDirectory = "tests/E2E.Tests",
                     },
 
                     DotNet.Build("tests/E2E.Tests/ProjectUsingTheLibrarySkipPublish/E2E.Tests.ProjectUsingTheLibrarySkipPublish.csproj") with
                     {
                         DisplayName = "Build project reference test with skipped publishing",
-                        IncludeNuGetOrg = false,
                         WorkingDirectory = "tests/E2E.Tests",
                     },
                 }

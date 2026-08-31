@@ -6,8 +6,6 @@
     inputs:
       command: publish
       arguments: -c Release
-      publishWebProjects: false
-      projects: src/*.csproj
+      publishWebProjects: true
       modifyOutputPath: true
       zipAfterPublish: true
-    timeoutInMinutes: 30

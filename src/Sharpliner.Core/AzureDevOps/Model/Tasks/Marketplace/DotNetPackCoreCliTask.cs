@@ -4,7 +4,7 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
-/// Task represents the `dotnet pack` command.
+/// Task represents the <c>dotnet pack</c> command.
 /// </summary>
 public record DotNetPackCoreCliTask : DotNetCoreCliTask
 {
@@ -22,7 +22,8 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     /// and you can make a pattern negative by prefixing it with !.
     /// Example: **/*.csproj;!**/*.Tests.csproj
     ///
-    /// Argument aliases: searchPatternPack
+    /// DotNetCoreCLI@2 input: <c>searchPatternPack</c>; serialized using official alias <c>packagesToPack</c>.
+    /// Default: <c>**/*.csproj</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? PackagesToPack
@@ -33,7 +34,8 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
 
     /// <summary>
     /// When using a csproj file this specifies the configuration to package.
-    /// Argument aliases: configuration
+    /// DotNetCoreCLI@2 input: <c>configurationToPack</c>; official alias: <c>configuration</c>.
+    /// Default: <c>$(BuildConfiguration)</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? ConfigurationToPack
@@ -45,7 +47,8 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     /// <summary>
     /// Folder where packages will be created. If empty, packages will be created alongside the csproj file.
     ///
-    /// Argument aliases: packDirectory
+    /// DotNetCoreCLI@2 input: <c>outputDir</c>; official alias: <c>packDirectory</c>.
+    /// Default: <c>$(Build.ArtifactStagingDirectory)</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? OutputDir
@@ -56,7 +59,8 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
 
     /// <summary>
     /// Don't build the project before packing.
-    /// Corresponds to the --no-build parameter of the `build` command.
+    /// Corresponds to the --no-build parameter of the <c>pack</c> command.
+    /// DotNetCoreCLI@2 defaults this input to false.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? NoBuild
@@ -68,6 +72,7 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     /// <summary>
     /// Additionally creates symbol NuGet packages.
     /// Corresponds to the --include-symbols command line parameter.
+    /// DotNetCoreCLI@2 defaults this input to false.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? IncludeSymbols
@@ -79,6 +84,7 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     /// <summary>
     /// Includes source code in the package.
     /// Corresponds to the --include-source command line parameter.
+    /// DotNetCoreCLI@2 defaults this input to false.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? IncludeSource
@@ -101,6 +107,18 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     }
 
     /// <summary>
+    /// Specifies the amount of detail displayed in the output for the pack command.
+    /// DotNetCoreCLI@2 accepts <c>-</c>, <c>Quiet</c>, <c>Minimal</c>, <c>Normal</c>, <c>Detailed</c>, and <c>Diagnostic</c>.
+    /// Default: <c>Normal</c>.
+    /// </summary>
+    [YamlIgnore]
+    public AdoExpression<BuildVerbosity>? VerbosityPack
+    {
+        get => GetExpression<BuildVerbosity>("verbosityPack");
+        init => SetProperty("verbosityPack", value);
+    }
+
+    /// <summary>
     /// You must select an environment variable and ensure it contains the version number you want to use.
     /// </summary>
     /// <param name="envVarName">Name of the env var where version is stored</param>
@@ -118,6 +136,15 @@ public record DotNetPackCoreCliTask : DotNetCoreCliTask
     public DotNetPackCoreCliTask VersionByBuildNumber()
     {
         SetProperty("versioningScheme", "byBuildNumber");
+        return this;
+    }
+
+    /// <summary>
+    /// This will use the full SemVer build number to version your package.
+    /// </summary>
+    public DotNetPackCoreCliTask VersionBySemVerBuildNumber()
+    {
+        SetProperty("versioningScheme", "bySemVerBuildNumber");
         return this;
     }
 

@@ -26,7 +26,7 @@ class ProjectBuildSteps(string project) : StepLibrary
             .DisplayAs($"Create {PackagePath}"),
 
         DotNet
-            .Build(project, includeNuGetOrg: true)
+            .Build(project)
             .DisplayAs("Build"),
     ];
 

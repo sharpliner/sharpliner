@@ -37,7 +37,6 @@ jobs:
     inputs:
       command: build
       projects: src/**/*.csproj
-      includeNuGetOrg: true
 
   - task: DotNetCoreCLI@2
     displayName: Validate generated docs
@@ -80,7 +79,6 @@ jobs:
     inputs:
       command: build
       projects: tests/E2E.Tests/ProjectUsingTheLibraryNuGet/E2E.Tests.ProjectUsingTheLibraryNuGet.csproj
-      includeNuGetOrg: false
       workingDirectory: tests/E2E.Tests
 
   - task: DotNetCoreCLI@2
@@ -88,7 +86,6 @@ jobs:
     inputs:
       command: build
       projects: tests/E2E.Tests/ProjectUsingTheLibrary/E2E.Tests.ProjectUsingTheLibrary.csproj
-      includeNuGetOrg: false
       workingDirectory: tests/E2E.Tests
 
   - task: DotNetCoreCLI@2
@@ -96,5 +93,4 @@ jobs:
     inputs:
       command: build
       projects: tests/E2E.Tests/ProjectUsingTheLibrarySkipPublish/E2E.Tests.ProjectUsingTheLibrarySkipPublish.csproj
-      includeNuGetOrg: false
       workingDirectory: tests/E2E.Tests

@@ -1,10 +1,11 @@
-﻿using Sharpliner.AzureDevOps.Expressions;
+﻿using System;
+using Sharpliner.AzureDevOps.Expressions;
 using YamlDotNet.Serialization;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
-/// Task represents the <c>>dotnet build</c> command.
+/// Task represents the <c>dotnet build</c> command.
 /// </summary>
 public record DotNetBuildCoreCliTask : DotNetCoreCliTask
 {
@@ -17,8 +18,10 @@ public record DotNetBuildCoreCliTask : DotNetCoreCliTask
     }
 
     /// <summary>
-    /// Include NuGet.org in the generated NuGet.config
+    /// DotNetCoreCLI@2 does not define <c>includeNuGetOrg</c> for the build command.
+    /// This property is retained for source compatibility with older Sharpliner versions.
     /// </summary>
+    [Obsolete("DotNetCoreCLI@2 does not define includeNuGetOrg for the build command.")]
     [YamlIgnore]
     public AdoExpression<bool>? IncludeNuGetOrg
     {

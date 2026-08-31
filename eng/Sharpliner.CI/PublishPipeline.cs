@@ -39,27 +39,30 @@ class PublishPipeline : SingleStagePipelineDefinition
                     StepLibrary(new ProjectBuildSteps("src/Sharpliner/Sharpliner.csproj")),
 
                     DotNet
-                        .Pack("src/Sharpliner.Core/Sharpliner.Core.csproj", $"-p:PackageVersion={variables["packageVersion"]}") with
+                        .Pack("src/Sharpliner.Core/Sharpliner.Core.csproj") with
                         {
                             DisplayName = "Pack Sharpliner.Core .nupkg",
                             OutputDir = ProjectBuildSteps.PackagePath,
                             ConfigurationToPack = "Release",
+                            BuildProperties = $"PackageVersion={variables["packageVersion"]}",
                         },
 
                     DotNet
-                        .Pack("src/Sharpliner/Sharpliner.csproj", $"-p:PackageVersion={variables["packageVersion"]}") with
+                        .Pack("src/Sharpliner/Sharpliner.csproj") with
                         {
                             DisplayName = "Pack Sharpliner .nupkg",
                             OutputDir = ProjectBuildSteps.PackagePath,
                             ConfigurationToPack = "Release",
+                            BuildProperties = $"PackageVersion={variables["packageVersion"]}",
                         },
 
                     DotNet
-                        .Pack("templates/Sharpliner.Templates/Sharpliner.Templates.csproj", $"-p:PackageVersion={variables["packageVersion"]}") with
+                        .Pack("templates/Sharpliner.Templates/Sharpliner.Templates.csproj") with
                         {
                             DisplayName = "Pack Sharpliner.Templates .nupkg",
                             OutputDir = ProjectBuildSteps.PackagePath,
                             ConfigurationToPack = "Release",
+                            BuildProperties = $"PackageVersion={variables["packageVersion"]}",
                         },
 
                     Publish

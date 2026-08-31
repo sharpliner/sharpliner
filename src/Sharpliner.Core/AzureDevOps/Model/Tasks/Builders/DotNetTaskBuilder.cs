@@ -1,4 +1,5 @@
-﻿using Sharpliner.AzureDevOps.Expressions;
+﻿using System;
+using Sharpliner.AzureDevOps.Expressions;
 
 namespace Sharpliner.AzureDevOps.Tasks;
 
@@ -89,7 +90,7 @@ public class DotNetTaskBuilder
     /// <code lang="csharp">
     /// Steps =
     /// {
-    ///     Dotnet.Build("project.csproj", true, "-c Release") with
+    ///     Dotnet.Build("project.csproj", "-c Release") with
     ///     {
     ///         WorkingDirectory = "/tmp"
     ///     }
@@ -103,20 +104,30 @@ public class DotNetTaskBuilder
     ///     command: build
     ///     projects: project.csproj
     ///     arguments: -c Release
-    ///     includeNuGetOrg: true
     ///     workingDirectory: /tmp
     /// </code>
     /// </summary>
     /// <param name="projects">Projects to build</param>
-    /// <param name="includeNuGetOrg">Include nuget.org in package sources?</param>
     /// <param name="arguments">Additional arguments</param>
     /// <returns>A new instance of the <see cref="DotNetBuildCoreCliTask"/> with the specified arguments</returns>
-    public DotNetBuildCoreCliTask Build(AdoExpression<string> projects, AdoExpression<bool>? includeNuGetOrg = null, AdoExpression<string>? arguments = null) => new()
+    public DotNetBuildCoreCliTask Build(AdoExpression<string> projects, AdoExpression<string>? arguments = null) => new()
     {
         Projects = projects,
         Arguments = arguments,
-        IncludeNuGetOrg = includeNuGetOrg,
     };
+
+    /// <summary>
+    /// <para>
+    /// Creates the <c>build</c> command version of the DotNetCoreCLI task.
+    /// </para>
+    /// </summary>
+    /// <param name="projects">Projects or solutions to build.</param>
+    /// <param name="includeNuGetOrg">Ignored. DotNetCoreCLI@2 does not define <c>includeNuGetOrg</c> for the build command.</param>
+    /// <param name="arguments">Additional arguments.</param>
+    /// <returns>A new instance of the <see cref="DotNetBuildCoreCliTask"/> with the specified arguments.</returns>
+    [Obsolete("DotNetCoreCLI@2 does not define includeNuGetOrg for the build command. Use Build(projects, arguments) instead.")]
+    public DotNetBuildCoreCliTask Build(AdoExpression<string> projects, AdoExpression<bool>? includeNuGetOrg, AdoExpression<string>? arguments = null)
+        => Build(projects, arguments);
 
     /// <summary>
     /// <para>
@@ -161,13 +172,21 @@ public class DotNetTaskBuilder
     /// Example: <c>**/*.csproj;!**/*.Tests.csproj</c>
     /// Argument aliases: <c>searchPatternPack</c>
     /// </param>
-    /// <param name="arguments">Additional arguments</param>
     /// <returns>A new instance of <see cref="DotNetPackCoreCliTask"/> with the specified values.</returns>
-    public DotNetPackCoreCliTask Pack(AdoExpression<string>? packagesToPack, AdoExpression<string>? arguments = null) => new()
+    public DotNetPackCoreCliTask Pack(AdoExpression<string>? packagesToPack = null) => new()
     {
         PackagesToPack = packagesToPack,
-        Arguments = arguments,
     };
+
+    /// <summary>
+    /// Creates the <c>pack</c> command version of the DotNetCoreCLI task.
+    /// </summary>
+    /// <param name="packagesToPack">Pattern to search for csproj or nuspec files to pack.</param>
+    /// <param name="arguments">Ignored. DotNetCoreCLI@2 does not define <c>arguments</c> for the pack command.</param>
+    /// <returns>A new instance of <see cref="DotNetPackCoreCliTask"/> with the specified values.</returns>
+    [Obsolete("DotNetCoreCLI@2 does not define arguments for the pack command. Use BuildProperties, ConfigurationToPack, OutputDir, and other pack-specific properties instead.")]
+    public DotNetPackCoreCliTask Pack(AdoExpression<string>? packagesToPack, AdoExpression<string>? arguments)
+        => Pack(packagesToPack);
 
     /// <summary>
     /// <para>
@@ -177,7 +196,7 @@ public class DotNetTaskBuilder
     /// <code lang="csharp">
     /// Steps =
     /// {
-    ///     Dotnet.Publish("src/*.csproj", true, "-c Release") with
+    ///     Dotnet.PublishProjects("src/*.csproj", "-c Release") with
     ///     {
     ///         ModifyOutputPath = true,
     ///         ZipAfterPublish = true,
@@ -198,7 +217,7 @@ public class DotNetTaskBuilder
     ///   timeoutInMinutes: 30
     /// </code>
     /// </summary>
-    /// <param name="projects">Projects to build</param>
+    /// <param name="projects">Projects to publish. Ignored by DotNetCoreCLI@2 when <paramref name="publishWebProjects"/> is explicitly set to true.</param>
     /// <param name="publishWebProjects">
     /// <para>
     /// If true, the projects property value will be skipped and the task will try to find the web projects in the repository and run the publish command on them.
@@ -213,11 +232,48 @@ public class DotNetTaskBuilder
     /// </param>
     /// <param name="arguments">Additional arguments</param>
     /// <returns>A new instance of <see cref="DotNetPublishCoreCliTask"/> with the specified values.</returns>
-    public DotNetPublishCoreCliTask Publish(AdoExpression<string> projects, AdoExpression<bool>? publishWebProjects = null, AdoExpression<string>? arguments = null) => new()
+    [Obsolete("Use PublishProjects(projects, arguments) or PublishWebProjects(arguments) to match DotNetCoreCLI@2 publish input visibility.")]
+    public DotNetPublishCoreCliTask Publish(AdoExpression<string> projects, AdoExpression<bool>? publishWebProjects = null, AdoExpression<string>? arguments = null)
     {
-        Projects = projects,
+        var task = new DotNetPublishCoreCliTask
+        {
+            Arguments = arguments,
+            PublishWebProjects = publishWebProjects,
+        };
+
+        if (publishWebProjects?.GetDefinitionValue() is not true)
+        {
+            task = task with
+            {
+                Projects = projects,
+            };
+        }
+
+        return task;
+    }
+
+    /// <summary>
+    /// Creates a <c>publish</c> command that publishes the specified project or solution patterns.
+    /// </summary>
+    /// <param name="projects">Projects to publish. The task's <c>publishWebProjects</c> input is set to false.</param>
+    /// <param name="arguments">Additional arguments.</param>
+    /// <returns>A new instance of <see cref="DotNetPublishCoreCliTask"/> with <c>publishWebProjects</c> set to false.</returns>
+    public DotNetPublishCoreCliTask PublishProjects(AdoExpression<string> projects, AdoExpression<string>? arguments = null) => new()
+    {
         Arguments = arguments,
-        PublishWebProjects = publishWebProjects,
+        PublishWebProjects = false,
+        Projects = projects,
+    };
+
+    /// <summary>
+    /// Creates a <c>publish</c> command that lets DotNetCoreCLI@2 discover web projects automatically.
+    /// </summary>
+    /// <param name="arguments">Additional arguments.</param>
+    /// <returns>A new instance of <see cref="DotNetPublishCoreCliTask"/> with <c>publishWebProjects</c> set to true.</returns>
+    public DotNetPublishCoreCliTask PublishWebProjects(AdoExpression<string>? arguments = null) => new()
+    {
+        Arguments = arguments,
+        PublishWebProjects = true,
     };
 
     /// <summary>
@@ -255,13 +311,21 @@ public class DotNetTaskBuilder
     /// Argument aliases: <c>searchPatternPush</c>
     /// </para>
     /// </param>
-    /// <param name="arguments">Additional arguments</param>
     /// <returns>A new instance of <see cref="DotNetPushCoreCliTask"/> with the specified values.</returns>
-    public DotNetPushCoreCliTask Push(AdoExpression<string>? packagesToPush = null, AdoExpression<string>? arguments = null) => new()
+    public DotNetPushCoreCliTask Push(AdoExpression<string>? packagesToPush = null) => new()
     {
         PackagesToPush = packagesToPush,
-        Arguments = arguments,
     };
+
+    /// <summary>
+    /// Creates the push command version of the DotNetCoreCLI task.
+    /// </summary>
+    /// <param name="packagesToPush">The pattern to match or path to nupkg files to be uploaded.</param>
+    /// <param name="arguments">Ignored. DotNetCoreCLI@2 does not define <c>arguments</c> for the push command.</param>
+    /// <returns>A new instance of <see cref="DotNetPushCoreCliTask"/> with the specified values.</returns>
+    [Obsolete("DotNetCoreCLI@2 does not define arguments for the push command.")]
+    public DotNetPushCoreCliTask Push(AdoExpression<string>? packagesToPush, AdoExpression<string>? arguments)
+        => Push(packagesToPush);
 
     /// <summary>
     /// <para>
@@ -323,9 +387,10 @@ public class DotNetTaskBuilder
     /// </summary>
     /// <param name="command">.NET command to call</param>
     /// <param name="arguments">Additional arguments for the call</param>
-    /// <param name="inputs">Additional arguments defined by the DotNetCoreCLI task</param>
+    /// <param name="inputs">Additional arguments defined by the DotNetCoreCLI task.</param>
+    /// <param name="projects">Projects or solutions to pass to the custom command.</param>
     /// <returns>A new instance of <see cref="Step"/> and not something more specific so that user cannot override Inputs</returns>
-    public Step CustomCommand(string command, AdoExpression<string>? arguments = null, TaskInputs? inputs = null)
+    public Step CustomCommand(string command, AdoExpression<string>? arguments = null, TaskInputs? inputs = null, AdoExpression<string>? projects = null)
     {
         var orderedInputs = new TaskInputs()
             {
@@ -344,6 +409,7 @@ public class DotNetTaskBuilder
         {
             Inputs = orderedInputs,
             Arguments = arguments,
+            Projects = projects,
         };
     }
 

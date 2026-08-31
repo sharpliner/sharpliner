@@ -6,9 +6,10 @@
     inputs:
       command: pack
       packagesToPack: src/*.csproj
-      arguments: -c Release
+      buildProperties: RepositoryCommit=$(Build.SourceVersion)
       nobuild: true
       configurationToPack: Release
       includesource: true
       includesymbols: true
       outputDir: {TempPath}staging/
+      verbosityPack: Detailed

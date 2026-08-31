@@ -44,7 +44,7 @@ class TestPipelines : SingleStagePipelineCollection
 
                 Steps =
                 {
-                    DotNet.Build("Sharpliner.slnx", includeNuGetOrg: true)
+                    DotNet.Build("Sharpliner.slnx")
                           .DisplayAs("Build projects"),
 
                     DotNet.Test("Sharpliner.slnx")

@@ -11,4 +11,4 @@
       externalFeedCredentials: feeds/dotnet-7
       noCache: true
       restoreDirectory: .packages
-      verbosityRestore: minimal
+      verbosityRestore: Minimal
