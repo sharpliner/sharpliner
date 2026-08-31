@@ -1,0 +1,18 @@
+﻿task: SqlAzureDacpacDeployment@1
+
+inputs:
+  TaskNameSelector: DacpacTask
+  DeploymentAction: Publish
+  DacpacFile: database.dacpac
+  AdditionalArguments: /p:BlockOnPossibleDataLoss=False
+  DeleteFirewallRule: false
+  azureConnectionType: ConnectedServiceNameARM
+  azureSubscription: azure-service-connection
+  AuthenticationType: server
+  ServerName: server.database.windows.net
+  DatabaseName: database
+  SqlUsername: administrator
+  SqlPassword: $(sqlPassword)
+  IpDetectionMethod: IPAddressRange
+  StartIpAddress: 196.21.30.50
+  EndIpAddress: 196.21.30.65

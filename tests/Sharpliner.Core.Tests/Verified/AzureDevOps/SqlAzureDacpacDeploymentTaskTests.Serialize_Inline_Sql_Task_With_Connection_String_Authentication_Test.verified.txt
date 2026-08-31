@@ -1,0 +1,9 @@
+﻿task: SqlAzureDacpacDeployment@1
+
+inputs:
+  TaskNameSelector: InlineSqlTask
+  DeploymentAction: Publish
+  SqlInline: SELECT 1
+  InlineAdditionalArguments: -OutputSqlErrors
+  AuthenticationType: connectionString
+  ConnectionString: Server=server.database.windows.net;Database=database;
