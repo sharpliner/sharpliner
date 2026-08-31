@@ -64,6 +64,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `DotNetCoreCLI@2` | `DotNet.*` -> `DotNetCoreCliTask` and its `Build`/`Test`/`Pack`/`Publish`/`Push`/`Restore` specializations |
 | `DownloadPipelineArtifact@2` | `Download.Current/FromPipelineResource/SpecificBuild/LatestFromBranch/None` -> `DownloadTask` (`download` step shortcut) |
 | `ExtractFiles@1` | `ExtractFilesTask` |
+| `MSBuild@1` | `MSBuild.Build` -> `MSBuildTask` |
 | `npmAuthenticate@0` | `Npm.Authenticate` -> `NpmAuthenticateTask` |
 | `NuGetAuthenticate@1` | `NuGet.Authenticate` -> `NuGetAuthenticateTask` |
 | `NuGetCommand@2` | `NuGet.*` -> `NuGetCommandTask` and its `Restore`/`Pack`/`Push`/`Custom` specializations |
@@ -100,7 +101,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Index sources and publish symbols | `PublishSymbols@2`, `PublishSymbols@1` | ❌ Missing | No strongly typed model or builder. |
 | Jenkins queue job | `JenkinsQueueJob@2`, `JenkinsQueueJob@1` | ❌ Missing | No strongly typed model or builder. |
 | Maven | `Maven@4`, `Maven@3`, `Maven@2`, `Maven@1` | ❌ Missing | No strongly typed model or builder. |
-| MSBuild | `MSBuild@1` | ❌ Missing | No strongly typed model or builder. |
+| MSBuild | `MSBuild@1` | ✅ Supported | `MSBuild.Build(...)` -> `MSBuildTask`. |
 | Prepare Analysis Configuration | `SonarQubePrepare@8`, `SonarQubePrepare@7`, `SonarQubePrepare@6`, `SonarQubePrepare@5`, `SonarQubePrepare@4` | ⚪ Out of scope | SonarQube tasks ship in a third-party (SonarSource) extension. Sharpliner models such tasks in separate extension packages, see [Marketplace tasks](DefinitionReference.md#marketplace-tasks). |
 | Publish Quality Gate Result | `SonarQubePublish@8`, `SonarQubePublish@7`, `SonarQubePublish@6`, `SonarQubePublish@5`, `SonarQubePublish@4` | ⚪ Out of scope | Third-party SonarSource extension, see `SonarQubePrepare`. |
 | Run Code Analysis | `SonarQubeAnalyze@8`, `SonarQubeAnalyze@7`, `SonarQubeAnalyze@6`, `SonarQubeAnalyze@5`, `SonarQubeAnalyze@4` | ⚪ Out of scope | Third-party SonarSource extension, see `SonarQubePrepare`. |
@@ -278,15 +279,15 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 
 | Category | Total | ✅ Supported | 🟡 Partial | ❌ Missing | ⚪ Out of scope |
 |---|---|---|---|---|---|
-| Build | 28 | 1 | 0 | 20 | 7 |
+| Build | 28 | 2 | 0 | 19 | 7 |
 | Deploy | 50 | 0 | 1 | 43 | 6 |
 | Package | 18 | 3 | 1 | 8 | 6 |
 | Test | 10 | 2 | 0 | 5 | 3 |
 | Tool | 15 | 1 | 0 | 13 | 1 |
 | Utility | 47 | 9 | 0 | 35 | 3 |
-| **Total** | **168** | **16** | **2** | **124** | **26** |
+| **Total** | **168** | **17** | **2** | **123** | **26** |
 
-Sharpliner covers **18 of the 168** official built-in task families (16 fully, 2 partially).
+Sharpliner covers **19 of the 168** official built-in task families (17 fully, 2 partially).
 Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
 library grew from. The **124 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
 Service Fabric) and by tool installers.
@@ -332,7 +333,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `PublishSymbols@2` – Index sources and publish symbols
 - `JenkinsQueueJob@2` – Jenkins queue job
 - `Maven@4` – Maven
-- `MSBuild@1` – MSBuild
 - `VSBuild@1` – Visual Studio build
 - `Xcode@5` – Xcode
 

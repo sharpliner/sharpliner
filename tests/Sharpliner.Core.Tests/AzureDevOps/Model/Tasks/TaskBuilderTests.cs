@@ -341,6 +341,32 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class MSBuildTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        MSBuild.Build("**/*.sln"),
+                        MSBuild.Build("MySolution.sln", platform: "x64", configuration: "Release", msbuildArguments: "/t:Restore;Build", displayName: "Build solution"),
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_MSBuild_Builder_Test()
+    {
+        MSBuildTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class TaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
