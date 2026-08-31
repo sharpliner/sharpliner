@@ -88,6 +88,7 @@ namespace Sharpliner.AzureDevOps
         protected static readonly Sharpliner.AzureDevOps.ResourcesReference resources;
         protected static readonly Sharpliner.AzureDevOps.VariablesReference variables;
         protected AzureDevOpsDefinition() { }
+        protected static Sharpliner.AzureDevOps.Tasks.AdvancedSecurityCodeqlTaskBuilder AdvancedSecurityCodeql { get; }
         protected static Sharpliner.AzureDevOps.Tasks.AzureCliTaskBuilder AzureCli { get; }
         protected static Sharpliner.AzureDevOps.Tasks.BashTaskBuilder Bash { get; }
         protected static Sharpliner.AzureDevOps.Tasks.CheckoutTaskBuilder Checkout { get; }
@@ -1517,6 +1518,21 @@ namespace Sharpliner.AzureDevOps.Tasks
         Continue = 1,
         SilentlyContinue = 2,
         Stop = 3,
+    }
+    public class AdvancedSecurityCodeqlAnalyzeTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AdvancedSecurityCodeqlAnalyzeTask>
+    {
+        public AdvancedSecurityCodeqlAnalyzeTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? WaitForProcessing { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WaitForProcessingInterval { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WaitForProcessingTimeout { get; init; }
+    }
+    public class AdvancedSecurityCodeqlTaskBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.AdvancedSecurityCodeqlAnalyzeTask Analyze { get; }
+        public Sharpliner.AzureDevOps.Tasks.AdvancedSecurityCodeqlAnalyzeTask AnalyzeAndWait(int? waitForProcessingIntervalSeconds = default, int? waitForProcessingTimeoutSeconds = default) { }
     }
     public class ArchiveFilesTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.ArchiveFilesTask>
     {
