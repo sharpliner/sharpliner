@@ -1,0 +1,32 @@
+﻿task: AzureLoadTest@1
+
+displayName: Run load test
+
+inputs:
+  azureSubscription: my-azure-subscription
+  loadTestConfigFile: config/loadtest.yaml
+  resourceGroup: my-resource-group
+  loadTestResource: my-load-test-resource
+  loadTestRunName: run-$(Build.BuildId)
+  loadTestRunDescription: Load test run from $(Build.SourceBranchName)
+  env: |-
+    [
+      {
+        "name": "MYAPP_URL",
+        "value": "$(myAppUrl)"
+      },
+      {
+        "name": "duration_in_sec",
+        "value": "120"
+      }
+    ]
+  secrets: |-
+    [
+      {
+        "name": "API_KEY",
+        "value": "$(apiKeySecret)"
+      }
+    ]
+  overrideParameters: '{"engineInstances":2}'
+  outputVariableName: loadTestRunId
+  waitForCompletion: false
