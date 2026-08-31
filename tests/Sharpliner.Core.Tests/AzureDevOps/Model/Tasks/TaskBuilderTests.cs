@@ -341,6 +341,35 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class SshTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        Ssh.Commands("ssh-service-connection", "cd /home/ubuntu/app", "./deploy.sh"),
+                        Ssh.Script("ssh-service-connection", "scripts/deploy.sh", "--environment prod"),
+                        Ssh.Inline("ssh-service-connection", "set -euo pipefail", "./build.sh"),
+                        Ssh.FromFile("ssh-service-connection", "AzureDevOps/Resources/test-script.sh"),
+                        Ssh.FromResourceFile("ssh-service-connection", "test-script.sh"),
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_Ssh_Builder_Test()
+    {
+        SshTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class TaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()

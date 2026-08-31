@@ -104,6 +104,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Tasks.PublishTaskBuilder Publish { get; }
         protected static Sharpliner.AzureDevOps.Tasks.PwshTaskBuilder Pwsh { get; }
         protected static Sharpliner.AzureDevOps.Tasks.ScriptTaskBuilder Script { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.SshTaskBuilder Ssh { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition And(params Sharpliner.AzureDevOps.InlineCondition[] expressions) { }
         protected static Sharpliner.AzureDevOps.InlineCondition And(params string[] expressions) { }
         protected static Sharpliner.AzureDevOps.InlineCondition And<T>(params Sharpliner.AzureDevOps.InlineCondition[] expressions) { }
@@ -2434,6 +2435,63 @@ namespace Sharpliner.AzureDevOps.Tasks
         public System.Collections.Generic.List<string> Tags { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TargetPath { get; init; }
+    }
+    public class SshCommandsTask : Sharpliner.AzureDevOps.Tasks.SshTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SshCommandsTask>
+    {
+        public SshCommandsTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> sshEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> commands) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Commands { get; init; }
+    }
+    public class SshInlineTask : Sharpliner.AzureDevOps.Tasks.SshTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SshInlineTask>
+    {
+        public SshInlineTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> sshEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> inline) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Inline { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? InterpreterCommand { get; init; }
+    }
+    public enum SshRunOptions
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="commands")]
+        Commands = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="script")]
+        Script = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="inline")]
+        Inline = 2,
+    }
+    public class SshScriptTask : Sharpliner.AzureDevOps.Tasks.SshTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SshScriptTask>
+    {
+        public SshScriptTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> sshEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> scriptPath) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Args { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ScriptPath { get; init; }
+    }
+    public abstract class SshTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SshTask>
+    {
+        protected SshTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> sshEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.SshRunOptions> runOptions) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? EnableRemoteVsoCommands { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? FailOnStdErr { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? InteractiveKeyboardAuthentication { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? InteractiveSession { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ReadyTimeout { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.SshRunOptions>? RunOptions { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SshEndpoint { get; init; }
+    }
+    public class SshTaskBuilder : Sharpliner.Common.Model.Tasks.TaskBuilderBase
+    {
+        public Sharpliner.AzureDevOps.Tasks.SshCommandsTask Commands(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> sshEndpoint, params string[] commands) { }
+        public Sharpliner.AzureDevOps.Tasks.SshInlineTask FromFile(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> sshEndpoint, string path) { }
+        public Sharpliner.AzureDevOps.Tasks.SshInlineTask FromResourceFile(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> sshEndpoint, string resourceFileName) { }
+        public Sharpliner.AzureDevOps.Tasks.SshInlineTask Inline(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> sshEndpoint, params string[] scriptLines) { }
+        public Sharpliner.AzureDevOps.Tasks.SshScriptTask Script(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> sshEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> scriptPath, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? args = null) { }
     }
     public class StepTarget : System.IEquatable<Sharpliner.AzureDevOps.Tasks.StepTarget>
     {

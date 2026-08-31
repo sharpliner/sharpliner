@@ -1,0 +1,10 @@
+﻿task: SSH@0
+
+inputs:
+  sshEndpoint: my-ssh-endpoint
+  runOptions: commands
+  commands: |-
+    cd /var/www
+    ./deploy.sh
+  interactiveSession: true
+  readyTimeout: 30000

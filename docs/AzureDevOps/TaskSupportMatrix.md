@@ -71,6 +71,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `PublishCodeCoverageResults@2` | `PublishCodeCoverageResultsTask` |
 | `PublishPipelineArtifact@1` | `Publish.Pipeline`, `Publish.FileShare` -> `PublishTask` (`publish` step shortcut) |
 | `PublishTestResults@2` | `PublishTestResultsTask` |
+| `SSH@0` | `Ssh.Commands/Script/Inline/FromFile/FromResourceFile` -> `SshCommandsTask`, `SshScriptTask`, `SshInlineTask` |
 | `UniversalPackages@0` | `UniversalPackagesDownloadTask`, `UniversalPackagesPublishTask` |
 | `UseDotNet@2` | `DotNet.Install.*` -> `UseDotNetTask` |
 
@@ -161,7 +162,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Service Fabric Compose deploy | `ServiceFabricComposeDeploy@0` | ❌ Missing | No strongly typed model or builder. |
 | SQL Server database deploy | `SqlDacpacDeploymentOnMachineGroup@0` | ❌ Missing | No strongly typed model or builder. |
 | SQL Server database deploy (Deprecated) | `SqlServerDacpacDeployment@1` | ⚪ Out of scope | Deprecated by Microsoft; superseded by `SqlDacpacDeploymentOnMachineGroup@0`. |
-| SSH | `SSH@0` | ❌ Missing | No strongly typed model or builder. |
+| SSH | `SSH@0` | ✅ Supported | `Ssh.Commands/Script/Inline/FromFile/FromResourceFile` -> `SshCommandsTask`, `SshScriptTask`, `SshInlineTask`. |
 | Windows machine file copy | `WindowsMachineFileCopy@2`, `WindowsMachineFileCopy@1` | ❌ Missing | No strongly typed model or builder. |
 
 ### Package tasks
@@ -380,7 +381,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `ServiceFabricDeploy@1` – Service Fabric application deployment
 - `ServiceFabricComposeDeploy@0` – Service Fabric Compose deploy
 - `SqlDacpacDeploymentOnMachineGroup@0` – SQL Server database deploy
-- `SSH@0` – SSH
 - `WindowsMachineFileCopy@2` – Windows machine file copy
 
 ### Missing package tasks
