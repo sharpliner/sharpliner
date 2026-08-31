@@ -1,0 +1,10 @@
+﻿task: Gradle@4
+
+inputs:
+  gradleWrapperFile: gradlew
+  tasks: build sonar
+  sonarQubeRunAnalysis: true
+  sqGradlePluginVersionChoice: specify
+  sonarQubeGradlePluginVersion: 4.4.1.3373
+  checkstyleAnalysisEnabled: true
+  pmdAnalysisEnabled: true

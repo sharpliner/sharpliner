@@ -1,0 +1,9 @@
+﻿task: Gradle@4
+
+inputs:
+  gradleWrapperFile: gradlew
+  tasks: build
+  javaHomeSelection: Path
+  jdkUserInputPath: $(JAVA_HOME_17_X64)
+  workingDirectory: src/app
+  gradleOptions: -Xmx2048m

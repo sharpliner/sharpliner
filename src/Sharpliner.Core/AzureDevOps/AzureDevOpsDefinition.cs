@@ -338,6 +338,11 @@ public abstract class AzureDevOpsDefinition
     protected static NuGetTaskBuilder NuGet { get; } = new();
 
     /// <summary>
+    /// Creates a Gradle task.
+    /// </summary>
+    protected static GradleTaskBuilder Gradle { get; } = new();
+
+    /// <summary>
     /// Creates an npm task.
     /// </summary>
     protected static NpmTaskBuilder Npm { get; } = new();

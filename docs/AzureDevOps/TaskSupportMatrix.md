@@ -64,6 +64,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `DotNetCoreCLI@2` | `DotNet.*` -> `DotNetCoreCliTask` and its `Build`/`Test`/`Pack`/`Publish`/`Push`/`Restore` specializations |
 | `DownloadPipelineArtifact@2` | `Download.Current/FromPipelineResource/SpecificBuild/LatestFromBranch/None` -> `DownloadTask` (`download` step shortcut) |
 | `ExtractFiles@1` | `ExtractFilesTask` |
+| `Gradle@4` | `Gradle.*` -> `GradleTask` |
 | `npmAuthenticate@0` | `Npm.Authenticate` -> `NpmAuthenticateTask` |
 | `NuGetAuthenticate@1` | `NuGet.Authenticate` -> `NuGetAuthenticateTask` |
 | `NuGetCommand@2` | `NuGet.*` -> `NuGetCommandTask` and its `Restore`/`Pack`/`Push`/`Custom` specializations |
@@ -94,7 +95,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Docker Compose | `DockerCompose@1`, `DockerCompose@0` | ❌ Missing | No strongly typed model or builder. |
 | Download GitHub NuGet | `DownloadGitHubNugetPackage@1` | ⚪ Out of scope | Deprecated by Microsoft; superseded by `NuGetCommand@2`/`DotNetCoreCLI@2` with a GitHub service connection, both of which are supported. |
 | Go | `Go@0` | ❌ Missing | No strongly typed model or builder. |
-| Gradle | `Gradle@4`, `Gradle@3`, `Gradle@2`, `Gradle@1` | ❌ Missing | No strongly typed model or builder. |
+| Gradle | `Gradle@4`, `Gradle@3`, `Gradle@2`, `Gradle@1` | ✅ Supported | `Gradle.*` builder + `GradleTask`. Only the current `@4` major is modelled; superseded `@3`/`@2`/`@1` are intentionally not modelled. |
 | Grunt | `Grunt@0` | ❌ Missing | No strongly typed model or builder. |
 | gulp | `gulp@1`, `gulp@0` | ❌ Missing | No strongly typed model or builder. |
 | Index sources and publish symbols | `PublishSymbols@2`, `PublishSymbols@1` | ❌ Missing | No strongly typed model or builder. |
@@ -278,15 +279,15 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 
 | Category | Total | ✅ Supported | 🟡 Partial | ❌ Missing | ⚪ Out of scope |
 |---|---|---|---|---|---|
-| Build | 28 | 1 | 0 | 20 | 7 |
+| Build | 28 | 2 | 0 | 19 | 7 |
 | Deploy | 50 | 0 | 1 | 43 | 6 |
 | Package | 18 | 3 | 1 | 8 | 6 |
 | Test | 10 | 2 | 0 | 5 | 3 |
 | Tool | 15 | 1 | 0 | 13 | 1 |
 | Utility | 47 | 9 | 0 | 35 | 3 |
-| **Total** | **168** | **16** | **2** | **124** | **26** |
+| **Total** | **168** | **17** | **2** | **123** | **26** |
 
-Sharpliner covers **18 of the 168** official built-in task families (16 fully, 2 partially).
+Sharpliner covers **19 of the 168** official built-in task families (17 fully, 2 partially).
 Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
 library grew from. The **124 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
 Service Fabric) and by tool installers.
@@ -326,7 +327,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `Docker@2` – Docker
 - `DockerCompose@1` – Docker Compose
 - `Go@0` – Go
-- `Gradle@4` – Gradle
 - `Grunt@0` – Grunt
 - `gulp@1` – gulp
 - `PublishSymbols@2` – Index sources and publish symbols

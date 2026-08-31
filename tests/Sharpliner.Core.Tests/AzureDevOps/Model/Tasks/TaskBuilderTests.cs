@@ -459,6 +459,37 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class GradleTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        Gradle.Build("clean build", displayName: "Gradle build"),
+                        Gradle.Test("clean test", testRunTitle: "Gradle tests"),
+                        Gradle.UseJdkVersion("build", jdkVersion: "1.17", jdkArchitecture: JdkArchitecture.X64),
+                        Gradle.UseJdkPath("$(JAVA_HOME_17_X64)", "publish"),
+                        Gradle.SonarQubeAnalysis("build", pluginVersionChoice: GradlePluginVersionChoice.Build),
+                        Gradle.StaticAnalysis("check", checkstyle: true, pmd: true),
+                        Gradle.SpotBugsAnalysis("check", pluginVersion: "4.8.3"),
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_Gradle_Builders_Test()
+    {
+        GradleTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class NpmTaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
