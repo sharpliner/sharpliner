@@ -89,6 +89,7 @@ namespace Sharpliner.AzureDevOps
         protected static readonly Sharpliner.AzureDevOps.VariablesReference variables;
         protected AzureDevOpsDefinition() { }
         protected static Sharpliner.AzureDevOps.Tasks.AzureCliTaskBuilder AzureCli { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentTaskBuilder AzureResourceManagerTemplateDeployment { get; }
         protected static Sharpliner.AzureDevOps.Tasks.BashTaskBuilder Bash { get; }
         protected static Sharpliner.AzureDevOps.Tasks.CheckoutTaskBuilder Checkout { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder DotNet { get; }
@@ -1621,6 +1622,100 @@ namespace Sharpliner.AzureDevOps.Tasks
         protected void SetProperty(string name, int? value) { }
         protected void SetProperty(string name, string? value) { }
         protected void SetProperty<T>(string name, Sharpliner.AzureDevOps.Expressions.AdoExpression<T>? value) { }
+    }
+    public enum AzureResourceManagerTemplateDeploymentAction
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="Create Or Update Resource Group")]
+        CreateOrUpdateResourceGroup = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="DeleteRG")]
+        DeleteResourceGroup = 1,
+    }
+    public abstract class AzureResourceManagerTemplateDeploymentCreateOrUpdateTask : Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentCreateOrUpdateTask>
+    {
+        protected AzureResourceManagerTemplateDeploymentCreateOrUpdateTask(Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentScope deploymentScope, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureResourceManagerConnection, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> location, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? subscription = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? resourceGroupName = null) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? AddSpnToEnvironment { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentMode>? DeploymentMode { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DeploymentName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DeploymentOutputs { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Location { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? OverrideParameters { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentTemplateLocation>? TemplateLocation { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? UseWithoutJSON { get; init; }
+    }
+    public class AzureResourceManagerTemplateDeploymentDeleteResourceGroupTask : Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentDeleteResourceGroupTask> { }
+    public class AzureResourceManagerTemplateDeploymentLinkedArtifactTask : Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentCreateOrUpdateTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentLinkedArtifactTask>
+    {
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Template { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TemplateParameters { get; init; }
+    }
+    public enum AzureResourceManagerTemplateDeploymentMode
+    {
+        Incremental = 0,
+        Complete = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="Validation")]
+        Validation = 2,
+    }
+    public class AzureResourceManagerTemplateDeploymentResourceGroupBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentTemplateSourceBuilder CreateOrUpdate(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> location) { }
+        public Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentDeleteResourceGroupTask Delete() { }
+    }
+    public enum AzureResourceManagerTemplateDeploymentScope
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="Management Group")]
+        ManagementGroup = 0,
+        Subscription = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="Resource Group")]
+        ResourceGroup = 2,
+    }
+    public abstract class AzureResourceManagerTemplateDeploymentTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentTask>
+    {
+        protected AzureResourceManagerTemplateDeploymentTask(Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentScope deploymentScope, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureResourceManagerConnection, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? subscription = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? resourceGroupName = null) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentAction>? Action { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureResourceManagerConnection { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentScope>? DeploymentScope { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ResourceGroupName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Subscription { get; init; }
+    }
+    public class AzureResourceManagerTemplateDeploymentTaskBuilder : Sharpliner.Common.Model.Tasks.TaskBuilderBase
+    {
+        public Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentTemplateSourceBuilder ManagementGroup(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureResourceManagerConnection, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> location) { }
+        public Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentResourceGroupBuilder ResourceGroup(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureResourceManagerConnection, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> subscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> resourceGroupName) { }
+        public Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentTemplateSourceBuilder Subscription(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureResourceManagerConnection, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> subscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> location) { }
+    }
+    public enum AzureResourceManagerTemplateDeploymentTemplateLocation
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="Linked artifact")]
+        LinkedArtifact = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="URL of the file")]
+        UrlOfTheFile = 1,
+    }
+    public class AzureResourceManagerTemplateDeploymentTemplateSourceBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentLinkedArtifactTask LinkedArtifact(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> template, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? templateParameters = null) { }
+        public Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentUrlTask Url(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> templateUrl, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? templateParametersUrl = null) { }
+    }
+    public class AzureResourceManagerTemplateDeploymentUrlTask : Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentCreateOrUpdateTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureResourceManagerTemplateDeploymentUrlTask>
+    {
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TemplateParametersUrl { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TemplateUrl { get; init; }
     }
     public class BashFileTask : Sharpliner.AzureDevOps.Tasks.BashTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.BashFileTask>, YamlDotNet.Serialization.IYamlConvertible
     {
