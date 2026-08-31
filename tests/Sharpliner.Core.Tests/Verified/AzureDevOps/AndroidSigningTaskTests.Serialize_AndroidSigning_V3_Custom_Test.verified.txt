@@ -1,0 +1,15 @@
+﻿task: AndroidSigning@3
+
+inputs:
+  files: '**/release/*.apk'
+  apksign: true
+  keystoreFile: android-release.keystore
+  keystorePass: $(keystorePassword)
+  keystoreAlias: release
+  keyPass: $(keyPassword)
+  apksignerVersion: 35.0.0
+  apksignerArguments: --verbose --v4-signing-enabled false
+  apksignerLocation: /opt/android/sdk/build-tools/35.0.0/apksigner
+  zipalign: true
+  zipalignVersion: 35.0.0
+  zipalignLocation: /opt/android/sdk/build-tools/35.0.0/zipalign

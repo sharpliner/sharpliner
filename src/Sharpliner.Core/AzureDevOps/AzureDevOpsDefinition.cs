@@ -342,6 +342,11 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static NpmTaskBuilder Npm { get; } = new();
 
+    /// <summary>
+    /// Creates an Android signing task.
+    /// </summary>
+    protected static AndroidSigningTaskBuilder AndroidSigning { get; } = new();
+
     #endregion
 
     #region Pipeline member shorthands

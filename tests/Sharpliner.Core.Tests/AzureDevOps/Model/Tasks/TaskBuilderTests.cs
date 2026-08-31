@@ -488,4 +488,47 @@ public class TaskBuilderTests
 
         return Verify(pipeline.Serialize());
     }
+
+    private class AndroidSigningTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        AndroidSigning.V3.ForApkFiles("**/*.apk")
+                            .SignWithKeystore("my-release.keystore") with
+                            {
+                                KeystorePass = "$(keystorePassword)",
+                                KeystoreAlias = "release",
+                                KeyPass = "$(keyPassword)",
+                                Zipalign = true,
+                            },
+#pragma warning disable CS0618
+                        AndroidSigning.V2.ForApkFiles("**/legacy/*.apk")
+                            .WithoutSigning() with
+                            {
+                                Zipalign = false,
+                            },
+#pragma warning restore CS0618
+                        AndroidSigning.V3.ForApkFiles().WithoutSigning() with
+                        {
+                            Zipalign = false
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_AndroidSigning_Builder_Test()
+    {
+        AndroidSigningTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
 }

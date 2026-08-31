@@ -1,0 +1,24 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: AndroidSigning@3
+    inputs:
+      files: '**/*.apk'
+      apksign: true
+      keystoreFile: my-release.keystore
+      keystorePass: $(keystorePassword)
+      keystoreAlias: release
+      keyPass: $(keyPassword)
+      zipalign: true
+
+  - task: AndroidSigning@2
+    inputs:
+      files: '**/legacy/*.apk'
+      jarsign: false
+      zipalign: false
+
+  - task: AndroidSigning@3
+    inputs:
+      files: '**/*.apk'
+      apksign: false
+      zipalign: false

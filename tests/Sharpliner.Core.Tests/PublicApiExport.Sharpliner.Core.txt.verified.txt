@@ -88,6 +88,7 @@ namespace Sharpliner.AzureDevOps
         protected static readonly Sharpliner.AzureDevOps.ResourcesReference resources;
         protected static readonly Sharpliner.AzureDevOps.VariablesReference variables;
         protected AzureDevOpsDefinition() { }
+        protected static Sharpliner.AzureDevOps.Tasks.AndroidSigningTaskBuilder AndroidSigning { get; }
         protected static Sharpliner.AzureDevOps.Tasks.AzureCliTaskBuilder AzureCli { get; }
         protected static Sharpliner.AzureDevOps.Tasks.BashTaskBuilder Bash { get; }
         protected static Sharpliner.AzureDevOps.Tasks.CheckoutTaskBuilder Checkout { get; }
@@ -1517,6 +1518,117 @@ namespace Sharpliner.AzureDevOps.Tasks
         Continue = 1,
         SilentlyContinue = 2,
         Stop = 3,
+    }
+    public class AndroidSigningTask : Sharpliner.AzureDevOps.Tasks.AndroidSigningTaskV3, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AndroidSigningTask>
+    {
+        public AndroidSigningTask() { }
+    }
+    public class AndroidSigningTaskBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.AndroidSigningV2Builder V2 { get; }
+        public Sharpliner.AzureDevOps.Tasks.AndroidSigningV3Builder V3 { get; }
+    }
+    [System.Obsolete("AndroidSigning@2 is deprecated in Azure DevOps. Prefer AndroidSigning@3.")]
+    public class AndroidSigningTaskV2 : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AndroidSigningTaskV2>
+    {
+        public AndroidSigningTaskV2() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string> ApkFiles { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string> Files { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool> JarSign { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string> JarsignerArguments { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? JarsignerKeyPassword { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? JarsignerKeystoreAlias { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? JarsignerKeystoreFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? JarsignerKeystorePassword { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KeyPass { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KeystoreAlias { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KeystoreFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KeystorePass { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool> Zipalign { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ZipalignFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ZipalignLocation { get; init; }
+    }
+    public class AndroidSigningTaskV3 : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AndroidSigningTaskV3>
+    {
+        public AndroidSigningTaskV3() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string> ApkFiles { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool> ApkSign { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string> ApksignerArguments { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ApksignerFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ApksignerKeyPassword { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ApksignerKeystoreAlias { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ApksignerKeystoreFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ApksignerKeystorePassword { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ApksignerLocation { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string> ApksignerVersion { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string> Files { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KeyPass { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KeystoreAlias { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KeystoreFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KeystorePass { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool> Zipalign { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ZipalignFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ZipalignLocation { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string> ZipalignVersion { get; init; }
+    }
+    public class AndroidSigningV2Builder
+    {
+        public AndroidSigningV2Builder() { }
+        [System.Obsolete("AndroidSigning@2 is deprecated in Azure DevOps. Prefer AndroidSigning@3.")]
+        public Sharpliner.AzureDevOps.Tasks.AndroidSigningV2ConfigurationBuilder ForApkFiles(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? files = null) { }
+    }
+    public class AndroidSigningV2ConfigurationBuilder
+    {
+        public AndroidSigningV2ConfigurationBuilder(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> files) { }
+        [System.Obsolete("AndroidSigning@2 is deprecated in Azure DevOps. Prefer AndroidSigning@3.")]
+        public Sharpliner.AzureDevOps.Tasks.AndroidSigningTaskV2 SignWithKeystore(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> keystoreFile) { }
+        [System.Obsolete("AndroidSigning@2 is deprecated in Azure DevOps. Prefer AndroidSigning@3.")]
+        public Sharpliner.AzureDevOps.Tasks.AndroidSigningTaskV2 WithoutSigning() { }
+    }
+    public class AndroidSigningV3Builder
+    {
+        public AndroidSigningV3Builder() { }
+        public Sharpliner.AzureDevOps.Tasks.AndroidSigningV3ConfigurationBuilder ForApkFiles(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? files = null) { }
+    }
+    public class AndroidSigningV3ConfigurationBuilder
+    {
+        public AndroidSigningV3ConfigurationBuilder(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> files) { }
+        public Sharpliner.AzureDevOps.Tasks.AndroidSigningTaskV3 SignWithKeystore(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> keystoreFile) { }
+        public Sharpliner.AzureDevOps.Tasks.AndroidSigningTaskV3 WithoutSigning() { }
     }
     public class ArchiveFilesTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.ArchiveFilesTask>
     {

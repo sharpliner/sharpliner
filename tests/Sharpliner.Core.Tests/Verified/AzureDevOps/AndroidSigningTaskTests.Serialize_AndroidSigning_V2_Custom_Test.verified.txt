@@ -1,0 +1,12 @@
+﻿task: AndroidSigning@2
+
+inputs:
+  files: '**/legacy/*.apk'
+  jarsign: true
+  keystoreFile: legacy-release.keystore
+  keystorePass: $(legacyKeystorePassword)
+  keystoreAlias: legacy
+  keyPass: $(legacyKeyPassword)
+  jarsignerArguments: -verbose -sigalg SHA256withRSA -digestalg SHA-256
+  zipalign: true
+  zipalignLocation: /opt/android/sdk/build-tools/31.0.0/zipalign

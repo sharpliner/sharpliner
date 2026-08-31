@@ -1,0 +1,6 @@
+﻿task: AndroidSigning@3
+
+inputs:
+  files: '**/*.apk'
+  apksign: false
+  zipalign: false

@@ -1,0 +1,1 @@
+﻿task: AndroidSigning@3
