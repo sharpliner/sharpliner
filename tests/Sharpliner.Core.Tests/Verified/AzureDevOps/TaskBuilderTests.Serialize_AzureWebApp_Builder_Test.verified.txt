@@ -1,0 +1,27 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: AzureWebApp@1
+    inputs:
+      azureSubscription: my-azure-connection
+      appType: webApp
+      appName: my-windows-app
+      package: $(System.DefaultWorkingDirectory)/**/*.zip
+      deploymentMethod: zipDeploy
+
+  - task: AzureWebApp@1
+    inputs:
+      azureSubscription: my-azure-connection
+      appType: webApp
+      appName: my-windows-app
+      package: $(System.DefaultWorkingDirectory)/**/*.war
+      customDeployFolder: ROOT
+
+  - task: AzureWebApp@1
+    inputs:
+      azureSubscription: my-azure-connection
+      appType: webAppLinux
+      appName: my-linux-app
+      package: $(System.DefaultWorkingDirectory)/**/*.zip
+      runtimeStack: NODE|22-lts
+      startUpCommand: npm run start

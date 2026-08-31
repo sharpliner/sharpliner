@@ -1,0 +1,10 @@
+﻿task: AzureWebApp@1
+
+inputs:
+  azureSubscription: my-azure-connection
+  appType: webAppLinux
+  appName: my-linux-app
+  package: $(System.DefaultWorkingDirectory)/**/*.war
+  runtimeStack: JAVA|17-java17
+  startUpCommand: java -jar app.war
+  customDeployFolder: ROOT

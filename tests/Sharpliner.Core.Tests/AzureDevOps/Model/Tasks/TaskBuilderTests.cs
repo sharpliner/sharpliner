@@ -341,6 +341,43 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class AzureWebAppTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        AzureWebApp.Windows("my-azure-connection", "my-windows-app").Package("$(System.DefaultWorkingDirectory)/**/*.zip") with
+                        {
+                            DeploymentMethod = AzureWebAppDeploymentMethod.ZipDeploy,
+                        },
+                        AzureWebApp.Windows("my-azure-connection", "my-windows-app").War("$(System.DefaultWorkingDirectory)/**/*.war") with
+                        {
+                            CustomDeployFolder = "ROOT",
+                        },
+                        AzureWebApp.Linux("my-azure-connection", "my-linux-app").Package("$(System.DefaultWorkingDirectory)/**/*.zip") with
+                        {
+                            RuntimeStack = AzureWebAppRuntimeStack.Node22Lts,
+                            StartUpCommand = "npm run start",
+                        },
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_AzureWebApp_Builder_Test()
+    {
+        AzureWebAppTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class TaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()

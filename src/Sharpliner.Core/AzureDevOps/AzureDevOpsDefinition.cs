@@ -302,6 +302,11 @@ public abstract class AzureDevOpsDefinition
     protected static AzureCliTaskBuilder AzureCli { get; } = new();
 
     /// <summary>
+    /// Creates an Azure Web App deployment task.
+    /// </summary>
+    protected static AzureWebAppTaskBuilder AzureWebApp { get; } = new();
+
+    /// <summary>
     /// Creates a generic pipeline task.
     /// </summary>
     protected static AzureDevOpsTask Task(string taskName, string? displayName = null)
