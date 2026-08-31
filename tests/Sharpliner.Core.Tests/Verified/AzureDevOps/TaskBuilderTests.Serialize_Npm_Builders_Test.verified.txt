@@ -1,4 +1,4 @@
-jobs:
+﻿jobs:
 - job: test
   steps:
   - task: npmAuthenticate@0
@@ -9,6 +9,12 @@ jobs:
     inputs:
       workingFile: packages/mypackage/.npmrc
       customEndpoint: MyServiceConnection,AnotherServiceConnection
+
+  - task: npmAuthenticate@0
+    inputs:
+      workingFile: .npmrc
+      azureDevOpsServiceConnection: MyAzureDevOpsServiceConnection
+      feedUrl: https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/npm/registry/
 
   - task: npmAuthenticate@0
     inputs:

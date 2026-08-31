@@ -1970,7 +1970,11 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public NpmAuthenticateTask(string workingFile) { }
         [YamlDotNet.Serialization.YamlIgnore]
+        public string? AzureDevOpsServiceConnection { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
         public string[]? CustomEndpoints { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? FeedUrl { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public string WorkingFile { get; init; }
     }
@@ -1978,6 +1982,7 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         public NpmTaskBuilder() { }
         public Sharpliner.AzureDevOps.Tasks.NpmAuthenticateTask Authenticate(string workingFile, string[]? customEndpoints = null) { }
+        public Sharpliner.AzureDevOps.Tasks.NpmAuthenticateTask Authenticate(string workingFile, string azureDevOpsServiceConnection, string feedUrl) { }
     }
     public class NuGetAuthenticateTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetAuthenticateTask>
     {
@@ -2012,6 +2017,7 @@ namespace Sharpliner.AzureDevOps.Tasks
     public abstract class NuGetPackCommandTask : Sharpliner.AzureDevOps.Tasks.NuGetCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetPackCommandTask>
     {
         public NuGetPackCommandTask(string versioningScheme) { }
+        [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? BasePath { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public System.Collections.Generic.Dictionary<string, string>? BuildProperties { get; init; }
@@ -2068,9 +2074,13 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public string[] PackagesToPush { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? RequestTimeout { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TargetFeed { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TargetFeedCredentials { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.NuGetVerbosity>? VerbosityPush { get; init; }
     }
     public class NuGetPushExternalCommandTask : Sharpliner.AzureDevOps.Tasks.NuGetPushCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetPushExternalCommandTask>
     {
@@ -2098,9 +2108,15 @@ namespace Sharpliner.AzureDevOps.Tasks
     {
         protected NuGetRestoreCommandTask(string feedsToUse) { }
         [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? DisableParallelProcessing { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? NoCache { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RestoreDirectory { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RestoreSolution { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.NuGetVerbosity>? VerbosityRestore { get; init; }
     }
     public class NuGetRestoreConfigCommandTask : Sharpliner.AzureDevOps.Tasks.NuGetRestoreCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetRestoreConfigCommandTask>
     {
@@ -2128,9 +2144,17 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.NuGetAuthenticateTask Authenticate(string[]? nuGetServiceConnections = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? forceReinstallCredentialProvider = null) { }
         public Sharpliner.AzureDevOps.Tasks.NuGetCustomCommandTask Custom(string arguments) { }
     }
+    public enum NuGetVerbosity
+    {
+        Quiet = 0,
+        Normal = 1,
+        Detailed = 2,
+    }
     public enum PackTimezoneType
     {
+        [YamlDotNet.Serialization.YamlMember(Alias="utc")]
         UTC = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="local")]
         Local = 1,
     }
     public enum PackVerbosity

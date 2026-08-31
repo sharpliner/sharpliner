@@ -1,0 +1,6 @@
+﻿task: npmAuthenticate@0
+
+inputs:
+  workingFile: .npmrc
+  azureDevOpsServiceConnection: MyAzureDevOpsServiceConnection
+  feedUrl: https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/npm/registry/

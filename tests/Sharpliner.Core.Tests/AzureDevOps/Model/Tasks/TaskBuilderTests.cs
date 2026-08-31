@@ -471,6 +471,7 @@ public class TaskBuilderTests
                     {
                         Npm.Authenticate(".npmrc"),
                         Npm.Authenticate("packages/mypackage/.npmrc", ["MyServiceConnection", "AnotherServiceConnection"]),
+                        Npm.Authenticate(".npmrc", "MyAzureDevOpsServiceConnection", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/npm/registry/"),
                         Npm.Authenticate("empty/.npmrc", []),
                         Npm.Authenticate("whitespace/.npmrc", [" MyServiceConnection ", "", " AnotherServiceConnection "]),
                         new NpmAuthenticateTask("null/.npmrc") with { CustomEndpoints = null },
