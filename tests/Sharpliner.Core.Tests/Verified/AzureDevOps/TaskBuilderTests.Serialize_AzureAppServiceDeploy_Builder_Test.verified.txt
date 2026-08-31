@@ -1,0 +1,45 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: AzureRmWebAppDeployment@5
+    displayName: Deploy web app
+    inputs:
+      ConnectionType: AzureRM
+      azureSubscription: my-subscription
+      WebAppName: my-app
+      appType: webApp
+      packageForLinux: $(Build.ArtifactStagingDirectory)/**/*.zip
+
+  - task: AzureRmWebAppDeployment@5
+    inputs:
+      ConnectionType: AzureRM
+      azureSubscription: my-subscription
+      WebAppName: my-linux-app
+      appType: webAppLinux
+      packageForLinux: $(Build.ArtifactStagingDirectory)/**/*.zip
+      RuntimeStack: DOTNETCORE|8.0
+
+  - task: AzureRmWebAppDeployment@5
+    inputs:
+      ConnectionType: AzureRM
+      azureSubscription: my-subscription
+      WebAppName: my-api-app
+      appType: apiApp
+      packageForLinux: $(Build.ArtifactStagingDirectory)/**/*.zip
+
+  - task: AzureRmWebAppDeployment@5
+    inputs:
+      ConnectionType: AzureRM
+      azureSubscription: my-subscription
+      WebAppName: my-container-app
+      appType: webAppContainer
+      DockerNamespace: myregistry.azurecr.io
+      DockerRepository: nginx
+      DockerImageTag: latest
+
+  - task: AzureRmWebAppDeployment@5
+    inputs:
+      ConnectionType: PublishProfile
+      PublishProfilePath: $(System.DefaultWorkingDirectory)/**/*.pubxml
+      PublishProfilePassword: $(PublishProfilePassword)
+      packageForLinux: $(Build.ArtifactStagingDirectory)/**/*.zip
