@@ -341,6 +341,33 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class AdvancedSecurityTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        AdvancedSecurity.Codeql.Init(CodeqlLanguage.CSharp),
+                        AdvancedSecurity.Codeql.InitWithoutBuild(CodeqlLanguage.Cpp, CodeqlLanguage.Python),
+                        AdvancedSecurity.Codeql.InitWithAutomaticInstall([CodeqlLanguage.Java], cleanupOldAutomaticInstalls: true)
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_AdvancedSecurity_Builder_Test()
+    {
+        AdvancedSecurityTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class TaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()

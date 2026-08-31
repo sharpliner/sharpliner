@@ -187,6 +187,24 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
         return Verify(yaml);
     }
 
+    [Fact]
+    public Task AdvancedSecurityCodeql_Test()
+    {
+        AdoExpressionList<Step> tasks =
+        [
+#region advanced-security-codeql-tasks-code
+            AdvancedSecurity.Codeql.Init(CodeqlLanguage.CSharp, CodeqlLanguage.JavaScript) with
+            {
+                QuerySuite = CodeqlQuerySuite.SecurityExtended,
+                BuildType = CodeqlBuildType.None,
+                EnableAutomaticCodeQLInstall = true,
+            }
+#endregion
+        ];
+
+        return Verify(SharplinerSerializer.Serialize(tasks));
+    }
+
     class PipelineVariables : SingleStagePipelineDefinition
     {
         public override string TargetFile => "pipeline-variables.yml";
