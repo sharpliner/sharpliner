@@ -1,0 +1,9 @@
+﻿task: AzurePowerShell@5
+
+inputs:
+  azureSubscription: connectedServiceNameARM
+  ScriptType: InlineScript
+  Inline: Get-AzResourceGroup
+  errorActionPreference: silentlyContinue
+  azurePowerShellVersion: LatestVersion
+  pwsh: true

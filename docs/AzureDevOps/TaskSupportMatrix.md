@@ -57,6 +57,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 |---|---|
 | `ArchiveFiles@2` | `ArchiveFilesTask` |
 | `AzureCLI@2` | `AzureCli.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliTask`, `AzureCliFileTask` |
+| `AzurePowerShell@5`, `AzurePowerShell@4` | `AzurePowerShell.Inline/File/FromFile/FromResourceFile` -> `InlineAzurePowerShellTask`, `AzurePowerShellFileTask`, `InlineAzurePowerShellV4Task`, `AzurePowerShellV4FileTask` |
 | `Bash@3` | `Bash.Inline/File/FromFile/FromResourceFile` -> `InlineBashTask`, `BashFileTask` (`bash` step shortcut) |
 | `CmdLine@2` | `Script.Inline/FromFile/FromResourceFile` -> `ScriptTask` (`script` step shortcut) |
 | `CopyFiles@2` | `CopyFilesTask` |
@@ -133,7 +134,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Azure Functions for container | `AzureFunctionAppContainer@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure Key Vault | `AzureKeyVault@2`, `AzureKeyVault@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure Monitor alerts (Deprecated) | `AzureMonitorAlerts@0` | ⚪ Out of scope | Deprecated by Microsoft (classic Azure Monitor alerts). |
-| Azure PowerShell | `AzurePowerShell@5`, `AzurePowerShell@4`, `AzurePowerShell@3`, `AzurePowerShell@2`, `AzurePowerShell@1` | ❌ Missing | No strongly typed model or builder. |
+| Azure PowerShell | `AzurePowerShell@5`, `AzurePowerShell@4`, `AzurePowerShell@3`, `AzurePowerShell@2`, `AzurePowerShell@1` | ✅ Supported | `AzurePowerShell.Inline/File/FromFile/FromResourceFile` builders emit `AzurePowerShell@5`; `InlineAzurePowerShellV4Task`/`AzurePowerShellV4FileTask` emit `AzurePowerShell@4`. The `@3`, `@2` and `@1` majors are deprecated by Microsoft and are not modelled. |
 | Azure resource group deployment | `AzureResourceGroupDeployment@2`, `AzureResourceGroupDeployment@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure Spring Apps | `AzureSpringCloud@0` | ❌ Missing | No strongly typed model or builder. |
 | Azure SQL Database deployment | `SqlAzureDacpacDeployment@1` | ❌ Missing | No strongly typed model or builder. |
@@ -310,7 +311,7 @@ When picking one up, a contribution is expected to contain:
 - an update of this document and of the [definition reference](DefinitionReference.md).
 
 Good candidates to start with, as they are the most commonly used ones in .NET pipelines, are `Cache@2`,
-`Docker@2`, `PublishBuildArtifacts@1`, `DownloadBuildArtifacts@1`, `AzureKeyVault@2`, `AzurePowerShell@5`,
+`Docker@2`, `PublishBuildArtifacts@1`, `DownloadBuildArtifacts@1`, `AzureKeyVault@2`,
 `Npm@1` and `VSTest@3`.
 
 ### Missing build tasks
@@ -355,7 +356,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `AzureFunctionApp@2` – Azure Functions Deploy
 - `AzureFunctionAppContainer@1` – Azure Functions for container
 - `AzureKeyVault@2` – Azure Key Vault
-- `AzurePowerShell@5` – Azure PowerShell
 - `AzureResourceGroupDeployment@2` – Azure resource group deployment
 - `AzureSpringCloud@0` – Azure Spring Apps
 - `SqlAzureDacpacDeployment@1` – Azure SQL Database deployment

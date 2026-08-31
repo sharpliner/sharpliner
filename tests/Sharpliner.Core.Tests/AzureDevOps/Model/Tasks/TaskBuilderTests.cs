@@ -341,6 +341,34 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class AzurePowerShellTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        AzurePowerShell.File("connectedServiceNameARM", "foo.ps1"),
+                        AzurePowerShell.FromFile("connectedServiceNameARM", "AzureDevOps/Resources/Test-Script.ps1"),
+                        AzurePowerShell.FromResourceFile("connectedServiceNameARM", "Test-Script.ps1"),
+                        AzurePowerShell.Inline("connectedServiceNameARM", displayName: null, "Write-Host \"test\"")
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_AzurePowerShell_Builder_Test()
+    {
+        AzurePowerShellTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class TaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()

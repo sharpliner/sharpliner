@@ -1,0 +1,7 @@
+﻿task: AzurePowerShell@4
+
+inputs:
+  azureSubscription: connectedServiceNameARM
+  ScriptType: InlineScript
+  Inline: Get-AzResourceGroup
+  RestrictContextToCurrentTask: true

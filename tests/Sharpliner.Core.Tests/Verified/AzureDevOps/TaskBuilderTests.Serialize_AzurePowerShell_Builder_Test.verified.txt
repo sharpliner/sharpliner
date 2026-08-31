@@ -1,0 +1,30 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: AzurePowerShell@5
+    inputs:
+      azureSubscription: connectedServiceNameARM
+      ScriptType: FilePath
+      ScriptPath: foo.ps1
+
+  - task: AzurePowerShell@5
+    inputs:
+      azureSubscription: connectedServiceNameARM
+      ScriptType: InlineScript
+      Inline: |+
+        Set-ErrorActionPreference Stop
+        Write-Host "Lorem ipsum dolor sit amet"
+
+  - task: AzurePowerShell@5
+    inputs:
+      azureSubscription: connectedServiceNameARM
+      ScriptType: InlineScript
+      Inline: |+
+        Set-ErrorActionPreference Stop
+        Write-Host "Lorem ipsum dolor sit amet"
+
+  - task: AzurePowerShell@5
+    inputs:
+      azureSubscription: connectedServiceNameARM
+      ScriptType: InlineScript
+      Inline: Write-Host "test"

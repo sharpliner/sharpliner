@@ -89,6 +89,7 @@ namespace Sharpliner.AzureDevOps
         protected static readonly Sharpliner.AzureDevOps.VariablesReference variables;
         protected AzureDevOpsDefinition() { }
         protected static Sharpliner.AzureDevOps.Tasks.AzureCliTaskBuilder AzureCli { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.AzurePowerShellTaskBuilder AzurePowerShell { get; }
         protected static Sharpliner.AzureDevOps.Tasks.BashTaskBuilder Bash { get; }
         protected static Sharpliner.AzureDevOps.Tasks.CheckoutTaskBuilder Checkout { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder DotNet { get; }
@@ -1622,6 +1623,64 @@ namespace Sharpliner.AzureDevOps.Tasks
         protected void SetProperty(string name, string? value) { }
         protected void SetProperty<T>(string name, Sharpliner.AzureDevOps.Expressions.AdoExpression<T>? value) { }
     }
+    public class AzurePowerShellFileTask : Sharpliner.AzureDevOps.Tasks.AzurePowerShellTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzurePowerShellFileTask>
+    {
+        public AzurePowerShellFileTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> scriptPath) { }
+        protected AzurePowerShellFileTask(string task, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> scriptPath) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ScriptArguments { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ScriptPath { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? ValidateScriptSignature { get; init; }
+    }
+    public enum AzurePowerShellScriptType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="FilePath")]
+        FilePath = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="InlineScript")]
+        InlineScript = 1,
+    }
+    public abstract class AzurePowerShellTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzurePowerShellTask>
+    {
+        protected AzurePowerShellTask(string task, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzurePowerShellScriptType> scriptType) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzurePowerShellVersion>? AzurePowerShellVersion { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureSubscription { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.PowerShellErrorActionPreference>? ErrorActionPreference { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? FailOnStandardError { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? PreferredAzurePowerShellVersion { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? Pwsh { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzurePowerShellScriptType>? ScriptType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WorkingDirectory { get; init; }
+    }
+    public class AzurePowerShellTaskBuilder : Sharpliner.Common.Model.Tasks.TaskBuilderBase
+    {
+        public Sharpliner.AzureDevOps.Tasks.AzurePowerShellFileTask File(string azureSubscription, string scriptPath, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.InlineAzurePowerShellTask FromFile(string azureSubscription, string path, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.InlineAzurePowerShellTask FromResourceFile(string azureSubscription, string resourceFileName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.InlineAzurePowerShellTask Inline(string azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null, params string[] scriptLines) { }
+    }
+    public class AzurePowerShellV4FileTask : Sharpliner.AzureDevOps.Tasks.AzurePowerShellFileTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzurePowerShellV4FileTask>
+    {
+        public AzurePowerShellV4FileTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> scriptPath) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? RestrictContextToCurrentTask { get; init; }
+    }
+    public enum AzurePowerShellVersion
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="LatestVersion")]
+        LatestVersion = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="OtherVersion")]
+        OtherVersion = 1,
+    }
     public class BashFileTask : Sharpliner.AzureDevOps.Tasks.BashTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.BashFileTask>, YamlDotNet.Serialization.IYamlConvertible
     {
         public BashFileTask(string filePath) { }
@@ -1957,6 +2016,19 @@ namespace Sharpliner.AzureDevOps.Tasks
         public InlineAzureCliTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptType> scriptType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> inlineScript) { }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? InlineScript { get; init; }
+    }
+    public class InlineAzurePowerShellTask : Sharpliner.AzureDevOps.Tasks.AzurePowerShellTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.InlineAzurePowerShellTask>
+    {
+        public InlineAzurePowerShellTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> inlineScript) { }
+        protected InlineAzurePowerShellTask(string task, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> inlineScript) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Inline { get; init; }
+    }
+    public class InlineAzurePowerShellV4Task : Sharpliner.AzureDevOps.Tasks.InlineAzurePowerShellTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.InlineAzurePowerShellV4Task>
+    {
+        public InlineAzurePowerShellV4Task(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> inlineScript) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? RestrictContextToCurrentTask { get; init; }
     }
     public class InlineBashTask : Sharpliner.AzureDevOps.Tasks.BashTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.InlineBashTask>
     {
