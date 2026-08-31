@@ -488,4 +488,36 @@ public class TaskBuilderTests
 
         return Verify(pipeline.Serialize());
     }
+
+    private class VSBuildTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        VSBuild.Solution("src/MyApp.sln")
+                            .PlatformAndConfiguration("Any CPU", "Release")
+                            .WebPackage(@"$(Build.ArtifactStagingDirectory)\MyApp.zip", skipInvalidConfigurations: true)
+                            .Build() with
+                        {
+                            VsVersion = VSBuildVisualStudioVersion.VisualStudio2022,
+                            MaximumCpuCount = true,
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_VSBuild_Builder_Test()
+    {
+        VSBuildTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
 }

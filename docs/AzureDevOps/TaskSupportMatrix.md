@@ -104,7 +104,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Prepare Analysis Configuration | `SonarQubePrepare@8`, `SonarQubePrepare@7`, `SonarQubePrepare@6`, `SonarQubePrepare@5`, `SonarQubePrepare@4` | ⚪ Out of scope | SonarQube tasks ship in a third-party (SonarSource) extension. Sharpliner models such tasks in separate extension packages, see [Marketplace tasks](DefinitionReference.md#marketplace-tasks). |
 | Publish Quality Gate Result | `SonarQubePublish@8`, `SonarQubePublish@7`, `SonarQubePublish@6`, `SonarQubePublish@5`, `SonarQubePublish@4` | ⚪ Out of scope | Third-party SonarSource extension, see `SonarQubePrepare`. |
 | Run Code Analysis | `SonarQubeAnalyze@8`, `SonarQubeAnalyze@7`, `SonarQubeAnalyze@6`, `SonarQubeAnalyze@5`, `SonarQubeAnalyze@4` | ⚪ Out of scope | Third-party SonarSource extension, see `SonarQubePrepare`. |
-| Visual Studio build | `VSBuild@1` | ❌ Missing | No strongly typed model or builder. |
+| Visual Studio build | `VSBuild@1` | ✅ Supported | `VSBuildTask` and `VSBuildTaskBuilder` provide a strongly typed model and fluent builder for `VSBuild@1`. |
 | Xcode | `Xcode@5`, `Xcode@4` | ❌ Missing | No strongly typed model or builder. |
 | Xcode Build | `Xcode@3`, `Xcode@2` | ⚪ Out of scope | Superseded majors of the `Xcode` task; only `Xcode@5` would be modelled. |
 | Xcode Package iOS | `XcodePackageiOS@0` | ⚪ Out of scope | Deprecated by Microsoft (Xcode 7 and below). |
@@ -333,7 +333,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `JenkinsQueueJob@2` – Jenkins queue job
 - `Maven@4` – Maven
 - `MSBuild@1` – MSBuild
-- `VSBuild@1` – Visual Studio build
 - `Xcode@5` – Xcode
 
 ### Missing deploy tasks

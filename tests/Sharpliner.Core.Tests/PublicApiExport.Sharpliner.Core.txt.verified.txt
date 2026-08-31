@@ -104,6 +104,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Tasks.PublishTaskBuilder Publish { get; }
         protected static Sharpliner.AzureDevOps.Tasks.PwshTaskBuilder Pwsh { get; }
         protected static Sharpliner.AzureDevOps.Tasks.ScriptTaskBuilder Script { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.VSBuildTaskBuilder VSBuild { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition And(params Sharpliner.AzureDevOps.InlineCondition[] expressions) { }
         protected static Sharpliner.AzureDevOps.InlineCondition And(params string[] expressions) { }
         protected static Sharpliner.AzureDevOps.InlineCondition And<T>(params Sharpliner.AzureDevOps.InlineCondition[] expressions) { }
@@ -2574,6 +2575,96 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? VsVersion { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WorkingDirectory { get; init; }
+    }
+    public enum VSBuildArchitecture
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="x86")]
+        X86 = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="x64")]
+        X64 = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="arm64")]
+        Arm64 = 2,
+    }
+    public class VSBuildFluentBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.VSBuildTask Build() { }
+        public Sharpliner.AzureDevOps.Tasks.VSBuildFluentBuilder Configuration(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> configuration) { }
+        public Sharpliner.AzureDevOps.Tasks.VSBuildFluentBuilder MSBuildArguments(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> arguments) { }
+        public Sharpliner.AzureDevOps.Tasks.VSBuildFluentBuilder Platform(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> platform) { }
+        public Sharpliner.AzureDevOps.Tasks.VSBuildFluentBuilder PlatformAndConfiguration(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> platform, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> configuration) { }
+        public Sharpliner.AzureDevOps.Tasks.VSBuildFluentBuilder WebPackage(string packageLocation, bool? packageAsSingleFile = default, bool? skipInvalidConfigurations = default) { }
+        public static Sharpliner.AzureDevOps.Tasks.VSBuildTask op_Implicit(Sharpliner.AzureDevOps.Tasks.VSBuildFluentBuilder builder) { }
+    }
+    public enum VSBuildLogFileVerbosity
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="quiet")]
+        Quiet = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="minimal")]
+        Minimal = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="normal")]
+        Normal = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="detailed")]
+        Detailed = 3,
+        [YamlDotNet.Serialization.YamlMember(Alias="diagnostic")]
+        Diagnostic = 4,
+    }
+    public class VSBuildTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.VSBuildTask>
+    {
+        public VSBuildTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> solution) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? Clean { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Configuration { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? CreateLogFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? CustomVersion { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? EnableDefaultLogger { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.VSBuildLogFileVerbosity>? LogFileVerbosity { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? LogProjectEvents { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.VSBuildArchitecture>? MSBuildArchitecture { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? MSBuildArgs { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? MaximumCpuCount { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Platform { get; init; }
+        [System.Obsolete("VSBuild@1 restoreNugetPackages is deprecated by Microsoft. Prefer an explicit NuG" +
+            "et restore task before VSBuild.")]
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? RestoreNugetPackages { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Solution { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.VSBuildVisualStudioVersion>? VsVersion { get; init; }
+    }
+    public class VSBuildTaskBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.VSBuildFluentBuilder Solution(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> solution) { }
+        public Sharpliner.AzureDevOps.Tasks.VSBuildTask Task(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> solution) { }
+    }
+    public enum VSBuildVisualStudioVersion
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="latest")]
+        Latest = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="18.0")]
+        VisualStudio2026 = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="17.0")]
+        VisualStudio2022 = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="16.0")]
+        VisualStudio2019 = 3,
+        [YamlDotNet.Serialization.YamlMember(Alias="15.0")]
+        VisualStudio2017 = 4,
+        [YamlDotNet.Serialization.YamlMember(Alias="14.0")]
+        VisualStudio2015 = 5,
+        [YamlDotNet.Serialization.YamlMember(Alias="12.0")]
+        VisualStudio2013 = 6,
+        [YamlDotNet.Serialization.YamlMember(Alias="11.0")]
+        VisualStudio2012 = 7,
     }
 }
 namespace Sharpliner.AzureDevOps.Validation
