@@ -1,0 +1,7 @@
+task: AdvancedSecurity-Publish@1
+
+displayName: Advanced Security Publish Results
+
+inputs:
+  SarifsInputDirectory: $(Build.SourcesDirectory)
+  WaitForProcessing: true

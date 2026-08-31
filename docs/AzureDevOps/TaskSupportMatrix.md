@@ -83,7 +83,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | .NET Core | `DotNetCoreCLI@2`, `DotNetCoreCLI@1`, `DotNetCoreCLI@0` | ✅ Supported | `DotNet.*` builder + `DotNetCoreCliTask` (`Build`/`Test`/`Pack`/`Publish`/`Push`/`Restore`/`Run`/`Custom`). Only the current `@2` major is modelled. |
 | Advanced Security Initialize CodeQL | `AdvancedSecurity-Codeql-Init@1` | ❌ Missing | No strongly typed model or builder. |
 | Advanced Security Perform CodeQL analysis | `AdvancedSecurity-Codeql-Analyze@1` | ❌ Missing | No strongly typed model or builder. |
-| Advanced Security Publish Results | `AdvancedSecurity-Publish@1` | ❌ Missing | No strongly typed model or builder. |
+| Advanced Security Publish Results | `AdvancedSecurity-Publish@1` | ✅ Supported | `AdvancedSecurity.PublishResults(...)` -> `AdvancedSecurityPublishTask`. |
 | Android Build | `AndroidBuild@1` | ⚪ Out of scope | Deprecated by Microsoft; the docs recommend the `Gradle` task instead. |
 | Android Signing | `AndroidSigning@3`, `AndroidSigning@2`, `AndroidSigning@1` | ❌ Missing | No strongly typed model or builder. |
 | Ant | `Ant@1` | ❌ Missing | No strongly typed model or builder. |

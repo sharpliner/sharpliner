@@ -1518,6 +1518,27 @@ namespace Sharpliner.AzureDevOps.Tasks
         SilentlyContinue = 2,
         Stop = 3,
     }
+    public class AdvancedSecurityPublishTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AdvancedSecurityPublishTask>
+    {
+        public AdvancedSecurityPublishTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Category { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? EnableRecursiveScanning { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SarifsInputDirectory { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? WaitForProcessing { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WaitForProcessingInterval { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WaitForProcessingTimeout { get; init; }
+    }
+    public class AdvancedSecurityTaskBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.AdvancedSecurityPublishTask PublishResults(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> sarifsInputDirectory) { }
+        public Sharpliner.AzureDevOps.Tasks.AdvancedSecurityPublishTask PublishResultsAndWait(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> sarifsInputDirectory, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? interval = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? timeout = null) { }
+    }
     public class ArchiveFilesTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.ArchiveFilesTask>
     {
         public ArchiveFilesTask(string rootFolderOrFile, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ArchiveType> archiveType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> archiveFile) { }

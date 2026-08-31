@@ -342,6 +342,8 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static NpmTaskBuilder Npm { get; } = new();
 
+    protected static AdvancedSecurityTaskBuilder AdvancedSecurity { get; } = new();
+
     #endregion
 
     #region Pipeline member shorthands

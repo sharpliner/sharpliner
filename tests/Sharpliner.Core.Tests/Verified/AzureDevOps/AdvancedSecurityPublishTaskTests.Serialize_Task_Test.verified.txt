@@ -1,0 +1,11 @@
+task: AdvancedSecurity-Publish@1
+
+displayName: Advanced Security Publish Results
+
+inputs:
+  SarifsInputDirectory: $(Build.ArtifactStagingDirectory)/sarif-reports
+  EnableRecursiveScanning: true
+  Category: iac-scan
+  WaitForProcessing: true
+  WaitForProcessingInterval: 10
+  WaitForProcessingTimeout: 300
