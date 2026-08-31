@@ -1,0 +1,23 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: Maven@1
+    inputs:
+      mavenPOMFile: legacy/pom.xml
+      goals: package sonar:sonar
+      jdkVersion: 1.8
+      jdkArchitecture: x64
+      sqAnalysisEnabled: true
+      sonarQubeServiceEndpoint: legacy-sonarqube
+      sonarQubeProjectName: Sharpliner.Legacy
+      sonarQubeProjectKey: Sharpliner.Legacy
+      sonarQubeProjectVersion: 1.0.0
+      sonarQubeSpecifyDB: true
+      sonarQubeDBUrl: jdbc:sqlserver://legacy-db:1433;databaseName=sonarqube
+      sonarQubeDBUsername: sonar
+      sonarQubeDBPassword: $(SonarPassword)
+      sonarQubeIncludeFullReport: false
+      sonarQubeFailWhenQualityGateFails: true
+      checkstyleAnalysisEnabled: true
+      pmdAnalysisEnabled: true
+      findbugsAnalysisEnabled: true

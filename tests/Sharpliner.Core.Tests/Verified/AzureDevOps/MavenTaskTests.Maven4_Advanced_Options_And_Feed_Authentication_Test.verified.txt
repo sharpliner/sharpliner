@@ -1,0 +1,16 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: Maven@4
+    inputs:
+      goals: package
+      options: -DskipTests
+      javaHomeSelection: Path
+      jdkUserInputPath: $(Agent.ToolsDirectory)/jdk-21
+      mavenVersionSelection: Path
+      mavenPath: /usr/share/maven-custom
+      mavenSetM2Home: true
+      mavenOpts: -Xmx2048m -Dhttps.protocols=TLSv1.2
+      mavenFeedAuthenticate: true
+      skipEffectivePom: true
+      ConnectedServiceName: sharpliner-integration-tests

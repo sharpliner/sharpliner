@@ -66,6 +66,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `ExtractFiles@1` | `ExtractFilesTask` |
 | `npmAuthenticate@0` | `Npm.Authenticate` -> `NpmAuthenticateTask` |
 | `NuGetAuthenticate@1` | `NuGet.Authenticate` -> `NuGetAuthenticateTask` |
+| `Maven@4` | `Maven.Build(...)` -> `MavenTask`; deprecated majors available through `BuildV3`/`BuildV2`/`BuildV1` -> `MavenV3Task`/`MavenV2Task`/`MavenV1Task` |
 | `NuGetCommand@2` | `NuGet.*` -> `NuGetCommandTask` and its `Restore`/`Pack`/`Push`/`Custom` specializations |
 | `PowerShell@2` | `Powershell.*`, `Pwsh.*` -> `InlinePowershellTask`, `PowershellFileTask`, `InlinePwshTask` |
 | `PublishCodeCoverageResults@2` | `PublishCodeCoverageResultsTask` |
@@ -99,7 +100,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | gulp | `gulp@1`, `gulp@0` | ❌ Missing | No strongly typed model or builder. |
 | Index sources and publish symbols | `PublishSymbols@2`, `PublishSymbols@1` | ❌ Missing | No strongly typed model or builder. |
 | Jenkins queue job | `JenkinsQueueJob@2`, `JenkinsQueueJob@1` | ❌ Missing | No strongly typed model or builder. |
-| Maven | `Maven@4`, `Maven@3`, `Maven@2`, `Maven@1` | ❌ Missing | No strongly typed model or builder. |
+| Maven | `Maven@4`, `Maven@3`, `Maven@2`, `Maven@1` | ✅ Supported | `Maven.Build(...)` -> `MavenTask` for the current major, with deprecated `MavenV3Task`, `MavenV2Task`, and `MavenV1Task` support through `BuildV3`/`BuildV2`/`BuildV1`. |
 | MSBuild | `MSBuild@1` | ❌ Missing | No strongly typed model or builder. |
 | Prepare Analysis Configuration | `SonarQubePrepare@8`, `SonarQubePrepare@7`, `SonarQubePrepare@6`, `SonarQubePrepare@5`, `SonarQubePrepare@4` | ⚪ Out of scope | SonarQube tasks ship in a third-party (SonarSource) extension. Sharpliner models such tasks in separate extension packages, see [Marketplace tasks](DefinitionReference.md#marketplace-tasks). |
 | Publish Quality Gate Result | `SonarQubePublish@8`, `SonarQubePublish@7`, `SonarQubePublish@6`, `SonarQubePublish@5`, `SonarQubePublish@4` | ⚪ Out of scope | Third-party SonarSource extension, see `SonarQubePrepare`. |

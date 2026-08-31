@@ -333,6 +333,11 @@ public abstract class AzureDevOpsDefinition
         };
 
     /// <summary>
+    /// Creates a Maven task.
+    /// </summary>
+    protected static MavenTaskBuilder Maven { get; } = new();
+
+    /// <summary>
     /// Creates a NuGet task.
     /// </summary>
     protected static NuGetTaskBuilder NuGet { get; } = new();

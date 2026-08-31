@@ -97,6 +97,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Expressions.IfConditionBuilder If { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsNotPullRequest { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsPullRequest { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.MavenTaskBuilder Maven { get; }
         protected static Sharpliner.AzureDevOps.DependsOn NoDependsOn { get; }
         protected static Sharpliner.AzureDevOps.Tasks.NpmTaskBuilder Npm { get; }
         protected static Sharpliner.AzureDevOps.Tasks.NuGetTaskBuilder NuGet { get; }
@@ -1975,6 +1976,214 @@ namespace Sharpliner.AzureDevOps.Tasks
         public InlinePwshTask(params string[] scriptLines) { }
         [YamlDotNet.Serialization.YamlMember(Alias="pwsh", Order=1, ScalarStyle=YamlDotNet.Core.ScalarStyle.Literal)]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Contents { get; init; }
+    }
+    public enum MavenCodeCoverageTool
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="None")]
+        None = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="Cobertura")]
+        Cobertura = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="JaCoCo")]
+        JaCoCo = 2,
+    }
+    public enum MavenJavaHomeSelection
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="JDKVersion")]
+        JDKVersion = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="Path")]
+        Path = 1,
+    }
+    public enum MavenJdkArchitecture
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="x86")]
+        X86 = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="x64")]
+        X64 = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="arm64")]
+        Arm64 = 2,
+    }
+    public enum MavenJdkVersion
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="default")]
+        Default = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="1.21")]
+        Jdk21 = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="1.17")]
+        Jdk17 = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="1.11")]
+        Jdk11 = 3,
+        [YamlDotNet.Serialization.YamlMember(Alias="1.10")]
+        Jdk10 = 4,
+        [YamlDotNet.Serialization.YamlMember(Alias="1.9")]
+        Jdk9 = 5,
+        [YamlDotNet.Serialization.YamlMember(Alias="1.8")]
+        Jdk8 = 6,
+        [YamlDotNet.Serialization.YamlMember(Alias="1.7")]
+        Jdk7 = 7,
+        [YamlDotNet.Serialization.YamlMember(Alias="1.6")]
+        Jdk6 = 8,
+    }
+    public enum MavenSonarQubeMavenPluginVersionChoice
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="latest")]
+        Latest = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="pom")]
+        Pom = 1,
+    }
+    public enum MavenSpotBugsGoal
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="spotbugs")]
+        SpotBugs = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="check")]
+        Check = 1,
+    }
+    public class MavenTask : Sharpliner.AzureDevOps.Tasks.MavenV3Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.MavenTask>
+    {
+        public MavenTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ConnectedServiceName { get; init; }
+    }
+    public abstract class MavenTaskBase : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.MavenTaskBase>
+    {
+        protected MavenTaskBase(string taskVersion) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? CheckstyleAnalysisEnabled { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ClassFilesDirectories { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ClassFilter { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.MavenCodeCoverageTool CodeCoverageTool { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? FailIfCoverageEmpty { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? FindbugsAnalysisEnabled { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Goals { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.MavenJavaHomeSelection JavaHomeSelection { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? JdkUserInputPath { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? MavenFeedAuthenticate { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? MavenOpts { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? MavenPOMFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? MavenPath { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? MavenSetM2Home { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.MavenVersionSelection MavenVersionSelection { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Options { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? PmdAnalysisEnabled { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? PublishJUnitResults { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? SqAnalysisEnabled { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SrcDirectories { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TestResultsFiles { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TestRunTitle { get; init; }
+    }
+    public class MavenTaskBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.MavenTask Build(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? mavenPOMFile = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? goals = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? options = null) { }
+        public Sharpliner.AzureDevOps.Tasks.MavenV1Task BuildV1(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? mavenPOMFile = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? goals = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? options = null) { }
+        public Sharpliner.AzureDevOps.Tasks.MavenV2Task BuildV2(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? mavenPOMFile = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? goals = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? options = null) { }
+        public Sharpliner.AzureDevOps.Tasks.MavenV3Task BuildV3(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? mavenPOMFile = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? goals = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? options = null) { }
+    }
+    public enum MavenV1JdkArchitecture
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="x86")]
+        X86 = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="x64")]
+        X64 = 1,
+    }
+    public enum MavenV1JdkVersion
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="default")]
+        Default = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="1.9")]
+        Jdk9 = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="1.8")]
+        Jdk8 = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="1.7")]
+        Jdk7 = 3,
+        [YamlDotNet.Serialization.YamlMember(Alias="1.6")]
+        Jdk6 = 4,
+    }
+    public class MavenV1Task : Sharpliner.AzureDevOps.Tasks.MavenTaskBase, System.IEquatable<Sharpliner.AzureDevOps.Tasks.MavenV1Task>
+    {
+        public MavenV1Task() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.MavenV1JdkArchitecture JdkArchitecture { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.MavenV1JdkVersion JdkVersion { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SonarQubeDBPassword { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SonarQubeDBUrl { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SonarQubeDBUsername { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? SonarQubeFailWhenQualityGateFails { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? SonarQubeIncludeFullReport { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SonarQubeProjectKey { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SonarQubeProjectName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SonarQubeProjectVersion { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SonarQubeServiceEndpoint { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? SonarQubeSpecifyDB { get; init; }
+    }
+    public class MavenV2Task : Sharpliner.AzureDevOps.Tasks.MavenTaskBase, System.IEquatable<Sharpliner.AzureDevOps.Tasks.MavenV2Task>
+    {
+        public MavenV2Task() { }
+        protected MavenV2Task(string taskVersion) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? AllowBrokenSymbolicLinks { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? IsJacocoCoverageReportXML { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.MavenJdkArchitecture JdkArchitecture { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.MavenJdkVersion JdkVersion { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? RestoreOriginalPomXml { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.MavenSonarQubeMavenPluginVersionChoice SqMavenPluginVersionChoice { get; init; }
+    }
+    public class MavenV3Task : Sharpliner.AzureDevOps.Tasks.MavenV2Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.MavenV3Task>
+    {
+        public MavenV3Task() { }
+        protected MavenV3Task(string taskVersion) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? SkipEffectivePom { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? SpotBugsAnalysisEnabled { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? SpotBugsFailWhenBugsFound { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.MavenSpotBugsGoal SpotBugsGoal { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SpotBugsMavenPluginVersion { get; init; }
+    }
+    public enum MavenVersionSelection
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="Default")]
+        Default = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="Path")]
+        Path = 1,
     }
     public class NoneCheckoutTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NoneCheckoutTask>
     {
