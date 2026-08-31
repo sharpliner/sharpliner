@@ -1952,6 +1952,13 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? PathToSevenZipTool { get; init; }
     }
+    public enum IndexableFileFormats
+    {
+        Default = 0,
+        Pdb = 1,
+        SourceMap = 2,
+        All = 3,
+    }
     public class InlineAzureCliTask : Sharpliner.AzureDevOps.Tasks.AzureCliTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.InlineAzureCliTask>
     {
         public InlineAzureCliTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptType> scriptType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> inlineScript) { }
@@ -2255,6 +2262,68 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string> TargetPath { get; init; }
     }
+    public class PublishSymbolsFileShareTask : Sharpliner.AzureDevOps.Tasks.PublishSymbolsPublishTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PublishSymbolsFileShareTask>
+    {
+        public PublishSymbolsFileShareTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> searchPattern, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> symbolsPath, bool indexSources = true) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? CompressSymbols { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SymbolsPath { get; init; }
+    }
+    public class PublishSymbolsIndexSourcesTask : Sharpliner.AzureDevOps.Tasks.PublishSymbolsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PublishSymbolsIndexSourcesTask>
+    {
+        public PublishSymbolsIndexSourcesTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> searchPattern) { }
+    }
+    public abstract class PublishSymbolsPublishTask : Sharpliner.AzureDevOps.Tasks.PublishSymbolsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PublishSymbolsPublishTask>
+    {
+        protected PublishSymbolsPublishTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> searchPattern, bool indexSources, Sharpliner.AzureDevOps.Tasks.SymbolServerType symbolServerType) { }
+    }
+    public class PublishSymbolsPublishingModeBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.PublishSymbolsTeamServicesTask ToAzureArtifacts(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> searchPattern) { }
+        public Sharpliner.AzureDevOps.Tasks.PublishSymbolsFileShareTask ToFileShare(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> searchPattern, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> symbolsPath) { }
+    }
+    public abstract class PublishSymbolsTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PublishSymbolsTask>
+    {
+        protected PublishSymbolsTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> searchPattern, bool indexSources, bool publishSymbols) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ConnectedServiceName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? DetailedLog { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Manifest { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SearchPattern { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SymbolsArtifactName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SymbolsFolder { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? SymbolsMaximumWaitTime { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SymbolsProduct { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SymbolsVersion { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? TreatNotIndexedAsWarning { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? UseNetCoreClientTool { get; init; }
+    }
+    public class PublishSymbolsTaskBuilder
+    {
+        public PublishSymbolsTaskBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.PublishSymbolsPublishingModeBuilder IndexAndPublish { get; }
+        public Sharpliner.AzureDevOps.Tasks.PublishSymbolsPublishingModeBuilder PublishOnly { get; }
+        public Sharpliner.AzureDevOps.Tasks.PublishSymbolsIndexSourcesTask IndexOnly(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> searchPattern) { }
+    }
+    public class PublishSymbolsTeamServicesTask : Sharpliner.AzureDevOps.Tasks.PublishSymbolsPublishTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PublishSymbolsTeamServicesTask>
+    {
+        public PublishSymbolsTeamServicesTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> searchPattern, bool indexSources = true) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.IndexableFileFormats>? IndexableFileFormats { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? SymbolExpirationInDays { get; init; }
+    }
     public class PublishTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PublishTask>
     {
         public PublishTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> targetPath, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? artifactName = null) { }
@@ -2266,6 +2335,7 @@ namespace Sharpliner.AzureDevOps.Tasks
     public class PublishTaskBuilder
     {
         public PublishTaskBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.PublishSymbolsTaskBuilder Symbols { get; }
         public Sharpliner.AzureDevOps.Tasks.PublishPipelineArtifactTask FileShare(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> artifactName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> targetPath, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> fileSharePath) { }
         public Sharpliner.AzureDevOps.Tasks.PublishTask Pipeline(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> artifactName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> targetPath) { }
         public Sharpliner.AzureDevOps.Tasks.PublishPipelineArtifactTask PipelineArtifact(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> artifactName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> targetPath) { }
@@ -2463,6 +2533,11 @@ namespace Sharpliner.AzureDevOps.Tasks
         SingleLevel = 1,
         [YamlDotNet.Serialization.YamlMember(Alias="recursive")]
         Recursive = 2,
+    }
+    public enum SymbolServerType
+    {
+        TeamServices = 0,
+        FileShare = 1,
     }
     public enum TarCompressionType
     {

@@ -8,6 +8,11 @@ namespace Sharpliner.AzureDevOps.Tasks;
 public class PublishTaskBuilder
 {
     /// <summary>
+    /// Gets a fluent builder for <c>PublishSymbols@2</c> task modes.
+    /// </summary>
+    public PublishSymbolsTaskBuilder Symbols => new();
+
+    /// <summary>
     /// <para>
     /// Creates a publish step that stores the artifact in Azure Pipelines.
     /// </para>
