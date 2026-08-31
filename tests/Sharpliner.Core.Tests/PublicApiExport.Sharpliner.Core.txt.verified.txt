@@ -1606,6 +1606,8 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.TaskInputs Inputs { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=230)]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? RetryCountOnTaskFailure { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=225)]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<object>? Target { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=1)]
         public string Task { get; }
         protected bool GetBool(string name, bool defaultValue) { }
@@ -1632,10 +1634,17 @@ namespace Sharpliner.AzureDevOps.Tasks
         protected BashTask() { }
         [YamlDotNet.Serialization.YamlMember(Order=114)]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? FailOnStderr { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Order=115)]
+        [System.Obsolete("NoProfile is not supported by Azure Pipelines steps.bash or Bash@3 and is not emi" +
+            "tted.")]
+        [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? NoProfile { get; init; }
-        [YamlDotNet.Serialization.YamlMember(Order=200)]
+        [System.Obsolete("NoRc is not supported by Azure Pipelines steps.bash or Bash@3 and is not emitted.")]
+        [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? NoRc { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=230)]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? RetryCountOnTaskFailure { get; init; }
+        [YamlDotNet.Serialization.YamlMember(Order=215)]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<object>? Target { get; init; }
         [YamlDotNet.Serialization.YamlMember(Order=113)]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WorkingDirectory { get; init; }
     }
@@ -2379,6 +2388,26 @@ namespace Sharpliner.AzureDevOps.Tasks
         public System.Collections.Generic.List<string> Tags { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TargetPath { get; init; }
+    }
+    public class StepTarget : System.IEquatable<Sharpliner.AzureDevOps.Tasks.StepTarget>
+    {
+        public StepTarget() { }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.StepTargetCommands>? Commands { get; init; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Container { get; init; }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.StepTargetSettableVariables>? SettableVariables { get; init; }
+    }
+    public enum StepTargetCommands
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="any")]
+        Any = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="restricted")]
+        Restricted = 1,
+    }
+    public sealed class StepTargetSettableVariables : YamlDotNet.Serialization.IYamlConvertible
+    {
+        public System.Collections.Generic.IReadOnlyList<string>? Variables { get; }
+        public static Sharpliner.AzureDevOps.Tasks.StepTargetSettableVariables None { get; }
+        public static Sharpliner.AzureDevOps.Tasks.StepTargetSettableVariables Allowed(params string[] variables) { }
     }
     public enum SubmoduleCheckout
     {

@@ -12,6 +12,13 @@
   - bash: |-
       cat /etc/passwd
       rm -rf tests.xml
+    workingDirectory: src
+    ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+      failOnStderr: true
+    ${{ else }}:
+      failOnStderr: false
+    target: host
+    retryCountOnTaskFailure: 2
 
   - task: Bash@3
     displayName: Test task
@@ -25,9 +32,16 @@
       targetType: filePath
       filePath: some/script.sh
       arguments: foo bar
+      workingDirectory: src
       failOnStderr: true
       bashEnvValue: ~/.bash_profile
     continueOnError: true
+    target:
+      container: node
+      commands: restricted
+      settableVariables:
+      - sauce
+    retryCountOnTaskFailure: 3
 
   - bash: |
       echo "foo"

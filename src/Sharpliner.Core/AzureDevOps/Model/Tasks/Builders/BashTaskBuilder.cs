@@ -5,13 +5,13 @@ using Sharpliner.Common.Model.Tasks;
 namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
-/// Builder for creating a bash task using the <c>bash</c> keyword or the Bash task.
+/// Builder for creating Bash steps using the <c>bash</c> shortcut syntax or the <c>Bash@3</c> task syntax.
 /// </summary>
 public class BashTaskBuilder : TaskBuilderBase
 {
     /// <summary>
     /// <para>
-    /// Creates a bash task where the contents come from an embedded resource.
+    /// Creates a <c>steps.bash</c> shortcut step where the inline script contents come from an embedded resource.
     /// </para>
     /// <para>
     /// For example:
@@ -48,7 +48,7 @@ public class BashTaskBuilder : TaskBuilderBase
 
     /// <summary>
     /// <para>
-    /// Creates a bash task where the contents come from a file.
+    /// Creates a <c>steps.bash</c> shortcut step where the inline script contents come from a file.
     /// The contents are inlined in the YAML as contrary to File method where the file name is just referenced.
     /// </para>
     /// <para>
@@ -86,7 +86,7 @@ public class BashTaskBuilder : TaskBuilderBase
 
     /// <summary>
     /// <para>
-    /// Creates a bash task referencing a bash file (contents are not inlined in the YAML).
+    /// Creates a <c>Bash@3</c> task step referencing a Bash file (contents are not inlined in the YAML).
     /// </para>
     /// For example:
     /// <code lang="csharp">
@@ -105,7 +105,7 @@ public class BashTaskBuilder : TaskBuilderBase
     ///     filePath: 'AzureDevOps/Resources/my-script.sh'
     /// </code>
     /// </summary>
-    /// <param name="filePath">Path to the file</param>
+    /// <param name="filePath">Path to the script file. Must be fully qualified or relative to <c>$(System.DefaultWorkingDirectory)</c>.</param>
     /// <param name="displayName">Name of the build step</param>
     /// <returns>A new instance of <see cref="BashFileTask"/> with the file path</returns>
     public BashFileTask File(string filePath, AdoExpression<string>? displayName = null)
@@ -116,7 +116,7 @@ public class BashTaskBuilder : TaskBuilderBase
 
     /// <summary>
     /// <para>
-    /// Creates a bash task with given contents.
+    /// Creates a <c>steps.bash</c> shortcut step with the given inline script contents.
     /// </para>
     /// For example:
     /// <code lang="csharp">
