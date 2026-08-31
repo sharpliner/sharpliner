@@ -91,6 +91,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Tasks.AzureCliTaskBuilder AzureCli { get; }
         protected static Sharpliner.AzureDevOps.Tasks.BashTaskBuilder Bash { get; }
         protected static Sharpliner.AzureDevOps.Tasks.CheckoutTaskBuilder Checkout { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.DockerComposeTaskBuilder DockerCompose { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder DotNet { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DownloadTaskBuilder Download { get; }
         protected static Sharpliner.AzureDevOps.ElseCondition Else { get; }
@@ -1759,6 +1760,138 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? RemoveSourceFolder { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SourceFolder { get; init; }
+    }
+    public class DockerComposeBuildTask : Sharpliner.AzureDevOps.Tasks.DockerComposeTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerComposeBuildTask>
+    {
+        public DockerComposeBuildTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AdditionalImageTags { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? IncludeLatestTag { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? IncludeSourceTags { get; init; }
+    }
+    public class DockerComposeCombineConfigurationTask : Sharpliner.AzureDevOps.Tasks.DockerComposeTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerComposeCombineConfigurationTask>
+    {
+        public DockerComposeCombineConfigurationTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? BaseResolveDirectory { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? OutputDockerComposeFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? RemoveBuildOptions { get; init; }
+    }
+    public class DockerComposeCommandTask : Sharpliner.AzureDevOps.Tasks.DockerComposeTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerComposeCommandTask>
+    {
+        public DockerComposeCommandTask(string command) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string> DockerComposeCommand { get; }
+    }
+    public enum DockerComposeContainerRegistryType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="Azure Container Registry")]
+        AzureContainerRegistry = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="Container Registry")]
+        ContainerRegistry = 1,
+    }
+    public class DockerComposeLockTask : Sharpliner.AzureDevOps.Tasks.DockerComposeTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerComposeLockTask>
+    {
+        public DockerComposeLockTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? BaseResolveDirectory { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? OutputDockerComposeFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? RemoveBuildOptions { get; init; }
+    }
+    public class DockerComposePushTask : Sharpliner.AzureDevOps.Tasks.DockerComposeTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerComposePushTask>
+    {
+        public DockerComposePushTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AdditionalImageTags { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? IncludeLatestTag { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? IncludeSourceTags { get; init; }
+    }
+    public class DockerComposeRunServiceTask : Sharpliner.AzureDevOps.Tasks.DockerComposeTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerComposeRunServiceTask>
+    {
+        public DockerComposeRunServiceTask(string serviceName) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ContainerCommand { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ContainerName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? Detached { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? EntryPoint { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Ports { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string> ServiceName { get; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WorkingDirectory { get; init; }
+    }
+    public class DockerComposeRunTask : Sharpliner.AzureDevOps.Tasks.DockerComposeTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerComposeRunTask>
+    {
+        public DockerComposeRunTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? AbortOnContainerExit { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? BuildImages { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? Detached { get; init; }
+    }
+    public class DockerComposeTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerComposeTask>
+    {
+        public DockerComposeTask(string action) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AdditionalDockerComposeFiles { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Arguments { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureContainerRegistry { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureSubscription { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.DockerComposeContainerRegistryType>? ContainerRegistryType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? CurrentWorkingDirectory { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DockerComposeFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DockerComposeFileArgs { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DockerComposePath { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DockerHostEndpoint { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DockerRegistryEndpoint { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? NopIfNoDockerComposeFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ProjectName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? QualifyImageNames { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? RequireAdditionalDockerComposeFiles { get; init; }
+    }
+    public class DockerComposeTaskBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.DockerComposeBuildTask Build(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? dockerComposeFile = null) { }
+        public Sharpliner.AzureDevOps.Tasks.DockerComposeCombineConfigurationTask CombineConfiguration(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? dockerComposeFile = null) { }
+        public Sharpliner.AzureDevOps.Tasks.DockerComposeCommandTask Command(string command) { }
+        public Sharpliner.AzureDevOps.Tasks.DockerComposeLockTask Lock(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? dockerComposeFile = null) { }
+        public Sharpliner.AzureDevOps.Tasks.DockerComposePushTask Push(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? dockerComposeFile = null) { }
+        public Sharpliner.AzureDevOps.Tasks.DockerComposeRunTask Run(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? dockerComposeFile = null) { }
+        public Sharpliner.AzureDevOps.Tasks.DockerComposeRunServiceTask RunService(string serviceName) { }
+        public Sharpliner.AzureDevOps.Tasks.DockerComposeWriteImageDigestsTask WriteImageDigests(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? dockerComposeFile = null) { }
+    }
+    public class DockerComposeWriteImageDigestsTask : Sharpliner.AzureDevOps.Tasks.DockerComposeTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerComposeWriteImageDigestsTask>
+    {
+        public DockerComposeWriteImageDigestsTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ImageDigestComposeFile { get; init; }
     }
     public class DotNetBuildCoreCliTask : Sharpliner.AzureDevOps.Tasks.DotNetCoreCliTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DotNetBuildCoreCliTask>
     {

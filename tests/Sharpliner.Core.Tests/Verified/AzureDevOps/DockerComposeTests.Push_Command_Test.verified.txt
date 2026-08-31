@@ -1,0 +1,15 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: DockerCompose@1
+    displayName: Docker Compose push services
+    inputs:
+      action: Push services
+      dockerComposeFile: deploy/docker-compose.yml
+      containerregistrytype: Container Registry
+      dockerRegistryEndpoint: external-registry
+      additionalImageTags: |-
+        release
+        $(Build.SourceVersion)
+      includeSourceTags: false
+      includeLatestTag: true

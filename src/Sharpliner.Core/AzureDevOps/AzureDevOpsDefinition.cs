@@ -322,6 +322,11 @@ public abstract class AzureDevOpsDefinition
     protected static DotNetTaskBuilder DotNet { get; } = new();
 
     /// <summary>
+    /// Creates a Docker Compose task.
+    /// </summary>
+    protected static DockerComposeTaskBuilder DockerCompose { get; } = new();
+
+    /// <summary>
     /// This task verifies that you didn't forget to check in your YAML pipeline changes.
     /// </summary>
     /// <param name="pipelineProject">Path to the .csproj where pipelines are defined</param>
