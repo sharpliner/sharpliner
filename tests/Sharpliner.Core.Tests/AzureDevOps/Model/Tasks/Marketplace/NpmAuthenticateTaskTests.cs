@@ -1,0 +1,75 @@
+﻿using Sharpliner.AzureDevOps.Tasks;
+
+namespace Sharpliner.Tests.AzureDevOps;
+
+public class NpmAuthenticateTaskTests
+{
+    [Fact]
+    public Task Serialize_Task_With_Required_WorkingFile_Test()
+    {
+        var task = new NpmAuthenticateTask(".npmrc");
+
+        return Verify(SharplinerSerializer.Serialize(task));
+    }
+
+    [Fact]
+    public Task Serialize_Task_With_Custom_Endpoints_Test()
+    {
+        var task = new NpmAuthenticateTask("packages/mypackage/.npmrc")
+        {
+            CustomEndpoints = ["ExternalNpmRegistry", "AnotherExternalNpmRegistry"]
+        };
+
+        return Verify(SharplinerSerializer.Serialize(task));
+    }
+
+    [Fact]
+    public Task Serialize_Task_With_Azure_DevOps_Service_Connection_Test()
+    {
+        var task = new NpmAuthenticateTask(".npmrc")
+        {
+            AzureDevOpsServiceConnection = "MyAzureDevOpsServiceConnection",
+            FeedUrl = "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/npm/registry/"
+        };
+
+        return Verify(SharplinerSerializer.Serialize(task));
+    }
+
+    [Fact]
+    public void Custom_Endpoints_Are_Emitted_As_Official_Comma_Separated_Input()
+    {
+        var task = new NpmAuthenticateTask(".npmrc")
+        {
+            CustomEndpoints = [" ExternalNpmRegistry ", "", " AnotherExternalNpmRegistry "]
+        };
+
+        Assert.Equal("npmAuthenticate@0", task.Task);
+        Assert.Equal(".npmrc", task.Inputs["workingFile"]);
+        Assert.Equal("ExternalNpmRegistry,AnotherExternalNpmRegistry", task.Inputs["customEndpoint"]);
+        Assert.Equal(["ExternalNpmRegistry", "AnotherExternalNpmRegistry"], task.CustomEndpoints);
+    }
+
+    [Fact]
+    public void Optional_Azure_DevOps_Inputs_Are_Not_Emitted_When_Blank()
+    {
+        var task = new NpmAuthenticateTask(".npmrc")
+        {
+            AzureDevOpsServiceConnection = " ",
+            FeedUrl = ""
+        };
+
+        Assert.DoesNotContain("azureDevOpsServiceConnection", task.Inputs.Keys);
+        Assert.DoesNotContain("feedUrl", task.Inputs.Keys);
+    }
+
+    [Fact]
+    public void Azure_DevOps_Service_Connection_Builder_Requires_Service_Connection_And_Feed_Url()
+    {
+        var builder = new NpmTaskBuilder();
+
+        Assert.Throws<System.ArgumentException>(() => builder.Authenticate(".npmrc", "", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/npm/registry/"));
+        Assert.Throws<System.ArgumentException>(() => builder.Authenticate(".npmrc", " ", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/npm/registry/"));
+        Assert.Throws<System.ArgumentException>(() => builder.Authenticate(".npmrc", "MyAzureDevOpsServiceConnection", ""));
+        Assert.Throws<System.ArgumentException>(() => builder.Authenticate(".npmrc", "MyAzureDevOpsServiceConnection", " "));
+    }
+}

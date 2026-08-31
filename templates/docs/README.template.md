@@ -5,6 +5,7 @@ Exchange YAML indentation problems for the type-safe environment of C# and let I
 
 - [Getting started](#getting-started)
   - [Quick Start with Project Template](#quick-start-with-project-template)
+  - [Agent skill](#agent-skill)
 - [Example](#example)
 - [Sharpliner features](#sharpliner-features)
   - [Intellisense](#intellisense)
@@ -50,6 +51,13 @@ dotnet build
 
 This creates a new project with a sample pipeline definition in `pipelines/SamplePipeline.cs`.
 The generated `sample-pipeline.yml` file will be ready to use in your repository!
+
+### Agent skill
+
+Sharpliner includes an [agent skill](.github/skills/sharpliner/SKILL.md) that helps compatible AI
+coding agents create and modify pipeline definitions using the public API instead of reverse
+engineering the NuGet package. Install the `sharpliner` skill from this repository or copy its
+directory into your repository's `.github/skills` directory.
 
 ## Example
 
@@ -176,6 +184,7 @@ If you find a missing feature / API / property / use case, file an issue in the 
 We try to be very responsive and for small asks can deliver you a new version very fast.
 
 If you want to start contributing, either you already know about something missing or you can choose from some of the open issues.
+The [task support matrix](docs/AzureDevOps/TaskSupportMatrix.md) also lists which of Azure DevOps' built-in tasks have a strongly typed API in Sharpliner and which ones are still missing.
 We will help you review your first change so that you can continue with something advanced!
 
 Another way to start is to try out Sharpliner to define your own, already existing pipeline.

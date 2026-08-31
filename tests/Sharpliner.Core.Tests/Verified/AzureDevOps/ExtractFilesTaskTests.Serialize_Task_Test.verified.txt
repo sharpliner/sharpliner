@@ -1,6 +1,6 @@
 ﻿task: ExtractFiles@1
 
 inputs:
-  destinationFolder: $(Build.ArtifactStagingDirectory)/ExtractedFiles
   archiveFilePatterns: $(Build.ArtifactStagingDirectory)/Archive.zip
+  destinationFolder: $(Build.ArtifactStagingDirectory)/ExtractedFiles
   cleanDestinationFolder: false

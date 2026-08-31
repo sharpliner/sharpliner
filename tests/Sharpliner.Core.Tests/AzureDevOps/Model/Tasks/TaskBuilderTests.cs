@@ -24,7 +24,16 @@ public class TaskBuilderTests
                     {
                         Bash.FromResourceFile("Sharpliner.Tests.AzureDevOps.Resources.test-script.sh"),
                         Bash.FromResourceFile("test-script.sh"),
-                        Bash.Inline("cat /etc/passwd", "rm -rf tests.xml"),
+                        Bash.Inline("cat /etc/passwd", "rm -rf tests.xml") with
+                        {
+                            WorkingDirectory = "src",
+                            FailOnStderr = If.Equal("variables['Build.Reason']", "'PullRequest'")
+                                .Value(true)
+                                .Else
+                                .Value(false),
+                            Target = "host",
+                            RetryCountOnTaskFailure = 2,
+                        },
                         Bash.File("foo.sh")
                             .DisplayAs("Test task"),
                         Bash.File("some/script.sh") with
@@ -33,7 +42,15 @@ public class TaskBuilderTests
                             ContinueOnError = true,
                             FailOnStderr = true,
                             BashEnv = "~/.bash_profile",
-                            DisplayName = "Test task"
+                            DisplayName = "Test task",
+                            WorkingDirectory = "src",
+                            Target = new StepTarget
+                            {
+                                Container = "node",
+                                Commands = StepTargetCommands.Restricted,
+                                SettableVariables = StepTargetSettableVariables.Allowed("sauce"),
+                            },
+                            RetryCountOnTaskFailure = 3,
                         },
                         Bash.FromFile( "AzureDevOps/Resources/test-script.sh"),
                     }
@@ -48,6 +65,12 @@ public class TaskBuilderTests
         BashTaskPipeline pipeline = new();
 
         return Verify(pipeline.Serialize());
+    }
+
+    [Fact]
+    public void StepTargetSettableVariables_Allowed_Requires_AtLeast_One_Variable()
+    {
+        Assert.Throws<ArgumentException>(() => StepTargetSettableVariables.Allowed());
     }
 
     private class PowershellTaskPipeline : TestPipeline
@@ -154,7 +177,14 @@ public class TaskBuilderTests
 
                         Publish.FileShare("additional-binary", "bin/Debug/netstandard2.0/", $"{variables.Build.ArtifactStagingDirectory}/additional-binary") with
                         {
-                            Parallel = true
+                            Parallel = true,
+                            ParallelCount = 16,
+                        },
+
+                        Publish.PipelineArtifact("Packages", "artifacts/packages") with
+                        {
+                            DisplayName = "Publish packages",
+                            Properties = """{"user-type":"packages"}""",
                         },
 
                         Publish.Pipeline("artifactName", "some/file/path.txt"),
@@ -238,11 +268,6 @@ public class TaskBuilderTests
                         Download.None,
                         Download.Current with
                         {
-                            Tags =
-                            [
-                                "release",
-                                "nightly",
-                            ],
                             Artifact = "Frontend",
                             Patterns =
                             [
@@ -250,17 +275,27 @@ public class TaskBuilderTests
                                 "frontend.config",
                             ]
                         },
+                        Download.CurrentBuild() with
+                        {
+                            ArtifactName = "CurrentTaskArtifactAlias",
+                            DownloadPath = "$(Pipeline.Workspace)/current-task",
+                            ItemPattern = [ "**/*.nupkg" ],
+                        },
+                        Download.FromPipelineResource("myPipelineResource", "ResourceArtifact", [ "**/*.dll" ]),
                         Download.SpecificBuild("public", 56, 1745, "MyProject.CLI", patterns: [ "**/*.dll", "**/*.exe" ]) with
                         {
+                            TargetPath = "$(Pipeline.Workspace)/specific",
+                        },
+                        Download.Latest("public", 56, "Latest.CLI") with
+                        {
+                            AllowFailedBuilds = true,
                             AllowPartiallySucceededBuilds = true,
-                            RetryDownloadCount = 3,
+                            PreferTriggeringPipeline = true,
                             Tags = ["non-release", "preview"],
                         },
                         Download.LatestFromBranch("internal", 23, "refs/heads/develop", path: variables.Build.ArtifactStagingDirectory) with
                         {
-                            AllowFailedBuilds = true,
                             CheckDownloadedFiles = true,
-                            PreferTriggeringPipeline = true,
                             Artifact = "Another.CLI",
                         }
                     }
@@ -349,7 +384,9 @@ public class TaskBuilderTests
                 {
                     Steps =
                     {
-                        NuGet.Authenticate(["MyServiceConnection"], true),
+                        NuGet.Authenticate(),
+                        NuGet.Authenticate([" MyServiceConnection ", "", " AnotherServiceConnection "], true),
+                        NuGet.Authenticate("MyAzureDevOpsServiceConnection", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/nuget/v3/index.json"),
                         NuGet.Restore.FromFeed("my-project/my-project-scoped-feed") with
                         {
                             RestoreSolution = "**/*.sln",
@@ -364,6 +401,9 @@ public class TaskBuilderTests
                             RestoreSolution = "**/*.sln",
                             ExternalFeedCredentials = "MyExternalFeedCredentials",
                             NoCache = true,
+                            DisableParallelProcessing = true,
+                            RestoreDirectory = "packages",
+                            VerbosityRestore = NuGetVerbosity.Normal,
                             ContinueOnError = true
                         },
                         NuGet.Pack.WithoutPackageVersioning with
@@ -378,16 +418,32 @@ public class TaskBuilderTests
                             }
 
                         },
-                        NuGet.Pack.ByPrereleaseNumber("3", "1", "4"),
+                        NuGet.Pack.ByPrereleaseNumber("3", "1", "4") with
+                        {
+                            PackTimezone = PackTimezoneType.Local,
+                        },
                         NuGet.Pack.ByEnvVar("VERSION"),
                         NuGet.Pack.ByBuildNumber with
                         {
                             PackagesToPack = "**/*.csproj",
                             Configuration = "Release",
-                            PackDestination = "artifacts/packages"
+                            PackDestination = "artifacts/packages",
+                            BasePath = "src",
+                            VerbosityPack = PackVerbosity.Quiet,
                         },
-                        NuGet.Push.ToInternalFeed("MyInternalFeed"),
-                        NuGet.Push.ToExternalFeed("MyExternalFeedCredentials"),
+                        NuGet.Push.ToInternalFeed("MyInternalFeed") with
+                        {
+                            PackagesToPush = ["$(Build.ArtifactStagingDirectory)/**/*.nupkg", "!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg"],
+                            PublishPackageMetadata = false,
+                            AllowPackageConflicts = true,
+                            RequestTimeout = 300,
+                            VerbosityPush = NuGetVerbosity.Quiet,
+                        },
+                        NuGet.Push.ToExternalFeed("MyExternalFeedCredentials") with
+                        {
+                            RequestTimeout = 120,
+                            VerbosityPush = NuGetVerbosity.Normal,
+                        },
                         NuGet.Custom(@"config -Set repositoryPath=c:\packages -configfile c:\my.config")
                     }
                 }
@@ -415,6 +471,7 @@ public class TaskBuilderTests
                     {
                         Npm.Authenticate(".npmrc"),
                         Npm.Authenticate("packages/mypackage/.npmrc", ["MyServiceConnection", "AnotherServiceConnection"]),
+                        Npm.Authenticate(".npmrc", "MyAzureDevOpsServiceConnection", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/npm/registry/"),
                         Npm.Authenticate("empty/.npmrc", []),
                         Npm.Authenticate("whitespace/.npmrc", [" MyServiceConnection ", "", " AnotherServiceConnection "]),
                         new NpmAuthenticateTask("null/.npmrc") with { CustomEndpoints = null },

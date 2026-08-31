@@ -1,0 +1,5 @@
+﻿task: npmAuthenticate@0
+
+inputs:
+  workingFile: packages/mypackage/.npmrc
+  customEndpoint: ExternalNpmRegistry,AnotherExternalNpmRegistry

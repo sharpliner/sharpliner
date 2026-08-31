@@ -35,8 +35,8 @@ public record UniversalPackagesDownloadTask : UniversalPackagesTask
     }
 
     /// <summary>
-    /// Specifies the credentials to use for external registries located in the selected NuGet.config. For feeds in this organization or collection, leave this blank; the build's credentials are used automatically.
-    /// Optional. Use when feedsToUse = external and command = download
+    /// Specifies the credentials to use for external feeds.
+    /// Optional. Use when feedsToUse = external and command = download.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? ExternalFeedCredentials

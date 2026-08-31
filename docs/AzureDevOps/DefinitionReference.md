@@ -99,6 +99,19 @@ Steps =
 
 Please notice the `with` keyword which is a [new feature in C#](https://docs.microsoft.com/en-us/dotnet/csharp/language-reference/builtin-types/record#nondestructive-mutation) that allows modifying of records.
 
+### Publishing artifacts
+
+The `publish` keyword ([`steps.publish`](https://learn.microsoft.com/en-us/azure/devops/pipelines/yaml-schema/steps-publish)) is a shortcut for the
+[`PublishPipelineArtifact@1`](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/publish-pipeline-artifact-v1) task but it only
+supports the `publish` (path) and `artifact` (name) properties. The remaining task inputs (`artifactType`, `fileSharePath`, `parallel`, `parallelCount`
+and `properties`) are only available on the full task, which Sharpliner models as `PublishPipelineArtifactTask`:
+
+- `Publish.Pipeline(artifactName, targetPath)` emits the `publish` shortcut.
+- `Publish.PipelineArtifact(artifactName, targetPath)` emits `PublishPipelineArtifact@1` with `artifactType: pipeline`.
+- `Publish.FileShare(artifactName, targetPath, fileSharePath)` emits `PublishPipelineArtifact@1` with `artifactType: filepath` and the given `fileSharePath`.
+  `fileSharePath` is required when publishing to a file share while `parallel` and `parallelCount` are only honored in that case
+  (`parallelCount` additionally requires `parallel: true`).
+
 ## Azure Pipelines tasks
 
 Even though it is possible to use any of the non-default [Azure Pipelines tasks](https://docs.microsoft.com/en-us/azure/devops/pipelines/tasks/?view=azure-devops) by specifying its name + inputs:
@@ -144,6 +157,7 @@ The [NuGet v2 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tas
 
 ```csharp
 NuGet.Authenticate(["NuGetServiceConnection1", "NuGetServiceConnection2"], forceReinstallCredentialProvider: true),
+NuGet.Authenticate("AzureDevOpsServiceConnection", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/nuget/v3/index.json"),
 
 NuGet.Restore.FromFeed("my-project/my-project-scoped-feed") with
 {
@@ -168,6 +182,12 @@ Generated YAML:
   inputs:
     forceReinstallCredentialProvider: true
     nuGetServiceConnections: NuGetServiceConnection1,NuGetServiceConnection2
+
+- task: NuGetAuthenticate@1
+  displayName: Authenticate to NuGet feeds
+  inputs:
+    azureDevOpsServiceConnection: AzureDevOpsServiceConnection
+    feedUrl: https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/nuget/v3/index.json
 
 - task: NuGetCommand@2
   displayName: NuGet restore
@@ -218,6 +238,8 @@ Generated YAML:
 
 Currently, we don't support many marketplace tasks in C# as the project is still growing.
 If you find one useful, hit us up with a request, or better, with a pull request and we can add it to our library.
+
+The [task support matrix](TaskSupportMatrix.md) compares the full catalog of Microsoft's built-in Azure Pipelines tasks with Sharpliner's strongly typed APIs and lists the tasks that are still missing.
 
 ### Marketplace tasks
 

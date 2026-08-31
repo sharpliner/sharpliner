@@ -24,6 +24,19 @@ public class PublishTestResultsTaskTests
     }
 
     [Fact]
+    public Task Serialize_Task_With_Canonical_Api_Test()
+    {
+        var task = new PublishTestResultsTask(TestResultsFormat.CTest, "**/Testing/**/*.xml")
+        {
+            Platform = "x86",
+            Configuration = "Debug",
+            PublishRunAttachments = false,
+        };
+
+        return Verify(SharplinerSerializer.Serialize(task));
+    }
+
+    [Fact]
     public Task Serialize_Task_With_Defaults_Test()
     {
         var task = new PublishTestResultsTask(TestResultsFormat.JUnit, "**/TEST-*.xml");

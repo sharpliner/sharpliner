@@ -3,5 +3,5 @@
 displayName: Publish test results
 
 inputs:
-  testResultsFormat: JUnit
+  testRunner: JUnit
   testResultsFiles: '**/TEST-*.xml'

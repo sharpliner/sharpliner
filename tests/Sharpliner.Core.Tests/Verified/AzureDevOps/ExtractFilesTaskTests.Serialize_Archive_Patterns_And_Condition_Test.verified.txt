@@ -1,0 +1,13 @@
+﻿task: ExtractFiles@1
+
+inputs:
+  archiveFilePatterns: |-
+    **/*.zip
+    **/*.7z
+    **/*.rar
+    **/*.tar.gz
+  destinationFolder: $(Pipeline.Workspace)/extracted
+  overwriteExistingFiles: true
+  pathToSevenZipTool: /usr/local/bin/7z
+
+condition: and(succeeded(), ne(variables['SkipExtract'], 'true'))

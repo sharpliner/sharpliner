@@ -165,6 +165,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
         [
 #region nuget-tasks-code
             NuGet.Authenticate(["NuGetServiceConnection1", "NuGetServiceConnection2"], forceReinstallCredentialProvider: true),
+            NuGet.Authenticate("AzureDevOpsServiceConnection", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/nuget/v3/index.json"),
 
             NuGet.Restore.FromFeed("my-project/my-project-scoped-feed") with
             {

@@ -443,25 +443,48 @@ public class DotNetTaskBuilder
         /// </code>
         /// </summary>
         /// <param name="version">
-        /// Specify version of .NET Core SDK or runtime to install.
-        /// Versions can be given in the following formats
+        /// Specify version of .NET Core SDK to install.
+        /// Versions can be given in the following formats:
         /// <code>
         /// 2.x => Install latest in major version.
-        /// 3.1.x => Install latest in major and minor version
-        /// 3.1.402 => Install exact version
+        /// 2.2.x => Install latest in major and minor version.
+        /// 2.2.104 => Install exact version.
         /// </code>
-        /// Find the value of version for installing SDK, from the <c>releases.json</c> for example <see href="https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/3.1/releases.json">releases.json for 3.1</see>
+        /// Find the value of version for installing SDK from the <c>releases.json</c> file linked by the
+        /// <see href="https://builds.dotnet.microsoft.com/dotnet/release-metadata/releases-index.json">releases-index file</see>.
         /// </param>
         /// <param name="includePreviewVersions">
         /// <para>
-        /// Select if you want preview versions to be included while searching for latest versions, for example <c>3.1.x</c>.
+        /// Select if you want preview versions to be included while searching for latest versions, for example <c>2.2.x</c>.
         /// </para>
         /// <para>
         /// This setting is ignored if you specify an exact version, such as: 3.0.100-preview3-010431
         /// </para>
         /// </param>
-        public UseDotNetTask Sdk(AdoExpression<string> version, AdoExpression<bool>? includePreviewVersions = null)
-            => new(DotNetPackageType.Sdk, version, includePreviewVersions);
+        /// <param name="vsVersion">
+        /// Optional compatible Visual Studio version for which the .NET Core SDK should be installed, such as <c>16.6.4</c>.
+        /// </param>
+        /// <param name="checkForExistingVersion">
+        /// Optional value indicating whether the task should detect if the specified version is already installed before downloading.
+        /// This input is ignored when the installation path is set to a custom path; it only applies when
+        /// the installation path is empty or set to its default value.
+        /// </param>
+        /// <param name="requestTimeout">
+        /// Optional timeout, in milliseconds, for HTTP requests that obtain the .NET package.
+        /// Default value: 300000 milliseconds (5 minutes). Maximum value: 600000 milliseconds (10 minutes).
+        /// </param>
+        public UseDotNetTask Sdk(
+            AdoExpression<string> version,
+            AdoExpression<bool>? includePreviewVersions = null,
+            AdoExpression<string>? vsVersion = null,
+            AdoExpression<bool>? checkForExistingVersion = null,
+            AdoExpression<int>? requestTimeout = null)
+            => new(DotNetPackageType.Sdk, version, includePreviewVersions)
+            {
+                VsVersion = vsVersion,
+                CheckForExistingVersion = checkForExistingVersion,
+                RequestTimeout = requestTimeout,
+            };
 
         /// <summary>
         /// <para>
@@ -484,41 +507,59 @@ public class DotNetTaskBuilder
         /// </code>
         /// </summary>
         /// <param name="version">
-        /// Specify version of .NET Core SDK or runtime to install.
-        /// Versions can be given in the following formats
+        /// Specify version of .NET Core runtime to install.
+        /// Versions can be given in the following formats:
         /// <code>
         /// 2.x => Install latest in major version.
-        /// 3.1.x => Install latest in major and minor version
-        /// 3.1.402 => Install exact version
+        /// 2.2.x => Install latest in major and minor version.
+        /// 2.2.104 => Install exact version.
         /// </code>
-        /// Find the value of version for installing Runtime, from the <c>releases.json</c> for example <see href="https://dotnetcli.blob.core.windows.net/dotnet/release-metadata/3.1/releases.json">releases.json for 3.1</see>
+        /// Find the value of version for installing runtime from the <c>releases.json</c> file linked by the
+        /// <see href="https://builds.dotnet.microsoft.com/dotnet/release-metadata/releases-index.json">releases-index file</see>.
         /// </param>
         /// <param name="includePreviewVersions">
         /// <para>
-        /// Select if you want preview versions to be included while searching for latest versions, for example <c>3.1.x</c>.
+        /// Select if you want preview versions to be included while searching for latest versions, for example <c>2.2.x</c>.
         /// </para>
         /// <para>
         /// This setting is ignored if you specify an exact version, such as: 3.0.100-preview3-010431
         /// </para>
         /// </param>
-        public UseDotNetTask Runtime(AdoExpression<string> version, AdoExpression<bool>? includePreviewVersions = null)
-            => new(DotNetPackageType.Runtime, version, includePreviewVersions);
+        /// <param name="checkForExistingVersion">
+        /// Optional value indicating whether the task should detect if the specified version is already installed before downloading.
+        /// This input is ignored when the installation path is set to a custom path; it only applies when
+        /// the installation path is empty or set to its default value.
+        /// </param>
+        /// <param name="requestTimeout">
+        /// Optional timeout, in milliseconds, for HTTP requests that obtain the .NET package.
+        /// Default value: 300000 milliseconds (5 minutes). Maximum value: 600000 milliseconds (10 minutes).
+        /// </param>
+        public UseDotNetTask Runtime(
+            AdoExpression<string> version,
+            AdoExpression<bool>? includePreviewVersions = null,
+            AdoExpression<bool>? checkForExistingVersion = null,
+            AdoExpression<int>? requestTimeout = null)
+            => new(DotNetPackageType.Runtime, version, includePreviewVersions)
+            {
+                CheckForExistingVersion = checkForExistingVersion,
+                RequestTimeout = requestTimeout,
+            };
 
         /// <summary>
         /// <para>
-        /// Select this option to install all SDKs from global.json files.
-        /// These files are searched from <c>$(System.DefaultWorkingDirectory)</c>
+        /// Select this option to install all SDKs from <c>global.json</c> files.
+        /// These files are searched from <c>$(System.DefaultWorkingDirectory)</c>.
         /// </para>
         /// <para>
-        /// You can change the search root path by setting working directory input.
+        /// You can change the search root path by setting the working directory input.
+        /// Version and include-preview inputs do not apply in this mode.
         /// </para>
         /// For example:
         /// <code lang="csharp">
         /// Steps =
         /// {
-        ///     Dotnet.Install.FromGlobalJson("/foo/global.json") with
+        ///     Dotnet.Install.FromGlobalJson("/foo") with
         ///     {
-        ///         WorkingDirectory = "/tmp",
         ///         InstallationPath = "/.dotnet",
         ///     }
         /// }
@@ -528,19 +569,35 @@ public class DotNetTaskBuilder
         /// steps:
         /// - task: UseDotNet@2
         ///   inputs:
+        ///     packageType: sdk
         ///     useGlobalJson: true
-        ///     workingDirectory: /tmp
+        ///     workingDirectory: /foo
         ///     installationPath: /.dotnet
         /// </code>
         /// </summary>
         /// <param name="workingDirectory">
-        /// Current working directory where the script is run.
-        /// Empty is the root of the repo (build) or artifacts (release), which is <c>$(System.DefaultWorkingDirectory)</c>
+        /// Directory where <c>global.json</c> files are searched.
+        /// Empty is the root of the repo (build) or artifacts (release), which is <c>$(System.DefaultWorkingDirectory)</c>.
         /// </param>
-        public UseDotNetTask FromGlobalJson(AdoExpression<string>? workingDirectory = null) => new()
+        /// <param name="checkForExistingVersion">
+        /// Optional value indicating whether the task should detect if a version specified by <c>global.json</c> is already installed before downloading.
+        /// This input is ignored when the installation path is set to a custom path; it only applies when
+        /// the installation path is empty or set to its default value.
+        /// </param>
+        /// <param name="requestTimeout">
+        /// Optional timeout, in milliseconds, for HTTP requests that obtain the .NET package.
+        /// Default value: 300000 milliseconds (5 minutes). Maximum value: 600000 milliseconds (10 minutes).
+        /// </param>
+        public UseDotNetTask FromGlobalJson(
+            AdoExpression<string>? workingDirectory = null,
+            AdoExpression<bool>? checkForExistingVersion = null,
+            AdoExpression<int>? requestTimeout = null) => new()
         {
+            PackageType = DotNetPackageType.Sdk,
             UseGlobalJson = true,
             WorkingDirectory = workingDirectory,
+            CheckForExistingVersion = checkForExistingVersion,
+            RequestTimeout = requestTimeout,
         };
     }
 

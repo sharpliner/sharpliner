@@ -1,0 +1,10 @@
+﻿task: PublishTestResults@2
+
+displayName: Publish test results
+
+inputs:
+  testRunner: CTest
+  testResultsFiles: '**/Testing/**/*.xml'
+  platform: x86
+  configuration: Debug
+  publishRunAttachments: false
