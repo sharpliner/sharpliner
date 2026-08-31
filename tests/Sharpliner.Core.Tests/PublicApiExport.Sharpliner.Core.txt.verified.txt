@@ -98,6 +98,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.InlineCondition IsNotPullRequest { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsPullRequest { get; }
         protected static Sharpliner.AzureDevOps.DependsOn NoDependsOn { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.NodeTaskBuilder Node { get; }
         protected static Sharpliner.AzureDevOps.Tasks.NpmTaskBuilder Npm { get; }
         protected static Sharpliner.AzureDevOps.Tasks.NuGetTaskBuilder NuGet { get; }
         protected static Sharpliner.AzureDevOps.Tasks.PowershellTaskBuilder Powershell { get; }
@@ -1976,6 +1977,20 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlMember(Alias="pwsh", Order=1, ScalarStyle=YamlDotNet.Core.ScalarStyle.Literal)]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Contents { get; init; }
     }
+    public enum NodeArchitecture
+    {
+        X64 = 0,
+        X86 = 1,
+    }
+    public class NodeTaskBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.NodeTaskBuilder.NodeInstallerBuilder Install { get; }
+        public class NodeInstallerBuilder
+        {
+            public Sharpliner.AzureDevOps.Tasks.UseNodeTask FromFile(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> versionFilePath, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? checkLatest = null, Sharpliner.AzureDevOps.Tasks.NodeArchitecture architecture = 0, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? nodejsMirror = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? retryCountOnDownloadFails = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? delayBetweenRetries = null) { }
+            public Sharpliner.AzureDevOps.Tasks.UseNodeTask Version(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> version, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? checkLatest = null, Sharpliner.AzureDevOps.Tasks.NodeArchitecture architecture = 0, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? nodejsMirror = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? retryCountOnDownloadFails = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? delayBetweenRetries = null) { }
+        }
+    }
     public class NoneCheckoutTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NoneCheckoutTask>
     {
         public NoneCheckoutTask() { }
@@ -2574,6 +2589,33 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? VsVersion { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WorkingDirectory { get; init; }
+    }
+    public class UseNodeTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.UseNodeTask>
+    {
+        public UseNodeTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.NodeArchitecture Architecture { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? CheckLatest { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? DelayBetweenRetries { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? NodejsMirror { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? RetryCountOnDownloadFails { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Version { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? VersionFilePath { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.UseNodeVersionSource VersionSource { get; init; }
+    }
+    public enum UseNodeVersionSource
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="spec")]
+        Spec = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="fromFile")]
+        FromFile = 1,
     }
 }
 namespace Sharpliner.AzureDevOps.Validation

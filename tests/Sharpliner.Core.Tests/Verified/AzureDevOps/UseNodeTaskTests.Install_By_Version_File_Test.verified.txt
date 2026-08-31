@@ -1,0 +1,13 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: UseNode@1
+    displayName: Use Node.js
+    inputs:
+      versionSource: fromFile
+      versionFilePath: .nvmrc
+      checkLatest: false
+      force32bit: false
+      nodejsMirror: https://nodejs.org/dist
+      retryCountOnDownloadFails: 5
+      delayBetweenRetries: 1000

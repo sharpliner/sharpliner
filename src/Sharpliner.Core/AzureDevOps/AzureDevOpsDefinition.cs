@@ -342,6 +342,11 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static NpmTaskBuilder Npm { get; } = new();
 
+    /// <summary>
+    /// Creates a Node.js installer task.
+    /// </summary>
+    protected static NodeTaskBuilder Node { get; } = new();
+
     #endregion
 
     #region Pipeline member shorthands
