@@ -12,7 +12,7 @@ public class CopyFilesTaskTests
         {
             SourceFolder = new ParameterReference("sourceDir"),
             CleanTargetFolder = true,
-            Overwrite = true,
+            OverWrite = true,
             FlattenFolders = true,
             PreserveTimestamp = true,
             RetryCount = 3,
@@ -29,6 +29,21 @@ public class CopyFilesTaskTests
         var task = new CopyFilesTask("**", "$(Build.ArtifactStagingDirectory)")
         {
             SourceFolder = "foo",
+        };
+
+        return Verify(SharplinerSerializer.Serialize(task));
+    }
+
+    [Fact]
+    public Task Serialize_Task_With_Multiple_Patterns_And_Expression_Retries_Test()
+    {
+        var task = new CopyFilesTask("""
+            **\bin\**
+            !**\bin\**\*.pdb
+            """, "$(Build.ArtifactStagingDirectory)")
+        {
+            RetryCount = new VariableReference("copyRetryCount"),
+            DelayBetweenRetries = new ParameterReference("copyRetryDelay"),
         };
 
         return Verify(SharplinerSerializer.Serialize(task));

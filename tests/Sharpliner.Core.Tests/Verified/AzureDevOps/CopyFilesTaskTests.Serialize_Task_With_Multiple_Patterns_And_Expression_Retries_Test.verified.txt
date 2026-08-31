@@ -1,0 +1,9 @@
+﻿task: CopyFiles@2
+
+inputs:
+  Contents: |-
+    **\bin\**
+    !**\bin\**\*.pdb
+  TargetFolder: $(Build.ArtifactStagingDirectory)
+  retryCount: $(copyRetryCount)
+  delayBetweenRetries: ${{ parameters.copyRetryDelay }}

@@ -5,7 +5,7 @@ inputs:
   TargetFolder: $(Build.ArtifactStagingDirectory)
   SourceFolder: ${{ parameters.sourceDir }}
   CleanTargetFolder: true
-  Overwrite: true
+  OverWrite: true
   flattenFolders: true
   preserveTimestamp: true
   retryCount: 3
