@@ -121,27 +121,50 @@ public enum AzureFunctionDeploymentMethod
 /// <summary>Supported Linux Function App runtime stacks.</summary>
 public enum AzureFunctionRuntimeStack
 {
+    /// <summary>.NET 6 in-process.</summary>
     [YamlMember(Alias = "DOTNET|6.0")] DotNet6,
+    /// <summary>.NET 6 isolated worker.</summary>
     [YamlMember(Alias = "DOTNET-ISOLATED|6.0")] DotNetIsolated6,
+    /// <summary>.NET 7 isolated worker.</summary>
     [YamlMember(Alias = "DOTNET-ISOLATED|7.0")] DotNetIsolated7,
+    /// <summary>.NET 8 isolated worker.</summary>
     [YamlMember(Alias = "DOTNET-ISOLATED|8.0")] DotNetIsolated8,
+    /// <summary>.NET 9 isolated worker.</summary>
     [YamlMember(Alias = "DOTNET-ISOLATED|9.0")] DotNetIsolated9,
+    /// <summary>.NET 10 isolated worker.</summary>
     [YamlMember(Alias = "DOTNET-ISOLATED|10.0")] DotNetIsolated10,
+    /// <summary>Java 8.</summary>
     [YamlMember(Alias = "JAVA|8")] Java8,
+    /// <summary>Java 11.</summary>
     [YamlMember(Alias = "JAVA|11")] Java11,
+    /// <summary>Java 17.</summary>
     [YamlMember(Alias = "JAVA|17")] Java17,
+    /// <summary>Java 21.</summary>
     [YamlMember(Alias = "JAVA|21")] Java21,
+    /// <summary>Java 25.</summary>
     [YamlMember(Alias = "JAVA|25")] Java25,
+    /// <summary>Node.js 14.</summary>
     [YamlMember(Alias = "NODE|14")] Node14,
+    /// <summary>Node.js 16.</summary>
     [YamlMember(Alias = "NODE|16")] Node16,
+    /// <summary>Node.js 18.</summary>
     [YamlMember(Alias = "NODE|18")] Node18,
+    /// <summary>Node.js 20.</summary>
     [YamlMember(Alias = "NODE|20")] Node20,
+    /// <summary>Node.js 22.</summary>
     [YamlMember(Alias = "NODE|22")] Node22,
+    /// <summary>Node.js 24.</summary>
     [YamlMember(Alias = "NODE|24")] Node24,
+    /// <summary>Python 3.8.</summary>
     [YamlMember(Alias = "PYTHON|3.8")] Python38,
+    /// <summary>Python 3.9.</summary>
     [YamlMember(Alias = "PYTHON|3.9")] Python39,
+    /// <summary>Python 3.10.</summary>
     [YamlMember(Alias = "PYTHON|3.10")] Python310,
+    /// <summary>Python 3.11.</summary>
     [YamlMember(Alias = "PYTHON|3.11")] Python311,
+    /// <summary>Python 3.12.</summary>
     [YamlMember(Alias = "PYTHON|3.12")] Python312,
+    /// <summary>Python 3.13.</summary>
     [YamlMember(Alias = "PYTHON|3.13")] Python313,
 }
