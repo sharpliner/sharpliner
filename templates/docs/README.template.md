@@ -184,6 +184,7 @@ If you find a missing feature / API / property / use case, file an issue in the 
 We try to be very responsive and for small asks can deliver you a new version very fast.
 
 If you want to start contributing, either you already know about something missing or you can choose from some of the open issues.
+The [task support matrix](docs/AzureDevOps/TaskSupportMatrix.md) also lists which of Azure DevOps' built-in tasks have a strongly typed API in Sharpliner and which ones are still missing.
 We will help you review your first change so that you can continue with something advanced!
 
 Another way to start is to try out Sharpliner to define your own, already existing pipeline.

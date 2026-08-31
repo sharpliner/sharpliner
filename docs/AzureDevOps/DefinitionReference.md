@@ -239,6 +239,8 @@ Generated YAML:
 Currently, we don't support many marketplace tasks in C# as the project is still growing.
 If you find one useful, hit us up with a request, or better, with a pull request and we can add it to our library.
 
+The [task support matrix](TaskSupportMatrix.md) compares the full catalog of Microsoft's built-in Azure Pipelines tasks with Sharpliner's strongly typed APIs and lists the tasks that are still missing.
+
 ### Marketplace tasks
 
 Marketplace tasks can be supported and can be added to the organization if requested.
