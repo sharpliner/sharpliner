@@ -129,8 +129,8 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Azure Database for MySQL deployment | `AzureMysqlDeployment@2`, `AzureMysqlDeployment@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure file copy | `AzureFileCopy@6`, `AzureFileCopy@5`, `AzureFileCopy@4`, `AzureFileCopy@3`, `AzureFileCopy@2`, `AzureFileCopy@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure Function on Kubernetes | `AzureFunctionOnKubernetes@1`, `AzureFunctionOnKubernetes@0` | ❌ Missing | No strongly typed model or builder. |
-| Azure Functions Deploy | `AzureFunctionApp@2`, `AzureFunctionApp@1` | ❌ Missing | No strongly typed model or builder. |
-| Azure Functions for container | `AzureFunctionAppContainer@1` | ❌ Missing | No strongly typed model or builder. |
+| Azure Functions Deploy | `AzureFunctionApp@2`, `AzureFunctionApp@1` | ✅ Supported | `AzureFunctionApp.Windows`/`Linux`/`FlexConsumption` builders and `AzureFunctionAppV2Task`/`AzureFunctionAppV1Task` models. |
+| Azure Functions for container | `AzureFunctionAppContainer@1` | ✅ Supported | `AzureFunctionApp.Container` builder and `AzureFunctionAppContainerV1Task` model. |
 | Azure Key Vault | `AzureKeyVault@2`, `AzureKeyVault@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure Monitor alerts (Deprecated) | `AzureMonitorAlerts@0` | ⚪ Out of scope | Deprecated by Microsoft (classic Azure Monitor alerts). |
 | Azure PowerShell | `AzurePowerShell@5`, `AzurePowerShell@4`, `AzurePowerShell@3`, `AzurePowerShell@2`, `AzurePowerShell@1` | ❌ Missing | No strongly typed model or builder. |
