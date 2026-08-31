@@ -1,0 +1,6 @@
+﻿task: CMake@1
+
+inputs:
+  cwd: $(Build.ArtifactStagingDirectory)/cmake-build
+  cmakeArgs: -S $(Build.SourcesDirectory) -G Ninja -DCMAKE_BUILD_TYPE=Release
+  runInsideShell: true

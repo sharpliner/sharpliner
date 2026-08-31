@@ -1,0 +1,6 @@
+﻿task: CMake@1
+
+inputs:
+  cwd: ${{ parameters.buildDirectory }}
+  cmakeArgs: $(cmakeArguments)
+  runInsideShell: ${{ parameters.runInsideShell }}

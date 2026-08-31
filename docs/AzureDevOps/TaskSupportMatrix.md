@@ -58,6 +58,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `ArchiveFiles@2` | `ArchiveFilesTask` |
 | `AzureCLI@2` | `AzureCli.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliTask`, `AzureCliFileTask` |
 | `Bash@3` | `Bash.Inline/File/FromFile/FromResourceFile` -> `InlineBashTask`, `BashFileTask` (`bash` step shortcut) |
+| `CMake@1` | `CMakeTask` |
 | `CmdLine@2` | `Script.Inline/FromFile/FromResourceFile` -> `ScriptTask` (`script` step shortcut) |
 | `CopyFiles@2` | `CopyFilesTask` |
 | `DeleteFiles@1` | `DeleteFilesTask` |
@@ -88,7 +89,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Android Signing | `AndroidSigning@3`, `AndroidSigning@2`, `AndroidSigning@1` | ❌ Missing | No strongly typed model or builder. |
 | Ant | `Ant@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure IoT Edge | `AzureIoTEdge@2` | ❌ Missing | No strongly typed model or builder. |
-| CMake | `CMake@1` | ❌ Missing | No strongly typed model or builder. |
+| CMake | `CMake@1` | ✅ Supported | `CMakeTask`. |
 | Container Build | `ContainerBuild@0` | ❌ Missing | No strongly typed model or builder. |
 | Docker | `Docker@2`, `Docker@1`, `Docker@0` | ❌ Missing | No strongly typed model or builder. |
 | Docker Compose | `DockerCompose@1`, `DockerCompose@0` | ❌ Missing | No strongly typed model or builder. |
