@@ -11,6 +11,43 @@ public class DownloadTaskBuilder
 {
     /// <summary>
     /// <para>
+    /// Creates a <c>UniversalPackages@1</c> task that downloads a Universal Package.
+    /// </para>
+    /// <para>
+    /// For example:
+    /// </para>
+    /// <code lang="csharp">
+    /// Steps =
+    /// {
+    ///     Download.UniversalPackage("MyProject/my-feed", "tooling-assets", "1.2.*") with
+    ///     {
+    ///         Directory = "$(Pipeline.Workspace)/packages"
+    ///     }
+    /// }
+    /// </code>
+    /// Will generate:
+    /// <code lang="yaml">
+    /// - task: UniversalPackages@1
+    ///   inputs:
+    ///     command: download
+    ///     feed: MyProject/my-feed
+    ///     packageName: tooling-assets
+    ///     packageVersion: 1.2.*
+    ///     directory: $(Pipeline.Workspace)/packages
+    /// </code>
+    /// More details can be found in the
+    /// <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/universal-packages-v1">official Azure DevOps pipelines documentation</see>.
+    /// </summary>
+    /// <param name="feed">Feed name, or <c>project/feed</c> for project-scoped feeds.</param>
+    /// <param name="packageName">Universal Package name.</param>
+    /// <param name="packageVersion">Package version to download. Wildcards are supported, such as <c>*</c>, <c>1.*</c>, or <c>1.2.*</c>.</param>
+    public UniversalPackagesV1DownloadTask UniversalPackage(
+        string feed,
+        string packageName,
+        string packageVersion) => new(feed, packageName, packageVersion);
+
+    /// <summary>
+    /// <para>
     /// Creates a download task that downloads artifacts from the current build.
     /// </para>
     /// This uses the <c>download: current</c> keyword.

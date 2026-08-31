@@ -1934,6 +1934,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.SpecificDownloadTask Latest(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> project, Sharpliner.AzureDevOps.Expressions.AdoExpression<int> definition, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? artifact = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? path = null, System.Collections.Generic.IEnumerable<string>? patterns = null) { }
         public Sharpliner.AzureDevOps.Tasks.SpecificDownloadTask LatestFromBranch(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> project, Sharpliner.AzureDevOps.Expressions.AdoExpression<int> definition, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? branchName = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? artifact = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? path = null, System.Collections.Generic.IEnumerable<string>? patterns = null) { }
         public Sharpliner.AzureDevOps.Tasks.SpecificDownloadTask SpecificBuild(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> project, Sharpliner.AzureDevOps.Expressions.AdoExpression<int> definition, Sharpliner.AzureDevOps.Expressions.AdoExpression<int> buildId, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? artifact = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? path = null, System.Collections.Generic.IEnumerable<string>? patterns = null) { }
+        public Sharpliner.AzureDevOps.Tasks.UniversalPackagesV1DownloadTask UniversalPackage(string feed, string packageName, string packageVersion) { }
     }
     public class ExtractFilesTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.ExtractFilesTask>
     {
@@ -2269,6 +2270,8 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.PublishPipelineArtifactTask FileShare(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> artifactName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> targetPath, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> fileSharePath) { }
         public Sharpliner.AzureDevOps.Tasks.PublishTask Pipeline(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> artifactName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> targetPath) { }
         public Sharpliner.AzureDevOps.Tasks.PublishPipelineArtifactTask PipelineArtifact(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> artifactName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> targetPath) { }
+        public Sharpliner.AzureDevOps.Tasks.UniversalPackagesV1PublishTask UniversalPackage(string feed, string packageName, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.UniversalPackagesV1VersionIncrement> versionIncrement) { }
+        public Sharpliner.AzureDevOps.Tasks.UniversalPackagesV1PublishTask UniversalPackage(string feed, string packageName, string packageVersion) { }
     }
     public class PublishTestResultsTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.PublishTestResultsTask>
     {
@@ -2549,6 +2552,40 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Command { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Verbosity { get; init; }
+    }
+    public class UniversalPackagesV1DownloadTask : Sharpliner.AzureDevOps.Tasks.UniversalPackagesV1Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.UniversalPackagesV1DownloadTask>
+    {
+        public UniversalPackagesV1DownloadTask(string feed, string packageName, string packageVersion) { }
+    }
+    public class UniversalPackagesV1PublishTask : Sharpliner.AzureDevOps.Tasks.UniversalPackagesV1Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.UniversalPackagesV1PublishTask>
+    {
+        public UniversalPackagesV1PublishTask(string feed, string packageName, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.UniversalPackagesV1VersionIncrement> versionIncrement) { }
+        public UniversalPackagesV1PublishTask(string feed, string packageName, string packageVersion) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? PackageDescription { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.UniversalPackagesV1VersionIncrement>? VersionIncrement { get; init; }
+    }
+    public abstract class UniversalPackagesV1Task : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.UniversalPackagesV1Task>
+    {
+        protected UniversalPackagesV1Task(string command, string feed, string packageName) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Directory { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Feed { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? PackageName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? PackageVersion { get; init; }
+    }
+    public enum UniversalPackagesV1VersionIncrement
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="major")]
+        Major = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="minor")]
+        Minor = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="patch")]
+        Patch = 2,
     }
     public class UseDotNetTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.UseDotNetTask>
     {

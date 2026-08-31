@@ -56,3 +56,12 @@
       path: $(Build.ArtifactStagingDirectory)
       checkDownloadedFiles: true
       artifact: Another.CLI
+
+  - task: UniversalPackages@1
+    displayName: Download universal package
+    inputs:
+      command: download
+      feed: MyProject/my-feed
+      packageName: my-package
+      packageVersion: 2.*
+      directory: $(Pipeline.Workspace)/universal

@@ -186,6 +186,11 @@ public class TaskBuilderTests
                             DisplayName = "Publish packages",
                             Properties = """{"user-type":"packages"}""",
                         },
+                        Publish.UniversalPackage("MyProject/my-feed", "my-package", UniversalPackagesV1VersionIncrement.Minor) with
+                        {
+                            Directory = "$(Build.ArtifactStagingDirectory)",
+                            PackageDescription = "Published from TaskBuilder",
+                        },
 
                         Publish.Pipeline("artifactName", "some/file/path.txt"),
                     }
@@ -297,7 +302,11 @@ public class TaskBuilderTests
                         {
                             CheckDownloadedFiles = true,
                             Artifact = "Another.CLI",
-                        }
+                        },
+                        Download.UniversalPackage("MyProject/my-feed", "my-package", "2.*") with
+                        {
+                            Directory = "$(Pipeline.Workspace)/universal",
+                        },
                     }
                 }
             }
