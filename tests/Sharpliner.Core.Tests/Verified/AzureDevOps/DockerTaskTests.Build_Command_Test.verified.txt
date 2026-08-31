@@ -1,0 +1,16 @@
+﻿task: Docker@2
+
+displayName: docker build
+
+inputs:
+  command: build
+  Dockerfile: Dockerfile
+  repository: contoso/my-app
+  tags: |-
+    $(Build.BuildId)
+    latest
+  buildContext: .
+  arguments: --build-arg HTTP_PROXY=http://10.20.30.2:1234 --quiet
+  containerRegistry: my-registry-service-connection
+  addPipelineData: false
+  addBaseImageData: false

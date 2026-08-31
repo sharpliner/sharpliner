@@ -91,6 +91,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Tasks.AzureCliTaskBuilder AzureCli { get; }
         protected static Sharpliner.AzureDevOps.Tasks.BashTaskBuilder Bash { get; }
         protected static Sharpliner.AzureDevOps.Tasks.CheckoutTaskBuilder Checkout { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.DockerTaskBuilder Docker { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder DotNet { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DownloadTaskBuilder Download { get; }
         protected static Sharpliner.AzureDevOps.ElseCondition Else { get; }
@@ -1759,6 +1760,82 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? RemoveSourceFolder { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SourceFolder { get; init; }
+    }
+    public class DockerBuildAndPushTask : Sharpliner.AzureDevOps.Tasks.DockerImageTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerBuildAndPushTask>
+    {
+        public DockerBuildAndPushTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? BuildContext { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Dockerfile { get; init; }
+    }
+    public class DockerBuildTask : Sharpliner.AzureDevOps.Tasks.DockerImageTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerBuildTask>
+    {
+        public DockerBuildTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Arguments { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? BuildContext { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Dockerfile { get; init; }
+    }
+    public abstract class DockerContainerTask : Sharpliner.AzureDevOps.Tasks.DockerTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerContainerTask>
+    {
+        protected DockerContainerTask(string command) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Arguments { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Container { get; init; }
+    }
+    public abstract class DockerImageTask : Sharpliner.AzureDevOps.Tasks.DockerTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerImageTask>
+    {
+        protected DockerImageTask(string command) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Repository { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public System.Collections.Generic.IReadOnlyList<string>? Tags { get; init; }
+    }
+    public class DockerLoginTask : Sharpliner.AzureDevOps.Tasks.DockerTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerLoginTask>
+    {
+        public DockerLoginTask() { }
+    }
+    public class DockerLogoutTask : Sharpliner.AzureDevOps.Tasks.DockerTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerLogoutTask>
+    {
+        public DockerLogoutTask() { }
+    }
+    public class DockerPushTask : Sharpliner.AzureDevOps.Tasks.DockerImageTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerPushTask>
+    {
+        public DockerPushTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Arguments { get; init; }
+    }
+    public class DockerStartTask : Sharpliner.AzureDevOps.Tasks.DockerContainerTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerStartTask>
+    {
+        public DockerStartTask() { }
+    }
+    public class DockerStopTask : Sharpliner.AzureDevOps.Tasks.DockerContainerTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerStopTask>
+    {
+        public DockerStopTask() { }
+    }
+    public class DockerTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DockerTask>
+    {
+        public DockerTask(string command) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? AddBaseImageData { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? AddPipelineData { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ContainerRegistry { get; init; }
+    }
+    public class DockerTaskBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.DockerBuildTask Build(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> dockerfile, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? repository = null, System.Collections.Generic.IReadOnlyList<string>? tags = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? buildContext = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
+        public Sharpliner.AzureDevOps.Tasks.DockerBuildAndPushTask BuildAndPush(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> dockerfile, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> repository, System.Collections.Generic.IReadOnlyList<string>? tags = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? buildContext = null) { }
+        public Sharpliner.AzureDevOps.Tasks.DockerLoginTask Login(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> containerRegistry) { }
+        public Sharpliner.AzureDevOps.Tasks.DockerLogoutTask Logout(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? containerRegistry = null) { }
+        public Sharpliner.AzureDevOps.Tasks.DockerPushTask Push(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> repository, System.Collections.Generic.IReadOnlyList<string>? tags = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
+        public Sharpliner.AzureDevOps.Tasks.DockerStartTask Start(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> container, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
+        public Sharpliner.AzureDevOps.Tasks.DockerStopTask Stop(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> container, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? arguments = null) { }
     }
     public class DotNetBuildCoreCliTask : Sharpliner.AzureDevOps.Tasks.DotNetCoreCliTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DotNetBuildCoreCliTask>
     {

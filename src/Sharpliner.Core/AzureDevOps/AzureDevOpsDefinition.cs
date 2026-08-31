@@ -342,6 +342,11 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static NpmTaskBuilder Npm { get; } = new();
 
+    /// <summary>
+    /// Creates a Docker task.
+    /// </summary>
+    protected static DockerTaskBuilder Docker { get; } = new();
+
     #endregion
 
     #region Pipeline member shorthands

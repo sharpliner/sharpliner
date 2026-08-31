@@ -1,0 +1,8 @@
+﻿task: Docker@2
+
+displayName: docker start
+
+inputs:
+  command: start
+  container: my-container
+  arguments: -e ASPNETCORE_ENVIRONMENT=Development
