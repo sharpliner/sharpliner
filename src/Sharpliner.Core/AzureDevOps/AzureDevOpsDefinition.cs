@@ -301,6 +301,8 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static AzureCliTaskBuilder AzureCli { get; } = new();
 
+    protected static AzureCliV3TaskBuilder AzureCliV3 { get; } = new();
+
     /// <summary>
     /// Creates a generic pipeline task.
     /// </summary>

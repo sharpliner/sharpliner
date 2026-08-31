@@ -56,7 +56,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | YAML identity | Sharpliner API |
 |---|---|
 | `ArchiveFiles@2` | `ArchiveFilesTask` |
-| `AzureCLI@2` | `AzureCli.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliTask`, `AzureCliFileTask` |
+| `AzureCLI@3`, `AzureCLI@2` | `AzureCliV3.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliV3Task`, `AzureCliV3FileTask`; `AzureCli.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliTask`, `AzureCliFileTask` |
 | `Bash@3` | `Bash.Inline/File/FromFile/FromResourceFile` -> `InlineBashTask`, `BashFileTask` (`bash` step shortcut) |
 | `CmdLine@2` | `Script.Inline/FromFile/FromResourceFile` -> `ScriptTask` (`script` step shortcut) |
 | `CopyFiles@2` | `CopyFilesTask` |
@@ -122,7 +122,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Azure App Service deploy | `AzureRmWebAppDeployment@5`, `AzureRmWebAppDeployment@4`, `AzureRmWebAppDeployment@3`, `AzureRmWebAppDeployment@2` | ❌ Missing | No strongly typed model or builder. |
 | Azure App Service manage | `AzureAppServiceManage@0` | ❌ Missing | No strongly typed model or builder. |
 | Azure App Service Settings | `AzureAppServiceSettings@1` | ❌ Missing | No strongly typed model or builder. |
-| Azure CLI | `AzureCLI@3`, `AzureCLI@2`, `AzureCLI@1` | 🟡 Partial | `AzureCli.Inline/File/FromFile/FromResourceFile` builders emit `AzureCLI@2`. The current `AzureCLI@3` major is not modelled. |
+| Azure CLI | `AzureCLI@3`, `AzureCLI@2`, `AzureCLI@1` | ✅ Supported | `AzureCliV3.Inline/File/FromFile/FromResourceFile` builders emit the current `AzureCLI@3` major; `AzureCli` retains the `AzureCLI@2` API. |
 | Azure CLI Preview | `AzureCLI@0` | ⚪ Out of scope | Deprecated `AzureCLI@0` preview version. |
 | Azure Cloud Service deployment | `AzureCloudPowerShellDeployment@2`, `AzureCloudPowerShellDeployment@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure Container Apps Deploy | `AzureContainerApps@1`, `AzureContainerApps@0` | ❌ Missing | No strongly typed model or builder. |
@@ -346,7 +346,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `AzureRmWebAppDeployment@5` – Azure App Service deploy
 - `AzureAppServiceManage@0` – Azure App Service manage
 - `AzureAppServiceSettings@1` – Azure App Service Settings
-- `AzureCLI@3` – Azure CLI (partially covered today)
 - `AzureCloudPowerShellDeployment@2` – Azure Cloud Service deployment
 - `AzureContainerApps@1` – Azure Container Apps Deploy
 - `AzureMysqlDeployment@2` – Azure Database for MySQL deployment

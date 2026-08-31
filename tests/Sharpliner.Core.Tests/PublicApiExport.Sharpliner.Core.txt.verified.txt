@@ -89,6 +89,7 @@ namespace Sharpliner.AzureDevOps
         protected static readonly Sharpliner.AzureDevOps.VariablesReference variables;
         protected AzureDevOpsDefinition() { }
         protected static Sharpliner.AzureDevOps.Tasks.AzureCliTaskBuilder AzureCli { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.AzureCliV3TaskBuilder AzureCliV3 { get; }
         protected static Sharpliner.AzureDevOps.Tasks.BashTaskBuilder Bash { get; }
         protected static Sharpliner.AzureDevOps.Tasks.CheckoutTaskBuilder Checkout { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder DotNet { get; }
@@ -1599,6 +1600,60 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.InlineAzureCliTask FromResourceFile(string azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptType> scriptType, string resourceFileName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
         public Sharpliner.AzureDevOps.Tasks.InlineAzureCliTask Inline(string azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptType> scriptType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null, params string[] scriptLines) { }
     }
+    public class AzureCliV3FileTask : Sharpliner.AzureDevOps.Tasks.AzureCliV3Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureCliV3FileTask>
+    {
+        public AzureCliV3FileTask(Sharpliner.AzureDevOps.Tasks.AzureCliV3ConnectionType connectionType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> serviceConnection, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptType> scriptType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> scriptPath) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ScriptPath { get; init; }
+    }
+    public abstract class AzureCliV3Task : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureCliV3Task>
+    {
+        protected AzureCliV3Task(Sharpliner.AzureDevOps.Tasks.AzureCliV3ConnectionType connectionType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> serviceConnection, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptType> scriptType, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptLocation> scriptLocation) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? AddSpnToEnvironment { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? AllowNoSubscriptions { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureDevOpsServiceConnection { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ConnectedServiceNameARM { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureCliV3ConnectionType>? ConnectionType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Cwd { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? FailOnStandardError { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? KeepAzSessionActive { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.PowerShellErrorActionPreference>? PowerShellErrorActionPreference { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? PowerShellIgnoreLASTEXITCODE { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ScriptArguments { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptLocation>? ScriptLocation { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptType>? ScriptType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? UseGlobalConfig { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? VisibleAzLogin { get; init; }
+    }
+    public class AzureCliV3TaskBuilder : Sharpliner.Common.Model.Tasks.TaskBuilderBase
+    {
+        public Sharpliner.AzureDevOps.Tasks.AzureCliV3FileTask File(Sharpliner.AzureDevOps.Tasks.AzureCliV3ConnectionType connectionType, string serviceConnection, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptType> scriptType, string scriptPath, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.InlineAzureCliV3Task FromFile(Sharpliner.AzureDevOps.Tasks.AzureCliV3ConnectionType connectionType, string serviceConnection, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptType> scriptType, string path, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.InlineAzureCliV3Task FromResourceFile(Sharpliner.AzureDevOps.Tasks.AzureCliV3ConnectionType connectionType, string serviceConnection, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptType> scriptType, string resourceFileName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.InlineAzureCliV3Task Inline(Sharpliner.AzureDevOps.Tasks.AzureCliV3ConnectionType connectionType, string serviceConnection, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptType> scriptType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null, params string[] scriptLines) { }
+    }
+    public enum AzureCliV3ConnectionType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="azureRM")]
+        AzureResourceManager = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="azureDevOps")]
+        AzureDevOps = 1,
+    }
     public class AzureDevOpsTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask>
     {
         public AzureDevOpsTask(string task) { }
@@ -1955,6 +2010,12 @@ namespace Sharpliner.AzureDevOps.Tasks
     public class InlineAzureCliTask : Sharpliner.AzureDevOps.Tasks.AzureCliTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.InlineAzureCliTask>
     {
         public InlineAzureCliTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptType> scriptType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> inlineScript) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? InlineScript { get; init; }
+    }
+    public class InlineAzureCliV3Task : Sharpliner.AzureDevOps.Tasks.AzureCliV3Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.InlineAzureCliV3Task>
+    {
+        public InlineAzureCliV3Task(Sharpliner.AzureDevOps.Tasks.AzureCliV3ConnectionType connectionType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> serviceConnection, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ScriptType> scriptType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> inlineScript) { }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? InlineScript { get; init; }
     }
