@@ -114,15 +114,26 @@ public record AzureResourceManagerKubernetesTask : KubernetesV1Task
 }
 
 /// <summary>A Kubernetes@1 task that uses the agent's existing Kubernetes configuration.</summary>
-public record KubernetesNoConnectionTask(KubernetesCommand command) : KubernetesV1Task(command, KubernetesConnectionType.None);
+public record KubernetesNoConnectionTask : KubernetesV1Task
+{
+    /// <summary>Initializes a Kubernetes task that uses the agent's existing configuration.</summary>
+    public KubernetesNoConnectionTask(KubernetesCommand command) : base(command, KubernetesConnectionType.None) { }
+}
 
 /// <summary>Models the deprecated <c>Kubernetes@0</c> task for existing pipelines. See the <see href="https://raw.githubusercontent.com/microsoft/azure-pipelines-tasks/master/Tasks/KubernetesV0/task.json">task specification</see>.</summary>
-public record KubernetesV0Task(KubernetesCommand command, AdoExpression<string> kubernetesServiceEndpoint) : KubernetesTask("Kubernetes@0")
+public record KubernetesV0Task : KubernetesTask
 {
+    /// <summary>Initializes a Kubernetes@0 task.</summary>
+    public KubernetesV0Task(KubernetesCommand command, AdoExpression<string> kubernetesServiceEndpoint) : base("Kubernetes@0")
+    {
+        KubernetesServiceEndpoint = kubernetesServiceEndpoint;
+        Command = command;
+    }
+
     /// <summary>Kubernetes service connection.</summary>
-    [YamlIgnore] public AdoExpression<string>? KubernetesServiceEndpoint { get => GetExpression<string>("kubernetesServiceEndpoint"); init => SetProperty("kubernetesServiceEndpoint", value); } = kubernetesServiceEndpoint;
+    [YamlIgnore] public AdoExpression<string>? KubernetesServiceEndpoint { get => GetExpression<string>("kubernetesServiceEndpoint"); init => SetProperty("kubernetesServiceEndpoint", value); }
     /// <summary>kubectl command to run.</summary>
-    [YamlIgnore] public AdoExpression<KubernetesCommand>? Command { get => GetExpression<KubernetesCommand>("command"); init => SetProperty("command", value); } = command;
+    [YamlIgnore] public AdoExpression<KubernetesCommand>? Command { get => GetExpression<KubernetesCommand>("command"); init => SetProperty("command", value); }
     /// <summary>Name of the variable receiving the kubectl output.</summary>
     [YamlIgnore] public AdoExpression<string>? KubectlOutput { get => GetExpression<string>("kubectlOutput"); init => SetProperty("kubectlOutput", value); }
 }

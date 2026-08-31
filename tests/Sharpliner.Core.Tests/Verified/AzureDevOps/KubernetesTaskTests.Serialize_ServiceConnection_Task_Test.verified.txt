@@ -7,6 +7,6 @@ inputs:
   namespace: production
   useConfigurationFile: true
   configurationType: inline
-  inline: "apiVersion: v1"
+  inline: 'apiVersion: v1'
   arguments: --validate=true
   outputFormat: yaml

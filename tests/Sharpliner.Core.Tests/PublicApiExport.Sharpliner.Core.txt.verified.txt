@@ -97,6 +97,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Expressions.IfConditionBuilder If { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsNotPullRequest { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsPullRequest { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.KubernetesTaskBuilder Kubernetes { get; }
         protected static Sharpliner.AzureDevOps.DependsOn NoDependsOn { get; }
         protected static Sharpliner.AzureDevOps.Tasks.NpmTaskBuilder Npm { get; }
         protected static Sharpliner.AzureDevOps.Tasks.NuGetTaskBuilder NuGet { get; }
@@ -1622,6 +1623,18 @@ namespace Sharpliner.AzureDevOps.Tasks
         protected void SetProperty(string name, string? value) { }
         protected void SetProperty<T>(string name, Sharpliner.AzureDevOps.Expressions.AdoExpression<T>? value) { }
     }
+    public class AzureResourceManagerKubernetesTask : Sharpliner.AzureDevOps.Tasks.KubernetesV1Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureResourceManagerKubernetesTask>
+    {
+        public AzureResourceManagerKubernetesTask(Sharpliner.AzureDevOps.Tasks.KubernetesCommand command, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscriptionEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureResourceGroup, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesCluster) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureResourceGroup { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureSubscriptionEndpoint { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KubernetesCluster { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? UseClusterAdmin { get; init; }
+    }
     public class BashFileTask : Sharpliner.AzureDevOps.Tasks.BashTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.BashFileTask>, YamlDotNet.Serialization.IYamlConvertible
     {
         public BashFileTask(string filePath) { }
@@ -1975,6 +1988,169 @@ namespace Sharpliner.AzureDevOps.Tasks
         public InlinePwshTask(params string[] scriptLines) { }
         [YamlDotNet.Serialization.YamlMember(Alias="pwsh", Order=1, ScalarStyle=YamlDotNet.Core.ScalarStyle.Literal)]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Contents { get; init; }
+    }
+    public enum KubectlLocationType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="version")]
+        Version = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="location")]
+        Location = 1,
+    }
+    public enum KubernetesCommand
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="apply")]
+        Apply = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="create")]
+        Create = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="delete")]
+        Delete = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="exec")]
+        Exec = 3,
+        [YamlDotNet.Serialization.YamlMember(Alias="expose")]
+        Expose = 4,
+        [YamlDotNet.Serialization.YamlMember(Alias="get")]
+        Get = 5,
+        [YamlDotNet.Serialization.YamlMember(Alias="login")]
+        Login = 6,
+        [YamlDotNet.Serialization.YamlMember(Alias="logout")]
+        Logout = 7,
+        [YamlDotNet.Serialization.YamlMember(Alias="logs")]
+        Logs = 8,
+        [YamlDotNet.Serialization.YamlMember(Alias="rollout")]
+        Rollout = 9,
+        [YamlDotNet.Serialization.YamlMember(Alias="run")]
+        Run = 10,
+        [YamlDotNet.Serialization.YamlMember(Alias="set")]
+        Set = 11,
+        [YamlDotNet.Serialization.YamlMember(Alias="top")]
+        Top = 12,
+    }
+    public enum KubernetesConfigurationType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="configuration")]
+        Configuration = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="inline")]
+        Inline = 1,
+    }
+    public enum KubernetesConnectionType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="Azure Resource Manager")]
+        AzureResourceManager = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="Kubernetes Service Connection")]
+        KubernetesServiceConnection = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="None")]
+        None = 2,
+    }
+    public enum KubernetesContainerRegistryType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="Azure Container Registry")]
+        AzureContainerRegistry = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="Container Registry")]
+        ContainerRegistry = 1,
+    }
+    public class KubernetesNoConnectionTask : Sharpliner.AzureDevOps.Tasks.KubernetesV1Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.KubernetesNoConnectionTask>
+    {
+        public KubernetesNoConnectionTask(Sharpliner.AzureDevOps.Tasks.KubernetesCommand command) { }
+    }
+    public enum KubernetesOutputFormat
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="json")]
+        Json = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="yaml")]
+        Yaml = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="none")]
+        None = 2,
+    }
+    public enum KubernetesSecretType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="dockerRegistry")]
+        DockerRegistry = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="generic")]
+        Generic = 1,
+    }
+    public class KubernetesServiceConnectionTask : Sharpliner.AzureDevOps.Tasks.KubernetesV1Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.KubernetesServiceConnectionTask>
+    {
+        public KubernetesServiceConnectionTask(Sharpliner.AzureDevOps.Tasks.KubernetesCommand command, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesServiceEndpoint) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KubernetesServiceEndpoint { get; init; }
+    }
+    public abstract class KubernetesTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.KubernetesTask>
+    {
+        protected KubernetesTask(string task) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Arguments { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureContainerRegistry { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureSubscriptionEndpointForSecrets { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? CheckLatest { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ConfigMapArguments { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ConfigMapFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ConfigMapName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Configuration { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesConfigurationType>? ConfigurationType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesContainerRegistryType>? ContainerRegistryType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DockerRegistryEndpoint { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? ForceUpdate { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? ForceUpdateConfigMap { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? InlineConfiguration { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Namespace { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesOutputFormat>? OutputFormat { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SecretArguments { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SecretName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesSecretType>? SecretType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SpecifyLocation { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? UseConfigMapFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? UseConfigurationFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubectlLocationType>? VersionOrLocation { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? VersionSpec { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WorkingDirectory { get; init; }
+    }
+    public class KubernetesTaskBuilder : Sharpliner.Common.Model.Tasks.TaskBuilderBase
+    {
+        public Sharpliner.AzureDevOps.Tasks.AzureResourceManagerKubernetesTask AzureResourceManager(Sharpliner.AzureDevOps.Tasks.KubernetesCommand command, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscriptionEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureResourceGroup, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesCluster, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesNoConnectionTask None(Sharpliner.AzureDevOps.Tasks.KubernetesCommand command, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesServiceConnectionTask ServiceConnection(Sharpliner.AzureDevOps.Tasks.KubernetesCommand command, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesServiceEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
+    }
+    public class KubernetesV0Task : Sharpliner.AzureDevOps.Tasks.KubernetesTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.KubernetesV0Task>
+    {
+        public KubernetesV0Task(Sharpliner.AzureDevOps.Tasks.KubernetesCommand command, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesServiceEndpoint) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesCommand>? Command { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KubectlOutput { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KubernetesServiceEndpoint { get; init; }
+    }
+    public abstract class KubernetesV1Task : Sharpliner.AzureDevOps.Tasks.KubernetesTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.KubernetesV1Task>
+    {
+        protected KubernetesV1Task(Sharpliner.AzureDevOps.Tasks.KubernetesCommand command, Sharpliner.AzureDevOps.Tasks.KubernetesConnectionType connectionType) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesCommand>? Command { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesConnectionType>? ConnectionType { get; init; }
     }
     public class NoneCheckoutTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NoneCheckoutTask>
     {
