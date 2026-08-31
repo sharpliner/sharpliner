@@ -342,6 +342,11 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static NpmTaskBuilder Npm { get; } = new();
 
+    /// <summary>
+    /// Creates a Maven task.
+    /// </summary>
+    protected static MavenTaskBuilder Maven { get; } = new();
+
     #endregion
 
     #region Pipeline member shorthands

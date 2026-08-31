@@ -97,6 +97,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Expressions.IfConditionBuilder If { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsNotPullRequest { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsPullRequest { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.MavenTaskBuilder Maven { get; }
         protected static Sharpliner.AzureDevOps.DependsOn NoDependsOn { get; }
         protected static Sharpliner.AzureDevOps.Tasks.NpmTaskBuilder Npm { get; }
         protected static Sharpliner.AzureDevOps.Tasks.NuGetTaskBuilder NuGet { get; }
@@ -1975,6 +1976,22 @@ namespace Sharpliner.AzureDevOps.Tasks
         public InlinePwshTask(params string[] scriptLines) { }
         [YamlDotNet.Serialization.YamlMember(Alias="pwsh", Order=1, ScalarStyle=YamlDotNet.Core.ScalarStyle.Literal)]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Contents { get; init; }
+    }
+    public class MavenAuthenticateTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.MavenAuthenticateTask>
+    {
+        public MavenAuthenticateTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string[]? ArtifactsFeeds { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? AzureDevOpsServiceConnection { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string[]? MavenServiceConnections { get; init; }
+    }
+    public class MavenTaskBuilder
+    {
+        public MavenTaskBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.MavenAuthenticateTask Authenticate(string azureDevOpsServiceConnection, string[]? artifactsFeeds = null) { }
+        public Sharpliner.AzureDevOps.Tasks.MavenAuthenticateTask Authenticate(string[]? artifactsFeeds = null, string[]? mavenServiceConnections = null) { }
     }
     public class NoneCheckoutTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NoneCheckoutTask>
     {

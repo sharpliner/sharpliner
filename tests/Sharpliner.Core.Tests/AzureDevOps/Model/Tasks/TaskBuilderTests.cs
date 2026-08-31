@@ -488,4 +488,38 @@ public class TaskBuilderTests
 
         return Verify(pipeline.Serialize());
     }
+
+    private class MavenTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        Maven.Authenticate(),
+                        Maven.Authenticate([" MyFeedInOrg1 ", "", " MyFeedInOrg2 "], [" central ", "", " MavenOrg "]),
+                        Maven.Authenticate("MyAzureDevOpsServiceConnection", [" MyFeedInOrg1 ", " CrossOrgFeed "]),
+                        Maven.Authenticate("empty-connection", []),
+                        new MavenAuthenticateTask
+                        {
+                            AzureDevOpsServiceConnection = " ",
+                            ArtifactsFeeds = [""],
+                            MavenServiceConnections = [" "],
+                        },
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_Maven_Builders_Test()
+    {
+        MavenTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
 }

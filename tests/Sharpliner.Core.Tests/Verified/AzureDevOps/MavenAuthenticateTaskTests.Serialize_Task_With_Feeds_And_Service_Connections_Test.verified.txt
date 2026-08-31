@@ -1,0 +1,7 @@
+﻿task: MavenAuthenticate@0
+
+displayName: Maven Authenticate
+
+inputs:
+  artifactsFeeds: MyFeedInOrg1,MyFeedInOrg2
+  mavenServiceConnections: central,MavenOrg

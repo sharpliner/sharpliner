@@ -1,0 +1,25 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: MavenAuthenticate@0
+    displayName: Maven Authenticate
+
+  - task: MavenAuthenticate@0
+    displayName: Maven Authenticate
+    inputs:
+      artifactsFeeds: MyFeedInOrg1,MyFeedInOrg2
+      mavenServiceConnections: central,MavenOrg
+
+  - task: MavenAuthenticate@0
+    displayName: Maven Authenticate
+    inputs:
+      azureDevOpsServiceConnection: MyAzureDevOpsServiceConnection
+      artifactsFeeds: MyFeedInOrg1,CrossOrgFeed
+
+  - task: MavenAuthenticate@0
+    displayName: Maven Authenticate
+    inputs:
+      azureDevOpsServiceConnection: empty-connection
+
+  - task: MavenAuthenticate@0
+    displayName: Maven Authenticate
