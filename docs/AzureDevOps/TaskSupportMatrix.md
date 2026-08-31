@@ -57,6 +57,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 |---|---|
 | `ArchiveFiles@2` | `ArchiveFilesTask` |
 | `AzureCLI@2` | `AzureCli.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliTask`, `AzureCliFileTask` |
+| `AzureKeyVault@2`, `AzureKeyVault@1` | `AzureKeyVault.DownloadSecrets` -> `AzureKeyVaultTask`, `AzureKeyVaultV1Task` |
 | `Bash@3` | `Bash.Inline/File/FromFile/FromResourceFile` -> `InlineBashTask`, `BashFileTask` (`bash` step shortcut) |
 | `CmdLine@2` | `Script.Inline/FromFile/FromResourceFile` -> `ScriptTask` (`script` step shortcut) |
 | `CopyFiles@2` | `CopyFilesTask` |
@@ -131,7 +132,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Azure Function on Kubernetes | `AzureFunctionOnKubernetes@1`, `AzureFunctionOnKubernetes@0` | ❌ Missing | No strongly typed model or builder. |
 | Azure Functions Deploy | `AzureFunctionApp@2`, `AzureFunctionApp@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure Functions for container | `AzureFunctionAppContainer@1` | ❌ Missing | No strongly typed model or builder. |
-| Azure Key Vault | `AzureKeyVault@2`, `AzureKeyVault@1` | ❌ Missing | No strongly typed model or builder. |
+| Azure Key Vault | `AzureKeyVault@2`, `AzureKeyVault@1` | ✅ Supported | `AzureKeyVault.DownloadSecrets(...)` -> `AzureKeyVaultTask` (`@2`). `AzureKeyVaultV1Task` and `AzureKeyVault.DownloadSecretsV1(...)` cover the deprecated `@1` major. |
 | Azure Monitor alerts (Deprecated) | `AzureMonitorAlerts@0` | ⚪ Out of scope | Deprecated by Microsoft (classic Azure Monitor alerts). |
 | Azure PowerShell | `AzurePowerShell@5`, `AzurePowerShell@4`, `AzurePowerShell@3`, `AzurePowerShell@2`, `AzurePowerShell@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure resource group deployment | `AzureResourceGroupDeployment@2`, `AzureResourceGroupDeployment@1` | ❌ Missing | No strongly typed model or builder. |
@@ -279,16 +280,16 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Category | Total | ✅ Supported | 🟡 Partial | ❌ Missing | ⚪ Out of scope |
 |---|---|---|---|---|---|
 | Build | 28 | 1 | 0 | 20 | 7 |
-| Deploy | 50 | 0 | 1 | 43 | 6 |
+| Deploy | 50 | 1 | 1 | 42 | 6 |
 | Package | 18 | 3 | 1 | 8 | 6 |
 | Test | 10 | 2 | 0 | 5 | 3 |
 | Tool | 15 | 1 | 0 | 13 | 1 |
 | Utility | 47 | 9 | 0 | 35 | 3 |
-| **Total** | **168** | **16** | **2** | **124** | **26** |
+| **Total** | **168** | **17** | **2** | **123** | **26** |
 
-Sharpliner covers **18 of the 168** official built-in task families (16 fully, 2 partially).
+Sharpliner covers **19 of the 168** official built-in task families (17 fully, 2 partially).
 Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
-library grew from. The **124 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
+library grew from. The **123 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
 Service Fabric) and by tool installers.
 
 ## Tasks we would like to see contributed
@@ -310,7 +311,7 @@ When picking one up, a contribution is expected to contain:
 - an update of this document and of the [definition reference](DefinitionReference.md).
 
 Good candidates to start with, as they are the most commonly used ones in .NET pipelines, are `Cache@2`,
-`Docker@2`, `PublishBuildArtifacts@1`, `DownloadBuildArtifacts@1`, `AzureKeyVault@2`, `AzurePowerShell@5`,
+`Docker@2`, `PublishBuildArtifacts@1`, `DownloadBuildArtifacts@1`, `AzurePowerShell@5`,
 `Npm@1` and `VSTest@3`.
 
 ### Missing build tasks
@@ -354,7 +355,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `AzureFunctionOnKubernetes@1` – Azure Function on Kubernetes
 - `AzureFunctionApp@2` – Azure Functions Deploy
 - `AzureFunctionAppContainer@1` – Azure Functions for container
-- `AzureKeyVault@2` – Azure Key Vault
 - `AzurePowerShell@5` – Azure PowerShell
 - `AzureResourceGroupDeployment@2` – Azure resource group deployment
 - `AzureSpringCloud@0` – Azure Spring Apps

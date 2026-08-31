@@ -341,6 +341,34 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class AzureKeyVaultTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        AzureKeyVault.DownloadSecrets("MyServiceConnection", "MyKeyVault"),
+#pragma warning disable CS0618 // Type or member is obsolete
+                        AzureKeyVault.DownloadSecretsV1("LegacyServiceConnection", "LegacyVault", "LegacySecret", true)
+#pragma warning restore CS0618 // Type or member is obsolete
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_AzureKeyVault_Builder_Test()
+    {
+        AzureKeyVaultTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class TaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
