@@ -94,6 +94,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder DotNet { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DownloadTaskBuilder Download { get; }
         protected static Sharpliner.AzureDevOps.ElseCondition Else { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.HelmTaskBuilder Helm { get; }
         protected static Sharpliner.AzureDevOps.Expressions.IfConditionBuilder If { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsNotPullRequest { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsPullRequest { get; }
@@ -1951,6 +1952,218 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? OverwriteExistingFiles { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? PathToSevenZipTool { get; init; }
+    }
+    public enum HelmChartType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="Name")]
+        Name = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="FilePath")]
+        FilePath = 1,
+    }
+    public enum HelmConnectionType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="Azure Resource Manager")]
+        AzureResourceManager = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="Kubernetes Service Connection")]
+        KubernetesServiceConnection = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="None")]
+        None = 2,
+    }
+    public abstract class HelmDeployChartTask : Sharpliner.AzureDevOps.Tasks.HelmDeployCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployChartTask>
+    {
+        protected HelmDeployChartTask(string command) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ChartName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ChartPath { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.HelmChartType>? ChartType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? OverrideValues { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ReleaseName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ValueFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Version { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? WaitForExecution { get; init; }
+    }
+    public abstract class HelmDeployCommandTask : Sharpliner.AzureDevOps.Tasks.HelmDeployTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployCommandTask>
+    {
+        protected HelmDeployCommandTask(string command) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Arguments { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? CaCert { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Certificate { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? EnableTls { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? PrivateKey { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TillerNamespace { get; init; }
+    }
+    public class HelmDeployCreateTask : Sharpliner.AzureDevOps.Tasks.HelmDeployCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployCreateTask>
+    {
+        public HelmDeployCreateTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> chartName) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ChartName { get; init; }
+    }
+    public class HelmDeployDeleteTask : Sharpliner.AzureDevOps.Tasks.HelmDeployReleaseTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployDeleteTask>
+    {
+        public HelmDeployDeleteTask() { }
+    }
+    public class HelmDeployExposeTask : Sharpliner.AzureDevOps.Tasks.HelmDeployCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployExposeTask>
+    {
+        public HelmDeployExposeTask() { }
+    }
+    public class HelmDeployGetTask : Sharpliner.AzureDevOps.Tasks.HelmDeployCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployGetTask>
+    {
+        public HelmDeployGetTask() { }
+    }
+    public class HelmDeployInitTask : Sharpliner.AzureDevOps.Tasks.HelmDeployCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployInitTask>
+    {
+        public HelmDeployInitTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? CanaryImage { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? UpgradeTiller { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? WaitForExecution { get; init; }
+    }
+    public class HelmDeployInstallTask : Sharpliner.AzureDevOps.Tasks.HelmDeployChartTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployInstallTask>
+    {
+        public HelmDeployInstallTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? UpdateDependency { get; init; }
+    }
+    public class HelmDeployLoginTask : Sharpliner.AzureDevOps.Tasks.HelmDeployTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployLoginTask>
+    {
+        public HelmDeployLoginTask() { }
+    }
+    public class HelmDeployLogoutTask : Sharpliner.AzureDevOps.Tasks.HelmDeployTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployLogoutTask>
+    {
+        public HelmDeployLogoutTask() { }
+    }
+    public class HelmDeployLsTask : Sharpliner.AzureDevOps.Tasks.HelmDeployCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployLsTask>
+    {
+        public HelmDeployLsTask() { }
+    }
+    public class HelmDeployPackageTask : Sharpliner.AzureDevOps.Tasks.HelmDeployCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployPackageTask>
+    {
+        public HelmDeployPackageTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ChartNameForACR { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ChartPath { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ChartPathForACR { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Destination { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? Save { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? UpdateDependency { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Version { get; init; }
+    }
+    public class HelmDeployPushTask : Sharpliner.AzureDevOps.Tasks.HelmDeployCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployPushTask>
+    {
+        public HelmDeployPushTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ChartNameForACR { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ChartPath { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ChartPathForACR { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RemoteRepo { get; init; }
+    }
+    public abstract class HelmDeployReleaseTask : Sharpliner.AzureDevOps.Tasks.HelmDeployCommandTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployReleaseTask>
+    {
+        protected HelmDeployReleaseTask(string command) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ReleaseName { get; init; }
+    }
+    public class HelmDeployRollbackTask : Sharpliner.AzureDevOps.Tasks.HelmDeployReleaseTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployRollbackTask>
+    {
+        public HelmDeployRollbackTask() { }
+    }
+    public abstract class HelmDeployTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployTask>
+    {
+        protected HelmDeployTask(string command) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureContainerRegistry { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureResourceGroup { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureResourceGroupForACR { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureSubscriptionEndpoint { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureSubscriptionEndpointForACR { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.HelmConnectionType>? ConnectionType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? FailOnStderr { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KubernetesCluster { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KubernetesServiceEndpoint { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Namespace { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? PublishPipelineMetadata { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? UseClusterAdmin { get; init; }
+    }
+    public class HelmDeployUninstallTask : Sharpliner.AzureDevOps.Tasks.HelmDeployReleaseTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployUninstallTask>
+    {
+        public HelmDeployUninstallTask() { }
+    }
+    public class HelmDeployUpgradeTask : Sharpliner.AzureDevOps.Tasks.HelmDeployChartTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.HelmDeployUpgradeTask>
+    {
+        public HelmDeployUpgradeTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? Force { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? Install { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? Recreate { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? ResetValues { get; init; }
+    }
+    public class HelmInstallBuilder
+    {
+        public HelmInstallBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.HelmDeployInstallTask FromChartName(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> chartName) { }
+        public Sharpliner.AzureDevOps.Tasks.HelmDeployInstallTask FromChartPath(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> chartPath) { }
+    }
+    public class HelmTaskBuilder
+    {
+        public HelmTaskBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.HelmDeployExposeTask Expose { get; }
+        public Sharpliner.AzureDevOps.Tasks.HelmDeployGetTask Get { get; }
+        public Sharpliner.AzureDevOps.Tasks.HelmDeployInitTask Init { get; }
+        public Sharpliner.AzureDevOps.Tasks.HelmInstallBuilder Install { get; }
+        public Sharpliner.AzureDevOps.Tasks.HelmDeployLoginTask Login { get; }
+        public Sharpliner.AzureDevOps.Tasks.HelmDeployLogoutTask Logout { get; }
+        public Sharpliner.AzureDevOps.Tasks.HelmDeployLsTask Ls { get; }
+        public Sharpliner.AzureDevOps.Tasks.HelmUpgradeBuilder Upgrade { get; }
+        public Sharpliner.AzureDevOps.Tasks.HelmDeployCreateTask Create(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> chartName) { }
+        public Sharpliner.AzureDevOps.Tasks.HelmDeployDeleteTask Delete(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> releaseName) { }
+        public Sharpliner.AzureDevOps.Tasks.HelmDeployPackageTask Package(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> chartPath) { }
+        public Sharpliner.AzureDevOps.Tasks.HelmDeployPushTask Push(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> chartPath, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> remoteRepo) { }
+        public Sharpliner.AzureDevOps.Tasks.HelmDeployRollbackTask Rollback(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> releaseName) { }
+        public Sharpliner.AzureDevOps.Tasks.HelmDeployUninstallTask Uninstall(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> releaseName) { }
+    }
+    public class HelmUpgradeBuilder
+    {
+        public HelmUpgradeBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.HelmDeployUpgradeTask FromChartName(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> chartName) { }
+        public Sharpliner.AzureDevOps.Tasks.HelmDeployUpgradeTask FromChartPath(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> chartPath) { }
     }
     public class InlineAzureCliTask : Sharpliner.AzureDevOps.Tasks.AzureCliTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.InlineAzureCliTask>
     {

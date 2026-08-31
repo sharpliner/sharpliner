@@ -342,6 +342,11 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static NpmTaskBuilder Npm { get; } = new();
 
+    /// <summary>
+    /// Creates a HelmDeploy task.
+    /// </summary>
+    protected static HelmTaskBuilder Helm { get; } = new();
+
     #endregion
 
     #region Pipeline member shorthands

@@ -64,6 +64,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `DotNetCoreCLI@2` | `DotNet.*` -> `DotNetCoreCliTask` and its `Build`/`Test`/`Pack`/`Publish`/`Push`/`Restore` specializations |
 | `DownloadPipelineArtifact@2` | `Download.Current/FromPipelineResource/SpecificBuild/LatestFromBranch/None` -> `DownloadTask` (`download` step shortcut) |
 | `ExtractFiles@1` | `ExtractFilesTask` |
+| `HelmDeploy@1` | `Helm.*` -> `HelmDeployTask` and its `Install`/`Upgrade`/`Package`/`Push`/`Init`/`Login`/`Logout`/`Create`/`Ls`/`Get`/`Expose`/`Delete`/`Uninstall`/`Rollback` specializations |
 | `npmAuthenticate@0` | `Npm.Authenticate` -> `NpmAuthenticateTask` |
 | `NuGetAuthenticate@1` | `NuGet.Authenticate` -> `NuGetAuthenticateTask` |
 | `NuGetCommand@2` | `NuGet.*` -> `NuGetCommandTask` and its `Restore`/`Pack`/`Push`/`Custom` specializations |
@@ -155,7 +156,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Manual intervention | `ManualIntervention@8` | ⚪ Out of scope | Classic release pipelines only, it cannot be used in YAML pipelines which are the only thing Sharpliner generates. |
 | Manual validation | `ManualValidation@1`, `ManualValidation@0` | ❌ Missing | No strongly typed model or builder. |
 | MySQL database deploy | `MysqlDeploymentOnMachineGroup@1` | ❌ Missing | No strongly typed model or builder. |
-| Package and deploy Helm charts | `HelmDeploy@1`, `HelmDeploy@0` | ❌ Missing | No strongly typed model or builder. |
+| Package and deploy Helm charts | `HelmDeploy@1`, `HelmDeploy@0` | ✅ Supported | `Helm.*` builder -> `HelmDeployTask` and its per-command specializations (`HelmDeploy@1`). The legacy `HelmDeploy@0` major is not modelled. |
 | PowerShell on target machines | `PowerShellOnTargetMachines@3`, `PowerShellOnTargetMachines@2`, `PowerShellOnTargetMachines@1` | ❌ Missing | No strongly typed model or builder. |
 | Service Fabric application deployment | `ServiceFabricDeploy@1` | ❌ Missing | No strongly typed model or builder. |
 | Service Fabric Compose deploy | `ServiceFabricComposeDeploy@0` | ❌ Missing | No strongly typed model or builder. |
@@ -279,16 +280,16 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Category | Total | ✅ Supported | 🟡 Partial | ❌ Missing | ⚪ Out of scope |
 |---|---|---|---|---|---|
 | Build | 28 | 1 | 0 | 20 | 7 |
-| Deploy | 50 | 0 | 1 | 43 | 6 |
+| Deploy | 50 | 1 | 1 | 42 | 6 |
 | Package | 18 | 3 | 1 | 8 | 6 |
 | Test | 10 | 2 | 0 | 5 | 3 |
 | Tool | 15 | 1 | 0 | 13 | 1 |
 | Utility | 47 | 9 | 0 | 35 | 3 |
-| **Total** | **168** | **16** | **2** | **124** | **26** |
+| **Total** | **168** | **17** | **2** | **123** | **26** |
 
-Sharpliner covers **18 of the 168** official built-in task families (16 fully, 2 partially).
+Sharpliner covers **19 of the 168** official built-in task families (17 fully, 2 partially).
 Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
-library grew from. The **124 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
+library grew from. The **123 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
 Service Fabric) and by tool installers.
 
 ## Tasks we would like to see contributed
@@ -375,7 +376,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `Kubernetes@1` – Kubectl
 - `ManualValidation@1` – Manual validation
 - `MysqlDeploymentOnMachineGroup@1` – MySQL database deploy
-- `HelmDeploy@1` – Package and deploy Helm charts
 - `PowerShellOnTargetMachines@3` – PowerShell on target machines
 - `ServiceFabricDeploy@1` – Service Fabric application deployment
 - `ServiceFabricComposeDeploy@0` – Service Fabric Compose deploy

@@ -1,0 +1,110 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: HelmDeploy@1
+    inputs:
+      command: install
+      chartType: Name
+      chartName: stable/mysql
+      connectionType: Azure Resource Manager
+      azureSubscriptionEndpoint: my-subscription
+      azureResourceGroup: my-resource-group
+      kubernetesCluster: my-cluster
+      namespace: my-namespace
+      releaseName: my-release
+      overrideValues: key1=val1,key2=val2
+      valueFile: values.yaml
+      updatedependency: true
+      waitForExecution: false
+
+  - task: HelmDeploy@1
+    inputs:
+      command: upgrade
+      chartType: FilePath
+      chartPath: ./charts/redis
+      connectionType: Kubernetes Service Connection
+      kubernetesServiceEndpoint: my-k8s-connection
+      releaseName: my-release
+      version: 1.2.3
+      install: true
+      recreate: true
+      resetValues: true
+      force: true
+      arguments: --dry-run
+
+  - task: HelmDeploy@1
+    inputs:
+      command: package
+      chartPath: ./charts/redis
+      destination: $(Build.ArtifactStagingDirectory)
+      save: false
+      updatedependency: true
+      version: 1.2.3
+      chartNameForACR: redis
+      chartPathForACR: ./charts/redis
+
+  - task: HelmDeploy@1
+    inputs:
+      command: push
+      chartPath: ./charts/redis-1.2.3.tgz
+      remoteRepo: myregistry.azurecr.io
+      azureSubscriptionEndpointForACR: my-subscription
+      azureResourceGroupForACR: my-resource-group
+      azureContainerRegistry: myregistry.azurecr.io
+
+  - task: HelmDeploy@1
+    inputs:
+      command: login
+      azureSubscriptionEndpointForACR: my-subscription
+      azureResourceGroupForACR: my-resource-group
+      azureContainerRegistry: myregistry.azurecr.io
+
+  - task: HelmDeploy@1
+    inputs:
+      command: logout
+
+  - task: HelmDeploy@1
+    inputs:
+      command: create
+      chartName: my-chart
+
+  - task: HelmDeploy@1
+    inputs:
+      command: init
+      canaryimage: true
+      upgradetiller: false
+      waitForExecution: true
+      tillernamespace: tiller-namespace
+
+  - task: HelmDeploy@1
+    inputs:
+      command: ls
+
+  - task: HelmDeploy@1
+    inputs:
+      command: get
+
+  - task: HelmDeploy@1
+    inputs:
+      command: expose
+
+  - task: HelmDeploy@1
+    inputs:
+      command: delete
+      releaseName: my-release
+
+  - task: HelmDeploy@1
+    inputs:
+      command: uninstall
+      releaseName: my-release
+
+  - task: HelmDeploy@1
+    inputs:
+      command: rollback
+      releaseName: my-release
+      enableTls: true
+      caCert: ca.cert
+      certificate: helm.cert
+      privatekey: helm.key
+      failOnStderr: true
+      publishPipelineMetadata: false

@@ -187,6 +187,43 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
         return Verify(yaml);
     }
 
+    [Fact]
+    public Task Helm_Test()
+    {
+        AdoExpressionList<Step> tasks =
+        [
+#region helm-tasks-code
+            Helm.Install.FromChartName("stable/mysql") with
+            {
+                ConnectionType = HelmConnectionType.AzureResourceManager,
+                AzureSubscriptionEndpoint = "my-azure-subscription",
+                AzureResourceGroup = "my-resource-group",
+                KubernetesCluster = "my-aks-cluster",
+                ReleaseName = "my-release",
+                OverrideValues = "image.tag=$(Build.BuildId)",
+            },
+
+            Helm.Upgrade.FromChartPath("./charts/my-app") with
+            {
+                ConnectionType = HelmConnectionType.KubernetesServiceConnection,
+                KubernetesServiceEndpoint = "my-kubernetes-connection",
+                ReleaseName = "my-release",
+                Install = true,
+            },
+
+            Helm.Package("./charts/my-app") with
+            {
+                Destination = "$(Build.ArtifactStagingDirectory)",
+            },
+
+            Helm.Uninstall("my-release")
+#endregion
+        ];
+
+        var yaml = SharplinerSerializer.Serialize(tasks);
+        return Verify(yaml);
+    }
+
     class PipelineVariables : SingleStagePipelineDefinition
     {
         public override string TargetFile => "pipeline-variables.yml";
