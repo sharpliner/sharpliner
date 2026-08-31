@@ -292,6 +292,11 @@ public abstract class AzureDevOpsDefinition
     protected static CheckoutTaskBuilder Checkout { get; } = new();
 
     /// <summary>
+    /// Creates a Cache@2 task.
+    /// </summary>
+    protected static CacheTaskBuilder Cache { get; } = new();
+
+    /// <summary>
     /// Creates a download task.
     /// </summary>
     protected static DownloadTaskBuilder Download { get; } = new();

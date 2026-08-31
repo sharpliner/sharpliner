@@ -58,6 +58,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `ArchiveFiles@2` | `ArchiveFilesTask` |
 | `AzureCLI@2` | `AzureCli.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliTask`, `AzureCliFileTask` |
 | `Bash@3` | `Bash.Inline/File/FromFile/FromResourceFile` -> `InlineBashTask`, `BashFileTask` (`bash` step shortcut) |
+| `Cache@2` | `Cache.Files` -> `CacheTask`; `CacheKey`/`CacheKeyBuilder` for key and restore-key segments |
 | `CmdLine@2` | `Script.Inline/FromFile/FromResourceFile` -> `ScriptTask` (`script` step shortcut) |
 | `CopyFiles@2` | `CopyFilesTask` |
 | `DeleteFiles@1` | `DeleteFilesTask` |
@@ -231,7 +232,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Azure Network Load Balancer | `AzureNLBManagement@1` | ❌ Missing | No strongly typed model or builder. |
 | Bash | `Bash@3` | ✅ Supported | `Bash.Inline/File/FromFile/FromResourceFile` -> `InlineBashTask`/`BashFileTask` and the `bash` step shortcut. |
 | Batch script | `BatchScript@1` | ❌ Missing | No strongly typed model or builder. |
-| Cache | `Cache@2` | ❌ Missing | No strongly typed model or builder. |
+| Cache | `Cache@2` | ✅ Supported | `Cache.Files` builder + `CacheTask`; `CacheKey`/`CacheKeyBuilder` model literal, file, and file-pattern key segments. |
 | Cache (Beta) | `CacheBeta@1`, `CacheBeta@0` | ⚪ Out of scope | Beta predecessor of `Cache@2`. |
 | Command Line | `CmdLine@2`, `CmdLine@1` | ✅ Supported | `Script.Inline/FromFile/FromResourceFile` -> `ScriptTask`, which serializes to the `script` step shortcut for `CmdLine@2`. |
 | Copy and Publish Build Artifacts | `CopyPublishBuildArtifacts@1` | ⚪ Out of scope | Deprecated by Microsoft; superseded by `CopyFiles@2` + `PublishBuildArtifacts@1`. |
