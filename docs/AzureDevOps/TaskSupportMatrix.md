@@ -242,7 +242,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Delete files | `DeleteFiles@1` | ✅ Supported | `DeleteFilesTask` (`DeleteFiles@1`). |
 | Deploy Azure Static Web App | `AzureStaticWebApp@0` | ❌ Missing | No strongly typed model or builder. |
 | Download artifacts from file share | `DownloadFileshareArtifacts@1` | ❌ Missing | No strongly typed model or builder. |
-| Download build artifacts | `DownloadBuildArtifacts@1`, `DownloadBuildArtifacts@0` | ❌ Missing | No strongly typed model or builder. |
+| Download build artifacts | `DownloadBuildArtifacts@1`, `DownloadBuildArtifacts@0` | ✅ Supported | `Download.BuildArtifacts.Current/Latest/LatestFromBranch/Specific` -> `DownloadBuildArtifactsTask` (`DownloadBuildArtifacts@1`). |
 | Download GitHub Release | `DownloadGitHubRelease@0` | ❌ Missing | No strongly typed model or builder. |
 | Download package | `DownloadPackage@1`, `DownloadPackage@0` | ❌ Missing | No strongly typed model or builder. |
 | Download Pipeline Artifacts | `DownloadPipelineArtifact@2`, `DownloadPipelineArtifact@1`, `DownloadPipelineArtifact@0` | ✅ Supported | `Download.Current/FromPipelineResource/SpecificBuild/LatestFromBranch/None` -> `DownloadTask` and the `download` step shortcut. |

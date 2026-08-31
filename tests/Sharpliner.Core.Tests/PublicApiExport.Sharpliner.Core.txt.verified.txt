@@ -1655,6 +1655,22 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.InlineBashTask FromResourceFile(string resourceFileName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
         public Sharpliner.AzureDevOps.Tasks.InlineBashTask Inline(params string[] scriptLines) { }
     }
+    public enum BuildArtifactDownloadType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="single")]
+        Single = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="specific")]
+        SpecificFiles = 1,
+    }
+    public enum BuildArtifactVersion
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="latest")]
+        Latest = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="latestFromBranch")]
+        LatestFromBranch = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="specific")]
+        Specific = 2,
+    }
     public enum BuildVerbosity
     {
         [YamlDotNet.Serialization.YamlMember(Alias="Quiet")]
@@ -1894,6 +1910,38 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TestRunTitle { get; init; }
     }
+    public abstract class DownloadBuildArtifactsTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DownloadBuildArtifactsTask>
+    {
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ArtifactName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? CheckDownloadedFiles { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? CleanDestinationFolder { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DownloadPath { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.BuildArtifactDownloadType>? DownloadType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? ExtractTars { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public System.Collections.Generic.List<string> ItemPatterns { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? ParallelizationLimit { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? RetryDownloadCount { get; init; }
+    }
+    public class DownloadBuildArtifactsTaskBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.DownloadCurrentBuildArtifactsTask Current(Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.BuildArtifactDownloadType> downloadType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> downloadPath) { }
+        public Sharpliner.AzureDevOps.Tasks.DownloadSpecificBuildArtifactsTask Latest(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> project, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> definition, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.BuildArtifactDownloadType> downloadType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> downloadPath) { }
+        public Sharpliner.AzureDevOps.Tasks.DownloadSpecificBuildArtifactsTask LatestFromBranch(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> project, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> definition, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> branchName, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.BuildArtifactDownloadType> downloadType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> downloadPath) { }
+        public Sharpliner.AzureDevOps.Tasks.DownloadSpecificBuildArtifactsTask Specific(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> project, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> definition, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> buildId, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.BuildArtifactDownloadType> downloadType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> downloadPath) { }
+    }
+    public class DownloadCurrentBuildArtifactsTask : Sharpliner.AzureDevOps.Tasks.DownloadBuildArtifactsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DownloadCurrentBuildArtifactsTask>
+    {
+        public DownloadCurrentBuildArtifactsTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.BuildArtifactDownloadType> downloadType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> downloadPath) { }
+    }
     public class DownloadFromPipelineResourceTask : Sharpliner.AzureDevOps.Tasks.DownloadTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DownloadFromPipelineResourceTask>
     {
         public DownloadFromPipelineResourceTask(string resourceName) { }
@@ -1906,6 +1954,26 @@ namespace Sharpliner.AzureDevOps.Tasks
         Current = 0,
         [YamlDotNet.Serialization.YamlMember(Alias="specific")]
         Specific = 1,
+    }
+    public class DownloadSpecificBuildArtifactsTask : Sharpliner.AzureDevOps.Tasks.DownloadBuildArtifactsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DownloadSpecificBuildArtifactsTask>
+    {
+        public DownloadSpecificBuildArtifactsTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> project, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> definition, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.BuildArtifactVersion> buildVersion, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.BuildArtifactDownloadType> downloadType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> downloadPath) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? AllowPartiallySucceededBuilds { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? BranchName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? BuildId { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.BuildArtifactVersion>? BuildVersionToDownload { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Definition { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Project { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? SpecificBuildWithTriggering { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public System.Collections.Generic.List<string> Tags { get; init; }
     }
     public abstract class DownloadTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DownloadTask>
     {
@@ -1927,6 +1995,7 @@ namespace Sharpliner.AzureDevOps.Tasks
     }
     public class DownloadTaskBuilder
     {
+        public Sharpliner.AzureDevOps.Tasks.DownloadBuildArtifactsTaskBuilder BuildArtifacts { get; }
         public Sharpliner.AzureDevOps.Tasks.CurrentDownloadTask Current { get; }
         public Sharpliner.AzureDevOps.Tasks.NoneDownloadTask None { get; }
         public Sharpliner.AzureDevOps.Tasks.SpecificDownloadTask CurrentBuild(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? artifact = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? path = null, System.Collections.Generic.IEnumerable<string>? patterns = null) { }
