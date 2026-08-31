@@ -342,6 +342,11 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static NpmTaskBuilder Npm { get; } = new();
 
+    /// <summary>
+    /// Creates a KubernetesManifest task.
+    /// </summary>
+    protected static KubernetesManifestTaskBuilder KubernetesManifest { get; } = new();
+
     #endregion
 
     #region Pipeline member shorthands

@@ -1,0 +1,13 @@
+﻿task: KubernetesManifest@1
+
+inputs:
+  action: patch
+  connectionType: kubernetesServiceConnection
+  kubernetesServiceEndpoint: aks-connection
+  namespace: production
+  resourceToPatch: name
+  kind: deployment
+  name: webapp
+  mergeStrategy: strategic
+  patch: '{"spec":{"replicas":5}}'
+  rolloutStatusTimeout: 120

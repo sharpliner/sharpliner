@@ -1,0 +1,10 @@
+﻿task: KubernetesManifest@1
+
+inputs:
+  action: delete
+  connectionType: azureResourceManager
+  azureSubscriptionEndpoint: azure-rm-connection
+  azureResourceGroup: rg-sharpliner
+  kubernetesCluster: aks-sharpliner
+  namespace: production
+  arguments: -f k8s/obsolete.yml

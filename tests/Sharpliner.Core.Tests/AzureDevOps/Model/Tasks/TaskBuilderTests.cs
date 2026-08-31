@@ -459,6 +459,47 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class KubernetesManifestTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        KubernetesManifest.Deploy.WithKubernetesServiceConnection("aks-connection", "k8s/deployment.yml\nk8s/service.yml") with
+                        {
+                            Namespace = "production",
+                            Containers = "sample/web:2.0.0",
+                            ImagePullSecrets = "acr-secret",
+                        },
+                        KubernetesManifest.Bake.Helm("charts/web") with
+                        {
+                            ReleaseName = "webapp",
+                            Overrides = "image.tag=2.0.0",
+                        },
+                        KubernetesManifest.Patch.NamedWithKubernetesServiceConnection("aks-connection", KubernetesManifestKind.Deployment, "webapp", "{\"spec\":{\"replicas\":3}}") with
+                        {
+                            MergeStrategy = KubernetesManifestMergeStrategy.Strategic,
+                        },
+                        KubernetesManifest.Scale.WithKubernetesServiceConnection("aks-connection", KubernetesManifestKind.Deployment, "webapp", "3"),
+                        KubernetesManifest.CreateSecret.DockerRegistryWithKubernetesServiceConnection("aks-connection", "acr-secret", "my-acr-service-connection"),
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_KubernetesManifest_Builders_Test()
+    {
+        KubernetesManifestTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class NpmTaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
