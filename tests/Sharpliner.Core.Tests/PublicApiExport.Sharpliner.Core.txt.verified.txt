@@ -1907,6 +1907,18 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlMember(Alias="specific")]
         Specific = 1,
     }
+    public class DownloadSecureFileTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DownloadSecureFileTask>
+    {
+        public const string SecureFilePathOutputVariableName = "secureFilePath";
+        public DownloadSecureFileTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> secureFile, Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? retryCount = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? socketTimeout = null) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? RetryCount { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SecureFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? SocketTimeout { get; init; }
+        public static string OutputSecureFilePath(string stepName) { }
+    }
     public abstract class DownloadTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.DownloadTask>
     {
         protected DownloadTask() { }
@@ -1933,6 +1945,7 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.DownloadFromPipelineResourceTask FromPipelineResource(string resourceName, string? artifact = null, System.Collections.Generic.IEnumerable<string>? patterns = null) { }
         public Sharpliner.AzureDevOps.Tasks.SpecificDownloadTask Latest(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> project, Sharpliner.AzureDevOps.Expressions.AdoExpression<int> definition, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? artifact = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? path = null, System.Collections.Generic.IEnumerable<string>? patterns = null) { }
         public Sharpliner.AzureDevOps.Tasks.SpecificDownloadTask LatestFromBranch(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> project, Sharpliner.AzureDevOps.Expressions.AdoExpression<int> definition, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? branchName = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? artifact = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? path = null, System.Collections.Generic.IEnumerable<string>? patterns = null) { }
+        public Sharpliner.AzureDevOps.Tasks.DownloadSecureFileTask SecureFile(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> secureFile, Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? retryCount = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<int>? socketTimeout = null) { }
         public Sharpliner.AzureDevOps.Tasks.SpecificDownloadTask SpecificBuild(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> project, Sharpliner.AzureDevOps.Expressions.AdoExpression<int> definition, Sharpliner.AzureDevOps.Expressions.AdoExpression<int> buildId, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? artifact = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? path = null, System.Collections.Generic.IEnumerable<string>? patterns = null) { }
     }
     public class ExtractFilesTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.ExtractFilesTask>

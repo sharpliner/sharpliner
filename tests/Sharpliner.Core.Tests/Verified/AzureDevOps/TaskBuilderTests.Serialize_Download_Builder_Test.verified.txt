@@ -3,6 +3,14 @@
   steps:
   - download: none
 
+  - task: DownloadSecureFile@1
+    displayName: Download secure file
+    inputs:
+      secureFile: ca.pem
+      retryCount: 5
+      socketTimeout: 30000
+    name: caFile
+
   - download: current
     artifact: Frontend
     patterns: |-

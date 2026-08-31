@@ -266,6 +266,10 @@ public class TaskBuilderTests
                     Steps =
                     {
                         Download.None,
+                        Download.SecureFile("ca.pem", retryCount: 5, socketTimeout: 30000) with
+                        {
+                            Name = "caFile",
+                        },
                         Download.Current with
                         {
                             Artifact = "Frontend",
