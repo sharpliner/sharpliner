@@ -2028,6 +2028,14 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Arguments { get; init; }
     }
+    public class NuGetInstallerBuilder
+    {
+        public NuGetInstallerBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.NuGetToolInstallerV1Task LatestMatching(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? versionSpec = null) { }
+        public Sharpliner.AzureDevOps.Tasks.NuGetToolInstallerV0Task V0(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? versionSpec = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? checkLatest = null) { }
+        public Sharpliner.AzureDevOps.Tasks.NuGetToolInstallerV1Task V1(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? versionSpec = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? checkLatest = null) { }
+        public Sharpliner.AzureDevOps.Tasks.NuGetToolInstallerV1Task Version(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? versionSpec = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? checkLatest = null) { }
+    }
     public class NuGetPackBuilder
     {
         public NuGetPackBuilder() { }
@@ -2159,12 +2167,29 @@ namespace Sharpliner.AzureDevOps.Tasks
     public class NuGetTaskBuilder
     {
         public NuGetTaskBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.NuGetInstallerBuilder Install { get; }
         public Sharpliner.AzureDevOps.Tasks.NuGetPackBuilder Pack { get; }
         public Sharpliner.AzureDevOps.Tasks.NuGetPushBuilder Push { get; }
         public Sharpliner.AzureDevOps.Tasks.NuGetRestoreBuilder Restore { get; }
         public Sharpliner.AzureDevOps.Tasks.NuGetAuthenticateTask Authenticate(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureDevOpsServiceConnection, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> feedUrl) { }
         public Sharpliner.AzureDevOps.Tasks.NuGetAuthenticateTask Authenticate(string[]? nuGetServiceConnections = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? forceReinstallCredentialProvider = null) { }
         public Sharpliner.AzureDevOps.Tasks.NuGetCustomCommandTask Custom(string arguments) { }
+    }
+    public abstract class NuGetToolInstallerTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetToolInstallerTask>
+    {
+        protected NuGetToolInstallerTask(string taskVersion, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? versionSpec = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? checkLatest = null) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? CheckLatest { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? VersionSpec { get; init; }
+    }
+    public class NuGetToolInstallerV0Task : Sharpliner.AzureDevOps.Tasks.NuGetToolInstallerTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetToolInstallerV0Task>
+    {
+        public NuGetToolInstallerV0Task(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? versionSpec = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? checkLatest = null) { }
+    }
+    public class NuGetToolInstallerV1Task : Sharpliner.AzureDevOps.Tasks.NuGetToolInstallerTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetToolInstallerV1Task>
+    {
+        public NuGetToolInstallerV1Task(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? versionSpec = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? checkLatest = null) { }
     }
     public enum NuGetVerbosity
     {

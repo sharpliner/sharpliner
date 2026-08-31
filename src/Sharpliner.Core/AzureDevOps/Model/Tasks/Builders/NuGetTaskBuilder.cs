@@ -9,6 +9,24 @@ namespace Sharpliner.AzureDevOps.Tasks;
 public class NuGetTaskBuilder
 {
     /// <summary>
+    /// <para>
+    /// Gets a <see cref="NuGetInstallerBuilder"/> instance to create NuGet tool installer tasks.
+    /// </para>
+    /// For example:
+    /// <code lang="csharp">
+    /// NuGet.Install.Version("6.x")
+    /// </code>
+    /// <para>Generated YAML:</para>
+    /// <code lang="yaml">
+    /// - task: NuGetToolInstaller@1
+    ///   displayName: Use NuGet
+    ///   inputs:
+    ///     versionSpec: 6.x
+    /// </code>
+    /// </summary>
+    public NuGetInstallerBuilder Install => new();
+
+    /// <summary>
     /// Creates a <see cref="NuGetAuthenticateTask"/> that configures NuGet tools to authenticate with Azure Artifacts feeds
     /// in this organization or collection, and optionally with feeds outside this organization through NuGet service connections.
     /// </summary>
@@ -163,6 +181,48 @@ public class NuGetTaskBuilder
     /// </summary>
     /// <returns>A <see cref="NuGetCustomCommandTask"/> instance.</returns>
     public NuGetCustomCommandTask Custom(string arguments) => new(arguments);
+}
+
+/// <summary>
+/// Provides methods to create NuGet tool installer tasks.
+/// </summary>
+public class NuGetInstallerBuilder
+{
+    /// <summary>
+    /// Creates a <see cref="NuGetToolInstallerV1Task"/> targeting <c>NuGetToolInstaller@1</c>.
+    /// This is the recommended task major version.
+    /// </summary>
+    /// <param name="versionSpec">Optional version or version range of NuGet.exe to install (for example <c>4.x</c>, <c>3.3.x</c>, or <c>>=4.0.0-0</c>).</param>
+    /// <param name="checkLatest">Optional value indicating whether to always check for and download the latest available matching version. Default is <c>false</c>.</param>
+    /// <returns>A <see cref="NuGetToolInstallerV1Task"/> instance.</returns>
+    public NuGetToolInstallerV1Task Version(AdoExpression<string>? versionSpec = null, AdoExpression<bool>? checkLatest = null)
+        => new(versionSpec, checkLatest);
+
+    /// <summary>
+    /// Creates a <see cref="NuGetToolInstallerV1Task"/> with <see cref="NuGetToolInstallerTask.CheckLatest"/> enabled.
+    /// </summary>
+    /// <param name="versionSpec">Optional version or version range of NuGet.exe to install.</param>
+    /// <returns>A <see cref="NuGetToolInstallerV1Task"/> instance with <c>checkLatest: true</c>.</returns>
+    public NuGetToolInstallerV1Task LatestMatching(AdoExpression<string>? versionSpec = null)
+        => new(versionSpec, true);
+
+    /// <summary>
+    /// Creates a <see cref="NuGetToolInstallerV1Task"/> explicitly targeting <c>NuGetToolInstaller@1</c>.
+    /// </summary>
+    /// <param name="versionSpec">Optional version or version range of NuGet.exe to install.</param>
+    /// <param name="checkLatest">Optional value indicating whether to always check for and download the latest available matching version.</param>
+    /// <returns>A <see cref="NuGetToolInstallerV1Task"/> instance.</returns>
+    public NuGetToolInstallerV1Task V1(AdoExpression<string>? versionSpec = null, AdoExpression<bool>? checkLatest = null)
+        => new(versionSpec, checkLatest);
+
+    /// <summary>
+    /// Creates a <see cref="NuGetToolInstallerV0Task"/> targeting the legacy <c>NuGetToolInstaller@0</c>.
+    /// </summary>
+    /// <param name="versionSpec">Optional version or version range of NuGet.exe to install.</param>
+    /// <param name="checkLatest">Optional value indicating whether to always check for and download the latest available matching version.</param>
+    /// <returns>A <see cref="NuGetToolInstallerV0Task"/> instance.</returns>
+    public NuGetToolInstallerV0Task V0(AdoExpression<string>? versionSpec = null, AdoExpression<bool>? checkLatest = null)
+        => new(versionSpec, checkLatest);
 }
 
 /// <summary>
