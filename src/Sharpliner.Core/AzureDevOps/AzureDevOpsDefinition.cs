@@ -342,6 +342,11 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static NpmTaskBuilder Npm { get; } = new();
 
+    /// <summary>
+    /// Creates a Visual Studio Test task.
+    /// </summary>
+    protected static VSTestTaskBuilder VSTest { get; } = new();
+
     #endregion
 
     #region Pipeline member shorthands

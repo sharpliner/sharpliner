@@ -459,6 +459,51 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class VSTestTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        VSTest.TestAssemblies("**\\bin\\**\\*tests.dll")
+                            .UsingPlatformVersion(VSTestVersion.VisualStudio2022) with
+                        {
+                            TestFilterCriteria = "Category=Unit",
+                            RunInParallel = true,
+                        },
+                        VSTest.V3.TestPlan("12", "34,56", "78")
+                            .UsingPlatformLocation("C:\\tools\\vstest.console.exe") with
+                        {
+                            DistributionBatchType = VSTestDistributionBatchType.BasedOnAssembly,
+                        },
+                        VSTest.V2.TestRun()
+                            .Build() with
+                        {
+                            DiagnosticsEnabled = true,
+                            CollectDumpOn = VSTestCollectDumpOn.Never,
+                        },
+                        VSTest.V1("**\\*test*.dll") with
+                        {
+                            VsTestVersion = VSTestV1Version.Latest,
+                        },
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_VSTest_Builder_Test()
+    {
+        VSTestTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class NpmTaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()

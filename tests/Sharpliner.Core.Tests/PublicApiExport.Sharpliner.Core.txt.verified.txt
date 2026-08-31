@@ -104,6 +104,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Tasks.PublishTaskBuilder Publish { get; }
         protected static Sharpliner.AzureDevOps.Tasks.PwshTaskBuilder Pwsh { get; }
         protected static Sharpliner.AzureDevOps.Tasks.ScriptTaskBuilder Script { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.VSTestTaskBuilder VSTest { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition And(params Sharpliner.AzureDevOps.InlineCondition[] expressions) { }
         protected static Sharpliner.AzureDevOps.InlineCondition And(params string[] expressions) { }
         protected static Sharpliner.AzureDevOps.InlineCondition And<T>(params Sharpliner.AzureDevOps.InlineCondition[] expressions) { }
@@ -2574,6 +2575,253 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? VsVersion { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WorkingDirectory { get; init; }
+    }
+    public enum VSTestBatchingBasedOnAgentsOption
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="autoBatchSize")]
+        AutoBatchSize = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="customBatchSize")]
+        CustomBatchSize = 1,
+    }
+    public enum VSTestBatchingBasedOnExecutionTimeOption
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="autoBatchSize")]
+        AutoBatchSize = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="customTimeBatchSize")]
+        CustomTimeBatchSize = 1,
+    }
+    public enum VSTestCollectDumpOn
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="onAbortOnly")]
+        OnAbortOnly = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="always")]
+        Always = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="never")]
+        Never = 2,
+    }
+    public enum VSTestDistributionBatchType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="basedOnTestCases")]
+        BasedOnTestCases = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="basedOnExecutionTime")]
+        BasedOnExecutionTime = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="basedOnAssembly")]
+        BasedOnAssembly = 2,
+    }
+    public class VSTestExecutionBuilder<TTask>
+        where TTask : Sharpliner.AzureDevOps.Tasks.VSTestV2AndV3Task
+    {
+        public TTask Build() { }
+        public TTask UsingPlatformLocation(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> vstestLocation) { }
+        public TTask UsingPlatformVersion(Sharpliner.AzureDevOps.Tasks.VSTestVersion version = 0) { }
+    }
+    public enum VSTestLocationMethod
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="version")]
+        Version = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="location")]
+        Location = 1,
+    }
+    public enum VSTestRerunType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="basedOnTestFailurePercentage")]
+        BasedOnTestFailurePercentage = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="basedOnTestFailureCount")]
+        BasedOnTestFailureCount = 1,
+    }
+    public enum VSTestSelection
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="testAssemblies")]
+        TestAssemblies = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="testPlan")]
+        TestPlan = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="testRun")]
+        TestRun = 2,
+    }
+    public class VSTestSelectionBuilder<TTask>
+        where TTask : Sharpliner.AzureDevOps.Tasks.VSTestV2AndV3Task
+    {
+        public Sharpliner.AzureDevOps.Tasks.VSTestExecutionBuilder<TTask> TestAssemblies(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> testFiles) { }
+        public Sharpliner.AzureDevOps.Tasks.VSTestExecutionBuilder<TTask> TestPlan(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> testPlan, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> testSuite, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> testConfiguration) { }
+        public Sharpliner.AzureDevOps.Tasks.VSTestExecutionBuilder<TTask> TestRun(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? testRunId = null) { }
+    }
+    public class VSTestTask : Sharpliner.AzureDevOps.Tasks.VSTestV2AndV3Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.VSTestTask>
+    {
+        public VSTestTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ConnectedServiceName { get; init; }
+    }
+    public class VSTestTaskBuilder
+    {
+        public VSTestTaskBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.VSTestSelectionBuilder<Sharpliner.AzureDevOps.Tasks.VSTestV2Task> V2 { get; }
+        public Sharpliner.AzureDevOps.Tasks.VSTestSelectionBuilder<Sharpliner.AzureDevOps.Tasks.VSTestTask> V3 { get; }
+        public Sharpliner.AzureDevOps.Tasks.VSTestExecutionBuilder<Sharpliner.AzureDevOps.Tasks.VSTestTask> TestAssemblies(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> testFiles) { }
+        public Sharpliner.AzureDevOps.Tasks.VSTestExecutionBuilder<Sharpliner.AzureDevOps.Tasks.VSTestTask> TestPlan(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> testPlan, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> testSuite, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> testConfiguration) { }
+        public Sharpliner.AzureDevOps.Tasks.VSTestExecutionBuilder<Sharpliner.AzureDevOps.Tasks.VSTestTask> TestRun(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? testRunId = null) { }
+        public Sharpliner.AzureDevOps.Tasks.VSTestV1Task V1(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> testAssembly) { }
+    }
+    public class VSTestV1Task : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.VSTestV1Task>
+    {
+        public VSTestV1Task(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> testAssembly) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? BuildConfiguration { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? BuildPlatform { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? CodeCoverageEnabled { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Configuration { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? OtherConsoleOptions { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? OverrideTestrunParameters { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? PathToCustomTestAdapters { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Platform { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? PublishRunAttachments { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? RunInParallel { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RunSettingsFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TestAssembly { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TestFilterCriteria { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TestRunTitle { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.VSTestV1Version>? VsTestVersion { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? VstestLocation { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.VSTestLocationMethod>? VstestLocationMethod { get; init; }
+    }
+    public enum VSTestV1Version
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="latest")]
+        Latest = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="14.0")]
+        VisualStudio2015 = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="12.0")]
+        VisualStudio2013 = 2,
+    }
+    public abstract class VSTestV2AndV3Task : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.VSTestV2AndV3Task>
+    {
+        protected VSTestV2AndV3Task(string taskVersion) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.VSTestBatchingBasedOnAgentsOption>? BatchingBasedOnAgentsOption { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.VSTestBatchingBasedOnExecutionTimeOption>? BatchingBasedOnExecutionTimeOption { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? BuildConfiguration { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? BuildPlatform { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? CodeCoverageEnabled { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.VSTestCollectDumpOn>? CollectDumpOn { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Configuration { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? CustomBatchSizeValue { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? CustomLoggerConfig { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? CustomRunTimePerBatchValue { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? DiagnosticsEnabled { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.VSTestDistributionBatchType>? DistributionBatchType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? DoNotPublishTestResults { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? DontDistribute { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? FailOnMinTestsNotRun { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? MinimumExpectedTests { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? OtherConsoleOptions { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? OverrideTestrunParameters { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? PathToCustomTestAdapters { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Platform { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? PublishRunAttachments { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RerunFailedTestCasesMaxLimit { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? RerunFailedTests { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RerunFailedThreshold { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RerunMaxAttempts { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.VSTestRerunType>? RerunType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ResultsFolder { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RunAllTestsAfterXBuilds { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? RunInParallel { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? RunOnlyImpactedTests { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RunSettingsFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? RunTestsInIsolation { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SearchFolder { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TcmTestRun { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TestAssemblyVer2 { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TestConfiguration { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TestFilterCriteria { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TestPlan { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TestRunTitle { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.VSTestSelection>? TestSelector { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TestSuite { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? UiTests { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.VSTestVersion>? VsTestVersion { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? VstestLocation { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.VSTestLocationMethod>? VstestLocationMethod { get; init; }
+    }
+    public class VSTestV2Task : Sharpliner.AzureDevOps.Tasks.VSTestV2AndV3Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.VSTestV2Task>
+    {
+        public VSTestV2Task() { }
+    }
+    public enum VSTestVersion
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="latest")]
+        Latest = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="18.0")]
+        VisualStudio2026 = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="17.0")]
+        VisualStudio2022 = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="16.0")]
+        VisualStudio2019 = 3,
+        [YamlDotNet.Serialization.YamlMember(Alias="15.0")]
+        VisualStudio2017 = 4,
+        [YamlDotNet.Serialization.YamlMember(Alias="14.0")]
+        VisualStudio2015 = 5,
+        [YamlDotNet.Serialization.YamlMember(Alias="toolsInstaller")]
+        ToolsInstaller = 6,
     }
 }
 namespace Sharpliner.AzureDevOps.Validation
