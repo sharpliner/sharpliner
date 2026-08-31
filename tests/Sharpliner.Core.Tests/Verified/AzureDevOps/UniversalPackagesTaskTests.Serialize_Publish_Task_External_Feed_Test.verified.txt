@@ -1,0 +1,13 @@
+﻿task: UniversalPackages@0
+
+displayName: Publish universal package
+
+inputs:
+  command: publish
+  publishDirectory: $(Build.ArtifactStagingDirectory)
+  feedsToUsePublish: external
+  publishFeedCredentials: my-service-connection
+  feedPublishExternal: OtherProject/other-feed
+  packagePublishExternal: other-package
+  versionOption: custom
+  versionPublish: 1.2.3

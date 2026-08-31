@@ -3,9 +3,18 @@
   steps:
   - task: NuGetAuthenticate@1
     displayName: Authenticate to NuGet feeds
+
+  - task: NuGetAuthenticate@1
+    displayName: Authenticate to NuGet feeds
     inputs:
       forceReinstallCredentialProvider: true
-      nuGetServiceConnections: MyServiceConnection
+      nuGetServiceConnections: MyServiceConnection,AnotherServiceConnection
+
+  - task: NuGetAuthenticate@1
+    displayName: Authenticate to NuGet feeds
+    inputs:
+      azureDevOpsServiceConnection: MyAzureDevOpsServiceConnection
+      feedUrl: https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/nuget/v3/index.json
 
   - task: NuGetCommand@2
     displayName: NuGet restore
@@ -33,6 +42,9 @@
       restoreSolution: '**/*.sln'
       externalFeedCredentials: MyExternalFeedCredentials
       noCache: true
+      disableParallelProcessing: true
+      restoreDirectory: packages
+      verbosityRestore: Normal
     continueOnError: true
 
   - task: NuGetCommand@2
@@ -53,6 +65,7 @@
       majorVersion: 3
       minorVersion: 1
       patchVersion: 4
+      packTimezone: local
 
   - task: NuGetCommand@2
     displayName: NuGet pack
@@ -69,6 +82,8 @@
       packagesToPack: '**/*.csproj'
       configuration: Release
       packDestination: artifacts/packages
+      basePath: src
+      verbosityPack: Quiet
 
   - task: NuGetCommand@2
     displayName: NuGet push
@@ -76,6 +91,11 @@
       command: push
       nuGetFeedType: internal
       publishVstsFeed: MyInternalFeed
+      packagesToPush: $(Build.ArtifactStagingDirectory)/**/*.nupkg;!$(Build.ArtifactStagingDirectory)/**/*.symbols.nupkg
+      publishPackageMetadata: false
+      allowPackageConflicts: true
+      requestTimeout: 300
+      verbosityPush: Quiet
 
   - task: NuGetCommand@2
     displayName: NuGet push
@@ -83,6 +103,8 @@
       command: push
       nuGetFeedType: external
       publishFeedCredentials: MyExternalFeedCredentials
+      requestTimeout: 120
+      verbosityPush: Normal
 
   - task: NuGetCommand@2
     inputs:

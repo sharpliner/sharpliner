@@ -3,7 +3,7 @@
 displayName: Publish test results
 
 inputs:
-  testResultsFormat: JUnit
+  testRunner: JUnit
   testResultsFiles: '**/TEST-*.xml'
   searchFolder: $(System.DefaultWorkingDirectory)
   mergeTestResults: true
@@ -11,6 +11,6 @@ inputs:
   failTaskOnFailureToPublishResults: true
   failTaskOnMissingResultsFile: true
   testRunTitle: Test run title
-  buildPlatform: x64
-  buildConfiguration: Release
+  platform: x64
+  configuration: Release
   publishRunAttachments: true

@@ -6,12 +6,16 @@ inputs:
   targetType: filePath
   filePath: some\script.ps1
   arguments: foo bar
-  errorActionPreference: Inquire
+  errorActionPreference: Continue
   warningPreference: Stop
-  informationPreference: Break
-  verbosePreference: Break
-  debugPreference: Suspend
+  informationPreference: SilentlyContinue
+  verbosePreference: Continue
+  debugPreference: Default
+  progressPreference: Default
   failOnStderr: true
+  showWarnings: true
   ignoreLASTEXITCODE: true
+  workingDirectory: some/dir
+  runScriptInSeparateScope: true
 
 continueOnError: true

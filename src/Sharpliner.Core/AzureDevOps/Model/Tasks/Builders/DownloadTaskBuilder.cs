@@ -71,7 +71,61 @@ public class DownloadTaskBuilder
 
     /// <summary>
     /// <para>
-    /// Creates a download task that an artifact from a given pipeline run.
+    /// Creates a task-backed download step that downloads pipeline artifacts from the current run using <c>DownloadPipelineArtifact@2</c>.
+    /// </para>
+    /// This differs from <see cref="Current"/> by emitting the full task form with <c>source: current</c>.
+    /// <para>
+    /// For example:
+    /// </para>
+    /// <code lang="csharp">
+    /// Steps =
+    /// {
+    ///     Download.CurrentBuild("WebApp", variables.Pipeline.Workspace, ["**/*.zip"])
+    /// }
+    /// </code>
+    /// Will generate:
+    /// <code lang="yaml">
+    /// - task: DownloadPipelineArtifact@2
+    ///   inputs:
+    ///     source: current
+    ///     artifact: WebApp
+    ///     path: $(Pipeline.Workspace)
+    ///     patterns: '**/*.zip'
+    /// </code>
+    /// </summary>
+    /// <param name="artifact">The name of the artifact to download. If left empty, all artifacts associated to the pipeline run will be downloaded.</param>
+    /// <param name="path">
+    /// <para>
+    /// Directory to download the artifact files. Can be relative to the pipeline workspace directory or absolute.
+    /// </para>
+    /// <para>
+    /// If multi-download option is applied (by leaving an empty artifact name), a sub-directory will be created for each.
+    /// </para>
+    /// <para>
+    /// Default value: <c>$(Pipeline.Workspace)</c>
+    /// </para>
+    /// </param>
+    /// <param name="patterns">
+    /// One or more file matching patterns that limit which files get downloaded.
+    /// <para>
+    /// Default value: <c>**</c>
+    /// </para>
+    /// </param>
+    public SpecificDownloadTask CurrentBuild(
+        AdoExpression<string>? artifact = null,
+        AdoExpression<string>? path = null,
+        IEnumerable<string>? patterns = null)
+        =>
+        new(DownloadPipelineArtifactSource.Current)
+        {
+            Artifact = artifact,
+            Path = path,
+            Patterns = patterns?.ToList(),
+        };
+
+    /// <summary>
+    /// <para>
+    /// Creates a download task that downloads an artifact from a given pipeline run.
     /// </para>
     /// For example:
     /// <code lang="csharp">
@@ -143,7 +197,69 @@ public class DownloadTaskBuilder
 
     /// <summary>
     /// <para>
-    /// Creates a download task that an artifact from a given pipeline run.
+    /// Creates a task-backed download step that downloads artifacts from the latest run of a specific pipeline.
+    /// </para>
+    /// For example:
+    /// <code lang="csharp">
+    /// Steps =
+    /// {
+    ///     Download.Latest("public", 56, "MyProject.CLI") with
+    ///     {
+    ///         AllowPartiallySucceededBuilds = true,
+    ///         Tags = ["release"],
+    ///     }
+    /// }
+    /// </code>
+    /// Will generate:
+    /// <code lang="yaml">
+    /// - task: DownloadPipelineArtifact@2
+    ///   inputs:
+    ///     source: specific
+    ///     runVersion: latest
+    ///     project: public
+    ///     pipeline: 56
+    ///     artifact: MyProject.CLI
+    ///     allowPartiallySucceededBuilds: true
+    ///     tags: release
+    /// </code>
+    /// </summary>
+    /// <param name="project">The project GUID from which to download the pipeline artifacts.</param>
+    /// <param name="definition">The definition ID of the build pipeline.</param>
+    /// <param name="artifact">The name of the artifact to download. If left empty, all artifacts associated to the pipeline run will be downloaded.</param>
+    /// <param name="path">
+    /// <para>
+    /// Directory to download the artifact files. Can be relative to the pipeline workspace directory or absolute.
+    /// </para>
+    /// <para>
+    /// If multi-download option is applied (by leaving an empty artifact name), a sub-directory will be created for each.
+    /// </para>
+    /// <para>
+    /// Default value: <c>$(Pipeline.Workspace)</c>
+    /// </para>
+    /// </param>
+    /// <param name="patterns">
+    /// One or more file matching patterns that limit which files get downloaded.
+    /// <para>
+    /// Default value: <c>**</c>
+    /// </para>
+    /// </param>
+    public SpecificDownloadTask Latest(
+        AdoExpression<string> project,
+        AdoExpression<int> definition,
+        AdoExpression<string>? artifact = null,
+        AdoExpression<string>? path = null,
+        IEnumerable<string>? patterns = null)
+        =>
+        new(RunVersion.Latest, project, definition)
+        {
+            Artifact = artifact,
+            Path = path,
+            Patterns = patterns?.ToList(),
+        };
+
+    /// <summary>
+    /// <para>
+    /// Creates a download task that downloads an artifact from a given pipeline run.
     /// </para>
     /// For example:
     /// <code lang="csharp">

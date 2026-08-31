@@ -4,18 +4,22 @@ using YamlDotNet.Serialization;
 namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
-/// More details can be found in <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/archive-files-v2">official Azure DevOps pipelines documentation</see>
+/// Represents the <c>ArchiveFiles@2</c> Azure Pipelines task, which compresses files into <c>.7z</c>, <c>.tar.gz</c>, or <c>.zip</c> archives.
+/// More details can be found in the
+/// <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/archive-files-v2">official Azure DevOps pipelines documentation</see>
+/// and the
+/// <see href="https://github.com/microsoft/azure-pipelines-tasks/blob/master/Tasks/ArchiveFilesV2/task.json">official ArchiveFilesV2 task specification</see>.
 /// </summary>
 public record ArchiveFilesTask : AzureDevOpsTask
 {
     /// <summary>
     /// <para>
-    /// Name of the root folder or the file path to files to add to the archive.
+    /// Required <c>filePath</c> input. Name of the root folder or the file path to files to add to the archive.
     /// </para>
     /// <para>
     /// For folders, everything in the named folder is added to the archive.
     /// </para>
-    /// Defaults to <c>$(Build.BinariesDirectory)</c>
+    /// Default value: <c>$(Build.BinariesDirectory)</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? RootFolderOrFile
@@ -26,12 +30,12 @@ public record ArchiveFilesTask : AzureDevOpsTask
 
     /// <summary>
     /// <para>
-    /// Prepends the root folder name to file paths in the archive.
+    /// Required <c>boolean</c> input. Prepends the root folder name to file paths in the archive.
     /// </para>
     /// <para>
     /// Otherwise, all file paths will start one level lower.
     /// </para>
-    /// Defaults to <c>true</c>
+    /// Default value: <c>true</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? IncludeRootFolder
@@ -42,9 +46,12 @@ public record ArchiveFilesTask : AzureDevOpsTask
 
     /// <summary>
     /// <para>
-    /// Specifies a compression format.
+    /// Required <c>pickList</c> input. Specifies a compression format.
     /// </para>
-    /// Defaults to <see cref="ArchiveType.Zip"/>
+    /// <para>
+    /// Allowed values: <c>zip</c>, <c>7z</c>, <c>tar</c>, and <c>wim</c>.
+    /// </para>
+    /// Default value: <see cref="ArchiveType.Zip"/>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<ArchiveType>? ArchiveType
@@ -55,9 +62,13 @@ public record ArchiveFilesTask : AzureDevOpsTask
 
     /// <summary>
     /// <para>
-    /// Set compression level or None to create an uncompressed .7z file.
+    /// Optional <c>pickList</c> input. Set a compression level, or choose <see cref="SevenZipCompressionLevel.None"/> to create an uncompressed 7z file.
     /// </para>
-    /// Defaults to <see cref="SevenZipCompressionLevel.Normal"/>
+    /// <para>
+    /// Use when <see cref="ArchiveType"/> is <see cref="Tasks.ArchiveType._7z"/>.
+    /// Allowed values: <c>ultra</c>, <c>maximum</c>, <c>normal</c>, <c>fast</c>, <c>fastest</c>, and <c>none</c>.
+    /// </para>
+    /// Default value: <see cref="SevenZipCompressionLevel.Normal"/>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<SevenZipCompressionLevel>? SevenZipCompression
@@ -68,9 +79,13 @@ public record ArchiveFilesTask : AzureDevOpsTask
 
     /// <summary>
     /// <para>
-    /// Set a compression format or choose None to create an uncompressed .tar file.
+    /// Optional <c>pickList</c> input. Set a compression scheme, or choose <see cref="TarCompressionType.None"/> to create an uncompressed tar file.
     /// </para>
-    /// Defaults to <see cref="TarCompressionType.Gz"/>
+    /// <para>
+    /// Use when <see cref="ArchiveType"/> is <see cref="Tasks.ArchiveType.Tar"/>.
+    /// Allowed values: <c>gz</c>, <c>bz2</c>, <c>xz</c>, and <c>none</c>.
+    /// </para>
+    /// Default value: <see cref="TarCompressionType.Gz"/>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<TarCompressionType>? TarCompression
@@ -81,9 +96,12 @@ public record ArchiveFilesTask : AzureDevOpsTask
 
     /// <summary>
     /// <para>
-    /// Specify the name of the archive file to create.
+    /// Required <c>filePath</c> input. Specify the name of the archive file to create.
     /// </para>
-    /// Defaults to <c>$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip</c>
+    /// <para>
+    /// For example, to create <c>foo.tgz</c>, select the <see cref="Tasks.ArchiveType.Tar"/> archive type and <see cref="TarCompressionType.Gz"/> tar compression.
+    /// </para>
+    /// Default value: <c>$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<string>? ArchiveFile
@@ -94,12 +112,15 @@ public record ArchiveFilesTask : AzureDevOpsTask
 
     /// <summary>
     /// <para>
-    /// By default, overwrites an existing archive. Otherwise, when set to <c>false</c>, uncompressed tar files are added to the existing archive.
+    /// Required <c>boolean</c> input. Specifies whether to overwrite an existing archive.
     /// </para>
     /// <para>
-    /// Supported only for zip, 7z, tar (only compressed) and wim formats.
+    /// When set to <c>false</c>, files are added to the existing archive.
     /// </para>
-    /// Defaults to <c>true</c>
+    /// <para>
+    /// This append behavior is supported for zip, 7z, compressed tar, and wim archives.
+    /// </para>
+    /// Default value: <c>true</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? ReplaceExistingArchive
@@ -110,9 +131,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
 
     /// <summary>
     /// <para>
-    /// If set to <c>true</c>, forces tools to use verbose output. Overrides the 'quiet' setting.
+    /// Optional <c>boolean</c> input. If set to <c>true</c>, forces tools to use verbose output and overrides the <see cref="Quiet"/> setting.
     /// </para>
-    /// Defaults to <c>false</c>
+    /// Default value: <c>false</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? Verbose
@@ -123,9 +144,9 @@ public record ArchiveFilesTask : AzureDevOpsTask
 
     /// <summary>
     /// <para>
-    /// If set to <c>true</c>, forces tools to use quiet output. The verbose setting (or equivalent) can override this setting.
+    /// Optional <c>boolean</c> input. If set to <c>true</c>, forces tools to use quiet output and can be overridden by the <see cref="Verbose"/> setting.
     /// </para>
-    /// Defaults to <c>false</c>
+    /// Default value: <c>false</c>.
     /// </summary>
     [YamlIgnore]
     public AdoExpression<bool>? Quiet
@@ -150,30 +171,30 @@ public record ArchiveFilesTask : AzureDevOpsTask
 }
 
 /// <summary>
-/// A supported archive type
+/// Supported values for the <c>archiveType</c> input of <see cref="ArchiveFilesTask"/>.
 /// </summary>
 public enum ArchiveType
 {
     /// <summary>
-    /// Default. Choose this format for all zip compatible types such as .zip, .jar, .war, .ear
+    /// Default. Choose this format for all zip-compatible types such as <c>.zip</c>, <c>.jar</c>, <c>.war</c>, and <c>.ear</c>.
     /// </summary>
     [YamlMember(Alias = "zip")]
     Zip,
 
     /// <summary>
-    /// 7-Zip format, (.7z)
+    /// 7-Zip format (<c>.7z</c>).
     /// </summary>
     [YamlMember(Alias = "7z")]
     _7z,
 
     /// <summary>
-    /// tar format, use for compressed tars including .tar.gz, .tar.bz2, .tar.xz
+    /// Tar format. Use for all tar files, including compressed tars such as <c>.tar.gz</c>, <c>.tar.bz2</c>, and <c>.tar.xz</c>.
     /// </summary>
     [YamlMember(Alias = "tar")]
     Tar,
 
     /// <summary>
-    /// wim format, .wim
+    /// Windows Imaging format (<c>.wim</c>).
     /// </summary>
     [YamlMember(Alias = "wim")]
     Wim,
@@ -181,7 +202,8 @@ public enum ArchiveType
 
 /// <summary>
 /// <para>
-/// 7z compression levels, see <see href="https://7-zip.opensource.jp/chm/cmdline/switches/method.htm#SevenZipX">-m (Set compression Method) switch</see> for more details.
+/// Supported values for the <c>sevenZipCompression</c> input of <see cref="ArchiveFilesTask"/>.
+/// See the <see href="https://7-zip.opensource.jp/chm/cmdline/switches/method.htm#SevenZipX">-m (Set compression Method) switch</see> for more details.
 /// </para>
 /// <code>
 /// Level	Method	Dictionary	FastBytes	MatchFinder	Filter	Description
@@ -196,67 +218,67 @@ public enum ArchiveType
 public enum SevenZipCompressionLevel
 {
     /// <summary>
-    /// Copy mode - level of compression = 0 (no compression)
+    /// Copy mode, level 0 (no compression).
     /// </summary>
     [YamlMember(Alias = "none")]
     None,
 
     /// <summary>
-    /// Fastest compressing, level 1
+    /// Fastest compression, level 1.
     /// </summary>
     [YamlMember(Alias = "fastest")]
     Fastest,
 
     /// <summary>
-    /// Fast compressing, level 3
+    /// Fast compression, level 3.
     /// </summary>
     [YamlMember(Alias = "fast")]
     Fast,
 
     /// <summary>
-    /// Normal compression, level 5
+    /// Normal compression, level 5. This is the default value.
     /// </summary>
     [YamlMember(Alias = "normal")]
     Normal,
 
     /// <summary>
-    /// Maximum compression, level 7
+    /// Maximum compression, level 7.
     /// </summary>
     [YamlMember(Alias = "maximum")]
     Maximum,
 
     /// <summary>
-    /// Ultra compression, level 9
+    /// Ultra compression, level 9.
     /// </summary>
     [YamlMember(Alias = "ultra")]
     Ultra,
 }
 
 /// <summary>
-/// Tar compression format
+/// Supported values for the <c>tarCompression</c> input of <see cref="ArchiveFilesTask"/>.
 /// </summary>
 public enum TarCompressionType
 {
     /// <summary>
-    /// Default format for gzip compression (.tar.gz, .tar.tgz, .taz)
+    /// Default gzip compression (<c>.tar.gz</c>, <c>.tar.tgz</c>, <c>.taz</c>).
     /// </summary>
     [YamlMember(Alias = "gz")]
     Gz,
 
     /// <summary>
-    /// bzip2 compression (.tar.bz2, .tz2, .tbz2)
+    /// bzip2 compression (<c>.tar.bz2</c>, <c>.tz2</c>, <c>.tbz2</c>).
     /// </summary>
     [YamlMember(Alias = "bz2")]
     Bz2,
 
     /// <summary>
-    /// xz compression (.tar.xz, .txz)
+    /// xz compression (<c>.tar.xz</c>, <c>.txz</c>).
     /// </summary>
     [YamlMember(Alias = "xz")]
     Xz,
 
     /// <summary>
-    /// Create an uncompressed .tar file.
+    /// Create an uncompressed <c>.tar</c> file.
     /// </summary>
     [YamlMember(Alias = "none")]
     None,

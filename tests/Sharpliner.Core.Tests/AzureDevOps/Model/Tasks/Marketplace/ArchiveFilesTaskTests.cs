@@ -32,4 +32,27 @@ public class ArchiveFilesTaskTests
 
         return Verify(SharplinerSerializer.Serialize(task));
     }
+
+    [Fact]
+    public Task Serialize_Task_With_SevenZip_Conditional_Input_Test()
+    {
+        var task = new ArchiveFilesTask("$(Build.BinariesDirectory)", ArchiveType._7z, "$(Build.ArtifactStagingDirectory)/Archive.7z")
+        {
+            SevenZipCompression = SevenZipCompressionLevel.Maximum,
+        };
+
+        return Verify(SharplinerSerializer.Serialize(task));
+    }
+
+    [Fact]
+    public Task Serialize_Task_With_Tar_Conditional_Input_Test()
+    {
+        var task = new ArchiveFilesTask("$(Build.BinariesDirectory)", ArchiveType.Tar, "$(Build.ArtifactStagingDirectory)/Archive.tar.xz")
+        {
+            TarCompression = TarCompressionType.Xz,
+            ReplaceExistingArchive = false,
+        };
+
+        return Verify(SharplinerSerializer.Serialize(task));
+    }
 }

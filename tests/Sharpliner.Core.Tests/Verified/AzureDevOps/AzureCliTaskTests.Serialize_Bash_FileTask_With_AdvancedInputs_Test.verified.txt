@@ -1,0 +1,14 @@
+﻿task: AzureCLI@2
+
+inputs:
+  azureSubscription: connectedServiceNameARM
+  scriptType: bash
+  scriptLocation: scriptPath
+  scriptPath: deploy.sh
+  arguments: --name my-app
+  addSpnToEnvironment: true
+  useGlobalConfig: true
+  workingDirectory: src
+  failOnStandardError: true
+  visibleAzLogin: false
+  keepAzSessionActive: true

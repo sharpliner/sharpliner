@@ -41,6 +41,12 @@ public record AzureDevOpsTask : Step
     } = [];
 
     /// <summary>
+    /// Environment in which to run this task. Use <c>"host"</c>, a container name, or a <see cref="StepTarget"/> object.
+    /// </summary>
+    [YamlMember(Order = 225)]
+    public AdoExpression<object>? Target { get; init; }
+
+    /// <summary>
     /// Number of retries if the task fails.
     /// Default is 0
     /// </summary>
