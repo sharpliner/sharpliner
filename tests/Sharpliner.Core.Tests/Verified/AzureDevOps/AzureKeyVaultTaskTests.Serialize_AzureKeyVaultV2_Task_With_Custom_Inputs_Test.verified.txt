@@ -1,0 +1,9 @@
+﻿task: AzureKeyVault@2
+
+displayName: Download Azure Key Vault secrets
+
+inputs:
+  azureSubscription: MyServiceConnection
+  KeyVaultName: MyKeyVault
+  SecretsFilter: DbPassword,SigningKey
+  RunAsPreJob: true

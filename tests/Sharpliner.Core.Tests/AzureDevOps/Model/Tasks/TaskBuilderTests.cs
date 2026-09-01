@@ -388,6 +388,7 @@ public class TaskBuilderTests
     }
 
     private class AdvancedSecurityTaskPipeline : TestPipeline
+    private class AzureKeyVaultTaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
         {
@@ -400,6 +401,10 @@ public class TaskBuilderTests
                         AdvancedSecurity.Codeql.Init(CodeqlLanguage.CSharp),
                         AdvancedSecurity.Codeql.InitWithoutBuild(CodeqlLanguage.Cpp, CodeqlLanguage.Python),
                         AdvancedSecurity.Codeql.InitWithAutomaticInstall([CodeqlLanguage.Java], cleanupOldAutomaticInstalls: true)
+                        AzureKeyVault.DownloadSecrets("MyServiceConnection", "MyKeyVault"),
+#pragma warning disable CS0618 // Type or member is obsolete
+                        AzureKeyVault.DownloadSecretsV1("LegacyServiceConnection", "LegacyVault", "LegacySecret", true)
+#pragma warning restore CS0618 // Type or member is obsolete
                     }
                 }
             }
@@ -474,6 +479,9 @@ public class TaskBuilderTests
     public Task Serialize_AzureContainerApps_Builder_Test()
     {
         AzureContainerAppsTaskPipeline pipeline = new();
+    public Task Serialize_AzureKeyVault_Builder_Test()
+    {
+        AzureKeyVaultTaskPipeline pipeline = new();
 
         return Verify(pipeline.Serialize());
     }

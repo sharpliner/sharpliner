@@ -92,6 +92,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Tasks.AzureAppServiceDeployTaskBuilder AzureAppServiceDeploy { get; }
         protected static Sharpliner.AzureDevOps.Tasks.AzureCliTaskBuilder AzureCli { get; }
         protected static Sharpliner.AzureDevOps.Tasks.AzureCliV3TaskBuilder AzureCliV3 { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.AzureKeyVaultTaskBuilder AzureKeyVault { get; }
         protected static Sharpliner.AzureDevOps.Tasks.BashTaskBuilder Bash { get; }
         protected static Sharpliner.AzureDevOps.Tasks.CheckoutTaskBuilder Checkout { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder DotNet { get; }
@@ -1912,6 +1913,34 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? XmlTransformation { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? XmlVariableSubstitution { get; init; }
+    public class AzureKeyVaultTask : Sharpliner.AzureDevOps.Tasks.AzureKeyVaultTaskBase, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureKeyVaultTask>
+    {
+        public AzureKeyVaultTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> keyVaultName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? secretsFilter = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? runAsPreJob = null) { }
+    }
+    public abstract class AzureKeyVaultTaskBase : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureKeyVaultTaskBase>
+    {
+        protected AzureKeyVaultTaskBase(string taskVersion, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> keyVaultName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? secretsFilter = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? runAsPreJob = null) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureSubscription { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KeyVaultName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? RunAsPreJob { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SecretsFilter { get; init; }
+    }
+    public class AzureKeyVaultTaskBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.AzureKeyVaultTask DownloadSecrets(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> keyVaultName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? secretsFilter = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? runAsPreJob = null) { }
+        [System.Obsolete("AzureKeyVault@1 is deprecated by Microsoft. Prefer DownloadSecrets for AzureKeyVa" +
+            "ult@2.")]
+        public Sharpliner.AzureDevOps.Tasks.AzureKeyVaultV1Task DownloadSecretsV1(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> keyVaultName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? secretsFilter = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? runAsPreJob = null) { }
+    }
+    [System.Obsolete("AzureKeyVault@1 is deprecated by Microsoft. Prefer AzureKeyVaultTask (AzureKeyVau" +
+        "lt@2).")]
+    public class AzureKeyVaultV1Task : Sharpliner.AzureDevOps.Tasks.AzureKeyVaultTaskBase, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureKeyVaultV1Task>
+    {
+        public AzureKeyVaultV1Task(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> keyVaultName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? secretsFilter = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? runAsPreJob = null) { }
     }
     public class BashFileTask : Sharpliner.AzureDevOps.Tasks.BashTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.BashFileTask>, YamlDotNet.Serialization.IYamlConvertible
     {

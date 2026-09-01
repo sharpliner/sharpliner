@@ -59,6 +59,8 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `AzureCLI@3`, `AzureCLI@2` | `AzureCliV3.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliV3Task`, `AzureCliV3FileTask`; `AzureCli.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliTask`, `AzureCliFileTask` |
 | `AzureLoadTest@1` | `AzureLoadTestTask` |
 | `AzureRmWebAppDeployment@5` | `AzureAppServiceDeploy.WebApp/WebAppLinux/Package/Container/PublishProfile` -> `AzureRmWebAppDeploymentPackageTask`, `AzureRmWebAppDeploymentContainerTask`, `AzureRmWebAppDeploymentPublishProfileTask` |
+| `AzureCLI@2` | `AzureCli.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliTask`, `AzureCliFileTask` |
+| `AzureKeyVault@2`, `AzureKeyVault@1` | `AzureKeyVault.DownloadSecrets` -> `AzureKeyVaultTask`, `AzureKeyVaultV1Task` |
 | `Bash@3` | `Bash.Inline/File/FromFile/FromResourceFile` -> `InlineBashTask`, `BashFileTask` (`bash` step shortcut) |
 | `CMake@1` | `CMakeTask` |
 | `CmdLine@2` | `Script.Inline/FromFile/FromResourceFile` -> `ScriptTask` (`script` step shortcut) |
@@ -137,7 +139,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Azure Function on Kubernetes | `AzureFunctionOnKubernetes@1`, `AzureFunctionOnKubernetes@0` | ❌ Missing | No strongly typed model or builder. |
 | Azure Functions Deploy | `AzureFunctionApp@2`, `AzureFunctionApp@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure Functions for container | `AzureFunctionAppContainer@1` | ❌ Missing | No strongly typed model or builder. |
-| Azure Key Vault | `AzureKeyVault@2`, `AzureKeyVault@1` | ❌ Missing | No strongly typed model or builder. |
+| Azure Key Vault | `AzureKeyVault@2`, `AzureKeyVault@1` | ✅ Supported | `AzureKeyVault.DownloadSecrets(...)` -> `AzureKeyVaultTask` (`@2`). `AzureKeyVaultV1Task` and `AzureKeyVault.DownloadSecretsV1(...)` cover the deprecated `@1` major. |
 | Azure Monitor alerts (Deprecated) | `AzureMonitorAlerts@0` | ⚪ Out of scope | Deprecated by Microsoft (classic Azure Monitor alerts). |
 | Azure PowerShell | `AzurePowerShell@5`, `AzurePowerShell@4`, `AzurePowerShell@3`, `AzurePowerShell@2`, `AzurePowerShell@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure resource group deployment | `AzureResourceGroupDeployment@2`, `AzureResourceGroupDeployment@1` | ❌ Missing | No strongly typed model or builder. |
@@ -295,6 +297,12 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 Sharpliner covers **21 of the 168** official built-in task families (19 fully, 2 partially).
 Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
 library grew from. The **121 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
+| Utility | 47 | 9 | 0 | 35 | 3 |
+| **Total** | **168** | **17** | **2** | **123** | **26** |
+
+Sharpliner covers **19 of the 168** official built-in task families (17 fully, 2 partially).
+Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
+library grew from. The **123 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
 Service Fabric) and by tool installers.
 
 ## Tasks we would like to see contributed
@@ -316,7 +324,7 @@ When picking one up, a contribution is expected to contain:
 - an update of this document and of the [definition reference](DefinitionReference.md).
 
 Good candidates to start with, as they are the most commonly used ones in .NET pipelines, are `Cache@2`,
-`Docker@2`, `PublishBuildArtifacts@1`, `DownloadBuildArtifacts@1`, `AzureKeyVault@2`, `AzurePowerShell@5`,
+`Docker@2`, `PublishBuildArtifacts@1`, `DownloadBuildArtifacts@1`, `AzurePowerShell@5`,
 `Npm@1` and `VSTest@3`.
 
 ### Missing build tasks
@@ -355,7 +363,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `AzureFunctionOnKubernetes@1` – Azure Function on Kubernetes
 - `AzureFunctionApp@2` – Azure Functions Deploy
 - `AzureFunctionAppContainer@1` – Azure Functions for container
-- `AzureKeyVault@2` – Azure Key Vault
 - `AzurePowerShell@5` – Azure PowerShell
 - `AzureResourceGroupDeployment@2` – Azure resource group deployment
 - `AzureSpringCloud@0` – Azure Spring Apps

@@ -1,0 +1,9 @@
+﻿task: AzureKeyVault@1
+
+displayName: Download Azure Key Vault secrets
+
+inputs:
+  azureSubscription: LegacyServiceConnection
+  KeyVaultName: LegacyVault
+  SecretsFilter: LegacySecret
+  RunAsPreJob: false
