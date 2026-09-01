@@ -31,7 +31,8 @@ public record DockerTask : AzureDevOpsTask
 
     /// <summary>
     /// Docker registry service connection to authenticate with. Required for commands that need to authenticate with
-    /// a registry (<c>login</c>, <c>logout</c>, <c>push</c>, <c>buildAndPush</c>).
+    /// a registry (<c>login</c>, <c>push</c>, <c>buildAndPush</c>).
+    /// For <c>logout</c>, this input is optional; when omitted, Docker@2 removes all authentication data from the temporary Docker config.
     /// Docker@2 input: <c>containerRegistry</c>.
     /// </summary>
     [YamlIgnore]

@@ -58,13 +58,13 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `ArchiveFiles@2` | `ArchiveFilesTask` |
 | `AdvancedSecurity-Codeql-Analyze@1` | `AdvancedSecurityCodeql.Analyze/AnalyzeAndWait` -> `AdvancedSecurityCodeqlAnalyzeTask` |
 | `AzureCLI@3`, `AzureCLI@2` | `AzureCliV3.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliV3Task`, `AzureCliV3FileTask`; `AzureCli.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliTask`, `AzureCliFileTask` |
-| `AzureContainerApps@1`, `AzureContainerApps@0` | `AzureContainerApps.V1.FromSource/FromImage/FromYaml` -> `AzureContainerAppsV1Task`; `AzureContainerApps.V0.FromImage` -> `AzureContainerAppsV0Task` |
+| `AzureContainerApps@1`, `AzureContainerApps@0` | `AzureContainerApps.V1.FromSource/FromImage/FromYaml` -> `AzureContainerAppsV1FromSourceTask` / `AzureContainerAppsV1FromImageTask` / `AzureContainerAppsV1FromYamlTask`; `AzureContainerApps.V0.FromSource/FromImage/FromYaml` -> `AzureContainerAppsV0FromSourceTask` / `AzureContainerAppsV0FromImageTask` / `AzureContainerAppsV0FromYamlTask` |
 | `AzureFunctionApp@2`, `AzureFunctionApp@1`, `AzureFunctionAppContainer@1` | `AzureFunctionApp.Windows/Linux/FlexConsumption/Container` -> `AzureFunctionAppV2Task`, `AzureFunctionAppV1Task`, `AzureFunctionAppContainerV1Task` |
 | `AzureLoadTest@1` | `AzureLoadTestTask` |
 | `AzureRmWebAppDeployment@5` | `AzureAppServiceDeploy.WebApp/WebAppLinux/Package/Container/PublishProfile` -> `AzureRmWebAppDeploymentPackageTask`, `AzureRmWebAppDeploymentContainerTask`, `AzureRmWebAppDeploymentPublishProfileTask` |
 | `AzureKeyVault@2`, `AzureKeyVault@1` | `AzureKeyVault.DownloadSecrets` -> `AzureKeyVaultTask`, `AzureKeyVaultV1Task` |
 | `AzurePowerShell@5`, `AzurePowerShell@4` | `AzurePowerShell.Inline/File/FromFile/FromResourceFile` -> `InlineAzurePowerShellTask`, `AzurePowerShellFileTask`, `InlineAzurePowerShellV4Task`, `AzurePowerShellV4FileTask` |
-| `AzureWebApp@1` | `AzureWebApp.Windows/Linux` deployment builders -> `AzureWebAppWindowsTask`, `AzureWebAppLinuxTask` |
+| `AzureWebApp@1` | `AzureWebApp.Windows/Linux` deployment builders -> `AzureWebAppWindowsPackageTask` / `AzureWebAppWindowsWarTask` / `AzureWebAppWindowsJarTask`, `AzureWebAppLinuxPackageTask` / `AzureWebAppLinuxWarTask` / `AzureWebAppLinuxJarTask` |
 | `Bash@3` | `Bash.Inline/File/FromFile/FromResourceFile` -> `InlineBashTask`, `BashFileTask` (`bash` step shortcut) |
 | `CMake@1` | `CMakeTask` |
 | `Cache@2` | `Cache.Files` -> `CacheTask`; `CacheKey`/`CacheKeyBuilder` for key and restore-key segments |
@@ -153,7 +153,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Azure CLI | `AzureCLI@3`, `AzureCLI@2`, `AzureCLI@1` | ✅ Supported | `AzureCliV3.Inline/File/FromFile/FromResourceFile` builders emit the current `AzureCLI@3` major; `AzureCli` retains the `AzureCLI@2` API. |
 | Azure CLI Preview | `AzureCLI@0` | ⚪ Out of scope | Deprecated `AzureCLI@0` preview version. |
 | Azure Cloud Service deployment | `AzureCloudPowerShellDeployment@2`, `AzureCloudPowerShellDeployment@1` | ❌ Missing | No strongly typed model or builder. |
-| Azure Container Apps Deploy | `AzureContainerApps@1`, `AzureContainerApps@0` | ✅ Supported | `AzureContainerApps.V1.FromSource/FromImage/FromYaml` and `AzureContainerApps.V0.FromImage` provide mode-safe builders for both majors. |
+| Azure Container Apps Deploy | `AzureContainerApps@1`, `AzureContainerApps@0` | ✅ Supported | `AzureContainerApps.V1.FromSource/FromImage/FromYaml` and `AzureContainerApps.V0.FromSource/FromImage/FromYaml` provide mode-specific builders for both majors. |
 | Azure Database for MySQL deployment | `AzureMysqlDeployment@2`, `AzureMysqlDeployment@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure file copy | `AzureFileCopy@6`, `AzureFileCopy@5`, `AzureFileCopy@4`, `AzureFileCopy@3`, `AzureFileCopy@2`, `AzureFileCopy@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure Function on Kubernetes | `AzureFunctionOnKubernetes@1`, `AzureFunctionOnKubernetes@0` | ❌ Missing | No strongly typed model or builder. |
