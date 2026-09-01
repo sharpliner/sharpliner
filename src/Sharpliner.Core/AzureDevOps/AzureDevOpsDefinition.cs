@@ -314,6 +314,11 @@ public abstract class AzureDevOpsDefinition
     protected static AzureAppServiceDeployTaskBuilder AzureAppServiceDeploy { get; } = new();
 
     /// <summary>
+    /// Creates an Azure Container Apps deployment task.
+    /// </summary>
+    protected static AzureContainerAppsTaskBuilder AzureContainerApps { get; } = new();
+
+    /// <summary>
     /// Creates a generic pipeline task.
     /// </summary>
     protected static AzureDevOpsTask Task(string taskName, string? displayName = null)

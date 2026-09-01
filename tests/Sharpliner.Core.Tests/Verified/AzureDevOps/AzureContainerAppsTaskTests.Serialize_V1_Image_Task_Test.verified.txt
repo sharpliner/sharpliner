@@ -1,0 +1,13 @@
+﻿task: AzureContainerApps@1
+
+displayName: Azure Container Apps Deploy
+
+inputs:
+  azureSubscription: my-azure-connection
+  imageToDeploy: myregistry.azurecr.io/my-app:1.2.3
+  acrName: myregistry
+  acrUsername: registry-user
+  acrPassword: $(registryPassword)
+  containerAppName: my-container-app
+  resourceGroup: rg-container-apps
+  ingress: internal

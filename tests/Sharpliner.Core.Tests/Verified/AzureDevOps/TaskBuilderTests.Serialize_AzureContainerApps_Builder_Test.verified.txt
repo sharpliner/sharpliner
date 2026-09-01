@@ -1,0 +1,25 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: AzureContainerApps@1
+    displayName: Azure Container Apps Deploy
+    inputs:
+      azureSubscription: my-azure-connection
+      appSourcePath: $(Build.SourcesDirectory)/src/MyApp
+      acrName: myregistry
+      dockerfilePath: src/MyApp/Dockerfile
+      runtimeStack: dotnet:8.0
+      ingress: external
+
+  - task: AzureContainerApps@1
+    displayName: Azure Container Apps Deploy
+    inputs:
+      azureSubscription: my-azure-connection
+      imageToDeploy: myregistry.azurecr.io/my-app:$(Build.BuildId)
+      containerAppName: my-app
+
+  - task: AzureContainerApps@1
+    displayName: Azure Container Apps Deploy
+    inputs:
+      azureSubscription: my-azure-connection
+      yamlConfigPath: $(System.DefaultWorkingDirectory)/containerapp.yaml
