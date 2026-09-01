@@ -74,6 +74,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `PublishPipelineArtifact@1` | `Publish.Pipeline`, `Publish.FileShare` -> `PublishTask` (`publish` step shortcut) |
 | `PublishSymbols@2` | `Publish.Symbols.*` -> `PublishSymbolsTask` mode-specific specializations |
 | `PublishTestResults@2` | `PublishTestResultsTask` |
+| `UniversalPackages@1` | `Download.UniversalPackage(...)`, `Publish.UniversalPackage(...)` -> `UniversalPackagesV1DownloadTask`, `UniversalPackagesV1PublishTask` |
 | `UniversalPackages@0` | `UniversalPackagesDownloadTask`, `UniversalPackagesPublishTask` |
 | `UseDotNet@2` | `DotNet.Install.*` -> `UseDotNetTask` |
 
@@ -188,7 +189,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | PyPI publisher | `PyPIPublisher@0` | ❌ Missing | No strongly typed model or builder. |
 | Python pip authenticate | `PipAuthenticate@1`, `PipAuthenticate@0` | ❌ Missing | No strongly typed model or builder. |
 | Python twine upload authenticate | `TwineAuthenticate@1`, `TwineAuthenticate@0` | ❌ Missing | No strongly typed model or builder. |
-| Universal packages | `UniversalPackages@1`, `UniversalPackages@0` | 🟡 Partial | `UniversalPackagesDownloadTask`/`UniversalPackagesPublishTask` emit `UniversalPackages@0`. The current `UniversalPackages@1` major is not modelled and there is no builder entry point. |
+| Universal packages | `UniversalPackages@1`, `UniversalPackages@0` | ✅ Supported | `Download.UniversalPackage(...)`/`Publish.UniversalPackage(...)` -> `UniversalPackagesV1DownloadTask`/`UniversalPackagesV1PublishTask` (`UniversalPackages@1`), plus `UniversalPackagesDownloadTask`/`UniversalPackagesPublishTask` (`UniversalPackages@0`) for backward compatibility. |
 
 ### Test tasks
 
@@ -393,7 +394,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `PyPIPublisher@0` – PyPI publisher
 - `PipAuthenticate@1` – Python pip authenticate
 - `TwineAuthenticate@1` – Python twine upload authenticate
-- `UniversalPackages@1` – Universal packages (partially covered today)
 
 ### Missing test tasks
 

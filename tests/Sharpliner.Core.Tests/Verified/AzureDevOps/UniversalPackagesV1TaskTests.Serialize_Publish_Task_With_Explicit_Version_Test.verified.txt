@@ -1,0 +1,11 @@
+﻿task: UniversalPackages@1
+
+displayName: Publish universal package
+
+inputs:
+  command: publish
+  feed: MyProject/my-feed
+  packageName: my-package
+  packageVersion: 1.2.3
+  directory: $(Build.ArtifactStagingDirectory)
+  packageDescription: Release build package
