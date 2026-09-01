@@ -1,0 +1,13 @@
+﻿task: PublishSymbols@2
+
+displayName: Index sources and publish symbols
+
+inputs:
+  SearchPattern: '**/bin/**/*.pdb'
+  IndexSources: true
+  PublishSymbols: true
+  SymbolServerType: TeamServices
+  SymbolsFolder: $(Build.BinariesDirectory)
+  IndexableFileFormats: Pdb
+  SymbolExpirationInDays: 30
+  DetailedLog: false

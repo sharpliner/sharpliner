@@ -72,6 +72,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `PowerShell@2` | `Powershell.*`, `Pwsh.*` -> `InlinePowershellTask`, `PowershellFileTask`, `InlinePwshTask` |
 | `PublishCodeCoverageResults@2` | `PublishCodeCoverageResultsTask` |
 | `PublishPipelineArtifact@1` | `Publish.Pipeline`, `Publish.FileShare` -> `PublishTask` (`publish` step shortcut) |
+| `PublishSymbols@2` | `Publish.Symbols.*` -> `PublishSymbolsTask` mode-specific specializations |
 | `PublishTestResults@2` | `PublishTestResultsTask` |
 | `UniversalPackages@0` | `UniversalPackagesDownloadTask`, `UniversalPackagesPublishTask` |
 | `UseDotNet@2` | `DotNet.Install.*` -> `UseDotNetTask` |
@@ -99,7 +100,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Gradle | `Gradle@4`, `Gradle@3`, `Gradle@2`, `Gradle@1` | ❌ Missing | No strongly typed model or builder. |
 | Grunt | `Grunt@0` | ❌ Missing | No strongly typed model or builder. |
 | gulp | `gulp@1`, `gulp@0` | ❌ Missing | No strongly typed model or builder. |
-| Index sources and publish symbols | `PublishSymbols@2`, `PublishSymbols@1` | ❌ Missing | No strongly typed model or builder. |
+| Index sources and publish symbols | `PublishSymbols@2`, `PublishSymbols@1` | ✅ Supported | `Publish.Symbols.*` builder + `PublishSymbolsTask` mode-specific specializations. Only current major `@2` is modelled. |
 | Jenkins queue job | `JenkinsQueueJob@2`, `JenkinsQueueJob@1` | ❌ Missing | No strongly typed model or builder. |
 | Maven | `Maven@4`, `Maven@3`, `Maven@2`, `Maven@1` | ❌ Missing | No strongly typed model or builder. |
 | MSBuild | `MSBuild@1` | ❌ Missing | No strongly typed model or builder. |
@@ -330,7 +331,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `Gradle@4` – Gradle
 - `Grunt@0` – Grunt
 - `gulp@1` – gulp
-- `PublishSymbols@2` – Index sources and publish symbols
 - `JenkinsQueueJob@2` – Jenkins queue job
 - `Maven@4` – Maven
 - `MSBuild@1` – MSBuild

@@ -202,6 +202,39 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class PublishSymbolsTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        Publish.Symbols.IndexAndPublish.ToAzureArtifacts("**/bin/**/*.pdb") with
+                        {
+                            IndexableFileFormats = IndexableFileFormats.SourceMap,
+                        },
+                        Publish.Symbols.PublishOnly.ToFileShare("**/bin/**/*.pdb", @"\\my-share\symbols") with
+                        {
+                            CompressSymbols = true,
+                        },
+                        Publish.Symbols.IndexOnly("**/bin/**/*.pdb"),
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_PublishSymbols_Builder_Test()
+    {
+        PublishSymbolsTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class CheckoutTaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()

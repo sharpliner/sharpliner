@@ -1,0 +1,10 @@
+﻿task: PublishSymbols@2
+
+displayName: Index sources and publish symbols
+
+inputs:
+  SearchPattern: '**/bin/**/*.pdb'
+  IndexSources: true
+  PublishSymbols: false
+  Manifest: $(Build.SourcesDirectory)/symbols.manifest
+  TreatNotIndexedAsWarning: true
