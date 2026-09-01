@@ -95,6 +95,17 @@ Generated YAML:
 
 [!code-yaml[](tests/Sharpliner.Core.Tests/Verified/AzureDevOps.Docs/DefinitionReferenceTests.AdvancedSecurityCodeql_Test.verified.txt)]
 
+### Helm
+
+The [HelmDeploy@1 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/helm-deploy-v1?view=azure-pipelines) packages and deploys Helm charts and its inputs depend on the selected command.
+Each command is modelled by its own task record and the `Helm` builder only offers the inputs that are valid for the given command.
+
+[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#helm-tasks-code)]
+
+Generated YAML:
+
+[!code-yaml[](tests/Sharpliner.Core.Tests/Verified/AzureDevOps.Docs/DefinitionReferenceTests.Helm_Test.verified.txt)]
+
 ### Contributions welcome
 
 Currently, we don't support many marketplace tasks in C# as the project is still growing.

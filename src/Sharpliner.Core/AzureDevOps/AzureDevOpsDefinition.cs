@@ -399,6 +399,11 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static KubernetesManifestTaskBuilder KubernetesManifest { get; } = new();
 
+    /// <summary>
+    /// Creates a HelmDeploy task.
+    /// </summary>
+    protected static HelmTaskBuilder Helm { get; } = new();
+
     #endregion
 
     #region Pipeline member shorthands

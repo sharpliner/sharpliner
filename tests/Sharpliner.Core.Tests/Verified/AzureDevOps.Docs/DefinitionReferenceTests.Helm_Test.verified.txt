@@ -1,0 +1,32 @@
+﻿- task: HelmDeploy@1
+  inputs:
+    command: install
+    chartType: Name
+    chartName: stable/mysql
+    connectionType: Azure Resource Manager
+    azureSubscriptionEndpoint: my-azure-subscription
+    azureResourceGroup: my-resource-group
+    kubernetesCluster: my-aks-cluster
+    releaseName: my-release
+    overrideValues: image.tag=$(Build.BuildId)
+
+- task: HelmDeploy@1
+  inputs:
+    command: upgrade
+    chartType: FilePath
+    chartPath: ./charts/my-app
+    connectionType: Kubernetes Service Connection
+    kubernetesServiceEndpoint: my-kubernetes-connection
+    releaseName: my-release
+    install: true
+
+- task: HelmDeploy@1
+  inputs:
+    command: package
+    chartPath: ./charts/my-app
+    destination: $(Build.ArtifactStagingDirectory)
+
+- task: HelmDeploy@1
+  inputs:
+    command: uninstall
+    releaseName: my-release
