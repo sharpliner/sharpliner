@@ -10,6 +10,41 @@ namespace Sharpliner.AzureDevOps.Tasks;
 public class DownloadTaskBuilder
 {
     /// <summary>
+    /// Creates a <c>DownloadSecureFile@1</c> task that downloads a secure file to the agent machine.
+    /// <para>
+    /// The secure file is downloaded at the beginning of the stage regardless of the task's position,
+    /// and is deleted when the job finishes.
+    /// </para>
+    /// <para>For example:</para>
+    /// <code lang="csharp">
+    /// Steps =
+    /// {
+    ///     Download.SecureFile("ca.pem", retryCount: 5) with
+    ///     {
+    ///         Name = "caFile",
+    ///     },
+    ///     Bash.Inline($"cat {DownloadSecureFileTask.OutputSecureFilePath("caFile")}")
+    /// }
+    /// </code>
+    /// Will generate:
+    /// <code lang="yaml">
+    /// - task: DownloadSecureFile@1
+    ///   name: caFile
+    ///   inputs:
+    ///     secureFile: ca.pem
+    ///     retryCount: 5
+    /// </code>
+    /// </summary>
+    /// <param name="secureFile">The file name or GUID of the secure file to download.</param>
+    /// <param name="retryCount">Optional number of retries when download fails. Default value: <c>8</c>.</param>
+    /// <param name="socketTimeout">Optional timeout in milliseconds for the download socket.</param>
+    public DownloadSecureFileTask SecureFile(
+        AdoExpression<string> secureFile,
+        AdoExpression<int>? retryCount = null,
+        AdoExpression<int>? socketTimeout = null)
+        => new(secureFile, retryCount, socketTimeout);
+
+    /// <summary>
     /// <para>
     /// Creates a download task that downloads artifacts from the current build.
     /// </para>
