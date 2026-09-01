@@ -104,6 +104,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Tasks.DownloadTaskBuilder Download { get; }
         protected static Sharpliner.AzureDevOps.ElseCondition Else { get; }
         protected static Sharpliner.AzureDevOps.Tasks.HelmTaskBuilder Helm { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.GradleTaskBuilder Gradle { get; }
         protected static Sharpliner.AzureDevOps.Expressions.IfConditionBuilder If { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsNotPullRequest { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsPullRequest { get; }
@@ -3158,6 +3159,68 @@ namespace Sharpliner.AzureDevOps.Tasks
         public HelmUpgradeBuilder() { }
         public Sharpliner.AzureDevOps.Tasks.HelmDeployUpgradeTask FromChartName(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> chartName) { }
         public Sharpliner.AzureDevOps.Tasks.HelmDeployUpgradeTask FromChartPath(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> chartPath) { }
+    public enum GradlePluginVersionChoice
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="specify")]
+        Specify = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="build")]
+        Build = 1,
+    }
+    public class GradleTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.GradleTask>
+    {
+        public GradleTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? wrapperScript = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? tasks = null) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? CheckstyleAnalysisEnabled { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? FindBugsAnalysisEnabled { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? GradleOptions { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? GradleWrapperFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.JavaHomeSelection>? JavaHomeSelection { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.JdkArchitecture>? JdkArchitecture { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? JdkUserInputPath { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? JdkVersion { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Options { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? PmdAnalysisEnabled { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? PublishJUnitResults { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SonarQubeGradlePluginVersion { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.GradlePluginVersionChoice>? SonarQubeGradlePluginVersionChoice { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? SonarQubeRunAnalysis { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? SpotBugsAnalysisEnabled { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SpotBugsGradlePluginVersion { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.GradlePluginVersionChoice>? SpotBugsGradlePluginVersionChoice { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Tasks { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TestResultsFiles { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TestRunTitle { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WorkingDirectory { get; init; }
+    }
+    public class GradleTaskBuilder : Sharpliner.Common.Model.Tasks.TaskBuilderBase
+    {
+        public Sharpliner.AzureDevOps.Tasks.GradleTask Build(string tasks = "build", string wrapperScript = "gradlew", Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.GradleTask SonarQubeAnalysis(string tasks = "build", string wrapperScript = "gradlew", Sharpliner.AzureDevOps.Tasks.GradlePluginVersionChoice pluginVersionChoice = 0, string pluginVersion = "2.6.1", Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.GradleTask SpotBugsAnalysis(string tasks = "build", string wrapperScript = "gradlew", Sharpliner.AzureDevOps.Tasks.GradlePluginVersionChoice pluginVersionChoice = 0, string pluginVersion = "4.7.0", Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.GradleTask StaticAnalysis(string tasks = "build", string wrapperScript = "gradlew", bool checkstyle = false, bool findBugs = false, bool pmd = false, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.GradleTask Test(string tasks = "test", string wrapperScript = "gradlew", string testResultsFiles = "**/TEST-*.xml", string? testRunTitle = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.GradleTask UseJdkPath(string jdkUserInputPath, string tasks = "build", string wrapperScript = "gradlew", Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
+        public Sharpliner.AzureDevOps.Tasks.GradleTask UseJdkVersion(string tasks = "build", string wrapperScript = "gradlew", string jdkVersion = "default", Sharpliner.AzureDevOps.Tasks.JdkArchitecture? jdkArchitecture = default, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
     }
     public class InlineAzureCliTask : Sharpliner.AzureDevOps.Tasks.AzureCliTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.InlineAzureCliTask>
     {
@@ -3616,6 +3679,21 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesCommand>? Command { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesConnectionType>? ConnectionType { get; init; }
+    public enum JavaHomeSelection
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="JDKVersion")]
+        JdkVersion = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="Path")]
+        Path = 1,
+    }
+    public enum JdkArchitecture
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="x86")]
+        X86 = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="x64")]
+        X64 = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="arm64")]
+        Arm64 = 2,
     }
     public class NoneCheckoutTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NoneCheckoutTask>
     {

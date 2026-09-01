@@ -1,0 +1,5 @@
+﻿task: Gradle@4
+
+inputs:
+  gradleWrapperFile: gradlew
+  tasks: build

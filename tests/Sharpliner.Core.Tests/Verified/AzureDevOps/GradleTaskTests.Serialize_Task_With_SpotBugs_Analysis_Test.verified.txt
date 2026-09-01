@@ -1,0 +1,8 @@
+﻿task: Gradle@4
+
+inputs:
+  gradleWrapperFile: gradlew
+  tasks: check
+  spotBugsAnalysisEnabled: true
+  spotBugsGradlePluginVersionChoice: build
+  findbugsAnalysisEnabled: true

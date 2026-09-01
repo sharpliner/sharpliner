@@ -1,0 +1,9 @@
+﻿task: Gradle@4
+
+inputs:
+  gradleWrapperFile: $(Build.SourcesDirectory)
+  tasks: ${{ parameters.gradleTasks }}
+  javaHomeSelection: JDKVersion
+  jdkVersion: 1.17
+  jdkArchitecture: arm64
+  options: --info

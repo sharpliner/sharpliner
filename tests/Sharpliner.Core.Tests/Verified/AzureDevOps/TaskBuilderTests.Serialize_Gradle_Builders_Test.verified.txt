@@ -1,0 +1,53 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: Gradle@4
+    displayName: Gradle build
+    inputs:
+      gradleWrapperFile: gradlew
+      tasks: clean build
+
+  - task: Gradle@4
+    inputs:
+      gradleWrapperFile: gradlew
+      tasks: clean test
+      publishJUnitResults: true
+      testResultsFiles: '**/TEST-*.xml'
+      testRunTitle: Gradle tests
+
+  - task: Gradle@4
+    inputs:
+      gradleWrapperFile: gradlew
+      tasks: build
+      javaHomeSelection: JDKVersion
+      jdkVersion: 1.17
+      jdkArchitecture: x64
+
+  - task: Gradle@4
+    inputs:
+      gradleWrapperFile: gradlew
+      tasks: publish
+      javaHomeSelection: Path
+      jdkUserInputPath: $(JAVA_HOME_17_X64)
+
+  - task: Gradle@4
+    inputs:
+      gradleWrapperFile: gradlew
+      tasks: build
+      sonarQubeRunAnalysis: true
+      sqGradlePluginVersionChoice: build
+
+  - task: Gradle@4
+    inputs:
+      gradleWrapperFile: gradlew
+      tasks: check
+      checkstyleAnalysisEnabled: true
+      pmdAnalysisEnabled: true
+
+  - task: Gradle@4
+    inputs:
+      gradleWrapperFile: gradlew
+      tasks: check
+      spotBugsAnalysisEnabled: true
+      spotBugsGradlePluginVersionChoice: specify
+      spotbugsGradlePluginVersion: 4.8.3

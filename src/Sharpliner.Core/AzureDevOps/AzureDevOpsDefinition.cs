@@ -393,6 +393,9 @@ public abstract class AzureDevOpsDefinition
     /// Creates a Visual Studio build task.
     /// </summary>
     protected static VSBuildTaskBuilder VSBuild { get; } = new();
+    /// Creates a Gradle task.
+    /// </summary>
+    protected static GradleTaskBuilder Gradle { get; } = new();
 
     /// <summary>
     /// Creates an npm task.

@@ -73,6 +73,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `DownloadPipelineArtifact@2` | `Download.Current/FromPipelineResource/SpecificBuild/LatestFromBranch/None` -> `DownloadTask` (`download` step shortcut) |
 | `ExtractFiles@1` | `ExtractFilesTask` |
 | `HelmDeploy@1` | `Helm.*` -> `HelmDeployTask` and its `Install`/`Upgrade`/`Package`/`Push`/`Init`/`Login`/`Logout`/`Create`/`Ls`/`Get`/`Expose`/`Delete`/`Uninstall`/`Rollback` specializations |
+| `Gradle@4` | `Gradle.*` -> `GradleTask` |
 | `npmAuthenticate@0` | `Npm.Authenticate` -> `NpmAuthenticateTask` |
 | `AdvancedSecurity-Codeql-Init@1` | `AdvancedSecurity.Codeql.Init/InitWithoutBuild/InitWithAutomaticInstall` -> `AdvancedSecurityCodeqlInitTask` |
 | `NuGetAuthenticate@1` | `NuGet.Authenticate` -> `NuGetAuthenticateTask` |
@@ -108,7 +109,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Docker Compose | `DockerCompose@1`, `DockerCompose@0` | ✅ Supported | `DockerCompose.*` builder + `DockerComposeTask` with action-specific `Build`/`Push`/`Run`/`RunService`/`Lock`/`WriteImageDigests`/`CombineConfiguration`/`Command` records. Only the current `@1` major is modelled. |
 | Download GitHub NuGet | `DownloadGitHubNugetPackage@1` | ⚪ Out of scope | Deprecated by Microsoft; superseded by `NuGetCommand@2`/`DotNetCoreCLI@2` with a GitHub service connection, both of which are supported. |
 | Go | `Go@0` | ❌ Missing | No strongly typed model or builder. |
-| Gradle | `Gradle@4`, `Gradle@3`, `Gradle@2`, `Gradle@1` | ❌ Missing | No strongly typed model or builder. |
+| Gradle | `Gradle@4`, `Gradle@3`, `Gradle@2`, `Gradle@1` | ✅ Supported | `Gradle.*` builder + `GradleTask`. Only the current `@4` major is modelled; superseded `@3`/`@2`/`@1` are intentionally not modelled. |
 | Grunt | `Grunt@0` | ❌ Missing | No strongly typed model or builder. |
 | gulp | `gulp@1`, `gulp@0` | ❌ Missing | No strongly typed model or builder. |
 | Index sources and publish symbols | `PublishSymbols@2`, `PublishSymbols@1` | ✅ Supported | `Publish.Symbols.*` builder + `PublishSymbolsTask` mode-specific specializations. Only current major `@2` is modelled. |
@@ -306,6 +307,10 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | **Total** | **168** | **19** | **2** | **121** | **26** |
 
 Sharpliner covers **21 of the 168** official built-in task families (19 fully, 2 partially).
+| Utility | 47 | 9 | 0 | 35 | 3 |
+| **Total** | **168** | **17** | **2** | **123** | **26** |
+
+Sharpliner covers **19 of the 168** official built-in task families (17 fully, 2 partially).
 Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
 library grew from. The **121 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
 | Utility | 47 | 9 | 0 | 35 | 3 |
@@ -361,7 +366,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `ContainerBuild@0` – Container Build
 - `DockerCompose@1` – Docker Compose
 - `Go@0` – Go
-- `Gradle@4` – Gradle
 - `Grunt@0` – Grunt
 - `gulp@1` – gulp
 - `JenkinsQueueJob@2` – Jenkins queue job
