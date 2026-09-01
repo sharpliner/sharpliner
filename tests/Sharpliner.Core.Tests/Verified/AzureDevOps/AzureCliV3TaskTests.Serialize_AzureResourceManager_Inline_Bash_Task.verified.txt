@@ -1,0 +1,16 @@
+﻿task: AzureCLI@3
+
+inputs:
+  connectionType: azureRM
+  connectedServiceNameARM: azure-resource-manager
+  scriptType: bash
+  scriptLocation: inlineScript
+  inlineScript: az group list
+  scriptArguments: --output table
+  addSpnToEnvironment: true
+  useGlobalConfig: true
+  cwd: src
+  failOnStandardError: true
+  visibleAzLogin: false
+  allowNoSubscriptions: true
+  keepAzSessionActive: true

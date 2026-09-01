@@ -1,0 +1,10 @@
+﻿task: AzureCLI@3
+
+inputs:
+  connectionType: azureDevOps
+  azureDevOpsServiceConnection: azure-devops
+  scriptType: pscore
+  scriptLocation: scriptPath
+  scriptPath: scripts/deploy.ps1
+  powerShellErrorActionPreference: continue
+  powerShellIgnoreLASTEXITCODE: true
