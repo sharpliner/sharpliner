@@ -755,6 +755,7 @@ public class TaskBuilderTests
     }
 
     private class VSBuildTaskPipeline : TestPipeline
+    private class MavenTaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
         {
@@ -772,6 +773,16 @@ public class TaskBuilderTests
                             VsVersion = VSBuildVisualStudioVersion.VisualStudio2022,
                             MaximumCpuCount = true,
                         }
+                        Maven.Authenticate(),
+                        Maven.Authenticate([" MyFeedInOrg1 ", "", " MyFeedInOrg2 "], [" central ", "", " MavenOrg "]),
+                        Maven.Authenticate("MyAzureDevOpsServiceConnection", [" MyFeedInOrg1 ", " CrossOrgFeed "]),
+                        Maven.Authenticate("empty-connection", []),
+                        new MavenAuthenticateTask
+                        {
+                            AzureDevOpsServiceConnection = " ",
+                            ArtifactsFeeds = [""],
+                            MavenServiceConnections = [" "],
+                        },
                     }
                 }
             }
@@ -782,6 +793,9 @@ public class TaskBuilderTests
     public Task Serialize_VSBuild_Builder_Test()
     {
         VSBuildTaskPipeline pipeline = new();
+    public Task Serialize_Maven_Builders_Test()
+    {
+        MavenTaskPipeline pipeline = new();
 
         return Verify(pipeline.Serialize());
     }

@@ -112,6 +112,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Tasks.KubernetesTaskBuilder Kubernetes { get; }
         protected static Sharpliner.AzureDevOps.Tasks.MavenTaskBuilder Maven { get; }
         protected static Sharpliner.AzureDevOps.Tasks.MSBuildTaskBuilder MSBuild { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.MavenTaskBuilder Maven { get; }
         protected static Sharpliner.AzureDevOps.DependsOn NoDependsOn { get; }
         protected static Sharpliner.AzureDevOps.Tasks.NpmTaskBuilder Npm { get; }
         protected static Sharpliner.AzureDevOps.Tasks.NuGetTaskBuilder NuGet { get; }
@@ -3953,6 +3954,21 @@ namespace Sharpliner.AzureDevOps.Tasks
     public class MSBuildTaskBuilder : Sharpliner.Common.Model.Tasks.TaskBuilderBase
     {
         public Sharpliner.AzureDevOps.Tasks.MSBuildTask Build(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> solution, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? platform = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? configuration = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? msbuildArguments = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? displayName = null) { }
+    public class MavenAuthenticateTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.MavenAuthenticateTask>
+    {
+        public MavenAuthenticateTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string[]? ArtifactsFeeds { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string? AzureDevOpsServiceConnection { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string[]? MavenServiceConnections { get; init; }
+    }
+    public class MavenTaskBuilder
+    {
+        public MavenTaskBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.MavenAuthenticateTask Authenticate(string azureDevOpsServiceConnection, string[]? artifactsFeeds = null) { }
+        public Sharpliner.AzureDevOps.Tasks.MavenAuthenticateTask Authenticate(string[]? artifactsFeeds = null, string[]? mavenServiceConnections = null) { }
     }
     public class NoneCheckoutTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NoneCheckoutTask>
     {

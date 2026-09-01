@@ -1,0 +1,7 @@
+﻿task: MavenAuthenticate@0
+
+displayName: Maven Authenticate
+
+inputs:
+  azureDevOpsServiceConnection: MyAzureDevOpsServiceConnection
+  artifactsFeeds: MyFeedInOrg1,CrossOrgFeed

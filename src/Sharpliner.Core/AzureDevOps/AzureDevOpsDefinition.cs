@@ -429,6 +429,9 @@ public abstract class AzureDevOpsDefinition
     /// Creates a Docker task.
     /// </summary>
     protected static DockerTaskBuilder Docker { get; } = new();
+    /// Creates a Maven task.
+    /// </summary>
+    protected static MavenTaskBuilder Maven { get; } = new();
 
     #endregion
 
