@@ -1,0 +1,6 @@
+task: Kubernetes@0
+
+inputs:
+  kubernetesServiceEndpoint: legacy-kubernetes-connection
+  command: get
+  kubectlOutput: kubectlOutput
