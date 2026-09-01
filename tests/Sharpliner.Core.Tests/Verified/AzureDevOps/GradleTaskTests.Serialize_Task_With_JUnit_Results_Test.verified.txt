@@ -1,0 +1,8 @@
+﻿task: Gradle@4
+
+inputs:
+  gradleWrapperFile: eng/gradlew
+  tasks: clean test
+  publishJUnitResults: true
+  testResultsFiles: '**/build/test-results/test/TEST-*.xml'
+  testRunTitle: Gradle tests

@@ -156,6 +156,7 @@ DotNet.Build("src/MyProject.csproj") with
 The [NuGet v2 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/nuget-command-v2?view=azure-pipelines) also has multiple combinations based on the command.
 
 ```csharp
+NuGet.Install.Version("6.x", checkLatest: true),
 NuGet.Authenticate(["NuGetServiceConnection1", "NuGetServiceConnection2"], forceReinstallCredentialProvider: true),
 NuGet.Authenticate("AzureDevOpsServiceConnection", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/nuget/v3/index.json"),
 
@@ -177,6 +178,12 @@ NuGet.Custom(@"config -Set repositoryPath=c:\packages -configfile c:\my.config")
 Generated YAML:
 
 ```yaml
+- task: NuGetToolInstaller@1
+  displayName: Use NuGet
+  inputs:
+    versionSpec: 6.x
+    checkLatest: true
+
 - task: NuGetAuthenticate@1
   displayName: Authenticate to NuGet feeds
   inputs:
@@ -232,31 +239,6 @@ Generated YAML:
   inputs:
     command: custom
     arguments: config -Set repositoryPath=c:\packages -configfile c:\my.config
-```
-
-### Advanced Security CodeQL
-
-The [Advanced Security Initialize CodeQL v1 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/advanced-security-codeql-init-v1?view=azure-pipelines) is available through a strongly typed builder and model.
-
-```csharp
-AdvancedSecurity.Codeql.Init(CodeqlLanguage.CSharp, CodeqlLanguage.JavaScript) with
-{
-    QuerySuite = CodeqlQuerySuite.SecurityExtended,
-    BuildType = CodeqlBuildType.None,
-    EnableAutomaticCodeQLInstall = true,
-}
-```
-
-Generated YAML:
-
-```yaml
-- task: AdvancedSecurity-Codeql-Init@1
-  displayName: Advanced Security Initialize CodeQL
-  inputs:
-    languages: csharp,javascript
-    querysuite: security-extended
-    buildtype: None
-    enableAutomaticCodeQLInstall: true
 ```
 
 ### Contributions welcome

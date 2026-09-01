@@ -292,6 +292,11 @@ public abstract class AzureDevOpsDefinition
     protected static CheckoutTaskBuilder Checkout { get; } = new();
 
     /// <summary>
+    /// Creates a Cache@2 task.
+    /// </summary>
+    protected static CacheTaskBuilder Cache { get; } = new();
+
+    /// <summary>
     /// Creates a download task.
     /// </summary>
     protected static DownloadTaskBuilder Download { get; } = new();
@@ -302,9 +307,69 @@ public abstract class AzureDevOpsDefinition
     protected static AzureCliTaskBuilder AzureCli { get; } = new();
 
     /// <summary>
+    /// Creates an Azure CLI version 3 task.
+    /// </summary>
+    protected static AzureCliV3TaskBuilder AzureCliV3 { get; } = new();
+
+    /// <summary>
     /// Creates an Advanced Security task.
     /// </summary>
     protected static AdvancedSecurityTaskBuilder AdvancedSecurity { get; } = new();
+
+    /// <summary>
+    /// Creates an Azure App Service deploy task
+    /// </summary>
+    protected static AzureAppServiceDeployTaskBuilder AzureAppServiceDeploy { get; } = new();
+
+    /// <summary>
+    /// Creates an Azure Container Apps deployment task.
+    /// </summary>
+    protected static AzureContainerAppsTaskBuilder AzureContainerApps { get; } = new();
+
+    /// <summary>
+    /// Creates an Azure Key Vault task.
+    /// </summary>
+    protected static AzureKeyVaultTaskBuilder AzureKeyVault { get; } = new();
+
+    /// <summary>
+    /// Creates strongly typed Azure Functions deployment tasks.
+    /// </summary>
+    protected static AzureFunctionAppTaskBuilder AzureFunctionApp { get; } = new();
+
+    /// <summary>
+    /// Creates an Azure PowerShell task
+    /// </summary>
+    protected static AzurePowerShellTaskBuilder AzurePowerShell { get; } = new();
+
+    /// <summary>
+    /// Creates an Azure SQL Database deployment task.
+    /// </summary>
+    protected static SqlAzureDacpacDeploymentTaskBuilder SqlAzureDacpacDeployment { get; } = new();
+
+    /// <summary>
+    /// Creates an Azure Web App deployment task.
+    /// </summary>
+    protected static AzureWebAppTaskBuilder AzureWebApp { get; } = new();
+
+    /// <summary>
+    /// Creates Kubernetes@1 Kubectl tasks.
+    /// </summary>
+    protected static KubernetesTaskBuilder Kubernetes { get; } = new();
+
+    /// <summary>
+    /// Creates an MSBuild task.
+    /// </summary>
+    protected static MSBuildTaskBuilder MSBuild { get; } = new();
+
+    /// <summary>
+    /// Creates an SSH task.
+    /// </summary>
+    protected static SshTaskBuilder Ssh { get; } = new();
+
+    /// <summary>
+    /// Creates an Advanced Security CodeQL task.
+    /// </summary>
+    protected static AdvancedSecurityCodeqlTaskBuilder AdvancedSecurityCodeql { get; } = new();
 
     /// <summary>
     /// Creates a generic pipeline task.
@@ -327,6 +392,11 @@ public abstract class AzureDevOpsDefinition
     protected static DotNetTaskBuilder DotNet { get; } = new();
 
     /// <summary>
+    /// Creates a Docker Compose task.
+    /// </summary>
+    protected static DockerComposeTaskBuilder DockerCompose { get; } = new();
+
+    /// <summary>
     /// This task verifies that you didn't forget to check in your YAML pipeline changes.
     /// </summary>
     /// <param name="pipelineProject">Path to the .csproj where pipelines are defined</param>
@@ -336,6 +406,11 @@ public abstract class AzureDevOpsDefinition
             DisplayName = "Validate YAML has been published",
             Arguments = "-p:FailIfChanged=true"
         };
+
+    /// <summary>
+    /// Creates a Maven task.
+    /// </summary>
+    protected static MavenTaskBuilder Maven { get; } = new();
 
     /// <summary>
     /// Creates a NuGet task.
@@ -348,6 +423,16 @@ public abstract class AzureDevOpsDefinition
     protected static VSBuildTaskBuilder VSBuild { get; } = new();
 
     /// <summary>
+    /// Creates a Gradle task.
+    /// </summary>
+    protected static GradleTaskBuilder Gradle { get; } = new();
+
+    /// <summary>
+    /// Creates a Container Structure Test task.
+    /// </summary>
+    protected static ContainerStructureTestTaskBuilder ContainerStructureTest { get; } = new();
+
+    /// <summary>
     /// Creates an npm task.
     /// </summary>
     protected static NpmTaskBuilder Npm { get; } = new();
@@ -356,6 +441,26 @@ public abstract class AzureDevOpsDefinition
     /// Creates a KubernetesManifest task.
     /// </summary>
     protected static KubernetesManifestTaskBuilder KubernetesManifest { get; } = new();
+
+    /// <summary>
+    /// Creates a HelmDeploy task.
+    /// </summary>
+    protected static HelmTaskBuilder Helm { get; } = new();
+
+    /// <summary>
+    /// Creates a Docker task.
+    /// </summary>
+    protected static DockerTaskBuilder Docker { get; } = new();
+
+    /// <summary>
+    /// Creates a Visual Studio Test task.
+    /// </summary>
+    protected static VSTestTaskBuilder VSTest { get; } = new();
+
+    /// <summary>
+    /// Creates a Node.js installer task.
+    /// </summary>
+    protected static NodeTaskBuilder Node { get; } = new();
 
     #endregion
 

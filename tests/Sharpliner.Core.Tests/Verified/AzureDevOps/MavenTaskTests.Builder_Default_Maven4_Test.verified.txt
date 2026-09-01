@@ -1,0 +1,4 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: Maven@4

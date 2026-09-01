@@ -1,0 +1,5 @@
+﻿task: Cache@2
+
+inputs:
+  key: '"maven" | "$(Agent.OS)" | **/pom.xml'
+  path: $(Pipeline.Workspace)/.m2/repository

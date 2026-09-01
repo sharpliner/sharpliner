@@ -82,6 +82,11 @@ public class DownloadTaskBuilder
         string packageVersion) => new(feed, packageName, packageVersion);
 
     /// <summary>
+    /// Creates a <c>DownloadBuildArtifacts@1</c> task.
+    /// </summary>
+    public DownloadBuildArtifactsTaskBuilder BuildArtifacts { get; } = new();
+
+    /// <summary>
     /// <para>
     /// Creates a download task that downloads artifacts from the current build.
     /// </para>

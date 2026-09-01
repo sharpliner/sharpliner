@@ -1,0 +1,21 @@
+﻿- task: AzureFunctionApp@1
+  inputs:
+    azureSubscription: azure
+    appType: functionApp
+    appName: function
+    package: app.zip
+    customWebConfig: -handler iisnode
+    configurationStrings: -Database server
+    deploymentMethod: zipDeploy
+
+- task: AzureFunctionAppContainer@1
+  inputs:
+    azureSubscription: azure
+    appName: function
+    imageName: registry.azurecr.io/function:v1
+    deployToSlotOrASE: true
+    resourceGroupName: rg
+    slotName: staging
+    containerCommand: dotnet Function.dll
+    appSettings: -Key Value
+    configurationStrings: -Connection connection

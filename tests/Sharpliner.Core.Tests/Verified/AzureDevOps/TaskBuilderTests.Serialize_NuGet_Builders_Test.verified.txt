@@ -1,6 +1,25 @@
 ﻿jobs:
 - job: test
   steps:
+  - task: NuGetToolInstaller@1
+    displayName: Use NuGet
+
+  - task: NuGetToolInstaller@1
+    displayName: Use NuGet
+    inputs:
+      versionSpec: 6.x
+
+  - task: NuGetToolInstaller@1
+    displayName: Use NuGet
+    inputs:
+      versionSpec: 5.x
+      checkLatest: true
+
+  - task: NuGetToolInstaller@0
+    displayName: Use NuGet
+    inputs:
+      versionSpec: 4.9.x
+
   - task: NuGetAuthenticate@1
     displayName: Authenticate to NuGet feeds
 

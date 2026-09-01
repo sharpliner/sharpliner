@@ -1,0 +1,8 @@
+﻿task: AzureRmWebAppDeployment@5
+
+inputs:
+  ConnectionType: PublishProfile
+  PublishProfilePath: $(System.DefaultWorkingDirectory)/**/*.pubxml
+  PublishProfilePassword: $(PublishProfilePassword)
+  packageForLinux: $(Build.ArtifactStagingDirectory)/**/*.zip
+  enableXmlVariableSubstitution: true

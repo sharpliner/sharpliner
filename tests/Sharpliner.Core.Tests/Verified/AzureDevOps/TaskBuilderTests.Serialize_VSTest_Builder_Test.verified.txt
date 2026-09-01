@@ -1,0 +1,37 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: VSTest@3
+    displayName: Visual Studio Test
+    inputs:
+      testSelector: testAssemblies
+      testAssemblyVer2: '**\bin\**\*tests.dll'
+      vstestLocationMethod: version
+      vsTestVersion: 17.0
+      testFiltercriteria: Category=Unit
+      runInParallel: true
+
+  - task: VSTest@3
+    displayName: Visual Studio Test
+    inputs:
+      testSelector: testPlan
+      testPlan: 12
+      testSuite: 34,56
+      testConfiguration: 78
+      vstestLocationMethod: location
+      vstestLocation: C:\tools\vstest.console.exe
+      distributionBatchType: basedOnAssembly
+
+  - task: VSTest@2
+    displayName: Visual Studio Test
+    inputs:
+      testSelector: testRun
+      tcmTestRun: $(test.RunId)
+      diagnosticsEnabled: true
+      collectDumpOn: never
+
+  - task: VSTest@1
+    displayName: Visual Studio Test
+    inputs:
+      testAssembly: '**\*test*.dll'
+      vsTestVersion: latest

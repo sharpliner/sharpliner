@@ -1,0 +1,13 @@
+﻿task: AzureFunctionApp@2
+
+inputs:
+  azureSubscription: azure
+  appType: functionAppLinux
+  appName: function
+  package: $(Pipeline.Workspace)/app.zip
+  deployToSlotOrASE: true
+  resourceGroupName: rg
+  slotName: staging
+  runtimeStack: DOTNET-ISOLATED|10.0
+  appSettings: -WEBSITE_RUN_FROM_PACKAGE 1
+  deploymentMethod: runFromPackage

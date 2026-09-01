@@ -1,0 +1,12 @@
+task: Kubernetes@1
+
+inputs:
+  command: apply
+  connectionType: Kubernetes Service Connection
+  kubernetesServiceEndpoint: kubernetes-connection
+  namespace: production
+  useConfigurationFile: true
+  configurationType: inline
+  inline: 'apiVersion: v1'
+  arguments: --validate=true
+  outputFormat: yaml

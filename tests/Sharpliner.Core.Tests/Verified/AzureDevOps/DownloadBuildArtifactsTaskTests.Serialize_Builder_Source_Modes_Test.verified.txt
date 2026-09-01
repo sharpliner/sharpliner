@@ -1,0 +1,44 @@
+﻿jobs:
+- job: download
+  steps:
+  - task: DownloadBuildArtifacts@1
+    displayName: Download build artifacts
+    inputs:
+      buildType: current
+      downloadType: single
+      downloadPath: $(System.ArtifactsDirectory)
+      artifactName: current
+
+  - task: DownloadBuildArtifacts@1
+    displayName: Download build artifacts
+    inputs:
+      buildType: specific
+      downloadType: single
+      downloadPath: latest
+      project: project
+      definition: 12
+      buildVersionToDownload: latest
+      artifactName: drop
+
+  - task: DownloadBuildArtifacts@1
+    displayName: Download build artifacts
+    inputs:
+      buildType: specific
+      downloadType: specific
+      downloadPath: branch
+      project: project
+      definition: 12
+      buildVersionToDownload: latestFromBranch
+      branchName: refs/heads/main
+
+  - task: DownloadBuildArtifacts@1
+    displayName: Download build artifacts
+    inputs:
+      buildType: specific
+      downloadType: single
+      downloadPath: specific
+      project: project
+      definition: 12
+      buildVersionToDownload: specific
+      buildId: 1234
+      artifactName: drop

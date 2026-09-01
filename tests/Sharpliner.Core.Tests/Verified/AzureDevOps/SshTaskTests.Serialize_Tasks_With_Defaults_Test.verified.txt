@@ -1,0 +1,17 @@
+﻿- task: SSH@0
+  inputs:
+    sshEndpoint: my-ssh-endpoint
+    runOptions: commands
+    commands: echo hello
+
+- task: SSH@0
+  inputs:
+    sshEndpoint: my-ssh-endpoint
+    runOptions: script
+    scriptPath: scripts/deploy.sh
+
+- task: SSH@0
+  inputs:
+    sshEndpoint: my-ssh-endpoint
+    runOptions: inline
+    inline: echo hello

@@ -1,0 +1,10 @@
+﻿task: SSH@0
+
+inputs:
+  sshEndpoint: my-ssh-endpoint
+  runOptions: script
+  scriptPath: scripts/deploy.sh
+  args: --environment prod --verbose
+  failOnStdErr: false
+  interactiveKeyboardAuthentication: true
+  enableRemoteVsoCommands: true

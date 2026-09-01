@@ -1,0 +1,10 @@
+﻿task: SSH@0
+
+inputs:
+  sshEndpoint: my-ssh-endpoint
+  runOptions: inline
+  inline: |-
+    set -euo pipefail
+    ./deploy.sh
+  interpreterCommand: /bin/sh
+  interactiveSession: true

@@ -1,0 +1,8 @@
+﻿task: Cache@2
+
+inputs:
+  key: '"npm" | "$(Agent.OS)" | package-lock.json'
+  path: $(Pipeline.Workspace)/.npm
+  restoreKeys: |-
+    "npm" | "$(Agent.OS)"
+    "npm"

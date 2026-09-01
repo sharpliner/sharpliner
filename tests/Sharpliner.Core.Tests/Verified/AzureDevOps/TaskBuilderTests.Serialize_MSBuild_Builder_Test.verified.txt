@@ -1,0 +1,14 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: MSBuild@1
+    inputs:
+      solution: '**/*.sln'
+
+  - task: MSBuild@1
+    displayName: Build solution
+    inputs:
+      solution: MySolution.sln
+      platform: x64
+      configuration: Release
+      msbuildArguments: /t:Restore;Build

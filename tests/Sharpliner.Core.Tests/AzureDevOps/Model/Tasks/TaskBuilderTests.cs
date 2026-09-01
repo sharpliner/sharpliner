@@ -414,6 +414,248 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class AzureAppServiceDeployTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        AzureAppServiceDeploy.WebApp("my-subscription", "my-app", "$(Build.ArtifactStagingDirectory)/**/*.zip", "Deploy web app"),
+                        AzureAppServiceDeploy.WebAppLinux("my-subscription", "my-linux-app", "$(Build.ArtifactStagingDirectory)/**/*.zip", "DOTNETCORE|8.0"),
+                        AzureAppServiceDeploy.Package("my-subscription", "my-api-app", "$(Build.ArtifactStagingDirectory)/**/*.zip", AzureAppServicePackageAppType.ApiApp),
+                        AzureAppServiceDeploy.Container("my-subscription", "my-container-app", "myregistry.azurecr.io", "nginx", "latest"),
+                        AzureAppServiceDeploy.PublishProfile("$(System.DefaultWorkingDirectory)/**/*.pubxml", "$(PublishProfilePassword)", "$(Build.ArtifactStagingDirectory)/**/*.zip"),
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_AzureAppServiceDeploy_Builder_Test()
+    {
+        AzureAppServiceDeployTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
+    private class AzureContainerAppsTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        AzureContainerApps.V1.FromSource("my-azure-connection", "$(Build.SourcesDirectory)/src/MyApp", "myregistry") with
+                        {
+                            DockerfilePath = "src/MyApp/Dockerfile",
+                            RuntimeStack = "dotnet:8.0",
+                            Ingress = AzureContainerAppIngress.External
+                        },
+                        AzureContainerApps.V1.FromImage("my-azure-connection", "myregistry.azurecr.io/my-app:$(Build.BuildId)") with
+                        {
+                            ContainerAppName = "my-app",
+                        },
+                        AzureContainerApps.V1.FromYaml("my-azure-connection", "$(System.DefaultWorkingDirectory)/containerapp.yaml")
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_AzureContainerApps_Builder_Test()
+    {
+        AzureContainerAppsTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
+    private class AzureKeyVaultTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        AzureKeyVault.DownloadSecrets("MyServiceConnection", "MyKeyVault"),
+#pragma warning disable CS0618 // Type or member is obsolete
+                        AzureKeyVault.DownloadSecretsV1("LegacyServiceConnection", "LegacyVault", "LegacySecret", true)
+#pragma warning restore CS0618 // Type or member is obsolete
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_AzureKeyVault_Builder_Test()
+    {
+        AzureKeyVaultTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
+    private class AzurePowerShellTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        AzurePowerShell.File("connectedServiceNameARM", "foo.ps1"),
+                        AzurePowerShell.FromFile("connectedServiceNameARM", "AzureDevOps/Resources/Test-Script.ps1"),
+                        AzurePowerShell.FromResourceFile("connectedServiceNameARM", "Test-Script.ps1"),
+                        AzurePowerShell.Inline("connectedServiceNameARM", displayName: null, "Write-Host \"test\"")
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_AzurePowerShell_Builder_Test()
+    {
+        AzurePowerShellTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
+    private class AzureWebAppTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        AzureWebApp.Windows("my-azure-connection", "my-windows-app").Package("$(System.DefaultWorkingDirectory)/**/*.zip") with
+                        {
+                            DeploymentMethod = AzureWebAppDeploymentMethod.ZipDeploy,
+                        },
+                        AzureWebApp.Windows("my-azure-connection", "my-windows-app").War("$(System.DefaultWorkingDirectory)/**/*.war") with
+                        {
+                            CustomDeployFolder = "ROOT",
+                        },
+                        AzureWebApp.Linux("my-azure-connection", "my-linux-app").Package("$(System.DefaultWorkingDirectory)/**/*.zip") with
+                        {
+                            RuntimeStack = AzureWebAppRuntimeStack.Node22Lts,
+                            StartUpCommand = "npm run start",
+                        },
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_AzureWebApp_Builder_Test()
+    {
+        AzureWebAppTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
+    private class MSBuildTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        MSBuild.Build("**/*.sln"),
+                        MSBuild.Build("MySolution.sln", platform: "x64", configuration: "Release", msbuildArguments: "/t:Restore;Build", displayName: "Build solution"),
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_MSBuild_Builder_Test()
+    {
+        MSBuildTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
+    private class SshTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        Ssh.Commands("ssh-service-connection", "cd /home/ubuntu/app", "./deploy.sh"),
+                        Ssh.Script("ssh-service-connection", "scripts/deploy.sh", "--environment prod"),
+                        Ssh.Inline("ssh-service-connection", "set -euo pipefail", "./build.sh"),
+                        Ssh.FromFile("ssh-service-connection", "AzureDevOps/Resources/test-script.sh"),
+                        Ssh.FromResourceFile("ssh-service-connection", "test-script.sh"),
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_Ssh_Builder_Test()
+    {
+        SshTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
+    private class ContainerStructureTestTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        ContainerStructureTest.Run("my-docker-connection", "my-org/my-image", "tests/container-structure.yaml") with
+                        {
+                            Tag = "1.2.3",
+                            TestRunTitle = "Container tests",
+                            FailTaskOnFailedTests = true,
+                        },
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_ContainerStructureTest_Builder_Test()
+    {
+        ContainerStructureTestTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class TaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
@@ -457,6 +699,10 @@ public class TaskBuilderTests
                 {
                     Steps =
                     {
+                        NuGet.Install.Version(),
+                        NuGet.Install.Version("6.x"),
+                        NuGet.Install.LatestMatching("5.x"),
+                        NuGet.Install.V0("4.9.x"),
                         NuGet.Authenticate(),
                         NuGet.Authenticate([" MyServiceConnection ", "", " AnotherServiceConnection "], true),
                         NuGet.Authenticate("MyAzureDevOpsServiceConnection", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/nuget/v3/index.json"),
@@ -573,6 +819,82 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class GradleTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        Gradle.Build("clean build", displayName: "Gradle build"),
+                        Gradle.Test("clean test", testRunTitle: "Gradle tests"),
+                        Gradle.UseJdkVersion("build", jdkVersion: "1.17", jdkArchitecture: JdkArchitecture.X64),
+                        Gradle.UseJdkPath("$(JAVA_HOME_17_X64)", "publish"),
+                        Gradle.SonarQubeAnalysis("build", pluginVersionChoice: GradlePluginVersionChoice.Build),
+                        Gradle.StaticAnalysis("check", checkstyle: true, pmd: true),
+                        Gradle.SpotBugsAnalysis("check", pluginVersion: "4.8.3"),
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_Gradle_Builders_Test()
+    {
+        GradleTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
+    private class VSTestTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        VSTest.TestAssemblies("**\\bin\\**\\*tests.dll")
+                            .UsingPlatformVersion(VSTestVersion.VisualStudio2022) with
+                        {
+                            TestFilterCriteria = "Category=Unit",
+                            RunInParallel = true,
+                        },
+                        VSTest.V3.TestPlan("12", "34,56", "78")
+                            .UsingPlatformLocation("C:\\tools\\vstest.console.exe") with
+                        {
+                            DistributionBatchType = VSTestDistributionBatchType.BasedOnAssembly,
+                        },
+                        VSTest.V2.TestRun()
+                            .Build() with
+                        {
+                            DiagnosticsEnabled = true,
+                            CollectDumpOn = VSTestCollectDumpOn.Never,
+                        },
+                        VSTest.V1("**\\*test*.dll") with
+                        {
+                            VsTestVersion = VSTestV1Version.Latest,
+                        },
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_VSTest_Builder_Test()
+    {
+        VSTestTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class NpmTaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
@@ -659,6 +981,40 @@ public class TaskBuilderTests
     public Task Serialize_VSBuild_Builder_Test()
     {
         VSBuildTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
+    private class MavenTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        Maven.Authenticate(),
+                        Maven.Authenticate([" MyFeedInOrg1 ", "", " MyFeedInOrg2 "], [" central ", "", " MavenOrg "]),
+                        Maven.Authenticate("MyAzureDevOpsServiceConnection", [" MyFeedInOrg1 ", " CrossOrgFeed "]),
+                        Maven.Authenticate("empty-connection", []),
+                        new MavenAuthenticateTask
+                        {
+                            AzureDevOpsServiceConnection = " ",
+                            ArtifactsFeeds = [""],
+                            MavenServiceConnections = [" "],
+                        },
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_Maven_Builders_Test()
+    {
+        MavenTaskPipeline pipeline = new();
 
         return Verify(pipeline.Serialize());
     }

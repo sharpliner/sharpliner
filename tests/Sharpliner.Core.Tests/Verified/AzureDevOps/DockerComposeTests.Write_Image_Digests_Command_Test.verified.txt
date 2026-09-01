@@ -1,0 +1,9 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: DockerCompose@1
+    displayName: Docker Compose write service image digests
+    inputs:
+      action: Write service image digests
+      dockerComposeFile: docker-compose.yml
+      imageDigestComposeFile: $(Build.StagingDirectory)/docker-compose.images.yml

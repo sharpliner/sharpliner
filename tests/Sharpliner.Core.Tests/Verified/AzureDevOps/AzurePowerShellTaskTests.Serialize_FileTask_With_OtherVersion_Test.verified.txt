@@ -1,0 +1,8 @@
+﻿task: AzurePowerShell@5
+
+inputs:
+  azureSubscription: connectedServiceNameARM
+  ScriptType: FilePath
+  ScriptPath: foo.ps1
+  azurePowerShellVersion: OtherVersion
+  preferredAzurePowerShellVersion: 4.1.0

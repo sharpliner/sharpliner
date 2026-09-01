@@ -1,0 +1,7 @@
+﻿task: HelmDeploy@1
+
+inputs:
+  command: install
+  chartType: FilePath
+  chartPath: ./charts/redis
+  useClusterAdmin: true

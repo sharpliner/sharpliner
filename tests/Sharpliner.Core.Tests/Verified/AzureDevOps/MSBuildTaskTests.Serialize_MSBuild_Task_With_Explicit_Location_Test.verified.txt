@@ -1,0 +1,6 @@
+﻿task: MSBuild@1
+
+inputs:
+  solution: MySolution.sln
+  msbuildLocationMethod: location
+  msbuildLocation: C:\MSBuild\MSBuild.exe

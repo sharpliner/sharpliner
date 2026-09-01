@@ -1,0 +1,22 @@
+jobs:
+- job: deploy
+  steps:
+  - task: Kubernetes@1
+    displayName: Roll out application
+    inputs:
+      command: rollout
+      connectionType: Kubernetes Service Connection
+      kubernetesServiceEndpoint: kubernetes-connection
+
+  - task: Kubernetes@1
+    inputs:
+      command: get
+      connectionType: Azure Resource Manager
+      azureSubscriptionEndpoint: azure-connection
+      azureResourceGroup: production-rg
+      kubernetesCluster: production-aks
+
+  - task: Kubernetes@1
+    inputs:
+      command: logout
+      connectionType: None

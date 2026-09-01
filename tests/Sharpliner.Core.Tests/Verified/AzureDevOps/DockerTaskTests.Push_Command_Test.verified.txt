@@ -1,0 +1,12 @@
+﻿task: Docker@2
+
+displayName: docker push
+
+inputs:
+  command: push
+  repository: contoso/my-app
+  tags: |-
+    $(Build.BuildId)
+    latest
+  arguments: --disable-content-trust
+  containerRegistry: my-registry-service-connection

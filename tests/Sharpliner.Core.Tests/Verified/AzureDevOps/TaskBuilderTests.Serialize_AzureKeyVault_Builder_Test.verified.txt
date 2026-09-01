@@ -1,0 +1,18 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: AzureKeyVault@2
+    displayName: Download Azure Key Vault secrets
+    inputs:
+      azureSubscription: MyServiceConnection
+      KeyVaultName: MyKeyVault
+      SecretsFilter: '*'
+      RunAsPreJob: false
+
+  - task: AzureKeyVault@1
+    displayName: Download Azure Key Vault secrets
+    inputs:
+      azureSubscription: LegacyServiceConnection
+      KeyVaultName: LegacyVault
+      SecretsFilter: LegacySecret
+      RunAsPreJob: true

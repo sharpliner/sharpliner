@@ -1,0 +1,41 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: SSH@0
+    inputs:
+      sshEndpoint: ssh-service-connection
+      runOptions: commands
+      commands: |-
+        cd /home/ubuntu/app
+        ./deploy.sh
+
+  - task: SSH@0
+    inputs:
+      sshEndpoint: ssh-service-connection
+      runOptions: script
+      scriptPath: scripts/deploy.sh
+      args: --environment prod
+
+  - task: SSH@0
+    inputs:
+      sshEndpoint: ssh-service-connection
+      runOptions: inline
+      inline: |-
+        set -euo pipefail
+        ./build.sh
+
+  - task: SSH@0
+    inputs:
+      sshEndpoint: ssh-service-connection
+      runOptions: inline
+      inline: |
+        echo "foo"
+        git clone $bar
+
+  - task: SSH@0
+    inputs:
+      sshEndpoint: ssh-service-connection
+      runOptions: inline
+      inline: |
+        echo "foo"
+        git clone $bar

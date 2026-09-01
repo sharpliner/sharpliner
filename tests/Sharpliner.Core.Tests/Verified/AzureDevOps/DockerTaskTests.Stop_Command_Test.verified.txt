@@ -1,0 +1,7 @@
+﻿task: Docker@2
+
+displayName: docker stop
+
+inputs:
+  command: stop
+  container: my-container

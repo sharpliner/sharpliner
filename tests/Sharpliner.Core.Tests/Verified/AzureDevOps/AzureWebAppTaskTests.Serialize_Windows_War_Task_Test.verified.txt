@@ -1,0 +1,9 @@
+﻿task: AzureWebApp@1
+
+inputs:
+  azureSubscription: my-azure-connection
+  appType: webApp
+  appName: my-windows-app
+  package: $(System.DefaultWorkingDirectory)/**/*.war
+  customDeployFolder: ROOT
+  appSettings: -Port 5000

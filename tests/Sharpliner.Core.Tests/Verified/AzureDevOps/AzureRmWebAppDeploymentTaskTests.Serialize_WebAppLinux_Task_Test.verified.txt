@@ -1,0 +1,12 @@
+﻿task: AzureRmWebAppDeployment@5
+
+inputs:
+  ConnectionType: AzureRM
+  azureSubscription: my-subscription
+  WebAppName: my-app
+  appType: webAppLinux
+  packageForLinux: $(Build.ArtifactStagingDirectory)/**/*.zip
+  RuntimeStack: DOTNETCORE|8.0
+  StartupCommand: dotnet exec MyApp.dll
+  DeploymentTypeLinux: oneDeploy
+  CleanDeploymentFlag: false

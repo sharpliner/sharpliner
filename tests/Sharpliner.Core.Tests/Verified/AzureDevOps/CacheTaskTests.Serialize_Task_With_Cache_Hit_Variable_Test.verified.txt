@@ -1,0 +1,6 @@
+﻿task: Cache@2
+
+inputs:
+  key: '"nuget" | "$(Agent.OS)" | **/packages.lock.json'
+  path: $(Pipeline.Workspace)/.nuget/packages
+  cacheHitVar: CACHE_RESTORED

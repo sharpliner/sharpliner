@@ -1,0 +1,4 @@
+﻿task: HelmDeploy@1
+
+inputs:
+  command: install

@@ -1,0 +1,16 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: DockerCompose@1
+    displayName: Docker Compose build services
+    inputs:
+      action: Build services
+      dockerComposeFile: src/docker-compose.yml
+      containerregistrytype: Azure Container Registry
+      azureSubscriptionEndpoint: azure-rm
+      azureContainerRegistry: myacr.azurecr.io
+      additionalImageTags: |-
+        latest
+        $(Build.BuildNumber)
+      includeSourceTags: true
+      includeLatestTag: true

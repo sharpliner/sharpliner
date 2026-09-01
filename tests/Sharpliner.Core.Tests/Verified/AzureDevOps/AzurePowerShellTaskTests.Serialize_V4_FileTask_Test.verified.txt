@@ -1,0 +1,7 @@
+﻿task: AzurePowerShell@4
+
+inputs:
+  azureSubscription: connectedServiceNameARM
+  ScriptType: FilePath
+  ScriptPath: foo.ps1
+  RestrictContextToCurrentTask: true

@@ -1,0 +1,18 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: Maven@4
+    inputs:
+      mavenPOMFile: eng/Sharpliner.CI/pom.xml
+      goals: verify
+      options: -DskipITs=false
+      publishJUnitResults: true
+      testResultsFiles: '**/surefire-reports/TEST-*.xml'
+      testRunTitle: Sharpliner Maven tests
+      allowBrokenSymbolicLinks: false
+      codeCoverageTool: JaCoCo
+      classFilter: +:com.sharpliner.*,-:com.sharpliner.generated.*
+      classFilesDirectories: target/classes,target/test-classes
+      srcDirectories: src/main/java,src/test/java
+      failIfCoverageEmpty: true
+      restoreOriginalPomXml: true

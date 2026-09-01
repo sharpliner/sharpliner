@@ -1,0 +1,12 @@
+﻿task: SqlAzureDacpacDeployment@1
+
+inputs:
+  TaskNameSelector: SqlTask
+  DeploymentAction: Publish
+  SqlFile: scripts/deploy.sql
+  SqlAdditionalArguments: -ConnectionTimeout 100
+  AuthenticationType: aadAuthenticationPassword
+  ServerName: server.database.windows.net
+  DatabaseName: database
+  aadSqlUsername: user@contoso.com
+  aadSqlPassword: $(aadPassword)

@@ -1,0 +1,8 @@
+﻿task: AzureRmWebAppDeployment@5
+
+inputs:
+  ConnectionType: AzureRM
+  azureSubscription: my-subscription
+  WebAppName: my-app
+  appType: webApp
+  packageForLinux: $(Build.ArtifactStagingDirectory)/**/*.zip
