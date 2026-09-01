@@ -1,0 +1,18 @@
+﻿jobs:
+- job: build
+  steps:
+  - task: VSBuild@1
+    displayName: Visual Studio build
+    inputs:
+      solution: src/MyApp.sln
+      vsVersion: 17.0
+      platform: Any CPU
+      configuration: Release
+      clean: true
+      maximumCpuCount: true
+      msbuildArchitecture: x64
+      logProjectEvents: true
+      createLogFile: true
+      logFileVerbosity: detailed
+      enableDefaultLogger: true
+      customVersion: 17.0
