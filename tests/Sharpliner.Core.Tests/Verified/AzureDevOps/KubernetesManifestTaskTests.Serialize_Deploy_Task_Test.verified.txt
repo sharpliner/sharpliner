@@ -1,0 +1,17 @@
+﻿task: KubernetesManifest@1
+
+inputs:
+  action: deploy
+  connectionType: kubernetesServiceConnection
+  kubernetesServiceEndpoint: aks-connection
+  namespace: production
+  strategy: canary
+  trafficSplitMethod: smi
+  percentage: 20
+  baselineAndCanaryReplicas: 1
+  manifests: |-
+    k8s/deployment.yml
+    k8s/service.yml
+  containers: sample/app:2.0.0
+  imagePullSecrets: acr-secret
+  rolloutStatusTimeout: 300

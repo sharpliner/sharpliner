@@ -98,6 +98,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Expressions.IfConditionBuilder If { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsNotPullRequest { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition IsPullRequest { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.KubernetesManifestTaskBuilder KubernetesManifest { get; }
         protected static Sharpliner.AzureDevOps.DependsOn NoDependsOn { get; }
         protected static Sharpliner.AzureDevOps.Tasks.NpmTaskBuilder Npm { get; }
         protected static Sharpliner.AzureDevOps.Tasks.NuGetTaskBuilder NuGet { get; }
@@ -2083,6 +2084,266 @@ namespace Sharpliner.AzureDevOps.Tasks
         public InlinePwshTask(params string[] scriptLines) { }
         [YamlDotNet.Serialization.YamlMember(Alias="pwsh", Order=1, ScalarStyle=YamlDotNet.Core.ScalarStyle.Literal)]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Contents { get; init; }
+    }
+    public class KubernetesManifestBakeBuilder
+    {
+        public KubernetesManifestBakeBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestBakeV1Task Helm(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> helmChart) { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestBakeV1Task Kompose(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> dockerComposeFile) { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestBakeV1Task Kustomize(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kustomizationPath) { }
+    }
+    public class KubernetesManifestBakeV1Task : Sharpliner.AzureDevOps.Tasks.KubernetesManifestV1Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.KubernetesManifestBakeV1Task>
+    {
+        public KubernetesManifestBakeV1Task() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Containers { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DockerComposeFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? HelmChart { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KustomizationPath { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? OverrideFiles { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Overrides { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ReleaseName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesManifestRenderType>? RenderType { get; init; }
+    }
+    public abstract class KubernetesManifestConnectedV1Task : Sharpliner.AzureDevOps.Tasks.KubernetesManifestV1Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.KubernetesManifestConnectedV1Task>
+    {
+        protected KubernetesManifestConnectedV1Task(string action) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureResourceGroup { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureSubscriptionEndpoint { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesManifestConnectionType>? ConnectionType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KubernetesCluster { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? KubernetesServiceEndpoint { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? UseClusterAdmin { get; init; }
+    }
+    public enum KubernetesManifestConnectionType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="azureResourceManager")]
+        AzureResourceManager = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="kubernetesServiceConnection")]
+        KubernetesServiceConnection = 1,
+    }
+    public class KubernetesManifestCreateSecretBuilder
+    {
+        public KubernetesManifestCreateSecretBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestCreateSecretV1Task DockerRegistryWithKubernetesServiceConnection(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesServiceEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> secretName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> dockerRegistryEndpoint) { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestCreateSecretV1Task GenericWithKubernetesServiceConnection(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesServiceEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> secretName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> secretArguments) { }
+    }
+    public class KubernetesManifestCreateSecretV1Task : Sharpliner.AzureDevOps.Tasks.KubernetesManifestConnectedV1Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.KubernetesManifestCreateSecretV1Task>
+    {
+        public KubernetesManifestCreateSecretV1Task() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DockerRegistryEndpoint { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SecretArguments { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SecretName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesManifestSecretType>? SecretType { get; init; }
+    }
+    public class KubernetesManifestDeleteBuilder
+    {
+        public KubernetesManifestDeleteBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestDeleteV1Task WithAzureResourceManager(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscriptionEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureResourceGroup, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesCluster) { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestDeleteV1Task WithKubernetesServiceConnection(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesServiceEndpoint) { }
+    }
+    public class KubernetesManifestDeleteV1Task : Sharpliner.AzureDevOps.Tasks.KubernetesManifestConnectedV1Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.KubernetesManifestDeleteV1Task>
+    {
+        public KubernetesManifestDeleteV1Task() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Arguments { get; init; }
+    }
+    public class KubernetesManifestDeployBuilder
+    {
+        public KubernetesManifestDeployBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestDeployV1Task WithAzureResourceManager(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscriptionEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureResourceGroup, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesCluster, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> manifests) { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestDeployV1Task WithKubernetesServiceConnection(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesServiceEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> manifests) { }
+    }
+    public class KubernetesManifestDeployV1Task : Sharpliner.AzureDevOps.Tasks.KubernetesManifestConnectedV1Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.KubernetesManifestDeployV1Task>
+    {
+        public KubernetesManifestDeployV1Task() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? BaselineAndCanaryReplicas { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Containers { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ImagePullSecrets { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Manifests { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Percentage { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ResourceType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RolloutStatusTimeout { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesManifestStrategy>? Strategy { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesManifestTrafficSplitMethod>? TrafficSplitMethod { get; init; }
+    }
+    public enum KubernetesManifestKind
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="deployment")]
+        Deployment = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="replicaset")]
+        Replicaset = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="statefulset")]
+        Statefulset = 2,
+    }
+    public enum KubernetesManifestMergeStrategy
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="json")]
+        Json = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="merge")]
+        Merge = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="strategic")]
+        Strategic = 2,
+    }
+    public class KubernetesManifestPatchBuilder
+    {
+        public KubernetesManifestPatchBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestPatchV1Task FileWithKubernetesServiceConnection(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesServiceEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> resourceFileToPatch, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> patch) { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestPatchV1Task NamedWithKubernetesServiceConnection(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesServiceEndpoint, Sharpliner.AzureDevOps.Tasks.KubernetesManifestKind kind, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> name, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> patch) { }
+    }
+    public class KubernetesManifestPatchV1Task : Sharpliner.AzureDevOps.Tasks.KubernetesManifestConnectedV1Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.KubernetesManifestPatchV1Task>
+    {
+        public KubernetesManifestPatchV1Task() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesManifestKind>? Kind { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesManifestMergeStrategy>? MergeStrategy { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Patch { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ResourceFileToPatch { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ResourceName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesManifestResourceToPatch>? ResourceToPatch { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RolloutStatusTimeout { get; init; }
+    }
+    public class KubernetesManifestPromoteBuilder
+    {
+        public KubernetesManifestPromoteBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestPromoteV1Task WithAzureResourceManager(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscriptionEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureResourceGroup, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesCluster, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> manifests) { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestPromoteV1Task WithKubernetesServiceConnection(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesServiceEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> manifests) { }
+    }
+    public class KubernetesManifestPromoteV1Task : Sharpliner.AzureDevOps.Tasks.KubernetesManifestConnectedV1Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.KubernetesManifestPromoteV1Task>
+    {
+        public KubernetesManifestPromoteV1Task() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Containers { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ImagePullSecrets { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Manifests { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RolloutStatusTimeout { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesManifestStrategy>? Strategy { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesManifestTrafficSplitMethod>? TrafficSplitMethod { get; init; }
+    }
+    public class KubernetesManifestRejectBuilder
+    {
+        public KubernetesManifestRejectBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestRejectV1Task WithAzureResourceManager(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscriptionEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureResourceGroup, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesCluster, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> manifests) { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestRejectV1Task WithKubernetesServiceConnection(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesServiceEndpoint, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> manifests) { }
+    }
+    public class KubernetesManifestRejectV1Task : Sharpliner.AzureDevOps.Tasks.KubernetesManifestConnectedV1Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.KubernetesManifestRejectV1Task>
+    {
+        public KubernetesManifestRejectV1Task() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Manifests { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesManifestStrategy>? Strategy { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesManifestTrafficSplitMethod>? TrafficSplitMethod { get; init; }
+    }
+    public enum KubernetesManifestRenderType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="helm")]
+        Helm = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="kompose")]
+        Kompose = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="kustomize")]
+        Kustomize = 2,
+    }
+    public enum KubernetesManifestResourceToPatch
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="file")]
+        File = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="name")]
+        Name = 1,
+    }
+    public class KubernetesManifestScaleBuilder
+    {
+        public KubernetesManifestScaleBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestScaleV1Task WithKubernetesServiceConnection(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> kubernetesServiceEndpoint, Sharpliner.AzureDevOps.Tasks.KubernetesManifestKind kind, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> name, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> replicas) { }
+    }
+    public class KubernetesManifestScaleV1Task : Sharpliner.AzureDevOps.Tasks.KubernetesManifestConnectedV1Task, System.IEquatable<Sharpliner.AzureDevOps.Tasks.KubernetesManifestScaleV1Task>
+    {
+        public KubernetesManifestScaleV1Task() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.KubernetesManifestKind>? Kind { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Replicas { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ResourceName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? RolloutStatusTimeout { get; init; }
+    }
+    public enum KubernetesManifestSecretType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="dockerRegistry")]
+        DockerRegistry = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="generic")]
+        Generic = 1,
+    }
+    public enum KubernetesManifestStrategy
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="none")]
+        None = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="canary")]
+        Canary = 1,
+    }
+    public class KubernetesManifestTaskBuilder
+    {
+        public KubernetesManifestTaskBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestBakeBuilder Bake { get; }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestCreateSecretBuilder CreateSecret { get; }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestDeleteBuilder Delete { get; }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestDeployBuilder Deploy { get; }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestPatchBuilder Patch { get; }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestPromoteBuilder Promote { get; }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestRejectBuilder Reject { get; }
+        public Sharpliner.AzureDevOps.Tasks.KubernetesManifestScaleBuilder Scale { get; }
+    }
+    public enum KubernetesManifestTrafficSplitMethod
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="pod")]
+        Pod = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="smi")]
+        Smi = 1,
+    }
+    public abstract class KubernetesManifestV1Task : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.KubernetesManifestV1Task>
+    {
+        protected KubernetesManifestV1Task(string action) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Namespace { get; init; }
     }
     public class NoneCheckoutTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NoneCheckoutTask>
     {

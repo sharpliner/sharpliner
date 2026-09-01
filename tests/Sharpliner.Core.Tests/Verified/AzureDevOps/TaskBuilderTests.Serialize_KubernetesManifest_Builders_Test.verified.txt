@@ -1,0 +1,51 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: KubernetesManifest@1
+    inputs:
+      action: deploy
+      connectionType: kubernetesServiceConnection
+      kubernetesServiceEndpoint: aks-connection
+      manifests: |-
+        k8s/deployment.yml
+        k8s/service.yml
+      namespace: production
+      containers: sample/web:2.0.0
+      imagePullSecrets: acr-secret
+
+  - task: KubernetesManifest@1
+    inputs:
+      action: bake
+      renderType: helm
+      helmChart: charts/web
+      releaseName: webapp
+      overrides: image.tag=2.0.0
+
+  - task: KubernetesManifest@1
+    inputs:
+      action: patch
+      connectionType: kubernetesServiceConnection
+      kubernetesServiceEndpoint: aks-connection
+      resourceToPatch: name
+      kind: deployment
+      name: webapp
+      patch: '{"spec":{"replicas":3}}'
+      mergeStrategy: strategic
+
+  - task: KubernetesManifest@1
+    inputs:
+      action: scale
+      connectionType: kubernetesServiceConnection
+      kubernetesServiceEndpoint: aks-connection
+      kind: deployment
+      name: webapp
+      replicas: 3
+
+  - task: KubernetesManifest@1
+    inputs:
+      action: createSecret
+      connectionType: kubernetesServiceConnection
+      kubernetesServiceEndpoint: aks-connection
+      secretType: dockerRegistry
+      secretName: acr-secret
+      dockerRegistryEndpoint: my-acr-service-connection
