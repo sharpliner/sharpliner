@@ -1,0 +1,10 @@
+﻿task: UniversalPackages@1
+
+displayName: Download universal package
+
+inputs:
+  command: download
+  feed: MyProject/my-feed
+  packageName: my-package
+  packageVersion: 1.*
+  directory: $(Pipeline.Workspace)/packages

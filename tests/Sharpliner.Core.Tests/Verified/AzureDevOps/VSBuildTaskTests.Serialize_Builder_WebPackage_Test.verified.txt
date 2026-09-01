@@ -1,0 +1,12 @@
+﻿jobs:
+- job: build
+  steps:
+  - task: VSBuild@1
+    displayName: Visual Studio build
+    inputs:
+      solution: src/WebApp/WebApp.csproj
+      platform: Any CPU
+      configuration: Release
+      msbuildArgs: /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)\WebApp.zip" /p:SkipInvalidConfigurations=true
+      vsVersion: latest
+      msbuildArchitecture: x64

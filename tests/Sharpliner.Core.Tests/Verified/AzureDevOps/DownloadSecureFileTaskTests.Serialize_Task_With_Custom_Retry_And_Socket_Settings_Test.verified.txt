@@ -1,0 +1,10 @@
+﻿task: DownloadSecureFile@1
+
+displayName: Download secure file
+
+inputs:
+  secureFile: ca.pem
+  retryCount: 3
+  socketTimeout: 60000
+
+name: secureFileStep

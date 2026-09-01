@@ -1,0 +1,13 @@
+﻿task: PublishSymbols@2
+
+displayName: Index sources and publish symbols
+
+inputs:
+  SearchPattern: '**/bin/**/*.pdb'
+  IndexSources: true
+  PublishSymbols: true
+  SymbolServerType: FileShare
+  SymbolsPath: \\myshare\symbols
+  CompressSymbols: true
+  SymbolsProduct: MyProduct
+  SymbolsVersion: 1.2.3

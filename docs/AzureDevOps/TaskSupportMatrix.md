@@ -57,8 +57,10 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 |---|---|
 | `ArchiveFiles@2` | `ArchiveFilesTask` |
 | `AzureCLI@2` | `AzureCli.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliTask`, `AzureCliFileTask` |
+| `AzureLoadTest@1` | `AzureLoadTestTask` |
 | `AzureRmWebAppDeployment@5` | `AzureAppServiceDeploy.WebApp/WebAppLinux/Package/Container/PublishProfile` -> `AzureRmWebAppDeploymentPackageTask`, `AzureRmWebAppDeploymentContainerTask`, `AzureRmWebAppDeploymentPublishProfileTask` |
 | `Bash@3` | `Bash.Inline/File/FromFile/FromResourceFile` -> `InlineBashTask`, `BashFileTask` (`bash` step shortcut) |
+| `CMake@1` | `CMakeTask` |
 | `CmdLine@2` | `Script.Inline/FromFile/FromResourceFile` -> `ScriptTask` (`script` step shortcut) |
 | `CopyFiles@2` | `CopyFilesTask` |
 | `DeleteFiles@1` | `DeleteFilesTask` |
@@ -66,12 +68,15 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `DownloadPipelineArtifact@2` | `Download.Current/FromPipelineResource/SpecificBuild/LatestFromBranch/None` -> `DownloadTask` (`download` step shortcut) |
 | `ExtractFiles@1` | `ExtractFilesTask` |
 | `npmAuthenticate@0` | `Npm.Authenticate` -> `NpmAuthenticateTask` |
+| `AdvancedSecurity-Codeql-Init@1` | `AdvancedSecurity.Codeql.Init/InitWithoutBuild/InitWithAutomaticInstall` -> `AdvancedSecurityCodeqlInitTask` |
 | `NuGetAuthenticate@1` | `NuGet.Authenticate` -> `NuGetAuthenticateTask` |
 | `NuGetCommand@2` | `NuGet.*` -> `NuGetCommandTask` and its `Restore`/`Pack`/`Push`/`Custom` specializations |
 | `PowerShell@2` | `Powershell.*`, `Pwsh.*` -> `InlinePowershellTask`, `PowershellFileTask`, `InlinePwshTask` |
 | `PublishCodeCoverageResults@2` | `PublishCodeCoverageResultsTask` |
 | `PublishPipelineArtifact@1` | `Publish.Pipeline`, `Publish.FileShare` -> `PublishTask` (`publish` step shortcut) |
+| `PublishSymbols@2` | `Publish.Symbols.*` -> `PublishSymbolsTask` mode-specific specializations |
 | `PublishTestResults@2` | `PublishTestResultsTask` |
+| `UniversalPackages@1` | `Download.UniversalPackage(...)`, `Publish.UniversalPackage(...)` -> `UniversalPackagesV1DownloadTask`, `UniversalPackagesV1PublishTask` |
 | `UniversalPackages@0` | `UniversalPackagesDownloadTask`, `UniversalPackagesPublishTask` |
 | `UseDotNet@2` | `DotNet.Install.*` -> `UseDotNetTask` |
 
@@ -82,14 +87,14 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Task | YAML identity (all majors) | Classification | Sharpliner API / rationale |
 |---|---|---|---|
 | .NET Core | `DotNetCoreCLI@2`, `DotNetCoreCLI@1`, `DotNetCoreCLI@0` | ✅ Supported | `DotNet.*` builder + `DotNetCoreCliTask` (`Build`/`Test`/`Pack`/`Publish`/`Push`/`Restore`/`Run`/`Custom`). Only the current `@2` major is modelled. |
-| Advanced Security Initialize CodeQL | `AdvancedSecurity-Codeql-Init@1` | ❌ Missing | No strongly typed model or builder. |
+| Advanced Security Initialize CodeQL | `AdvancedSecurity-Codeql-Init@1` | ✅ Supported | `AdvancedSecurity.Codeql.Init/InitWithoutBuild/InitWithAutomaticInstall` -> `AdvancedSecurityCodeqlInitTask`. |
 | Advanced Security Perform CodeQL analysis | `AdvancedSecurity-Codeql-Analyze@1` | ❌ Missing | No strongly typed model or builder. |
 | Advanced Security Publish Results | `AdvancedSecurity-Publish@1` | ❌ Missing | No strongly typed model or builder. |
 | Android Build | `AndroidBuild@1` | ⚪ Out of scope | Deprecated by Microsoft; the docs recommend the `Gradle` task instead. |
 | Android Signing | `AndroidSigning@3`, `AndroidSigning@2`, `AndroidSigning@1` | ❌ Missing | No strongly typed model or builder. |
 | Ant | `Ant@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure IoT Edge | `AzureIoTEdge@2` | ❌ Missing | No strongly typed model or builder. |
-| CMake | `CMake@1` | ❌ Missing | No strongly typed model or builder. |
+| CMake | `CMake@1` | ✅ Supported | `CMakeTask`. |
 | Container Build | `ContainerBuild@0` | ❌ Missing | No strongly typed model or builder. |
 | Docker | `Docker@2`, `Docker@1`, `Docker@0` | ❌ Missing | No strongly typed model or builder. |
 | Docker Compose | `DockerCompose@1`, `DockerCompose@0` | ❌ Missing | No strongly typed model or builder. |
@@ -98,14 +103,14 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Gradle | `Gradle@4`, `Gradle@3`, `Gradle@2`, `Gradle@1` | ❌ Missing | No strongly typed model or builder. |
 | Grunt | `Grunt@0` | ❌ Missing | No strongly typed model or builder. |
 | gulp | `gulp@1`, `gulp@0` | ❌ Missing | No strongly typed model or builder. |
-| Index sources and publish symbols | `PublishSymbols@2`, `PublishSymbols@1` | ❌ Missing | No strongly typed model or builder. |
+| Index sources and publish symbols | `PublishSymbols@2`, `PublishSymbols@1` | ✅ Supported | `Publish.Symbols.*` builder + `PublishSymbolsTask` mode-specific specializations. Only current major `@2` is modelled. |
 | Jenkins queue job | `JenkinsQueueJob@2`, `JenkinsQueueJob@1` | ❌ Missing | No strongly typed model or builder. |
 | Maven | `Maven@4`, `Maven@3`, `Maven@2`, `Maven@1` | ❌ Missing | No strongly typed model or builder. |
 | MSBuild | `MSBuild@1` | ❌ Missing | No strongly typed model or builder. |
 | Prepare Analysis Configuration | `SonarQubePrepare@8`, `SonarQubePrepare@7`, `SonarQubePrepare@6`, `SonarQubePrepare@5`, `SonarQubePrepare@4` | ⚪ Out of scope | SonarQube tasks ship in a third-party (SonarSource) extension. Sharpliner models such tasks in separate extension packages, see [Marketplace tasks](DefinitionReference.md#marketplace-tasks). |
 | Publish Quality Gate Result | `SonarQubePublish@8`, `SonarQubePublish@7`, `SonarQubePublish@6`, `SonarQubePublish@5`, `SonarQubePublish@4` | ⚪ Out of scope | Third-party SonarSource extension, see `SonarQubePrepare`. |
 | Run Code Analysis | `SonarQubeAnalyze@8`, `SonarQubeAnalyze@7`, `SonarQubeAnalyze@6`, `SonarQubeAnalyze@5`, `SonarQubeAnalyze@4` | ⚪ Out of scope | Third-party SonarSource extension, see `SonarQubePrepare`. |
-| Visual Studio build | `VSBuild@1` | ❌ Missing | No strongly typed model or builder. |
+| Visual Studio build | `VSBuild@1` | ✅ Supported | `VSBuildTask` and `VSBuildTaskBuilder` provide a strongly typed model and fluent builder for `VSBuild@1`. |
 | Xcode | `Xcode@5`, `Xcode@4` | ❌ Missing | No strongly typed model or builder. |
 | Xcode Build | `Xcode@3`, `Xcode@2` | ⚪ Out of scope | Superseded majors of the `Xcode` task; only `Xcode@5` would be modelled. |
 | Xcode Package iOS | `XcodePackageiOS@0` | ⚪ Out of scope | Deprecated by Microsoft (Xcode 7 and below). |
@@ -175,7 +180,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Download Github Npm Package | `DownloadGithubNpmPackage@1` | ⚪ Out of scope | Deprecated by Microsoft; superseded by `Npm@1` with a GitHub service connection. |
 | Gradle Authenticate | `GradleAuthenticate@0` | ❌ Missing | No strongly typed model or builder. |
 | Maven Authenticate | `MavenAuthenticate@0` | ❌ Missing | No strongly typed model or builder. |
-| npm | `Npm@1`, `Npm@0` | ❌ Missing | Only `npmAuthenticate@0` is modelled by the `Npm` builder, the `Npm@1` task itself is not. |
+| npm | `Npm@1`, `Npm@0` | ✅ Supported | `Npm.Install(...)`, `Npm.InstallFromFeed(...)`, `Npm.Ci(...)`, `Npm.CiFromFeed(...)`, `Npm.Custom(...)`, `Npm.CustomFromFeed(...)`, `Npm.PublishToExternalRegistry(...)`, `Npm.PublishToFeed(...)` -> typed `Npm@1` task models. |
 | npm authenticate (for task runners) | `npmAuthenticate@0` | ✅ Supported | `Npm.Authenticate(...)` -> `NpmAuthenticateTask`. |
 | NuGet | `NuGetCommand@2`, `NuGet@0` | ✅ Supported | `NuGet.*` builder (`Restore`, `Pack`, `Push`, `Custom`) -> `NuGetCommandTask` (`NuGetCommand@2`). The legacy `NuGet@0` major is not modelled. |
 | NuGet authenticate | `NuGetAuthenticate@1`, `NuGetAuthenticate@0` | ✅ Supported | `NuGet.Authenticate(...)` -> `NuGetAuthenticateTask`. |
@@ -186,14 +191,14 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | PyPI publisher | `PyPIPublisher@0` | ❌ Missing | No strongly typed model or builder. |
 | Python pip authenticate | `PipAuthenticate@1`, `PipAuthenticate@0` | ❌ Missing | No strongly typed model or builder. |
 | Python twine upload authenticate | `TwineAuthenticate@1`, `TwineAuthenticate@0` | ❌ Missing | No strongly typed model or builder. |
-| Universal packages | `UniversalPackages@1`, `UniversalPackages@0` | 🟡 Partial | `UniversalPackagesDownloadTask`/`UniversalPackagesPublishTask` emit `UniversalPackages@0`. The current `UniversalPackages@1` major is not modelled and there is no builder entry point. |
+| Universal packages | `UniversalPackages@1`, `UniversalPackages@0` | ✅ Supported | `Download.UniversalPackage(...)`/`Publish.UniversalPackage(...)` -> `UniversalPackagesV1DownloadTask`/`UniversalPackagesV1PublishTask` (`UniversalPackages@1`), plus `UniversalPackagesDownloadTask`/`UniversalPackagesPublishTask` (`UniversalPackages@0`) for backward compatibility. |
 
 ### Test tasks
 
 | Task | YAML identity (all majors) | Classification | Sharpliner API / rationale |
 |---|---|---|---|
 | App Center test | `AppCenterTest@1` | ❌ Missing | No strongly typed model or builder. |
-| Azure Load Testing | `AzureLoadTest@1` | ❌ Missing | No strongly typed model or builder. |
+| Azure Load Testing | `AzureLoadTest@1` | ✅ Supported | `AzureLoadTestTask` (`AzureLoadTest@1`). |
 | Azure Test Plan | `AzureTestPlan@0` | ❌ Missing | No strongly typed model or builder. |
 | Container Structure Test | `ContainerStructureTest@0` | ❌ Missing | No strongly typed model or builder. |
 | Mobile Center Test | `VSMobileCenterTest@0` | ⚪ Out of scope | Deprecated/renamed by Microsoft; superseded by `AppCenterTest@1`. |
@@ -247,7 +252,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Download GitHub Release | `DownloadGitHubRelease@0` | ❌ Missing | No strongly typed model or builder. |
 | Download package | `DownloadPackage@1`, `DownloadPackage@0` | ❌ Missing | No strongly typed model or builder. |
 | Download Pipeline Artifacts | `DownloadPipelineArtifact@2`, `DownloadPipelineArtifact@1`, `DownloadPipelineArtifact@0` | ✅ Supported | `Download.Current/FromPipelineResource/SpecificBuild/LatestFromBranch/None` -> `DownloadTask` and the `download` step shortcut. |
-| Download secure file | `DownloadSecureFile@1` | ❌ Missing | No strongly typed model or builder. |
+| Download secure file | `DownloadSecureFile@1` | ✅ Supported | `Download.SecureFile` -> `DownloadSecureFileTask` (`DownloadSecureFile@1`). |
 | Extract files | `ExtractFiles@1` | ✅ Supported | `ExtractFilesTask` (`ExtractFiles@1`). |
 | File transform | `FileTransform@2`, `FileTransform@1` | ❌ Missing | No strongly typed model or builder. |
 | FTP upload | `FtpUpload@2`, `FtpUpload@1` | ❌ Missing | No strongly typed model or builder. |
@@ -282,14 +287,14 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Build | 28 | 1 | 0 | 20 | 7 |
 | Deploy | 50 | 1 | 1 | 42 | 6 |
 | Package | 18 | 3 | 1 | 8 | 6 |
-| Test | 10 | 2 | 0 | 5 | 3 |
+| Test | 10 | 3 | 0 | 4 | 3 |
 | Tool | 15 | 1 | 0 | 13 | 1 |
-| Utility | 47 | 9 | 0 | 35 | 3 |
-| **Total** | **168** | **17** | **2** | **123** | **26** |
+| Utility | 47 | 10 | 0 | 34 | 3 |
+| **Total** | **168** | **19** | **2** | **121** | **26** |
 
-Sharpliner covers **19 of the 168** official built-in task families (17 fully, 2 partially).
+Sharpliner covers **21 of the 168** official built-in task families (19 fully, 2 partially).
 Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
-library grew from. The **123 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
+library grew from. The **121 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
 Service Fabric) and by tool installers.
 
 ## Tasks we would like to see contributed
@@ -316,7 +321,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 
 ### Missing build tasks
 
-- `AdvancedSecurity-Codeql-Init@1` – Advanced Security Initialize CodeQL
 - `AdvancedSecurity-Codeql-Analyze@1` – Advanced Security Perform CodeQL analysis
 - `AdvancedSecurity-Publish@1` – Advanced Security Publish Results
 - `AndroidSigning@3` – Android Signing
@@ -330,11 +334,9 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `Gradle@4` – Gradle
 - `Grunt@0` – Grunt
 - `gulp@1` – gulp
-- `PublishSymbols@2` – Index sources and publish symbols
 - `JenkinsQueueJob@2` – Jenkins queue job
 - `Maven@4` – Maven
 - `MSBuild@1` – MSBuild
-- `VSBuild@1` – Visual Studio build
 - `Xcode@5` – Xcode
 
 ### Missing deploy tasks
@@ -393,12 +395,10 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `PyPIPublisher@0` – PyPI publisher
 - `PipAuthenticate@1` – Python pip authenticate
 - `TwineAuthenticate@1` – Python twine upload authenticate
-- `UniversalPackages@1` – Universal packages (partially covered today)
 
 ### Missing test tasks
 
 - `AppCenterTest@1` – App Center test
-- `AzureLoadTest@1` – Azure Load Testing
 - `AzureTestPlan@0` – Azure Test Plan
 - `ContainerStructureTest@0` – Container Structure Test
 - `VSTest@3` – Visual Studio Test
@@ -433,7 +433,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `DownloadBuildArtifacts@1` – Download build artifacts
 - `DownloadGitHubRelease@0` – Download GitHub Release
 - `DownloadPackage@1` – Download package
-- `DownloadSecureFile@1` – Download secure file
 - `FileTransform@2` – File transform
 - `FtpUpload@2` – FTP upload
 - `GitHubComment@0` – GitHub Comment

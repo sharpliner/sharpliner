@@ -1,0 +1,12 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: VSBuild@1
+    displayName: Visual Studio build
+    inputs:
+      solution: src/MyApp.sln
+      platform: Any CPU
+      configuration: Release
+      msbuildArgs: /p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:PackageLocation="$(Build.ArtifactStagingDirectory)\MyApp.zip" /p:SkipInvalidConfigurations=true
+      vsVersion: 17.0
+      maximumCpuCount: true

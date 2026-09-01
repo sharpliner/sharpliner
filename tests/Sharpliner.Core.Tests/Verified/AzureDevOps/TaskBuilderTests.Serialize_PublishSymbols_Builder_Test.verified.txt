@@ -1,0 +1,28 @@
+﻿jobs:
+- job: test
+  steps:
+  - task: PublishSymbols@2
+    displayName: Index sources and publish symbols
+    inputs:
+      SearchPattern: '**/bin/**/*.pdb'
+      IndexSources: true
+      PublishSymbols: true
+      SymbolServerType: TeamServices
+      IndexableFileFormats: SourceMap
+
+  - task: PublishSymbols@2
+    displayName: Index sources and publish symbols
+    inputs:
+      SearchPattern: '**/bin/**/*.pdb'
+      IndexSources: false
+      PublishSymbols: true
+      SymbolServerType: FileShare
+      SymbolsPath: \\my-share\symbols
+      CompressSymbols: true
+
+  - task: PublishSymbols@2
+    displayName: Index sources and publish symbols
+    inputs:
+      SearchPattern: '**/bin/**/*.pdb'
+      IndexSources: true
+      PublishSymbols: false

@@ -302,6 +302,11 @@ public abstract class AzureDevOpsDefinition
     protected static AzureCliTaskBuilder AzureCli { get; } = new();
 
     /// <summary>
+    /// Creates an Advanced Security task.
+    /// </summary>
+    protected static AdvancedSecurityTaskBuilder AdvancedSecurity { get; } = new();
+
+    /// <summary>
     /// Creates an Azure App Service deploy task
     /// </summary>
     protected static AzureAppServiceDeployTaskBuilder AzureAppServiceDeploy { get; } = new();
@@ -343,9 +348,19 @@ public abstract class AzureDevOpsDefinition
     protected static NuGetTaskBuilder NuGet { get; } = new();
 
     /// <summary>
+    /// Creates a Visual Studio build task.
+    /// </summary>
+    protected static VSBuildTaskBuilder VSBuild { get; } = new();
+
+    /// <summary>
     /// Creates an npm task.
     /// </summary>
     protected static NpmTaskBuilder Npm { get; } = new();
+
+    /// <summary>
+    /// Creates a KubernetesManifest task.
+    /// </summary>
+    protected static KubernetesManifestTaskBuilder KubernetesManifest { get; } = new();
 
     #endregion
 

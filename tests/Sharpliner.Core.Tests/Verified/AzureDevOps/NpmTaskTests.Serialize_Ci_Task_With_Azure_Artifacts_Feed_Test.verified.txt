@@ -1,0 +1,8 @@
+﻿task: Npm@1
+
+inputs:
+  command: ci
+  customRegistry: useFeed
+  workingDir: src/web
+  verbose: false
+  customFeed: MyProject/MyFeed

@@ -1,0 +1,6 @@
+﻿task: DownloadSecureFile@1
+
+displayName: Download secure file
+
+inputs:
+  secureFile: signing-cert.p12

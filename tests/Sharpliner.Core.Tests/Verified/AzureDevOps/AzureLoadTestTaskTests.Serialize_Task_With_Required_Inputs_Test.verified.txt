@@ -1,0 +1,7 @@
+﻿task: AzureLoadTest@1
+
+inputs:
+  azureSubscription: my-azure-subscription
+  loadTestConfigFile: loadtest.yaml
+  resourceGroup: my-resource-group
+  loadTestResource: my-load-test-resource

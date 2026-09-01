@@ -1,3 +1,5 @@
+using Sharpliner.AzureDevOps.Expressions;
+
 namespace Sharpliner.AzureDevOps.Tasks;
 
 /// <summary>
@@ -5,6 +7,109 @@ namespace Sharpliner.AzureDevOps.Tasks;
 /// </summary>
 public class NpmTaskBuilder
 {
+    /// <summary>
+    /// Creates an <see cref="NpmInstallTask"/> that runs <c>npm install</c> with registries from the repository <c>.npmrc</c>.
+    /// </summary>
+    /// <param name="customEndpoints">Optional npm service connection names for registries outside this organization/collection.</param>
+    /// <returns>An <see cref="NpmInstallTask"/> instance.</returns>
+    /// <example>
+    /// <code lang="csharp">
+    /// Npm.Install(["myExternalRegistryServiceConnection"])
+    /// </code>
+    /// <para>Generated YAML:</para>
+    /// <code lang="yaml">
+    /// - task: Npm@1
+    ///   inputs:
+    ///     command: install
+    ///     customRegistry: useNpmrc
+    ///     customEndpoint: myExternalRegistryServiceConnection
+    /// </code>
+    /// </example>
+    public NpmInstallTask Install(string[]? customEndpoints = null) => new()
+    {
+        CustomRegistry = NpmCustomRegistry.UseNpmrc,
+        CustomEndpoint = customEndpoints,
+    };
+
+    /// <summary>
+    /// Creates an <see cref="NpmInstallTask"/> that runs <c>npm install</c> using a selected Azure Artifacts/TFS feed.
+    /// </summary>
+    /// <param name="customFeed">The feed to include in the generated <c>.npmrc</c> file.</param>
+    /// <returns>An <see cref="NpmInstallTask"/> instance.</returns>
+    public NpmInstallTask InstallFromFeed(AdoExpression<string> customFeed) => new()
+    {
+        CustomRegistry = NpmCustomRegistry.UseFeed,
+        CustomFeed = customFeed,
+    };
+
+    /// <summary>
+    /// Creates an <see cref="NpmCiTask"/> that runs <c>npm ci</c> with registries from the repository <c>.npmrc</c>.
+    /// </summary>
+    /// <param name="customEndpoints">Optional npm service connection names for registries outside this organization/collection.</param>
+    /// <returns>An <see cref="NpmCiTask"/> instance.</returns>
+    public NpmCiTask Ci(string[]? customEndpoints = null) => new()
+    {
+        CustomRegistry = NpmCustomRegistry.UseNpmrc,
+        CustomEndpoint = customEndpoints,
+    };
+
+    /// <summary>
+    /// Creates an <see cref="NpmCiTask"/> that runs <c>npm ci</c> using a selected Azure Artifacts/TFS feed.
+    /// </summary>
+    /// <param name="customFeed">The feed to include in the generated <c>.npmrc</c> file.</param>
+    /// <returns>An <see cref="NpmCiTask"/> instance.</returns>
+    public NpmCiTask CiFromFeed(AdoExpression<string> customFeed) => new()
+    {
+        CustomRegistry = NpmCustomRegistry.UseFeed,
+        CustomFeed = customFeed,
+    };
+
+    /// <summary>
+    /// Creates an <see cref="NpmCustomTask"/> that runs a custom npm command with registries from the repository <c>.npmrc</c>.
+    /// </summary>
+    /// <param name="customCommand">The custom npm command and arguments, such as <c>dist-tag ls mypackage</c>.</param>
+    /// <param name="customEndpoints">Optional npm service connection names for registries outside this organization/collection.</param>
+    /// <returns>An <see cref="NpmCustomTask"/> instance.</returns>
+    public NpmCustomTask Custom(AdoExpression<string> customCommand, string[]? customEndpoints = null) => new(customCommand)
+    {
+        CustomRegistry = NpmCustomRegistry.UseNpmrc,
+        CustomEndpoint = customEndpoints,
+    };
+
+    /// <summary>
+    /// Creates an <see cref="NpmCustomTask"/> that runs a custom npm command using a selected Azure Artifacts/TFS feed.
+    /// </summary>
+    /// <param name="customCommand">The custom npm command and arguments, such as <c>dist-tag ls mypackage</c>.</param>
+    /// <param name="customFeed">The feed to include in the generated <c>.npmrc</c> file.</param>
+    /// <returns>An <see cref="NpmCustomTask"/> instance.</returns>
+    public NpmCustomTask CustomFromFeed(AdoExpression<string> customCommand, AdoExpression<string> customFeed) => new(customCommand)
+    {
+        CustomRegistry = NpmCustomRegistry.UseFeed,
+        CustomFeed = customFeed,
+    };
+
+    /// <summary>
+    /// Creates an <see cref="NpmPublishTask"/> that runs <c>npm publish</c> to an external npm registry.
+    /// </summary>
+    /// <param name="publishEndpoint">The npm service connection used to publish to the external registry.</param>
+    /// <returns>An <see cref="NpmPublishTask"/> instance.</returns>
+    public NpmPublishTask PublishToExternalRegistry(AdoExpression<string> publishEndpoint) => new()
+    {
+        PublishRegistry = NpmPublishRegistry.UseExternalRegistry,
+        PublishEndpoint = publishEndpoint,
+    };
+
+    /// <summary>
+    /// Creates an <see cref="NpmPublishTask"/> that runs <c>npm publish</c> to an Azure Artifacts/TFS feed.
+    /// </summary>
+    /// <param name="publishFeed">The feed to which npm packages are published.</param>
+    /// <returns>An <see cref="NpmPublishTask"/> instance.</returns>
+    public NpmPublishTask PublishToFeed(AdoExpression<string> publishFeed) => new()
+    {
+        PublishRegistry = NpmPublishRegistry.UseFeed,
+        PublishFeed = publishFeed,
+    };
+
     /// <summary>
     /// Creates an <see cref="NpmAuthenticateTask"/> that provides npm credentials to an <c>.npmrc</c>
     /// file in your repository for the scope of the build. This enables npm and other npm-based tasks

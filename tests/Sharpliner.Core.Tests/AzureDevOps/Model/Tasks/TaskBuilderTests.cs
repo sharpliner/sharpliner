@@ -186,6 +186,11 @@ public class TaskBuilderTests
                             DisplayName = "Publish packages",
                             Properties = """{"user-type":"packages"}""",
                         },
+                        Publish.UniversalPackage("MyProject/my-feed", "my-package", UniversalPackagesV1VersionIncrement.Minor) with
+                        {
+                            Directory = "$(Build.ArtifactStagingDirectory)",
+                            PackageDescription = "Published from TaskBuilder",
+                        },
 
                         Publish.Pipeline("artifactName", "some/file/path.txt"),
                     }
@@ -199,6 +204,39 @@ public class TaskBuilderTests
     {
         PublishTaskPipeline pipeline = new();
         
+        return Verify(pipeline.Serialize());
+    }
+
+    private class PublishSymbolsTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        Publish.Symbols.IndexAndPublish.ToAzureArtifacts("**/bin/**/*.pdb") with
+                        {
+                            IndexableFileFormats = IndexableFileFormats.SourceMap,
+                        },
+                        Publish.Symbols.PublishOnly.ToFileShare("**/bin/**/*.pdb", @"\\my-share\symbols") with
+                        {
+                            CompressSymbols = true,
+                        },
+                        Publish.Symbols.IndexOnly("**/bin/**/*.pdb"),
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_PublishSymbols_Builder_Test()
+    {
+        PublishSymbolsTaskPipeline pipeline = new();
+
         return Verify(pipeline.Serialize());
     }
 
@@ -266,6 +304,10 @@ public class TaskBuilderTests
                     Steps =
                     {
                         Download.None,
+                        Download.SecureFile("ca.pem", retryCount: 5, socketTimeout: 30000) with
+                        {
+                            Name = "caFile",
+                        },
                         Download.Current with
                         {
                             Artifact = "Frontend",
@@ -297,7 +339,11 @@ public class TaskBuilderTests
                         {
                             CheckDownloadedFiles = true,
                             Artifact = "Another.CLI",
-                        }
+                        },
+                        Download.UniversalPackage("MyProject/my-feed", "my-package", "2.*") with
+                        {
+                            Directory = "$(Pipeline.Workspace)/universal",
+                        },
                     }
                 }
             }
@@ -337,6 +383,33 @@ public class TaskBuilderTests
     public Task Serialize_AzureCli_Builder_Test()
     {
         AzureCliTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
+    private class AdvancedSecurityTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        AdvancedSecurity.Codeql.Init(CodeqlLanguage.CSharp),
+                        AdvancedSecurity.Codeql.InitWithoutBuild(CodeqlLanguage.Cpp, CodeqlLanguage.Python),
+                        AdvancedSecurity.Codeql.InitWithAutomaticInstall([CodeqlLanguage.Java], cleanupOldAutomaticInstalls: true)
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_AdvancedSecurity_Builder_Test()
+    {
+        AdvancedSecurityTaskPipeline pipeline = new();
 
         return Verify(pipeline.Serialize());
     }
@@ -488,6 +561,47 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class KubernetesManifestTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        KubernetesManifest.Deploy.WithKubernetesServiceConnection("aks-connection", "k8s/deployment.yml\nk8s/service.yml") with
+                        {
+                            Namespace = "production",
+                            Containers = "sample/web:2.0.0",
+                            ImagePullSecrets = "acr-secret",
+                        },
+                        KubernetesManifest.Bake.Helm("charts/web") with
+                        {
+                            ReleaseName = "webapp",
+                            Overrides = "image.tag=2.0.0",
+                        },
+                        KubernetesManifest.Patch.NamedWithKubernetesServiceConnection("aks-connection", KubernetesManifestKind.Deployment, "webapp", "{\"spec\":{\"replicas\":3}}") with
+                        {
+                            MergeStrategy = KubernetesManifestMergeStrategy.Strategic,
+                        },
+                        KubernetesManifest.Scale.WithKubernetesServiceConnection("aks-connection", KubernetesManifestKind.Deployment, "webapp", "3"),
+                        KubernetesManifest.CreateSecret.DockerRegistryWithKubernetesServiceConnection("aks-connection", "acr-secret", "my-acr-service-connection"),
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_KubernetesManifest_Builders_Test()
+    {
+        KubernetesManifestTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class NpmTaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
@@ -504,6 +618,34 @@ public class TaskBuilderTests
                         Npm.Authenticate("empty/.npmrc", []),
                         Npm.Authenticate("whitespace/.npmrc", [" MyServiceConnection ", "", " AnotherServiceConnection "]),
                         new NpmAuthenticateTask("null/.npmrc") with { CustomEndpoints = null },
+                        Npm.Install([" MyServiceConnection ", "", " AnotherServiceConnection "]) with
+                        {
+                            WorkingDirectory = "src/web",
+                            Verbose = true,
+                        },
+                        Npm.InstallFromFeed("MyProject/MyFeed"),
+                        Npm.Ci() with
+                        {
+                            WorkingDirectory = "src/web",
+                        },
+                        Npm.CiFromFeed("MyProject/MyFeed") with
+                        {
+                            Verbose = false,
+                        },
+                        Npm.Custom("dist-tag ls mypackage", ["ExternalNpmRegistry"]) with
+                        {
+                            WorkingDirectory = "src/web",
+                        },
+                        Npm.CustomFromFeed("dist-tag ls mypackage", "MyProject/MyFeed"),
+                        Npm.PublishToExternalRegistry("MyExternalPublishServiceConnection") with
+                        {
+                            WorkingDirectory = "src/web",
+                            Verbose = true,
+                        },
+                        Npm.PublishToFeed("MyProject/MyFeed") with
+                        {
+                            PublishPackageMetadata = false,
+                        },
                     }
                 }
             }
@@ -514,6 +656,38 @@ public class TaskBuilderTests
     public Task Serialize_Npm_Builders_Test()
     {
         NpmTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
+    private class VSBuildTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        VSBuild.Solution("src/MyApp.sln")
+                            .PlatformAndConfiguration("Any CPU", "Release")
+                            .WebPackage(@"$(Build.ArtifactStagingDirectory)\MyApp.zip", skipInvalidConfigurations: true)
+                            .Build() with
+                        {
+                            VsVersion = VSBuildVisualStudioVersion.VisualStudio2022,
+                            MaximumCpuCount = true,
+                        }
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_VSBuild_Builder_Test()
+    {
+        VSBuildTaskPipeline pipeline = new();
 
         return Verify(pipeline.Serialize());
     }

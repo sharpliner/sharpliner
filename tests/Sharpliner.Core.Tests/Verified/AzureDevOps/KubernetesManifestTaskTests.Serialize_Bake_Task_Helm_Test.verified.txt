@@ -1,0 +1,13 @@
+﻿task: KubernetesManifest@1
+
+inputs:
+  action: bake
+  namespace: staging
+  renderType: helm
+  helmChart: charts/web
+  releaseName: webapp
+  overrideFiles: |-
+    values/common.yml
+    values/staging.yml
+  overrides: image.tag=2.0.0
+  containers: sample/web:2.0.0

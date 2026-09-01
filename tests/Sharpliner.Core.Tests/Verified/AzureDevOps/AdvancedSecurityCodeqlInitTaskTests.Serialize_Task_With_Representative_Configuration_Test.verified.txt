@@ -1,0 +1,18 @@
+﻿task: AdvancedSecurity-Codeql-Init@1
+
+displayName: Advanced Security Initialize CodeQL
+
+inputs:
+  languages: csharp,javascript
+  enableAutomaticCodeQLInstall: true
+  cleanupOldAutomaticInstalls: true
+  querysuite: security-and-quality
+  buildtype: None
+  ram: 8192
+  threads: 0
+  codeqlpathstoignore: generated,legacy
+  codeqlpathstoinclude: src,services
+  sourcesfolder: src
+  loglevel: 2
+  configfilepath: /agent/_work/1/s/.github/codeql/codeql-config.yml
+  codeqltoolsdirectory: /agent/_work/_tool/CodeQL

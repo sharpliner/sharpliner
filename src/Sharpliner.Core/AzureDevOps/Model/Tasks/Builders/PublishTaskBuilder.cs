@@ -8,6 +8,85 @@ namespace Sharpliner.AzureDevOps.Tasks;
 public class PublishTaskBuilder
 {
     /// <summary>
+    /// Gets a fluent builder for <c>PublishSymbols@2</c> task modes.
+    /// </summary>
+    public PublishSymbolsTaskBuilder Symbols => new();
+
+    /// <summary>
+    /// <para>
+    /// Creates a <c>UniversalPackages@1</c> task that publishes a specific package version.
+    /// </para>
+    /// <para>
+    /// For example:
+    /// </para>
+    /// <code lang="csharp">
+    /// Steps =
+    /// {
+    ///     Publish.UniversalPackage("MyProject/my-feed", "tooling-assets", "2.3.4") with
+    ///     {
+    ///         Directory = "$(Build.ArtifactStagingDirectory)",
+    ///         PackageDescription = "Release-ready assets"
+    ///     }
+    /// }
+    /// </code>
+    /// Will generate:
+    /// <code lang="yaml">
+    /// - task: UniversalPackages@1
+    ///   inputs:
+    ///     command: publish
+    ///     feed: MyProject/my-feed
+    ///     packageName: tooling-assets
+    ///     packageVersion: 2.3.4
+    ///     directory: $(Build.ArtifactStagingDirectory)
+    ///     packageDescription: Release-ready assets
+    /// </code>
+    /// More details can be found in the
+    /// <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/universal-packages-v1">official Azure DevOps pipelines documentation</see>.
+    /// </summary>
+    /// <param name="feed">Feed name, or <c>project/feed</c> for project-scoped feeds.</param>
+    /// <param name="packageName">Universal Package name.</param>
+    /// <param name="packageVersion">Package version to publish.</param>
+    public UniversalPackagesV1PublishTask UniversalPackage(
+        string feed,
+        string packageName,
+        string packageVersion) => new(feed, packageName, packageVersion);
+
+    /// <summary>
+    /// <para>
+    /// Creates a <c>UniversalPackages@1</c> task that publishes a package using automatic version incrementing.
+    /// </para>
+    /// <para>
+    /// For example:
+    /// </para>
+    /// <code lang="csharp">
+    /// Steps =
+    /// {
+    ///     Publish.UniversalPackage("MyProject/my-feed", "tooling-assets", UniversalPackagesV1VersionIncrement.Patch) with
+    ///     {
+    ///         Directory = "$(Build.ArtifactStagingDirectory)"
+    ///     }
+    /// }
+    /// </code>
+    /// Will generate:
+    /// <code lang="yaml">
+    /// - task: UniversalPackages@1
+    ///   inputs:
+    ///     command: publish
+    ///     feed: MyProject/my-feed
+    ///     packageName: tooling-assets
+    ///     versionIncrement: patch
+    ///     directory: $(Build.ArtifactStagingDirectory)
+    /// </code>
+    /// </summary>
+    /// <param name="feed">Feed name, or <c>project/feed</c> for project-scoped feeds.</param>
+    /// <param name="packageName">Universal Package name.</param>
+    /// <param name="versionIncrement">Version component to increment automatically.</param>
+    public UniversalPackagesV1PublishTask UniversalPackage(
+        string feed,
+        string packageName,
+        AdoExpression<UniversalPackagesV1VersionIncrement> versionIncrement) => new(feed, packageName, versionIncrement);
+
+    /// <summary>
     /// <para>
     /// Creates a publish step that stores the artifact in Azure Pipelines.
     /// </para>

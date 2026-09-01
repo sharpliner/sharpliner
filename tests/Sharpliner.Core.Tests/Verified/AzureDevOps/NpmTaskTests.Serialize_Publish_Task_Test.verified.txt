@@ -1,0 +1,9 @@
+﻿task: Npm@1
+
+inputs:
+  command: publish
+  publishRegistry: useFeed
+  workingDir: src/web
+  verbose: true
+  publishFeed: MyProject/MyFeed
+  publishPackageMetadata: false
