@@ -390,6 +390,7 @@ public class TaskBuilderTests
     private class AdvancedSecurityTaskPipeline : TestPipeline
     private class AzureKeyVaultTaskPipeline : TestPipeline
     private class AzurePowerShellTaskPipeline : TestPipeline
+    private class AzureWebAppTaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
         {
@@ -474,6 +475,19 @@ public class TaskBuilderTests
                             ContainerAppName = "my-app",
                         },
                         AzureContainerApps.V1.FromYaml("my-azure-connection", "$(System.DefaultWorkingDirectory)/containerapp.yaml")
+                        AzureWebApp.Windows("my-azure-connection", "my-windows-app").Package("$(System.DefaultWorkingDirectory)/**/*.zip") with
+                        {
+                            DeploymentMethod = AzureWebAppDeploymentMethod.ZipDeploy,
+                        },
+                        AzureWebApp.Windows("my-azure-connection", "my-windows-app").War("$(System.DefaultWorkingDirectory)/**/*.war") with
+                        {
+                            CustomDeployFolder = "ROOT",
+                        },
+                        AzureWebApp.Linux("my-azure-connection", "my-linux-app").Package("$(System.DefaultWorkingDirectory)/**/*.zip") with
+                        {
+                            RuntimeStack = AzureWebAppRuntimeStack.Node22Lts,
+                            StartUpCommand = "npm run start",
+                        },
                     }
                 }
             }
@@ -490,6 +504,9 @@ public class TaskBuilderTests
     public Task Serialize_AzurePowerShell_Builder_Test()
     {
         AzurePowerShellTaskPipeline pipeline = new();
+    public Task Serialize_AzureWebApp_Builder_Test()
+    {
+        AzureWebAppTaskPipeline pipeline = new();
 
         return Verify(pipeline.Serialize());
     }

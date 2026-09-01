@@ -1,0 +1,14 @@
+﻿task: AzureWebApp@1
+
+inputs:
+  azureSubscription: my-azure-connection
+  appType: webApp
+  appName: my-windows-app
+  package: $(System.DefaultWorkingDirectory)/**/*.zip
+  deploymentMethod: runFromPackage
+  deployToSlotOrASE: true
+  resourceGroupName: my-resource-group
+  slotName: staging
+  customWebConfig: -appType node -startupFile server.js
+  appSettings: -WEBSITE_TIME_ZONE "Eastern Standard Time"
+  configurationStrings: -linuxFxVersion node|20-lts

@@ -1,0 +1,10 @@
+﻿task: AzureWebApp@1
+
+inputs:
+  azureSubscription: my-azure-connection
+  appType: webAppLinux
+  appName: my-linux-app
+  package: $(System.DefaultWorkingDirectory)/**/*.zip
+  runtimeStack: NODE|20-lts
+  startUpCommand: npm run start
+  siteContainersConfig: '{"containers":[]}'
