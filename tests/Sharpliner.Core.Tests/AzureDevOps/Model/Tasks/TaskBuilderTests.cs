@@ -266,6 +266,10 @@ public class TaskBuilderTests
                     Steps =
                     {
                         Download.None,
+                        Download.SecureFile("ca.pem", retryCount: 5, socketTimeout: 30000) with
+                        {
+                            Name = "caFile",
+                        },
                         Download.Current with
                         {
                             Artifact = "Frontend",
@@ -337,6 +341,33 @@ public class TaskBuilderTests
     public Task Serialize_AzureCli_Builder_Test()
     {
         AzureCliTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
+    private class AdvancedSecurityTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        AdvancedSecurity.Codeql.Init(CodeqlLanguage.CSharp),
+                        AdvancedSecurity.Codeql.InitWithoutBuild(CodeqlLanguage.Cpp, CodeqlLanguage.Python),
+                        AdvancedSecurity.Codeql.InitWithAutomaticInstall([CodeqlLanguage.Java], cleanupOldAutomaticInstalls: true)
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_AdvancedSecurity_Builder_Test()
+    {
+        AdvancedSecurityTaskPipeline pipeline = new();
 
         return Verify(pipeline.Serialize());
     }

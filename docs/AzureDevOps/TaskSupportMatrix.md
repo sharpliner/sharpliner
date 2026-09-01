@@ -66,6 +66,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `DownloadPipelineArtifact@2` | `Download.Current/FromPipelineResource/SpecificBuild/LatestFromBranch/None` -> `DownloadTask` (`download` step shortcut) |
 | `ExtractFiles@1` | `ExtractFilesTask` |
 | `npmAuthenticate@0` | `Npm.Authenticate` -> `NpmAuthenticateTask` |
+| `AdvancedSecurity-Codeql-Init@1` | `AdvancedSecurity.Codeql.Init/InitWithoutBuild/InitWithAutomaticInstall` -> `AdvancedSecurityCodeqlInitTask` |
 | `NuGetAuthenticate@1` | `NuGet.Authenticate` -> `NuGetAuthenticateTask` |
 | `NuGetCommand@2` | `NuGet.*` -> `NuGetCommandTask` and its `Restore`/`Pack`/`Push`/`Custom` specializations |
 | `PowerShell@2` | `Powershell.*`, `Pwsh.*` -> `InlinePowershellTask`, `PowershellFileTask`, `InlinePwshTask` |
@@ -82,7 +83,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Task | YAML identity (all majors) | Classification | Sharpliner API / rationale |
 |---|---|---|---|
 | .NET Core | `DotNetCoreCLI@2`, `DotNetCoreCLI@1`, `DotNetCoreCLI@0` | ✅ Supported | `DotNet.*` builder + `DotNetCoreCliTask` (`Build`/`Test`/`Pack`/`Publish`/`Push`/`Restore`/`Run`/`Custom`). Only the current `@2` major is modelled. |
-| Advanced Security Initialize CodeQL | `AdvancedSecurity-Codeql-Init@1` | ❌ Missing | No strongly typed model or builder. |
+| Advanced Security Initialize CodeQL | `AdvancedSecurity-Codeql-Init@1` | ✅ Supported | `AdvancedSecurity.Codeql.Init/InitWithoutBuild/InitWithAutomaticInstall` -> `AdvancedSecurityCodeqlInitTask`. |
 | Advanced Security Perform CodeQL analysis | `AdvancedSecurity-Codeql-Analyze@1` | ❌ Missing | No strongly typed model or builder. |
 | Advanced Security Publish Results | `AdvancedSecurity-Publish@1` | ❌ Missing | No strongly typed model or builder. |
 | Android Build | `AndroidBuild@1` | ⚪ Out of scope | Deprecated by Microsoft; the docs recommend the `Gradle` task instead. |
@@ -247,7 +248,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Download GitHub Release | `DownloadGitHubRelease@0` | ❌ Missing | No strongly typed model or builder. |
 | Download package | `DownloadPackage@1`, `DownloadPackage@0` | ❌ Missing | No strongly typed model or builder. |
 | Download Pipeline Artifacts | `DownloadPipelineArtifact@2`, `DownloadPipelineArtifact@1`, `DownloadPipelineArtifact@0` | ✅ Supported | `Download.Current/FromPipelineResource/SpecificBuild/LatestFromBranch/None` -> `DownloadTask` and the `download` step shortcut. |
-| Download secure file | `DownloadSecureFile@1` | ❌ Missing | No strongly typed model or builder. |
+| Download secure file | `DownloadSecureFile@1` | ✅ Supported | `Download.SecureFile` -> `DownloadSecureFileTask` (`DownloadSecureFile@1`). |
 | Extract files | `ExtractFiles@1` | ✅ Supported | `ExtractFilesTask` (`ExtractFiles@1`). |
 | File transform | `FileTransform@2`, `FileTransform@1` | ❌ Missing | No strongly typed model or builder. |
 | FTP upload | `FtpUpload@2`, `FtpUpload@1` | ❌ Missing | No strongly typed model or builder. |
@@ -284,12 +285,12 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Package | 18 | 3 | 1 | 8 | 6 |
 | Test | 10 | 3 | 0 | 4 | 3 |
 | Tool | 15 | 1 | 0 | 13 | 1 |
-| Utility | 47 | 9 | 0 | 35 | 3 |
-| **Total** | **168** | **17** | **2** | **123** | **26** |
+| Utility | 47 | 10 | 0 | 34 | 3 |
+| **Total** | **168** | **18** | **2** | **122** | **26** |
 
-Sharpliner covers **19 of the 168** official built-in task families (17 fully, 2 partially).
+Sharpliner covers **20 of the 168** official built-in task families (18 fully, 2 partially).
 Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
-library grew from. The **123 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
+library grew from. The **122 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
 Service Fabric) and by tool installers.
 
 ## Tasks we would like to see contributed
@@ -316,7 +317,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 
 ### Missing build tasks
 
-- `AdvancedSecurity-Codeql-Init@1` – Advanced Security Initialize CodeQL
 - `AdvancedSecurity-Codeql-Analyze@1` – Advanced Security Perform CodeQL analysis
 - `AdvancedSecurity-Publish@1` – Advanced Security Publish Results
 - `AndroidSigning@3` – Android Signing
@@ -433,7 +433,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `DownloadBuildArtifacts@1` – Download build artifacts
 - `DownloadGitHubRelease@0` – Download GitHub Release
 - `DownloadPackage@1` – Download package
-- `DownloadSecureFile@1` – Download secure file
 - `FileTransform@2` – File transform
 - `FtpUpload@2` – FTP upload
 - `GitHubComment@0` – GitHub Comment
