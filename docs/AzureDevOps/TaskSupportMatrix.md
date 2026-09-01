@@ -56,12 +56,15 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | YAML identity | Sharpliner API |
 |---|---|
 | `ArchiveFiles@2` | `ArchiveFilesTask` |
+| `AdvancedSecurity-Codeql-Analyze@1` | `AdvancedSecurityCodeql.Analyze/AnalyzeAndWait` -> `AdvancedSecurityCodeqlAnalyzeTask` |
 | `AzureCLI@3`, `AzureCLI@2` | `AzureCliV3.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliV3Task`, `AzureCliV3FileTask`; `AzureCli.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliTask`, `AzureCliFileTask` |
+| `AzureContainerApps@1`, `AzureContainerApps@0` | `AzureContainerApps.V1.FromSource/FromImage/FromYaml` -> `AzureContainerAppsV1Task`; `AzureContainerApps.V0.FromImage` -> `AzureContainerAppsV0Task` |
+| `AzureFunctionApp@2`, `AzureFunctionApp@1`, `AzureFunctionAppContainer@1` | `AzureFunctionApp.Windows/Linux/FlexConsumption/Container` -> `AzureFunctionAppV2Task`, `AzureFunctionAppV1Task`, `AzureFunctionAppContainerV1Task` |
 | `AzureLoadTest@1` | `AzureLoadTestTask` |
 | `AzureRmWebAppDeployment@5` | `AzureAppServiceDeploy.WebApp/WebAppLinux/Package/Container/PublishProfile` -> `AzureRmWebAppDeploymentPackageTask`, `AzureRmWebAppDeploymentContainerTask`, `AzureRmWebAppDeploymentPublishProfileTask` |
-| `AzureCLI@2` | `AzureCli.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliTask`, `AzureCliFileTask` |
 | `AzureKeyVault@2`, `AzureKeyVault@1` | `AzureKeyVault.DownloadSecrets` -> `AzureKeyVaultTask`, `AzureKeyVaultV1Task` |
 | `AzurePowerShell@5`, `AzurePowerShell@4` | `AzurePowerShell.Inline/File/FromFile/FromResourceFile` -> `InlineAzurePowerShellTask`, `AzurePowerShellFileTask`, `InlineAzurePowerShellV4Task`, `AzurePowerShellV4FileTask` |
+| `AzureWebApp@1` | `AzureWebApp.Windows/Linux` deployment builders -> `AzureWebAppWindowsTask`, `AzureWebAppLinuxTask` |
 | `Bash@3` | `Bash.Inline/File/FromFile/FromResourceFile` -> `InlineBashTask`, `BashFileTask` (`bash` step shortcut) |
 | `CMake@1` | `CMakeTask` |
 | `Cache@2` | `Cache.Files` -> `CacheTask`; `CacheKey`/`CacheKeyBuilder` for key and restore-key segments |
@@ -72,16 +75,20 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `Docker@2` | `Docker.Build/Push/BuildAndPush/Login/Logout/Start/Stop` -> `DockerTask` and its command specializations |
 | `DockerCompose@1` | `DockerCompose.*` -> `DockerComposeTask` and its action-specific `Build`/`Push`/`Run`/`RunService`/`Lock`/`WriteImageDigests`/`CombineConfiguration`/`Command` specializations |
 | `DotNetCoreCLI@2` | `DotNet.*` -> `DotNetCoreCliTask` and its `Build`/`Test`/`Pack`/`Publish`/`Push`/`Restore` specializations |
+| `DownloadBuildArtifacts@1` | `Download.BuildArtifacts.Current/Latest/LatestFromBranch/Specific` -> `DownloadBuildArtifactsTask` |
 | `DownloadPipelineArtifact@2` | `Download.Current/FromPipelineResource/SpecificBuild/LatestFromBranch/None` -> `DownloadTask` (`download` step shortcut) |
 | `ExtractFiles@1` | `ExtractFilesTask` |
 | `HelmDeploy@1` | `Helm.*` -> `HelmDeployTask` and its `Install`/`Upgrade`/`Package`/`Push`/`Init`/`Login`/`Logout`/`Create`/`Ls`/`Get`/`Expose`/`Delete`/`Uninstall`/`Rollback` specializations |
 | `Gradle@4` | `Gradle.*` -> `GradleTask` |
+| `Kubernetes@1`, `Kubernetes@0` | `Kubernetes.ServiceConnection/AzureResourceManager/None` -> `KubernetesTask`, `KubernetesV0Task` |
 | `MSBuild@1` | `MSBuild.Build` -> `MSBuildTask` |
 | `npmAuthenticate@0` | `Npm.Authenticate` -> `NpmAuthenticateTask` |
 | `AdvancedSecurity-Codeql-Init@1` | `AdvancedSecurity.Codeql.Init/InitWithoutBuild/InitWithAutomaticInstall` -> `AdvancedSecurityCodeqlInitTask` |
 | `NuGetAuthenticate@1` | `NuGet.Authenticate` -> `NuGetAuthenticateTask` |
 | `Maven@4` | `Maven.Build(...)` -> `MavenTask`; deprecated majors available through `BuildV3`/`BuildV2`/`BuildV1` -> `MavenV3Task`/`MavenV2Task`/`MavenV1Task` |
+| `MavenAuthenticate@0` | `Maven.Authenticate` -> `MavenAuthenticateTask` |
 | `NuGetCommand@2` | `NuGet.*` -> `NuGetCommandTask` and its `Restore`/`Pack`/`Push`/`Custom` specializations |
+| `NuGetToolInstaller@1`, `NuGetToolInstaller@0` | `NuGet.Install.Version/LatestMatching/V1/V0` -> `NuGetToolInstallerV1Task`, `NuGetToolInstallerV0Task` |
 | `PowerShell@2` | `Powershell.*`, `Pwsh.*` -> `InlinePowershellTask`, `PowershellFileTask`, `InlinePwshTask` |
 | `PublishCodeCoverageResults@2` | `PublishCodeCoverageResultsTask` |
 | `PublishPipelineArtifact@1` | `Publish.Pipeline`, `Publish.FileShare` -> `PublishTask` (`publish` step shortcut) |
@@ -89,8 +96,11 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `PublishTestResults@2` | `PublishTestResultsTask` |
 | `UniversalPackages@1` | `Download.UniversalPackage(...)`, `Publish.UniversalPackage(...)` -> `UniversalPackagesV1DownloadTask`, `UniversalPackagesV1PublishTask` |
 | `SSH@0` | `Ssh.Commands/Script/Inline/FromFile/FromResourceFile` -> `SshCommandsTask`, `SshScriptTask`, `SshInlineTask` |
+| `SqlAzureDacpacDeployment@1` | `SqlAzureDacpacDeploymentTask` and its authentication/deployment specializations |
 | `UniversalPackages@0` | `UniversalPackagesDownloadTask`, `UniversalPackagesPublishTask` |
 | `UseDotNet@2` | `DotNet.Install.*` -> `UseDotNetTask` |
+| `UseNode@1` | `Node.Install.Version/FromFile` -> `UseNodeTask` |
+| `VSTest@3`, `VSTest@2`, `VSTest@1` | `VSTest.TestAssemblies/TestPlan/TestRun` -> `VSTestTask`, `VSTestV2Task`, `VSTestV1Task` |
 
 ## Support matrix
 
@@ -100,8 +110,6 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 |---|---|---|---|
 | .NET Core | `DotNetCoreCLI@2`, `DotNetCoreCLI@1`, `DotNetCoreCLI@0` | ✅ Supported | `DotNet.*` builder + `DotNetCoreCliTask` (`Build`/`Test`/`Pack`/`Publish`/`Push`/`Restore`/`Run`/`Custom`). Only the current `@2` major is modelled. |
 | Advanced Security Initialize CodeQL | `AdvancedSecurity-Codeql-Init@1` | ✅ Supported | `AdvancedSecurity.Codeql.Init/InitWithoutBuild/InitWithAutomaticInstall` -> `AdvancedSecurityCodeqlInitTask`. |
-| Advanced Security Perform CodeQL analysis | `AdvancedSecurity-Codeql-Analyze@1` | ❌ Missing | No strongly typed model or builder. |
-| Advanced Security Initialize CodeQL | `AdvancedSecurity-Codeql-Init@1` | ❌ Missing | No strongly typed model or builder. |
 | Advanced Security Perform CodeQL analysis | `AdvancedSecurity-Codeql-Analyze@1` | ✅ Supported | `AdvancedSecurityCodeql.Analyze` / `AdvancedSecurityCodeql.AnalyzeAndWait(...)` -> `AdvancedSecurityCodeqlAnalyzeTask`. |
 | Advanced Security Publish Results | `AdvancedSecurity-Publish@1` | ❌ Missing | No strongly typed model or builder. |
 | Android Build | `AndroidBuild@1` | ⚪ Out of scope | Deprecated by Microsoft; the docs recommend the `Gradle` task instead. |
@@ -111,8 +119,6 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | CMake | `CMake@1` | ✅ Supported | `CMakeTask`. |
 | Container Build | `ContainerBuild@0` | ❌ Missing | No strongly typed model or builder. |
 | Docker | `Docker@2`, `Docker@1`, `Docker@0` | ✅ Supported | `Docker.Build/Push/BuildAndPush/Login/Logout/Start/Stop` -> `DockerTask` and its command specializations model the current `Docker@2` major. Superseded `Docker@1`/`Docker@0` majors are not modelled. |
-| Docker Compose | `DockerCompose@1`, `DockerCompose@0` | ❌ Missing | No strongly typed model or builder. |
-| Docker | `Docker@2`, `Docker@1`, `Docker@0` | ❌ Missing | No strongly typed model or builder. |
 | Docker Compose | `DockerCompose@1`, `DockerCompose@0` | ✅ Supported | `DockerCompose.*` builder + `DockerComposeTask` with action-specific `Build`/`Push`/`Run`/`RunService`/`Lock`/`WriteImageDigests`/`CombineConfiguration`/`Command` records. Only the current `@1` major is modelled. |
 | Download GitHub NuGet | `DownloadGitHubNugetPackage@1` | ⚪ Out of scope | Deprecated by Microsoft; superseded by `NuGetCommand@2`/`DotNetCoreCLI@2` with a GitHub service connection, both of which are supported. |
 | Go | `Go@0` | ❌ Missing | No strongly typed model or builder. |
@@ -122,8 +128,6 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Index sources and publish symbols | `PublishSymbols@2`, `PublishSymbols@1` | ✅ Supported | `Publish.Symbols.*` builder + `PublishSymbolsTask` mode-specific specializations. Only current major `@2` is modelled. |
 | Jenkins queue job | `JenkinsQueueJob@2`, `JenkinsQueueJob@1` | ❌ Missing | No strongly typed model or builder. |
 | Maven | `Maven@4`, `Maven@3`, `Maven@2`, `Maven@1` | ✅ Supported | `Maven.Build(...)` -> `MavenTask` for the current major, with deprecated `MavenV3Task`, `MavenV2Task`, and `MavenV1Task` support through `BuildV3`/`BuildV2`/`BuildV1`. |
-| MSBuild | `MSBuild@1` | ❌ Missing | No strongly typed model or builder. |
-| Maven | `Maven@4`, `Maven@3`, `Maven@2`, `Maven@1` | ❌ Missing | No strongly typed model or builder. |
 | MSBuild | `MSBuild@1` | ✅ Supported | `MSBuild.Build(...)` -> `MSBuildTask`. |
 | Prepare Analysis Configuration | `SonarQubePrepare@8`, `SonarQubePrepare@7`, `SonarQubePrepare@6`, `SonarQubePrepare@5`, `SonarQubePrepare@4` | ⚪ Out of scope | SonarQube tasks ship in a third-party (SonarSource) extension. Sharpliner models such tasks in separate extension packages, see [Marketplace tasks](DefinitionReference.md#marketplace-tasks). |
 | Publish Quality Gate Result | `SonarQubePublish@8`, `SonarQubePublish@7`, `SonarQubePublish@6`, `SonarQubePublish@5`, `SonarQubePublish@4` | ⚪ Out of scope | Third-party SonarSource extension, see `SonarQubePrepare`. |
@@ -149,23 +153,20 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Azure CLI | `AzureCLI@3`, `AzureCLI@2`, `AzureCLI@1` | ✅ Supported | `AzureCliV3.Inline/File/FromFile/FromResourceFile` builders emit the current `AzureCLI@3` major; `AzureCli` retains the `AzureCLI@2` API. |
 | Azure CLI Preview | `AzureCLI@0` | ⚪ Out of scope | Deprecated `AzureCLI@0` preview version. |
 | Azure Cloud Service deployment | `AzureCloudPowerShellDeployment@2`, `AzureCloudPowerShellDeployment@1` | ❌ Missing | No strongly typed model or builder. |
-| Azure Container Apps Deploy | `AzureContainerApps@1`, `AzureContainerApps@0` | ❌ Missing | No strongly typed model or builder. |
+| Azure Container Apps Deploy | `AzureContainerApps@1`, `AzureContainerApps@0` | ✅ Supported | `AzureContainerApps.V1.FromSource/FromImage/FromYaml` and `AzureContainerApps.V0.FromImage` provide mode-safe builders for both majors. |
 | Azure Database for MySQL deployment | `AzureMysqlDeployment@2`, `AzureMysqlDeployment@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure file copy | `AzureFileCopy@6`, `AzureFileCopy@5`, `AzureFileCopy@4`, `AzureFileCopy@3`, `AzureFileCopy@2`, `AzureFileCopy@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure Function on Kubernetes | `AzureFunctionOnKubernetes@1`, `AzureFunctionOnKubernetes@0` | ❌ Missing | No strongly typed model or builder. |
-| Azure Functions Deploy | `AzureFunctionApp@2`, `AzureFunctionApp@1` | ❌ Missing | No strongly typed model or builder. |
-| Azure Functions for container | `AzureFunctionAppContainer@1` | ❌ Missing | No strongly typed model or builder. |
-| Azure Key Vault | `AzureKeyVault@2`, `AzureKeyVault@1` | ✅ Supported | `AzureKeyVault.DownloadSecrets(...)` -> `AzureKeyVaultTask` (`@2`). `AzureKeyVaultV1Task` and `AzureKeyVault.DownloadSecretsV1(...)` cover the deprecated `@1` major. |
 | Azure Functions Deploy | `AzureFunctionApp@2`, `AzureFunctionApp@1` | ✅ Supported | `AzureFunctionApp.Windows`/`Linux`/`FlexConsumption` builders and `AzureFunctionAppV2Task`/`AzureFunctionAppV1Task` models. |
 | Azure Functions for container | `AzureFunctionAppContainer@1` | ✅ Supported | `AzureFunctionApp.Container` builder and `AzureFunctionAppContainerV1Task` model. |
-| Azure Key Vault | `AzureKeyVault@2`, `AzureKeyVault@1` | ❌ Missing | No strongly typed model or builder. |
+| Azure Key Vault | `AzureKeyVault@2`, `AzureKeyVault@1` | ✅ Supported | `AzureKeyVault.DownloadSecrets(...)` -> `AzureKeyVaultTask` (`@2`). `AzureKeyVaultV1Task` and `AzureKeyVault.DownloadSecretsV1(...)` cover the deprecated `@1` major. |
 | Azure Monitor alerts (Deprecated) | `AzureMonitorAlerts@0` | ⚪ Out of scope | Deprecated by Microsoft (classic Azure Monitor alerts). |
 | Azure PowerShell | `AzurePowerShell@5`, `AzurePowerShell@4`, `AzurePowerShell@3`, `AzurePowerShell@2`, `AzurePowerShell@1` | ✅ Supported | `AzurePowerShell.Inline/File/FromFile/FromResourceFile` builders emit `AzurePowerShell@5`; `InlineAzurePowerShellV4Task`/`AzurePowerShellV4FileTask` emit `AzurePowerShell@4`. The `@3`, `@2` and `@1` majors are deprecated by Microsoft and are not modelled. |
 | Azure resource group deployment | `AzureResourceGroupDeployment@2`, `AzureResourceGroupDeployment@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure Spring Apps | `AzureSpringCloud@0` | ❌ Missing | No strongly typed model or builder. |
-| Azure SQL Database deployment | `SqlAzureDacpacDeployment@1` | ❌ Missing | No strongly typed model or builder. |
+| Azure SQL Database deployment | `SqlAzureDacpacDeployment@1` | ✅ Supported | `SqlAzureDacpacDeploymentTask` and its mode-specific records model DACPAC, SQL script and inline SQL deployments with typed authentication. |
 | Azure VM scale set deployment | `AzureVmssDeployment@1`, `AzureVmssDeployment@0` | ❌ Missing | No strongly typed model or builder. |
-| Azure Web App | `AzureWebApp@1` | ❌ Missing | No strongly typed model or builder. |
+| Azure Web App | `AzureWebApp@1` | ✅ Supported | `AzureWebApp.Windows/Linux` deployment builders -> `AzureWebAppWindowsTask` and `AzureWebAppLinuxTask`. |
 | Azure Web App for Containers | `AzureWebAppContainer@1` | ❌ Missing | No strongly typed model or builder. |
 | Bicep Deploy | `BicepDeploy@0` | ❌ Missing | No strongly typed model or builder. |
 | Build machine image | `PackerBuild@1`, `PackerBuild@0` | ❌ Missing | No strongly typed model or builder. |
@@ -200,7 +201,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Conda environment | `CondaEnvironment@1`, `CondaEnvironment@0` | ⚪ Out of scope | Deprecated by Microsoft; the docs recommend calling `conda` from a script step. |
 | Download Github Npm Package | `DownloadGithubNpmPackage@1` | ⚪ Out of scope | Deprecated by Microsoft; superseded by `Npm@1` with a GitHub service connection. |
 | Gradle Authenticate | `GradleAuthenticate@0` | ❌ Missing | No strongly typed model or builder. |
-| Maven Authenticate | `MavenAuthenticate@0` | ❌ Missing | No strongly typed model or builder. |
+| Maven Authenticate | `MavenAuthenticate@0` | ✅ Supported | `Maven.Authenticate(...)` -> `MavenAuthenticateTask`. |
 | npm | `Npm@1`, `Npm@0` | ✅ Supported | `Npm.Install(...)`, `Npm.InstallFromFeed(...)`, `Npm.Ci(...)`, `Npm.CiFromFeed(...)`, `Npm.Custom(...)`, `Npm.CustomFromFeed(...)`, `Npm.PublishToExternalRegistry(...)`, `Npm.PublishToFeed(...)` -> typed `Npm@1` task models. |
 | npm authenticate (for task runners) | `npmAuthenticate@0` | ✅ Supported | `Npm.Authenticate(...)` -> `NpmAuthenticateTask`. |
 | NuGet | `NuGetCommand@2`, `NuGet@0` | ✅ Supported | `NuGet.*` builder (`Restore`, `Pack`, `Push`, `Custom`) -> `NuGetCommandTask` (`NuGetCommand@2`). The legacy `NuGet@0` major is not modelled. |
@@ -305,59 +306,17 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 
 | Category | Total | ✅ Supported | 🟡 Partial | ❌ Missing | ⚪ Out of scope |
 |---|---|---|---|---|---|
-| Build | 28 | 1 | 0 | 20 | 7 |
-| Deploy | 50 | 1 | 1 | 42 | 6 |
-| Build | 28 | 2 | 0 | 19 | 7 |
-| Deploy | 50 | 0 | 1 | 43 | 6 |
-| Package | 18 | 3 | 1 | 8 | 6 |
-| Test | 10 | 3 | 0 | 4 | 3 |
-| Tool | 15 | 1 | 0 | 13 | 1 |
-| Utility | 47 | 10 | 0 | 34 | 3 |
-| **Total** | **168** | **19** | **2** | **121** | **26** |
+| Build | 28 | 11 | 0 | 10 | 7 |
+| Deploy | 50 | 11 | 1 | 32 | 6 |
+| Package | 18 | 6 | 0 | 6 | 6 |
+| Test | 10 | 5 | 0 | 2 | 3 |
+| Tool | 15 | 3 | 0 | 11 | 1 |
+| Utility | 47 | 12 | 0 | 32 | 3 |
+| **Total** | **168** | **48** | **1** | **93** | **26** |
 
-Sharpliner covers **21 of the 168** official built-in task families (19 fully, 2 partially).
-| Utility | 47 | 9 | 0 | 35 | 3 |
-| **Total** | **168** | **17** | **2** | **123** | **26** |
-
-| Utility | 47 | 9 | 0 | 35 | 3 |
-| **Total** | **168** | **17** | **2** | **123** | **26** |
-
-| Test | 10 | 2 | 0 | 5 | 3 |
-| Tool | 15 | 2 | 0 | 12 | 1 |
-| Utility | 47 | 9 | 0 | 35 | 3 |
-| **Total** | **168** | **17** | **2** | **123** | **26** |
-
-Sharpliner covers **19 of the 168** official built-in task families (17 fully, 2 partially).
+Sharpliner covers **49 of the 168** official built-in task families (48 fully, 1 partially).
 Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
-library grew from. The **121 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
-| Utility | 47 | 9 | 0 | 35 | 3 |
-| **Total** | **168** | **17** | **2** | **123** | **26** |
-
-Sharpliner covers **19 of the 168** official built-in task families (17 fully, 2 partially).
-Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
-| Utility | 47 | 9 | 0 | 35 | 3 |
-| **Total** | **168** | **17** | **2** | **123** | **26** |
-
-Sharpliner covers **19 of the 168** official built-in task families (17 fully, 2 partially).
-Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
-| Utility | 47 | 9 | 0 | 35 | 3 |
-| **Total** | **168** | **17** | **2** | **123** | **26** |
-
-Sharpliner covers **19 of the 168** official built-in task families (17 fully, 2 partially).
-Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
-| Utility | 47 | 9 | 0 | 35 | 3 |
-| **Total** | **168** | **17** | **2** | **123** | **26** |
-
-Sharpliner covers **19 of the 168** official built-in task families (17 fully, 2 partially).
-Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
-| Test | 10 | 2 | 0 | 5 | 3 |
-| Tool | 15 | 2 | 0 | 12 | 1 |
-| Utility | 47 | 9 | 0 | 35 | 3 |
-| **Total** | **168** | **17** | **2** | **123** | **26** |
-
-Sharpliner covers **19 of the 168** official built-in task families (17 fully, 2 partially).
-Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
-library grew from. The **123 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
+library grew from. The **93 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
 Service Fabric) and by tool installers.
 
 ## Tasks we would like to see contributed
@@ -378,32 +337,20 @@ When picking one up, a contribution is expected to contain:
 - an updated public API export file (see [Generating the Public API](../../README.md#generating-the-public-api)),
 - an update of this document and of the [definition reference](DefinitionReference.md).
 
-Good candidates to start with, as they are the most commonly used ones in .NET pipelines, are `Cache@2`,
-`Docker@2`, `PublishBuildArtifacts@1`, `DownloadBuildArtifacts@1`, `AzurePowerShell@5`,
-`Docker@2`, `PublishBuildArtifacts@1`, `DownloadBuildArtifacts@1`, `AzureKeyVault@2`,
-`PublishBuildArtifacts@1`, `DownloadBuildArtifacts@1`, `AzureKeyVault@2`, `AzurePowerShell@5`,
-`Npm@1` and `VSTest@3`.
-`Docker@2`, `PublishBuildArtifacts@1`, `DownloadBuildArtifacts@1`, `AzureKeyVault@2`, `AzurePowerShell@5`,
-and `Npm@1`.
+Good candidates to start with, as they are commonly used in .NET pipelines, are `PublishBuildArtifacts@1`,
+`Npm@1`, `UsePythonVersion@0`, and `VisualStudioTestPlatformInstaller@1`.
 
 ### Missing build tasks
 
-- `AdvancedSecurity-Codeql-Analyze@1` – Advanced Security Perform CodeQL analysis
-- `AdvancedSecurity-Codeql-Init@1` – Advanced Security Initialize CodeQL
 - `AdvancedSecurity-Publish@1` – Advanced Security Publish Results
 - `AndroidSigning@3` – Android Signing
 - `Ant@1` – Ant
 - `AzureIoTEdge@2` – Azure IoT Edge
-- `CMake@1` – CMake
 - `ContainerBuild@0` – Container Build
-- `DockerCompose@1` – Docker Compose
 - `Go@0` – Go
 - `Grunt@0` – Grunt
 - `gulp@1` – gulp
 - `JenkinsQueueJob@2` – Jenkins queue job
-- `Maven@4` – Maven
-- `MSBuild@1` – MSBuild
-- `VSBuild@1` – Visual Studio build
 - `Xcode@5` – Xcode
 
 ### Missing deploy tasks
@@ -416,19 +363,12 @@ and `Npm@1`.
 - `AzureAppServiceManage@0` – Azure App Service manage
 - `AzureAppServiceSettings@1` – Azure App Service Settings
 - `AzureCloudPowerShellDeployment@2` – Azure Cloud Service deployment
-- `AzureContainerApps@1` – Azure Container Apps Deploy
 - `AzureMysqlDeployment@2` – Azure Database for MySQL deployment
 - `AzureFileCopy@6` – Azure file copy
 - `AzureFunctionOnKubernetes@1` – Azure Function on Kubernetes
-- `AzureFunctionApp@2` – Azure Functions Deploy
-- `AzureFunctionAppContainer@1` – Azure Functions for container
-- `AzurePowerShell@5` – Azure PowerShell
-- `AzureKeyVault@2` – Azure Key Vault
 - `AzureResourceGroupDeployment@2` – Azure resource group deployment
 - `AzureSpringCloud@0` – Azure Spring Apps
-- `SqlAzureDacpacDeployment@1` – Azure SQL Database deployment
 - `AzureVmssDeployment@1` – Azure VM scale set deployment
-- `AzureWebApp@1` – Azure Web App
 - `AzureWebAppContainer@1` – Azure Web App for Containers
 - `BicepDeploy@0` – Bicep Deploy
 - `PackerBuild@1` – Build machine image
@@ -440,7 +380,6 @@ and `Npm@1`.
 - `IISWebAppDeploymentOnMachineGroup@0` – IIS web app deploy
 - `IISWebAppManagementOnMachineGroup@0` – IIS web app manage
 - `InvokeRESTAPI@1` – Invoke REST API
-- `Kubernetes@1` – Kubectl
 - `ManualValidation@1` – Manual validation
 - `MysqlDeploymentOnMachineGroup@1` – MySQL database deploy
 - `PowerShellOnTargetMachines@3` – PowerShell on target machines
@@ -454,8 +393,6 @@ and `Npm@1`.
 - `CargoAuthenticate@0` – Cargo authenticate (for task runners)
 - `CocoaPods@0` – CocoaPods
 - `GradleAuthenticate@0` – Gradle Authenticate
-- `MavenAuthenticate@0` – Maven Authenticate
-- `Npm@1` – npm
 - `PyPIPublisher@0` – PyPI publisher
 - `PipAuthenticate@1` – Python pip authenticate
 - `TwineAuthenticate@1` – Python twine upload authenticate
@@ -464,8 +401,6 @@ and `Npm@1`.
 
 - `AppCenterTest@1` – App Center test
 - `AzureTestPlan@0` – Azure Test Plan
-- `ContainerStructureTest@0` – Container Structure Test
-- `VSTest@3` – Visual Studio Test
 
 ### Missing tool tasks
 
@@ -477,8 +412,6 @@ and `Npm@1`.
 - `JavaToolInstaller@1` – Java tool installer
 - `KubectlInstaller@0` – Kubectl tool installer
 - `KubeloginInstaller@0` – Kubelogin tool installer
-- `UseNode@1` – Use Node.js ecosystem
-- `NuGetToolInstaller@1` – NuGet tool installer
 - `UsePythonVersion@0` – Use Python version
 - `UseRubyVersion@0` – Use Ruby version
 - `VisualStudioTestPlatformInstaller@1` – Visual Studio test platform installer
@@ -488,13 +421,11 @@ and `Npm@1`.
 - `AdvancedSecurity-Dependency-Scanning@1` – Advanced Security Dependency Scanning
 - `AzureNLBManagement@1` – Azure Network Load Balancer
 - `BatchScript@1` – Batch script
-- `Cache@2` – Cache
 - `cURLUploader@2` – cURL Upload Files
 - `DecryptFile@1` – Decrypt file (OpenSSL)
 - `Delay@1` – Delay
 - `AzureStaticWebApp@0` – Deploy Azure Static Web App
 - `DownloadFileshareArtifacts@1` – Download artifacts from file share
-- `DownloadBuildArtifacts@1` – Download build artifacts
 - `DownloadGitHubRelease@0` – Download GitHub Release
 - `DownloadPackage@1` – Download package
 - `FileTransform@2` – File transform

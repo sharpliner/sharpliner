@@ -418,9 +418,13 @@ public abstract class AzureDevOpsDefinition
     /// Creates a Visual Studio build task.
     /// </summary>
     protected static VSBuildTaskBuilder VSBuild { get; } = new();
+
+    /// <summary>
     /// Creates a Gradle task.
     /// </summary>
     protected static GradleTaskBuilder Gradle { get; } = new();
+
+    /// <summary>
     /// Creates a Container Structure Test task.
     /// </summary>
     protected static ContainerStructureTestTaskBuilder ContainerStructureTest { get; } = new();
@@ -439,15 +443,18 @@ public abstract class AzureDevOpsDefinition
     /// Creates a HelmDeploy task.
     /// </summary>
     protected static HelmTaskBuilder Helm { get; } = new();
+
+    /// <summary>
     /// Creates a Docker task.
     /// </summary>
     protected static DockerTaskBuilder Docker { get; } = new();
-    /// Creates a Maven task.
-    /// </summary>
-    protected static MavenTaskBuilder Maven { get; } = new();
+
+    /// <summary>
     /// Creates a Visual Studio Test task.
     /// </summary>
     protected static VSTestTaskBuilder VSTest { get; } = new();
+
+    /// <summary>
     /// Creates a Node.js installer task.
     /// </summary>
     protected static NodeTaskBuilder Node { get; } = new();

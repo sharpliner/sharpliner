@@ -252,6 +252,89 @@ AdvancedSecurity.Codeql.Init(CodeqlLanguage.CSharp, CodeqlLanguage.JavaScript) w
     QuerySuite = CodeqlQuerySuite.SecurityExtended,
     BuildType = CodeqlBuildType.None,
     EnableAutomaticCodeQLInstall = true,
+}
+```
+
+Generated YAML:
+
+```yaml
+- task: AdvancedSecurity-Codeql-Init@1
+  displayName: Advanced Security Initialize CodeQL
+  inputs:
+    languages: csharp,javascript
+    querysuite: security-extended
+    buildtype: None
+    enableAutomaticCodeQLInstall: true
+```
+
+### Helm
+
+The [HelmDeploy@1 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/helm-deploy-v1?view=azure-pipelines) packages and deploys Helm charts and its inputs depend on the selected command.
+Each command is modelled by its own task record and the `Helm` builder only offers the inputs that are valid for the given command.
+
+```csharp
+Helm.Install.FromChartName("stable/mysql") with
+{
+    ConnectionType = HelmConnectionType.AzureResourceManager,
+    AzureSubscriptionEndpoint = "my-azure-subscription",
+    AzureResourceGroup = "my-resource-group",
+    KubernetesCluster = "my-aks-cluster",
+    ReleaseName = "my-release",
+    OverrideValues = "image.tag=$(Build.BuildId)",
+},
+
+Helm.Upgrade.FromChartPath("./charts/my-app") with
+{
+    ConnectionType = HelmConnectionType.KubernetesServiceConnection,
+    KubernetesServiceEndpoint = "my-kubernetes-connection",
+    ReleaseName = "my-release",
+    Install = true,
+},
+
+Helm.Package("./charts/my-app") with
+{
+    Destination = "$(Build.ArtifactStagingDirectory)",
+},
+
+Helm.Uninstall("my-release")
+```
+
+Generated YAML:
+
+```yaml
+- task: HelmDeploy@1
+  inputs:
+    command: install
+    chartType: Name
+    chartName: stable/mysql
+    connectionType: Azure Resource Manager
+    azureSubscriptionEndpoint: my-azure-subscription
+    azureResourceGroup: my-resource-group
+    kubernetesCluster: my-aks-cluster
+    releaseName: my-release
+    overrideValues: image.tag=$(Build.BuildId)
+
+- task: HelmDeploy@1
+  inputs:
+    command: upgrade
+    chartType: FilePath
+    chartPath: ./charts/my-app
+    connectionType: Kubernetes Service Connection
+    kubernetesServiceEndpoint: my-kubernetes-connection
+    releaseName: my-release
+    install: true
+
+- task: HelmDeploy@1
+  inputs:
+    command: package
+    chartPath: ./charts/my-app
+    destination: $(Build.ArtifactStagingDirectory)
+
+- task: HelmDeploy@1
+  inputs:
+    command: uninstall
+    releaseName: my-release
+```
 ### Docker Compose
 
 The [Docker Compose v1 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/docker-compose-v1?view=azure-pipelines)
@@ -279,13 +362,6 @@ DockerCompose.RunService("web") with
 Generated YAML:
 
 ```yaml
-- task: AdvancedSecurity-Codeql-Init@1
-  displayName: Advanced Security Initialize CodeQL
-  inputs:
-    languages: csharp,javascript
-    querysuite: security-extended
-    buildtype: None
-    enableAutomaticCodeQLInstall: true
 - task: DockerCompose@1
   displayName: Docker Compose build services
   inputs:
