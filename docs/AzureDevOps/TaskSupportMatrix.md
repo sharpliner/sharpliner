@@ -17,9 +17,9 @@ have to be defined through the generic `AzureDevOpsTask` escape hatch.
 
 | Source | URL | Revision / date |
 |---|---|---|
-| Microsoft's official task reference index (the source that backs the [Microsoft Learn task reference](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/)) | <https://raw.githubusercontent.com/MicrosoftDocs/azure-devops-yaml-schema/main/task-reference/index.md> | `main` branch, fetched **2026-08-30**; document's own `ms.date` front matter is **06/30/2026** |
-| Microsoft's task implementations | <https://github.com/microsoft/azure-pipelines-tasks/tree/master/Tasks> | Used as a cross-check for task identities and versions, **2026-08-30** |
-| Sharpliner's task models and builders | [`src/Sharpliner.Core/AzureDevOps/Model/Tasks`](../../src/Sharpliner.Core/AzureDevOps/Model/Tasks) | This repository, at the commit that introduced this document |
+| Microsoft's official task reference index (the source that backs the [Microsoft Learn task reference](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/)) | <https://raw.githubusercontent.com/MicrosoftDocs/azure-devops-yaml-schema/main/task-reference/index.md> | `main` branch, fetched **2026-09-01**; document's own `ms.date` front matter is **06/30/2026** |
+| Microsoft's task implementations | <https://github.com/microsoft/azure-pipelines-tasks/tree/master/Tasks> | Used as a cross-check for task identities and versions, **2026-09-01** |
+| Sharpliner's task models and builders | [`src/Sharpliner.Core/AzureDevOps/Model/Tasks`](../../src/Sharpliner.Core/AzureDevOps/Model/Tasks) | This repository, audited on **2026-09-01** |
 
 Only the `azure-pipelines` (Azure DevOps Services) moniker of the official index is audited, as it is a
 superset of the tasks available on the on-premises Azure DevOps Server versions.
@@ -77,15 +77,18 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `DotNetCoreCLI@2` | `DotNet.*` -> `DotNetCoreCliTask` and its `Build`/`Test`/`Pack`/`Publish`/`Push`/`Restore` specializations |
 | `DownloadBuildArtifacts@1` | `Download.BuildArtifacts.Current/Latest/LatestFromBranch/Specific` -> `DownloadBuildArtifactsTask` |
 | `DownloadPipelineArtifact@2` | `Download.Current/FromPipelineResource/SpecificBuild/LatestFromBranch/None` -> `DownloadTask` (`download` step shortcut) |
+| `DownloadSecureFile@1` | `Download.SecureFile` -> `DownloadSecureFileTask` |
 | `ExtractFiles@1` | `ExtractFilesTask` |
 | `HelmDeploy@1` | `Helm.*` -> `HelmDeployTask` and its `Install`/`Upgrade`/`Package`/`Push`/`Init`/`Login`/`Logout`/`Create`/`Ls`/`Get`/`Expose`/`Delete`/`Uninstall`/`Rollback` specializations |
 | `Gradle@4` | `Gradle.*` -> `GradleTask` |
-| `Kubernetes@1`, `Kubernetes@0` | `Kubernetes.ServiceConnection/AzureResourceManager/None` -> `KubernetesTask`, `KubernetesV0Task` |
+| `Kubernetes@1`, `Kubernetes@0` | `Kubernetes.ServiceConnection/AzureResourceManager/None` -> `KubernetesServiceConnectionTask`, `AzureResourceManagerKubernetesTask`, `KubernetesNoConnectionTask`, `KubernetesV0Task` |
+| `KubernetesManifest@1` | `KubernetesManifest.Deploy/Promote/Reject/Bake/Patch/Scale/Delete/CreateSecret` -> `KubernetesManifestV1Task` and its per-action specializations |
 | `MSBuild@1` | `MSBuild.Build` -> `MSBuildTask` |
+| `Npm@1` | `Npm.Install/InstallFromFeed/Ci/CiFromFeed/Custom/CustomFromFeed/PublishToExternalRegistry/PublishToFeed` -> `NpmInstallTask`, `NpmCiTask`, `NpmCustomTask`, `NpmPublishTask` |
 | `npmAuthenticate@0` | `Npm.Authenticate` -> `NpmAuthenticateTask` |
 | `AdvancedSecurity-Codeql-Init@1` | `AdvancedSecurity.Codeql.Init/InitWithoutBuild/InitWithAutomaticInstall` -> `AdvancedSecurityCodeqlInitTask` |
 | `NuGetAuthenticate@1` | `NuGet.Authenticate` -> `NuGetAuthenticateTask` |
-| `Maven@4` | `Maven.Build(...)` -> `MavenTask`; deprecated majors available through `BuildV3`/`BuildV2`/`BuildV1` -> `MavenV3Task`/`MavenV2Task`/`MavenV1Task` |
+| `Maven@4`, `Maven@3`, `Maven@2`, `Maven@1` | `Maven.Build(...)` -> `MavenTask`; deprecated majors available through `BuildV3`/`BuildV2`/`BuildV1` -> `MavenV3Task`/`MavenV2Task`/`MavenV1Task` |
 | `MavenAuthenticate@0` | `Maven.Authenticate` -> `MavenAuthenticateTask` |
 | `NuGetCommand@2` | `NuGet.*` -> `NuGetCommandTask` and its `Restore`/`Pack`/`Push`/`Custom` specializations |
 | `NuGetToolInstaller@1`, `NuGetToolInstaller@0` | `NuGet.Install.Version/LatestMatching/V1/V0` -> `NuGetToolInstallerV1Task`, `NuGetToolInstallerV0Task` |
@@ -100,6 +103,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `UniversalPackages@0` | `UniversalPackagesDownloadTask`, `UniversalPackagesPublishTask` |
 | `UseDotNet@2` | `DotNet.Install.*` -> `UseDotNetTask` |
 | `UseNode@1` | `Node.Install.Version/FromFile` -> `UseNodeTask` |
+| `VSBuild@1` | `VSBuild.Build/Solution/Configuration/Platform/PlatformAndConfiguration/WebPackage/MSBuildArguments` -> `VSBuildTask` |
 | `VSTest@3`, `VSTest@2`, `VSTest@1` | `VSTest.TestAssemblies/TestPlan/TestRun` -> `VSTestTask`, `VSTestV2Task`, `VSTestV1Task` |
 
 ## Support matrix
@@ -166,7 +170,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Azure Spring Apps | `AzureSpringCloud@0` | ❌ Missing | No strongly typed model or builder. |
 | Azure SQL Database deployment | `SqlAzureDacpacDeployment@1` | ✅ Supported | `SqlAzureDacpacDeploymentTask` and its mode-specific records model DACPAC, SQL script and inline SQL deployments with typed authentication. |
 | Azure VM scale set deployment | `AzureVmssDeployment@1`, `AzureVmssDeployment@0` | ❌ Missing | No strongly typed model or builder. |
-| Azure Web App | `AzureWebApp@1` | ✅ Supported | `AzureWebApp.Windows/Linux` deployment builders -> `AzureWebAppWindowsTask` and `AzureWebAppLinuxTask`. |
+| Azure Web App | `AzureWebApp@1` | ✅ Supported | `AzureWebApp.Windows/Linux` deployment builders -> `AzureWebAppWindowsPackageTask`/`AzureWebAppWindowsWarTask`/`AzureWebAppWindowsJarTask` and `AzureWebAppLinuxPackageTask`/`AzureWebAppLinuxWarTask`/`AzureWebAppLinuxJarTask`. |
 | Azure Web App for Containers | `AzureWebAppContainer@1` | ❌ Missing | No strongly typed model or builder. |
 | Bicep Deploy | `BicepDeploy@0` | ❌ Missing | No strongly typed model or builder. |
 | Build machine image | `PackerBuild@1`, `PackerBuild@0` | ❌ Missing | No strongly typed model or builder. |
@@ -174,12 +178,12 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Chef | `Chef@1` | ❌ Missing | No strongly typed model or builder. |
 | Chef Knife | `ChefKnife@1` | ❌ Missing | No strongly typed model or builder. |
 | Copy files over SSH | `CopyFilesOverSSH@0` | ❌ Missing | No strongly typed model or builder. |
-| Deploy to Kubernetes | `KubernetesManifest@1`, `KubernetesManifest@0` | ❌ Missing | No strongly typed model or builder. |
+| Deploy to Kubernetes | `KubernetesManifest@1`, `KubernetesManifest@0` | ✅ Supported | `KubernetesManifest.Deploy/Promote/Reject/Bake/Patch/Scale/Delete/CreateSecret` -> `KubernetesManifestV1Task` and its per-action specializations (`KubernetesManifest@1`). The legacy `KubernetesManifest@0` major is not modelled. |
 | IIS web app deploy | `IISWebAppDeploymentOnMachineGroup@0` | ❌ Missing | No strongly typed model or builder. |
 | IIS Web App deployment (Deprecated) | `IISWebAppDeployment@1` | ⚪ Out of scope | Deprecated by Microsoft; superseded by `IISWebAppDeploymentOnMachineGroup@0`. |
 | IIS web app manage | `IISWebAppManagementOnMachineGroup@0` | ❌ Missing | No strongly typed model or builder. |
 | Invoke REST API | `InvokeRESTAPI@1`, `InvokeRESTAPI@0` | ❌ Missing | No strongly typed model or builder. |
-| Kubectl | `Kubernetes@1`, `Kubernetes@0` | 🟡 Partial | `Kubernetes.ServiceConnection/AzureResourceManager/None` builders emit `Kubernetes@1`; `KubernetesV0Task` supports existing deprecated pipelines. |
+| Kubectl | `Kubernetes@1`, `Kubernetes@0` | ✅ Supported | `Kubernetes.ServiceConnection/AzureResourceManager/None` builders emit `Kubernetes@1` with the full `KubernetesCommand`, config-map, secret and container-registry input set; `KubernetesV0Task` additionally covers the deprecated `Kubernetes@0` major. |
 | Manual intervention | `ManualIntervention@8` | ⚪ Out of scope | Classic release pipelines only, it cannot be used in YAML pipelines which are the only thing Sharpliner generates. |
 | Manual validation | `ManualValidation@1`, `ManualValidation@0` | ❌ Missing | No strongly typed model or builder. |
 | MySQL database deploy | `MysqlDeploymentOnMachineGroup@1` | ❌ Missing | No strongly typed model or builder. |
@@ -307,21 +311,21 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Category | Total | ✅ Supported | 🟡 Partial | ❌ Missing | ⚪ Out of scope |
 |---|---|---|---|---|---|
 | Build | 28 | 11 | 0 | 10 | 7 |
-| Deploy | 50 | 11 | 1 | 32 | 6 |
+| Deploy | 50 | 13 | 0 | 31 | 6 |
 | Package | 18 | 6 | 0 | 6 | 6 |
 | Test | 10 | 5 | 0 | 2 | 3 |
 | Tool | 15 | 3 | 0 | 11 | 1 |
 | Utility | 47 | 12 | 0 | 32 | 3 |
-| **Total** | **168** | **48** | **1** | **93** | **26** |
+| **Total** | **168** | **50** | **0** | **92** | **26** |
 
-Sharpliner covers **49 of the 168** official built-in task families (48 fully, 1 partially).
-Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
-library grew from. The **93 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
-Service Fabric) and by tool installers.
+Sharpliner covers **50 of the 168** official built-in task families with a dedicated strongly typed API.
+Most of the covered tasks are the ones needed for .NET, NuGet, container and artifact workflows, which is
+where the library grew from. The **92 missing** families are dominated by deploy tasks (Azure resources,
+Service Fabric, machine-group deployments) and by tool installers.
 
 ## Tasks we would like to see contributed
 
-The list below groups the missing (and partially covered) tasks per category so that each item can be turned
+The list below groups the missing tasks per category so that each item can be turned
 into an individually actionable issue. Only the current major of each family is listed - that is the version a
 new model should target.
 
@@ -338,7 +342,7 @@ When picking one up, a contribution is expected to contain:
 - an update of this document and of the [definition reference](DefinitionReference.md).
 
 Good candidates to start with, as they are commonly used in .NET pipelines, are `PublishBuildArtifacts@1`,
-`Npm@1`, `UsePythonVersion@0`, and `VisualStudioTestPlatformInstaller@1`.
+`UsePythonVersion@0`, `JavaToolInstaller@1`, and `VisualStudioTestPlatformInstaller@1`.
 
 ### Missing build tasks
 
@@ -376,7 +380,6 @@ Good candidates to start with, as they are commonly used in .NET pipelines, are 
 - `Chef@1` – Chef
 - `ChefKnife@1` – Chef Knife
 - `CopyFilesOverSSH@0` – Copy files over SSH
-- `KubernetesManifest@1` – Deploy to Kubernetes
 - `IISWebAppDeploymentOnMachineGroup@0` – IIS web app deploy
 - `IISWebAppManagementOnMachineGroup@0` – IIS web app manage
 - `InvokeRESTAPI@1` – Invoke REST API
