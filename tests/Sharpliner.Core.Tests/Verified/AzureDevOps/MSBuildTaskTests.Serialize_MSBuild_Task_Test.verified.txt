@@ -1,0 +1,14 @@
+﻿task: MSBuild@1
+
+displayName: Build solution
+
+inputs:
+  solution: MySolution.sln
+  platform: x64
+  configuration: Release
+  msbuildArguments: /t:Restore;Build
+  clean: true
+  maximumCpuCount: true
+  logProjectEvents: true
+  createLogFile: true
+  logFileVerbosity: diagnostic

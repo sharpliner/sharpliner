@@ -391,6 +391,7 @@ public class TaskBuilderTests
     private class AzureKeyVaultTaskPipeline : TestPipeline
     private class AzurePowerShellTaskPipeline : TestPipeline
     private class AzureWebAppTaskPipeline : TestPipeline
+    private class MSBuildTaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
         {
@@ -411,6 +412,8 @@ public class TaskBuilderTests
                         AzurePowerShell.FromFile("connectedServiceNameARM", "AzureDevOps/Resources/Test-Script.ps1"),
                         AzurePowerShell.FromResourceFile("connectedServiceNameARM", "Test-Script.ps1"),
                         AzurePowerShell.Inline("connectedServiceNameARM", displayName: null, "Write-Host \"test\"")
+                        MSBuild.Build("**/*.sln"),
+                        MSBuild.Build("MySolution.sln", platform: "x64", configuration: "Release", msbuildArguments: "/t:Restore;Build", displayName: "Build solution"),
                     }
                 }
             }
@@ -507,6 +510,9 @@ public class TaskBuilderTests
     public Task Serialize_AzureWebApp_Builder_Test()
     {
         AzureWebAppTaskPipeline pipeline = new();
+    public Task Serialize_MSBuild_Builder_Test()
+    {
+        MSBuildTaskPipeline pipeline = new();
 
         return Verify(pipeline.Serialize());
     }
