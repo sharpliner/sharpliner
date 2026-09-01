@@ -65,6 +65,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `DownloadPipelineArtifact@2` | `Download.Current/FromPipelineResource/SpecificBuild/LatestFromBranch/None` -> `DownloadTask` (`download` step shortcut) |
 | `ExtractFiles@1` | `ExtractFilesTask` |
 | `npmAuthenticate@0` | `Npm.Authenticate` -> `NpmAuthenticateTask` |
+| `AdvancedSecurity-Codeql-Init@1` | `AdvancedSecurity.Codeql.Init/InitWithoutBuild/InitWithAutomaticInstall` -> `AdvancedSecurityCodeqlInitTask` |
 | `NuGetAuthenticate@1` | `NuGet.Authenticate` -> `NuGetAuthenticateTask` |
 | `NuGetCommand@2` | `NuGet.*` -> `NuGetCommandTask` and its `Restore`/`Pack`/`Push`/`Custom` specializations |
 | `PowerShell@2` | `Powershell.*`, `Pwsh.*` -> `InlinePowershellTask`, `PowershellFileTask`, `InlinePwshTask` |
@@ -81,7 +82,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Task | YAML identity (all majors) | Classification | Sharpliner API / rationale |
 |---|---|---|---|
 | .NET Core | `DotNetCoreCLI@2`, `DotNetCoreCLI@1`, `DotNetCoreCLI@0` | ✅ Supported | `DotNet.*` builder + `DotNetCoreCliTask` (`Build`/`Test`/`Pack`/`Publish`/`Push`/`Restore`/`Run`/`Custom`). Only the current `@2` major is modelled. |
-| Advanced Security Initialize CodeQL | `AdvancedSecurity-Codeql-Init@1` | ❌ Missing | No strongly typed model or builder. |
+| Advanced Security Initialize CodeQL | `AdvancedSecurity-Codeql-Init@1` | ✅ Supported | `AdvancedSecurity.Codeql.Init/InitWithoutBuild/InitWithAutomaticInstall` -> `AdvancedSecurityCodeqlInitTask`. |
 | Advanced Security Perform CodeQL analysis | `AdvancedSecurity-Codeql-Analyze@1` | ❌ Missing | No strongly typed model or builder. |
 | Advanced Security Publish Results | `AdvancedSecurity-Publish@1` | ❌ Missing | No strongly typed model or builder. |
 | Android Build | `AndroidBuild@1` | ⚪ Out of scope | Deprecated by Microsoft; the docs recommend the `Gradle` task instead. |
@@ -315,7 +316,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 
 ### Missing build tasks
 
-- `AdvancedSecurity-Codeql-Init@1` – Advanced Security Initialize CodeQL
 - `AdvancedSecurity-Codeql-Analyze@1` – Advanced Security Perform CodeQL analysis
 - `AdvancedSecurity-Publish@1` – Advanced Security Publish Results
 - `AndroidSigning@3` – Android Signing

@@ -1,0 +1,7 @@
+﻿- task: AdvancedSecurity-Codeql-Init@1
+  displayName: Advanced Security Initialize CodeQL
+  inputs:
+    languages: csharp,javascript
+    querysuite: security-extended
+    buildtype: None
+    enableAutomaticCodeQLInstall: true

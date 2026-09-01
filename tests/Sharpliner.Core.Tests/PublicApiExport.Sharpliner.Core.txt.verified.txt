@@ -88,6 +88,7 @@ namespace Sharpliner.AzureDevOps
         protected static readonly Sharpliner.AzureDevOps.ResourcesReference resources;
         protected static readonly Sharpliner.AzureDevOps.VariablesReference variables;
         protected AzureDevOpsDefinition() { }
+        protected static Sharpliner.AzureDevOps.Tasks.AdvancedSecurityTaskBuilder AdvancedSecurity { get; }
         protected static Sharpliner.AzureDevOps.Tasks.AzureCliTaskBuilder AzureCli { get; }
         protected static Sharpliner.AzureDevOps.Tasks.BashTaskBuilder Bash { get; }
         protected static Sharpliner.AzureDevOps.Tasks.CheckoutTaskBuilder Checkout { get; }
@@ -1518,6 +1519,48 @@ namespace Sharpliner.AzureDevOps.Tasks
         SilentlyContinue = 2,
         Stop = 3,
     }
+    public class AdvancedSecurityCodeqlInitTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AdvancedSecurityCodeqlInitTask>
+    {
+        public AdvancedSecurityCodeqlInitTask() { }
+        public AdvancedSecurityCodeqlInitTask(params Sharpliner.AzureDevOps.Tasks.CodeqlLanguage[] languages) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.CodeqlBuildType BuildType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? CleanupOldAutomaticInstalls { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? CodeqlPathsToIgnore { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? CodeqlPathsToInclude { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? CodeqlToolsDirectory { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ConfigFilePath { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? EnableAutomaticCodeQLInstall { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Languages { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.CodeqlLogLevel LogLevel { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.CodeqlQuerySuite QuerySuite { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Ram { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SourcesFolder { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Threads { get; init; }
+        public Sharpliner.AzureDevOps.Tasks.AdvancedSecurityCodeqlInitTask WithLanguages(params Sharpliner.AzureDevOps.Tasks.CodeqlLanguage[] languages) { }
+    }
+    public class AdvancedSecurityCodeqlTaskBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.AdvancedSecurityCodeqlInitTask Init(params Sharpliner.AzureDevOps.Tasks.CodeqlLanguage[] languages) { }
+        public Sharpliner.AzureDevOps.Tasks.AdvancedSecurityCodeqlInitTask InitWithAutomaticInstall(Sharpliner.AzureDevOps.Tasks.CodeqlLanguage[] languages, bool? cleanupOldAutomaticInstalls = default) { }
+        public Sharpliner.AzureDevOps.Tasks.AdvancedSecurityCodeqlInitTask InitWithoutBuild(params Sharpliner.AzureDevOps.Tasks.CodeqlLanguage[] languages) { }
+    }
+    public class AdvancedSecurityTaskBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.AdvancedSecurityCodeqlTaskBuilder Codeql { get; }
+    }
     public class ArchiveFilesTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.ArchiveFilesTask>
     {
         public ArchiveFilesTask(string rootFolderOrFile, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.ArchiveType> archiveType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> archiveFile) { }
@@ -1703,6 +1746,58 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Tasks.NoneCheckoutTask None { get; }
         public Sharpliner.AzureDevOps.Tasks.SelfCheckoutTask Self { get; }
         public Sharpliner.AzureDevOps.Tasks.RepositoryCheckoutTask Repository(string repository) { }
+    }
+    public enum CodeqlBuildType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="Manual")]
+        Manual = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="None")]
+        None = 1,
+    }
+    public enum CodeqlLanguage
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="csharp")]
+        CSharp = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="cpp")]
+        Cpp = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="go")]
+        Go = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="java")]
+        Java = 3,
+        [YamlDotNet.Serialization.YamlMember(Alias="javascript")]
+        JavaScript = 4,
+        [YamlDotNet.Serialization.YamlMember(Alias="python")]
+        Python = 5,
+        [YamlDotNet.Serialization.YamlMember(Alias="ruby")]
+        Ruby = 6,
+        [YamlDotNet.Serialization.YamlMember(Alias="rust")]
+        Rust = 7,
+        [YamlDotNet.Serialization.YamlMember(Alias="swift")]
+        Swift = 8,
+    }
+    public enum CodeqlLogLevel
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="0")]
+        Warning = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="1")]
+        Verbose = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="2")]
+        Debug = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="_")]
+        DefaultWarning = 3,
+    }
+    public enum CodeqlQuerySuite
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="Select a query suite...")]
+        SelectAQuerySuite = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="code-scanning")]
+        CodeScanning = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="security-extended")]
+        SecurityExtended = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="security-experimental")]
+        SecurityExperimental = 3,
+        [YamlDotNet.Serialization.YamlMember(Alias="security-and-quality")]
+        SecurityAndQuality = 4,
     }
     public sealed class CopyFilesRetryInput : YamlDotNet.Serialization.IYamlConvertible
     {

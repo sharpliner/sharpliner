@@ -1,0 +1,3 @@
+﻿task: AdvancedSecurity-Codeql-Init@1
+
+displayName: Advanced Security Initialize CodeQL
