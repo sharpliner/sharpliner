@@ -93,6 +93,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Tasks.AzureCliTaskBuilder AzureCli { get; }
         protected static Sharpliner.AzureDevOps.Tasks.AzureCliV3TaskBuilder AzureCliV3 { get; }
         protected static Sharpliner.AzureDevOps.Tasks.AzureKeyVaultTaskBuilder AzureKeyVault { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.AzureFunctionAppTaskBuilder AzureFunctionApp { get; }
         protected static Sharpliner.AzureDevOps.Tasks.BashTaskBuilder Bash { get; }
         protected static Sharpliner.AzureDevOps.Tasks.CheckoutTaskBuilder Checkout { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder DotNet { get; }
@@ -1821,6 +1822,11 @@ namespace Sharpliner.AzureDevOps.Tasks
     public abstract class AzureRmWebAppDeploymentAzureRmTask : Sharpliner.AzureDevOps.Tasks.AzureRmWebAppDeploymentTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureRmWebAppDeploymentAzureRmTask>
     {
         protected AzureRmWebAppDeploymentAzureRmTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> webAppName) { }
+    public class AzureFunctionAppContainerV1Task : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureFunctionAppContainerV1Task>
+    {
+        public AzureFunctionAppContainerV1Task(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> appName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> imageName) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AppName { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AppSettings { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
@@ -1941,6 +1947,131 @@ namespace Sharpliner.AzureDevOps.Tasks
     public class AzureKeyVaultV1Task : Sharpliner.AzureDevOps.Tasks.AzureKeyVaultTaskBase, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureKeyVaultV1Task>
     {
         public AzureKeyVaultV1Task(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> keyVaultName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? secretsFilter = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? runAsPreJob = null) { }
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ConfigurationStrings { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ContainerCommand { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? DeployToSlotOrASE { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ImageName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ResourceGroupName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SlotName { get; init; }
+    }
+    public abstract class AzureFunctionAppTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureFunctionAppTask>
+    {
+        protected AzureFunctionAppTask(string task, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureFunctionAppType> appType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> appName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> package) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AppName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AppSettings { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureFunctionAppType>? AppType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureSubscription { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? DeployToSlotOrASE { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureFunctionDeploymentMethod>? DeploymentMethod { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Package { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ResourceGroupName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureFunctionRuntimeStack>? RuntimeStack { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SlotName { get; init; }
+    }
+    public class AzureFunctionAppTaskBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.AzureFunctionAppContainerV1Task Container(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> appName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> imageName) { }
+        public Sharpliner.AzureDevOps.Tasks.AzureFunctionAppV2Task FlexConsumption(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureFunctionAppType> appType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> appName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> package) { }
+        public Sharpliner.AzureDevOps.Tasks.AzureFunctionAppV2Task Linux(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> appName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> package, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureFunctionRuntimeStack>? runtimeStack = null, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureFunctionDeploymentMethod>? deploymentMethod = null) { }
+        public Sharpliner.AzureDevOps.Tasks.AzureFunctionAppV1Task V1Linux(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> appName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> package, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureFunctionRuntimeStack>? runtimeStack = null) { }
+        public Sharpliner.AzureDevOps.Tasks.AzureFunctionAppV1Task V1Windows(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> appName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> package, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureFunctionDeploymentMethod>? deploymentMethod = null) { }
+        public Sharpliner.AzureDevOps.Tasks.AzureFunctionAppV2Task Windows(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> appName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> package, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureFunctionDeploymentMethod>? deploymentMethod = null) { }
+    }
+    public enum AzureFunctionAppType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="functionApp")]
+        Windows = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="functionAppLinux")]
+        Linux = 1,
+    }
+    public class AzureFunctionAppV1Task : Sharpliner.AzureDevOps.Tasks.AzureFunctionAppTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureFunctionAppV1Task>
+    {
+        public AzureFunctionAppV1Task(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureFunctionAppType> appType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> appName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> package) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ConfigurationStrings { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? CustomWebConfig { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? StartUpCommand { get; init; }
+    }
+    public class AzureFunctionAppV2Task : Sharpliner.AzureDevOps.Tasks.AzureFunctionAppTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureFunctionAppV2Task>
+    {
+        public AzureFunctionAppV2Task(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.AzureFunctionAppType> appType, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> appName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> package) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? IsFlexConsumption { get; init; }
+    }
+    public enum AzureFunctionDeploymentMethod
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="auto")]
+        Auto = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="zipDeploy")]
+        ZipDeploy = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="runFromPackage")]
+        RunFromPackage = 2,
+    }
+    public enum AzureFunctionRuntimeStack
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="DOTNET|6.0")]
+        DotNet6 = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="DOTNET-ISOLATED|6.0")]
+        DotNetIsolated6 = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="DOTNET-ISOLATED|7.0")]
+        DotNetIsolated7 = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="DOTNET-ISOLATED|8.0")]
+        DotNetIsolated8 = 3,
+        [YamlDotNet.Serialization.YamlMember(Alias="DOTNET-ISOLATED|9.0")]
+        DotNetIsolated9 = 4,
+        [YamlDotNet.Serialization.YamlMember(Alias="DOTNET-ISOLATED|10.0")]
+        DotNetIsolated10 = 5,
+        [YamlDotNet.Serialization.YamlMember(Alias="JAVA|8")]
+        Java8 = 6,
+        [YamlDotNet.Serialization.YamlMember(Alias="JAVA|11")]
+        Java11 = 7,
+        [YamlDotNet.Serialization.YamlMember(Alias="JAVA|17")]
+        Java17 = 8,
+        [YamlDotNet.Serialization.YamlMember(Alias="JAVA|21")]
+        Java21 = 9,
+        [YamlDotNet.Serialization.YamlMember(Alias="JAVA|25")]
+        Java25 = 10,
+        [YamlDotNet.Serialization.YamlMember(Alias="NODE|14")]
+        Node14 = 11,
+        [YamlDotNet.Serialization.YamlMember(Alias="NODE|16")]
+        Node16 = 12,
+        [YamlDotNet.Serialization.YamlMember(Alias="NODE|18")]
+        Node18 = 13,
+        [YamlDotNet.Serialization.YamlMember(Alias="NODE|20")]
+        Node20 = 14,
+        [YamlDotNet.Serialization.YamlMember(Alias="NODE|22")]
+        Node22 = 15,
+        [YamlDotNet.Serialization.YamlMember(Alias="NODE|24")]
+        Node24 = 16,
+        [YamlDotNet.Serialization.YamlMember(Alias="PYTHON|3.8")]
+        Python38 = 17,
+        [YamlDotNet.Serialization.YamlMember(Alias="PYTHON|3.9")]
+        Python39 = 18,
+        [YamlDotNet.Serialization.YamlMember(Alias="PYTHON|3.10")]
+        Python310 = 19,
+        [YamlDotNet.Serialization.YamlMember(Alias="PYTHON|3.11")]
+        Python311 = 20,
+        [YamlDotNet.Serialization.YamlMember(Alias="PYTHON|3.12")]
+        Python312 = 21,
+        [YamlDotNet.Serialization.YamlMember(Alias="PYTHON|3.13")]
+        Python313 = 22,
     }
     public class BashFileTask : Sharpliner.AzureDevOps.Tasks.BashTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.BashFileTask>, YamlDotNet.Serialization.IYamlConvertible
     {

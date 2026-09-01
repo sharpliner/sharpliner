@@ -1,0 +1,40 @@
+﻿jobs:
+- job: testJob
+  steps:
+  - task: AzureFunctionApp@2
+    inputs:
+      azureSubscription: azure
+      appType: functionApp
+      appName: windows-function
+      package: app.zip
+      deploymentMethod: zipDeploy
+
+  - task: AzureFunctionApp@2
+    inputs:
+      azureSubscription: azure
+      appType: functionAppLinux
+      appName: linux-function
+      package: app.zip
+      runtimeStack: PYTHON|3.13
+
+  - task: AzureFunctionApp@2
+    inputs:
+      azureSubscription: azure
+      appType: functionAppLinux
+      appName: flex-function
+      package: app.zip
+      isFlexConsumption: true
+
+  - task: AzureFunctionApp@1
+    inputs:
+      azureSubscription: azure
+      appType: functionAppLinux
+      appName: v1-function
+      package: app.zip
+      runtimeStack: NODE|24
+
+  - task: AzureFunctionAppContainer@1
+    inputs:
+      azureSubscription: azure
+      appName: container-function
+      imageName: registry.azurecr.io/function:v1

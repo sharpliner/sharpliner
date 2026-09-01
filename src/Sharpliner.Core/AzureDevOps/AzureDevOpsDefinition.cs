@@ -324,6 +324,11 @@ public abstract class AzureDevOpsDefinition
     protected static AzureKeyVaultTaskBuilder AzureKeyVault { get; } = new();
 
     /// <summary>
+    /// Creates strongly typed Azure Functions deployment tasks.
+    /// </summary>
+    protected static AzureFunctionAppTaskBuilder AzureFunctionApp { get; } = new();
+
+    /// <summary>
     /// Creates a generic pipeline task.
     /// </summary>
     protected static AzureDevOpsTask Task(string taskName, string? displayName = null)

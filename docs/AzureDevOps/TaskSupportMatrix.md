@@ -140,6 +140,9 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Azure Functions Deploy | `AzureFunctionApp@2`, `AzureFunctionApp@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure Functions for container | `AzureFunctionAppContainer@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure Key Vault | `AzureKeyVault@2`, `AzureKeyVault@1` | ✅ Supported | `AzureKeyVault.DownloadSecrets(...)` -> `AzureKeyVaultTask` (`@2`). `AzureKeyVaultV1Task` and `AzureKeyVault.DownloadSecretsV1(...)` cover the deprecated `@1` major. |
+| Azure Functions Deploy | `AzureFunctionApp@2`, `AzureFunctionApp@1` | ✅ Supported | `AzureFunctionApp.Windows`/`Linux`/`FlexConsumption` builders and `AzureFunctionAppV2Task`/`AzureFunctionAppV1Task` models. |
+| Azure Functions for container | `AzureFunctionAppContainer@1` | ✅ Supported | `AzureFunctionApp.Container` builder and `AzureFunctionAppContainerV1Task` model. |
+| Azure Key Vault | `AzureKeyVault@2`, `AzureKeyVault@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure Monitor alerts (Deprecated) | `AzureMonitorAlerts@0` | ⚪ Out of scope | Deprecated by Microsoft (classic Azure Monitor alerts). |
 | Azure PowerShell | `AzurePowerShell@5`, `AzurePowerShell@4`, `AzurePowerShell@3`, `AzurePowerShell@2`, `AzurePowerShell@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure resource group deployment | `AzureResourceGroupDeployment@2`, `AzureResourceGroupDeployment@1` | ❌ Missing | No strongly typed model or builder. |
