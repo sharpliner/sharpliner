@@ -1,0 +1,6 @@
+﻿task: AzurePowerShell@5
+
+inputs:
+  azureSubscription: connectedServiceNameARM
+  ScriptType: InlineScript
+  Inline: Get-AzResourceGroup

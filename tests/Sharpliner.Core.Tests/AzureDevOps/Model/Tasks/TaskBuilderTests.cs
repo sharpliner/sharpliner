@@ -389,6 +389,7 @@ public class TaskBuilderTests
 
     private class AdvancedSecurityTaskPipeline : TestPipeline
     private class AzureKeyVaultTaskPipeline : TestPipeline
+    private class AzurePowerShellTaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
         {
@@ -405,6 +406,10 @@ public class TaskBuilderTests
 #pragma warning disable CS0618 // Type or member is obsolete
                         AzureKeyVault.DownloadSecretsV1("LegacyServiceConnection", "LegacyVault", "LegacySecret", true)
 #pragma warning restore CS0618 // Type or member is obsolete
+                        AzurePowerShell.File("connectedServiceNameARM", "foo.ps1"),
+                        AzurePowerShell.FromFile("connectedServiceNameARM", "AzureDevOps/Resources/Test-Script.ps1"),
+                        AzurePowerShell.FromResourceFile("connectedServiceNameARM", "Test-Script.ps1"),
+                        AzurePowerShell.Inline("connectedServiceNameARM", displayName: null, "Write-Host \"test\"")
                     }
                 }
             }
@@ -482,6 +487,9 @@ public class TaskBuilderTests
     public Task Serialize_AzureKeyVault_Builder_Test()
     {
         AzureKeyVaultTaskPipeline pipeline = new();
+    public Task Serialize_AzurePowerShell_Builder_Test()
+    {
+        AzurePowerShellTaskPipeline pipeline = new();
 
         return Verify(pipeline.Serialize());
     }
