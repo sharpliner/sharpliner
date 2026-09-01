@@ -1,0 +1,19 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: Maven@4
+    inputs:
+      mavenPOMFile: pom.xml
+      goals: verify
+      options: -Pci
+      codeCoverageTool: JaCoCo
+      sqAnalysisEnabled: true
+      isJacocoCoverageReportXML: true
+      sqMavenPluginVersionChoice: pom
+      checkstyleAnalysisEnabled: true
+      pmdAnalysisEnabled: true
+      findbugsAnalysisEnabled: true
+      spotBugsAnalysisEnabled: true
+      spotBugsMavenPluginVersion: 4.9.8.1
+      spotBugsGoal: check
+      spotBugsFailWhenBugsFound: false
