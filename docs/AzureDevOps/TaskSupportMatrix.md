@@ -239,7 +239,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Java tool installer | `JavaToolInstaller@1`, `JavaToolInstaller@0` | ❌ Missing | No strongly typed model or builder. |
 | Kubectl tool installer | `KubectlInstaller@0` | ❌ Missing | No strongly typed model or builder. |
 | Kubelogin tool installer | `KubeloginInstaller@0` | ❌ Missing | No strongly typed model or builder. |
-| NuGet tool installer | `NuGetToolInstaller@1`, `NuGetToolInstaller@0` | ❌ Missing | No strongly typed model or builder. |
+| NuGet tool installer | `NuGetToolInstaller@1`, `NuGetToolInstaller@0` | ✅ Supported | `NuGet.Install.Version/LatestMatching/V1/V0` -> `NuGetToolInstallerV1Task` / `NuGetToolInstallerV0Task`. |
 | Use .NET Core | `UseDotNet@2` | ✅ Supported | `DotNet.Install.Sdk/Runtime/FromGlobalJson` -> `UseDotNetTask`. |
 | Use Node.js ecosystem | `UseNode@1`, `NodeTool@0` | ❌ Missing | No strongly typed model or builder. |
 | Use Python version | `UsePythonVersion@0` | ❌ Missing | No strongly typed model or builder. |
@@ -316,6 +316,11 @@ Sharpliner covers **21 of the 168** official built-in task families (19 fully, 2
 | Utility | 47 | 9 | 0 | 35 | 3 |
 | **Total** | **168** | **17** | **2** | **123** | **26** |
 
+| Utility | 47 | 9 | 0 | 35 | 3 |
+| **Total** | **168** | **17** | **2** | **123** | **26** |
+
+| Test | 10 | 2 | 0 | 5 | 3 |
+| Tool | 15 | 2 | 0 | 12 | 1 |
 | Utility | 47 | 9 | 0 | 35 | 3 |
 | **Total** | **168** | **17** | **2** | **123** | **26** |
 
@@ -461,7 +466,6 @@ and `Npm@1`.
 - `JavaToolInstaller@1` – Java tool installer
 - `KubectlInstaller@0` – Kubectl tool installer
 - `KubeloginInstaller@0` – Kubelogin tool installer
-- `NuGetToolInstaller@1` – NuGet tool installer
 - `UseNode@1` – Use Node.js ecosystem
 - `UsePythonVersion@0` – Use Python version
 - `UseRubyVersion@0` – Use Ruby version

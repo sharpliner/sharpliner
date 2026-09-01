@@ -578,6 +578,10 @@ public class TaskBuilderTests
                 {
                     Steps =
                     {
+                        NuGet.Install.Version(),
+                        NuGet.Install.Version("6.x"),
+                        NuGet.Install.LatestMatching("5.x"),
+                        NuGet.Install.V0("4.9.x"),
                         NuGet.Authenticate(),
                         NuGet.Authenticate([" MyServiceConnection ", "", " AnotherServiceConnection "], true),
                         NuGet.Authenticate("MyAzureDevOpsServiceConnection", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/nuget/v3/index.json"),

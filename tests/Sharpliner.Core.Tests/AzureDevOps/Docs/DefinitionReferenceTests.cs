@@ -164,6 +164,7 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
         AdoExpressionList<Step> tasks =
         [
 #region nuget-tasks-code
+            NuGet.Install.Version("6.x", checkLatest: true),
             NuGet.Authenticate(["NuGetServiceConnection1", "NuGetServiceConnection2"], forceReinstallCredentialProvider: true),
             NuGet.Authenticate("AzureDevOpsServiceConnection", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/nuget/v3/index.json"),
 
