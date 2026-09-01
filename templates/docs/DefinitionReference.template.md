@@ -85,16 +85,6 @@ Generated YAML:
 
 [!code-yaml[](tests/Sharpliner.Core.Tests/Verified/AzureDevOps.Docs/DefinitionReferenceTests.NuGet_Test.verified.txt)]
 
-### Advanced Security CodeQL
-
-The [Advanced Security Initialize CodeQL v1 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/advanced-security-codeql-init-v1?view=azure-pipelines) is available through a strongly typed builder and model.
-
-[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#advanced-security-codeql-tasks-code)]
-
-Generated YAML:
-
-[!code-yaml[](tests/Sharpliner.Core.Tests/Verified/AzureDevOps.Docs/DefinitionReferenceTests.AdvancedSecurityCodeql_Test.verified.txt)]
-
 ### Contributions welcome
 
 Currently, we don't support many marketplace tasks in C# as the project is still growing.

@@ -241,31 +241,6 @@ Generated YAML:
     arguments: config -Set repositoryPath=c:\packages -configfile c:\my.config
 ```
 
-### Advanced Security CodeQL
-
-The [Advanced Security Initialize CodeQL v1 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/advanced-security-codeql-init-v1?view=azure-pipelines) is available through a strongly typed builder and model.
-
-```csharp
-AdvancedSecurity.Codeql.Init(CodeqlLanguage.CSharp, CodeqlLanguage.JavaScript) with
-{
-    QuerySuite = CodeqlQuerySuite.SecurityExtended,
-    BuildType = CodeqlBuildType.None,
-    EnableAutomaticCodeQLInstall = true,
-}
-```
-
-Generated YAML:
-
-```yaml
-- task: AdvancedSecurity-Codeql-Init@1
-  displayName: Advanced Security Initialize CodeQL
-  inputs:
-    languages: csharp,javascript
-    querysuite: security-extended
-    buildtype: None
-    enableAutomaticCodeQLInstall: true
-```
-
 ### Contributions welcome
 
 Currently, we don't support many marketplace tasks in C# as the project is still growing.
