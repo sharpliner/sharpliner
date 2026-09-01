@@ -1,0 +1,11 @@
+﻿task: ContainerStructureTest@0
+
+displayName: Container Structure Test
+
+inputs:
+  dockerRegistryServiceConnection: my-docker-service-connection
+  repository: my-org/my-image
+  configFile: tests/container-structure.yaml
+  tag: 1.2.3
+  testRunTitle: Container structure test run
+  failTaskOnFailedTests: true

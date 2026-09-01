@@ -100,6 +100,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Tasks.CheckoutTaskBuilder Checkout { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DockerTaskBuilder Docker { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DockerComposeTaskBuilder DockerCompose { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.ContainerStructureTestTaskBuilder ContainerStructureTest { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DotNetTaskBuilder DotNet { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DownloadTaskBuilder Download { get; }
         protected static Sharpliner.AzureDevOps.ElseCondition Else { get; }
@@ -2477,6 +2478,25 @@ namespace Sharpliner.AzureDevOps.Tasks
         SecurityExperimental = 3,
         [YamlDotNet.Serialization.YamlMember(Alias="security-and-quality")]
         SecurityAndQuality = 4,
+    public class ContainerStructureTestTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.ContainerStructureTestTask>
+    {
+        public ContainerStructureTestTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> dockerRegistryServiceConnection, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> repository, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> configFile) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ConfigFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DockerRegistryServiceConnection { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? FailTaskOnFailedTests { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Repository { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Tag { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TestRunTitle { get; init; }
+    }
+    public class ContainerStructureTestTaskBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.ContainerStructureTestTask Run(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> dockerRegistryServiceConnection, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> repository, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> configFile, Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? tag = null) { }
     }
     public sealed class CopyFilesRetryInput : YamlDotNet.Serialization.IYamlConvertible
     {

@@ -393,6 +393,7 @@ public class TaskBuilderTests
     private class AzureWebAppTaskPipeline : TestPipeline
     private class MSBuildTaskPipeline : TestPipeline
     private class SshTaskPipeline : TestPipeline
+    private class ContainerStructureTestTaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
         {
@@ -496,6 +497,11 @@ public class TaskBuilderTests
                         {
                             RuntimeStack = AzureWebAppRuntimeStack.Node22Lts,
                             StartUpCommand = "npm run start",
+                        ContainerStructureTest.Run("my-docker-connection", "my-org/my-image", "tests/container-structure.yaml") with
+                        {
+                            Tag = "1.2.3",
+                            TestRunTitle = "Container tests",
+                            FailTaskOnFailedTests = true,
                         },
                     }
                 }
@@ -522,6 +528,9 @@ public class TaskBuilderTests
     public Task Serialize_Ssh_Builder_Test()
     {
         SshTaskPipeline pipeline = new();
+    public Task Serialize_ContainerStructureTest_Builder_Test()
+    {
+        ContainerStructureTestTaskPipeline pipeline = new();
 
         return Verify(pipeline.Serialize());
     }

@@ -65,6 +65,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `Bash@3` | `Bash.Inline/File/FromFile/FromResourceFile` -> `InlineBashTask`, `BashFileTask` (`bash` step shortcut) |
 | `CMake@1` | `CMakeTask` |
 | `CmdLine@2` | `Script.Inline/FromFile/FromResourceFile` -> `ScriptTask` (`script` step shortcut) |
+| `ContainerStructureTest@0` | `ContainerStructureTest.Run` -> `ContainerStructureTestTask` |
 | `CopyFiles@2` | `CopyFilesTask` |
 | `DeleteFiles@1` | `DeleteFilesTask` |
 | `Docker@2` | `Docker.Build/Push/BuildAndPush/Login/Logout/Start/Stop` -> `DockerTask` and its command specializations |
@@ -217,7 +218,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | App Center test | `AppCenterTest@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure Load Testing | `AzureLoadTest@1` | ✅ Supported | `AzureLoadTestTask` (`AzureLoadTest@1`). |
 | Azure Test Plan | `AzureTestPlan@0` | ❌ Missing | No strongly typed model or builder. |
-| Container Structure Test | `ContainerStructureTest@0` | ❌ Missing | No strongly typed model or builder. |
+| Container Structure Test | `ContainerStructureTest@0` | ✅ Supported | `ContainerStructureTest.Run(...)` -> `ContainerStructureTestTask`. |
 | Mobile Center Test | `VSMobileCenterTest@0` | ⚪ Out of scope | Deprecated/renamed by Microsoft; superseded by `AppCenterTest@1`. |
 | Publish code coverage results | `PublishCodeCoverageResults@2`, `PublishCodeCoverageResults@1` | ✅ Supported | `PublishCodeCoverageResultsTask` (`PublishCodeCoverageResults@2`). |
 | Publish Test Results | `PublishTestResults@2`, `PublishTestResults@1` | ✅ Supported | `PublishTestResultsTask` (`PublishTestResults@2`). |
@@ -448,6 +449,7 @@ and `Npm@1`.
 - `AppCenterTest@1` – App Center test
 - `AzureTestPlan@0` – Azure Test Plan
 - `ContainerStructureTest@0` – Container Structure Test
+- `VSTest@3` – Visual Studio Test
 
 ### Missing tool tasks
 

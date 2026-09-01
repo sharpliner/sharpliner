@@ -411,6 +411,9 @@ public abstract class AzureDevOpsDefinition
     /// Creates a Gradle task.
     /// </summary>
     protected static GradleTaskBuilder Gradle { get; } = new();
+    /// Creates a Container Structure Test task.
+    /// </summary>
+    protected static ContainerStructureTestTaskBuilder ContainerStructureTest { get; } = new();
 
     /// <summary>
     /// Creates an npm task.
