@@ -112,6 +112,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Tasks.PwshTaskBuilder Pwsh { get; }
         protected static Sharpliner.AzureDevOps.Tasks.ScriptTaskBuilder Script { get; }
         protected static Sharpliner.AzureDevOps.Tasks.VSBuildTaskBuilder VSBuild { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacDeploymentTaskBuilder SqlAzureDacpacDeployment { get; }
         protected static Sharpliner.AzureDevOps.InlineCondition And(params Sharpliner.AzureDevOps.InlineCondition[] expressions) { }
         protected static Sharpliner.AzureDevOps.InlineCondition And(params string[] expressions) { }
         protected static Sharpliner.AzureDevOps.InlineCondition And<T>(params Sharpliner.AzureDevOps.InlineCondition[] expressions) { }
@@ -3452,6 +3453,164 @@ namespace Sharpliner.AzureDevOps.Tasks
         public System.Collections.Generic.List<string> Tags { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? TargetPath { get; init; }
+    }
+    public enum SqlAzureAuthenticationType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="server")]
+        Server = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="aadAuthenticationPassword")]
+        AadAuthenticationPassword = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="aadAuthenticationIntegrated")]
+        AadAuthenticationIntegrated = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="connectionString")]
+        ConnectionString = 3,
+        [YamlDotNet.Serialization.YamlMember(Alias="servicePrincipal")]
+        ServicePrincipal = 4,
+    }
+    public class SqlAzureDacpacBuilder
+    {
+        public SqlAzureDacpacBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacDeployReportTask DeployReport(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> dacpacFile) { }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacDriftReportTask DriftReport() { }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacExportTask Export() { }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacExtractTask Extract() { }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacImportTask Import(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> bacpacFile) { }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacPublishTask Publish(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> dacpacFile) { }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacScriptTask Script(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> dacpacFile) { }
+    }
+    public class SqlAzureDacpacDeployReportTask : Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacDeployReportTask>
+    {
+        public SqlAzureDacpacDeployReportTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> dacpacFile) { }
+    }
+    public abstract class SqlAzureDacpacDeploymentTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacDeploymentTask>
+    {
+        protected SqlAzureDacpacDeploymentTask(Sharpliner.AzureDevOps.Tasks.SqlAzureTaskNameSelector taskNameSelector, Sharpliner.AzureDevOps.Tasks.SqlAzureDeploymentAction deploymentAction) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AadSqlPassword { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AadSqlUsername { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.SqlAzureAuthenticationType>? AuthenticationType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureClassicSubscription { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.SqlAzureServiceConnectionType>? AzureConnectionType { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureSubscription { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ConnectionString { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DatabaseName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? DeleteFirewallRule { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? EndIpAddress { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<Sharpliner.AzureDevOps.Tasks.SqlAzureIpDetectionMethod>? IpDetectionMethod { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ServerName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SqlPassword { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SqlUsername { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? StartIpAddress { get; init; }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacDeploymentTask WithActiveDirectoryIntegratedAuthentication(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> serverName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> databaseName) { }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacDeploymentTask WithActiveDirectoryPasswordAuthentication(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> serverName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> databaseName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> username, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> password) { }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacDeploymentTask WithAzureClassicServiceConnection(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureClassicSubscription) { }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacDeploymentTask WithAzureResourceManagerServiceConnection(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription) { }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacDeploymentTask WithConnectionStringAuthentication(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> connectionString) { }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacDeploymentTask WithFirewallIpRange(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> startIpAddress, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> endIpAddress) { }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacDeploymentTask WithServicePrincipalAuthentication(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> serverName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> databaseName) { }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacDeploymentTask WithSqlServerAuthentication(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> serverName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> databaseName, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> sqlUsername, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> sqlPassword) { }
+    }
+    public class SqlAzureDacpacDeploymentTaskBuilder
+    {
+        public SqlAzureDacpacDeploymentTaskBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacBuilder Dacpac { get; }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureInlineSqlTask InlineSql(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> sqlInline) { }
+        public Sharpliner.AzureDevOps.Tasks.SqlAzureSqlScriptTask SqlScript(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> sqlFile) { }
+    }
+    public class SqlAzureDacpacDriftReportTask : Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacDriftReportTask>
+    {
+        public SqlAzureDacpacDriftReportTask() { }
+    }
+    public class SqlAzureDacpacExportTask : Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacExportTask>
+    {
+        public SqlAzureDacpacExportTask() { }
+    }
+    public class SqlAzureDacpacExtractTask : Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacExtractTask>
+    {
+        public SqlAzureDacpacExtractTask() { }
+    }
+    public class SqlAzureDacpacImportTask : Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacImportTask>
+    {
+        public SqlAzureDacpacImportTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> bacpacFile) { }
+    }
+    public class SqlAzureDacpacPublishTask : Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacPublishTask>
+    {
+        public SqlAzureDacpacPublishTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> dacpacFile) { }
+    }
+    public class SqlAzureDacpacScriptTask : Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacScriptTask>
+    {
+        public SqlAzureDacpacScriptTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> dacpacFile) { }
+    }
+    public abstract class SqlAzureDacpacTask : Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacDeploymentTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacTask>
+    {
+        protected SqlAzureDacpacTask(Sharpliner.AzureDevOps.Tasks.SqlAzureDeploymentAction deploymentAction) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AdditionalArguments { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? BacpacFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? DacpacFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? PublishProfile { get; init; }
+    }
+    public enum SqlAzureDeploymentAction
+    {
+        Publish = 0,
+        Extract = 1,
+        Export = 2,
+        Import = 3,
+        Script = 4,
+        DriftReport = 5,
+        DeployReport = 6,
+    }
+    public class SqlAzureInlineSqlTask : Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacDeploymentTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SqlAzureInlineSqlTask>
+    {
+        public SqlAzureInlineSqlTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> sqlInline) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? InlineAdditionalArguments { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SqlInline { get; init; }
+    }
+    public enum SqlAzureIpDetectionMethod
+    {
+        AutoDetect = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="IPAddressRange")]
+        IpAddressRange = 1,
+    }
+    public enum SqlAzureServiceConnectionType
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="ConnectedServiceName")]
+        AzureClassic = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="ConnectedServiceNameARM")]
+        AzureResourceManager = 1,
+    }
+    public class SqlAzureSqlScriptTask : Sharpliner.AzureDevOps.Tasks.SqlAzureDacpacDeploymentTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.SqlAzureSqlScriptTask>
+    {
+        public SqlAzureSqlScriptTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> sqlFile) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SqlAdditionalArguments { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? SqlFile { get; init; }
+    }
+    public enum SqlAzureTaskNameSelector
+    {
+        DacpacTask = 0,
+        SqlTask = 1,
+        InlineSqlTask = 2,
     }
     public class StepTarget : System.IEquatable<Sharpliner.AzureDevOps.Tasks.StepTarget>
     {
