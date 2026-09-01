@@ -97,6 +97,7 @@ namespace Sharpliner.AzureDevOps
         protected static Sharpliner.AzureDevOps.Tasks.AzurePowerShellTaskBuilder AzurePowerShell { get; }
         protected static Sharpliner.AzureDevOps.Tasks.AzureWebAppTaskBuilder AzureWebApp { get; }
         protected static Sharpliner.AzureDevOps.Tasks.BashTaskBuilder Bash { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.CacheTaskBuilder Cache { get; }
         protected static Sharpliner.AzureDevOps.Tasks.CheckoutTaskBuilder Checkout { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DockerTaskBuilder Docker { get; }
         protected static Sharpliner.AzureDevOps.Tasks.DockerComposeTaskBuilder DockerCompose { get; }
@@ -2393,6 +2394,53 @@ namespace Sharpliner.AzureDevOps.Tasks
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? RunInsideShell { get; init; }
         [YamlDotNet.Serialization.YamlIgnore]
         public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WorkingDirectory { get; init; }
+    public sealed class CacheKey
+    {
+        public override string ToString() { }
+        public static Sharpliner.AzureDevOps.Tasks.CacheKeySegment File(string path) { }
+        public static Sharpliner.AzureDevOps.Tasks.CacheKeySegment FilePattern(string pattern) { }
+        public static Sharpliner.AzureDevOps.Tasks.CacheKey FromSegments(params Sharpliner.AzureDevOps.Tasks.CacheKeySegment[] segments) { }
+        public static Sharpliner.AzureDevOps.Tasks.CacheKeySegment Literal(string value) { }
+        public static Sharpliner.AzureDevOps.Tasks.CacheKey Raw(string value) { }
+        public static string op_Implicit(Sharpliner.AzureDevOps.Tasks.CacheKey key) { }
+    }
+    public sealed class CacheKeyBuilder
+    {
+        public CacheKeyBuilder() { }
+        public Sharpliner.AzureDevOps.Tasks.CacheKey Build() { }
+        public Sharpliner.AzureDevOps.Tasks.CacheKeyBuilder File(string path) { }
+        public Sharpliner.AzureDevOps.Tasks.CacheKeyBuilder FilePattern(string pattern) { }
+        public Sharpliner.AzureDevOps.Tasks.CacheKeyBuilder Literal(string value) { }
+        public Sharpliner.AzureDevOps.Tasks.CacheKeyBuilder Variable(Sharpliner.AzureDevOps.Expressions.VariableReference variable) { }
+        public static Sharpliner.AzureDevOps.Tasks.CacheKey op_Implicit(Sharpliner.AzureDevOps.Tasks.CacheKeyBuilder builder) { }
+    }
+    public sealed class CacheKeySegment
+    {
+        public override string ToString() { }
+        public static Sharpliner.AzureDevOps.Tasks.CacheKeySegment File(string path) { }
+        public static Sharpliner.AzureDevOps.Tasks.CacheKeySegment FilePattern(string pattern) { }
+        public static Sharpliner.AzureDevOps.Tasks.CacheKeySegment Literal(string value) { }
+    }
+    public class CacheTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.CacheTask>
+    {
+        public CacheTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> key, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> path) { }
+        public CacheTask(Sharpliner.AzureDevOps.Tasks.CacheKey key, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> path) { }
+        public CacheTask(Sharpliner.AzureDevOps.Tasks.CacheKey key, string path) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? CacheHitVariable { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Key { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? Path { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.CacheKey[]? RestoreKeys { get; init; }
+    }
+    public class CacheTaskBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.CacheKeyBuilder Key { get; }
+        public Sharpliner.AzureDevOps.Tasks.CacheTask Files(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> path, Sharpliner.AzureDevOps.Tasks.CacheKey key) { }
+        public Sharpliner.AzureDevOps.Tasks.CacheTask Files(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> path, Sharpliner.AzureDevOps.Tasks.CacheKey key, params Sharpliner.AzureDevOps.Tasks.CacheKey[] restoreKeys) { }
+        public Sharpliner.AzureDevOps.Tasks.CacheTask Files(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> path, Sharpliner.AzureDevOps.Tasks.CacheKey key, System.Collections.Generic.IEnumerable<Sharpliner.AzureDevOps.Tasks.CacheKey> restoreKeys) { }
     }
     public abstract class CheckoutTask : Sharpliner.AzureDevOps.Step, System.IEquatable<Sharpliner.AzureDevOps.Tasks.CheckoutTask>
     {
