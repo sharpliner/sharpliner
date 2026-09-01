@@ -1667,6 +1667,38 @@ namespace Sharpliner.AzureDevOps.Tasks
         protected void SetProperty(string name, string? value) { }
         protected void SetProperty<T>(string name, Sharpliner.AzureDevOps.Expressions.AdoExpression<T>? value) { }
     }
+    public class AzureLoadTestTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureLoadTestTask>
+    {
+        public AzureLoadTestTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> azureSubscription, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> loadTestConfigFile, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> resourceGroup, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> loadTestResource) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? AzureSubscription { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public System.Collections.Generic.IReadOnlyCollection<Sharpliner.AzureDevOps.Tasks.AzureLoadTestVariable>? EnvironmentVariables { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? LoadTestConfigFile { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? LoadTestResource { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? LoadTestRunDescription { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? LoadTestRunName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? OutputVariableName { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? OverrideParameters { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? ResourceGroup { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public System.Collections.Generic.IReadOnlyCollection<Sharpliner.AzureDevOps.Tasks.AzureLoadTestVariable>? Secrets { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? WaitForCompletion { get; init; }
+    }
+    public class AzureLoadTestVariable : System.IEquatable<Sharpliner.AzureDevOps.Tasks.AzureLoadTestVariable>
+    {
+        public AzureLoadTestVariable(string Name, string Value) { }
+        public string Name { get; init; }
+        public string Value { get; init; }
+    }
     public class BashFileTask : Sharpliner.AzureDevOps.Tasks.BashTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.BashFileTask>, YamlDotNet.Serialization.IYamlConvertible
     {
         public BashFileTask(string filePath) { }

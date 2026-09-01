@@ -57,6 +57,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 |---|---|
 | `ArchiveFiles@2` | `ArchiveFilesTask` |
 | `AzureCLI@2` | `AzureCli.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliTask`, `AzureCliFileTask` |
+| `AzureLoadTest@1` | `AzureLoadTestTask` |
 | `Bash@3` | `Bash.Inline/File/FromFile/FromResourceFile` -> `InlineBashTask`, `BashFileTask` (`bash` step shortcut) |
 | `CMake@1` | `CMakeTask` |
 | `CmdLine@2` | `Script.Inline/FromFile/FromResourceFile` -> `ScriptTask` (`script` step shortcut) |
@@ -196,7 +197,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Task | YAML identity (all majors) | Classification | Sharpliner API / rationale |
 |---|---|---|---|
 | App Center test | `AppCenterTest@1` | ❌ Missing | No strongly typed model or builder. |
-| Azure Load Testing | `AzureLoadTest@1` | ❌ Missing | No strongly typed model or builder. |
+| Azure Load Testing | `AzureLoadTest@1` | ✅ Supported | `AzureLoadTestTask` (`AzureLoadTest@1`). |
 | Azure Test Plan | `AzureTestPlan@0` | ❌ Missing | No strongly typed model or builder. |
 | Container Structure Test | `ContainerStructureTest@0` | ❌ Missing | No strongly typed model or builder. |
 | Mobile Center Test | `VSMobileCenterTest@0` | ⚪ Out of scope | Deprecated/renamed by Microsoft; superseded by `AppCenterTest@1`. |
@@ -285,14 +286,14 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Build | 28 | 1 | 0 | 20 | 7 |
 | Deploy | 50 | 0 | 1 | 43 | 6 |
 | Package | 18 | 3 | 1 | 8 | 6 |
-| Test | 10 | 2 | 0 | 5 | 3 |
+| Test | 10 | 3 | 0 | 4 | 3 |
 | Tool | 15 | 1 | 0 | 13 | 1 |
 | Utility | 47 | 10 | 0 | 34 | 3 |
-| **Total** | **168** | **17** | **2** | **123** | **26** |
+| **Total** | **168** | **18** | **2** | **122** | **26** |
 
-Sharpliner covers **19 of the 168** official built-in task families (17 fully, 2 partially).
+Sharpliner covers **20 of the 168** official built-in task families (18 fully, 2 partially).
 Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
-library grew from. The **123 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
+library grew from. The **122 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
 Service Fabric) and by tool installers.
 
 ## Tasks we would like to see contributed
@@ -398,7 +399,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 ### Missing test tasks
 
 - `AppCenterTest@1` – App Center test
-- `AzureLoadTest@1` – Azure Load Testing
 - `AzureTestPlan@0` – Azure Test Plan
 - `ContainerStructureTest@0` – Container Structure Test
 - `VSTest@3` – Visual Studio Test
