@@ -1,0 +1,18 @@
+﻿task: DownloadBuildArtifacts@1
+
+displayName: Download build artifacts
+
+inputs:
+  buildType: specific
+  downloadType: specific
+  downloadPath: $(Pipeline.Workspace)
+  project: project
+  definition: 42
+  buildVersionToDownload: latestFromBranch
+  specificBuildWithTriggering: true
+  allowPartiallySucceededBuilds: true
+  branchName: refs/heads/main
+  tags: release,signed
+  itemPattern: |-
+    drop/**/*.zip
+    !drop/**/*.symbols.zip

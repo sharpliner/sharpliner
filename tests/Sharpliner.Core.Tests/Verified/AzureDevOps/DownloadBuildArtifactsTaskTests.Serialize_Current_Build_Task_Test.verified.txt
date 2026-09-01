@@ -1,0 +1,14 @@
+﻿task: DownloadBuildArtifacts@1
+
+displayName: Download build artifacts
+
+inputs:
+  buildType: current
+  downloadType: single
+  downloadPath: $(artifactDirectory)
+  artifactName: drop
+  cleanDestinationFolder: true
+  parallelizationLimit: 16
+  checkDownloadedFiles: true
+  retryDownloadCount: 6
+  extractTars: true
