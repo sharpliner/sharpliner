@@ -10,7 +10,6 @@ For a full list of classes you can override to create a YAML file, see [PublicDe
 - [Azure Pipelines tasks](#azure-pipelines-tasks)
   - [Dotnet](#dotnet)
   - [NuGet](#nuget)
-  - [Docker Compose](#docker-compose)
   - [Contributions welcome](#contributions-welcome)
   - [Marketplace tasks](#marketplace-tasks)
 - [Pipeline variables](#pipeline-variables)
@@ -95,67 +94,6 @@ The [Advanced Security Initialize CodeQL v1 task](https://learn.microsoft.com/en
 Generated YAML:
 
 [!code-yaml[](tests/Sharpliner.Core.Tests/Verified/AzureDevOps.Docs/DefinitionReferenceTests.AdvancedSecurityCodeql_Test.verified.txt)]
-
-### Helm
-
-The [HelmDeploy@1 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/helm-deploy-v1?view=azure-pipelines) packages and deploys Helm charts and its inputs depend on the selected command.
-Each command is modelled by its own task record and the `Helm` builder only offers the inputs that are valid for the given command.
-
-[!code-csharp[](tests/Sharpliner.Core.Tests/AzureDevOps/Docs/DefinitionReferenceTests.cs#helm-tasks-code)]
-
-Generated YAML:
-
-[!code-yaml[](tests/Sharpliner.Core.Tests/Verified/AzureDevOps.Docs/DefinitionReferenceTests.Helm_Test.verified.txt)]
-### Docker Compose
-
-The [Docker Compose v1 task](https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/docker-compose-v1?view=azure-pipelines)
-also has multiple action-specific combinations, so Sharpliner exposes them through the `DockerCompose.*` builder and dedicated record types.
-
-```csharp
-DockerCompose.Build("src/docker-compose.yml") with
-{
-    AzureSubscription = "my-azure-subscription",
-    AzureContainerRegistry = "myacr.azurecr.io",
-    AdditionalImageTags = "latest\n$(Build.BuildNumber)",
-    IncludeLatestTag = true,
-},
-
-DockerCompose.RunService("web") with
-{
-    DockerComposeFile = "src/docker-compose.yml",
-    Ports = "8080:80",
-    Detached = false,
-    EntryPoint = "/bin/sh",
-    ContainerCommand = "-c \"dotnet MyApp.dll\"",
-}
-```
-
-Generated YAML:
-
-```yaml
-- task: DockerCompose@1
-  displayName: Docker Compose build services
-  inputs:
-    action: Build services
-    dockerComposeFile: src/docker-compose.yml
-    azureSubscriptionEndpoint: my-azure-subscription
-    azureContainerRegistry: myacr.azurecr.io
-    additionalImageTags: |-
-      latest
-      $(Build.BuildNumber)
-    includeLatestTag: true
-
-- task: DockerCompose@1
-  displayName: Docker Compose run a specific service
-  inputs:
-    action: Run a specific service
-    serviceName: web
-    dockerComposeFile: src/docker-compose.yml
-    ports: 8080:80
-    detached: false
-    entrypoint: /bin/sh
-    containerCommand: -c "dotnet MyApp.dll"
-```
 
 ### Contributions welcome
 
