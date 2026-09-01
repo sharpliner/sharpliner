@@ -28,3 +28,60 @@
   - task: npmAuthenticate@0
     inputs:
       workingFile: null/.npmrc
+
+  - task: Npm@1
+    inputs:
+      command: install
+      customRegistry: useNpmrc
+      customEndpoint: MyServiceConnection,AnotherServiceConnection
+      workingDir: src/web
+      verbose: true
+
+  - task: Npm@1
+    inputs:
+      command: install
+      customRegistry: useFeed
+      customFeed: MyProject/MyFeed
+
+  - task: Npm@1
+    inputs:
+      command: ci
+      customRegistry: useNpmrc
+      workingDir: src/web
+
+  - task: Npm@1
+    inputs:
+      command: ci
+      customRegistry: useFeed
+      customFeed: MyProject/MyFeed
+      verbose: false
+
+  - task: Npm@1
+    inputs:
+      command: custom
+      customRegistry: useNpmrc
+      customCommand: dist-tag ls mypackage
+      customEndpoint: ExternalNpmRegistry
+      workingDir: src/web
+
+  - task: Npm@1
+    inputs:
+      command: custom
+      customRegistry: useFeed
+      customCommand: dist-tag ls mypackage
+      customFeed: MyProject/MyFeed
+
+  - task: Npm@1
+    inputs:
+      command: publish
+      publishRegistry: useExternalRegistry
+      publishEndpoint: MyExternalPublishServiceConnection
+      workingDir: src/web
+      verbose: true
+
+  - task: Npm@1
+    inputs:
+      command: publish
+      publishRegistry: useFeed
+      publishFeed: MyProject/MyFeed
+      publishPackageMetadata: false

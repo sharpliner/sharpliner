@@ -1,0 +1,8 @@
+﻿task: Npm@1
+
+inputs:
+  command: custom
+  customRegistry: useFeed
+  customCommand: dist-tag ls mypackage
+  workingDir: src/web
+  customFeed: MyProject/MyFeed

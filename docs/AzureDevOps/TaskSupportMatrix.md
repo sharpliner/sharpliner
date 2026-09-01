@@ -177,7 +177,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Download Github Npm Package | `DownloadGithubNpmPackage@1` | ⚪ Out of scope | Deprecated by Microsoft; superseded by `Npm@1` with a GitHub service connection. |
 | Gradle Authenticate | `GradleAuthenticate@0` | ❌ Missing | No strongly typed model or builder. |
 | Maven Authenticate | `MavenAuthenticate@0` | ❌ Missing | No strongly typed model or builder. |
-| npm | `Npm@1`, `Npm@0` | ❌ Missing | Only `npmAuthenticate@0` is modelled by the `Npm` builder, the `Npm@1` task itself is not. |
+| npm | `Npm@1`, `Npm@0` | ✅ Supported | `Npm.Install(...)`, `Npm.InstallFromFeed(...)`, `Npm.Ci(...)`, `Npm.CiFromFeed(...)`, `Npm.Custom(...)`, `Npm.CustomFromFeed(...)`, `Npm.PublishToExternalRegistry(...)`, `Npm.PublishToFeed(...)` -> typed `Npm@1` task models. |
 | npm authenticate (for task runners) | `npmAuthenticate@0` | ✅ Supported | `Npm.Authenticate(...)` -> `NpmAuthenticateTask`. |
 | NuGet | `NuGetCommand@2`, `NuGet@0` | ✅ Supported | `NuGet.*` builder (`Restore`, `Pack`, `Push`, `Custom`) -> `NuGetCommandTask` (`NuGetCommand@2`). The legacy `NuGet@0` major is not modelled. |
 | NuGet authenticate | `NuGetAuthenticate@1`, `NuGetAuthenticate@0` | ✅ Supported | `NuGet.Authenticate(...)` -> `NuGetAuthenticateTask`. |

@@ -2387,11 +2387,94 @@ namespace Sharpliner.AzureDevOps.Tasks
         [YamlDotNet.Serialization.YamlIgnore]
         public string WorkingFile { get; init; }
     }
+    public class NpmCiTask : Sharpliner.AzureDevOps.Tasks.NpmInstallCiTaskBase, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NpmCiTask>
+    {
+        public NpmCiTask() { }
+    }
+    public enum NpmCommand
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="ci")]
+        Ci = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="install")]
+        Install = 1,
+        [YamlDotNet.Serialization.YamlMember(Alias="publish")]
+        Publish = 2,
+        [YamlDotNet.Serialization.YamlMember(Alias="custom")]
+        Custom = 3,
+    }
+    public enum NpmCustomRegistry
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="useNpmrc")]
+        UseNpmrc = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="useFeed")]
+        UseFeed = 1,
+    }
+    public class NpmCustomTask : Sharpliner.AzureDevOps.Tasks.NpmInstallCiCustomTaskBase, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NpmCustomTask>
+    {
+        public NpmCustomTask(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> customCommand) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? CustomCommand { get; init; }
+    }
+    public abstract class NpmInstallCiCustomTaskBase : Sharpliner.AzureDevOps.Tasks.NpmTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NpmInstallCiCustomTaskBase>
+    {
+        protected NpmInstallCiCustomTaskBase(Sharpliner.AzureDevOps.Tasks.NpmCommand command) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public string[]? CustomEndpoint { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? CustomFeed { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.NpmCustomRegistry CustomRegistry { get; init; }
+    }
+    public abstract class NpmInstallCiTaskBase : Sharpliner.AzureDevOps.Tasks.NpmInstallCiCustomTaskBase, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NpmInstallCiTaskBase>
+    {
+        protected NpmInstallCiTaskBase(Sharpliner.AzureDevOps.Tasks.NpmCommand command) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? Verbose { get; init; }
+    }
+    public class NpmInstallTask : Sharpliner.AzureDevOps.Tasks.NpmInstallCiTaskBase, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NpmInstallTask>
+    {
+        public NpmInstallTask() { }
+    }
+    public enum NpmPublishRegistry
+    {
+        [YamlDotNet.Serialization.YamlMember(Alias="useExternalRegistry")]
+        UseExternalRegistry = 0,
+        [YamlDotNet.Serialization.YamlMember(Alias="useFeed")]
+        UseFeed = 1,
+    }
+    public class NpmPublishTask : Sharpliner.AzureDevOps.Tasks.NpmTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NpmPublishTask>
+    {
+        public NpmPublishTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? PublishEndpoint { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? PublishFeed { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? PublishPackageMetadata { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Tasks.NpmPublishRegistry PublishRegistry { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? Verbose { get; init; }
+    }
+    public abstract class NpmTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NpmTask>
+    {
+        protected NpmTask(Sharpliner.AzureDevOps.Tasks.NpmCommand command) { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WorkingDirectory { get; init; }
+    }
     public class NpmTaskBuilder
     {
         public NpmTaskBuilder() { }
         public Sharpliner.AzureDevOps.Tasks.NpmAuthenticateTask Authenticate(string workingFile, string[]? customEndpoints = null) { }
         public Sharpliner.AzureDevOps.Tasks.NpmAuthenticateTask Authenticate(string workingFile, string azureDevOpsServiceConnection, string feedUrl) { }
+        public Sharpliner.AzureDevOps.Tasks.NpmCiTask Ci(string[]? customEndpoints = null) { }
+        public Sharpliner.AzureDevOps.Tasks.NpmCiTask CiFromFeed(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> customFeed) { }
+        public Sharpliner.AzureDevOps.Tasks.NpmCustomTask Custom(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> customCommand, string[]? customEndpoints = null) { }
+        public Sharpliner.AzureDevOps.Tasks.NpmCustomTask CustomFromFeed(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> customCommand, Sharpliner.AzureDevOps.Expressions.AdoExpression<string> customFeed) { }
+        public Sharpliner.AzureDevOps.Tasks.NpmInstallTask Install(string[]? customEndpoints = null) { }
+        public Sharpliner.AzureDevOps.Tasks.NpmInstallTask InstallFromFeed(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> customFeed) { }
+        public Sharpliner.AzureDevOps.Tasks.NpmPublishTask PublishToExternalRegistry(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> publishEndpoint) { }
+        public Sharpliner.AzureDevOps.Tasks.NpmPublishTask PublishToFeed(Sharpliner.AzureDevOps.Expressions.AdoExpression<string> publishFeed) { }
     }
     public class NuGetAuthenticateTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.NuGetAuthenticateTask>
     {
