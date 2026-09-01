@@ -1,0 +1,11 @@
+﻿task: AzureRmWebAppDeployment@5
+
+inputs:
+  ConnectionType: AzureRM
+  azureSubscription: my-subscription
+  WebAppName: my-app
+  appType: webAppHyperVContainer
+  DockerNamespace: myregistry.azurecr.io
+  DockerRepository: nginx
+  DockerImageTag: $(Build.BuildId)
+  StartupCommand: dotnet exec MyApp.dll

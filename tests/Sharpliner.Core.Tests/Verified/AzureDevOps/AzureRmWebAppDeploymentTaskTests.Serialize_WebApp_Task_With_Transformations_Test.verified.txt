@@ -1,0 +1,14 @@
+﻿task: AzureRmWebAppDeployment@5
+
+inputs:
+  ConnectionType: AzureRM
+  azureSubscription: my-subscription
+  WebAppName: my-app
+  appType: webApp
+  packageForLinux: $(Build.ArtifactStagingDirectory)/**/*.zip
+  WebConfigParameters: -Handler iisnode -NodeStartFile server.js -appType node
+  enableXmlTransform: true
+  enableXmlVariableSubstitution: true
+  JSONFiles: appsettings.json
+  ScriptType: Inline Script
+  InlineScript: npm install

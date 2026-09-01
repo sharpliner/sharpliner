@@ -1,0 +1,22 @@
+﻿task: AzureRmWebAppDeployment@5
+
+inputs:
+  ConnectionType: AzureRM
+  azureSubscription: my-subscription
+  WebAppName: my-app
+  appType: webApp
+  packageForLinux: $(Build.ArtifactStagingDirectory)/**/*.zip
+  deployToSlotOrASE: true
+  ResourceGroupName: my-resource-group
+  SlotName: staging
+  VirtualApplication: my-virtual-app
+  AppSettings: -Port 5000 -WEBSITE_TIME_ZONE "Eastern Standard Time"
+  ConfigurationSettings: -phpVersion 5.6
+  enableCustomDeployment: true
+  DeploymentType: webDeploy
+  TakeAppOfflineFlag: true
+  SetParametersFile: SetParameters.xml
+  RemoveAdditionalFilesFlag: true
+  ExcludeFilesFromAppDataFlag: false
+  AdditionalArguments: -disableLink:AppPoolExtension
+  RenameFilesFlag: false

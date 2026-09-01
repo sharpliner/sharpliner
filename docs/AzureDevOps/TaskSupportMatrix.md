@@ -58,6 +58,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `ArchiveFiles@2` | `ArchiveFilesTask` |
 | `AzureCLI@2` | `AzureCli.Inline/File/FromFile/FromResourceFile` -> `InlineAzureCliTask`, `AzureCliFileTask` |
 | `AzureLoadTest@1` | `AzureLoadTestTask` |
+| `AzureRmWebAppDeployment@5` | `AzureAppServiceDeploy.WebApp/WebAppLinux/Package/Container/PublishProfile` -> `AzureRmWebAppDeploymentPackageTask`, `AzureRmWebAppDeploymentContainerTask`, `AzureRmWebAppDeploymentPublishProfileTask` |
 | `Bash@3` | `Bash.Inline/File/FromFile/FromResourceFile` -> `InlineBashTask`, `BashFileTask` (`bash` step shortcut) |
 | `CMake@1` | `CMakeTask` |
 | `CmdLine@2` | `Script.Inline/FromFile/FromResourceFile` -> `ScriptTask` (`script` step shortcut) |
@@ -124,7 +125,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Azure App Configuration Import | `AzureAppConfigurationImport@10` | ❌ Missing | No strongly typed model or builder. |
 | Azure App Configuration Snapshot | `AzureAppConfigurationSnapshot@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure App Service Classic (Deprecated) | `AzureWebPowerShellDeployment@1` | ⚪ Out of scope | Deprecated by Microsoft; superseded by `AzureRmWebAppDeployment`. |
-| Azure App Service deploy | `AzureRmWebAppDeployment@5`, `AzureRmWebAppDeployment@4`, `AzureRmWebAppDeployment@3`, `AzureRmWebAppDeployment@2` | ❌ Missing | No strongly typed model or builder. |
+| Azure App Service deploy | `AzureRmWebAppDeployment@5`, `AzureRmWebAppDeployment@4`, `AzureRmWebAppDeployment@3`, `AzureRmWebAppDeployment@2` | ✅ Supported | `AzureAppServiceDeploy.*` builder + `AzureRmWebAppDeploymentPackageTask`, `AzureRmWebAppDeploymentContainerTask` and `AzureRmWebAppDeploymentPublishProfileTask`. Only the current `@5` major is modelled; the older majors take the same inputs apart from the Linux deployment options. |
 | Azure App Service manage | `AzureAppServiceManage@0` | ❌ Missing | No strongly typed model or builder. |
 | Azure App Service Settings | `AzureAppServiceSettings@1` | ❌ Missing | No strongly typed model or builder. |
 | Azure CLI | `AzureCLI@3`, `AzureCLI@2`, `AzureCLI@1` | 🟡 Partial | `AzureCli.Inline/File/FromFile/FromResourceFile` builders emit `AzureCLI@2`. The current `AzureCLI@3` major is not modelled. |
@@ -284,16 +285,16 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Category | Total | ✅ Supported | 🟡 Partial | ❌ Missing | ⚪ Out of scope |
 |---|---|---|---|---|---|
 | Build | 28 | 1 | 0 | 20 | 7 |
-| Deploy | 50 | 0 | 1 | 43 | 6 |
+| Deploy | 50 | 1 | 1 | 42 | 6 |
 | Package | 18 | 3 | 1 | 8 | 6 |
 | Test | 10 | 3 | 0 | 4 | 3 |
 | Tool | 15 | 1 | 0 | 13 | 1 |
 | Utility | 47 | 10 | 0 | 34 | 3 |
-| **Total** | **168** | **18** | **2** | **122** | **26** |
+| **Total** | **168** | **19** | **2** | **121** | **26** |
 
-Sharpliner covers **20 of the 168** official built-in task families (18 fully, 2 partially).
+Sharpliner covers **21 of the 168** official built-in task families (19 fully, 2 partially).
 Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
-library grew from. The **122 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
+library grew from. The **121 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
 Service Fabric) and by tool installers.
 
 ## Tasks we would like to see contributed
@@ -345,7 +346,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `AzureAppConfigurationExport@10` – Azure App Configuration Export
 - `AzureAppConfigurationImport@10` – Azure App Configuration Import
 - `AzureAppConfigurationSnapshot@1` – Azure App Configuration Snapshot
-- `AzureRmWebAppDeployment@5` – Azure App Service deploy
 - `AzureAppServiceManage@0` – Azure App Service manage
 - `AzureAppServiceSettings@1` – Azure App Service Settings
 - `AzureCLI@3` – Azure CLI (partially covered today)

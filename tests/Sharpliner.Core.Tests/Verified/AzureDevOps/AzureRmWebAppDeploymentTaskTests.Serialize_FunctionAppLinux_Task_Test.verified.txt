@@ -1,0 +1,11 @@
+﻿task: AzureRmWebAppDeployment@5
+
+inputs:
+  ConnectionType: AzureRM
+  azureSubscription: my-subscription
+  WebAppName: my-function-app
+  appType: functionAppLinux
+  packageForLinux: $(Build.ArtifactStagingDirectory)/**/*.zip
+  RuntimeStackFunction: NODE|22
+  ScriptType: File Path
+  ScriptPath: scripts/post-deploy.sh

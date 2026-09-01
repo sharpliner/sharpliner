@@ -414,6 +414,35 @@ public class TaskBuilderTests
         return Verify(pipeline.Serialize());
     }
 
+    private class AzureAppServiceDeployTaskPipeline : TestPipeline
+    {
+        public override SingleStagePipeline Pipeline => new()
+        {
+            Jobs =
+            {
+                new Job("test")
+                {
+                    Steps =
+                    {
+                        AzureAppServiceDeploy.WebApp("my-subscription", "my-app", "$(Build.ArtifactStagingDirectory)/**/*.zip", "Deploy web app"),
+                        AzureAppServiceDeploy.WebAppLinux("my-subscription", "my-linux-app", "$(Build.ArtifactStagingDirectory)/**/*.zip", "DOTNETCORE|8.0"),
+                        AzureAppServiceDeploy.Package("my-subscription", "my-api-app", "$(Build.ArtifactStagingDirectory)/**/*.zip", AzureAppServicePackageAppType.ApiApp),
+                        AzureAppServiceDeploy.Container("my-subscription", "my-container-app", "myregistry.azurecr.io", "nginx", "latest"),
+                        AzureAppServiceDeploy.PublishProfile("$(System.DefaultWorkingDirectory)/**/*.pubxml", "$(PublishProfilePassword)", "$(Build.ArtifactStagingDirectory)/**/*.zip"),
+                    }
+                }
+            }
+        };
+    }
+
+    [Fact]
+    public Task Serialize_AzureAppServiceDeploy_Builder_Test()
+    {
+        AzureAppServiceDeployTaskPipeline pipeline = new();
+
+        return Verify(pipeline.Serialize());
+    }
+
     private class TaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
