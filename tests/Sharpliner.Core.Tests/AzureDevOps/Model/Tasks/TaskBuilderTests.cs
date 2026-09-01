@@ -392,6 +392,7 @@ public class TaskBuilderTests
     private class AzurePowerShellTaskPipeline : TestPipeline
     private class AzureWebAppTaskPipeline : TestPipeline
     private class MSBuildTaskPipeline : TestPipeline
+    private class SshTaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
         {
@@ -414,6 +415,11 @@ public class TaskBuilderTests
                         AzurePowerShell.Inline("connectedServiceNameARM", displayName: null, "Write-Host \"test\"")
                         MSBuild.Build("**/*.sln"),
                         MSBuild.Build("MySolution.sln", platform: "x64", configuration: "Release", msbuildArguments: "/t:Restore;Build", displayName: "Build solution"),
+                        Ssh.Commands("ssh-service-connection", "cd /home/ubuntu/app", "./deploy.sh"),
+                        Ssh.Script("ssh-service-connection", "scripts/deploy.sh", "--environment prod"),
+                        Ssh.Inline("ssh-service-connection", "set -euo pipefail", "./build.sh"),
+                        Ssh.FromFile("ssh-service-connection", "AzureDevOps/Resources/test-script.sh"),
+                        Ssh.FromResourceFile("ssh-service-connection", "test-script.sh"),
                     }
                 }
             }
@@ -513,6 +519,9 @@ public class TaskBuilderTests
     public Task Serialize_MSBuild_Builder_Test()
     {
         MSBuildTaskPipeline pipeline = new();
+    public Task Serialize_Ssh_Builder_Test()
+    {
+        SshTaskPipeline pipeline = new();
 
         return Verify(pipeline.Serialize());
     }

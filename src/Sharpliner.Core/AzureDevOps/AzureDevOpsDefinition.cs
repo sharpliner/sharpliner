@@ -354,6 +354,11 @@ public abstract class AzureDevOpsDefinition
     protected static MSBuildTaskBuilder MSBuild { get; } = new();
 
     /// <summary>
+    /// Creates an SSH task.
+    /// </summary>
+    protected static SshTaskBuilder Ssh { get; } = new();
+
+    /// <summary>
     /// Creates a generic pipeline task.
     /// </summary>
     protected static AzureDevOpsTask Task(string taskName, string? displayName = null)
