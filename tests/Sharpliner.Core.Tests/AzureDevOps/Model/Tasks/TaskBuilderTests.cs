@@ -646,6 +646,7 @@ public class TaskBuilderTests
 
     private class KubernetesManifestTaskPipeline : TestPipeline
     private class GradleTaskPipeline : TestPipeline
+    private class VSTestTaskPipeline : TestPipeline
     {
         public override SingleStagePipeline Pipeline => new()
         {
@@ -679,6 +680,27 @@ public class TaskBuilderTests
                         Gradle.SonarQubeAnalysis("build", pluginVersionChoice: GradlePluginVersionChoice.Build),
                         Gradle.StaticAnalysis("check", checkstyle: true, pmd: true),
                         Gradle.SpotBugsAnalysis("check", pluginVersion: "4.8.3"),
+                        VSTest.TestAssemblies("**\\bin\\**\\*tests.dll")
+                            .UsingPlatformVersion(VSTestVersion.VisualStudio2022) with
+                        {
+                            TestFilterCriteria = "Category=Unit",
+                            RunInParallel = true,
+                        },
+                        VSTest.V3.TestPlan("12", "34,56", "78")
+                            .UsingPlatformLocation("C:\\tools\\vstest.console.exe") with
+                        {
+                            DistributionBatchType = VSTestDistributionBatchType.BasedOnAssembly,
+                        },
+                        VSTest.V2.TestRun()
+                            .Build() with
+                        {
+                            DiagnosticsEnabled = true,
+                            CollectDumpOn = VSTestCollectDumpOn.Never,
+                        },
+                        VSTest.V1("**\\*test*.dll") with
+                        {
+                            VsTestVersion = VSTestV1Version.Latest,
+                        },
                     }
                 }
             }
@@ -692,6 +714,9 @@ public class TaskBuilderTests
     public Task Serialize_Gradle_Builders_Test()
     {
         GradleTaskPipeline pipeline = new();
+    public Task Serialize_VSTest_Builder_Test()
+    {
+        VSTestTaskPipeline pipeline = new();
 
         return Verify(pipeline.Serialize());
     }

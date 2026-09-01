@@ -222,7 +222,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Publish code coverage results | `PublishCodeCoverageResults@2`, `PublishCodeCoverageResults@1` | ✅ Supported | `PublishCodeCoverageResultsTask` (`PublishCodeCoverageResults@2`). |
 | Publish Test Results | `PublishTestResults@2`, `PublishTestResults@1` | ✅ Supported | `PublishTestResultsTask` (`PublishTestResults@2`). |
 | Run functional tests | `RunVisualStudioTestsusingTestAgent@1` | ⚪ Out of scope | Deprecated by Microsoft; superseded by `VSTest`. |
-| Visual Studio Test | `VSTest@3`, `VSTest@2`, `VSTest@1` | ❌ Missing | No strongly typed model or builder. |
+| Visual Studio Test | `VSTest@3`, `VSTest@2`, `VSTest@1` | ✅ Supported | `VSTest` builder (`TestAssemblies`/`TestPlan`/`TestRun`) -> `VSTestTask` (`@3`) with `VSTestV2Task` and `VSTestV1Task` for useful older majors. |
 | Visual Studio test agent deployment | `DeployVisualStudioTestAgent@2`, `DeployVisualStudioTestAgent@1` | ⚪ Out of scope | Deprecated by Microsoft; superseded by `VSTest`. |
 
 ### Tool tasks
@@ -336,6 +336,11 @@ Most of the covered tasks are the ones needed for .NET, NuGet and artifact workf
 
 Sharpliner covers **19 of the 168** official built-in task families (17 fully, 2 partially).
 Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
+| Utility | 47 | 9 | 0 | 35 | 3 |
+| **Total** | **168** | **17** | **2** | **123** | **26** |
+
+Sharpliner covers **19 of the 168** official built-in task families (17 fully, 2 partially).
+Most of the covered tasks are the ones needed for .NET, NuGet and artifact workflows, which is where the
 library grew from. The **123 missing** families are dominated by deploy tasks (Azure resources, Kubernetes,
 Service Fabric) and by tool installers.
 
@@ -362,6 +367,8 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 `Docker@2`, `PublishBuildArtifacts@1`, `DownloadBuildArtifacts@1`, `AzureKeyVault@2`,
 `PublishBuildArtifacts@1`, `DownloadBuildArtifacts@1`, `AzureKeyVault@2`, `AzurePowerShell@5`,
 `Npm@1` and `VSTest@3`.
+`Docker@2`, `PublishBuildArtifacts@1`, `DownloadBuildArtifacts@1`, `AzureKeyVault@2`, `AzurePowerShell@5`,
+and `Npm@1`.
 
 ### Missing build tasks
 
@@ -441,7 +448,6 @@ Good candidates to start with, as they are the most commonly used ones in .NET p
 - `AppCenterTest@1` – App Center test
 - `AzureTestPlan@0` – Azure Test Plan
 - `ContainerStructureTest@0` – Container Structure Test
-- `VSTest@3` – Visual Studio Test
 
 ### Missing tool tasks
 

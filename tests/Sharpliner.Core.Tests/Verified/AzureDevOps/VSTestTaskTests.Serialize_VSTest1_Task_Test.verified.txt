@@ -1,0 +1,19 @@
+﻿task: VSTest@1
+
+displayName: Visual Studio Test
+
+inputs:
+  testAssembly: '**\bin\**\*test.dll'
+  testFiltercriteria: Category=Smoke
+  runSettingsFile: legacy.runsettings
+  overrideTestrunParameters: AppUrl=$(DeployUrl)
+  codeCoverageEnabled: true
+  runInParallel: true
+  vstestLocationMethod: version
+  vsTestVersion: 14.0
+  pathtoCustomTestAdapters: legacy-adapters
+  otherConsoleOptions: /InIsolation
+  testRunTitle: Legacy
+  platform: Any CPU
+  configuration: Release
+  publishRunAttachments: true

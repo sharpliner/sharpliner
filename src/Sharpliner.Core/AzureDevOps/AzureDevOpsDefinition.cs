@@ -432,6 +432,9 @@ public abstract class AzureDevOpsDefinition
     /// Creates a Maven task.
     /// </summary>
     protected static MavenTaskBuilder Maven { get; } = new();
+    /// Creates a Visual Studio Test task.
+    /// </summary>
+    protected static VSTestTaskBuilder VSTest { get; } = new();
 
     #endregion
 

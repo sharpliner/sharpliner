@@ -1,0 +1,40 @@
+﻿task: VSTest@3
+
+displayName: Visual Studio Test
+
+inputs:
+  testSelector: testAssemblies
+  testAssemblyVer2: '**\bin\**\*tests.dll'
+  searchFolder: $(System.DefaultWorkingDirectory)
+  testFiltercriteria: Priority=1|Category=Unit
+  runOnlyImpactedTests: true
+  runAllTestsAfterXBuilds: 25
+  uiTests: false
+  vstestLocationMethod: version
+  vsTestVersion: 17.0
+  runSettingsFile: tests.runsettings
+  overrideTestrunParameters: -environment ci
+  pathtoCustomTestAdapters: adapters
+  runInParallel: true
+  runTestsInIsolation: true
+  codeCoverageEnabled: true
+  otherConsoleOptions: /Blame
+  distributionBatchType: basedOnExecutionTime
+  batchingBasedOnExecutionTimeOption: customTimeBatchSize
+  customRunTimePerBatchValue: 120
+  dontDistribute: false
+  testRunTitle: Unit tests
+  platform: x64
+  configuration: Release
+  customLoggerConfig: trx
+  publishRunAttachments: true
+  donotPublishTestResults: false
+  failOnMinTestsNotRun: true
+  minimumExpectedTests: 5
+  diagnosticsEnabled: true
+  collectDumpOn: always
+  rerunFailedTests: true
+  rerunType: basedOnTestFailureCount
+  rerunFailedTestCasesMaxLimit: 10
+  rerunMaxAttempts: 4
+  ConnectedServiceName: AzureConnection

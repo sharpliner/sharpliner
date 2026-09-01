@@ -1,0 +1,21 @@
+﻿task: VSTest@2
+
+displayName: Visual Studio Test
+
+inputs:
+  testSelector: testPlan
+  testPlan: 42
+  testSuite: 9,15
+  testConfiguration: 3
+  resultsFolder: $(Agent.TempDirectory)\results
+  vstestLocationMethod: location
+  vstestLocation: C:\tools\vstest.console.exe
+  distributionBatchType: basedOnTestCases
+  batchingBasedOnAgentsOption: customBatchSize
+  customBatchSizeValue: 20
+  testRunTitle: Plan suite
+  platform: x86
+  configuration: Debug
+  publishRunAttachments: false
+  diagnosticsEnabled: true
+  collectDumpOn: onAbortOnly
