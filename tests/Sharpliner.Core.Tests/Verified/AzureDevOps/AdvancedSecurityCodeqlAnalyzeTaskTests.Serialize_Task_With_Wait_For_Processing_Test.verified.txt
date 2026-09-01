@@ -1,0 +1,8 @@
+﻿task: AdvancedSecurity-Codeql-Analyze@1
+
+displayName: Advanced Security Perform CodeQL analysis
+
+inputs:
+  WaitForProcessing: true
+  WaitForProcessingInterval: 10
+  WaitForProcessingTimeout: 300

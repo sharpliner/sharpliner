@@ -90,6 +90,7 @@ namespace Sharpliner.AzureDevOps
         protected AzureDevOpsDefinition() { }
         protected static Sharpliner.AzureDevOps.Tasks.AdvancedSecurityTaskBuilder AdvancedSecurity { get; }
         protected static Sharpliner.AzureDevOps.Tasks.AzureAppServiceDeployTaskBuilder AzureAppServiceDeploy { get; }
+        protected static Sharpliner.AzureDevOps.Tasks.AdvancedSecurityCodeqlTaskBuilder AdvancedSecurityCodeql { get; }
         protected static Sharpliner.AzureDevOps.Tasks.AzureCliTaskBuilder AzureCli { get; }
         protected static Sharpliner.AzureDevOps.Tasks.AzureCliV3TaskBuilder AzureCliV3 { get; }
         protected static Sharpliner.AzureDevOps.Tasks.AzureKeyVaultTaskBuilder AzureKeyVault { get; }
@@ -1582,6 +1583,20 @@ namespace Sharpliner.AzureDevOps.Tasks
     public class AdvancedSecurityTaskBuilder
     {
         public Sharpliner.AzureDevOps.Tasks.AdvancedSecurityCodeqlTaskBuilder Codeql { get; }
+    public class AdvancedSecurityCodeqlAnalyzeTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.AdvancedSecurityCodeqlAnalyzeTask>
+    {
+        public AdvancedSecurityCodeqlAnalyzeTask() { }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<bool>? WaitForProcessing { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WaitForProcessingInterval { get; init; }
+        [YamlDotNet.Serialization.YamlIgnore]
+        public Sharpliner.AzureDevOps.Expressions.AdoExpression<string>? WaitForProcessingTimeout { get; init; }
+    }
+    public class AdvancedSecurityCodeqlTaskBuilder
+    {
+        public Sharpliner.AzureDevOps.Tasks.AdvancedSecurityCodeqlAnalyzeTask Analyze { get; }
+        public Sharpliner.AzureDevOps.Tasks.AdvancedSecurityCodeqlAnalyzeTask AnalyzeAndWait(int? waitForProcessingIntervalSeconds = default, int? waitForProcessingTimeoutSeconds = default) { }
     }
     public class ArchiveFilesTask : Sharpliner.AzureDevOps.Tasks.AzureDevOpsTask, System.IEquatable<Sharpliner.AzureDevOps.Tasks.ArchiveFilesTask>
     {
