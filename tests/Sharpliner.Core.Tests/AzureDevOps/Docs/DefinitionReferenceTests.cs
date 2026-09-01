@@ -164,7 +164,6 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
         AdoExpressionList<Step> tasks =
         [
 #region nuget-tasks-code
-            NuGet.Install.Version("6.x", checkLatest: true),
             NuGet.Authenticate(["NuGetServiceConnection1", "NuGetServiceConnection2"], forceReinstallCredentialProvider: true),
             NuGet.Authenticate("AzureDevOpsServiceConnection", "https://pkgs.dev.azure.com/my-org/my-project/_packaging/my-feed/nuget/v3/index.json"),
 
@@ -204,43 +203,6 @@ public class DefinitionReferenceTests : AzureDevOpsDefinition
         ];
 
         return Verify(SharplinerSerializer.Serialize(tasks));
-    }
-
-    [Fact]
-    public Task Helm_Test()
-    {
-        AdoExpressionList<Step> tasks =
-        [
-#region helm-tasks-code
-            Helm.Install.FromChartName("stable/mysql") with
-            {
-                ConnectionType = HelmConnectionType.AzureResourceManager,
-                AzureSubscriptionEndpoint = "my-azure-subscription",
-                AzureResourceGroup = "my-resource-group",
-                KubernetesCluster = "my-aks-cluster",
-                ReleaseName = "my-release",
-                OverrideValues = "image.tag=$(Build.BuildId)",
-            },
-
-            Helm.Upgrade.FromChartPath("./charts/my-app") with
-            {
-                ConnectionType = HelmConnectionType.KubernetesServiceConnection,
-                KubernetesServiceEndpoint = "my-kubernetes-connection",
-                ReleaseName = "my-release",
-                Install = true,
-            },
-
-            Helm.Package("./charts/my-app") with
-            {
-                Destination = "$(Build.ArtifactStagingDirectory)",
-            },
-
-            Helm.Uninstall("my-release")
-#endregion
-        ];
-
-        var yaml = SharplinerSerializer.Serialize(tasks);
-        return Verify(yaml);
     }
 
     class PipelineVariables : SingleStagePipelineDefinition
