@@ -1,0 +1,15 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: DockerCompose@1
+    displayName: Docker Compose command
+    inputs:
+      action: Run a Docker Compose command
+      dockerComposeCommand: config
+      dockerComposeFile: src/docker-compose.yml
+      dockerComposeFileArgs: |-
+        TAG=$(Build.BuildNumber)
+        CONFIG=Release
+      arguments: --quiet
+      cwd: /workspace
+      dockerComposePath: /usr/local/bin/docker-compose

@@ -1,0 +1,17 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: DockerCompose@1
+    displayName: Docker Compose run a specific service
+    inputs:
+      action: Run a specific service
+      serviceName: web
+      dockerComposeFile: src/docker-compose.yml
+      containerName: web-container
+      ports: |-
+        8080:80
+        8443:443
+      workDir: /workspace/app
+      entrypoint: /bin/sh
+      containerCommand: -c "dotnet MyApp.dll"
+      detached: false

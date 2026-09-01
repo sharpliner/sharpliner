@@ -1,0 +1,11 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: DockerCompose@1
+    displayName: Docker Compose lock services
+    inputs:
+      action: Lock services
+      dockerComposeFile: docker-compose.yml
+      removeBuildOptions: true
+      baseResolveDirectory: src/containers
+      outputDockerComposeFile: $(Build.StagingDirectory)/docker-compose.lock.yml

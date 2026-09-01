@@ -1,0 +1,13 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: DockerCompose@1
+    displayName: Docker Compose run services
+    inputs:
+      action: Run services
+      dockerComposeFile: docker-compose.yml
+      projectName: integration-tests
+      buildImages: false
+      detached: false
+      abortOnContainerExit: true
+      arguments: --remove-orphans

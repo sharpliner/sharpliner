@@ -1,0 +1,11 @@
+﻿jobs:
+- job: job
+  steps:
+  - task: DockerCompose@1
+    displayName: Docker Compose combine configuration
+    inputs:
+      action: Combine configuration
+      dockerComposeFile: docker-compose.yml
+      removeBuildOptions: true
+      baseResolveDirectory: src/containers
+      outputDockerComposeFile: $(Build.StagingDirectory)/docker-compose.combined.yml

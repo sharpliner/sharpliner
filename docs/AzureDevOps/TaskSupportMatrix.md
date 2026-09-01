@@ -68,6 +68,7 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | `CopyFiles@2` | `CopyFilesTask` |
 | `DeleteFiles@1` | `DeleteFilesTask` |
 | `Docker@2` | `Docker.Build/Push/BuildAndPush/Login/Logout/Start/Stop` -> `DockerTask` and its command specializations |
+| `DockerCompose@1` | `DockerCompose.*` -> `DockerComposeTask` and its action-specific `Build`/`Push`/`Run`/`RunService`/`Lock`/`WriteImageDigests`/`CombineConfiguration`/`Command` specializations |
 | `DotNetCoreCLI@2` | `DotNet.*` -> `DotNetCoreCliTask` and its `Build`/`Test`/`Pack`/`Publish`/`Push`/`Restore` specializations |
 | `DownloadPipelineArtifact@2` | `Download.Current/FromPipelineResource/SpecificBuild/LatestFromBranch/None` -> `DownloadTask` (`download` step shortcut) |
 | `ExtractFiles@1` | `ExtractFilesTask` |
@@ -103,6 +104,8 @@ These are all the tasks Sharpliner emits from a dedicated API today:
 | Container Build | `ContainerBuild@0` | ❌ Missing | No strongly typed model or builder. |
 | Docker | `Docker@2`, `Docker@1`, `Docker@0` | ✅ Supported | `Docker.Build/Push/BuildAndPush/Login/Logout/Start/Stop` -> `DockerTask` and its command specializations model the current `Docker@2` major. Superseded `Docker@1`/`Docker@0` majors are not modelled. |
 | Docker Compose | `DockerCompose@1`, `DockerCompose@0` | ❌ Missing | No strongly typed model or builder. |
+| Docker | `Docker@2`, `Docker@1`, `Docker@0` | ❌ Missing | No strongly typed model or builder. |
+| Docker Compose | `DockerCompose@1`, `DockerCompose@0` | ✅ Supported | `DockerCompose.*` builder + `DockerComposeTask` with action-specific `Build`/`Push`/`Run`/`RunService`/`Lock`/`WriteImageDigests`/`CombineConfiguration`/`Command` records. Only the current `@1` major is modelled. |
 | Download GitHub NuGet | `DownloadGitHubNugetPackage@1` | ⚪ Out of scope | Deprecated by Microsoft; superseded by `NuGetCommand@2`/`DotNetCoreCLI@2` with a GitHub service connection, both of which are supported. |
 | Go | `Go@0` | ❌ Missing | No strongly typed model or builder. |
 | Gradle | `Gradle@4`, `Gradle@3`, `Gradle@2`, `Gradle@1` | ❌ Missing | No strongly typed model or builder. |
