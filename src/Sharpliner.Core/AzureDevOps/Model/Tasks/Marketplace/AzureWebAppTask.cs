@@ -138,7 +138,7 @@ public abstract record AzureWebAppTask : AzureDevOpsTask
 public record AzureWebAppWindowsPackageTask : AzureWebAppTask
 {
     /// <summary>
-    /// Optional. Use when <see cref="AppType"/> is Windows and package source is not WAR/JAR.
+    /// Optional. Use when <see cref="AzureWebAppTask.AppType"/> is Windows and package source is not WAR/JAR.
     /// Controls how deployment is performed.
     /// </summary>
     [YamlIgnore]
@@ -351,126 +351,167 @@ public enum AzureWebAppDeploymentMethod
 /// </summary>
 public enum AzureWebAppRuntimeStack
 {
+    /// <summary>Use the .NET Core 10.0 runtime stack.</summary>
     [YamlMember(Alias = "DOTNETCORE|10.0")]
     DotNetCore10_0,
 
+    /// <summary>Use the .NET Core 9.0 runtime stack.</summary>
     [YamlMember(Alias = "DOTNETCORE|9.0")]
     DotNetCore9_0,
 
+    /// <summary>Use the .NET Core 8.0 runtime stack.</summary>
     [YamlMember(Alias = "DOTNETCORE|8.0")]
     DotNetCore8_0,
 
+    /// <summary>Use the .NET Core 7.0 runtime stack.</summary>
     [YamlMember(Alias = "DOTNETCORE|7.0")]
     DotNetCore7_0,
 
+    /// <summary>Use the .NET Core 6.0 runtime stack.</summary>
     [YamlMember(Alias = "DOTNETCORE|6.0")]
     DotNetCore6_0,
 
+    /// <summary>Use the Node.js 24 LTS runtime stack.</summary>
     [YamlMember(Alias = "NODE|24-lts")]
     Node24Lts,
 
+    /// <summary>Use the Node.js 22 LTS runtime stack.</summary>
     [YamlMember(Alias = "NODE|22-lts")]
     Node22Lts,
 
+    /// <summary>Use the Node.js 20 LTS runtime stack.</summary>
     [YamlMember(Alias = "NODE|20-lts")]
     Node20Lts,
 
+    /// <summary>Use the Node.js 18 LTS runtime stack.</summary>
     [YamlMember(Alias = "NODE|18-lts")]
     Node18Lts,
 
+    /// <summary>Use the Node.js 16 LTS runtime stack.</summary>
     [YamlMember(Alias = "NODE|16-lts")]
     Node16Lts,
 
+    /// <summary>Use the Python 3.13 runtime stack.</summary>
     [YamlMember(Alias = "PYTHON|3.13")]
     Python3_13,
 
+    /// <summary>Use the Python 3.12 runtime stack.</summary>
     [YamlMember(Alias = "PYTHON|3.12")]
     Python3_12,
 
+    /// <summary>Use the Python 3.11 runtime stack.</summary>
     [YamlMember(Alias = "PYTHON|3.11")]
     Python3_11,
 
+    /// <summary>Use the Python 3.10 runtime stack.</summary>
     [YamlMember(Alias = "PYTHON|3.10")]
     Python3_10,
 
+    /// <summary>Use the Python 3.9 runtime stack.</summary>
     [YamlMember(Alias = "PYTHON|3.9")]
     Python3_9,
 
+    /// <summary>Use the Python 3.8 runtime stack.</summary>
     [YamlMember(Alias = "PYTHON|3.8")]
     Python3_8,
 
+    /// <summary>Use the PHP 8.3 runtime stack.</summary>
     [YamlMember(Alias = "PHP|8.3")]
     Php8_3,
 
+    /// <summary>Use the PHP 8.2 runtime stack.</summary>
     [YamlMember(Alias = "PHP|8.2")]
     Php8_2,
 
+    /// <summary>Use the PHP 8.1 runtime stack.</summary>
     [YamlMember(Alias = "PHP|8.1")]
     Php8_1,
 
+    /// <summary>Use the PHP 8.0 runtime stack.</summary>
     [YamlMember(Alias = "PHP|8.0")]
     Php8_0,
 
+    /// <summary>Use the Java 21 runtime stack.</summary>
     [YamlMember(Alias = "JAVA|21-java21")]
     Java21,
 
+    /// <summary>Use the Java 17 runtime stack.</summary>
     [YamlMember(Alias = "JAVA|17-java17")]
     Java17,
 
+    /// <summary>Use the Java 11 runtime stack.</summary>
     [YamlMember(Alias = "JAVA|11-java11")]
     Java11,
 
+    /// <summary>Use the Java 8 runtime stack.</summary>
     [YamlMember(Alias = "JAVA|8-jre8")]
     Java8,
 
+    /// <summary>Use JBoss EAP 8 with Java 17.</summary>
     [YamlMember(Alias = "JBOSSEAP|8-java17")]
     JbossEap8Java17,
 
+    /// <summary>Use JBoss EAP 8 with Java 11.</summary>
     [YamlMember(Alias = "JBOSSEAP|8-java11")]
     JbossEap8Java11,
 
+    /// <summary>Use JBoss EAP 7 with Java 17.</summary>
     [YamlMember(Alias = "JBOSSEAP|7-java17")]
     JbossEap7Java17,
 
+    /// <summary>Use JBoss EAP 7 with Java 11.</summary>
     [YamlMember(Alias = "JBOSSEAP|7-java11")]
     JbossEap7Java11,
 
+    /// <summary>Use JBoss EAP 7 with Java 8.</summary>
     [YamlMember(Alias = "JBOSSEAP|7-java8")]
     JbossEap7Java8,
 
+    /// <summary>Use Tomcat 10.1 with Java 21.</summary>
     [YamlMember(Alias = "TOMCAT|10.1-java21")]
     Tomcat10_1Java21,
 
+    /// <summary>Use Tomcat 10.1 with Java 17.</summary>
     [YamlMember(Alias = "TOMCAT|10.1-java17")]
     Tomcat10_1Java17,
 
+    /// <summary>Use Tomcat 10.1 with Java 11.</summary>
     [YamlMember(Alias = "TOMCAT|10.1-java11")]
     Tomcat10_1Java11,
 
+    /// <summary>Use Tomcat 10.0 with Java 17.</summary>
     [YamlMember(Alias = "TOMCAT|10.0-java17")]
     Tomcat10_0Java17,
 
+    /// <summary>Use Tomcat 10.0 with Java 11.</summary>
     [YamlMember(Alias = "TOMCAT|10.0-java11")]
     Tomcat10_0Java11,
 
+    /// <summary>Use Tomcat 10.0 with Java 8.</summary>
     [YamlMember(Alias = "TOMCAT|10.0-jre8")]
     Tomcat10_0Java8,
 
+    /// <summary>Use Tomcat 9.0 with Java 21.</summary>
     [YamlMember(Alias = "TOMCAT|9.0-java21")]
     Tomcat9_0Java21,
 
+    /// <summary>Use Tomcat 9.0 with Java 17.</summary>
     [YamlMember(Alias = "TOMCAT|9.0-java17")]
     Tomcat9_0Java17,
 
+    /// <summary>Use Tomcat 9.0 with Java 11.</summary>
     [YamlMember(Alias = "TOMCAT|9.0-java11")]
     Tomcat9_0Java11,
 
+    /// <summary>Use Tomcat 9.0 with Java 8.</summary>
     [YamlMember(Alias = "TOMCAT|9.0-jre8")]
     Tomcat9_0Java8,
 
+    /// <summary>Use Tomcat 8.5 with Java 11.</summary>
     [YamlMember(Alias = "TOMCAT|8.5-java11")]
     Tomcat8_5Java11,
 
+    /// <summary>Use Tomcat 8.5 with Java 8.</summary>
     [YamlMember(Alias = "TOMCAT|8.5-jre8")]
     Tomcat8_5Java8,
 }

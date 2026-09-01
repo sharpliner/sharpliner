@@ -127,6 +127,11 @@ public abstract record AzureContainerAppsTask : AzureDevOpsTask
         init => SetProperty("disableTelemetry", value);
     }
 
+    /// <summary>
+    /// Initializes the common Azure Container Apps deployment inputs.
+    /// </summary>
+    /// <param name="taskName">Name and version of the Azure Container Apps task.</param>
+    /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
     protected AzureContainerAppsTask(string taskName, AdoExpression<string> azureSubscription)
         : base(taskName)
     {
@@ -224,6 +229,13 @@ public abstract record AzureContainerAppsFromSourceTask : AzureContainerAppsTask
         init => SetProperty("runtimeStack", value);
     }
 
+    /// <summary>
+    /// Initializes the common inputs for a source-based Azure Container Apps deployment.
+    /// </summary>
+    /// <param name="taskName">Name and version of the Azure Container Apps task.</param>
+    /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
+    /// <param name="appSourcePath">Absolute path of the application source code on the agent.</param>
+    /// <param name="acrName">Name of the Azure Container Registry to which the built image is pushed.</param>
     protected AzureContainerAppsFromSourceTask(string taskName, AdoExpression<string> azureSubscription, AdoExpression<string> appSourcePath, AdoExpression<string> acrName)
         : base(taskName, azureSubscription)
     {
@@ -278,6 +290,12 @@ public abstract record AzureContainerAppsFromImageTask : AzureContainerAppsTask
         init => SetProperty("acrPassword", value);
     }
 
+    /// <summary>
+    /// Initializes the common inputs for an image-based Azure Container Apps deployment.
+    /// </summary>
+    /// <param name="taskName">Name and version of the Azure Container Apps task.</param>
+    /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
+    /// <param name="imageToDeploy">Full reference of the container image to deploy.</param>
     protected AzureContainerAppsFromImageTask(string taskName, AdoExpression<string> azureSubscription, AdoExpression<string> imageToDeploy)
         : base(taskName, azureSubscription)
     {
@@ -301,6 +319,12 @@ public abstract record AzureContainerAppsFromYamlTask : AzureContainerAppsTask
         init => SetProperty("yamlConfigPath", value);
     }
 
+    /// <summary>
+    /// Initializes the common inputs for a YAML-based Azure Container Apps deployment.
+    /// </summary>
+    /// <param name="taskName">Name and version of the Azure Container Apps task.</param>
+    /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
+    /// <param name="yamlConfigPath">Full path on the agent to the Container Apps YAML configuration file.</param>
     protected AzureContainerAppsFromYamlTask(string taskName, AdoExpression<string> azureSubscription, AdoExpression<string> yamlConfigPath)
         : base(taskName, azureSubscription)
     {
@@ -313,6 +337,12 @@ public abstract record AzureContainerAppsFromYamlTask : AzureContainerAppsTask
 /// </summary>
 public record AzureContainerAppsV1FromSourceTask : AzureContainerAppsFromSourceTask
 {
+    /// <summary>
+    /// Initializes an <c>AzureContainerApps@1</c> task that builds from source and deploys the resulting image.
+    /// </summary>
+    /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
+    /// <param name="appSourcePath">Absolute path of the application source code on the agent.</param>
+    /// <param name="acrName">Name of the Azure Container Registry to which the built image is pushed.</param>
     public AzureContainerAppsV1FromSourceTask(AdoExpression<string> azureSubscription, AdoExpression<string> appSourcePath, AdoExpression<string> acrName)
         : base("AzureContainerApps@1", azureSubscription, appSourcePath, acrName)
     {
@@ -324,6 +354,11 @@ public record AzureContainerAppsV1FromSourceTask : AzureContainerAppsFromSourceT
 /// </summary>
 public record AzureContainerAppsV1FromImageTask : AzureContainerAppsFromImageTask
 {
+    /// <summary>
+    /// Initializes an <c>AzureContainerApps@1</c> task that deploys an existing container image.
+    /// </summary>
+    /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
+    /// <param name="imageToDeploy">Full reference of the container image to deploy.</param>
     public AzureContainerAppsV1FromImageTask(AdoExpression<string> azureSubscription, AdoExpression<string> imageToDeploy)
         : base("AzureContainerApps@1", azureSubscription, imageToDeploy)
     {
@@ -335,6 +370,11 @@ public record AzureContainerAppsV1FromImageTask : AzureContainerAppsFromImageTas
 /// </summary>
 public record AzureContainerAppsV1FromYamlTask : AzureContainerAppsFromYamlTask
 {
+    /// <summary>
+    /// Initializes an <c>AzureContainerApps@1</c> task that deploys from a YAML configuration file.
+    /// </summary>
+    /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
+    /// <param name="yamlConfigPath">Full path on the agent to the Container Apps YAML configuration file.</param>
     public AzureContainerAppsV1FromYamlTask(AdoExpression<string> azureSubscription, AdoExpression<string> yamlConfigPath)
         : base("AzureContainerApps@1", azureSubscription, yamlConfigPath)
     {
@@ -347,6 +387,12 @@ public record AzureContainerAppsV1FromYamlTask : AzureContainerAppsFromYamlTask
 [Obsolete("AzureContainerApps@0 is deprecated by Azure Pipelines. Prefer AzureContainerApps@1.")]
 public record AzureContainerAppsV0FromSourceTask : AzureContainerAppsFromSourceTask
 {
+    /// <summary>
+    /// Initializes an <c>AzureContainerApps@0</c> task that builds from source and deploys the resulting image.
+    /// </summary>
+    /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
+    /// <param name="appSourcePath">Absolute path of the application source code on the agent.</param>
+    /// <param name="acrName">Name of the Azure Container Registry to which the built image is pushed.</param>
     public AzureContainerAppsV0FromSourceTask(AdoExpression<string> azureSubscription, AdoExpression<string> appSourcePath, AdoExpression<string> acrName)
         : base("AzureContainerApps@0", azureSubscription, appSourcePath, acrName)
     {
@@ -359,6 +405,11 @@ public record AzureContainerAppsV0FromSourceTask : AzureContainerAppsFromSourceT
 [Obsolete("AzureContainerApps@0 is deprecated by Azure Pipelines. Prefer AzureContainerApps@1.")]
 public record AzureContainerAppsV0FromImageTask : AzureContainerAppsFromImageTask
 {
+    /// <summary>
+    /// Initializes an <c>AzureContainerApps@0</c> task that deploys an existing container image.
+    /// </summary>
+    /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
+    /// <param name="imageToDeploy">Full reference of the container image to deploy.</param>
     public AzureContainerAppsV0FromImageTask(AdoExpression<string> azureSubscription, AdoExpression<string> imageToDeploy)
         : base("AzureContainerApps@0", azureSubscription, imageToDeploy)
     {
@@ -371,6 +422,11 @@ public record AzureContainerAppsV0FromImageTask : AzureContainerAppsFromImageTas
 [Obsolete("AzureContainerApps@0 is deprecated by Azure Pipelines. Prefer AzureContainerApps@1.")]
 public record AzureContainerAppsV0FromYamlTask : AzureContainerAppsFromYamlTask
 {
+    /// <summary>
+    /// Initializes an <c>AzureContainerApps@0</c> task that deploys from a YAML configuration file.
+    /// </summary>
+    /// <param name="azureSubscription">Azure Resource Manager service connection for the deployment.</param>
+    /// <param name="yamlConfigPath">Full path on the agent to the Container Apps YAML configuration file.</param>
     public AzureContainerAppsV0FromYamlTask(AdoExpression<string> azureSubscription, AdoExpression<string> yamlConfigPath)
         : base("AzureContainerApps@0", azureSubscription, yamlConfigPath)
     {

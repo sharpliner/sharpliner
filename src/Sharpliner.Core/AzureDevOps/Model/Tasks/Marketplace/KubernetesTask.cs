@@ -152,20 +152,119 @@ public enum KubernetesConnectionType
 /// <summary>Commands supported by Kubernetes@1.</summary>
 public enum KubernetesCommand
 {
-    [YamlMember(Alias = "apply")] Apply, [YamlMember(Alias = "create")] Create, [YamlMember(Alias = "delete")] Delete,
-    [YamlMember(Alias = "exec")] Exec, [YamlMember(Alias = "expose")] Expose, [YamlMember(Alias = "get")] Get,
-    [YamlMember(Alias = "login")] Login, [YamlMember(Alias = "logout")] Logout, [YamlMember(Alias = "logs")] Logs,
-    [YamlMember(Alias = "rollout")] Rollout, [YamlMember(Alias = "run")] Run, [YamlMember(Alias = "set")] Set,
-    [YamlMember(Alias = "top")] Top,
+    /// <summary>Apply a configuration to Kubernetes resources.</summary>
+    [YamlMember(Alias = "apply")]
+    Apply,
+
+    /// <summary>Create Kubernetes resources.</summary>
+    [YamlMember(Alias = "create")]
+    Create,
+
+    /// <summary>Delete Kubernetes resources.</summary>
+    [YamlMember(Alias = "delete")]
+    Delete,
+
+    /// <summary>Execute a command in a container.</summary>
+    [YamlMember(Alias = "exec")]
+    Exec,
+
+    /// <summary>Expose a Kubernetes resource as a service.</summary>
+    [YamlMember(Alias = "expose")]
+    Expose,
+
+    /// <summary>Display one or more Kubernetes resources.</summary>
+    [YamlMember(Alias = "get")]
+    Get,
+
+    /// <summary>Authenticate with a Kubernetes cluster.</summary>
+    [YamlMember(Alias = "login")]
+    Login,
+
+    /// <summary>End the current Kubernetes cluster session.</summary>
+    [YamlMember(Alias = "logout")]
+    Logout,
+
+    /// <summary>Print logs for a container.</summary>
+    [YamlMember(Alias = "logs")]
+    Logs,
+
+    /// <summary>Manage the rollout of a Kubernetes resource.</summary>
+    [YamlMember(Alias = "rollout")]
+    Rollout,
+
+    /// <summary>Run a container image on the cluster.</summary>
+    [YamlMember(Alias = "run")]
+    Run,
+
+    /// <summary>Configure Kubernetes resources.</summary>
+    [YamlMember(Alias = "set")]
+    Set,
+
+    /// <summary>Display resource usage.</summary>
+    [YamlMember(Alias = "top")]
+    Top,
 }
 
 /// <summary>Configuration source types supported by Kubernetes@1.</summary>
-public enum KubernetesConfigurationType { [YamlMember(Alias = "configuration")] Configuration, [YamlMember(Alias = "inline")] Inline }
+public enum KubernetesConfigurationType
+{
+    /// <summary>Read the Kubernetes configuration from a path, directory, or URL.</summary>
+    [YamlMember(Alias = "configuration")]
+    Configuration,
+
+    /// <summary>Use an inline Kubernetes configuration.</summary>
+    [YamlMember(Alias = "inline")]
+    Inline,
+}
+
 /// <summary>Secret types supported by Kubernetes@1.</summary>
-public enum KubernetesSecretType { [YamlMember(Alias = "dockerRegistry")] DockerRegistry, [YamlMember(Alias = "generic")] Generic }
+public enum KubernetesSecretType
+{
+    /// <summary>Create or update a Docker registry secret.</summary>
+    [YamlMember(Alias = "dockerRegistry")]
+    DockerRegistry,
+
+    /// <summary>Create or update a generic secret.</summary>
+    [YamlMember(Alias = "generic")]
+    Generic,
+}
+
 /// <summary>Container registry types supported by Kubernetes@1.</summary>
-public enum KubernetesContainerRegistryType { [YamlMember(Alias = "Azure Container Registry")] AzureContainerRegistry, [YamlMember(Alias = "Container Registry")] ContainerRegistry }
+public enum KubernetesContainerRegistryType
+{
+    /// <summary>Use an Azure Container Registry.</summary>
+    [YamlMember(Alias = "Azure Container Registry")]
+    AzureContainerRegistry,
+
+    /// <summary>Use a non-Azure container registry.</summary>
+    [YamlMember(Alias = "Container Registry")]
+    ContainerRegistry,
+}
+
 /// <summary>kubectl selection types supported by Kubernetes@1.</summary>
-public enum KubectlLocationType { [YamlMember(Alias = "version")] Version, [YamlMember(Alias = "location")] Location }
+public enum KubectlLocationType
+{
+    /// <summary>Select kubectl by version.</summary>
+    [YamlMember(Alias = "version")]
+    Version,
+
+    /// <summary>Use kubectl from an explicit path.</summary>
+    [YamlMember(Alias = "location")]
+    Location,
+}
+
 /// <summary>kubectl output formats supported by Kubernetes@1.</summary>
-public enum KubernetesOutputFormat { [YamlMember(Alias = "json")] Json, [YamlMember(Alias = "yaml")] Yaml, [YamlMember(Alias = "none")] None }
+public enum KubernetesOutputFormat
+{
+    /// <summary>Format kubectl output as JSON.</summary>
+    [YamlMember(Alias = "json")]
+    Json,
+
+    /// <summary>Format kubectl output as YAML.</summary>
+    [YamlMember(Alias = "yaml")]
+    Yaml,
+
+    /// <summary>Do not request a structured kubectl output format.</summary>
+    [YamlMember(Alias = "none")]
+    None,
+}

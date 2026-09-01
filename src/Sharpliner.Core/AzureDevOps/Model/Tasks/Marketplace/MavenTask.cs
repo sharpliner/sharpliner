@@ -366,7 +366,7 @@ public record MavenV1Task : MavenTaskBase
     /// Gets or sets the SonarQube generic service endpoint.
     /// </summary>
     /// <remarks>
-    /// This input only applies when <see cref="SqAnalysisEnabled"/> is <c>true</c>.
+    /// This input only applies when <see cref="MavenTaskBase.SqAnalysisEnabled"/> is <c>true</c>.
     /// </remarks>
     [YamlIgnore]
     public AdoExpression<string>? SonarQubeServiceEndpoint
@@ -379,7 +379,7 @@ public record MavenV1Task : MavenTaskBase
     /// Gets or sets the SonarQube project name.
     /// </summary>
     /// <remarks>
-    /// This input only applies when <see cref="SqAnalysisEnabled"/> is <c>true</c>.
+    /// This input only applies when <see cref="MavenTaskBase.SqAnalysisEnabled"/> is <c>true</c>.
     /// </remarks>
     [YamlIgnore]
     public AdoExpression<string>? SonarQubeProjectName
@@ -392,7 +392,7 @@ public record MavenV1Task : MavenTaskBase
     /// Gets or sets the SonarQube project key.
     /// </summary>
     /// <remarks>
-    /// This input only applies when <see cref="SqAnalysisEnabled"/> is <c>true</c>.
+    /// This input only applies when <see cref="MavenTaskBase.SqAnalysisEnabled"/> is <c>true</c>.
     /// </remarks>
     [YamlIgnore]
     public AdoExpression<string>? SonarQubeProjectKey
@@ -405,7 +405,7 @@ public record MavenV1Task : MavenTaskBase
     /// Gets or sets the SonarQube project version.
     /// </summary>
     /// <remarks>
-    /// This input only applies when <see cref="SqAnalysisEnabled"/> is <c>true</c>.
+    /// This input only applies when <see cref="MavenTaskBase.SqAnalysisEnabled"/> is <c>true</c>.
     /// </remarks>
     [YamlIgnore]
     public AdoExpression<string>? SonarQubeProjectVersion
@@ -419,7 +419,7 @@ public record MavenV1Task : MavenTaskBase
     /// Azure DevOps defaults this input to <c>false</c>.
     /// </summary>
     /// <remarks>
-    /// This input only applies when <see cref="SqAnalysisEnabled"/> is <c>true</c>.
+    /// This input only applies when <see cref="MavenTaskBase.SqAnalysisEnabled"/> is <c>true</c>.
     /// </remarks>
     [YamlIgnore]
     public AdoExpression<bool>? SonarQubeSpecifyDB
@@ -472,7 +472,7 @@ public record MavenV1Task : MavenTaskBase
     /// Azure DevOps defaults this input to <c>true</c>.
     /// </summary>
     /// <remarks>
-    /// This input only applies when <see cref="SqAnalysisEnabled"/> is <c>true</c>.
+    /// This input only applies when <see cref="MavenTaskBase.SqAnalysisEnabled"/> is <c>true</c>.
     /// </remarks>
     [YamlIgnore]
     public AdoExpression<bool>? SonarQubeIncludeFullReport
@@ -485,7 +485,7 @@ public record MavenV1Task : MavenTaskBase
     /// Gets or sets a value indicating whether the build should fail when the SonarQube quality gate fails.
     /// </summary>
     /// <remarks>
-    /// This input only applies when <see cref="SqAnalysisEnabled"/> is <c>true</c>.
+    /// This input only applies when <see cref="MavenTaskBase.SqAnalysisEnabled"/> is <c>true</c>.
     /// </remarks>
     [YamlIgnore]
     public AdoExpression<bool>? SonarQubeFailWhenQualityGateFails
@@ -534,7 +534,7 @@ public record MavenV2Task : MavenTaskBase
     /// Azure DevOps defaults this input to <c>true</c>.
     /// </summary>
     /// <remarks>
-    /// This input only applies when <see cref="PublishJUnitResults"/> is <c>true</c>.
+    /// This input only applies when <see cref="MavenTaskBase.PublishJUnitResults"/> is <c>true</c>.
     /// </remarks>
     [YamlIgnore]
     public AdoExpression<bool>? AllowBrokenSymbolicLinks
@@ -548,7 +548,7 @@ public record MavenV2Task : MavenTaskBase
     /// Azure DevOps defaults this input to <c>false</c>.
     /// </summary>
     /// <remarks>
-    /// This input only applies when <see cref="CodeCoverageTool"/> is not <see cref="MavenCodeCoverageTool.None"/>.
+    /// This input only applies when <see cref="MavenTaskBase.CodeCoverageTool"/> is not <see cref="MavenCodeCoverageTool.None"/>.
     /// </remarks>
     [YamlIgnore]
     public AdoExpression<bool>? RestoreOriginalPomXml
@@ -587,7 +587,7 @@ public record MavenV2Task : MavenTaskBase
     /// Azure DevOps defaults this input to <c>false</c>.
     /// </summary>
     /// <remarks>
-    /// This input only applies when <see cref="SqAnalysisEnabled"/> is <c>true</c> and <see cref="CodeCoverageTool"/> is <see cref="MavenCodeCoverageTool.JaCoCo"/>.
+    /// This input only applies when <see cref="MavenTaskBase.SqAnalysisEnabled"/> is <c>true</c> and <see cref="MavenTaskBase.CodeCoverageTool"/> is <see cref="MavenCodeCoverageTool.JaCoCo"/>.
     /// </remarks>
     [YamlIgnore]
     public AdoExpression<bool>? IsJacocoCoverageReportXML
@@ -601,7 +601,7 @@ public record MavenV2Task : MavenTaskBase
     /// Azure DevOps defaults this input to <see cref="MavenSonarQubeMavenPluginVersionChoice.Latest"/>.
     /// </summary>
     /// <remarks>
-    /// This input only applies when <see cref="SqAnalysisEnabled"/> is <c>true</c>.
+    /// This input only applies when <see cref="MavenTaskBase.SqAnalysisEnabled"/> is <c>true</c>.
     /// </remarks>
     [YamlIgnore]
     public MavenSonarQubeMavenPluginVersionChoice SqMavenPluginVersionChoice

@@ -306,6 +306,9 @@ public abstract class AzureDevOpsDefinition
     /// </summary>
     protected static AzureCliTaskBuilder AzureCli { get; } = new();
 
+    /// <summary>
+    /// Creates an Azure CLI version 3 task.
+    /// </summary>
     protected static AzureCliV3TaskBuilder AzureCliV3 { get; } = new();
 
     /// <summary>

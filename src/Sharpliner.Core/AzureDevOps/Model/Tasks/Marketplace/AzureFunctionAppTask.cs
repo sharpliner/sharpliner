@@ -54,7 +54,7 @@ public record AzureFunctionAppV2Task : AzureFunctionAppTask
 /// <summary>Deploys an Azure Function App using <c>AzureFunctionApp@1</c>. See the <see href="https://learn.microsoft.com/en-us/azure/devops/pipelines/tasks/reference/azure-function-app-v1?view=azure-pipelines">official reference</see>.</summary>
 public record AzureFunctionAppV1Task : AzureFunctionAppTask
 {
-    /// <summary>Linux Function App startup command. Applies only when <see cref="AppType"/> is Linux.</summary>
+    /// <summary>Linux Function App startup command. Applies only when <see cref="AzureFunctionAppTask.AppType"/> is Linux.</summary>
     [YamlIgnore] public AdoExpression<string>? StartUpCommand { get => GetExpression<string>("startUpCommand"); init => SetProperty("startUpCommand", value); }
     /// <summary>Parameters used to generate web.config for Windows Python, Node.js, Go, and Java apps. Does not apply to Linux apps or WAR packages.</summary>
     [YamlIgnore] public AdoExpression<string>? CustomWebConfig { get => GetExpression<string>("customWebConfig"); init => SetProperty("customWebConfig", value); }
