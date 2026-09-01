@@ -438,6 +438,9 @@ public abstract class AzureDevOpsDefinition
     /// Creates a Visual Studio Test task.
     /// </summary>
     protected static VSTestTaskBuilder VSTest { get; } = new();
+    /// Creates a Node.js installer task.
+    /// </summary>
+    protected static NodeTaskBuilder Node { get; } = new();
 
     #endregion
 
