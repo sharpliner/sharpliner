@@ -403,6 +403,9 @@ public abstract class AzureDevOpsDefinition
     /// Creates a HelmDeploy task.
     /// </summary>
     protected static HelmTaskBuilder Helm { get; } = new();
+    /// Creates a Docker task.
+    /// </summary>
+    protected static DockerTaskBuilder Docker { get; } = new();
 
     #endregion
 

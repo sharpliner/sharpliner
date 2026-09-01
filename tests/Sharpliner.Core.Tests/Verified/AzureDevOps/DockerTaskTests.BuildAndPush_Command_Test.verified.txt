@@ -1,0 +1,11 @@
+﻿task: Docker@2
+
+displayName: docker build and push
+
+inputs:
+  command: buildAndPush
+  Dockerfile: Dockerfile
+  repository: contoso/my-app
+  tags: $(Build.BuildId)
+  buildContext: .
+  containerRegistry: my-registry-service-connection

@@ -1,0 +1,7 @@
+﻿task: Docker@2
+
+displayName: docker logout
+
+inputs:
+  command: logout
+  containerRegistry: my-registry-service-connection
